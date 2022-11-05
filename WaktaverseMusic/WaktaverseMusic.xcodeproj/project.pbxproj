@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */; };
+		68AAECA8A903228AEEC32CA6 /* Pods_WaktaverseMusicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */; };
+		9D5863A64FA71124C5AD0D83 /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */; };
 		D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */; };
 		D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */; };
 		D8A5A3B22916377200F9FAA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* ViewController.swift */; };
@@ -36,6 +39,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		003B45E47ED4540221B3DCB2 /* Pods-WaktaverseMusicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.release.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.release.xcconfig"; sourceTree = "<group>"; };
+		04D4B7D37897A1B627C0280D /* Pods-WaktaverseMusic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic.debug.xcconfig"; sourceTree = "<group>"; };
+		17B67386B0A09B9942106F2A /* Pods-WaktaverseMusic-WaktaverseMusicUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic-WaktaverseMusicUITests.release.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests.release.xcconfig"; sourceTree = "<group>"; };
+		2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusicTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D368FB4B9B6D2D2F80C8C4E /* Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic_WaktaverseMusicUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D8A5A3AA2916377200F9FAA5 /* WaktaverseMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaktaverseMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +60,7 @@
 		D8A5A3CA2916377300F9FAA5 /* WaktaverseMusicUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaktaverseMusicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3CE2916377300F9FAA5 /* WaktaverseMusicUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaktaverseMusicUITests.swift; sourceTree = "<group>"; };
 		D8A5A3D02916377300F9FAA5 /* WaktaverseMusicUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaktaverseMusicUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F46CB1701B521BDFECDB888E /* Pods-WaktaverseMusic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic.release.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68AAECA8A903228AEEC32CA6 /* Pods_WaktaverseMusicTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +84,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D5863A64FA71124C5AD0D83 /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A0561CAC94FEA48DD4855C0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				04D4B7D37897A1B627C0280D /* Pods-WaktaverseMusic.debug.xcconfig */,
+				F46CB1701B521BDFECDB888E /* Pods-WaktaverseMusic.release.xcconfig */,
+				5D368FB4B9B6D2D2F80C8C4E /* Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig */,
+				17B67386B0A09B9942106F2A /* Pods-WaktaverseMusic-WaktaverseMusicUITests.release.xcconfig */,
+				D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */,
+				003B45E47ED4540221B3DCB2 /* Pods-WaktaverseMusicTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B34198B77511BB9E6251DC72 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */,
+				7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */,
+				2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D8A5A3A12916377200F9FAA5 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +122,8 @@
 				D8A5A3C32916377300F9FAA5 /* WaktaverseMusicTests */,
 				D8A5A3CD2916377300F9FAA5 /* WaktaverseMusicUITests */,
 				D8A5A3AB2916377200F9FAA5 /* Products */,
+				2A0561CAC94FEA48DD4855C0 /* Pods */,
+				B34198B77511BB9E6251DC72 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +175,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8A5A3D42916377300F9FAA5 /* Build configuration list for PBXNativeTarget "WaktaverseMusic" */;
 			buildPhases = (
+				048CB2CE779BCAFA728630BD /* [CP] Check Pods Manifest.lock */,
 				D8A5A3A62916377200F9FAA5 /* Sources */,
 				D8A5A3A72916377200F9FAA5 /* Frameworks */,
 				D8A5A3A82916377200F9FAA5 /* Resources */,
@@ -151,6 +193,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8A5A3D72916377300F9FAA5 /* Build configuration list for PBXNativeTarget "WaktaverseMusicTests" */;
 			buildPhases = (
+				B124635A8C4F17CFA95CE4F5 /* [CP] Check Pods Manifest.lock */,
 				D8A5A3BC2916377300F9FAA5 /* Sources */,
 				D8A5A3BD2916377300F9FAA5 /* Frameworks */,
 				D8A5A3BE2916377300F9FAA5 /* Resources */,
@@ -169,6 +212,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8A5A3DA2916377300F9FAA5 /* Build configuration list for PBXNativeTarget "WaktaverseMusicUITests" */;
 			buildPhases = (
+				A507FE64CB270FF85B98F84B /* [CP] Check Pods Manifest.lock */,
 				D8A5A3C62916377300F9FAA5 /* Sources */,
 				D8A5A3C72916377300F9FAA5 /* Frameworks */,
 				D8A5A3C82916377300F9FAA5 /* Resources */,
@@ -252,6 +296,75 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		048CB2CE779BCAFA728630BD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WaktaverseMusic-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A507FE64CB270FF85B98F84B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WaktaverseMusic-WaktaverseMusicUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B124635A8C4F17CFA95CE4F5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WaktaverseMusicTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D8A5A3A62916377200F9FAA5 /* Sources */ = {
@@ -432,6 +545,7 @@
 		};
 		D8A5A3D52916377300F9FAA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 04D4B7D37897A1B627C0280D /* Pods-WaktaverseMusic.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -466,6 +580,7 @@
 		};
 		D8A5A3D62916377300F9FAA5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F46CB1701B521BDFECDB888E /* Pods-WaktaverseMusic.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -500,6 +615,7 @@
 		};
 		D8A5A3D82916377300F9FAA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -520,6 +636,7 @@
 		};
 		D8A5A3D92916377300F9FAA5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 003B45E47ED4540221B3DCB2 /* Pods-WaktaverseMusicTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -540,6 +657,7 @@
 		};
 		D8A5A3DB2916377300F9FAA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D368FB4B9B6D2D2F80C8C4E /* Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -558,6 +676,7 @@
 		};
 		D8A5A3DC2916377300F9FAA5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17B67386B0A09B9942106F2A /* Pods-WaktaverseMusic-WaktaverseMusicUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

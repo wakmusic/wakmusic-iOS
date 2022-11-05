@@ -1,0 +1,6 @@
+framework module Pods_WaktaverseMusic_WaktaverseMusicUITests {
+  umbrella header "Pods-WaktaverseMusic-WaktaverseMusicUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
