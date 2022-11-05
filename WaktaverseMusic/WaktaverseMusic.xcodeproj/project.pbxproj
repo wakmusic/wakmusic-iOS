@@ -19,6 +19,8 @@
 		D8A5A3C52916377300F9FAA5 /* WaktaverseMusicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3C42916377300F9FAA5 /* WaktaverseMusicTests.swift */; };
 		D8A5A3CF2916377300F9FAA5 /* WaktaverseMusicUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3CE2916377300F9FAA5 /* WaktaverseMusicUITests.swift */; };
 		D8A5A3D12916377300F9FAA5 /* WaktaverseMusicUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3D02916377300F9FAA5 /* WaktaverseMusicUITestsLaunchTests.swift */; };
+		D8A5A3DF29163DEB00F9FAA5 /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = D8A5A3DE29163DEB00F9FAA5 /* YouTubePlayerKit */; };
+		D8A5A3E52916454100F9FAA5 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = D8A5A3E42916454100F9FAA5 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,7 @@
 		D8A5A3CA2916377300F9FAA5 /* WaktaverseMusicUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaktaverseMusicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3CE2916377300F9FAA5 /* WaktaverseMusicUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaktaverseMusicUITests.swift; sourceTree = "<group>"; };
 		D8A5A3D02916377300F9FAA5 /* WaktaverseMusicUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaktaverseMusicUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D8A5A3E42916454100F9FAA5 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		F46CB1701B521BDFECDB888E /* Pods-WaktaverseMusic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic.release.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8A5A3DF29163DEB00F9FAA5 /* YouTubePlayerKit in Frameworks */,
 				2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,7 +105,6 @@
 				D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */,
 				003B45E47ED4540221B3DCB2 /* Pods-WaktaverseMusicTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -118,6 +121,7 @@
 		D8A5A3A12916377200F9FAA5 = {
 			isa = PBXGroup;
 			children = (
+				D8A5A3E42916454100F9FAA5 /* .swiftlint.yml */,
 				D8A5A3AC2916377200F9FAA5 /* WaktaverseMusic */,
 				D8A5A3C32916377300F9FAA5 /* WaktaverseMusicTests */,
 				D8A5A3CD2916377300F9FAA5 /* WaktaverseMusicUITests */,
@@ -179,12 +183,17 @@
 				D8A5A3A62916377200F9FAA5 /* Sources */,
 				D8A5A3A72916377200F9FAA5 /* Frameworks */,
 				D8A5A3A82916377200F9FAA5 /* Resources */,
+				B60CAD09AD31867E3C2E8D9F /* [CP] Embed Pods Frameworks */,
+				D8A5A3E32916415F00F9FAA5 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = WaktaverseMusic;
+			packageProductDependencies = (
+				D8A5A3DE29163DEB00F9FAA5 /* YouTubePlayerKit */,
+			);
 			productName = WaktaverseMusic;
 			productReference = D8A5A3AA2916377200F9FAA5 /* WaktaverseMusic.app */;
 			productType = "com.apple.product-type.application";
@@ -216,6 +225,7 @@
 				D8A5A3C62916377300F9FAA5 /* Sources */,
 				D8A5A3C72916377300F9FAA5 /* Frameworks */,
 				D8A5A3C82916377300F9FAA5 /* Resources */,
+				47E856320C5D9DAF53FF80DE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -259,6 +269,9 @@
 				Base,
 			);
 			mainGroup = D8A5A3A12916377200F9FAA5;
+			packageReferences = (
+				D8A5A3DD29163DEB00F9FAA5 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
+			);
 			productRefGroup = D8A5A3AB2916377200F9FAA5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,6 +288,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8A5A3E52916454100F9FAA5 /* .swiftlint.yml in Resources */,
 				D8A5A3BA2916377300F9FAA5 /* LaunchScreen.storyboard in Resources */,
 				D8A5A3B72916377300F9FAA5 /* Assets.xcassets in Resources */,
 				D8A5A3B52916377200F9FAA5 /* Main.storyboard in Resources */,
@@ -320,6 +334,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		47E856320C5D9DAF53FF80DE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A507FE64CB270FF85B98F84B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -363,6 +394,40 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		B60CAD09AD31867E3C2E8D9F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D8A5A3E32916415F00F9FAA5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint --fix && ${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -479,7 +544,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -533,7 +598,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -733,6 +798,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D8A5A3DD29163DEB00F9FAA5 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/YouTubePlayerKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D8A5A3DE29163DEB00F9FAA5 /* YouTubePlayerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8A5A3DD29163DEB00F9FAA5 /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */;
+			productName = YouTubePlayerKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D8A5A3A22916377200F9FAA5 /* Project object */;
 }
