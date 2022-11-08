@@ -10,9 +10,14 @@
 		2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */; };
 		68AAECA8A903228AEEC32CA6 /* Pods_WaktaverseMusicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */; };
 		9D5863A64FA71124C5AD0D83 /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */; };
+		CB2C6EB8291A606800C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CB2C6EBA291A607A00C5C423 /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; };
+		CB2C6EBB291A607A00C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CB9F65DC291A61850054A4EC /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; };
+		CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65E6291A63AA0054A4EC /* MainViewController.swift */; };
 		D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */; };
 		D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */; };
-		D8A5A3B22916377200F9FAA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* ViewController.swift */; };
+		D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */; };
 		D8A5A3B52916377200F9FAA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8A5A3B32916377200F9FAA5 /* Main.storyboard */; };
 		D8A5A3B72916377300F9FAA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8A5A3B62916377300F9FAA5 /* Assets.xcassets */; };
 		D8A5A3BA2916377300F9FAA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8A5A3B82916377300F9FAA5 /* LaunchScreen.storyboard */; };
@@ -24,6 +29,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CB2C6EB2291A605B00C5C423 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CB2C6E87291A556B00C5C423;
+			remoteInfo = WaktaverseMusicFramework;
+		};
+		CB2C6EB4291A605B00C5C423 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CB2C6E91291A556C00C5C423;
+			remoteInfo = WaktaverseMusicFrameworkTests;
+		};
 		D8A5A3C12916377300F9FAA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8A5A3A22916377200F9FAA5 /* Project object */;
@@ -40,6 +59,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CB2C6EB9291A606800C5C423 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CB2C6EBB291A607A00C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */,
+				CB2C6EB8291A606800C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		003B45E47ED4540221B3DCB2 /* Pods-WaktaverseMusicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.release.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.release.xcconfig"; sourceTree = "<group>"; };
 		04D4B7D37897A1B627C0280D /* Pods-WaktaverseMusic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic/Pods-WaktaverseMusic.debug.xcconfig"; sourceTree = "<group>"; };
@@ -48,11 +82,14 @@
 		5D368FB4B9B6D2D2F80C8C4E /* Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic_WaktaverseMusicUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WaktaverseMusicFramework.xcodeproj; path = WaktaverseMusicFramework/WaktaverseMusicFramework.xcodeproj; sourceTree = "<group>"; };
+		CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WaktaverseMusicFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB9F65E6291A63AA0054A4EC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D8A5A3AA2916377200F9FAA5 /* WaktaverseMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaktaverseMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D8A5A3B12916377200F9FAA5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		D8A5A3B42916377200F9FAA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8A5A3B62916377300F9FAA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8A5A3B92916377300F9FAA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -73,6 +110,8 @@
 			files = (
 				D8A5A3DF29163DEB00F9FAA5 /* YouTubePlayerKit in Frameworks */,
 				2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */,
+				CB9F65DC291A61850054A4EC /* WaktaverseMusicFramework.framework in Frameworks */,
+				CB2C6EBA291A607A00C5C423 /* WaktaverseMusicFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,11 +150,81 @@
 		B34198B77511BB9E6251DC72 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */,
 				C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */,
 				7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */,
+				CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */,
 				2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB2C6EAE291A605B00C5C423 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */,
+				CB2C6EB5291A605B00C5C423 /* WaktaverseMusicFrameworkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB9F65E0291A63110054A4EC /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				CB9F65E8291A63D30054A4EC /* Root */,
+				CB9F65E5291A63990054A4EC /* Main */,
+			);
+			path = Screen;
+			sourceTree = "<group>";
+		};
+		CB9F65E1291A63270054A4EC /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CB9F65E3291A634A0054A4EC /* Naver */,
+				CB9F65E2291A63440054A4EC /* Google */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		CB9F65E2291A63440054A4EC /* Google */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Google;
+			sourceTree = "<group>";
+		};
+		CB9F65E3291A634A0054A4EC /* Naver */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Naver;
+			sourceTree = "<group>";
+		};
+		CB9F65E4291A63700054A4EC /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				D8A5A3B82916377300F9FAA5 /* LaunchScreen.storyboard */,
+				D8A5A3BB2916377300F9FAA5 /* Info.plist */,
+				D8A5A3B62916377300F9FAA5 /* Assets.xcassets */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		CB9F65E5291A63990054A4EC /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D8A5A3B32916377200F9FAA5 /* Main.storyboard */,
+				CB9F65E6291A63AA0054A4EC /* MainViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		CB9F65E8291A63D30054A4EC /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */,
+			);
+			path = Root;
 			sourceTree = "<group>";
 		};
 		D8A5A3A12916377200F9FAA5 = {
@@ -146,11 +255,9 @@
 			children = (
 				D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */,
 				D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */,
-				D8A5A3B12916377200F9FAA5 /* ViewController.swift */,
-				D8A5A3B32916377200F9FAA5 /* Main.storyboard */,
-				D8A5A3B62916377300F9FAA5 /* Assets.xcassets */,
-				D8A5A3B82916377300F9FAA5 /* LaunchScreen.storyboard */,
-				D8A5A3BB2916377300F9FAA5 /* Info.plist */,
+				CB9F65E4291A63700054A4EC /* Info */,
+				CB9F65E1291A63270054A4EC /* Config */,
+				CB9F65E0291A63110054A4EC /* Screen */,
 			);
 			path = WaktaverseMusic;
 			sourceTree = "<group>";
@@ -185,6 +292,7 @@
 				D8A5A3A82916377200F9FAA5 /* Resources */,
 				B60CAD09AD31867E3C2E8D9F /* [CP] Embed Pods Frameworks */,
 				D8A5A3E32916415F00F9FAA5 /* ShellScript */,
+				CB2C6EB9291A606800C5C423 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -274,6 +382,12 @@
 			);
 			productRefGroup = D8A5A3AB2916377200F9FAA5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CB2C6EAE291A605B00C5C423 /* Products */;
+					ProjectRef = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				D8A5A3A92916377200F9FAA5 /* WaktaverseMusic */,
@@ -282,6 +396,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WaktaverseMusicFramework.framework;
+			remoteRef = CB2C6EB2291A605B00C5C423 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CB2C6EB5291A605B00C5C423 /* WaktaverseMusicFrameworkTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = WaktaverseMusicFrameworkTests.xctest;
+			remoteRef = CB2C6EB4291A605B00C5C423 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D8A5A3A82916377200F9FAA5 /* Resources */ = {
@@ -436,9 +567,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8A5A3B22916377200F9FAA5 /* ViewController.swift in Sources */,
+				D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */,
 				D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */,
 				D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */,
+				CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,9 +746,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 28NL63HBTJ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 28NL63HBTJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WaktaverseMusic/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "왁타버스 뮤직";
@@ -634,6 +768,8 @@
 				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = yongbeomkwak.Billboardoo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Team WaktaverseMusic";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -649,9 +785,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 28NL63HBTJ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 28NL63HBTJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WaktaverseMusic/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "왁타버스 뮤직";
@@ -669,6 +807,8 @@
 				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = yongbeomkwak.Billboardoo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Team WaktaverseMusic";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;

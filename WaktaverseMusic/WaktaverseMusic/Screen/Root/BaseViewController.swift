@@ -7,14 +7,16 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        var ab = 3
 
-        var bb = 1
+        view.addGestureRecognizer(UITapGestureRecognizer { _ in
+            print("test")
+        })
+
     }
 
 }
