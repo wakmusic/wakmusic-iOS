@@ -5,6 +5,9 @@
       location = "group:WaktaverseMusic.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:WaktaverseMusicFramework/WaktaverseMusicFramework.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
