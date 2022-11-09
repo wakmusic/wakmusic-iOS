@@ -16,6 +16,7 @@
 		CB9F65DE291A619F0054A4EC /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65DD291A619F0054A4EC /* UIColorExt.swift */; };
 		CB9F65EB291A64700054A4EC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EA291A64700054A4EC /* NetworkManager.swift */; };
 		CB9F65ED291A64F30054A4EC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EC291A64F30054A4EC /* Util.swift */; };
+		CB9F65F3291B63E00054A4EC /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65F2291B63E00054A4EC /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,12 +35,12 @@
 		CB2C6E8B291A556B00C5C423 /* WaktaverseMusicFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = WaktaverseMusicFramework.docc; sourceTree = "<group>"; };
 		CB2C6E91291A556C00C5C423 /* WaktaverseMusicFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaktaverseMusicFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB2C6E96291A556C00C5C423 /* WaktaverseMusicFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaktaverseMusicFrameworkTests.swift; sourceTree = "<group>"; };
-		CB2C6EA1291A557600C5C423 /* WaktaverseMusicFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WaktaverseMusicFramework.xcodeproj; sourceTree = SOURCE_ROOT; };
 		CB2C6EA9291A5B7B00C5C423 /* UIControlExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControlExt.swift; sourceTree = "<group>"; };
 		CB2C6EAB291A5F0500C5C423 /* UIGestureRecognizerExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizerExt.swift; sourceTree = "<group>"; };
 		CB9F65DD291A619F0054A4EC /* UIColorExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
 		CB9F65EA291A64700054A4EC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		CB9F65EC291A64F30054A4EC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		CB9F65F2291B63E00054A4EC /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,14 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				CB2C6E96291A556C00C5C423 /* WaktaverseMusicFrameworkTests.swift */,
-				CB2C6EA1291A557600C5C423 /* WaktaverseMusicFramework.xcodeproj */,
 			);
 			path = WaktaverseMusicFrameworkTests;
-			sourceTree = "<group>";
-		};
-		CB2C6EA2291A557600C5C423 /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
 			sourceTree = "<group>";
 		};
 		CB2C6EA8291A5B4F00C5C423 /* Extension */ = {
@@ -119,6 +114,7 @@
 		CB9F65DF291A63040054A4EC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CB9F65F2291B63E00054A4EC /* Model.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -210,12 +206,6 @@
 			mainGroup = CB2C6E7D291A556B00C5C423;
 			productRefGroup = CB2C6E88291A556B00C5C423 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CB2C6EA2291A557600C5C423 /* Products */;
-					ProjectRef = CB2C6EA1291A557600C5C423 /* WaktaverseMusicFramework.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				CB2C6E86291A556B00C5C423 /* WaktaverseMusicFramework */,
@@ -246,6 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9F65F3291B63E00054A4EC /* Model.swift in Sources */,
 				CB2C6EAC291A5F0500C5C423 /* UIGestureRecognizerExt.swift in Sources */,
 				CB9F65ED291A64F30054A4EC /* Util.swift in Sources */,
 				CB9F65DE291A619F0054A4EC /* UIColorExt.swift in Sources */,

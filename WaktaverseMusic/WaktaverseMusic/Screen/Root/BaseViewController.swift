@@ -13,7 +13,6 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 
-
         view.addGestureRecognizer(UITapGestureRecognizer { _ in
             print("test")
         })
