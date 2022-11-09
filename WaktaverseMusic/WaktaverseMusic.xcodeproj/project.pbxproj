@@ -11,9 +11,6 @@
 		68AAECA8A903228AEEC32CA6 /* Pods_WaktaverseMusicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */; };
 		9D5863A64FA71124C5AD0D83 /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */; };
 		CB2C6EB8291A606800C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		CB2C6EBA291A607A00C5C423 /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; };
-		CB2C6EBB291A607A00C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		CB9F65DC291A61850054A4EC /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */; };
 		CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65E6291A63AA0054A4EC /* MainViewController.swift */; };
 		CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EE291B37F10054A4EC /* NaverInfo.swift */; };
 		CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */; };
@@ -31,20 +28,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		CB2C6EB2291A605B00C5C423 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CB2C6E87291A556B00C5C423;
-			remoteInfo = WaktaverseMusicFramework;
-		};
-		CB2C6EB4291A605B00C5C423 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CB2C6E91291A556C00C5C423;
-			remoteInfo = WaktaverseMusicFrameworkTests;
-		};
 		D8A5A3C12916377300F9FAA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8A5A3A22916377200F9FAA5 /* Project object */;
@@ -68,7 +51,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CB2C6EBB291A607A00C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */,
 				CB2C6EB8291A606800C5C423 /* WaktaverseMusicFramework.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -84,7 +66,6 @@
 		5D368FB4B9B6D2D2F80C8C4E /* Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusic-WaktaverseMusicUITests/Pods-WaktaverseMusic-WaktaverseMusicUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic_WaktaverseMusicUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WaktaverseMusic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WaktaverseMusicFramework.xcodeproj; path = WaktaverseMusicFramework/WaktaverseMusicFramework.xcodeproj; sourceTree = "<group>"; };
 		CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = WaktaverseMusicFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB9F65E6291A63AA0054A4EC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CB9F65EE291B37F10054A4EC /* NaverInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverInfo.swift; sourceTree = "<group>"; };
@@ -114,8 +95,6 @@
 			files = (
 				D8A5A3DF29163DEB00F9FAA5 /* YouTubePlayerKit in Frameworks */,
 				2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */,
-				CB9F65DC291A61850054A4EC /* WaktaverseMusicFramework.framework in Frameworks */,
-				CB2C6EBA291A607A00C5C423 /* WaktaverseMusicFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,19 +136,9 @@
 				CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */,
 				C1E728E9BE7836C7DEB44F36 /* Pods_WaktaverseMusic.framework */,
 				7BFAD8D7852FD706318D8B0E /* Pods_WaktaverseMusic_WaktaverseMusicUITests.framework */,
-				CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */,
 				2E10D7544EB8C2F7482149ED /* Pods_WaktaverseMusicTests.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CB2C6EAE291A605B00C5C423 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */,
-				CB2C6EB5291A605B00C5C423 /* WaktaverseMusicFrameworkTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		CB9F65E0291A63110054A4EC /* Screen */ = {
@@ -388,12 +357,6 @@
 			);
 			productRefGroup = D8A5A3AB2916377200F9FAA5 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CB2C6EAE291A605B00C5C423 /* Products */;
-					ProjectRef = CB2C6EAD291A605B00C5C423 /* WaktaverseMusicFramework.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				D8A5A3A92916377200F9FAA5 /* WaktaverseMusic */,
@@ -402,23 +365,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CB2C6EB3291A605B00C5C423 /* WaktaverseMusicFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WaktaverseMusicFramework.framework;
-			remoteRef = CB2C6EB2291A605B00C5C423 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CB2C6EB5291A605B00C5C423 /* WaktaverseMusicFrameworkTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = WaktaverseMusicFrameworkTests.xctest;
-			remoteRef = CB2C6EB4291A605B00C5C423 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D8A5A3A82916377200F9FAA5 /* Resources */ = {
