@@ -14,6 +14,7 @@
 		CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65E6291A63AA0054A4EC /* MainViewController.swift */; };
 		CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EE291B37F10054A4EC /* NaverInfo.swift */; };
 		CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */; };
+		CB9F65FD291B68D20054A4EC /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */; };
 		D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */; };
 		D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */; };
 		D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */; };
@@ -93,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9F65FD291B68D20054A4EC /* WaktaverseMusicFramework.framework in Frameworks */,
 				D8A5A3DF29163DEB00F9FAA5 /* YouTubePlayerKit in Frameworks */,
 				2D80A782047F4245BDE06C99 /* Pods_WaktaverseMusic.framework in Frameworks */,
 			);
