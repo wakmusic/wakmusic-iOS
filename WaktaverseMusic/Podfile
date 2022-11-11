@@ -8,6 +8,9 @@ target 'WaktaverseMusic' do
   pod 'Alamofire'
   pod 'SwiftLint'
   
+  
+  pod 'LGSideMenuController'
+  
   # Pods for WaktaverseMusic
 
   target 'WaktaverseMusicTests' do
