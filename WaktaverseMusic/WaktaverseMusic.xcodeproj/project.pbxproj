@@ -15,6 +15,8 @@
 		CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EE291B37F10054A4EC /* NaverInfo.swift */; };
 		CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */; };
 		CB9F65FD291B68D20054A4EC /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */; };
+		CB9F660D291E01E00054A4EC /* Root.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB9F660C291E01E00054A4EC /* Root.storyboard */; };
+		CB9F660F291E1DC60054A4EC /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F660E291E1DC60054A4EC /* RootViewController.swift */; };
 		D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */; };
 		D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */; };
 		D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */; };
@@ -71,6 +73,8 @@
 		CB9F65E6291A63AA0054A4EC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CB9F65EE291B37F10054A4EC /* NaverInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverInfo.swift; sourceTree = "<group>"; };
 		CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleInfo.swift; sourceTree = "<group>"; };
+		CB9F660C291E01E00054A4EC /* Root.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Root.storyboard; sourceTree = "<group>"; };
+		CB9F660E291E1DC60054A4EC /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D8A5A3AA2916377200F9FAA5 /* WaktaverseMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaktaverseMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 		CB9F65E0291A63110054A4EC /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				CB9F660B291E01D20054A4EC /* Base */,
 				CB9F65E8291A63D30054A4EC /* Root */,
 				CB9F65E5291A63990054A4EC /* Main */,
 			);
@@ -199,9 +204,18 @@
 		CB9F65E8291A63D30054A4EC /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */,
+				CB9F660C291E01E00054A4EC /* Root.storyboard */,
+				CB9F660E291E1DC60054A4EC /* RootViewController.swift */,
 			);
 			path = Root;
+			sourceTree = "<group>";
+		};
+		CB9F660B291E01D20054A4EC /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		D8A5A3A12916377200F9FAA5 = {
@@ -373,6 +387,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9F660D291E01E00054A4EC /* Root.storyboard in Resources */,
 				D8A5A3E52916454100F9FAA5 /* .swiftlint.yml in Resources */,
 				D8A5A3BA2916377300F9FAA5 /* LaunchScreen.storyboard in Resources */,
 				D8A5A3B72916377300F9FAA5 /* Assets.xcassets in Resources */,
@@ -524,6 +539,7 @@
 				CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */,
 				D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */,
 				CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */,
+				CB9F660F291E1DC60054A4EC /* RootViewController.swift in Sources */,
 				D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */,
 				D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */,
 				CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */,
