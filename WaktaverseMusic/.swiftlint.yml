@@ -4,7 +4,6 @@ excluded:
     - WaktaverseMusicUITests
     
 disabled_rules:
-  - force_cast
   - force_try
   - type_name
   - file_length
@@ -15,8 +14,8 @@ disabled_rules:
   - trailing_whitespace:
         ignores_empty_lines: true
         
-
-
+force_cast:     # From https://realm.github.io/SwiftLint/force_cast.html
+    warning     # 강제 캐스팅은 error에서 warning으로 변경
 identifier_name:
     min_length: # min_length에서
         error: 1 # 에러만 적용
