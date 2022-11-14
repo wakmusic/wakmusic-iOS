@@ -6,6 +6,10 @@
 //
 
 import Foundation
+import UIKit
+
+public let SCREENWIDTH = UIScreen.main.bounds.width
+public let SCREENHEIGHT = UIScreen.main.bounds.height
 
 public func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
 

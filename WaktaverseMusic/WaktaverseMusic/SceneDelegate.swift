@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LGSideMenuController
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,14 +17,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        let storyboard = UIStoryboard(name: "Root", bundle: nil)
+        let rootStoryboard = UIStoryboard(name: "Root", bundle: nil)
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let windowScene = scene as? UIWindowScene else { return }
-        let vc = storyboard.instantiateViewController(withIdentifier: "RootViewController")
+
+        let navigationController = rootStoryboard.instantiateViewController(withIdentifier: "RootNavigationController") as! UINavigationController
+        let mainViewController = mainStoryboard.instantiateViewController(withIdentifier: "MainViewController")
+        navigationController.viewControllers = [mainViewController]
+
+        aGate.rootManager().rootViewController = navigationController
+
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = vc
+        window?.rootViewController = aGate.rootManager()
         window?.makeKeyAndVisible()
 
-        guard let _ = (scene as? UIWindowScene) else { return }
+//        guard let _ = (scene as? UIWindowScene) else { return }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

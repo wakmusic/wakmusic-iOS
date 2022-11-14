@@ -6,10 +6,15 @@
 //
 
 import UIKit
-import WaktaverseMusicFramework
+
+@_exported import WaktaverseMusicFramework
+
+let aGate = UIApplication.shared.delegate as! AppDelegate
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    private var rootController: RootViewController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -31,4 +36,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+}
+
+extension AppDelegate {
+
+    func rootManager() -> RootViewController {
+        if rootController == nil {
+            let storyboard = UIStoryboard(name: "Root", bundle: nil)
+            rootController = storyboard.instantiateViewController(withIdentifier: "RootViewController") as! RootViewController
+        }
+
+        return rootController!
+    }
 }
