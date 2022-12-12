@@ -15,6 +15,11 @@
 		CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65EE291B37F10054A4EC /* NaverInfo.swift */; };
 		CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */; };
 		CB9F65FD291B68D20054A4EC /* WaktaverseMusicFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2C6EB6291A606800C5C423 /* WaktaverseMusicFramework.framework */; };
+		CB9F660D291E01E00054A4EC /* Root.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB9F660C291E01E00054A4EC /* Root.storyboard */; };
+		CB9F660F291E1DC60054A4EC /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F660E291E1DC60054A4EC /* RootViewController.swift */; };
+		CB9F661129221A730054A4EC /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F661029221A730054A4EC /* RootNavigationController.swift */; };
+		CB9F661329221A800054A4EC /* LeftSideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F661229221A800054A4EC /* LeftSideViewController.swift */; };
+		CB9F661529221A890054A4EC /* RightSideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9F661429221A890054A4EC /* RightSideViewController.swift */; };
 		D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */; };
 		D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3AF2916377200F9FAA5 /* SceneDelegate.swift */; };
 		D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */; };
@@ -71,6 +76,12 @@
 		CB9F65E6291A63AA0054A4EC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CB9F65EE291B37F10054A4EC /* NaverInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverInfo.swift; sourceTree = "<group>"; };
 		CB9F65F0291B37F90054A4EC /* GoogleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleInfo.swift; sourceTree = "<group>"; };
+		CB9F660C291E01E00054A4EC /* Root.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Root.storyboard; sourceTree = "<group>"; };
+		CB9F660E291E1DC60054A4EC /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		CB9F661029221A730054A4EC /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
+		CB9F661229221A800054A4EC /* LeftSideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftSideViewController.swift; sourceTree = "<group>"; };
+		CB9F661429221A890054A4EC /* RightSideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightSideViewController.swift; sourceTree = "<group>"; };
+		CB9F6616292228F40054A4EC /* WaktaverseMusic-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WaktaverseMusic-Bridging-Header.h"; sourceTree = "<group>"; };
 		D445122D689F6AE5F7D6E76D /* Pods-WaktaverseMusicTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WaktaverseMusicTests.debug.xcconfig"; path = "Target Support Files/Pods-WaktaverseMusicTests/Pods-WaktaverseMusicTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D8A5A3AA2916377200F9FAA5 /* WaktaverseMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WaktaverseMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A5A3AD2916377200F9FAA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +157,7 @@
 		CB9F65E0291A63110054A4EC /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				CB9F660B291E01D20054A4EC /* Base */,
 				CB9F65E8291A63D30054A4EC /* Root */,
 				CB9F65E5291A63990054A4EC /* Main */,
 			);
@@ -183,6 +195,7 @@
 				D8A5A3B82916377300F9FAA5 /* LaunchScreen.storyboard */,
 				D8A5A3BB2916377300F9FAA5 /* Info.plist */,
 				D8A5A3B62916377300F9FAA5 /* Assets.xcassets */,
+				CB9F6616292228F40054A4EC /* WaktaverseMusic-Bridging-Header.h */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -199,9 +212,21 @@
 		CB9F65E8291A63D30054A4EC /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */,
+				CB9F660C291E01E00054A4EC /* Root.storyboard */,
+				CB9F661029221A730054A4EC /* RootNavigationController.swift */,
+				CB9F660E291E1DC60054A4EC /* RootViewController.swift */,
+				CB9F661229221A800054A4EC /* LeftSideViewController.swift */,
+				CB9F661429221A890054A4EC /* RightSideViewController.swift */,
 			);
 			path = Root;
+			sourceTree = "<group>";
+		};
+		CB9F660B291E01D20054A4EC /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				D8A5A3B12916377200F9FAA5 /* BaseViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		D8A5A3A12916377200F9FAA5 = {
@@ -334,6 +359,7 @@
 				TargetAttributes = {
 					D8A5A3A92916377200F9FAA5 = {
 						CreatedOnToolsVersion = 14.0.1;
+						LastSwiftMigration = 1400;
 					};
 					D8A5A3BF2916377300F9FAA5 = {
 						CreatedOnToolsVersion = 14.0.1;
@@ -373,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9F660D291E01E00054A4EC /* Root.storyboard in Resources */,
 				D8A5A3E52916454100F9FAA5 /* .swiftlint.yml in Resources */,
 				D8A5A3BA2916377300F9FAA5 /* LaunchScreen.storyboard in Resources */,
 				D8A5A3B72916377300F9FAA5 /* Assets.xcassets in Resources */,
@@ -522,10 +549,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB9F65EF291B37F10054A4EC /* NaverInfo.swift in Sources */,
+				CB9F661129221A730054A4EC /* RootNavigationController.swift in Sources */,
 				D8A5A3B22916377200F9FAA5 /* BaseViewController.swift in Sources */,
 				CB9F65F1291B37F90054A4EC /* GoogleInfo.swift in Sources */,
+				CB9F661529221A890054A4EC /* RightSideViewController.swift in Sources */,
+				CB9F660F291E1DC60054A4EC /* RootViewController.swift in Sources */,
 				D8A5A3AE2916377200F9FAA5 /* AppDelegate.swift in Sources */,
 				D8A5A3B02916377200F9FAA5 /* SceneDelegate.swift in Sources */,
+				CB9F661329221A800054A4EC /* LeftSideViewController.swift in Sources */,
 				CB9F65E7291A63AA0054A4EC /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -702,6 +733,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -730,6 +762,8 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "WaktaverseMusic/Info/WaktaverseMusic-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -741,6 +775,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -769,6 +804,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "WaktaverseMusic/Info/WaktaverseMusic-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -12,12 +12,44 @@
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="WaktaverseMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainViewController" id="BYZ-38-t0r" customClass="MainViewController" customModule="WaktaverseMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MainViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nvQ-X3-cN3">
+                                <rect key="frame" x="69.666666666666686" y="404" width="251" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4x-dh-IfJ">
+                                <rect key="frame" x="0.0" y="47" width="54" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Left"/>
+                                <connections>
+                                    <action selector="btnActionLeft:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FIB-7P-wmQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FiV-3J-r86">
+                                <rect key="frame" x="326" y="47" width="64" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Right"/>
+                                <connections>
+                                    <action selector="btnActionRight:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xQ8-tD-8gY"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nvQ-X3-cN3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9FL-IP-he4"/>
+                            <constraint firstItem="X4x-dh-IfJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ROU-Wg-aJQ"/>
+                            <constraint firstItem="nvQ-X3-cN3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="YLk-hG-ETE"/>
+                            <constraint firstItem="FiV-3J-r86" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="aXX-og-Qzn"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FiV-3J-r86" secondAttribute="trailing" id="iV8-CG-pT0"/>
+                            <constraint firstItem="X4x-dh-IfJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="mYb-n8-tB2"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
