@@ -1,3 +1,14 @@
+# Created by https://www.toptal.com/developers/gitignore/api/macos,xcode,swift,swiftpackagemanager,swiftpm,cocoapods
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,xcode,swift,swiftpackagemanager,swiftpm,cocoapods
+
+### CocoaPods ###
+## CocoaPods GitIgnore Template
+
+# CocoaPods - Only use to conserve bandwidth / Save time on Pushing
+#           - Also handy if you have a large number of dependant pods
+#           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
+Pods/
+
 ### macOS ###
 # General
 .DS_Store
@@ -25,6 +36,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
 
 ### Xcode ###
 # Xcode
