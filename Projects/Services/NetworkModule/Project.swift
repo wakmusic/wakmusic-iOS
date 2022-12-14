@@ -6,6 +6,7 @@ let project = Project.makeModule(
     product: .staticFramework,
     dependencies: [
         .Project.Module.UtilityModule,
-        .Project.Service.APIModule
+        .Project.Service.APIModule,
+        .SPM.Moya
     ]
 )

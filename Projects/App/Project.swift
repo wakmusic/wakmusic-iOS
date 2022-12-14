@@ -28,7 +28,8 @@ let targets: [Target] = [
         resources: ["Resources/**"],
         scripts: scripts,
         dependencies: [
-            .Project.Service.NetworkModule
+            .Project.Service.NetworkModule,
+            .Project.Service.DatabaseModule
         ],
         settings: .settings(base: Environment.baseSetting)
     ),
