@@ -16,6 +16,7 @@ public extension TargetDependency.Project.Module {
 public extension TargetDependency.Project.Service {
     static let APIModule = TargetDependency.service(name: "APIModule")
     static let DataMappingModule = TargetDependency.service(name: "DataMappingModule")
+    static let DataModule = TargetDependency.service(name: "DataModule")
     static let DatabaseModule = TargetDependency.service(name: "DatabaseModule")
     static let NetworkModule = TargetDependency.service(name: "NetworkModule")
 }
