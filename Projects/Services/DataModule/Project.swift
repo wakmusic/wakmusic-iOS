@@ -6,6 +6,7 @@ let project = Project.makeModule(
     product: .staticFramework,
     dependencies: [
         .Project.Service.DatabaseModule,
-        .Project.Service.NetworkModule
+        .Project.Service.NetworkModule,
+        .SPM.RxSwift
     ]
 )
