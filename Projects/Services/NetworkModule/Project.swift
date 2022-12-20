@@ -7,7 +7,8 @@ let project = Project.makeModule(
     dependencies: [
         .Project.Module.UtilityModule,
         .Project.Service.APIModule,
-        .SPM.Moya,
+        .Project.Service.DomainModule,
+        .SPM.RxMoya,
         .SPM.RxSwift,
         .SPM.RxCocoa
     ]

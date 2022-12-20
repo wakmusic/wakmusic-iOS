@@ -8,7 +8,7 @@ let project = Project.makeModule(
         .Project.Module.KeychainModule,
         .Project.Module.ErrorModule,
         .Project.Service.DataMappingModule,
-        .SPM.Moya,
+        .SPM.RxMoya,
         .SPM.RxSwift
     ]
 )
