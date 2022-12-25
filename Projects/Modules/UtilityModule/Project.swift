@@ -10,7 +10,6 @@ let project = Project.makeModule(
         .SPM.RxSwift,
         .SPM.RxCocoa,
         .SPM.Then,
-        .SPM.YouTubePlayerKit,
         .SPM.YoutubeKit
     ]
 )

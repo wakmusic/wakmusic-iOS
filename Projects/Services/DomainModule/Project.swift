@@ -5,6 +5,7 @@ let project = Project.makeModule(
     name: "DomainModule",
     product: .staticFramework,
     dependencies: [
-        .Project.Service.DataMappingModule
+        .Project.Service.DataMappingModule,
+        .SPM.RxSwift
     ]
 )

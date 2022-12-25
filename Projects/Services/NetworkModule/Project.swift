@@ -9,7 +9,6 @@ let project = Project.makeModule(
         .Project.Service.APIModule,
         .Project.Service.DomainModule,
         .SPM.RxMoya,
-        .SPM.RxSwift,
-        .SPM.RxCocoa
+        .SPM.RxSwift
     ]
 )
