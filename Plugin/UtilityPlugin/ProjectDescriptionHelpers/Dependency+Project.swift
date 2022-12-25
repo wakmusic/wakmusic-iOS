@@ -11,6 +11,7 @@ public extension TargetDependency.Project.Module {
     static let KeychainModule = TargetDependency.module(name: "KeychainModule")
     static let ErrorModule = TargetDependency.module(name: "ErrorModule")
     static let UtilityModule = TargetDependency.module(name: "UtilityModule")
+    static let FeatureThirdPartyLib = TargetDependency.module(name: "FeatureThirdPartyLib")
 }
 
 public extension TargetDependency.Project.Service {
