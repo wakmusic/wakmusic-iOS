@@ -13,7 +13,7 @@ let settinges: Settings =
 
 let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
 
-let scripts: [TargetScript] = isForDev ? [.swiftLint] : []
+let scripts: [TargetScript] = [.swiftLint, .needle]
 
 let targets: [Target] = [
     .init(
@@ -28,6 +28,7 @@ let targets: [Target] = [
         resources: ["Resources/**"],
         scripts: scripts,
         dependencies: [
+            .Project.Module.FeatureThirdPartyLib,
             .Project.Service.DataModule
         ],
         settings: .settings(base: Environment.baseSetting)
