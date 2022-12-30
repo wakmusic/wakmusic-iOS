@@ -30,7 +30,10 @@ let targets: [Target] = [
         dependencies: [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
-            .Project.Service.Data
+            .Project.Service.Data,
+            .SPM.Firebase,
+            .SPM.Nimble,
+            .SPM.Quick
         ],
         settings: .settings(base: Environment.baseSetting)
     ),
