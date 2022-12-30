@@ -45,7 +45,7 @@ public extension Project {
         hasDemoApp: Bool = false
     ) -> Project {
         let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
-        let scripts: [TargetScript] = [.swiftLint]
+        let scripts: [TargetScript] = isForDev ? [.swiftLint] : []
         let settings: Settings = .settings(
             base: Environment.baseSetting,
             configurations: [
@@ -98,7 +98,10 @@ public extension Project {
             deploymentTarget: deploymentTarget,
             infoPlist: .default,
             sources: ["Tests/**"],
-            dependencies: testTargetDependencies
+            dependencies: testTargetDependencies + [
+                .SPM.Quick,
+                .SPM.Nimble
+            ]
         )
         
         let schemes: [Scheme] = hasDemoApp

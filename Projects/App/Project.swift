@@ -13,7 +13,7 @@ let settinges: Settings =
 
 let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
 
-let scripts: [TargetScript] = [.swiftLint, .needle]
+let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : []
 
 let targets: [Target] = [
     .init(
@@ -28,8 +28,9 @@ let targets: [Target] = [
         resources: ["Resources/**"],
         scripts: scripts,
         dependencies: [
-            .Project.Module.FeatureThirdPartyLib,
-            .Project.Service.DataModule
+            .Project.Features.RootFeature,
+            .Project.Module.ThirdPartyLib,
+            .Project.Service.Data
         ],
         settings: .settings(base: Environment.baseSetting)
     ),
@@ -37,7 +38,7 @@ let targets: [Target] = [
         name: Environment.targetTestName,
         platform: .iOS,
         product: .unitTests,
-        bundleId: "\(Environment.organizationName).\(Environment.targetName)Tests",
+        bundleId: "\(Environment.organizationName).\(Environment.beforeName)Tests",
         deploymentTarget: Environment.deploymentTarget,
         infoPlist: .default,
         sources: ["Tests/**"],
