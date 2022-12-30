@@ -16,6 +16,7 @@ let project = Project.makeModule(
         .SPM.RxCocoa,
         .SPM.ReactorKit,
         .SPM.SnapKit,
-        .SPM.Then
+        .SPM.Then,
+        .SPM.YouTubePlayerKit
     ]
 )
