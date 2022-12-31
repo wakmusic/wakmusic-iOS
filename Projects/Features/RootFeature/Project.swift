@@ -7,4 +7,5 @@ let project = Project.makeModule(
     dependencies: [
         .Project.Features.CommonFeature
     ]
+    , resources: ["Resources/**"]
 )

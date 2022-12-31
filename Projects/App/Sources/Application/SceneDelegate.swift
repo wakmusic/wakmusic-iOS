@@ -1,5 +1,5 @@
 import UIKit
-import DesignSystem
+import RootFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -12,14 +12,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: scene)
-
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .white
+        let viewController = IntroViewController.viewController()
 
         self.window?.rootViewController = viewController
         self.window?.makeKeyAndVisible()
-        
-        let _ = DesignSystemAsset.TabBar.artistOn.image
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
