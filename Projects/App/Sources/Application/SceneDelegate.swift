@@ -15,9 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let viewController = UIViewController()
         viewController.view.backgroundColor = .white
-        
+
         self.window?.rootViewController = viewController
         self.window?.makeKeyAndVisible()
+        
+        let _ = DesignSystemAsset.TabBar.artistOn.image
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
