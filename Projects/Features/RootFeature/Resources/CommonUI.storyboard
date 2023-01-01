@@ -31,6 +31,9 @@
                                                 <state key="normal" title="취소">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="cancelButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="8ch-Mm-TXm"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VoA-1f-c55">
                                                 <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="56"/>
@@ -40,6 +43,9 @@
                                                 <state key="normal" title="확인">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="confirmButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="eum-g2-XFV"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>

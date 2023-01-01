@@ -18,6 +18,7 @@ class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var confirmButton: UIButton!
 
     var contentString: String = ""
+    var cancelButtonIsHidden: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,10 +26,19 @@ class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
         configureUI()
     }
 
-    public static func viewController(text: String = "") -> TextPopupViewController {
+    public static func viewController(text: String = "", cancelButtonIsHidden: Bool) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
+        viewController.cancelButtonIsHidden = cancelButtonIsHidden
         return viewController
+    }
+
+    @IBAction func cancelButtonAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+
+    @IBAction func confirmButtonAction(_ sender: Any) {
+        dismiss(animated: true)
     }
 }
 
@@ -41,6 +51,8 @@ extension TextPopupViewController {
 
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
+
+        cancelButton.isHidden = cancelButtonIsHidden
     }
 }
 
