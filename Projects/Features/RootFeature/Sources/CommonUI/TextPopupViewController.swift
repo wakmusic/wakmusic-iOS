@@ -73,7 +73,8 @@ extension TextPopupViewController: PanModalPresentable {
      var longFormHeight: PanModalHeight {
          let stringHeight: CGFloat = contentString.heightConstraintAt(width: APP_WIDTH()-40,
                                                                       font: .systemFont(ofSize: 18, weight: .medium))
-         return .contentHeight(60 + stringHeight + 52 + 56 + 20)
+         let spacingHeight: CGFloat = 60 + 52 + 56 + 20
+         return .contentHeight(spacingHeight + stringHeight)
      }
 
     var cornerRadius: CGFloat {

@@ -12,6 +12,7 @@ import DesignSystem
 
 class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var tabBarCoverView: UIView!
     @IBOutlet weak var tabBarHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelViewTopConstraint: NSLayoutConstraint!
@@ -20,6 +21,7 @@ class MainContainerViewController: UIViewController, ViewControllerFromStoryBoar
     var originalPanelAlpha: CGFloat = 0
     var originalPanelPosition: CGFloat = 0
     var lastPoint: CGPoint = .zero
+    var originalTabBarPosition: CGFloat = 0
 
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self,
@@ -58,8 +60,7 @@ extension MainContainerViewController {
             statusBarHeight = safeAreaInsetsTop
         }
 
-        let tabBarHeight: CGFloat = 49.0
-        let screenHeight = APP_HEIGHT() - (statusBarHeight + safeAreaInsetsBottom + tabBarHeight)
+        let screenHeight = APP_HEIGHT() - (statusBarHeight + safeAreaInsetsBottom)
         let centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
                             (screenHeight + originalPanelPosition)
 
@@ -87,10 +88,12 @@ extension MainContainerViewController {
                            initialSpringVelocity: 0.8,
                            options: [.curveEaseInOut],
                            animations: {
+
+                self.tabBarHeightConstraint.constant = (centerRatio < standard) ? self.originalTabBarPosition : 0
                 self.view.layoutIfNeeded()
 
             }, completion: { _ in
-
+                self.tabBarCoverView.isHidden = (centerRatio < standard) ? true : false
             })
 
         default:
@@ -103,6 +106,7 @@ extension MainContainerViewController {
     private func configureUI() {
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarCoverView.isHidden = true
 
         let viewController = MainTabBarController.viewController()
         self.addChild(viewController)
@@ -110,6 +114,7 @@ extension MainContainerViewController {
 
         _ = panGestureRecognizer
 
+        self.originalTabBarPosition = self.tabBarHeightConstraint.constant // 49
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false

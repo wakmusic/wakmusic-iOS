@@ -18,18 +18,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="86a-nB-PJ3">
-                                <rect key="frame" x="0.0" y="769" width="393" height="49"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="49" id="uTD-PT-1jl"/>
-                                </constraints>
-                            </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gc8-5l-C6x">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <connections>
                                     <segue destination="EFw-ca-nsM" kind="embed" id="Bgo-gT-EX1"/>
                                 </connections>
                             </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="86a-nB-PJ3">
+                                <rect key="frame" x="0.0" y="769" width="393" height="49"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="49" id="uTD-PT-1jl"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Tn-23-Dux">
                                 <rect key="frame" x="0.0" y="713" width="393" height="56"/>
                                 <color key="backgroundColor" name="gray200"/>
@@ -58,6 +58,7 @@
                         <outlet property="panelView" destination="4Tn-23-Dux" id="Vlu-Bt-FKb"/>
                         <outlet property="panelViewHeightConstraint" destination="ksy-Yf-i8Y" id="zi6-1r-IxJ"/>
                         <outlet property="panelViewTopConstraint" destination="BfO-lI-Msh" id="2Zs-eN-sSm"/>
+                        <outlet property="tabBarCoverView" destination="86a-nB-PJ3" id="edb-dx-dvK"/>
                         <outlet property="tabBarHeightConstraint" destination="uTD-PT-1jl" id="jRy-lH-PPH"/>
                     </connections>
                 </viewController>
