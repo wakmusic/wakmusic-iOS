@@ -7,5 +7,8 @@ let project = Project.makeModule(
     dependencies: [
         .Project.Features.CommonFeature
     ]
+    , sources: ["Sources/**",
+                "Sources/**/*.xib",
+                "Sources/**/*.storyboard"]
     , resources: ["Resources/**"]
 )
