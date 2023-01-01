@@ -16,6 +16,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradation_bg" translatesAutoresizingMaskIntoConstraints="NO" id="TWm-vm-MRN">
+                                <rect key="frame" x="190" y="0.0" width="203" height="242"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7np-sn-Hue">
                                 <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                                 <constraints>
@@ -27,16 +30,25 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7np-sn-Hue" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="5Sy-Ye-gI8"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="203:242" id="8Pd-y8-GOJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="TWm-vm-MRN" secondAttribute="trailing" id="Skp-Lw-Coh"/>
                             <constraint firstAttribute="trailing" secondItem="7np-sn-Hue" secondAttribute="trailing" id="aJM-70-6xH"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="n2Q-C2-hbh"/>
                             <constraint firstItem="7np-sn-Hue" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="qoS-8Y-66l"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="홈" id="78J-gZ-QXi"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="gradationImageView" destination="TWm-vm-MRN" id="j61-7K-kMm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139" y="-2"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="gradation_bg" width="203" height="242"/>
+    </resources>
 </document>

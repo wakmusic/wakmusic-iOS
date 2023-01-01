@@ -12,6 +12,12 @@ import DesignSystem
 
 class HomeViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var gradationImageView: UIImageView!{
+        didSet{
+            gradationImageView.image = DesignSystemAsset.Home.gradationBg.image
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
