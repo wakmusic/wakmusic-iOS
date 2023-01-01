@@ -15,8 +15,21 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7np-sn-Hue">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="JRz-lV-ta6"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="7np-sn-Hue" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="5Sy-Ye-gI8"/>
+                            <constraint firstAttribute="trailing" secondItem="7np-sn-Hue" secondAttribute="trailing" id="aJM-70-6xH"/>
+                            <constraint firstItem="7np-sn-Hue" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="qoS-8Y-66l"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="홈" id="78J-gZ-QXi"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

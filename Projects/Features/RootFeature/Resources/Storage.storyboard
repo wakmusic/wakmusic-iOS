@@ -16,8 +16,21 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bd9-vD-dwA">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Tl2-V1-Si0"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bd9-vD-dwA" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="1LK-Yg-wii"/>
+                            <constraint firstItem="bd9-vD-dwA" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="34d-XR-uLi"/>
+                            <constraint firstAttribute="trailing" secondItem="bd9-vD-dwA" secondAttribute="trailing" id="jXZ-U7-oFG"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="보관함" id="5O9-Kq-2HE"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

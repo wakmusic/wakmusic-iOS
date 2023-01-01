@@ -29,7 +29,7 @@ class MainTabBarController: UITabBarController, ViewControllerFromStoryBoard {
         propertyAnimator.startAnimation()
     }
 
-    static func viewController() -> MainTabBarController {
+    public static func viewController() -> MainTabBarController {
         let viewController = MainTabBarController.viewController(storyBoardName: "MainTabBar", bundle: Bundle.module)
         return viewController
     }
@@ -106,22 +106,5 @@ extension MainTabBarController {
     private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance) {
         itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: colorFromRGB(0x98A2B3)]
         itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: colorFromRGB(0x101828)]
-    }
-}
-
-extension UIImage {
-
-    static func tabBarTopLine(color: UIColor) -> UIImage {
-        let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-        UIGraphicsBeginImageContext(rect.size)
-        guard let context = UIGraphicsGetCurrentContext() else { return Self() }
-
-        context.setFillColor(color.cgColor)
-        context.fill(rect)
-
-        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return Self() }
-        UIGraphicsEndImageContext()
-
-        return image
     }
 }

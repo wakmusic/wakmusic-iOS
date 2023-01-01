@@ -9,6 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import PanModal
 
 class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -17,7 +18,7 @@ class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
 
     }
 
-    static func viewController() -> ArtistViewController {
+    public static func viewController() -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
     }

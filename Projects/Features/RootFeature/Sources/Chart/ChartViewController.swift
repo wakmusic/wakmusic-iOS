@@ -16,7 +16,7 @@ class ChartViewController: UIViewController, ViewControllerFromStoryBoard {
         super.viewDidLoad()
     }
 
-    static func viewController() -> ChartViewController {
+    public static func viewController() -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         return viewController
     }

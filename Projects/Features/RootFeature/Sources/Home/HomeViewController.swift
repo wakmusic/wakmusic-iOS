@@ -18,7 +18,7 @@ class HomeViewController: UIViewController, ViewControllerFromStoryBoard {
         DEBUG_LOG("\(Self.self) viewDidLoad")
     }
 
-    static func viewController() -> HomeViewController {
+    public static func viewController() -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         return viewController
     }
