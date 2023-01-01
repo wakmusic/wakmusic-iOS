@@ -30,7 +30,7 @@ class MainTabBarController: UITabBarController, ViewControllerFromStoryBoard {
     }
 
     public static func viewController() -> MainTabBarController {
-        let viewController = MainTabBarController.viewController(storyBoardName: "MainTabBar", bundle: Bundle.module)
+        let viewController = MainTabBarController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         return viewController
     }
 }

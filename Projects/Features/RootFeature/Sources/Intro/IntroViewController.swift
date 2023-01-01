@@ -33,7 +33,7 @@ extension IntroViewController {
 
     @objc
     private func showTabBar() {
-        let viewController = MainTabBarController.viewController()
+        let viewController = MainContainerViewController.viewController()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
