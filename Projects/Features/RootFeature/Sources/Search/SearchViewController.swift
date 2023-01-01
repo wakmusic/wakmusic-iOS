@@ -9,7 +9,6 @@
 import UIKit
 import Utility
 import DesignSystem
-import PanModal
 
 class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -21,12 +20,5 @@ class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
     public static func viewController() -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         return viewController
-    }
-
-    @IBAction func buttonAction(_ sender: Any) {
-        let textPopupViewController = TextPopupViewController.viewController(text: "한 줄\n두 줄",
-                                                                             cancelButtonIsHidden: false)
-        let viewController: PanModalPresentable.LayoutType = textPopupViewController
-        self.presentPanModal(viewController)
     }
 }

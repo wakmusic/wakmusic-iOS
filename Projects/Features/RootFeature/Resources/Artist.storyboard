@@ -16,21 +16,8 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="USP-S3-Cyz">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="QaK-AG-KQU"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="USP-S3-Cyz" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="NGb-Ni-OLS"/>
-                            <constraint firstItem="USP-S3-Cyz" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="ZaK-rz-J3B"/>
-                            <constraint firstAttribute="trailing" secondItem="USP-S3-Cyz" secondAttribute="trailing" id="hhg-Z1-xXE"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="아티스트" id="1Bg-Sp-n3b"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

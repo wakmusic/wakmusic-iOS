@@ -15,21 +15,8 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ckb-9Q-zs4">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="2tM-bt-joj"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ckb-9Q-zs4" secondAttribute="trailing" id="BqC-hj-t2i"/>
-                            <constraint firstItem="ckb-9Q-zs4" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Y5w-26-6gX"/>
-                            <constraint firstItem="ckb-9Q-zs4" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="dc9-Fy-T0g"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="차트" id="FVW-eT-hiu"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
