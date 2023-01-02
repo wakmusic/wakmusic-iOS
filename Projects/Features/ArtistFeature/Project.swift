@@ -2,13 +2,10 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "RootFeature",
+    name: "ArtistFeature",
     product: .staticFramework,
     dependencies: [
-        .Project.Features.BaseFeature,
-        .Project.Features.MainTabFeature,
-        .Project.Features.PlayerFeature,
-        .Project.Features.SignInFeature
+        .Project.Features.BaseFeature
     ]
     , resources: ["Resources/**"]
 )

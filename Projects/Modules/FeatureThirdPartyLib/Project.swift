@@ -6,6 +6,15 @@ let project = Project.makeModule(
     name: "FeatureThirdPartyLib",
     product: .framework,
     dependencies: [
-        .SPM.Needle
+        .SPM.Needle,
+        .SPM.FlexLayout,
+        .SPM.PanModal,
+        .SPM.Lottie,
+        .SPM.RxSwift,
+        .SPM.RxCocoa,
+        .SPM.ReactorKit,
+        .SPM.SnapKit,
+        .SPM.Then,
+        .SPM.Kingfisher
     ]
 )

@@ -10,7 +10,15 @@ public extension TargetDependency {
 }
 
 public extension TargetDependency.Project.Features {
-    static let CommonFeature = TargetDependency.feature(name: "CommonFeature")
+    static let PlayerFeature = TargetDependency.feature(name: "PlayerFeature")
+    static let StorageFeature = TargetDependency.feature(name: "StorageFeature")
+    static let SignInFeature = TargetDependency.feature(name: "SignInFeature")
+    static let HomeFeature = TargetDependency.feature(name: "HomeFeature")
+    static let ChartFeature = TargetDependency.feature(name: "ChartFeature")
+    static let SearchFeature = TargetDependency.feature(name: "SearchFeature")
+    static let MainTabFeature = TargetDependency.feature(name: "MainTabFeature")
+    static let ArtistFeature = TargetDependency.feature(name: "ArtistFeature")
+    static let BaseFeature = TargetDependency.feature(name: "BaseFeature")
     static let RootFeature = TargetDependency.feature(name: "RootFeature")
 }
 
