@@ -1,14 +1,11 @@
-//
-//  MainTabBarController.swift
-//  RootFeature
-//
-//  Created by KTH on 2023/01/01.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import UIKit
 import Utility
 import DesignSystem
+import HomeFeature
+import SearchFeature
+import ArtistFeature
+import ChartFeature
+import StorageFeature
 
 class MainTabBarController: UITabBarController, ViewControllerFromStoryBoard {
 
@@ -41,11 +38,13 @@ extension MainTabBarController {
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 
-        self.viewControllers = [HomeViewController.viewController(),
-                                ChartViewController.viewController(),
-                                SearchViewController.viewController(),
-                                ArtistViewController.viewController(),
-                                StorageViewController.viewController()]
+        self.viewControllers = [
+            HomeViewController.viewController(),
+            ChartViewController.viewController(),
+            SearchViewController.viewController(),
+            ArtistViewController.viewController(),
+            StorageViewController.viewController()
+        ]
 
         let topLineColor: UIColor = colorFromRGB(0xf2f4f7)
         let normalColor: UIColor = colorFromRGB(0x98A2B3)

@@ -1,18 +1,10 @@
-//
-//  SearchViewController.swift
-//  RootFeature
-//
-//  Created by KTH on 2023/01/02.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import UIKit
 import Utility
 import DesignSystem
 
-class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
     }

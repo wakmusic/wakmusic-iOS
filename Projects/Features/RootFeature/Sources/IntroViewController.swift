@@ -1,11 +1,3 @@
-//
-//  IntroViewController.swift
-//  RootFeature
-//
-//  Created by KTH on 2022/12/31.
-//  Copyright © 2022 yongbeomkwak. All rights reserved.
-//
-
 import UIKit
 import Utility
 import DesignSystem
