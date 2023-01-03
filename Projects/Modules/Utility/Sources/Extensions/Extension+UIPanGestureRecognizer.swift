@@ -33,6 +33,10 @@ public extension UIPanGestureRecognizer {
         return velocity > 0 ? greater : lower
     }
 
+    /// 현재 수행되는 제스쳐의 방향을 반환합니다.
+    /// 이 부분 주석은 저도 좀 학습이 필요할 것 같습니다. 추후 업데이트 예정
+    /// - Parameter view: 제스쳐가 적용된 뷰
+    /// - Returns: PanGestureDirection
     func direction(in view: UIView) -> PanGestureDirection {
         let velocity = self.velocity(in: view)
         let yDirection = getDirectionBy(velocity: velocity.y,
