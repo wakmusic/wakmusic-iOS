@@ -2,7 +2,7 @@ import UIKit
 import Utility
 import DesignSystem
 
-class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
+open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tabBarCoverView: UIView!
     @IBOutlet weak var tabBarHeightConstraint: NSLayoutConstraint!
@@ -22,7 +22,7 @@ class MainContainerViewController: UIViewController, ViewControllerFromStoryBoar
         return gesture
     }()
 
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()

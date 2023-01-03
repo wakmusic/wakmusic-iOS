@@ -1,6 +1,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import MainTabFeature
 
 open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
 

@@ -13,7 +13,7 @@
         <!--Main Container View Controller-->
         <scene sceneID="hhW-xL-tCO">
             <objects>
-                <viewController storyboardIdentifier="MainContainerViewController" id="bBr-N8-o9p" customClass="MainContainerViewController" customModule="RootFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainContainerViewController" id="bBr-N8-o9p" customClass="MainContainerViewController" customModule="MainTabFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0KA-OH-Mpe">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -69,7 +69,7 @@
         <!--Main Tab Bar Controller-->
         <scene sceneID="IRF-2d-E9M">
             <objects>
-                <tabBarController storyboardIdentifier="MainTabBarController" id="EFw-ca-nsM" customClass="MainTabBarController" customModule="RootFeature" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabBarController" id="EFw-ca-nsM" customClass="MainTabBarController" customModule="MainTabFeature" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="qkV-Re-XgL"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NhF-ds-oId">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
