@@ -1,0 +1,16 @@
+name: "Todo"
+description: "해야할 것이 있나요??🤔"
+body:
+
+  - type: textarea
+    attributes:
+      label: 할 일
+      description: |
+        [Explain] 설명을 작성해주세요.
+      placeholder: |
+        밥먹기 UI 작성
+  - type: textarea
+    attributes:
+      label: 추가사항
+      description: |
+        [추가사항] 별도로 알려줘야 할 사항이나 추가사항을 작성해주세요    
