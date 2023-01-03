@@ -21,7 +21,7 @@ public final class HomeViewController: UIViewController, ViewControllerFromStory
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         return viewController
     }
-    
+
     @IBAction func buttonAction(_ sender: Any) {
         let textPopupViewController = TextPopupViewController.viewController(
             text: "한 줄\n두 줄",
