@@ -52,7 +52,7 @@ extension MainContainerViewController {
             statusBarHeight = safeAreaInsetsTop
         }
 
-        let screenHeight = APP_HEIGHT() - (statusBarHeight + safeAreaInsetsBottom)
+        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
         let centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
                             (screenHeight + originalPanelPosition)
 
