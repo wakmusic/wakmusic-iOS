@@ -1,7 +1,8 @@
 import UIKit
 import Utility
 import DesignSystem
-import PanModal
+import RxSwift
+import RxCocoa
 
 public final class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
 
