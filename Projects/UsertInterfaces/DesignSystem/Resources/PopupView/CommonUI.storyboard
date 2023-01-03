@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Text Popup View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="TextPopupViewController" id="Y6W-OH-hqX" customClass="TextPopupViewController" customModule="DesignSystem" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KPw-HA-JMU">
+                                <rect key="frame" x="0.0" y="59" width="393" height="231"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="GVm-xa-fSc">
+                                        <rect key="frame" x="20" y="155" width="353" height="56"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DNn-Fv-Nq0">
+                                                <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="56"/>
+                                                <color key="backgroundColor" red="0.59607843137254901" green="0.63529411764705879" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="취소">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="cancelButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="8ch-Mm-TXm"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VoA-1f-c55">
+                                                <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="56"/>
+                                                <color key="backgroundColor" name="POINT"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="확인">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="confirmButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="eum-g2-XFV"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="pKv-iK-t7g"/>
+                                        </constraints>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="한 줄 두 줄" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mgy-2n-pj8">
+                                        <rect key="frame" x="20" y="60" width="353" height="43"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                        <color key="textColor" red="0.062745098039215685" green="0.094117647058823528" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Mgy-2n-pj8" firstAttribute="leading" secondItem="KPw-HA-JMU" secondAttribute="leading" constant="20" id="7Hb-7F-4jj"/>
+                                    <constraint firstAttribute="trailing" secondItem="GVm-xa-fSc" secondAttribute="trailing" constant="20" id="A38-LZ-TGj"/>
+                                    <constraint firstItem="Mgy-2n-pj8" firstAttribute="top" secondItem="KPw-HA-JMU" secondAttribute="top" constant="60" id="B13-7Y-cbm"/>
+                                    <constraint firstAttribute="trailing" secondItem="Mgy-2n-pj8" secondAttribute="trailing" constant="20" id="Glm-Os-SAp"/>
+                                    <constraint firstAttribute="bottom" secondItem="GVm-xa-fSc" secondAttribute="bottom" constant="20" id="PSh-in-kJD"/>
+                                    <constraint firstItem="GVm-xa-fSc" firstAttribute="top" secondItem="Mgy-2n-pj8" secondAttribute="bottom" constant="52" id="XMg-Ok-UK1"/>
+                                    <constraint firstItem="GVm-xa-fSc" firstAttribute="leading" secondItem="KPw-HA-JMU" secondAttribute="leading" constant="20" id="fTx-uP-LTf"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="KPw-HA-JMU" secondAttribute="trailing" id="i4N-rs-VB4"/>
+                            <constraint firstItem="KPw-HA-JMU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="lDH-WT-Xwn"/>
+                            <constraint firstItem="KPw-HA-JMU" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="taD-nS-DJR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="DNn-Fv-Nq0" id="Qbi-Ml-jn9"/>
+                        <outlet property="confirmButton" destination="VoA-1f-c55" id="2Gx-Tl-Vae"/>
+                        <outlet property="contentLabel" destination="Mgy-2n-pj8" id="KXR-bb-bc0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="-2"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="POINT">
+            <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

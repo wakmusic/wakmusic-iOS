@@ -1,4 +1,5 @@
 import UIKit
+import RootFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -10,7 +11,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
+        self.window = UIWindow(windowScene: scene)
+        let viewController = IntroViewController.viewController().wrapNavigationController
 
+        self.window?.rootViewController = viewController
+        self.window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

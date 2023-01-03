@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--홈-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="HomeViewController" id="Y6W-OH-hqX" customClass="HomeViewController" customModule="HomeFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradation_bg" translatesAutoresizingMaskIntoConstraints="NO" id="TWm-vm-MRN">
+                                <rect key="frame" x="190" y="0.0" width="203" height="242"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o27-Gb-2NX">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptx-Ka-m3v">
+                                        <rect key="frame" x="330" y="0.0" width="53" height="44"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="POPUP">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="d75-DT-4iy"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ptx-Ka-m3v" secondAttribute="trailing" constant="10" id="CqE-q8-JHH"/>
+                                    <constraint firstItem="ptx-Ka-m3v" firstAttribute="top" secondItem="o27-Gb-2NX" secondAttribute="top" id="DZd-9c-3WW"/>
+                                    <constraint firstAttribute="bottom" secondItem="ptx-Ka-m3v" secondAttribute="bottom" id="XHA-gR-9cZ"/>
+                                    <constraint firstAttribute="height" constant="44" id="nYY-Gm-ibt"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="o27-Gb-2NX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="35F-wm-6TL"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="203:242" id="8Pd-y8-GOJ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="TWm-vm-MRN" secondAttribute="trailing" id="Skp-Lw-Coh"/>
+                            <constraint firstItem="o27-Gb-2NX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="kVe-av-M3F"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="n2Q-C2-hbh"/>
+                            <constraint firstItem="o27-Gb-2NX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="sXr-X7-ION"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="홈" id="78J-gZ-QXi"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="gradationImageView" destination="TWm-vm-MRN" id="j61-7K-kMm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139" y="-2"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="gradation_bg" width="203" height="242"/>
+    </resources>
+</document>
