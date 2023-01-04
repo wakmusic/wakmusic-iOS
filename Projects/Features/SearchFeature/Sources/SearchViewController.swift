@@ -61,16 +61,20 @@ extension SearchViewController {
             .asObservable()
             .subscribe { [weak self]  _ in
                 
-                self?.view.backgroundColor = .white
-                self?.searchContentView.backgroundColor = .white
+                guard let self = self else {
+                    return
+                }
                 
-                self?.searchTextFiled.textColor = .black
-                self?.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:unFocusedplaceHolderAttributes) //플레이스 홀더 설정
+                self.view.backgroundColor = .white
+                self.searchContentView.backgroundColor = .white
                 
-                self?.searchImageView.tintColor = DesignSystemAsset.GrayColor.gray400.color
+                self.searchTextFiled.textColor = .black
+                self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:unFocusedplaceHolderAttributes) //플레이스 홀더 설정
+                
+                self.searchImageView.tintColor = DesignSystemAsset.GrayColor.gray400.color
                 
             
-                self?.searchTextFiled.alpha = 0
+                self.searchTextFiled.alpha = 0
 
             }.disposed(by: self.disposeBag)
     
@@ -80,17 +84,21 @@ extension SearchViewController {
             .asObservable()
             .subscribe { [weak self]  _ in
                 
-                self?.view.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-                self?.searchContentView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+                guard let self = self else {
+                    return
+                }
+                
+                self.view.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+                self.searchContentView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
                 
                 
-                self?.searchTextFiled.textColor = .white
-                self?.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+                self.searchTextFiled.textColor = .white
+                self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
                 
                 
-                self?.searchImageView.tintColor = .white
+                self.searchImageView.tintColor = .white
                 
-                self?.searchTextFiled.alpha = 1
+                self.searchTextFiled.alpha = 1
                 
             }.disposed(by: self.disposeBag)
         
