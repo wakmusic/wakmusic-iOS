@@ -62,7 +62,7 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vca-gg-89h">
                                 <rect key="frame" x="0.0" y="125" width="393" height="644"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -81,6 +81,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="cancelButton" destination="pwf-8T-rR0" id="9ug-Jg-CPu"/>
+                        <outlet property="searchContentView" destination="yLy-ME-gxl" id="wjQ-qQ-H92"/>
                         <outlet property="searchImageView" destination="DMe-Vm-2cg" id="oFs-eJ-DKi"/>
                         <outlet property="searchTextFiled" destination="VJU-GJ-8b6" id="qs0-yr-rIP"/>
                     </connections>
