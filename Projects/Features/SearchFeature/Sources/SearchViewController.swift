@@ -23,6 +23,11 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         return viewController
     }
+    
+    
+    @IBAction func cancelButtonAction(_ sender: Any) {
+        self.view.endEditing(false)
+    }
 }
 
 
@@ -74,7 +79,7 @@ extension SearchViewController {
                 self.searchImageView.tintColor = DesignSystemAsset.GrayColor.gray400.color
                 
             
-                self.searchTextFiled.alpha = 0
+                self.cancelButton.alpha = 0
 
             }.disposed(by: self.disposeBag)
     
@@ -98,7 +103,7 @@ extension SearchViewController {
                 
                 self.searchImageView.tintColor = .white
                 
-                self.searchTextFiled.alpha = 1
+                self.cancelButton.alpha = 1
                 
             }.disposed(by: self.disposeBag)
         
@@ -112,6 +117,7 @@ extension SearchViewController {
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
+        self.cancelButton.alpha = 0
         
         
         

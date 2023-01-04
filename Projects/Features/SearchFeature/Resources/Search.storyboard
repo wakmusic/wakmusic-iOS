@@ -45,6 +45,9 @@
                                         <state key="normal" title="취소">
                                             <color key="titleColor" name="gray400"/>
                                         </state>
+                                        <connections>
+                                            <action selector="cancelButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="3JA-YC-r5f"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
