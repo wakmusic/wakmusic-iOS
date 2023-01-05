@@ -10,6 +10,9 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchTextFiled:UITextField!
     @IBOutlet weak var cancelButton:UIButton!
     @IBOutlet weak var searchContentView:UIView!
+    
+    var viewModel = SearchViewModel()
+    
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -38,6 +41,7 @@ extension SearchViewController {
     
     private func configureUI() {
         
+        
         //MARK: 검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)
         
@@ -53,7 +57,16 @@ extension SearchViewController {
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
         
-        unFocusedVisualSetting()
+        self.viewModel.output.isFoucused.subscribe { (res:Bool) in
+            if(res)
+            {
+                self.focusedVisualSetting()
+            }
+            else
+            {
+                self.unFocusedVisualSetting()
+            }
+        }.disposed(by: self.disposeBag)
         
         
         // MARK: 검색바 포커싱 시작 종료
@@ -65,7 +78,8 @@ extension SearchViewController {
                     return
                 }
                 
-                self.unFocusedVisualSetting()
+                self.viewModel.output.isFoucused.accept(false)
+             
                 
                
 
@@ -73,6 +87,9 @@ extension SearchViewController {
     
         
         // MARK: 검색바 포커싱 시작
+        
+        
+        
         self.searchTextFiled.rx.controlEvent([.editingDidBegin])
             .asObservable()
             .subscribe { [weak self]  _ in
@@ -80,27 +97,17 @@ extension SearchViewController {
                     return
                 }
                 
-                self.focusedVisualSetting()
+                self.viewModel.output.isFoucused.accept(true)
                 
 
                 
             }.disposed(by: self.disposeBag)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
     }
     
     private func unFocusedVisualSetting()
     {
-        
-        
+
         let headerFontSize:CGFloat = 20
         let unFocusedplaceHolderAttributes = [
             NSAttributedString.Key.foregroundColor: DesignSystemAsset.GrayColor.gray400.color,

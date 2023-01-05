@@ -22,12 +22,12 @@ final class SearchViewModel {
     }
 
     struct Output {
-        let enableLoginButton = PublishRelay<Bool>()
+        let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
     init() {
         
-
+        print("✅ SearchViewModel 생성")
         
 
     }
