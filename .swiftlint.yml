@@ -1,7 +1,0 @@
-excluded:
-  - "**/*/NeedleGenerated.swift"
-  - "Tuist"
-
-
-
-

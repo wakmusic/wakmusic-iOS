@@ -42,8 +42,7 @@ extension SearchViewController {
     
     private func configureUI() {
         
-        
-        //MARK: 검색 돋보기 이미지
+        // MARK:검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)
         
         let headerFontSize:CGFloat = 20
@@ -66,12 +65,11 @@ extension SearchViewController {
     
     
     //MARK: Rx 작업
-    
-    private func rxBindTask()
-    {
+
+    private func rxBindTask(){
         self.viewModel.output.isFoucused.subscribe { [weak self](res:Bool) in
             
-            guard let self = self else{
+            guard let self = self else {
                 return
             }
             
