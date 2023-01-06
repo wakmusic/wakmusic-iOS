@@ -31,6 +31,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     
     @IBAction func cancelButtonAction(_ sender: Any) {
+        viewModel.input.textString.accept("")
         self.view.endEditing(false)
     }
 }
@@ -57,19 +58,34 @@ extension SearchViewController {
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
         
-        self.viewModel.output.isFoucused.subscribe { (res:Bool) in
-            if(res)
-            {
-                self.focusedVisualSetting()
+        
+        self.rxBindTask()
+        
+}
+       
+    
+    
+    //MARK: Rx 작업
+    
+    private func rxBindTask()
+    {
+        self.viewModel.output.isFoucused.subscribe { [weak self](res:Bool) in
+            
+            guard let self = self else{
+                return
             }
-            else
-            {
-                self.unFocusedVisualSetting()
-            }
+            
+            self.reactSearchHeader(res)
+            
+            
         }.disposed(by: self.disposeBag)
         
         
         // MARK: 검색바 포커싱 시작 종료
+        
+  
+        
+        
         self.searchTextFiled.rx.controlEvent([.editingDidEnd])
             .asObservable()
             .subscribe { [weak self]  _ in
@@ -87,9 +103,6 @@ extension SearchViewController {
     
         
         // MARK: 검색바 포커싱 시작
-        
-        
-        
         self.searchTextFiled.rx.controlEvent([.editingDidBegin])
             .asObservable()
             .subscribe { [weak self]  _ in
@@ -102,50 +115,47 @@ extension SearchViewController {
 
                 
             }.disposed(by: self.disposeBag)
+        
+        
+        self.searchTextFiled.rx.text.orEmpty
+            .skip(1)
+            .distinctUntilChanged()
+            .bind(to: viewModel.input.textString)
+            .disposed(by: self.disposeBag)
+        
+        
+        self.viewModel.input.textString.subscribe { (str:String) in
+            print(str)
+        }.disposed(by: self.disposeBag)
 
     }
-    
-    private func unFocusedVisualSetting()
-    {
-
-        let headerFontSize:CGFloat = 20
-        let unFocusedplaceHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
-            NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
-        ] // 언 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.view.backgroundColor = .white
-        self.searchContentView.backgroundColor = .white
-        
-        self.searchTextFiled.textColor = .black
-        self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:unFocusedplaceHolderAttributes) //플레이스 홀더 설정
-        
-        self.searchImageView.tintColor = DesignSystemAsset.GrayColor.gray400.color
-        
-    
-        self.cancelButton.alpha = 0
-    }
+    // 바인딩 작업
     
     
-    private func focusedVisualSetting()
+  
+    
+    
+    
+    private func reactSearchHeader(_ isfocused:Bool)
     {
         let headerFontSize:CGFloat = 20
         
         let focusedplaceHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.foregroundColor: isfocused ? UIColor.white : DesignSystemAsset.GrayColor.gray400.color,
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.view.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-        self.searchContentView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+        self.view.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
+        self.searchContentView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
         
         
-        self.searchTextFiled.textColor = .white
+        self.searchTextFiled.textColor = isfocused ? .white : .black
         self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
-        self.searchImageView.tintColor = .white
+        self.searchImageView.tintColor = isfocused ? .white : DesignSystemAsset.GrayColor.gray400.color
         
-        self.cancelButton.alpha = 1
-    
+        self.cancelButton.alpha =  isfocused ? 1 : 0
     }
-
+    
+    
 }
