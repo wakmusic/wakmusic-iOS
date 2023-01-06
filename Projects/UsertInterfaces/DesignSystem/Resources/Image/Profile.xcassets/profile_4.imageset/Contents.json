@@ -1,17 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=img_세균단_76.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=img_세균단_76@2x.png",
+      "filename" : "profile_4@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=img_세균단_76@3x.png",
+      "filename" : "profile_4@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
