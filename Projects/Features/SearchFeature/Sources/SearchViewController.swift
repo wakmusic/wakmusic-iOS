@@ -82,41 +82,31 @@ extension SearchViewController {
         
         
         // MARK: 검색바 포커싱 시작 종료
+      
+        let editingDidBegin = searchTextFiled.rx.controlEvent(.editingDidBegin)
+        let editingDidEnd = searchTextFiled.rx.controlEvent(.editingDidEnd)
         
-  
-        
-        
-        self.searchTextFiled.rx.controlEvent([.editingDidEnd])
-            .asObservable()
-            .subscribe { [weak self]  _ in
-                
-                guard let self = self else{
-                    return
-                }
-                
-                self.viewModel.output.isFoucused.accept(false)
-             
-                
-               
 
-            }.disposed(by: self.disposeBag)
-    
-        
-        // MARK: 검색바 포커싱 시작
-        self.searchTextFiled.rx.controlEvent([.editingDidBegin])
-            .asObservable()
-            .subscribe { [weak self]  _ in
-                guard let self = self else{
-                    return
-                }
-                
-                self.viewModel.output.isFoucused.accept(true)
-                
+                let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
+                                                       editingDidEnd.map { UIControl.Event.editingDidEnd })
 
-                
-            }.disposed(by: self.disposeBag)
+                mergeObservable
+                    .asObservable()
+                    .subscribe(onNext: { [weak self] (event) in
+                        
+                        guard let self = self else {
+                            return
+                        }
+                        
+                        if event == .editingDidBegin {
+                            self.viewModel.output.isFoucused.accept(true)
+
+                        }else if event == .editingDidEnd {
+                            self.viewModel.output.isFoucused.accept(false)
+                        }
+                    }).disposed(by: disposeBag)
         
-        
+
         self.searchTextFiled.rx.text.orEmpty
             .skip(1)
             .distinctUntilChanged()
@@ -129,14 +119,7 @@ extension SearchViewController {
         }.disposed(by: self.disposeBag)
 
     }
-        
-    // 바인딩 작업
-    
-    
-  
-    
-    
-    
+
     private func reactSearchHeader(_ isfocused:Bool)
     {
         let headerFontSize:CGFloat = 20
