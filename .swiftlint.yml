@@ -2,6 +2,29 @@ excluded:
   - "**/*/NeedleGenerated.swift"
   - "Tuist"
 
+included: # paths to include during linting. `--path` is ignored if present.
+  - Source
+
+
+disabled_rules:
+  - trailing_whitespace
+  - vertical_whitespace
+
+
+
+
+excluded:
+  - "**/*/NeedleGenerated.swift"
+  - "Tuist"
+
+included: # paths to include during linting. `--path` is ignored if present.
+  - Source
+
+
+disabled_rules:
+  - trailing_whitespace
+  - vertical_whitespace
+
 
 
 

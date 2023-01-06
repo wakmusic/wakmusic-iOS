@@ -1,9 +1,27 @@
+# excluded:
+# - "**/*/NeedleGenerated.swift"
+# - "Tuist"
+
+
+# disabled_rules:
+# - trailing_whitespace
+# - vertical_whitespace
+
+# included:
+#   - SearchViewController.swift
+
+
+
+
 excluded:
   - "**/*/NeedleGenerated.swift"
   - "Tuist"
 
-
-
 disabled_rules:
   - trailing_whitespace
+  - vertical_whitespace
+  - line_length
+  
+
+
 
