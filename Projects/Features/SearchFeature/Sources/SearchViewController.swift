@@ -31,7 +31,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     
     @IBAction func cancelButtonAction(_ sender: Any) {
-        viewModel.input.textString.accept("")
+        self.searchTextFiled.rx.text.onNext("")
         self.view.endEditing(false)
     }
 }
@@ -105,17 +105,40 @@ extension SearchViewController {
             })
             .disposed(by: disposeBag)
         
-
+        
+        
+        //textField.rx.text 하고 subscirbe하면 옵셔널 타입으로 String? 을 받아오는데,
+        // 옵셔널 말고 String으로 받아오고 싶으면 orEmpty를 쓰자 -!
         self.searchTextFiled.rx.text.orEmpty
             .skip(1)
-            .distinctUntilChanged()
-            .bind(to: viewModel.input.textString)
+            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
+            .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
         
-        
         self.viewModel.input.textString.subscribe { (str:String) in
-            print(str)
+            
+            if(str.isEmpty)
+            {
+                print("Empty")
+            }
+            
+            
+            
+            else
+            {
+                print("str: \(str)")
+            }
+            
+            
         }.disposed(by: self.disposeBag)
+        
+        
+        
+        
+        
+        
+        
+      
 
     }
 
