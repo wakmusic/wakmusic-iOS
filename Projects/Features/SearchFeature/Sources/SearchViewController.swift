@@ -87,24 +87,25 @@ extension SearchViewController {
         let editingDidEnd = searchTextFiled.rx.controlEvent(.editingDidEnd)
         
 
-                let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
+        let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
                                                        editingDidEnd.map { UIControl.Event.editingDidEnd })
 
-                mergeObservable
-                    .asObservable()
-                    .subscribe(onNext: { [weak self] (event) in
+        mergeObservable
+            .asObservable()
+            .subscribe(onNext: { [weak self] (event) in
                         
-                        guard let self = self else {
-                            return
-                        }
+            guard let self = self else {
+                return
+            }
                         
-                        if event == .editingDidBegin {
-                            self.viewModel.output.isFoucused.accept(true)
-
-                        }else if event == .editingDidEnd {
-                            self.viewModel.output.isFoucused.accept(false)
-                        }
-                    }).disposed(by: disposeBag)
+            if event == .editingDidBegin {
+                self.viewModel.output.isFoucused.accept(true)
+            }
+            else if event == .editingDidEnd {
+                self.viewModel.output.isFoucused.accept(false)
+            }
+            })
+            .disposed(by: disposeBag)
         
 
         self.searchTextFiled.rx.text.orEmpty

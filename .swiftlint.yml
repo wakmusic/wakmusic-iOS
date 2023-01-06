@@ -2,6 +2,6 @@ excluded:
   - "**/*/NeedleGenerated.swift"
   - "Tuist"
 
-disabled_rules:
+
 
 
