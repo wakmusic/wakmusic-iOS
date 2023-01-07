@@ -66,7 +66,7 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vca-gg-89h">
                                 <rect key="frame" x="0.0" y="125" width="393" height="644"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="gray100"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -94,10 +94,10 @@
             </objects>
             <point key="canvasLocation" x="139.69465648854961" y="-2.1126760563380285"/>
         </scene>
-        <!--Search Content View Controller-->
+        <!--Before Search Content View Controller-->
         <scene sceneID="38Z-mM-MxM">
             <objects>
-                <viewController id="3SA-9c-5nM" customClass="SearchContentViewController" customModule="SearchFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BeforeSearchContentViewController" id="3SA-9c-5nM" customClass="BeforeSearchContentViewController" customModule="SearchFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3xk-U4-Bip">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -167,6 +167,9 @@
     </scenes>
     <resources>
         <image name="xmark" catalog="system" width="128" height="113"/>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray400">
             <color red="0.59600001573562622" green="0.63499999046325684" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -9,16 +9,18 @@
 import UIKit
 import Utility
 
-class SearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
+class BeforeSearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        DEBUG_LOG("\(Self.self) viewDidLoad")
+        
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController() -> SearchViewController {
-        let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+    public static func viewController() -> BeforeSearchContentViewController {
+        let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         return viewController
     }
     

@@ -10,6 +10,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchTextFiled:UITextField!
     @IBOutlet weak var cancelButton:UIButton!
     @IBOutlet weak var searchContentView:UIView!
+    @IBOutlet weak var talbeView:UIView!
     
     var viewModel = SearchViewModel()
     
