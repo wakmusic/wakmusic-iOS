@@ -65,6 +65,17 @@ extension ArtistViewController {
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .withLatestFrom(dataSource) { ($0, $1) }
+            .subscribe(onNext:{ [weak self] (indexPath, model) in
+                guard let `self` = self else { return }
+                
+                let viewController = ArtistDetailViewController.viewController()
+                self.navigationController?.pushViewController(viewController, animated: true)
+                
+            }).disposed(by: disposeBag)
+
 
     }
     
