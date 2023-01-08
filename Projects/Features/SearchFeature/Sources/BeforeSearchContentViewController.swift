@@ -23,15 +23,8 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
         tableView.delegate = self
         tableView.dataSource = self
         
-        // Do any additional setup after loading the view.
-        if(keyword.count != 0 )
-        {
-            
-        }
-        else
-        {
-            
-        }
+        
+
         
     }
     
@@ -86,10 +79,23 @@ extension BeforeSearchContentViewController:UITableViewDataSource{
 
 }
 
+
+
 extension BeforeSearchContentViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
+   
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return RecentRecordHeaderView()
+    }
+    
+   
+
     
 }
 
