@@ -38,10 +38,14 @@ class WarningView: UIView {
         if let view = Bundle.module.loadNibNamed("WarningView", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
+            view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color //헤더 영역 흰 색 방지
             self.addSubview(view)
+            
         }
         
         warningImageView.image = DesignSystemAsset.Search.warning.image
+        
+        
         
         
     }

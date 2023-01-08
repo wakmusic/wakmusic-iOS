@@ -44,5 +44,3 @@ class RecentRecordTableViewCell: UITableViewCell {
 
 }
 
-
-

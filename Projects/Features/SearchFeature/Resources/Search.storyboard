@@ -156,7 +156,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="slZ-f3-dc4"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="slZ-f3-dc4" firstAttribute="trailing" secondItem="uat-un-eu2" secondAttribute="trailing" id="BRG-se-8Zk"/>
                             <constraint firstItem="uat-un-eu2" firstAttribute="top" secondItem="slZ-f3-dc4" secondAttribute="top" id="Ije-1m-uY5"/>
@@ -166,6 +166,7 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="uat-un-eu2" id="o7O-aM-hpQ"/>
+                        <outlet property="view" destination="3xk-U4-Bip" id="tP8-Gi-Vk9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vkw-j7-s64" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

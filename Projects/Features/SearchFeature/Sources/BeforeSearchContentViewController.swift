@@ -8,6 +8,7 @@
 
 import UIKit
 import Utility
+import DesignSystem
 
 class BeforeSearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
 
@@ -15,14 +16,14 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
     @IBOutlet weak var tableView: UITableView!
     
 
-    let keyword:[String] = ["A","우왁굳","왁타버스"]
+    let keyword:[String] = ["우왁굳","고세구","아이네"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
         DEBUG_LOG("\(Self.self) viewDidLoad")
         tableView.delegate = self
         tableView.dataSource = self
-        
+        configureUI()
         
 
         
@@ -34,6 +35,16 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
     }
     
 
+}
+
+
+
+extension BeforeSearchContentViewController {
+    
+    
+    private func configureUI() {
+        self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+    }
 }
 
 
@@ -51,6 +62,7 @@ extension BeforeSearchContentViewController:UITableViewDataSource{
         }
         
         
+        cell.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         cell.recentLabel.text = keyword[indexPath.row]
         cell.delegate = self //cell의 delegate를 받기위해
         
