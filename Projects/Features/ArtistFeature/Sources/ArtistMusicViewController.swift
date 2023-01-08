@@ -39,13 +39,13 @@ extension ArtistMusicViewController {
         self.dataSource = self
         let bar = TMBar.ButtonBar()
         
-        // 배경 회색 -> 하얀색
-        bar.backgroundView.style = .blur(style: .light)
+        // 배경색
+        bar.backgroundView.style = .flat(color: colorFromRGB(0xF0F3F6))
         
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
-        bar.layout.transitionStyle = .snap
+        bar.layout.transitionStyle = .progressive
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
@@ -56,7 +56,7 @@ extension ArtistMusicViewController {
         }
         
         // indicator
-        bar.indicator.weight = .custom(value: 2)
+        bar.indicator.weight = .custom(value: 3)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
         
