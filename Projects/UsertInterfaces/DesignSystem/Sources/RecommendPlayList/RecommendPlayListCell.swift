@@ -9,12 +9,12 @@
 import UIKit
 import Utility
 
-class RecommendPlayListCell: UICollectionViewCell {
+public class RecommendPlayListCell: UICollectionViewCell {
     
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var logoImageView: UIImageView!
     
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
         
         self.contentView.layer.cornerRadius = 8

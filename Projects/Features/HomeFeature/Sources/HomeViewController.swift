@@ -54,7 +54,7 @@ extension HomeViewController {
 }
 
 extension HomeViewController: RecommendPlayListViewDelegate {
-    func itemSelected(model: RecommendPlayListDTO) {
+    public func itemSelected(model: RecommendPlayListDTO) {
         DEBUG_LOG(model)
     }
 }
