@@ -62,7 +62,7 @@ extension BeforeSearchContentViewController:UITableViewDataSource{
         }
         
         
-        cell.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        cell.backgroundColor = .clear
         cell.recentLabel.text = keyword[indexPath.row]
         cell.delegate = self //cell의 delegate를 받기위해
         
@@ -92,7 +92,7 @@ extension BeforeSearchContentViewController:UITableViewDataSource{
 }
 
 
-
+// 테이블뷰 rx 
 extension BeforeSearchContentViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
@@ -100,10 +100,17 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
+        // 300
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return RecentRecordHeaderView()
+        
+        let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
+        warningView.text = "최근 검색 기록이 없습니다."
+        
+        let recentRecordHeaderView = RecentRecordHeaderView()
+        
+        return recentRecordHeaderView
     }
     
    

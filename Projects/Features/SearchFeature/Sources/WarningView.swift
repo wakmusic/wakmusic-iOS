@@ -11,6 +11,7 @@ import DesignSystem
 
 class WarningView: UIView {
 
+    @IBOutlet weak var superView: UIView!
     @IBOutlet weak var warningLabelView: UILabel!
     @IBOutlet weak var warningImageView: UIImageView!
     var text:String = ""
@@ -38,13 +39,15 @@ class WarningView: UIView {
         if let view = Bundle.module.loadNibNamed("WarningView", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
-            view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color //헤더 영역 흰 색 방지
+            view.backgroundColor = .clear //헤더 영역 흰 색 방지
+            self.superView.backgroundColor = .clear
             self.addSubview(view)
             
         }
         
         warningImageView.image = DesignSystemAsset.Search.warning.image
-        
+        warningLabelView.textColor = DesignSystemAsset.GrayColor.gray900.color
+        warningLabelView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         
         
         
