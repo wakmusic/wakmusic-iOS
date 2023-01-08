@@ -9,8 +9,8 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchImageView:UIImageView!
     @IBOutlet weak var searchTextFiled:UITextField!
     @IBOutlet weak var cancelButton:UIButton!
+    @IBOutlet weak var searchHeaderView:UIView!
     @IBOutlet weak var searchContentView:UIView!
-    @IBOutlet weak var talbeView:UIView!
     
     var viewModel = SearchViewModel()
     
@@ -22,6 +22,25 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         configureUI()
 
     }
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let child = self.children.first as? BeforeSearchContentViewController else { return }
+        child.view.frame = searchContentView.bounds
+       
+        //오차로 인하여 여기서 설정함
+        /*
+          frame != bounds
+         - 두개 모두 x,y , width, height 을 갖고 있음
+         - frame의 x,y는 부모의 중심 x,y을 가르킴
+         - bounds의 x,y는 항상 자기자신을 중심으로 찍힘( 언제나 (0,0))
+         
+         */
+        
+
+        
+    }
+    
     
    
 
@@ -30,12 +49,18 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         return viewController
     }
     
+
+    
     
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.searchTextFiled.rx.text.onNext("")
         self.view.endEditing(false)
+     
     }
 }
+
+
+//Extension
 
 
 extension SearchViewController {
@@ -59,10 +84,20 @@ extension SearchViewController {
         self.cancelButton.backgroundColor = .white
         
         
-        self.rxBindTask()
+        rxBindTask()
+        bindSubView()
         
 }
        
+    private func bindSubView()
+    {
+        let contentView = BeforeSearchContentViewController.viewController() //
+        addChild(contentView)
+        searchContentView.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
+        
+        
+    }
     
     
     //MARK: Rx 작업
@@ -76,6 +111,12 @@ extension SearchViewController {
             
             self.reactSearchHeader(res)
             
+            
+            
+            
+            //여기서 최근 검색어 로드 작업
+            
+         
             
         }.disposed(by: self.disposeBag)
         
@@ -102,6 +143,7 @@ extension SearchViewController {
             }
             else if event == .editingDidEnd {
                 self.viewModel.output.isFoucused.accept(false)
+               
             }
             })
             .disposed(by: disposeBag)
@@ -133,13 +175,7 @@ extension SearchViewController {
             
         }.disposed(by: self.disposeBag)
         
-        
-        
-        
-        
-        
-        
-      
+ 
 
     }
 
@@ -153,7 +189,7 @@ extension SearchViewController {
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
         self.view.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
-        self.searchContentView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
+        self.searchHeaderView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
         
         
         self.searchTextFiled.textColor = isfocused ? .white : .black
