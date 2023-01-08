@@ -118,8 +118,10 @@ extension PlayerViewController {
         visualEffectView.frame = backgroundBlurImageView.frame
         self.backgroundBlurImageView.addSubview(visualEffectView)
         // 테이블뷰
-        lyricsTableView.backgroundColor = .clear
+        lyricsTableView.backgroundColor = .yellow
         lyricsTableView.rowHeight = 24
+        lyricsTableView.heightAnchor.constraint(equalToConstant: Utility.APP_HEIGHT() >= 812 ?  120 : 72).isActive = true
+        
         // 플레이 버튼
         playButton.layer.shadowColor = CGColor(red: 8, green: 15, blue: 52, alpha: 0.08)
         playButton.layer.shadowOpacity = 1.0
@@ -157,7 +159,7 @@ extension PlayerViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 10
     }
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let lyricsCell: LyricsCell = lyricsTableView.dequeueReusableCell(withIdentifier: "LyricsCell", for: indexPath) as? LyricsCell ?? LyricsCell()

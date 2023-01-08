@@ -110,23 +110,22 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wvT-Fa-YtL" userLabel="Spacer View 2">
                                         <rect key="frame" x="0.0" y="295.66666666666669" width="393" height="41.666666666666686"/>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DIY-kT-502" userLabel="Lyrics Table View">
-                                        <rect key="frame" x="61.666666666666657" y="337.33333333333331" width="270" height="120"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DIY-kT-502" userLabel="Lyrics Table View">
+                                        <rect key="frame" x="61.666666666666657" y="337.33333333333331" width="270" height="72"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="DIY-kT-502" secondAttribute="height" multiplier="27:12" id="D4D-9j-5bY"/>
                                             <constraint firstAttribute="width" constant="270" id="UxJ-Ew-YCz"/>
                                         </constraints>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LyricsCell" id="Jat-U7-wXh" userLabel="LyricsCell" customClass="LyricsCell" customModule="PlayerFeature">
-                                                <rect key="frame" x="0.0" y="50" width="270" height="44"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LyricsCell" rowHeight="24" id="Jat-U7-wXh" userLabel="LyricsCell" customClass="LyricsCell" customModule="PlayerFeature">
+                                                <rect key="frame" x="0.0" y="50" width="270" height="24"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jat-U7-wXh" id="DuC-5Y-xjj">
-                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="24"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="기억나 우리 처음 만난 날" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKJ-no-Fpm" customClass="CustomLabel" customModule="PlayerFeature">
-                                                            <rect key="frame" x="67.666666666666686" y="13.666666666666664" width="135" height="17"/>
+                                                            <rect key="frame" x="67.666666666666686" y="3.6666666666666661" width="135" height="17"/>
                                                             <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="14"/>
                                                             <color key="textColor" name="gray500"/>
                                                             <nil key="highlightedColor"/>
@@ -137,6 +136,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                     </subviews>
+                                                    <color key="backgroundColor" name="NEW"/>
                                                     <constraints>
                                                         <constraint firstItem="DKJ-no-Fpm" firstAttribute="centerY" secondItem="DuC-5Y-xjj" secondAttribute="centerY" id="0tB-ZZ-LRG"/>
                                                         <constraint firstItem="DKJ-no-Fpm" firstAttribute="centerX" secondItem="DuC-5Y-xjj" secondAttribute="centerX" id="WE9-Ii-1J2"/>
@@ -148,11 +148,11 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="suW-Pi-f3T" userLabel="Spacer View 3">
-                                        <rect key="frame" x="0.0" y="457.33333333333337" width="393" height="45.333333333333314"/>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="suW-Pi-f3T" userLabel="Spacer View 3">
+                                        <rect key="frame" x="0.0" y="409.33333333333337" width="393" height="45.333333333333314"/>
                                     </view>
-                                    <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="PXE-1L-1Ik" customClass="CustomSlider" customModule="PlayerFeature">
-                                        <rect key="frame" x="18" y="502.66666666666663" width="357" height="31"/>
+                                    <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="PXE-1L-1Ik" customClass="CustomSlider" customModule="PlayerFeature">
+                                        <rect key="frame" x="18" y="454.66666666666663" width="357" height="31"/>
                                         <color key="tintColor" name="POINT"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="trackLineHeight">
@@ -160,8 +160,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </slider>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80m-ve-Rbj" userLabel="Current Play Time" customClass="CustomLabel" customModule="PlayerFeature">
-                                        <rect key="frame" x="20" y="539.66666666666663" width="25.666666666666671" height="14.333333333333371"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="0:30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80m-ve-Rbj" userLabel="Current Play Time" customClass="CustomLabel" customModule="PlayerFeature">
+                                        <rect key="frame" x="20" y="491.66666666666663" width="25.666666666666671" height="14.333333333333314"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                         <color key="textColor" name="POINT"/>
                                         <nil key="highlightedColor"/>
@@ -183,8 +183,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:34" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oSK-f0-Nq0" userLabel="Total Play Time" customClass="CustomLabel" customModule="PlayerFeature">
-                                        <rect key="frame" x="347" y="539.66666666666663" width="26" height="14.333333333333371"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="4:34" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oSK-f0-Nq0" userLabel="Total Play Time" customClass="CustomLabel" customModule="PlayerFeature">
+                                        <rect key="frame" x="347" y="491.66666666666663" width="26" height="14.333333333333314"/>
                                         <fontDescription key="fontDescription" name="Pretendard-Medium" family="Pretendard" pointSize="12"/>
                                         <color key="textColor" name="gray400"/>
                                         <nil key="highlightedColor"/>
@@ -206,8 +206,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6Q-Ib-7Ti" userLabel="Repeat Button">
-                                        <rect key="frame" x="28.666666666666671" y="620" width="32" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6Q-Ib-7Ti" userLabel="Repeat Button">
+                                        <rect key="frame" x="28.666666666666671" y="572" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="o2R-33-sMB"/>
                                             <constraint firstAttribute="width" constant="32" id="xtM-RM-CTG"/>
@@ -218,8 +218,8 @@
                                             <action selector="repeatButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="D73-s8-hlD"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyw-zF-7yg" userLabel="Prev Button">
-                                        <rect key="frame" x="92.666666666666671" y="620" width="32" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyw-zF-7yg" userLabel="Prev Button">
+                                        <rect key="frame" x="92.666666666666671" y="572" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="32" id="3Su-AZ-ae8"/>
                                             <constraint firstAttribute="height" constant="32" id="OIf-cY-9S6"/>
@@ -230,8 +230,8 @@
                                             <action selector="prevButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="PsO-Tc-xkk"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwh-Ae-QdD" userLabel="Play Button">
-                                        <rect key="frame" x="156.66666666666666" y="596" width="80" height="80"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwh-Ae-QdD" userLabel="Play Button">
+                                        <rect key="frame" x="156.66666666666666" y="548" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="6gl-iA-4VD"/>
                                             <constraint firstAttribute="height" constant="80" id="Y2Y-aY-qxh"/>
@@ -242,8 +242,8 @@
                                             <action selector="playButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="D9g-M3-zTc"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnI-9i-qsN" userLabel="Next Button">
-                                        <rect key="frame" x="268.66666666666669" y="620" width="32" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnI-9i-qsN" userLabel="Next Button">
+                                        <rect key="frame" x="268.66666666666669" y="572" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="n8l-kJ-Ex6"/>
                                             <constraint firstAttribute="width" constant="32" id="r5G-iq-3Hr"/>
@@ -254,8 +254,8 @@
                                             <action selector="nextButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="aw9-gt-uzZ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHi-57-tA1" userLabel="Shuffle Button">
-                                        <rect key="frame" x="332.66666666666669" y="620" width="32" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHi-57-tA1" userLabel="Shuffle Button">
+                                        <rect key="frame" x="332.66666666666669" y="572" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="32" id="Sq2-TF-L29"/>
                                             <constraint firstAttribute="height" constant="32" id="hgM-T4-1dv"/>
@@ -467,8 +467,8 @@
                                             <constraint firstAttribute="height" constant="56" id="RlF-10-fsR"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K85-8r-Jd7" userLabel="Spacer View 4">
-                                        <rect key="frame" x="0.0" y="554" width="393" height="42"/>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K85-8r-Jd7" userLabel="Spacer View 4">
+                                        <rect key="frame" x="0.0" y="506" width="393" height="42"/>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -571,6 +571,9 @@
         <image name="prev_on" width="32" height="32"/>
         <image name="repeat_off" width="32" height="32"/>
         <image name="shuffle_off" width="32" height="32"/>
+        <namedColor name="NEW">
+            <color red="1" green="0.56099998950958252" blue="0.046999998390674591" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="POINT">
             <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
