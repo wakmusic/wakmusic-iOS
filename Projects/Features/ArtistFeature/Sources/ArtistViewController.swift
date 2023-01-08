@@ -34,7 +34,22 @@ extension ArtistViewController {
                       ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
                       ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
                       ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
-                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image)]
+                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
+                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image),
+                      ArtistListDTO(name: "아이네", image: DesignSystemAsset.Artist.ine.image),
+                      ArtistListDTO(name: "징버거", image: DesignSystemAsset.Artist.jingburger.image),
+                      ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
+                      ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
+                      ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
+                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
+                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image),
+                      ArtistListDTO(name: "아이네", image: DesignSystemAsset.Artist.ine.image),
+                      ArtistListDTO(name: "징버거", image: DesignSystemAsset.Artist.jingburger.image),
+                      ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
+                      ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
+                      ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
+                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
+                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image)]
         
         Observable.just(models)
             .map({ (model) in
@@ -68,10 +83,20 @@ extension ArtistViewController {
         
         collectionView.rx.itemSelected
             .withLatestFrom(dataSource) { ($0, $1) }
-            .subscribe(onNext:{ [weak self] (indexPath, model) in
+            .do(onNext: { [weak self] (indexPath, _) in
+                guard let `self` = self,
+                      let cell = self.collectionView.cellForItem(at: indexPath) as? ArtistListCell else { return }
+                cell.animateSizeDownToUp(timeInterval: 0.3)
+            })
+            .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
+            .subscribe(onNext:{ [weak self] (indexPath, dataSource) in
                 guard let `self` = self else { return }
+
+                let model = dataSource[indexPath.row]
+                DEBUG_LOG(model)
                 let viewController = ArtistDetailViewController.viewController()
                 self.navigationController?.pushViewController(viewController, animated: true)
+                
             }).disposed(by: disposeBag)
 
 
@@ -86,7 +111,7 @@ extension ArtistViewController {
 //        layout.minimumLineSpacing = 15
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
         layout.headerHeight = 15.0
-        layout.footerHeight = 10.0
+        layout.footerHeight = 50.0
         self.collectionView.setCollectionViewLayout(layout, animated: false)
     }
 }
