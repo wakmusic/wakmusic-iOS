@@ -17,7 +17,7 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
         configureUI()
         bind()
     }
-
+    
     public static func viewController() -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -70,10 +70,8 @@ extension ArtistViewController {
             .withLatestFrom(dataSource) { ($0, $1) }
             .subscribe(onNext:{ [weak self] (indexPath, model) in
                 guard let `self` = self else { return }
-                
                 let viewController = ArtistDetailViewController.viewController()
                 self.navigationController?.pushViewController(viewController, animated: true)
-                
             }).disposed(by: disposeBag)
 
 

@@ -120,10 +120,11 @@ extension ArtistDetailViewController {
         let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
                                                                     attributes: [.font: UIFont.systemFont(ofSize: 24, weight: .bold),
                                                                                  .foregroundColor: colorFromRGB(0x101828)])
+        
         let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
 
         artistNameAttributedString.addAttributes([.font: UIFont.systemFont(ofSize: 14, weight: .light),
-                                                   .foregroundColor: colorFromRGB(0x101828)],
+                                                  .foregroundColor: colorFromRGB(0x101828)],
                                                   range: artistEngNameRange)
 
         self.artistNameLabel.attributedText = artistNameAttributedString
