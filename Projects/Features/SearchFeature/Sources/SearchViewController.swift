@@ -9,6 +9,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchImageView:UIImageView!
     @IBOutlet weak var searchTextFiled:UITextField!
     @IBOutlet weak var cancelButton:UIButton!
+    @IBOutlet weak var searchHeaderView:UIView!
     @IBOutlet weak var searchContentView:UIView!
     
     var viewModel = SearchViewModel()
@@ -21,6 +22,25 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         configureUI()
 
     }
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let child = self.children.first as? BeforeSearchContentViewController else { return }
+        child.view.frame = searchContentView.bounds
+       
+        //오차로 인하여 여기서 설정함
+        /*
+          frame != bounds
+         - 두개 모두 x,y , width, height 을 갖고 있음
+         - frame의 x,y는 부모의 중심 x,y을 가르킴
+         - bounds의 x,y는 항상 자기자신을 중심으로 찍힘( 언제나 (0,0))
+         
+         */
+        
+
+        
+    }
+    
     
    
 
@@ -29,12 +49,18 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         return viewController
     }
     
+
+    
     
     @IBAction func cancelButtonAction(_ sender: Any) {
-        viewModel.input.textString.accept("")
+        self.searchTextFiled.rx.text.onNext("")
         self.view.endEditing(false)
+     
     }
 }
+
+
+//Extension
 
 
 extension SearchViewController {
@@ -58,10 +84,20 @@ extension SearchViewController {
         self.cancelButton.backgroundColor = .white
         
         
-        self.rxBindTask()
+        rxBindTask()
+        bindSubView()
         
 }
        
+    private func bindSubView()
+    {
+        let contentView = BeforeSearchContentViewController.viewController() //
+        addChild(contentView)
+        searchContentView.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
+        
+        
+    }
     
     
     //MARK: Rx 작업
@@ -76,6 +112,12 @@ extension SearchViewController {
             self.reactSearchHeader(res)
             
             
+            
+            
+            //여기서 최근 검색어 로드 작업
+            
+         
+            
         }.disposed(by: self.disposeBag)
         
         
@@ -83,10 +125,11 @@ extension SearchViewController {
       
         let editingDidBegin = searchTextFiled.rx.controlEvent(.editingDidBegin)
         let editingDidEnd = searchTextFiled.rx.controlEvent(.editingDidEnd)
+        let editingDidEndOnExit = searchTextFiled.rx.controlEvent(.editingDidEndOnExit)
         
 
         let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
-                                                       editingDidEnd.map { UIControl.Event.editingDidEnd })
+                                               editingDidEnd.map { UIControl.Event.editingDidEnd }, editingDidEndOnExit.map { UIControl.Event.editingDidEndOnExit })
 
         mergeObservable
             .asObservable()
@@ -102,20 +145,42 @@ extension SearchViewController {
             else if event == .editingDidEnd {
                 self.viewModel.output.isFoucused.accept(false)
             }
+            else
+                {
+                DEBUG_LOG("EditingDidEndOnExit")
+                //유저 디폴트 저장
+            }
             })
             .disposed(by: disposeBag)
         
-
+        
+        
+        //textField.rx.text 하고 subscirbe하면 옵셔널 타입으로 String? 을 받아오는데,
+        // 옵셔널 말고 String으로 받아오고 싶으면 orEmpty를 쓰자 -!
         self.searchTextFiled.rx.text.orEmpty
             .skip(1)
-            .distinctUntilChanged()
-            .bind(to: viewModel.input.textString)
+            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
+            .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
         
-        
         self.viewModel.input.textString.subscribe { (str:String) in
-            print(str)
+            
+            if(str.isEmpty)
+            {
+                print("Empty")
+            }
+            
+            
+            
+            else
+            {
+                print("str: \(str)")
+            }
+            
+            
         }.disposed(by: self.disposeBag)
+        
+ 
 
     }
 
@@ -129,7 +194,7 @@ extension SearchViewController {
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
         self.view.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
-        self.searchContentView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
+        self.searchHeaderView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
         
         
         self.searchTextFiled.textColor = isfocused ? .white : .black

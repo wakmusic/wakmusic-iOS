@@ -17,7 +17,7 @@ final class SearchViewModel {
     var disposeBag = DisposeBag()
 
     struct Input {
-        let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let textString:PublishRelay<String> = PublishRelay()
        
     }
 
@@ -32,7 +32,3 @@ final class SearchViewModel {
 
     }
 }
-
-
-
-

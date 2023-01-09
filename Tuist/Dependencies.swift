@@ -3,6 +3,11 @@ import ProjectDescription
 let dependencies = Dependencies(
     carthage: nil,
     swiftPackageManager: [
+        
+        /*
+         uptoNextMajor: 5.0.0부터 6.0.0 이전까지 사용을 의미합니다.
+         uptoNextMinor: 5.0.0부터 5.1.0 이전까지 사용을 의미합니다.
+         */
         .remote(url: "https://github.com/Moya/Moya.git", requirement: .upToNextMajor(from: "15.0.3")),
         .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .upToNextMajor(from: "7.0.0")),
         .remote(url: "https://github.com/SvenTiigi/YouTubePlayerKit.git", requirement: .upToNextMajor(from: "1.2.0")),
@@ -19,7 +24,7 @@ let dependencies = Dependencies(
         .remote(url: "https://github.com/Quick/Quick.git", requirement: .upToNextMajor(from: "5.0.1")),
         .remote(url: "https://github.com/Quick/Nimble.git", requirement: .upToNextMajor(from: "10.0.0")),
         .remote(url: "https://github.com/uber/needle.git", requirement: .upToNextMajor(from: "0.19.0")),
-        .remote(url: "https://github.com/uias/Tabman", requirement: .upToNextMajor(from: "3.0.1"))
+        .remote(url: "https://github.com/uias/Tabman.git", requirement: .upToNextMajor(from: "3.0.1"))
     ],
     platforms: [.iOS]
 )
