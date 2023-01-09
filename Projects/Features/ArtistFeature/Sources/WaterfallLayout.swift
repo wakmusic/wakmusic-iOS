@@ -66,7 +66,6 @@ public class WaterfallLayout: UICollectionViewLayout {
                                                      height: .greatestFiniteMagnitude)
 
     public enum DistributionMethod {
-
         case equal
         case balanced
     }
@@ -202,18 +201,13 @@ public class WaterfallLayout: UICollectionViewLayout {
                                              withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
         let context = super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
 
-        guard let _ = collectionView else { return context }
+        guard collectionView != nil else { return context }
 
         let oldContentSize = self.collectionViewContentSize
         cachedItemSizes[originalAttributes.indexPath] = preferredAttributes.size
         let newContentSize = self.collectionViewContentSize
         context.contentSizeAdjustment = CGSize(width: 0, height: newContentSize.height - oldContentSize.height)
 
-        /*
-         let indexPaths: [IndexPath] = (originalAttributes.indexPath.item..<collectionView.numberOfItems(inSection: originalAttributes.indexPath.section))
-            .map { [originalAttributes.indexPath.section, $0] }
-         context.invalidateItems(at: indexPaths)
- */
         _ = context.invalidateEverything
         return context
     }

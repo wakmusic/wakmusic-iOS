@@ -15,15 +15,19 @@ class MainTabBarController: UITabBarController, ViewControllerFromStoryBoard {
         configureUI()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let barItemView = item.value(forKey: "view") as? UIView else { return }
-
-        let timeInterval: TimeInterval = 0.3
-        let propertyAnimator = UIViewPropertyAnimator(duration: timeInterval, dampingRatio: 0.5) {
-          barItemView.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)
-        }
-        propertyAnimator.addAnimations({ barItemView.transform = .identity }, delayFactor: CGFloat(timeInterval))
-        propertyAnimator.startAnimation()
+        barItemView.animateSizeDownToUp(timeInterval: 0.3)
     }
 
     public static func viewController() -> MainTabBarController {
@@ -105,5 +109,12 @@ extension MainTabBarController {
     private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance) {
         itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: colorFromRGB(0x98A2B3)]
         itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: colorFromRGB(0x101828)]
+    }
+}
+
+extension MainTabBarController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }

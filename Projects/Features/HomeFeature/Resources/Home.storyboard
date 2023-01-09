@@ -41,15 +41,22 @@
                                     <constraint firstAttribute="height" constant="44" id="nYY-Gm-ibt"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H7N-2m-tH8">
+                                <rect key="frame" x="0.0" y="242" width="393" height="527"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="35F-wm-6TL"/>
                             <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="203:242" id="8Pd-y8-GOJ"/>
+                            <constraint firstItem="H7N-2m-tH8" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Q8j-1U-K8d"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H7N-2m-tH8" secondAttribute="bottom" id="S7A-KA-ula"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="TWm-vm-MRN" secondAttribute="trailing" id="Skp-Lw-Coh"/>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="kVe-av-M3F"/>
                             <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="n2Q-C2-hbh"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H7N-2m-tH8" secondAttribute="trailing" id="nNc-5p-dhM"/>
+                            <constraint firstItem="H7N-2m-tH8" firstAttribute="top" secondItem="TWm-vm-MRN" secondAttribute="bottom" id="poH-c9-3JD"/>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="sXr-X7-ION"/>
                         </constraints>
                     </view>
@@ -57,6 +64,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="gradationImageView" destination="TWm-vm-MRN" id="j61-7K-kMm"/>
+                        <outlet property="tempView" destination="H7N-2m-tH8" id="6Es-pK-jsC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

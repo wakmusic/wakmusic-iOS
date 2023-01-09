@@ -25,7 +25,6 @@ let dependencies = Dependencies(
         .remote(url: "https://github.com/Quick/Nimble.git", requirement: .upToNextMajor(from: "10.0.0")),
         .remote(url: "https://github.com/uber/needle.git", requirement: .upToNextMajor(from: "0.19.0")),
         .remote(url: "https://github.com/uias/Tabman.git", requirement: .upToNextMajor(from: "3.0.1"))
-        
     ],
     platforms: [.iOS]
 )
