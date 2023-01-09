@@ -10,52 +10,43 @@ import UIKit
 import SwiftUI
 import Utility
 import DesignSystem
+import SnapKit
+import Then
 
 public class NewPlayerViewController: UIViewController {
     private var titleBarView: UIView = UIView()
     
-    private var closeButton: UIButton {
-        let button = UIButton()
-        button.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
-        button.tintColor = .systemGray
-        return button
+    private var closeButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
+        $0.tintColor = .systemGray
     }
     
-    private var titleLabel: UILabel {
-        let label = UILabel()
-        label.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
-        label.textColor = DesignSystemAsset.GrayColor.gray900.color
-        label.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        label.text = "리와인드(RE:WIND)"
-        return label
+    private var titleLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
+        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
+        $0.text = "리와인드(RE:WIND)"
     }
     
-    private var artistLabel: UILabel {
-        let label = UILabel()
-        label.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        label.textColor = DesignSystemAsset.GrayColor.gray900.color
-        label.alpha = 0.6
-        label.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
-        label.text = "이세계아이돌"
-        return label
+    private var artistLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
+        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+        $0.alpha = 0.6
+        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
+        $0.text = "이세계아이돌"
     }
     
-    private var thumbnailImageView: UIImageView {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: DesignSystemAsset.Player.dummyThumbnailLarge.name)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 12
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private var thumbnailImageView = UIImageView().then {
+        $0.image = UIImage(named: DesignSystemAsset.Player.dummyThumbnailLarge.name)
+        $0.contentMode = .scaleAspectFit
+        $0.layer.cornerRadius = 12
     }
     
-    private var lyricsTableView: UITableView {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
-        tableView.separatorStyle = .none
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 24
-        return tableView
+    private var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
+        $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
+        $0.separatorStyle = .none
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 24
     }
 
     public override func viewDidLoad() {
@@ -105,13 +96,11 @@ struct NewPlayerViewController_Previews: PreviewProvider {
 class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
     
-    private var lyricsLabel: UILabel {
-        let label = UILabel()
-        label.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        label.textColor = DesignSystemAsset.GrayColor.gray500.color
-        label.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
-        label.text = "기억나 우리 처음 만난 날"
-        return label
+    private var lyricsLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
+        $0.textColor = DesignSystemAsset.GrayColor.gray500.color
+        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
+        $0.text = "기억나 우리 처음 만난 날"
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
