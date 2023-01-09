@@ -19,7 +19,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bq8-55-E59">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="262.33333333333331"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IntroLogo" translatesAutoresizingMaskIntoConstraints="NO" id="qbA-Qu-2cI">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="qbA-Qu-2cI">
                                 <rect key="frame" x="118.66666666666669" y="262.33333333333331" width="156" height="160"/>
                             </imageView>
                         </subviews>
@@ -41,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IntroLogo" width="156" height="160"/>
+        <image name="launchScreen" width="156" height="160"/>
     </resources>
 </document>

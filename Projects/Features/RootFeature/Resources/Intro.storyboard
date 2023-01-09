@@ -35,24 +35,28 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lmb-xA-DIU">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="262.33333333333331"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="Csx-er-Vbw">
-                                <rect key="frame" x="118.66666666666669" y="262.33333333333331" width="156" height="160"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BaG-Ji-1sD">
+                                <rect key="frame" x="114.66666666666667" y="262.33333333333331" width="163.66666666666663" height="167.66666666666669"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="BaG-Ji-1sD" secondAttribute="height" multiplier="156:160" id="daO-lg-zox"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="2lU-ej-RPj"/>
+                            <constraint firstItem="BaG-Ji-1sD" firstAttribute="top" secondItem="lmb-xA-DIU" secondAttribute="bottom" id="VRD-nw-zgV"/>
+                            <constraint firstItem="BaG-Ji-1sD" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="hyQ-GM-ond"/>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="pYF-Q1-7Tb"/>
-                            <constraint firstItem="Csx-er-Vbw" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="qKN-qd-97A"/>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="rDS-yv-3QN"/>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="height" secondItem="5EZ-qb-Rvc" secondAttribute="height" multiplier="250:812" id="vj1-qE-h2p"/>
-                            <constraint firstItem="Csx-er-Vbw" firstAttribute="top" secondItem="lmb-xA-DIU" secondAttribute="bottom" id="xFx-gX-KAp"/>
+                            <constraint firstItem="BaG-Ji-1sD" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="156:375" id="xvl-ty-34W"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="p7K-rx-PWS"/>
                     <connections>
-                        <outlet property="logoImageView" destination="Csx-er-Vbw" id="mZf-0h-N4V"/>
+                        <outlet property="logoContentView" destination="BaG-Ji-1sD" id="J1U-Ty-Az4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -61,7 +65,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="156" height="160"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
