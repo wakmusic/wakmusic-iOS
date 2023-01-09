@@ -10,7 +10,7 @@ import UIKit
 import DesignSystem
 
 protocol RecentRecordDelegate: AnyObject {
-    func selectedItems(item: String)
+    func selectedItems(_ keyword: String)
 }
 
 
@@ -37,9 +37,16 @@ class RecentRecordTableViewCell: UITableViewCell {
         // Initialization code
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        print("PREPARE")
+    }
+    
+
+    
     
     @IBAction func pressRemoveAction(_ sender: Any) {
-        delegate?.selectedItems(item: self.recentLabel.text!)
+        delegate?.selectedItems(self.recentLabel.text!)
     }
 
 }

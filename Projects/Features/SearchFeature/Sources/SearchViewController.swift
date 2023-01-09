@@ -125,10 +125,11 @@ extension SearchViewController {
       
         let editingDidBegin = searchTextFiled.rx.controlEvent(.editingDidBegin)
         let editingDidEnd = searchTextFiled.rx.controlEvent(.editingDidEnd)
+        let editingDidEndOnExit = searchTextFiled.rx.controlEvent(.editingDidEndOnExit)
         
 
         let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
-                                                       editingDidEnd.map { UIControl.Event.editingDidEnd })
+                                               editingDidEnd.map { UIControl.Event.editingDidEnd }, editingDidEndOnExit.map { UIControl.Event.editingDidEndOnExit })
 
         mergeObservable
             .asObservable()
@@ -143,7 +144,11 @@ extension SearchViewController {
             }
             else if event == .editingDidEnd {
                 self.viewModel.output.isFoucused.accept(false)
-               
+            }
+            else
+                {
+                DEBUG_LOG("EditingDidEndOnExit")
+                //유저 디폴트 저장
             }
             })
             .disposed(by: disposeBag)
