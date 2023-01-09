@@ -14,21 +14,37 @@ import SnapKit
 import Then
 
 public class NewPlayerViewController: UIViewController {
-    private var titleBarView: UIView = UIView()
     
-    private var closeButton = UIButton().then {
+    private lazy var backgroundView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+    }
+    
+    private lazy var blurEffectView = UIVisualEffectView().then {
+        $0.effect = UIBlurEffect(style: .regular)
+    }
+    
+    private lazy var backgroundImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
+        $0.layer.opacity = 0.6
+    }
+    
+    private lazy var contentView: UIView = UIView()
+    
+    private lazy var titleBarView: UIView = UIView()
+    
+    private lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private var titleLabel = UILabel().then {
+    private lazy var titleLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "리와인드(RE:WIND)"
     }
     
-    private var artistLabel = UILabel().then {
+    private lazy var artistLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.alpha = 0.6
@@ -36,19 +52,98 @@ public class NewPlayerViewController: UIViewController {
         $0.text = "이세계아이돌"
     }
     
-    private var thumbnailImageView = UIImageView().then {
+    private lazy var thumbnailImageView = UIImageView().then {
         $0.image = UIImage(named: DesignSystemAsset.Player.dummyThumbnailLarge.name)
         $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 12
     }
     
-    private var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
+    private lazy var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
         $0.estimatedRowHeight = 24
     }
-
+    
+    private lazy var playTimeSlider = CustomSlider().then {
+        let circleSize: CGFloat = 8.0
+        let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
+                                                                height: circleSize),
+                                                   color: colorFromRGB(0x08DEF7))
+        $0.layer.cornerRadius = 1
+        $0.setThumbImage(circleImage, for: .normal)
+        $0.setThumbImage(circleImage, for: .highlighted)
+        $0.maximumTrackTintColor = colorFromRGB(0xD0D5DD) // 슬라이더 안지나갔을때 컬러 값
+    }
+    
+    private lazy var playTimeView: UIView = UIView()
+    
+    private lazy var currentPlayTimeLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.textColor = DesignSystemAsset.PrimaryColor.point.color
+        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
+        $0.text = "0:30"
+    }
+    
+    private lazy var totalPlayTimeLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.textColor = DesignSystemAsset.GrayColor.gray400.color
+        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
+        $0.text = "4:34"
+    }
+    
+    private lazy var buttonBarView: UIView = UIView()
+    
+    private lazy var playButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var prevButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var nextButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var repeatButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var shuffleButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var bottomBarStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 0
+        $0.distribution = .fillEqually
+    }
+    
+    private lazy var likeButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.likeOff.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var viewsImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Player.views.image
+    }
+    
+    private lazy var addPlayistButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.musicAdd.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
+    private lazy var playistButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.playList.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -80,9 +175,87 @@ private extension NewPlayerViewController {
     }
     
     private func configureUI() {
-        self.view.backgroundColor = .white
-        self.view.addSubview(thumbnailImageView)
-        thumbnailImageView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        self.configureSubViews()
+        self.configureBackground()
+        self.configureTitleBar()
+        self.configureThumbnail()
+        self.configureLyrics()
+        self.configurePlayTimeSlider()
+        self.configurePlayTime()
+        self.configureButtonBar()
+        self.configureBottomBar()
+    }
+    
+    private func configureSubViews() {
+        self.view.addSubview(backgroundView)
+        self.view.addSubview(contentView)
+        
+        self.backgroundView.addSubview(backgroundImageView)
+        self.backgroundImageView.addSubview(blurEffectView)
+        
+        self.contentView.addSubview(titleBarView)
+        self.contentView.addSubview(thumbnailImageView)
+        self.contentView.addSubview(lyricsTableView)
+        self.contentView.addSubview(playTimeSlider)
+        self.contentView.addSubview(playTimeView)
+        self.contentView.addSubview(buttonBarView)
+        self.contentView.addSubview(bottomBarStackView)
+        
+        self.titleBarView.addSubview(closeButton)
+        self.titleBarView.addSubview(titleLabel)
+        self.titleBarView.addSubview(artistLabel)
+        
+        self.playTimeView.addSubview(currentPlayTimeLabel)
+        self.playTimeView.addSubview(totalPlayTimeLabel)
+        
+        self.buttonBarView.addSubview(playButton)
+        self.buttonBarView.addSubview(prevButton)
+        self.buttonBarView.addSubview(nextButton)
+        self.buttonBarView.addSubview(repeatButton)
+        self.buttonBarView.addSubview(shuffleButton)
+        
+        self.bottomBarStackView.addArrangedSubview(likeButton)
+        self.bottomBarStackView.addArrangedSubview(viewsImageView)
+        self.bottomBarStackView.addArrangedSubview(addPlayistButton)
+        self.bottomBarStackView.addArrangedSubview(playistButton)
+    }
+    
+    private func configureBackground() {
+        
+    }
+    private func configureTitleBar() {
+        
+    }
+    private func configureThumbnail() {
+        
+    }
+    private func configureLyrics() {
+        
+    }
+    private func configurePlayTimeSlider() {
+        
+    }
+    private func configurePlayTime() {
+        
+    }
+    private func configureButtonBar() {
+        
+    }
+    private func configureBottomBar() {
+        
+    }
+    
+    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(color.cgColor)
+        context?.setStrokeColor(UIColor.clear.cgColor)
+        let bounds = CGRect(origin: .zero, size: size)
+        context?.addEllipse(in: bounds)
+        context?.drawPath(using: .fill)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
     
 }
@@ -96,7 +269,7 @@ struct NewPlayerViewController_Previews: PreviewProvider {
 class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
     
-    private var lyricsLabel = UILabel().then {
+    private lazy var lyricsLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray500.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
@@ -113,24 +286,4 @@ class LyricsTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("")
     }
-}
-
-public extension UIViewController {
-
-    #if DEBUG
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        func makeUIViewController(context: Context) -> UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        }
-    }
-    
-    func toPreview() -> some View {
-        Preview(viewController: self)
-    }
-    #endif
 }
