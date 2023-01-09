@@ -12,6 +12,15 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
+
+protocol BeforeSearchContentViewDelegate:AnyObject{
+    
+    func itemSelected(_ keyword:String)
+    
+}
+
+
+
 class BeforeSearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
 
     
@@ -19,8 +28,9 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
     
     
     let disposeBag = DisposeBag()
+    var delegate:BeforeSearchContentViewDelegate?
     
-    var viewModel = BeforeSearchViewModel()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +77,8 @@ extension BeforeSearchContentViewController {
         
    
         //cell 그리기
-        viewModel.output.keywords.bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
+        PreferenceManager.shared.rx.recentRecords
+        .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecentRecordTableViewCell") as? RecentRecordTableViewCell  else
             {
                 return RecentRecordTableViewCell()
@@ -75,7 +86,7 @@ extension BeforeSearchContentViewController {
             
             cell.backgroundColor = .clear
             cell.recentLabel.text = element
-            cell.delegate = self
+            //cell.delegate = self
             
             return cell
                 
@@ -84,25 +95,16 @@ extension BeforeSearchContentViewController {
         
         //터치 이벤트
         tableView.rx.modelSelected(String.self)
-            .subscribe{ event in
+            .subscribe(onNext:{ [weak self] (keyword) in
                 
-                let keyword = event.element!
+                guard let self = self else{
+                    return
+                }
                 
-                parent.searchTextFiled.rx.text.onNext(keyword)
-                parent.viewModel.input.textString.accept(keyword)
-                parent.viewModel.output.isFoucused.accept(false)
-                parent.view.endEditing(true)
-            }.disposed(by: disposeBag)
-        
-//        tableView.rx.itemDeleted
-//                .subscribe(onNext: { [weak self] indexPath in
-//                        self?.keywords.remove(at: indexPath.row)
-//                })
-//                .disposed(by: disposeBag)
+                self.delegate?.itemSelected(keyword)
+            }).disposed(by: disposeBag)
             
-      
-        
-        
+  
         
         
     }
@@ -167,7 +169,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        if(viewModel.output.keywords.value.count == 0 )
+        if(PreferenceManager.shared.recentRecords.count == 0 )
         {
             return 300
         }
@@ -182,7 +184,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
         let recentRecordHeaderView = RecentRecordHeaderView()
         
-        if(viewModel.output.keywords.value.count == 0 )
+        if(PreferenceManager.shared.recentRecords.count == 0  )
         {
             return warningView
         }
@@ -198,13 +200,12 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 }
 
 
-extension BeforeSearchContentViewController:RecentRecordDelegate
-{
-    func selectedItems(_ keyword: String) {
-
-        self.viewModel.output.keywords.accept(viewModel.output.keywords.value.filter( {$0 != keyword }))
-
-    }
-
-    
-}
+//extension BeforeSearchContentViewController:RecentRecordDelegate
+//{
+//    func selectedItems(_ keyword: String) {
+//
+//
+//    }
+//
+//
+//}

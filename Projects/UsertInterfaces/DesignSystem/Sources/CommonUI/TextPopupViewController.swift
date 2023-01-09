@@ -39,7 +39,7 @@ extension TextPopupViewController {
 
         cancelButton.layer.cornerRadius = 12
         cancelButton.clipsToBounds = true
-
+        contentLabel.text = contentString
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
 

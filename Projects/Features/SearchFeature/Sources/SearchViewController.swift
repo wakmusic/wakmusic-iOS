@@ -3,6 +3,7 @@ import Utility
 import DesignSystem
 import RxCocoa
 import RxSwift
+import PanModal
 
 public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -13,7 +14,6 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchContentView:UIView!
     
     var viewModel = SearchViewModel()
-    
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -95,6 +95,7 @@ extension SearchViewController {
         addChild(contentView)
         searchContentView.addSubview(contentView.view)
         contentView.didMove(toParent: self)
+        contentView.delegate = self
         
         
     }
@@ -133,7 +134,8 @@ extension SearchViewController {
 
         mergeObservable
             .asObservable()
-            .subscribe(onNext: { [weak self] (event) in
+            .withLatestFrom(viewModel.input.textString) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (event,str) in
                         
             guard let self = self else {
                 return
@@ -149,6 +151,21 @@ extension SearchViewController {
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
                 //유저 디폴트 저장
+                if(str.isWhiteSpace)
+                {
+                    self.searchTextFiled.rx.text.onNext("")
+                    let textPopupViewController = TextPopupViewController.viewController(
+                        text: "검색어를 입려해주세요.",
+                        cancelButtonIsHidden: true
+                    )
+                    let viewController: PanModalPresentable.LayoutType = textPopupViewController //
+                    self.presentPanModal(viewController) //modal Show
+                    
+                }
+                else
+                {
+                    PreferenceManager.shared.addRecentRecords(word: str)
+                }
             }
             })
             .disposed(by: disposeBag)
@@ -163,20 +180,23 @@ extension SearchViewController {
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
         
-        self.viewModel.input.textString.subscribe { (str:String) in
+        self.viewModel.input.textString.subscribe { [weak self] (str:String) in
+            
+            guard let self = self else
+            {
+                return
+            }
             
             if(str.isEmpty)
             {
                 print("Empty")
             }
             
-            
-            
             else
             {
                 print("str: \(str)")
             }
-            
+        
             
         }.disposed(by: self.disposeBag)
         
@@ -202,6 +222,19 @@ extension SearchViewController {
         self.searchImageView.tintColor = isfocused ? .white : DesignSystemAsset.GrayColor.gray400.color
         
         self.cancelButton.alpha =  isfocused ? 1 : 0
+    }
+    
+    
+}
+
+extension SearchViewController:BeforeSearchContentViewDelegate{
+    func itemSelected(_ keyword: String) {
+        searchTextFiled.rx.text.onNext(keyword)
+        viewModel.input.textString.accept(keyword)
+        viewModel.output.isFoucused.accept(false)
+        PreferenceManager.shared.addRecentRecords(word: keyword)
+        view.endEditing(true)
+        
     }
     
     

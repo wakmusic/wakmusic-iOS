@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import Utility
 
 protocol RecentRecordDelegate: AnyObject {
     func selectedItems(_ keyword: String)
@@ -27,7 +28,7 @@ class RecentRecordTableViewCell: UITableViewCell {
     @IBOutlet weak var recentLabel: UILabel!
     @IBOutlet weak var recentRemoveButton: UIButton!
     
-    var delegate:RecentRecordDelegate?
+    //var delegate:RecentRecordDelegate?
     
     override func awakeFromNib() { //View의 DidLoad쪽과 같은 역할
         super.awakeFromNib()
@@ -37,16 +38,16 @@ class RecentRecordTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        print("PREPARE")
-    }
+    
     
 
     
     
     @IBAction func pressRemoveAction(_ sender: Any) {
-        delegate?.selectedItems(self.recentLabel.text!)
+        
+        //delegate?.selectedItems(self.recentLabel.text!)
+        
+        PreferenceManager.shared.removeRecentRecords(word: self.recentLabel.text!)
     }
 
 }

@@ -24,7 +24,7 @@ public final class PreferenceManager {
         BehaviorSubject(value: UserDefaults.standard.array(forKey: Constants.recentRecords.rawValue) as? [String] ?? [])
 
     /// UserDefaults에 저장 된 최근 검색어 데이터를 저장하는 프로퍼티
-    var recentRecords: [String]{
+    public var recentRecords: [String]{
         let records = (UserDefaults.standard.array(forKey: Constants.recentRecords.rawValue) as? [String]) ?? []
         return records
     }
