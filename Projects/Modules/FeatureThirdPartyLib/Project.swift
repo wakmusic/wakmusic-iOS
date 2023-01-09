@@ -15,6 +15,7 @@ let project = Project.makeModule(
         .SPM.ReactorKit,
         .SPM.SnapKit,
         .SPM.Then,
-        .SPM.Kingfisher
+        .SPM.Kingfisher,
+        .SPM.Tabman
     ]
 )

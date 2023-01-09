@@ -8,9 +8,8 @@
 
 import UIKit
 import Utility
-import DesignSystem
 
-protocol RecommendPlayListViewDelegate: AnyObject {
+public protocol RecommendPlayListViewDelegate: AnyObject {
     func itemSelected(model: RecommendPlayListDTO)
 }
 
@@ -18,7 +17,7 @@ public class RecommendPlayListView: UIView {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    weak var delegate: RecommendPlayListViewDelegate?
+    public weak var delegate: RecommendPlayListViewDelegate?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,19 +29,24 @@ public class RecommendPlayListView: UIView {
         self.setupView()
     }
     
-    var dataSource: [RecommendPlayListDTO] = [] {
+    public var dataSource: [RecommendPlayListDTO] = [] {
         didSet{
             collectionView.reloadData()
         }
     }
 }
 
-struct RecommendPlayListDTO {
+public struct RecommendPlayListDTO {
     let title: String
     let image: UIImage
+    
+    public init(title: String, image: UIImage) {
+        self.title = title
+        self.image = image
+    }
 }
 
-extension RecommendPlayListView {
+public extension RecommendPlayListView {
     
     private func setupView(){
         
