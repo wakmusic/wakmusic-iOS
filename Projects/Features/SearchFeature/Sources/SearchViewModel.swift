@@ -17,7 +17,7 @@ final class SearchViewModel {
     var disposeBag = DisposeBag()
 
     struct Input {
-        let textString:PublishRelay<String> = PublishRelay()
+        let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
        
     }
 

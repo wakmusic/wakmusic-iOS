@@ -136,7 +136,7 @@ extension SearchViewController {
             .asObservable()
             .withLatestFrom(viewModel.input.textString) { ($0, $1) }
             .subscribe(onNext: { [weak self] (event,str) in
-                        
+
             guard let self = self else {
                 return
             }
@@ -206,6 +206,7 @@ extension SearchViewController {
 
     private func reactSearchHeader(_ isfocused:Bool)
     {
+        
         let headerFontSize:CGFloat = 20
         
         let focusedplaceHolderAttributes = [
