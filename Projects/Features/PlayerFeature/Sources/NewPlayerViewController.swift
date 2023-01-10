@@ -144,6 +144,9 @@ public class NewPlayerViewController: UIViewController {
         $0.tintColor = .systemGray
     }
     
+    private var firstSpacing: CGFloat = 0
+    private var secondSpacing: CGFloat = 0
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -175,8 +178,10 @@ private extension NewPlayerViewController {
     }
     
     private func configureUI() {
+        self.updateSpacing()
         self.configureSubViews()
         self.configureBackground()
+        self.configureContent()
         self.configureTitleBar()
         self.configureThumbnail()
         self.configureLyrics()
@@ -223,6 +228,9 @@ private extension NewPlayerViewController {
     private func configureBackground() {
         
     }
+    private func configureContent() {
+        
+    }
     private func configureTitleBar() {
         
     }
@@ -243,6 +251,29 @@ private extension NewPlayerViewController {
     }
     private func configureBottomBar() {
         
+    }
+    
+    private func updateSpacing() {
+        let x = specialValue(height: self.view.frame.height)
+        firstSpacing = x * 4 + 4
+        secondSpacing = x * 4 - 4
+    }
+    
+    private func specialValue(height: CGFloat) -> CGFloat {
+        let window: UIWindow? = UIApplication.shared.windows.first
+        let top: CGFloat = window?.safeAreaInsets.top ?? 0
+        let bottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+        let left: CGFloat = window?.safeAreaInsets.left ?? 0
+        let right: CGFloat = window?.safeAreaInsets.right ?? 0
+        let width: CGFloat = Utility.APP_WIDTH() - left - right
+        var x: CGFloat = 0
+        
+        if height >= 812 {
+            x = ((height - top - bottom - (width - 50)/1.8 - 334 - 18) / 20)
+        } else {
+            x = ((height - top - bottom - (width - 50)/1.8 - 286 - 18) / 20)
+        }
+        return CGFloat(floorf(Float(x)))
     }
     
     private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
