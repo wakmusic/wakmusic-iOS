@@ -19,19 +19,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bq8-55-E59">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="262.33333333333331"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="qbA-Qu-2cI">
-                                <rect key="frame" x="118.66666666666669" y="262.33333333333331" width="156" height="160"/>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Bq8-55-E59" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="250:812" id="6eB-pZ-uRu"/>
                             <constraint firstItem="Bq8-55-E59" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="AVa-P3-VSu"/>
-                            <constraint firstItem="qbA-Qu-2cI" firstAttribute="top" secondItem="Bq8-55-E59" secondAttribute="bottom" id="H3F-RE-YVf"/>
                             <constraint firstItem="Bq8-55-E59" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Joc-xz-XAf"/>
                             <constraint firstAttribute="trailing" secondItem="Bq8-55-E59" secondAttribute="trailing" id="d0T-tJ-euT"/>
-                            <constraint firstItem="qbA-Qu-2cI" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="r9D-K3-Dgi"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,7 +35,4 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="launchScreen" width="156" height="160"/>
-    </resources>
 </document>

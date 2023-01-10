@@ -12,9 +12,7 @@ open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
         super.viewDidLoad()
 
         configureUI()
-
-        // Intro 화면에서는 앱에 대한 기본 정보를 받아오는 일을 보통 하는데, 없어서 딜레이 조금 주고 뭔가 하는척 해봤습니다.
-        self.perform(#selector(self.showTabBar), with: nil, afterDelay: 1.7)
+//        self.perform(#selector(self.showTabBar), with: nil, afterDelay: 1.6)
     }
 
     public static func viewController() -> IntroViewController {
@@ -36,8 +34,9 @@ extension IntroViewController {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
-        animationView.contentMode = .scaleToFill
-        animationView.loopMode = .playOnce
+        animationView.contentMode = .scaleAspectFill
+        animationView.loopMode = .loop
+        animationView.animationSpeed = 0.5
         self.logoContentView.addSubview(animationView)
         animationView.play()
     }
