@@ -1,6 +1,8 @@
 import UIKit
 import Utility
 import DesignSystem
+import PlayerFeature
+import SnapKit
 
 open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -111,5 +113,45 @@ extension MainContainerViewController {
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
         self.view.layoutIfNeeded()
+        
+        configurePlayer()
+    }
+    
+    private func configurePlayer() {
+        let vc = PlayerViewController.viewController()
+        self.addChild(vc)
+        panelView.addSubview(vc.view)
+        vc.didMove(toParent: self)
+        
+        vc.view.snp.makeConstraints {
+            $0.top.left.right.bottom.equalTo(panelView)
+        }
+        
+        let window: UIWindow? = UIApplication.shared.windows.first
+        let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
+        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+        var statusBarHeight: CGFloat = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+
+        if safeAreaInsetsTop > statusBarHeight {
+            statusBarHeight = safeAreaInsetsTop
+        }
+
+        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        
+        self.panelViewTopConstraint.constant = -screenHeight
+
+        UIView.animate(withDuration: 0.35,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.8,
+                       options: [.curveEaseInOut],
+                       animations: {
+
+            self.tabBarHeightConstraint.constant = 0
+            self.view.layoutIfNeeded()
+
+        }, completion: { _ in
+            self.tabBarCoverView.isHidden = false
+        })
     }
 }
