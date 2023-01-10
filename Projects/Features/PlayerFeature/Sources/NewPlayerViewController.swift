@@ -135,7 +135,7 @@ public class NewPlayerViewController: UIViewController {
     }
     
     private lazy var addPlayistButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.musicAdd.image, for: .normal)
+        $0.setImage(DesignSystemAsset.Player.playerMusicAdd.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
