@@ -129,28 +129,13 @@ extension BeforeSearchContentViewController {
         
         parent.viewModel.output.isFoucused
             .withLatestFrom(parent.viewModel.input.textString) {($0,$1)}
-            .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
-                
-                
-                guard let self = self else {
-                    return
-                }
-                
-                print(focus == false && str.isWhiteSpace)
-                if focus == false && str.isWhiteSpace == true //포커싱이 없고 빈 문자열 상태면 , 추천리스트 팝업
-                {
-                    self.viewModel.output.showRecommand.accept(true)
-                }
-                else
-                {
-                    self.viewModel.output.showRecommand.accept(false)
-                }
-                
-                self.tableView.reloadData() //헤더를 갈아끼기위한 reload
-                
-                
-            }).disposed(by: disposeBag)
-        
+            .map { (focus:Bool, str:String) -> Bool in
+                return focus == false && str.isWhiteSpace  == true
+            }
+            .bind(to: viewModel.output.showRecommand)
+            .disposed(by: disposeBag)
+
+//
        
         
         
