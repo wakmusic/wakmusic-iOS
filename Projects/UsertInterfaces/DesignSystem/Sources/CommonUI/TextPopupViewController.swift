@@ -39,9 +39,12 @@ extension TextPopupViewController {
 
         cancelButton.layer.cornerRadius = 12
         cancelButton.clipsToBounds = true
-
+        contentLabel.text = contentString
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
+        contentLabel.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        cancelButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        confirmButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
 
         cancelButton.isHidden = cancelButtonIsHidden
     }
@@ -62,8 +65,10 @@ extension TextPopupViewController: PanModalPresentable {
     }
 
     public var longFormHeight: PanModalHeight {
-         let stringHeight: CGFloat = contentString.heightConstraintAt(width: APP_WIDTH()-40,
-                                                                      font: .systemFont(ofSize: 18, weight: .medium))
+         let stringHeight: CGFloat = contentString.heightConstraintAt(
+            width: APP_WIDTH()-40,
+            font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18))
+        
          let spacingHeight: CGFloat = 60 + 52 + 56 + 20
          return .contentHeight(spacingHeight + stringHeight)
      }

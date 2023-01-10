@@ -10,19 +10,19 @@ import Foundation
 import RxSwift
 import RxRelay
 
-final class SearchViewModel {
+final class BeforeSearchContentViewModel {
 
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
 
     struct Input {
-        let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
+        
         
     }
 
     struct Output {
-        let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let showRecommand:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
     init() {

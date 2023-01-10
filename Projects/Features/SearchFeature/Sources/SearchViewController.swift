@@ -3,6 +3,7 @@ import Utility
 import DesignSystem
 import RxCocoa
 import RxSwift
+import PanModal
 
 public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -13,7 +14,6 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var searchContentView:UIView!
     
     var viewModel = SearchViewModel()
-    
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -54,7 +54,9 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.searchTextFiled.rx.text.onNext("")
+        self.viewModel.input.textString.accept("")
         self.view.endEditing(false)
+        self.viewModel.output.isFoucused.accept(false)
      
     }
 }
@@ -82,6 +84,7 @@ extension SearchViewController {
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
+        self.viewModel.output.isFoucused.accept(false)
         
         
         rxBindTask()
@@ -95,6 +98,7 @@ extension SearchViewController {
         addChild(contentView)
         searchContentView.addSubview(contentView.view)
         contentView.didMove(toParent: self)
+        contentView.delegate = self
         
         
     }
@@ -103,23 +107,7 @@ extension SearchViewController {
     //MARK: Rx 작업
 
     private func rxBindTask(){
-        self.viewModel.output.isFoucused.subscribe { [weak self](res:Bool) in
-            
-            guard let self = self else {
-                return
-            }
-            
-            self.reactSearchHeader(res)
-            
-            
-            
-            
-            //여기서 최근 검색어 로드 작업
-            
-         
-            
-        }.disposed(by: self.disposeBag)
-        
+
         
         // MARK: 검색바 포커싱 시작 종료
       
@@ -133,8 +121,9 @@ extension SearchViewController {
 
         mergeObservable
             .asObservable()
-            .subscribe(onNext: { [weak self] (event) in
-                        
+            .withLatestFrom(viewModel.input.textString) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (event,str) in
+
             guard let self = self else {
                 return
             }
@@ -145,10 +134,28 @@ extension SearchViewController {
             else if event == .editingDidEnd {
                 self.viewModel.output.isFoucused.accept(false)
             }
-            else
+            else //검색 버튼 눌렀을 때
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
                 //유저 디폴트 저장
+                if(str.isWhiteSpace == true)
+                {
+                    self.searchTextFiled.rx.text.onNext("")
+                    let textPopupViewController = TextPopupViewController.viewController(
+                        text: "검색어를 입려해주세요.",
+                        cancelButtonIsHidden: true
+                    )
+                    let viewController: PanModalPresentable.LayoutType = textPopupViewController //
+                    self.presentPanModal(viewController) //modal Show
+                    
+                }
+                else
+                {
+                    PreferenceManager.shared.addRecentRecords(word: str)
+                    
+                }
+                
+                self.viewModel.output.isFoucused.accept(false)
             }
             })
             .disposed(by: disposeBag)
@@ -163,22 +170,34 @@ extension SearchViewController {
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
         
-        self.viewModel.input.textString.subscribe { (str:String) in
+        
+        
+        self.viewModel.output.isFoucused
+            .withLatestFrom(self.viewModel.input.textString) {($0,$1)}
+            .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
+                
+                  
+                guard let self = self else
+                {
+                      return
+                }
+                self.reactSearchHeader(focus)
+                print("str:\(str.isEmpty) , \(focus)")
+                 
+                  
+                self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0
+                
+                
+            }).disposed(by: disposeBag)
             
-            if(str.isEmpty)
-            {
-                print("Empty")
-            }
+                
+
+        
+          
             
+        
             
-            
-            else
-            {
-                print("str: \(str)")
-            }
-            
-            
-        }.disposed(by: self.disposeBag)
+ 
         
  
 
@@ -186,6 +205,7 @@ extension SearchViewController {
 
     private func reactSearchHeader(_ isfocused:Bool)
     {
+        
         let headerFontSize:CGFloat = 20
         
         let focusedplaceHolderAttributes = [
@@ -201,7 +221,20 @@ extension SearchViewController {
         self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.searchImageView.tintColor = isfocused ? .white : DesignSystemAsset.GrayColor.gray400.color
         
-        self.cancelButton.alpha =  isfocused ? 1 : 0
+        
+    }
+    
+    
+}
+
+extension SearchViewController:BeforeSearchContentViewDelegate{
+    func itemSelected(_ keyword: String) {
+        searchTextFiled.rx.text.onNext(keyword)
+        viewModel.input.textString.accept(keyword)
+        viewModel.output.isFoucused.accept(false)
+        PreferenceManager.shared.addRecentRecords(word: keyword)
+        view.endEditing(true)
+        
     }
     
     

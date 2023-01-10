@@ -12,6 +12,15 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
+
+protocol BeforeSearchContentViewDelegate:AnyObject{
+    
+    func itemSelected(_ keyword:String)
+    
+}
+
+
+
 class BeforeSearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
 
     
@@ -19,8 +28,15 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
     
     
     let disposeBag = DisposeBag()
+    var delegate:BeforeSearchContentViewDelegate?
+    var viewModel = BeforeSearchContentViewModel()
+    let dataSource = [RecommendPlayListDTO(title: "고멤가요제", image: DesignSystemAsset.RecommendPlayList.gomemSongFestival.image),
+                      RecommendPlayListDTO(title: "연말공모전", image: DesignSystemAsset.RecommendPlayList.competition.image),
+                      RecommendPlayListDTO(title: "상콘 OST", image: DesignSystemAsset.RecommendPlayList.situationalplayOST.image),
+                      RecommendPlayListDTO(title: "힙합 SWAG", image: DesignSystemAsset.RecommendPlayList.hiphop.image),
+                      RecommendPlayListDTO(title: "캐롤", image: DesignSystemAsset.RecommendPlayList.carol.image),
+                      RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
     
-    var viewModel = BeforeSearchViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,14 +76,25 @@ extension BeforeSearchContentViewController {
         tableView.rx.setDelegate(self)
         .disposed(by: disposeBag)
         
-        guard let parent = self.parent as? SearchViewController else
-        {
-            return
-        }
+        
         
    
         //cell 그리기
-        viewModel.output.keywords.bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
+        
+        
+        let combine = Observable.combineLatest(viewModel.output.showRecommand,PreferenceManager.shared.rx.recentRecords){($0,$1)}
+            //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
+        
+        combine.map({ (showRecommand:Bool,item:[String]) -> [String] in
+            if showRecommand //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
+            {
+                return []
+            }
+            else
+            {
+                return item
+            }
+        }).bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecentRecordTableViewCell") as? RecentRecordTableViewCell  else
             {
                 return RecentRecordTableViewCell()
@@ -75,7 +102,7 @@ extension BeforeSearchContentViewController {
             
             cell.backgroundColor = .clear
             cell.recentLabel.text = element
-            cell.delegate = self
+            //cell.delegate = self
             
             return cell
                 
@@ -84,25 +111,47 @@ extension BeforeSearchContentViewController {
         
         //터치 이벤트
         tableView.rx.modelSelected(String.self)
-            .subscribe{ event in
+            .subscribe(onNext:{ [weak self] (keyword) in
                 
-                let keyword = event.element!
+                guard let self = self else{
+                    return
+                }
                 
-                parent.searchTextFiled.rx.text.onNext(keyword)
-                parent.viewModel.input.textString.accept(keyword)
-                parent.viewModel.output.isFoucused.accept(false)
-                parent.view.endEditing(true)
-            }.disposed(by: disposeBag)
-        
-//        tableView.rx.itemDeleted
-//                .subscribe(onNext: { [weak self] indexPath in
-//                        self?.keywords.remove(at: indexPath.row)
-//                })
-//                .disposed(by: disposeBag)
+                self.delegate?.itemSelected(keyword)
+            }).disposed(by: disposeBag)
             
-      
         
         
+        guard let parent = self.parent as? SearchViewController else
+        {
+            return
+        }
+        
+        parent.viewModel.output.isFoucused
+            .withLatestFrom(parent.viewModel.input.textString) {($0,$1)}
+            .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
+                
+                
+                guard let self = self else {
+                    return
+                }
+                
+                print(focus == false && str.isWhiteSpace)
+                if focus == false && str.isWhiteSpace == true //포커싱이 없고 빈 문자열 상태면 , 추천리스트 팝업
+                {
+                    self.viewModel.output.showRecommand.accept(true)
+                }
+                else
+                {
+                    self.viewModel.output.showRecommand.accept(false)
+                }
+                
+                self.tableView.reloadData() //헤더를 갈아끼기위한 reload
+                
+                
+            }).disposed(by: disposeBag)
+        
+       
         
         
     }
@@ -167,29 +216,55 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        if(viewModel.output.keywords.value.count == 0 )
+        
+        
+        if viewModel.output.showRecommand.value
+        {
+            return RecommendPlayListView.getViewHeight(model: dataSource)
+        }
+        
+        else if PreferenceManager.shared.recentRecords.count == 0
         {
             return 300
         }
-        return 40
+        else
+        {
+            return 40
+        }
+        
         
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
+        
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
         warningView.text = "최근 검색 기록이 없습니다."
 
         let recentRecordHeaderView = RecentRecordHeaderView()
         
-        if(viewModel.output.keywords.value.count == 0 )
+        
+        
+        let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
+                                                ,height: RecommendPlayListView.getViewHeight(model: dataSource)))
+        
+        recommendView.dataSource = self.dataSource
+        if viewModel.output.showRecommand.value
+        {
+            return recommendView
+        }
+        
+        else if PreferenceManager.shared.recentRecords.count == 0
         {
             return warningView
         }
+        else
+        {
+            return recentRecordHeaderView
+        }
+
+
         
-
-
-        return recentRecordHeaderView
     }
 
 
@@ -198,13 +273,12 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 }
 
 
-extension BeforeSearchContentViewController:RecentRecordDelegate
-{
-    func selectedItems(_ keyword: String) {
-
-        self.viewModel.output.keywords.accept(viewModel.output.keywords.value.filter( {$0 != keyword }))
-
-    }
-
-    
-}
+//extension BeforeSearchContentViewController:RecentRecordDelegate
+//{
+//    func selectedItems(_ keyword: String) {
+//
+//
+//    }
+//
+//
+//}
