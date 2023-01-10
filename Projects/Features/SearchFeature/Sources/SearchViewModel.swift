@@ -18,7 +18,7 @@ final class SearchViewModel {
 
     struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
-       
+        
     }
 
     struct Output {

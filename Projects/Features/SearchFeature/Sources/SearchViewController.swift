@@ -54,6 +54,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.searchTextFiled.rx.text.onNext("")
+        self.viewModel.input.textString.accept("")
         self.view.endEditing(false)
      
     }
@@ -147,7 +148,7 @@ extension SearchViewController {
             else if event == .editingDidEnd {
                 self.viewModel.output.isFoucused.accept(false)
             }
-            else
+            else //검색 버튼 눌렀을 때
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
                 //유저 디폴트 저장
@@ -187,15 +188,8 @@ extension SearchViewController {
                 return
             }
             
-            if(str.isEmpty)
-            {
-                print("Empty")
-            }
+            self.cancelButton.alpha =  str.isEmpty ? 0 : 1
             
-            else
-            {
-                print("str: \(str)")
-            }
         
             
         }.disposed(by: self.disposeBag)
@@ -222,7 +216,7 @@ extension SearchViewController {
         self.searchTextFiled.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.searchImageView.tintColor = isfocused ? .white : DesignSystemAsset.GrayColor.gray400.color
         
-        self.cancelButton.alpha =  isfocused ? 1 : 0
+        
     }
     
     
