@@ -56,6 +56,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         self.searchTextFiled.rx.text.onNext("")
         self.viewModel.input.textString.accept("")
         self.view.endEditing(false)
+        self.viewModel.output.isFoucused.accept(false)
      
     }
 }
@@ -83,6 +84,7 @@ extension SearchViewController {
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
+        self.viewModel.output.isFoucused.accept(false)
         
         
         rxBindTask()
@@ -105,23 +107,7 @@ extension SearchViewController {
     //MARK: Rx 작업
 
     private func rxBindTask(){
-        self.viewModel.output.isFoucused.subscribe { [weak self](res:Bool) in
-            
-            guard let self = self else {
-                return
-            }
-            
-            self.reactSearchHeader(res)
-            
-            
-            
-            
-            //여기서 최근 검색어 로드 작업
-            
-         
-            
-        }.disposed(by: self.disposeBag)
-        
+
         
         // MARK: 검색바 포커싱 시작 종료
       
@@ -166,7 +152,10 @@ extension SearchViewController {
                 else
                 {
                     PreferenceManager.shared.addRecentRecords(word: str)
+                    
                 }
+                
+                self.viewModel.output.isFoucused.accept(false)
             }
             })
             .disposed(by: disposeBag)
@@ -181,18 +170,34 @@ extension SearchViewController {
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
         
-        self.viewModel.input.textString.subscribe { [weak self] (str:String) in
+        
+        
+        self.viewModel.output.isFoucused
+            .withLatestFrom(self.viewModel.input.textString) {($0,$1)}
+            .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
+                
+                  
+                  guard let self = self else
+                  {
+                      return
+                  }
+                self.reactSearchHeader(focus)
+                print("str:\(str.isEmpty) , \(focus)")
+                 
+                  
+                  self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0
+                
+                
+            }).disposed(by: disposeBag)
             
-            guard let self = self else
-            {
-                return
-            }
-            
-            self.cancelButton.alpha =  str.isEmpty ? 0 : 1
+                
+
+        
+          
             
         
             
-        }.disposed(by: self.disposeBag)
+ 
         
  
 
