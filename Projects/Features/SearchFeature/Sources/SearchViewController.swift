@@ -138,7 +138,7 @@ extension SearchViewController {
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
                 //유저 디폴트 저장
-                if(str.isWhiteSpace)
+                if(str.isWhiteSpace == true)
                 {
                     self.searchTextFiled.rx.text.onNext("")
                     let textPopupViewController = TextPopupViewController.viewController(
@@ -177,15 +177,15 @@ extension SearchViewController {
             .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
                 
                   
-                  guard let self = self else
-                  {
+                guard let self = self else
+                {
                       return
-                  }
+                }
                 self.reactSearchHeader(focus)
                 print("str:\(str.isEmpty) , \(focus)")
                  
                   
-                  self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0
+                self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0
                 
                 
             }).disposed(by: disposeBag)
