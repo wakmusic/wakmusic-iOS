@@ -28,6 +28,7 @@ open class MainContainerViewController: UIViewController, ViewControllerFromStor
         super.viewDidLoad()
 
         configureUI()
+        configurePlayer()
     }
 
     public static func viewController() -> MainContainerViewController {
@@ -113,8 +114,6 @@ extension MainContainerViewController {
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
         self.view.layoutIfNeeded()
-        
-        configurePlayer()
     }
     
     private func configurePlayer() {
