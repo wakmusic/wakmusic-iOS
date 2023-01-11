@@ -12,7 +12,7 @@ open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
         super.viewDidLoad()
 
         configureUI()
-//        self.perform(#selector(self.showTabBar), with: nil, afterDelay: 1.6)
+        self.perform(#selector(self.showTabBar), with: nil, afterDelay: 1.6)
     }
 
     public static func viewController() -> IntroViewController {
@@ -34,9 +34,9 @@ extension IntroViewController {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
-        animationView.contentMode = .scaleAspectFill
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 0.5
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .playOnce
+
         self.logoContentView.addSubview(animationView)
         animationView.play()
     }
