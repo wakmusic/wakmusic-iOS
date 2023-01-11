@@ -254,24 +254,25 @@ private extension NewPlayerViewController {
     }
     
     private func updateSpacing() {
-        let x = specialValue(height: self.view.frame.height)
+        let x = specialValue()
         firstSpacing = x * 4 + 4
         secondSpacing = x * 4 - 4
     }
     
-    private func specialValue(height: CGFloat) -> CGFloat {
+    private func specialValue() -> CGFloat {
         let window: UIWindow? = UIApplication.shared.windows.first
         let top: CGFloat = window?.safeAreaInsets.top ?? 0
         let bottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
         let left: CGFloat = window?.safeAreaInsets.left ?? 0
         let right: CGFloat = window?.safeAreaInsets.right ?? 0
         let width: CGFloat = Utility.APP_WIDTH() - left - right
+        let height: CGFloat = Utility.APP_HEIGHT() - top - bottom
         var x: CGFloat = 0
         
-        if height >= 812 {
-            x = ((height - top - bottom - (width - 50)/1.8 - 334 - 18) / 20)
+        if height >= 732 {
+            x = ((height - (width - 50)/1.8 - 334 - 18) / 20)
         } else {
-            x = ((height - top - bottom - (width - 50)/1.8 - 286 - 18) / 20)
+            x = ((height - (width - 50)/1.8 - 286 - 18) / 20)
         }
         return CGFloat(floorf(Float(x)))
     }
