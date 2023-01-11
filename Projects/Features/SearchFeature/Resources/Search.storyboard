@@ -11,20 +11,78 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--After Search View Controller-->
         <scene sceneID="r4z-61-wri">
             <objects>
-                <viewController id="A4A-7Y-f8v" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AfterSearchViewController" id="A4A-7Y-f8v" customClass="AfterSearchViewController" customModule="SearchFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mad-wb-Q4D">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nx-1t-MMz">
+                                <rect key="frame" x="0.0" y="59" width="393" height="40"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh9-hM-9M7">
+                                        <rect key="frame" x="0.0" y="39" width="393" height="1"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="LqB-NS-3TQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Rh9-hM-9M7" secondAttribute="bottom" id="hB0-h5-h6Y"/>
+                                    <constraint firstItem="Rh9-hM-9M7" firstAttribute="leading" secondItem="5nx-1t-MMz" secondAttribute="leading" id="i26-TY-pSd"/>
+                                    <constraint firstAttribute="trailing" secondItem="Rh9-hM-9M7" secondAttribute="trailing" id="mN9-oh-XSO"/>
+                                    <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="n2C-C8-98k"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="5nx-1t-MMz" secondAttribute="trailing" id="9pS-Rx-amP"/>
+                            <constraint firstItem="5nx-1t-MMz" firstAttribute="top" secondItem="n2C-C8-98k" secondAttribute="top" id="uqi-7p-FgL"/>
+                            <constraint firstItem="5nx-1t-MMz" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="xnX-8T-irg"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tabBarView" destination="5nx-1t-MMz" id="sqI-Rv-Ui1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Upd-wJ-2Fc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="975" y="-656"/>
+            <point key="canvasLocation" x="1754.9618320610687" y="-2.1126760563380285"/>
+        </scene>
+        <!--After Search Content View Controller-->
+        <scene sceneID="ewL-de-ykJ">
+            <objects>
+                <viewController storyboardIdentifier="AfterSearchContentViewController" id="wFs-UV-N8n" customClass="AfterSearchContentViewController" customModule="SearchFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Xtf-ws-O1l">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="rcw-Ju-H6e"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="rcw-Ju-H6e" firstAttribute="trailing" secondItem="AFm-fr-N46" secondAttribute="trailing" id="7tt-pj-WAb"/>
+                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" id="eIZ-1L-S7b"/>
+                            <constraint firstItem="rcw-Ju-H6e" firstAttribute="bottom" secondItem="AFm-fr-N46" secondAttribute="bottom" id="fma-yd-7O3"/>
+                            <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IVM-sj-ICq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2491" y="-2"/>
         </scene>
         <!--검색-->
         <scene sceneID="s0d-6b-0kx">
