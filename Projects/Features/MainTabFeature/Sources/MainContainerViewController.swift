@@ -117,13 +117,13 @@ extension MainContainerViewController {
     }
     
     private func configurePlayer() {
-        let vc = PlayerViewController.viewController()
+        let vc = PlayerViewController()
         self.addChild(vc)
         panelView.addSubview(vc.view)
         vc.didMove(toParent: self)
         
         vc.view.snp.makeConstraints {
-            $0.top.left.right.bottom.equalTo(panelView)
+            $0.edges.equalTo(panelView)
         }
         
         let window: UIWindow? = UIApplication.shared.windows.first
