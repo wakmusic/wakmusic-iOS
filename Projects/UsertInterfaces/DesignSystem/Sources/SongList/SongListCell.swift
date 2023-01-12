@@ -9,18 +9,18 @@
 import UIKit
 import Utility
 
-class SongListCell: UITableViewCell {
+public class SongListCell: UITableViewCell {
 
     @IBOutlet weak var albumImageView: UIImageView!
     
-    @IBOutlet weak var titleStringLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     
     
 
     
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
 
         self.backgroundColor = .clear
@@ -28,7 +28,7 @@ class SongListCell: UITableViewCell {
     }
 }
 
-extension SongListCell {
+public extension SongListCell {
     
     static func getCellHeight() -> CGFloat {
         
@@ -39,20 +39,29 @@ extension SongListCell {
         return base + height
     }
     
-    func update() {
+    func update(_ song:SongInfoDTO) {
         
-        albumImageView.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
+        albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         albumImageView.layer.cornerRadius = 8
         albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
         albumImageView.layer.borderWidth = 1
+        
+        self.titleLabel.text = song.name
+        self.artistLabel.text = song.artist
+        self.releaseDateLabel.text = song.releaseDay
+        
     }
 }
 
 public struct SongInfoDTO {
-    
     var name:String
     var artist:String
     var releaseDay:String
     
-    
+    public init(name: String, artist: String, releaseDay: String) {
+        self.name = name
+        self.artist = artist
+        self.releaseDay = releaseDay
+    }
 }
+

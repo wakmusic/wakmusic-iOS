@@ -24,6 +24,7 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh9-hM-9M7">
                                         <rect key="frame" x="0.0" y="39" width="393" height="1"/>
+                                        <color key="backgroundColor" name="gray200"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="LqB-NS-3TQ"/>
                                         </constraints>
@@ -66,7 +67,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="99" width="393" height="719"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -74,7 +75,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="trailing" secondItem="AFm-fr-N46" secondAttribute="trailing" id="7tt-pj-WAb"/>
-                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" id="eIZ-1L-S7b"/>
+                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="40" id="eIZ-1L-S7b"/>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="bottom" secondItem="AFm-fr-N46" secondAttribute="bottom" id="fma-yd-7O3"/>
                             <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
                         </constraints>
@@ -254,6 +255,9 @@
         <image name="add" width="32" height="32"/>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray200">
+            <color red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray400">
             <color red="0.59600001573562622" green="0.63499999046325684" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

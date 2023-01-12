@@ -9,11 +9,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EntireSectionHeader" customModule="SearchFeature">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EntireSectionHeader" customModule="SearchFeature_SearchFeature" customModuleProvider="target">
             <connections>
-                <outlet property="categoryLabel" destination="HCH-Vt-HrF" id="LY7-ko-lYs"/>
-                <outlet property="moveTapButton" destination="3kH-8C-bYa" id="n0a-FV-y0w"/>
-                <outlet property="numberOfSongLabel" destination="v0r-r8-7jX" id="xmj-OJ-RC2"/>
+                <outlet property="categoryLabel" destination="HCH-Vt-HrF" id="LDX-xp-qLB"/>
+                <outlet property="moveTapButton" destination="3kH-8C-bYa" id="z94-Ni-OAR"/>
+                <outlet property="numberOfSongLabel" destination="v0r-r8-7jX" id="r5B-26-WNY"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -22,33 +22,33 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HCH-Vt-HrF">
-                    <rect key="frame" x="20" y="89.666666666666671" width="42" height="21"/>
+                    <rect key="frame" x="20" y="96" width="42" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0r-r8-7jX">
-                    <rect key="frame" x="66" y="89.666666666666671" width="42" height="21"/>
+                    <rect key="frame" x="66" y="96" width="42" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-8C-bYa">
-                    <rect key="frame" x="282.66666666666669" y="83" width="93.333333333333314" height="34.333333333333343"/>
+                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-8C-bYa">
+                    <rect key="frame" x="346.66666666666669" y="94.666666666666671" width="29.333333333333314" height="24"/>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" image="search_arrow_right" imagePlacement="trailing" title="전체보기" imagePadding="5" titleAlignment="leading">
+                    <buttonConfiguration key="configuration" style="plain" image="search_arrow_right" imagePlacement="trailing" imagePadding="10">
                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage"/>
                     </buttonConfiguration>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" systemColor="systemBlueColor"/>
             <constraints>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="centerY" secondItem="v0r-r8-7jX" secondAttribute="centerY" id="CiO-sy-lWU"/>
                 <constraint firstItem="v0r-r8-7jX" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="KgJ-j5-jfo"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3kH-8C-bYa" secondAttribute="trailing" constant="24" id="M4X-Ni-79w"/>
                 <constraint firstItem="v0r-r8-7jX" firstAttribute="leading" secondItem="HCH-Vt-HrF" secondAttribute="trailing" constant="4" id="OqN-ii-kot"/>
                 <constraint firstItem="HCH-Vt-HrF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="d0m-Za-bxb"/>
-                <constraint firstItem="3kH-8C-bYa" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="eFe-Nm-guR"/>
                 <constraint firstItem="HCH-Vt-HrF" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="f06-H4-7DO"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -57,8 +57,8 @@
     </objects>
     <resources>
         <image name="search_arrow_right" width="5.3333334922790527" height="10"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
