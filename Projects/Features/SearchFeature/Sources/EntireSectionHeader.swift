@@ -36,15 +36,14 @@ extension EntireSectionHeader {
         if let view = Bundle.module.loadNibNamed("EntireSectionHeader", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
-            //view.backgroundColor = .clear
+            view.backgroundColor = .clear
             self.addSubview(view)
         }
         
-        self.categoryLabel.text = "노래"
+       
         self.categoryLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.categoryLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
-        self.numberOfSongLabel.text = "5"
         self.numberOfSongLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.numberOfSongLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         
@@ -71,7 +70,7 @@ extension EntireSectionHeader {
     
     public func update(_ title:String,_ count:Int)
     {
-        self.categoryLabel.text = "노래"
+        self.categoryLabel.text = title
         self.numberOfSongLabel.text = String(count)
     }
 }

@@ -14,6 +14,19 @@ import RxDataSources
 import DesignSystem
 
 
+
+typealias SearchSectionModel = SectionModel<String,SongInfoDTO>
+
+
+enum SearchType{
+    case all
+    case song
+    case artist
+    case assistant
+}
+
+
+
 class AfterSearchContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
@@ -21,8 +34,9 @@ class AfterSearchContentViewController: UIViewController, ViewControllerFromStor
     //섹션 타이이틀
     //갯수
     //배열 
-  
-    var dataSource: BehaviorRelay<[SongInfoDTO]> =  BehaviorRelay(value:  [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    
+    var searchType:SearchType = .all
+    var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[SearchSectionModel.init(model: "노래", items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: "가수", items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
     
    
     var disposeBag = DisposeBag()
@@ -37,8 +51,9 @@ class AfterSearchContentViewController: UIViewController, ViewControllerFromStor
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController() -> AfterSearchContentViewController{
+    public static func viewController(_ type:SearchType) -> AfterSearchContentViewController{
         let viewController = AfterSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        viewController.searchType = type
         
         DEBUG_LOG("After After")
         
@@ -47,23 +62,17 @@ class AfterSearchContentViewController: UIViewController, ViewControllerFromStor
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
+    
+    
 
 }
 
 extension AfterSearchContentViewController{
     private func configureUI()
     {
-        self.tableView.backgroundColor = .clear
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56)) // 미니 플레이어 만큼 밑에서 뛰움
         //self.view.backgroundColor = .
     }
     
@@ -75,14 +84,8 @@ extension AfterSearchContentViewController{
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         tableView.register(UINib(nibName:"SongListCell", bundle: DesignSystemResources.bundle), forCellReuseIdentifier: "SongListCell")
         
-        dataSource.bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
-            let indexPath: IndexPath = IndexPath(row: index, section: 0)
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
-                return UITableViewCell()
-            }
-            cell.update(model)
-            return cell
-        }.disposed(by: disposeBag)
+        dataSource.bind(to: tableView.rx.items(dataSource: createDatasource()))
+        .disposed(by: disposeBag)
         
         
         
@@ -92,16 +95,18 @@ extension AfterSearchContentViewController{
 
 extension AfterSearchContentViewController:UITableViewDelegate{
  
+    
+    
         
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        60
+        return 60
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
         let songlistHeader = EntireSectionHeader()
-        songlistHeader.update("노래", self.dataSource.value.count)
+        songlistHeader.update(self.dataSource.value[section].model, self.dataSource.value[section].items.count)
         
         
         return songlistHeader
@@ -109,5 +114,28 @@ extension AfterSearchContentViewController:UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
+    }
+}
+
+
+extension AfterSearchContentViewController{
+
+    func createDatasource() -> RxTableViewSectionedReloadDataSource<SearchSectionModel>{
+
+        let datasource = RxTableViewSectionedReloadDataSource<SearchSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
+
+            guard let self = self else { return UITableViewCell() }
+
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
+                return UITableViewCell()
+            }
+            return cell
+
+
+        }, titleForHeaderInSection: { (datasource, sectionNumber) -> String? in
+            return nil
+        })
+
+        return datasource
     }
 }

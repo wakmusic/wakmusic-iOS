@@ -21,31 +21,29 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nx-1t-MMz">
                                 <rect key="frame" x="0.0" y="59" width="393" height="40"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh9-hM-9M7">
-                                        <rect key="frame" x="0.0" y="39" width="393" height="1"/>
-                                        <color key="backgroundColor" name="gray200"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="LqB-NS-3TQ"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Rh9-hM-9M7" secondAttribute="bottom" id="hB0-h5-h6Y"/>
-                                    <constraint firstItem="Rh9-hM-9M7" firstAttribute="leading" secondItem="5nx-1t-MMz" secondAttribute="leading" id="i26-TY-pSd"/>
-                                    <constraint firstAttribute="trailing" secondItem="Rh9-hM-9M7" secondAttribute="trailing" id="mN9-oh-XSO"/>
                                     <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh9-hM-9M7">
+                                <rect key="frame" x="0.0" y="99" width="393" height="1"/>
+                                <color key="backgroundColor" name="gray200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="LqB-NS-3TQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="n2C-C8-98k"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="5nx-1t-MMz" secondAttribute="trailing" id="9pS-Rx-amP"/>
+                            <constraint firstItem="Rh9-hM-9M7" firstAttribute="leading" secondItem="Mad-wb-Q4D" secondAttribute="leading" id="EkC-41-0se"/>
+                            <constraint firstItem="Rh9-hM-9M7" firstAttribute="top" secondItem="5nx-1t-MMz" secondAttribute="bottom" id="TnP-0B-j0c"/>
+                            <constraint firstAttribute="trailing" secondItem="Rh9-hM-9M7" secondAttribute="trailing" id="u5r-9d-6rE"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="top" secondItem="n2C-C8-98k" secondAttribute="top" id="uqi-7p-FgL"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="xnX-8T-irg"/>
                         </constraints>
@@ -66,9 +64,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
                                 <rect key="frame" x="0.0" y="99" width="393" height="719"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="SUB 1"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="rcw-Ju-H6e"/>
@@ -253,6 +251,9 @@
     </scenes>
     <resources>
         <image name="add" width="32" height="32"/>
+        <namedColor name="SUB 1">
+            <color red="0.9570000171661377" green="1" blue="0.50599998235702515" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

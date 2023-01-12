@@ -24,7 +24,10 @@ public class SongListCell: UITableViewCell {
         super.awakeFromNib()
 
         self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
+        
+        albumImageView.layer.cornerRadius = 8
+        albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
+        albumImageView.layer.borderWidth = 1
     }
 }
 
@@ -42,9 +45,7 @@ public extension SongListCell {
     func update(_ song:SongInfoDTO) {
         
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
-        albumImageView.layer.borderWidth = 1
+        
         
         self.titleLabel.text = song.name
         self.artistLabel.text = song.artist

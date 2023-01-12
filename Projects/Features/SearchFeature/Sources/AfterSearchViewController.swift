@@ -16,10 +16,10 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
 
     @IBOutlet weak var tabBarView: UIView!
     
-    private var viewControllers: [UIViewController] = [AfterSearchContentViewController.viewController(),
-                                                       AfterSearchContentViewController.viewController(),
-                                                       AfterSearchContentViewController.viewController(),
-                                                       AfterSearchContentViewController.viewController()]
+    private var viewControllers: [UIViewController] = [AfterSearchContentViewController.viewController(.all),
+                                                       AfterSearchContentViewController.viewController(.song),
+                                                       AfterSearchContentViewController.viewController(.artist),
+                                                       AfterSearchContentViewController.viewController(.assistant)]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +49,7 @@ extension AfterSearchViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
