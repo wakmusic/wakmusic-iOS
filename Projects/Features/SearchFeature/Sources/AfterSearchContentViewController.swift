@@ -8,9 +8,18 @@
 
 import UIKit
 import Utility
+import RxCocoa
+import RxSwift
+import DesignSystem
 
 class AfterSearchContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var tableView: UITableView!
+    
+    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: [1,2,3,4,5,6,7,8,9,10])
+  
+    var disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,4 +42,33 @@ class AfterSearchContentViewController: UIViewController, ViewControllerFromStor
     }
     */
 
+}
+
+extension AfterSearchContentViewController{
+    private func configureUI()
+    {
+        
+    }
+    
+    private func bindRx()
+    {
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        
+        
+        
+    }
+    
+}
+
+extension AfterSearchContentViewController:UITableViewDelegate{
+ 
+        
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        60
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return
+    }
 }

@@ -23,7 +23,7 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureUI()
         // Do any additional setup after loading the view.
     }
     
@@ -39,6 +39,7 @@ extension AfterSearchViewController {
     
     private func configureUI() {
         
+        self.dataSource = self //dateSource
         let bar = TMBar.ButtonBar()
         
         // 배경색
@@ -51,10 +52,10 @@ extension AfterSearchViewController {
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
-            button.tintColor = colorFromRGB(0x98A2B3)
-            button.selectedTintColor = colorFromRGB(0x101828)
-            button.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            button.selectedFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
         
         // indicator

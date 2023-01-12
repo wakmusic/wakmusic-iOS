@@ -79,6 +79,9 @@
                             <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="AFm-fr-N46" id="6Hf-WL-ueX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IVM-sj-ICq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

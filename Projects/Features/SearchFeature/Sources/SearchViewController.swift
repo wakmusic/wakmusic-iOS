@@ -25,7 +25,10 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard let child = self.children.first as? BeforeSearchContentViewController else { return }
+        //guard let child = self.children.first as? BeforeSearchContentViewController else { return }
+        //child.view.frame = searchContentView.bounds
+        
+        guard let child = self.children.first as? AfterSearchViewController else { return }
         child.view.frame = searchContentView.bounds
        
         //오차로 인하여 여기서 설정함
@@ -88,17 +91,28 @@ extension SearchViewController {
         
         
         rxBindTask()
-        bindSubView()
+        //bindBeforeSearchView()
+        bindAfterSearchView()
         
 }
        
-    private func bindSubView()
+    private func bindBeforeSearchView()
     {
         let contentView = BeforeSearchContentViewController.viewController() //
         addChild(contentView)
         searchContentView.addSubview(contentView.view)
         contentView.didMove(toParent: self)
         contentView.delegate = self
+  
+    }
+    
+    private func bindAfterSearchView()
+    {
+        let contentView = AfterSearchViewController.viewController() //
+        addChild(contentView)
+        searchContentView.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
+        //contentView.delegate = self
         
         
     }
