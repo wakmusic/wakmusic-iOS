@@ -10,7 +10,9 @@ import UIKit
 import Utility
 import RxCocoa
 import RxSwift
+import RxDataSources
 import DesignSystem
+
 
 class AfterSearchContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
