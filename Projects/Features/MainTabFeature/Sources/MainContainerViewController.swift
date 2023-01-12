@@ -56,7 +56,7 @@ extension MainContainerViewController {
         }
 
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
-        let centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
+        var centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
                             (screenHeight + originalPanelPosition)
 
         switch gestureRecognizer.state {
@@ -72,7 +72,8 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
-
+            updatePlayerViewController(value: Float(centerRatio))
+            
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
             self.panelViewTopConstraint.constant = (centerRatio < standard) ? self.originalPanelPosition : -screenHeight
@@ -90,6 +91,9 @@ extension MainContainerViewController {
             }, completion: { _ in
                 self.tabBarCoverView.isHidden = (centerRatio < standard) ? true : false
             })
+            
+            centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
+            updatePlayerViewController(value: Float(centerRatio))
 
         default:
             return
@@ -97,7 +101,13 @@ extension MainContainerViewController {
 
         self.lastPoint = point
     }
-
+    
+    private func updatePlayerViewController(value: Float) {
+        if let playerViewController: PlayerViewController = self.children.last as? PlayerViewController {
+            playerViewController.updateOpacity(value: value)
+        }
+    }
+    
     private func configureUI() {
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
