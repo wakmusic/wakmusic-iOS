@@ -11,8 +11,6 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import HomeFeature
-import SearchFeature
 
 class ArtistMusicContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
