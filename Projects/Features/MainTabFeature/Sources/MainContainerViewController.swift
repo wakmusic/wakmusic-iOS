@@ -73,6 +73,7 @@ extension MainContainerViewController {
 
             self.panelViewTopConstraint.constant = newConstant
             updatePlayerViewController(value: Float(centerRatio))
+            updateMainTabViewController(value: centerRatio)
             
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
@@ -94,12 +95,19 @@ extension MainContainerViewController {
             
             centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
             updatePlayerViewController(value: Float(centerRatio))
+            updateMainTabViewController(value: centerRatio)
 
         default:
             return
         }
 
         self.lastPoint = point
+    }
+    
+    private func updateMainTabViewController(value: CGFloat) {
+        if let mainTabBarViewController: MainTabBarViewController = self.children.first as? MainTabBarViewController {
+            mainTabBarViewController.updateLayout(value: value)
+        }
     }
     
     private func updatePlayerViewController(value: Float) {
@@ -113,13 +121,13 @@ extension MainContainerViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarCoverView.isHidden = true
 
-        let viewController = MainTabBarController.viewController()
+        let viewController = MainTabBarViewController.viewController()
         self.addChild(viewController)
         viewController.didMove(toParent: self)
 
         _ = panGestureRecognizer
 
-        self.originalTabBarPosition = self.tabBarHeightConstraint.constant // 49
+        self.originalTabBarPosition = self.tabBarHeightConstraint.constant // 56
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
@@ -136,7 +144,9 @@ extension MainContainerViewController {
         vc.view.snp.makeConstraints {
             $0.edges.equalTo(panelView)
         }
-        
+        updatePlayerViewController(value: Float(0))
+
+        /*
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
@@ -163,5 +173,6 @@ extension MainContainerViewController {
         }, completion: { _ in
             self.tabBarCoverView.isHidden = false
         })
+         */
     }
 }
