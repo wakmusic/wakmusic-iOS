@@ -40,7 +40,6 @@ public extension UILabel {
     }
     
     func setLineHeight(lineHeight: CGFloat){
-        print(self.text)
         if let text = self.text {
             let style = NSMutableParagraphStyle()
             style.maximumLineHeight = lineHeight
