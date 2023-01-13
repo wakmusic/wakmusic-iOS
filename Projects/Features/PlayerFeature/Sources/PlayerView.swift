@@ -316,10 +316,13 @@ private extension PlayerView {
         }
     }
     private func configureThumbnail() {
+        let width = Utility.APP_WIDTH() - 25 - 25
+        let height = width * 9 / 16
         thumbnailImageView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom).offset(firstSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25))
             $0.centerX.equalTo(self.snp.centerX)
+            $0.width.equalTo(width)
+            $0.height.equalTo(height)
         }
         thumbnailImageView.backgroundColor = .white
     }
