@@ -276,8 +276,10 @@ private extension PlayerView {
     }
     
     private func configureBackground() {
+        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         backgroundView.snp.makeConstraints {
-            $0.edges.equalTo(self.snp.edges)
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
         }
         backgroundImageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
@@ -288,10 +290,11 @@ private extension PlayerView {
         }
     }
     private func configureContent() {
+        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         contentView.snp.makeConstraints {
-            //$0.edges.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(Utility.STATUS_BAR_HEGHIT())
-            $0.horizontalEdges.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
+            $0.horizontalEdges.equalToSuperview()
         }
     }
     private func configureTitleBar() {

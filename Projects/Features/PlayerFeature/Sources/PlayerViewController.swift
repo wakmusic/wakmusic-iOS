@@ -26,7 +26,6 @@ public class PlayerViewController: UIViewController {
         super.loadView()
         
         playerView = PlayerView(frame: self.view.frame)
-        //self.view = playerView
         self.view.addSubview(playerView)
     }
 }
