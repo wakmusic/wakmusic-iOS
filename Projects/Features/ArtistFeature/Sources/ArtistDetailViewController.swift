@@ -130,6 +130,7 @@ extension ArtistDetailViewController {
         self.artistNameLabel.attributedText = artistNameAttributedString
         
         let viewController = ArtistMusicViewController.viewController()
+        viewController.view.frame = musicContentView.bounds
         self.addChild(viewController)
         self.musicContentView.addSubview(viewController.view)
         viewController.didMove(toParent: self)

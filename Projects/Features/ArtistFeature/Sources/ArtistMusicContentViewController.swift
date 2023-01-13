@@ -12,6 +12,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import HomeFeature
+import SearchFeature
 
 class ArtistMusicContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -63,15 +64,29 @@ extension ArtistMusicContentViewController {
     
     private func configureUI() {
         
+        let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
+        
+        allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                                               .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
+                                              range: NSRange(location: 0, length: allPlayAttributedString.string.count))
+
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.layer.cornerRadius = 8
-        allPlayButton.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
+        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         allPlayButton.layer.borderWidth = 1
+        allPlayButton.setAttributedTitle(allPlayAttributedString, for: .normal)
+        
+        let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
+        
+        shufflePlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
+                                                  range: NSRange(location: 0, length: shufflePlayAttributedString.string.count))
         
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         shufflePlayButton.layer.cornerRadius = 8
-        shufflePlayButton.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
+        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         shufflePlayButton.layer.borderWidth = 1
+        shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
     }
 }
 

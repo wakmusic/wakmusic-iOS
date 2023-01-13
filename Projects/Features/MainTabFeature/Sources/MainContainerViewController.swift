@@ -69,7 +69,6 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
-            DEBUG_LOG("centerRatio: \(centerRatio)")
 
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
@@ -88,8 +87,6 @@ extension MainContainerViewController {
             }, completion: { _ in
                 self.tabBarCoverView.isHidden = (centerRatio < standard) ? true : false
             })
-            
-            DEBUG_LOG("centerRatio: \(centerRatio)")
             
         default:
             return
