@@ -15,8 +15,13 @@ import Then
 
 final class MiniPlayerView: UIView {
     private lazy var contentView: UIView = UIView()
-    private lazy var totalPlayTimeLine = UIBezierPath()
-    private lazy var currentPlayTimeLine = UIBezierPath()
+    
+    private lazy var totalPlayTimeView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
+    }
+    private lazy var currentPlayTimeView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+    }
     
     private lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
@@ -71,6 +76,7 @@ private extension MiniPlayerView {
     private func configureUI() {
         self.configureSubViews()
         self.configureContent()
+        self.configurePlayTime()
         self.configureThumbnail()
         self.configureTitleArtist()
         self.configureTitleLabel()
@@ -81,6 +87,8 @@ private extension MiniPlayerView {
     
     private func configureSubViews() {
         self.addSubview(contentView)
+        self.contentView.addSubview(totalPlayTimeView)
+        self.totalPlayTimeView.addSubview(currentPlayTimeView)
         self.contentView.addSubview(thumbnailImageView)
         self.contentView.addSubview(titleArtistLabelView)
         self.titleArtistLabelView.addSubview(titleLabel)
@@ -94,6 +102,17 @@ private extension MiniPlayerView {
         contentView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(56)
+        }
+    }
+    
+    private func configurePlayTime() {
+        totalPlayTimeView.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        currentPlayTimeView.snp.makeConstraints {
+            $0.top.left.bottom.equalToSuperview()
+            $0.width.equalTo(totalPlayTimeView.snp.width).multipliedBy(0.4)
         }
     }
     
