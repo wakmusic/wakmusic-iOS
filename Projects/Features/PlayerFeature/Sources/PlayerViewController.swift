@@ -15,6 +15,7 @@ import Then
 
 public class PlayerViewController: UIViewController {
     var playerView: PlayerView!
+    var miniPlayerView: MiniPlayerView!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,13 +27,17 @@ public class PlayerViewController: UIViewController {
         super.loadView()
         
         playerView = PlayerView(frame: self.view.frame)
+        miniPlayerView = MiniPlayerView(frame: self.view.frame)
+        miniPlayerView.layer.opacity = 0
         self.view.addSubview(playerView)
+        self.view.addSubview(miniPlayerView)
     }
 }
 
 public extension PlayerViewController {
     func updateOpacity(value: Float) {
         playerView.layer.opacity = value
+        miniPlayerView.layer.opacity = 1 - value
     }
 }
 

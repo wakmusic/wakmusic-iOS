@@ -123,6 +123,7 @@ extension MainContainerViewController {
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
+        self.panelView.backgroundColor = .white
         self.view.layoutIfNeeded()
     }
     
