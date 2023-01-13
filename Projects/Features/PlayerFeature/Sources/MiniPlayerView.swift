@@ -14,25 +14,25 @@ import SnapKit
 import Then
 
 final class MiniPlayerView: UIView {
-    private lazy var contentView: UIView = UIView()
+    internal lazy var contentView: UIView = UIView()
     
-    private lazy var totalPlayTimeView = UIView().then {
+    internal lazy var totalPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
     }
-    private lazy var currentPlayTimeView = UIView().then {
+    internal lazy var currentPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
     }
     
-    private lazy var thumbnailImageView = UIImageView().then {
+    internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
         $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
     }
     
-    private lazy var titleArtistLabelView: UIView = UIView()
+    internal lazy var titleArtistLabelView: UIView = UIView()
     
-    private lazy var titleLabel = UILabel().then {
+    internal lazy var titleLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
@@ -41,7 +41,7 @@ final class MiniPlayerView: UIView {
         $0.lineBreakMode = .byTruncatingTail
     }
     
-    private lazy var artistLabel = UILabel().then {
+    internal lazy var artistLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
@@ -50,12 +50,12 @@ final class MiniPlayerView: UIView {
         $0.lineBreakMode = .byTruncatingTail
     }
     
-    private lazy var playButton = UIButton().then {
+    internal lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private lazy var closeButton = UIButton().then {
+    internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.miniClose.image, for: .normal)
         $0.tintColor = .systemGray
     }
