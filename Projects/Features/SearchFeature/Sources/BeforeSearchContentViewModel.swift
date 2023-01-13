@@ -27,7 +27,7 @@ final class BeforeSearchContentViewModel {
 
     init() {
         
-        print("✅ SearchViewModel 생성")
+        print("✅ BeforeSearchContentViewModel 생성")
         
 
     }

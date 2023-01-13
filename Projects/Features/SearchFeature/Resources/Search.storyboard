@@ -171,7 +171,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="cancelButton" destination="pwf-8T-rR0" id="9ug-Jg-CPu"/>
-                        <outlet property="searchContentView" destination="jLC-fz-G5h" id="v7E-Mr-1a8"/>
+                        <outlet property="contentView" destination="jLC-fz-G5h" id="v7E-Mr-1a8"/>
                         <outlet property="searchHeaderView" destination="yLy-ME-gxl" id="wjQ-qQ-H92"/>
                         <outlet property="searchImageView" destination="DMe-Vm-2cg" id="oFs-eJ-DKi"/>
                         <outlet property="searchTextFiled" destination="VJU-GJ-8b6" id="qs0-yr-rIP"/>
@@ -217,10 +217,7 @@
                                                     <state key="normal">
                                                         <imageReference key="image" image="add" symbolScale="small"/>
                                                     </state>
-                                                    <buttonConfiguration key="configuration" style="plain">
-                                                        <imageReference key="image" image="add" symbolScale="small"/>
-                                                        <color key="baseForegroundColor" name="gray600"/>
-                                                    </buttonConfiguration>
+                                                    <buttonConfiguration key="configuration" style="plain"/>
                                                     <connections>
                                                         <action selector="pressRemoveAction:" destination="LHP-CS-jsI" eventType="touchUpInside" id="HV3-rG-M9a"/>
                                                     </connections>
@@ -273,9 +270,6 @@
         </namedColor>
         <namedColor name="gray400">
             <color red="0.59600001573562622" green="0.63499999046325684" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="gray600">
-            <color red="0.27799999713897705" green="0.32899999618530273" blue="0.40400001406669617" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

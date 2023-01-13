@@ -6,16 +6,20 @@ import RxSwift
 import PanModal
 import SnapKit
 
-public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard,ContainerViewType {
 
     @IBOutlet weak var searchImageView:UIImageView!
     @IBOutlet weak var searchTextFiled:UITextField!
     @IBOutlet weak var cancelButton:UIButton!
     @IBOutlet weak var searchHeaderView:UIView!
-    @IBOutlet weak var searchContentView:UIView!
+    @IBOutlet weak public var contentView:UIView!
     
     var viewModel = SearchViewModel()
     let disposeBag = DisposeBag()
+    
+    let beforeVc = BeforeSearchContentViewController.viewController()
+    let afterVc = AfterSearchViewController.viewController()
+    
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +64,8 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.searchTextFiled.rx.text.onNext("")
         self.viewModel.input.textString.accept("")
-        self.view.endEditing(false)
+        self.bindSubView(false)
+        self.view.endEditing(true)
         self.viewModel.output.isFoucused.accept(false)
      
     }
@@ -92,43 +97,71 @@ extension SearchViewController {
         
         
         rxBindTask()
-        //bindBeforeSearchView(false)
-        bindAfterSearchView()
+        self.add(asChildViewController: beforeVc)
+        beforeVc.delegate = self
         
 }
-       
-    private func bindBeforeSearchView(_ res:Bool)
+    
+    private func bindSubView(_ afterSearch:Bool)
     {
         
         
-        let contentView = BeforeSearchContentViewController.viewController()
-        addChild(contentView)
-        searchContentView.addSubview(contentView.view)
-        contentView.didMove(toParent: self)
-        contentView.delegate = self
+        /*
+         A:부모
+         B:자식
+         
+         서브뷰 추가
+         A.addChild(B)
+         A.view.addSubview(B.view)
+         B.didMove(toParent: A)
+         
+         
+         서브뷰 삭제
+         B.willMove(toParent: nil) // 제거되기 직전에 호출
+         B.removeFromParent() // parentVC로 부터 관계 삭제
+         B.view.removeFromSuperview() // parentVC.view.addsubView()와 반대 기능
+        
+         */
+        
 
         
-        contentView.view.snp.makeConstraints {
-            $0.top.left.right.bottom.equalTo(searchContentView)
+        if  let nowChildVc  = children.first as? BeforeSearchContentViewController{
+            
+            print("현재 :\(nowChildVc) 서치완료:  \(afterSearch)")
+            
+            if(afterSearch == false)
+            {
+                return
+            }
+            else
+            {
+                self.remove(asChildViewController: beforeVc)
+                self.add(asChildViewController: afterVc)
+            }
+            
+            
+        }else if let nowChildVc = children.first as? AfterSearchViewController{
+            print("현재 :\(nowChildVc) 서치완료:  \(afterSearch)")
+            
+            if(afterSearch == true)
+            {
+                return
+            }
+            else
+            {
+                self.remove(asChildViewController: afterVc)
+                self.add(asChildViewController: beforeVc)
+                beforeVc.delegate = self
+            }
+            
         }
         
-  
+    
     }
     
-    private func bindAfterSearchView()
-    {
-        let contentView = AfterSearchViewController.viewController() //
-        addChild(contentView)
-        searchContentView.addSubview(contentView.view)
-        contentView.didMove(toParent: self)
-        //contentView.delegate = self
-        
-        contentView.view.snp.makeConstraints {
-            $0.top.left.right.bottom.equalTo(searchContentView)
-        }
-        
-        
-    }
+    
+    
+  
     
     
     //MARK: Rx 작업
@@ -158,10 +191,12 @@ extension SearchViewController {
             if event == .editingDidBegin {
                 print("END DID Begin")
                 self.viewModel.output.isFoucused.accept(true)
+                self.bindSubView(false)
             }
             else if event == .editingDidEnd {
                 print("END DID End")
                 self.viewModel.output.isFoucused.accept(false)
+                //self.bindSubView(false)
             }
             else //검색 버튼 눌렀을 때
                 {
@@ -181,10 +216,12 @@ extension SearchViewController {
                 else
                 {
                     PreferenceManager.shared.addRecentRecords(word: str)
+                    self.bindSubView(true)
                     
                 }
                 
                 self.viewModel.output.isFoucused.accept(false)
+                
             }
             })
             .disposed(by: disposeBag)
@@ -263,6 +300,7 @@ extension SearchViewController:BeforeSearchContentViewDelegate{
         viewModel.output.isFoucused.accept(false)
         PreferenceManager.shared.addRecentRecords(word: keyword)
         view.endEditing(true)
+        self.bindSubView(true)
         
     }
     
