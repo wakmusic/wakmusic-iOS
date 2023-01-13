@@ -5,6 +5,7 @@ import RxCocoa
 import RxSwift
 import PanModal
 import SnapKit
+import RxKeyboard
 
 public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard,ContainerViewType {
 
@@ -13,6 +14,8 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var cancelButton:UIButton!
     @IBOutlet weak var searchHeaderView:UIView!
     @IBOutlet weak public var contentView:UIView!
+    
+    @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
     
     var viewModel = SearchViewModel()
     let disposeBag = DisposeBag()
@@ -193,16 +196,16 @@ extension SearchViewController {
                 self.viewModel.output.isFoucused.accept(true)
                 self.bindSubView(false)
             }
-            else if event == .editingDidEnd {
-                print("END DID End")
-                self.viewModel.output.isFoucused.accept(false)
-                //self.bindSubView(false)
-            }
+//            else if event == .editingDidEnd {
+//                print("END DID End")
+//                self.viewModel.output.isFoucused.accept(false)
+//                //self.bindSubView(false)
+//            }
             else //검색 버튼 눌렀을 때
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
                 //유저 디폴트 저장
-                if(str.isWhiteSpace == true)
+                if str.isWhiteSpace == true
                 {
                     self.searchTextFiled.rx.text.onNext("")
                     let textPopupViewController = TextPopupViewController.viewController(
@@ -255,6 +258,32 @@ extension SearchViewController {
                 
                 
             }).disposed(by: disposeBag)
+        
+        
+        
+        RxKeyboard.instance.visibleHeight //드라이브: 무조건 메인쓰레드에서 돌아감
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                
+                guard let self = self else {
+                    return
+                }
+                
+             
+                //키보드는 바텀 SafeArea부터 계산되므로 빼야함
+                let window: UIWindow? = UIApplication.shared.windows.first
+                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+                
+                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom  - 49 //탭바 높이 추가 
+                
+                print(safeAreaInsetsBottom)
+                
+                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 56
+                self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
+                
+                
+            }).disposed(by: disposeBag)
+            
+        
             
 
 
@@ -270,7 +299,6 @@ extension SearchViewController {
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.view.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
         self.searchHeaderView.backgroundColor = isfocused ? DesignSystemAsset.PrimaryColor.point.color : .white
         
         
@@ -290,9 +318,8 @@ extension SearchViewController:BeforeSearchContentViewDelegate{
         viewModel.input.textString.accept(keyword)
         viewModel.output.isFoucused.accept(false)
         PreferenceManager.shared.addRecentRecords(word: keyword)
-        view.endEditing(true)
         self.bindSubView(true)
-        
+        view.endEditing(true) //바인드 서브 뷰를 먼저 해야 tabMan tabBar가 짤리는 버그를 방지
     }
     
     

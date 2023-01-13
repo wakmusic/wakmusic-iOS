@@ -105,66 +105,78 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yLy-ME-gxl" userLabel="SearchHeaderView" customClass="SearchHeaderView">
-                                <rect key="frame" x="0.0" y="69" width="393" height="56"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nj5-Rh-R0O">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="115"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DMe-Vm-2cg">
-                                        <rect key="frame" x="24" y="18" width="20" height="20"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yLy-ME-gxl" userLabel="SearchHeaderView" customClass="SearchHeaderView">
+                                        <rect key="frame" x="0.0" y="59" width="393" height="56"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DMe-Vm-2cg">
+                                                <rect key="frame" x="24" y="18" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="5yS-75-H0b"/>
+                                                    <constraint firstAttribute="height" constant="20" id="CPL-L8-IXW"/>
+                                                </constraints>
+                                            </imageView>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-GJ-8b6">
+                                                <rect key="frame" x="54" y="0.0" width="255" height="56"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwf-8T-rR0" userLabel="CancelButton">
+                                                <rect key="frame" x="314" y="14" width="59" height="28"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="XVT-vK-aPk"/>
+                                                    <constraint firstAttribute="width" constant="59" id="jXq-dI-uMa"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="취소">
+                                                    <color key="titleColor" name="gray400"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="cancelButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="3JA-YC-r5f"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="5yS-75-H0b"/>
-                                            <constraint firstAttribute="height" constant="20" id="CPL-L8-IXW"/>
+                                            <constraint firstItem="VJU-GJ-8b6" firstAttribute="top" secondItem="yLy-ME-gxl" secondAttribute="top" id="Dd8-YR-SK2"/>
+                                            <constraint firstItem="pwf-8T-rR0" firstAttribute="trailing" secondItem="yLy-ME-gxl" secondAttribute="trailing" constant="-20" id="IcO-E5-Mhs"/>
+                                            <constraint firstItem="VJU-GJ-8b6" firstAttribute="leading" secondItem="DMe-Vm-2cg" secondAttribute="trailing" constant="10" id="IiD-51-5cs"/>
+                                            <constraint firstAttribute="bottom" secondItem="VJU-GJ-8b6" secondAttribute="bottom" id="LLQ-4f-gpy"/>
+                                            <constraint firstItem="pwf-8T-rR0" firstAttribute="centerY" secondItem="yLy-ME-gxl" secondAttribute="centerY" id="PmK-aY-beT"/>
+                                            <constraint firstItem="DMe-Vm-2cg" firstAttribute="leading" secondItem="yLy-ME-gxl" secondAttribute="leading" constant="24" id="fRw-jM-kL6"/>
+                                            <constraint firstItem="DMe-Vm-2cg" firstAttribute="centerY" secondItem="yLy-ME-gxl" secondAttribute="centerY" id="fnr-wb-EgH"/>
+                                            <constraint firstItem="pwf-8T-rR0" firstAttribute="leading" secondItem="VJU-GJ-8b6" secondAttribute="trailing" constant="5" id="pFE-7J-WwY"/>
+                                            <constraint firstAttribute="height" constant="56" id="pY0-N6-D5w"/>
                                         </constraints>
-                                    </imageView>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-GJ-8b6">
-                                        <rect key="frame" x="54" y="0.0" width="255" height="56"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="search"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwf-8T-rR0" userLabel="CancelButton">
-                                        <rect key="frame" x="314" y="14" width="59" height="28"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="28" id="XVT-vK-aPk"/>
-                                            <constraint firstAttribute="width" constant="59" id="jXq-dI-uMa"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="취소">
-                                            <color key="titleColor" name="gray400"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="cancelButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="3JA-YC-r5f"/>
-                                        </connections>
-                                    </button>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="VJU-GJ-8b6" firstAttribute="top" secondItem="yLy-ME-gxl" secondAttribute="top" id="Dd8-YR-SK2"/>
-                                    <constraint firstItem="pwf-8T-rR0" firstAttribute="trailing" secondItem="yLy-ME-gxl" secondAttribute="trailing" constant="-20" id="IcO-E5-Mhs"/>
-                                    <constraint firstItem="VJU-GJ-8b6" firstAttribute="leading" secondItem="DMe-Vm-2cg" secondAttribute="trailing" constant="10" id="IiD-51-5cs"/>
-                                    <constraint firstAttribute="bottom" secondItem="VJU-GJ-8b6" secondAttribute="bottom" id="LLQ-4f-gpy"/>
-                                    <constraint firstItem="pwf-8T-rR0" firstAttribute="centerY" secondItem="yLy-ME-gxl" secondAttribute="centerY" id="PmK-aY-beT"/>
-                                    <constraint firstItem="DMe-Vm-2cg" firstAttribute="leading" secondItem="yLy-ME-gxl" secondAttribute="leading" constant="24" id="fRw-jM-kL6"/>
-                                    <constraint firstItem="DMe-Vm-2cg" firstAttribute="centerY" secondItem="yLy-ME-gxl" secondAttribute="centerY" id="fnr-wb-EgH"/>
-                                    <constraint firstItem="pwf-8T-rR0" firstAttribute="leading" secondItem="VJU-GJ-8b6" secondAttribute="trailing" constant="5" id="pFE-7J-WwY"/>
-                                    <constraint firstAttribute="height" constant="56" id="pY0-N6-D5w"/>
+                                    <constraint firstAttribute="trailing" secondItem="yLy-ME-gxl" secondAttribute="trailing" id="6w7-YM-kfv"/>
+                                    <constraint firstAttribute="bottom" secondItem="yLy-ME-gxl" secondAttribute="bottom" id="j9x-WJ-lH3"/>
+                                    <constraint firstItem="yLy-ME-gxl" firstAttribute="leading" secondItem="nj5-Rh-R0O" secondAttribute="leading" id="qIX-ZX-pje"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jLC-fz-G5h" customClass="SearchContentView">
-                                <rect key="frame" x="0.0" y="125" width="393" height="644"/>
+                                <rect key="frame" x="0.0" y="115" width="393" height="598"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="yLy-ME-gxl" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="2dP-Eo-Ia3"/>
                             <constraint firstItem="jLC-fz-G5h" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="GRs-Zk-gf4"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jLC-fz-G5h" secondAttribute="trailing" id="GSA-S7-MOl"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="yLy-ME-gxl" secondAttribute="trailing" id="OtM-Cj-pdS"/>
-                            <constraint firstItem="yLy-ME-gxl" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="P4C-CD-VwL"/>
-                            <constraint firstItem="jLC-fz-G5h" firstAttribute="top" secondItem="yLy-ME-gxl" secondAttribute="bottom" id="fRb-Gy-9zb"/>
-                            <constraint firstItem="yLy-ME-gxl" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="iNt-M6-v3a"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jLC-fz-G5h" secondAttribute="bottom" id="znF-Ya-K6h"/>
+                            <constraint firstItem="nj5-Rh-R0O" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Jab-lb-1zl"/>
+                            <constraint firstItem="nj5-Rh-R0O" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="NUt-iX-NXS"/>
+                            <constraint firstItem="jLC-fz-G5h" firstAttribute="top" secondItem="nj5-Rh-R0O" secondAttribute="bottom" id="Pax-vD-9JE"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="nj5-Rh-R0O" secondAttribute="trailing" id="mgc-05-uhs"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jLC-fz-G5h" secondAttribute="bottom" constant="56" id="znF-Ya-K6h"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="검색" id="3UJ-E3-BYc"/>
@@ -172,7 +184,8 @@
                     <connections>
                         <outlet property="cancelButton" destination="pwf-8T-rR0" id="9ug-Jg-CPu"/>
                         <outlet property="contentView" destination="jLC-fz-G5h" id="v7E-Mr-1a8"/>
-                        <outlet property="searchHeaderView" destination="yLy-ME-gxl" id="wjQ-qQ-H92"/>
+                        <outlet property="contentViewBottomConstraint" destination="znF-Ya-K6h" id="gP4-l4-S2x"/>
+                        <outlet property="searchHeaderView" destination="nj5-Rh-R0O" id="evQ-ZJ-eOe"/>
                         <outlet property="searchImageView" destination="DMe-Vm-2cg" id="oFs-eJ-DKi"/>
                         <outlet property="searchTextFiled" destination="VJU-GJ-8b6" id="qs0-yr-rIP"/>
                     </connections>
