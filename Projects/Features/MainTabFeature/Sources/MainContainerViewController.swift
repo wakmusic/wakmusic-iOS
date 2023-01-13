@@ -1,6 +1,8 @@
 import UIKit
 import Utility
 import DesignSystem
+import PlayerFeature
+import SnapKit
 
 open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -26,6 +28,7 @@ open class MainContainerViewController: UIViewController, ViewControllerFromStor
         super.viewDidLoad()
 
         configureUI()
+        configurePlayer()
     }
 
     public static func viewController() -> MainContainerViewController {
@@ -53,7 +56,7 @@ extension MainContainerViewController {
         }
 
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
-        let centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
+        var centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
                             (screenHeight + originalPanelPosition)
 
         switch gestureRecognizer.state {
@@ -69,7 +72,8 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
-
+            updatePlayerViewController(value: Float(centerRatio))
+            
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
             self.panelViewTopConstraint.constant = (centerRatio < standard) ? self.originalPanelPosition : -screenHeight
@@ -87,6 +91,9 @@ extension MainContainerViewController {
             }, completion: { _ in
                 self.tabBarCoverView.isHidden = (centerRatio < standard) ? true : false
             })
+            
+            centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
+            updatePlayerViewController(value: Float(centerRatio))
 
         default:
             return
@@ -94,7 +101,13 @@ extension MainContainerViewController {
 
         self.lastPoint = point
     }
-
+    
+    private func updatePlayerViewController(value: Float) {
+        if let playerViewController: PlayerViewController = self.children.last as? PlayerViewController {
+            playerViewController.updateOpacity(value: value)
+        }
+    }
+    
     private func configureUI() {
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -110,6 +123,45 @@ extension MainContainerViewController {
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
+        self.panelView.backgroundColor = .white
         self.view.layoutIfNeeded()
+    }
+    
+    private func configurePlayer() {
+        let vc = PlayerViewController()
+        self.addChild(vc)
+        panelView.addSubview(vc.view)
+        vc.didMove(toParent: self)
+        
+        vc.view.snp.makeConstraints {
+            $0.edges.equalTo(panelView)
+        }
+        
+        let window: UIWindow? = UIApplication.shared.windows.first
+        let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
+        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+        var statusBarHeight: CGFloat = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+
+        if safeAreaInsetsTop > statusBarHeight {
+            statusBarHeight = safeAreaInsetsTop
+        }
+
+        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        
+        self.panelViewTopConstraint.constant = -screenHeight
+
+        UIView.animate(withDuration: 0.35,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.8,
+                       options: [.curveEaseInOut],
+                       animations: {
+
+            self.tabBarHeightConstraint.constant = 0
+            self.view.layoutIfNeeded()
+
+        }, completion: { _ in
+            self.tabBarCoverView.isHidden = false
+        })
     }
 }
