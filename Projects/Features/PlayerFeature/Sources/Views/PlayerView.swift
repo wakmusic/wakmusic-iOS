@@ -421,7 +421,6 @@ private extension PlayerView {
         } else {
             x = ((height - (width - 50) / (16/9) - 286 - 18) / 20)
         }
-        print(x)
         return CGFloat(floorf(Float(x)))
     }
     

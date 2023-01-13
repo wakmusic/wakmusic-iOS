@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class VerticalButton: UIButton {
+internal class VerticalButton: UIButton {
     
     func alignToVertical(spacing: CGFloat = 0) {
         guard let image = self.imageView?.image else { return }
