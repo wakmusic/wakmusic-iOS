@@ -36,7 +36,6 @@ public final class PlayerView: UIView {
     private lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
     }
     
     private lazy var titleLabel = UILabel().then {
@@ -102,7 +101,6 @@ public final class PlayerView: UIView {
     private lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
         $0.layer.shadowColor = UIColor.gray.withAlphaComponent(0.25).cgColor
         $0.layer.shadowOpacity = 1.0
         $0.layer.shadowOffset = CGSize(width: 0, height: 8)
@@ -112,25 +110,21 @@ public final class PlayerView: UIView {
     private lazy var prevButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
     }
     
     private lazy var nextButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
     }
     
     private lazy var repeatButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
     }
     
     private lazy var shuffleButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
         $0.tintColor = .systemGray
-        $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
     }
     
     private lazy var bottomBarView: UIView = UIView().then {
@@ -305,6 +299,7 @@ private extension PlayerView {
         closeButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.left.equalToSuperview().offset(20)
+            $0.width.height.equalTo(48)
         }
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -358,27 +353,32 @@ private extension PlayerView {
     private func configureButtonBar() {
         buttonBarView.snp.makeConstraints {
             $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
             $0.height.equalTo(80)
         }
         playButton.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
+            $0.width.height.equalTo(80)
         }
         prevButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(playButton.snp.left).offset(-32)
+            $0.right.equalTo(playButton.snp.left).offset(-24)
+            $0.width.height.equalTo(48)
         }
         nextButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(playButton.snp.right).offset(32)
+            $0.left.equalTo(playButton.snp.right).offset(24)
+            $0.width.height.equalTo(48)
         }
         repeatButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(prevButton.snp.left).offset(-32)
+            $0.right.equalTo(prevButton.snp.left).offset(-24)
+            $0.width.height.equalTo(48)
         }
         shuffleButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(nextButton.snp.right).offset(32)
+            $0.left.equalTo(nextButton.snp.right).offset(24)
+            $0.width.height.equalTo(48)
         }
     }
     private func configureBottomBar() {
