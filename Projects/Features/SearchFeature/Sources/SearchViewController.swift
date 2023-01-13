@@ -256,16 +256,7 @@ extension SearchViewController {
                 
             }).disposed(by: disposeBag)
             
-                
 
-        
-          
-            
-        
-            
- 
-        
- 
 
     }
 
