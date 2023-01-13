@@ -56,7 +56,6 @@ extension TabItemView {
     private func animateLottie() {
         
         guard let item = self.item else { return }
-        DEBUG_LOG("animateLottie")
         
         if self.lottieAnimationView == nil {
             self.lottieAnimationView = LottieAnimationView(name: item.animateImage, bundle: DesignSystemResources.bundle)
