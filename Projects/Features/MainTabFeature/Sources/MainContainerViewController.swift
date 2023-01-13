@@ -213,12 +213,11 @@ public extension MainContainerViewController {
         self.addChild(vc)
         panelView.addSubview(vc.view)
         vc.didMove(toParent: self)
-        
+        panelView.isHidden = false
+
         vc.view.snp.makeConstraints {
             $0.edges.equalTo(panelView)
         }
-        
-        updatePlayerViewController(value: Float(1))
 
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
@@ -239,6 +238,9 @@ public extension MainContainerViewController {
         }, completion: { _ in
             self.tabBarCoverView.isHidden = false
         })
+        
+        updatePlayerViewController(value: Float(1))
+        updateMainTabViewController(value: 1)
     }
     
     //플레이어 닫기
