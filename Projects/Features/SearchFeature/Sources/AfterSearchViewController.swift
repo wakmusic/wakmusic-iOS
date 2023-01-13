@@ -16,6 +16,7 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
 
     @IBOutlet weak var tabBarView: UIView!
     
+    @IBOutlet weak var fakeView: UIView!
     private var viewControllers: [UIViewController] = [AfterSearchContentViewController.viewController(.all),
                                                        AfterSearchContentViewController.viewController(.song),
                                                        AfterSearchContentViewController.viewController(.artist),
@@ -38,7 +39,7 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
 extension AfterSearchViewController {
     
     private func configureUI() {
-        
+        self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.dataSource = self //dateSource
         let bar = TMBar.ButtonBar()
         

@@ -4,6 +4,7 @@ import DesignSystem
 import RxCocoa
 import RxSwift
 import PanModal
+import SnapKit
 
 public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -22,27 +23,28 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
         configureUI()
 
     }
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        //guard let child = self.children.first as? BeforeSearchContentViewController else { return }
-        //child.view.frame = searchContentView.bounds
-        
-        guard let child = self.children.first as? AfterSearchViewController else { return }
-        child.view.frame = searchContentView.bounds
-       
-        //오차로 인하여 여기서 설정함
-        /*
-          frame != bounds
-         - 두개 모두 x,y , width, height 을 갖고 있음
-         - frame의 x,y는 부모의 중심 x,y을 가르킴
-         - bounds의 x,y는 항상 자기자신을 중심으로 찍힘( 언제나 (0,0))
-         
-         */
-        
-
-        
-    }
+//    override public func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        //guard let child = self.children.first as? BeforeSearchContentViewController else { return }
+//        //child.view.frame = searchContentView.bounds
+//
+//        guard let child = self.children.first as? AfterSearchViewController else { return }
+//        child.view.frame = searchContentView.bounds
+//
+//        print("DidLayoutSubview")
+//        //오차로 인하여 여기서 설정함
+//        /*
+//          frame != bounds
+//         - 두개 모두 x,y , width, height 을 갖고 있음
+//         - frame의 x,y는 부모의 중심 x,y을 가르킴
+//         - bounds의 x,y는 항상 자기자신을 중심으로 찍힘( 언제나 (0,0))
+//
+//         */
+//
+//
+//
+//    }
     
     
    
@@ -75,7 +77,6 @@ extension SearchViewController {
         
         // MARK:검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)
-        
         let headerFontSize:CGFloat = 20
         self.searchTextFiled.borderStyle = .none // 텍스트 필드 테두리 제거
         self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
@@ -91,18 +92,26 @@ extension SearchViewController {
         
         
         rxBindTask()
-        //bindBeforeSearchView()
+        //bindBeforeSearchView(false)
         bindAfterSearchView()
         
 }
        
-    private func bindBeforeSearchView()
+    private func bindBeforeSearchView(_ res:Bool)
     {
-        let contentView = BeforeSearchContentViewController.viewController() //
+        
+        
+        let contentView = BeforeSearchContentViewController.viewController()
         addChild(contentView)
         searchContentView.addSubview(contentView.view)
         contentView.didMove(toParent: self)
         contentView.delegate = self
+
+        
+        contentView.view.snp.makeConstraints {
+            $0.top.left.right.bottom.equalTo(searchContentView)
+        }
+        
   
     }
     
@@ -113,6 +122,10 @@ extension SearchViewController {
         searchContentView.addSubview(contentView.view)
         contentView.didMove(toParent: self)
         //contentView.delegate = self
+        
+        contentView.view.snp.makeConstraints {
+            $0.top.left.right.bottom.equalTo(searchContentView)
+        }
         
         
     }
@@ -143,9 +156,11 @@ extension SearchViewController {
             }
                         
             if event == .editingDidBegin {
+                print("END DID Begin")
                 self.viewModel.output.isFoucused.accept(true)
             }
             else if event == .editingDidEnd {
+                print("END DID End")
                 self.viewModel.output.isFoucused.accept(false)
             }
             else //검색 버튼 눌렀을 때
@@ -179,7 +194,7 @@ extension SearchViewController {
         //textField.rx.text 하고 subscirbe하면 옵셔널 타입으로 String? 을 받아오는데,
         // 옵셔널 말고 String으로 받아오고 싶으면 orEmpty를 쓰자 -!
         self.searchTextFiled.rx.text.orEmpty
-            .skip(1)
+            .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
@@ -196,7 +211,7 @@ extension SearchViewController {
                       return
                 }
                 self.reactSearchHeader(focus)
-                print("str:\(str.isEmpty) , \(focus)")
+                //print("str:\(str.isEmpty) , \(focus)")
                  
                   
                 self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0
