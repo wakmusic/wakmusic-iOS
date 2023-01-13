@@ -39,14 +39,15 @@ extension TextPopupViewController {
 
         cancelButton.layer.cornerRadius = 12
         cancelButton.clipsToBounds = true
-        contentLabel.text = contentString
+        cancelButton.isHidden = cancelButtonIsHidden
+        cancelButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
-        contentLabel.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        cancelButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         confirmButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
 
-        cancelButton.isHidden = cancelButtonIsHidden
+        contentLabel.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        contentLabel.text = contentString
     }
 }
 
