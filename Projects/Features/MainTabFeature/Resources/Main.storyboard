@@ -20,9 +20,6 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gc8-5l-C6x">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="762"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <segue destination="kAd-zJ-cz6" kind="embed" id="hdZ-Q7-UAi"/>
-                                </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M73-ud-Z9S">
                                 <rect key="frame" x="0.0" y="762" width="393" height="56"/>
@@ -73,11 +70,11 @@
             <objects>
                 <viewController storyboardIdentifier="MainTabBarViewController" id="65S-UR-AJz" customClass="MainTabBarViewController" customModule="MainTabFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5dq-dM-Ur4">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="762"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gxb-PJ-AKa">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="762"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" name="gray100"/>
                             </view>
                         </subviews>
@@ -98,22 +95,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vw5-aD-Dsq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="781" y="-25"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Wcv-nj-5lE">
-            <objects>
-                <navigationController id="kAd-zJ-cz6" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vhu-Hk-bKs">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="65S-UR-AJz" kind="relationship" relationship="rootViewController" id="wRE-DR-okN"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="b9v-q0-aS9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-66" y="-25"/>
         </scene>
         <!--Bottom Tab Bar View Controller-->
         <scene sceneID="mp2-ZG-H3a">

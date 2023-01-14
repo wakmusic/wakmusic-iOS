@@ -198,10 +198,9 @@ extension MainContainerViewController {
 extension MainContainerViewController: BottomTabBarViewDelegate {
     
     func handleTapped(index previous: Int, current: Int) {
-        
-        guard self.children.count > 1 else { return }
-        guard let navigationController = self.children[1] as? UINavigationController,
-              let mainTabBarViewController = navigationController.visibleViewController as? MainTabBarViewController else { return }
+
+        guard let navigationController = self.children.first as? UINavigationController,
+              let mainTabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController else { return }
         
         mainTabBarViewController.updateContent(previous: previous, current: current)
     }
