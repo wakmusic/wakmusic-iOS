@@ -25,7 +25,7 @@ class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBo
 
         configureUI()
     }
-    
+
     public static func viewController() -> ArtistMusicViewController {
         let viewController = ArtistMusicViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController

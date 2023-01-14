@@ -7,8 +7,9 @@ import SnapKit
 open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var tabBarCoverView: UIView!
-    @IBOutlet weak var tabBarCoverViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomContainerView: UIView!
+    @IBOutlet weak var bottomContainerViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var bottomContainerViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelViewHeightConstraint: NSLayoutConstraint!
@@ -73,14 +74,19 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
-            self.tabBarCoverViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
+            self.bottomContainerViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
 
             updatePlayerViewController(value: Float(centerRatio))
             updateMainTabViewController(value: centerRatio)
             
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
-            self.panelViewTopConstraint.constant = (centerRatio < standard) ? self.originalPanelPosition : -screenHeight
+            
+            //플레이어 확장 여부
+            let expanded: Bool = (centerRatio < standard) ? false : true
+            
+            self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
+            self.bottomContainerView.isHidden = (expanded) ? true : false
 
             UIView.animate(withDuration: 0.35,
                            delay: 0.0,
@@ -89,11 +95,11 @@ extension MainContainerViewController {
                            options: [.curveEaseInOut],
                            animations: {
 
-                self.tabBarCoverViewBottomConstraint.constant = (centerRatio < standard) ? 0 : -self.originalTabBarPosition
+                self.bottomContainerViewBottomConstraint.constant = (expanded) ? -self.originalTabBarPosition : 0
                 self.view.layoutIfNeeded()
 
             }, completion: { _ in
-                self.tabBarCoverView.isHidden = (centerRatio < standard) ? true : false
+                
             })
             
             centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
@@ -123,8 +129,8 @@ extension MainContainerViewController {
     private func configureUI() {
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.tabBarCoverView.isHidden = true
 
+        //Main Content
         let viewController = MainTabBarViewController.viewController().wrapNavigationController
         self.addChild(viewController)
         self.containerView.addSubview(viewController.view)
@@ -133,12 +139,24 @@ extension MainContainerViewController {
         viewController.view.snp.makeConstraints {
             $0.edges.equalTo(containerView)
         }
+        
+        //Bottom TabBar
+        let bottomTabBar = BottomTabBarViewController.viewController()
+        self.addChild(bottomTabBar)
+        self.bottomContainerView.addSubview(bottomTabBar.view)
+        
+        bottomTabBar.didMove(toParent: self)
+        bottomTabBar.delegate = self
+        bottomTabBar.view.snp.makeConstraints {
+            $0.edges.equalTo(bottomContainerView)
+        }
 
         _ = panGestureRecognizer
 
-        self.originalTabBarPosition = 56
+        self.originalTabBarPosition = self.bottomContainerViewHeight.constant //56
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
+        
         self.panelView.isHidden = false
         self.panelView.backgroundColor = .white
         self.view.layoutIfNeeded()
@@ -186,6 +204,17 @@ extension MainContainerViewController {
     }
 }
 
+extension MainContainerViewController: BottomTabBarViewDelegate {
+    
+    func handleTapped(index previous: Int, current: Int) {
+        
+        guard let navigationController = self.children[1] as? UINavigationController,
+              let mainTabBarViewController = navigationController.visibleViewController as? MainTabBarViewController else { return }
+        
+        mainTabBarViewController.updateContent(previous: previous, current: current)
+    }
+}
+
 public extension MainContainerViewController {
     
     //expanded: 플레이어 확장/축소 여부
@@ -196,6 +225,7 @@ public extension MainContainerViewController {
 
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
         self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
+        self.bottomContainerView.isHidden = (expanded) ? false : true
 
         UIView.animate(withDuration: 0.5,
                        delay: 0.0,
@@ -204,11 +234,10 @@ public extension MainContainerViewController {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.tabBarCoverViewBottomConstraint.constant = (expanded) ? -self.originalTabBarPosition : 0
+            self.bottomContainerViewBottomConstraint.constant = (expanded) ? -self.originalTabBarPosition : 0
             self.view.layoutIfNeeded()
 
         }, completion: { _ in
-            self.tabBarCoverView.isHidden = (expanded) ? false : true
         })
         
         updatePlayerViewController(value: (expanded) ? Float(1) : Float(0))
@@ -233,6 +262,7 @@ public extension MainContainerViewController {
 
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
         self.panelViewTopConstraint.constant = -screenHeight
+        self.bottomContainerView.isHidden = false
 
         UIView.animate(withDuration: 0.5,
                        delay: 0.0,
@@ -241,11 +271,10 @@ public extension MainContainerViewController {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.tabBarCoverViewBottomConstraint.constant = -self.originalTabBarPosition
+            self.bottomContainerViewBottomConstraint.constant = -self.originalTabBarPosition
             self.view.layoutIfNeeded()
 
         }, completion: { _ in
-            self.tabBarCoverView.isHidden = false
         })
         
         updatePlayerViewController(value: Float(1))
