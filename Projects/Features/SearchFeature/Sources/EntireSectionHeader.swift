@@ -9,13 +9,25 @@
 import UIKit
 import DesignSystem
 
+
+
+
+
+
+protocol EntireSectionHeaderDelegate:AnyObject {
+    func switchTapEvent(_ type:SearchType)
+}
+
 class EntireSectionHeader: UIView {
     
     @IBOutlet weak var categoryLabel: UILabel!
-    
-    @IBOutlet weak var moveTapButton: UIButton!
+    @IBOutlet weak var moveTabButton: UIButton!
     @IBOutlet weak var numberOfSongLabel: UILabel!
-    
+    var delegate:EntireSectionHeaderDelegate?
+    var type:SearchType = .all
+    @IBAction func switchTabAction(_ sender: Any) {
+        self.delegate?.switchTapEvent(type)
+    }
     
     
     public override init(frame: CGRect) {
@@ -54,23 +66,26 @@ extension EntireSectionHeader {
         
         
         //self.moveTapButton.setTitle("전체보기3", for: .normal)
-        let title = moveTapButton.titleLabel!.text!
+        let title = moveTabButton.titleLabel!.text!
         let attrTitle = NSAttributedString(string: "전체보기", attributes: [
             NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color])
         
-        moveTapButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
+        moveTabButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
         
               
         
-        self.moveTapButton.setImage(DesignSystemAsset.Search.searchArrowRight.image, for: .normal)
+        self.moveTabButton.setImage(DesignSystemAsset.Search.searchArrowRight.image, for: .normal)
         
 
     }
     
-    public func update(_ title:String,_ count:Int)
+    public func update(_ type:SearchType,_ count:Int)
     {
-        self.categoryLabel.text = title
+        self.categoryLabel.text = type == .song ? "노래" : type == .artist ? "가수" : "조교"
         self.numberOfSongLabel.text = String(count)
+        self.type = type
     }
 }
+
+

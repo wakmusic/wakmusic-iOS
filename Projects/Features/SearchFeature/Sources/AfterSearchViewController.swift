@@ -12,6 +12,8 @@ import DesignSystem
 import Pageboy
 import Tabman
 
+
+
 class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
 
     @IBOutlet weak var tabBarView: UIView!
@@ -21,6 +23,7 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
                                                        AfterSearchContentViewController.viewController(.song),
                                                        AfterSearchContentViewController.viewController(.artist),
                                                        AfterSearchContentViewController.viewController(.assistant)]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +67,11 @@ extension AfterSearchViewController {
         bar.indicator.weight = .custom(value: 3)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
-        
-    
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
+        
+
+    
         
         
     }
@@ -105,3 +109,4 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
     
     
 }
+

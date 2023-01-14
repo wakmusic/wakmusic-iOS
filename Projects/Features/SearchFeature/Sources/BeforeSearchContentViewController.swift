@@ -195,9 +195,10 @@ extension BeforeSearchContentViewController {
 // 테이블뷰 rx
 
 extension BeforeSearchContentViewController:UITableViewDelegate{
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 50
-//    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
@@ -210,11 +211,11 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
         else if PreferenceManager.shared.recentRecords.count == 0
         {
-            return 300
+            return  (APP_HEIGHT() * 3) / 8
         }
         else
         {
-            return 40
+            return 76
         }
         
         
@@ -233,7 +234,11 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
                                                 ,height: RecommendPlayListView.getViewHeight(model: dataSource)))
         
+        
+        
         recommendView.dataSource = self.dataSource
+        recommendView.delegate = self
+        
         if viewModel.output.showRecommand.value
         {
             return recommendView
@@ -253,8 +258,20 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
     }
 
 
+}
 
 
+extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
+    func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
+        
+        let vc = AfterSearchContentViewController.viewController(.all)
+        
+        self.parent?.navigationController?.pushViewController(vc, animated: true)
+        
+        
+    }
+    
+    
 }
 
 

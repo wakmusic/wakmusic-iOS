@@ -85,7 +85,7 @@ extension SearchViewController {
         
         // MARK:검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)
-        let headerFontSize:CGFloat = 20
+        let headerFontSize:CGFloat = 16
         self.searchTextFiled.borderStyle = .none // 텍스트 필드 테두리 제거
         self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
@@ -196,11 +196,11 @@ extension SearchViewController {
                 self.viewModel.output.isFoucused.accept(true)
                 self.bindSubView(false)
             }
-//            else if event == .editingDidEnd {
-//                print("END DID End")
+            else if event == .editingDidEnd {
+                print("END DID End")
 //                self.viewModel.output.isFoucused.accept(false)
-//                //self.bindSubView(false)
-//            }
+                //self.bindSubView(false)
+            }
             else //검색 버튼 눌렀을 때
                 {
                 DEBUG_LOG("EditingDidEndOnExit")
@@ -292,7 +292,7 @@ extension SearchViewController {
     private func reactSearchHeader(_ isfocused:Bool)
     {
         
-        let headerFontSize:CGFloat = 20
+        let headerFontSize:CGFloat = 16
         
         let focusedplaceHolderAttributes = [
             NSAttributedString.Key.foregroundColor: isfocused ? UIColor.white : DesignSystemAsset.GrayColor.gray400.color,
@@ -324,3 +324,6 @@ extension SearchViewController:BeforeSearchContentViewDelegate{
     
     
 }
+
+
+
