@@ -59,7 +59,7 @@ private extension PlayerViewController {
             likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
             playlistButtonDidTapEvent: self.playerView.playistButton.rx.tap.asObservable(),
-            miniPlayerDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(), // 바꿔야함
+            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
             miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
         )

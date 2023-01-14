@@ -22,7 +22,7 @@ final class PlayerViewModel: ViewModelType {
         let likeButtonDidTapEvent: Observable<Void>
         let addPlaylistButtonDidTapEvent: Observable<Void>
         let playlistButtonDidTapEvent: Observable<Void>
-        let miniPlayerDidTapEvent: Observable<Void>
+        let miniExtendButtonDidTapEvent: Observable<Void>
         let miniPlayButtonDidTapEvent: Observable<Void>
         let miniCloseButtonDidTapEvent: Observable<Void>
     }
@@ -54,6 +54,10 @@ final class PlayerViewModel: ViewModelType {
                 print("플레이버튼 눌림")
             }
             .disposed(by: disposeBag)
+        
+        input.miniExtendButtonDidTapEvent.subscribe { _ in
+            print("미니플레이어 확장버튼 눌림")
+        }.disposed(by: disposeBag)
         
         return output
     }

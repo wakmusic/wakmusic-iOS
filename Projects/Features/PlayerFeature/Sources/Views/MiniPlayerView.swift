@@ -14,7 +14,11 @@ import SnapKit
 import Then
 
 final class MiniPlayerView: UIView {
-    internal lazy var contentView: UIView = UIView()
+    private lazy var contentView: UIView = UIView()
+    
+    internal lazy var extendButton = UIButton().then {
+        $0.backgroundColor = .clear
+    }
     
     internal lazy var totalPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
@@ -93,6 +97,7 @@ private extension MiniPlayerView {
         self.contentView.addSubview(titleArtistLabelView)
         self.titleArtistLabelView.addSubview(titleLabel)
         self.titleArtistLabelView.addSubview(artistLabel)
+        self.contentView.addSubview(extendButton)
         self.contentView.addSubview(playButton)
         self.contentView.addSubview(closeButton)
     }
@@ -102,6 +107,9 @@ private extension MiniPlayerView {
         contentView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(56)
+        }
+        extendButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
     
