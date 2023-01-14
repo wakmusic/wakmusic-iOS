@@ -77,7 +77,6 @@ extension MainContainerViewController {
             self.bottomContainerViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
 
             updatePlayerViewController(value: Float(centerRatio))
-            updateMainTabViewController(value: centerRatio)
             
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
@@ -104,20 +103,12 @@ extension MainContainerViewController {
             
             centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
             updatePlayerViewController(value: Float(centerRatio))
-            updateMainTabViewController(value: centerRatio)
 
         default:
             return
         }
 
         self.lastPoint = point
-    }
-    
-    private func updateMainTabViewController(value: CGFloat) {
-        if let navigationController = self.children[1] as? UINavigationController,
-            let mainTabBarViewController = navigationController.visibleViewController as? MainTabBarViewController {
-            mainTabBarViewController.updateLayout(value: value)
-        }
     }
     
     private func updatePlayerViewController(value: Float) {
@@ -241,7 +232,6 @@ public extension MainContainerViewController {
         })
         
         updatePlayerViewController(value: (expanded) ? Float(1) : Float(0))
-        updateMainTabViewController(value: (expanded) ? 1 : 0)
     }
     
     //플레이어 열기
@@ -278,7 +268,6 @@ public extension MainContainerViewController {
         })
         
         updatePlayerViewController(value: Float(1))
-        updateMainTabViewController(value: 1)
     }
     
     //플레이어 닫기
