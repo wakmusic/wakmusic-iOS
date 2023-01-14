@@ -11,35 +11,26 @@ import UIKit
 import SnapKit
 
 public protocol ContainerViewType{
-    
     var contentView: UIView! {get set}
-    
-    
 }
 
 public extension ContainerViewType where Self: UIViewController {
+    
     func add(asChildViewController viewController: UIViewController) {
 
-            addChild(viewController)
-            contentView.addSubview(viewController.view)
+        addChild(viewController)
+        contentView.addSubview(viewController.view)
+        viewController.didMove(toParent: self)
 
-            viewController.view.frame = contentView.bounds
-
-            viewController.didMove(toParent: self)
-        
-            viewController.view.snp.makeConstraints {
-            $0.top.left.right.bottom.equalTo(contentView)
-                
-            }
-        
+        viewController.view.snp.makeConstraints {
+            $0.edges.equalTo(contentView)
         }
+    }
 
-        func remove(asChildViewController viewController: UIViewController) {
+    func remove(asChildViewController viewController: UIViewController) {
 
-            viewController.willMove(toParent: nil)
-
-            viewController.view.removeFromSuperview()
-
-            viewController.removeFromParent()
-        }
+        viewController.willMove(toParent: nil)
+        viewController.view.removeFromSuperview()
+        viewController.removeFromParent()
+    }
 }

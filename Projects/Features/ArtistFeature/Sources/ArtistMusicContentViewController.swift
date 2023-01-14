@@ -85,6 +85,8 @@ extension ArtistMusicContentViewController {
         shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         shufflePlayButton.layer.borderWidth = 1
         shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
+        
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
     }
 }
 
