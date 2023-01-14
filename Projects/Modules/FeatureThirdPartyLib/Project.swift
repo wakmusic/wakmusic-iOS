@@ -16,6 +16,8 @@ let project = Project.makeModule(
         .SPM.SnapKit,
         .SPM.Then,
         .SPM.Kingfisher,
-        .SPM.Tabman
+        .SPM.Tabman,
+        .SPM.RxDataSources,
+        .SPM.RxKeyboard
     ]
 )
