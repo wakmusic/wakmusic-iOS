@@ -158,8 +158,11 @@ extension AfterSearchContentViewController{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
                 return UITableViewCell()
             }
+            let bgView = UIView()
+            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
             
             cell.update(model)
+            cell.selectedBackgroundView = bgView
             //cell.selectedBa = DesignSystemAsset.GrayColor.gray200.color
             
             return cell
