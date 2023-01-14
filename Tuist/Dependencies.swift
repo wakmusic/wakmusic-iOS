@@ -10,7 +10,7 @@ let dependencies = Dependencies(
          */
         .remote(url: "https://github.com/Moya/Moya.git", requirement: .upToNextMajor(from: "15.0.3")),
         .remote(url: "https://github.com/onevcat/Kingfisher.git", requirement: .upToNextMajor(from: "7.0.0")),
-        .remote(url: "https://github.com/SvenTiigi/YouTubePlayerKit.git", requirement: .upToNextMajor(from: "1.2.0")),
+        .remote(url: "https://github.com/rinov/YoutubeKit.git", requirement: .upToNextMajor(from: "0.7.0")),
         .remote(url: "https://github.com/slackhq/PanModal.git", requirement: .upToNextMajor(from: "1.2.0")),
         .remote(url: "https://github.com/ReactiveX/RxSwift.git",requirement: .upToNextMajor(from: "6.5.0")),
         .remote(url: "https://github.com/ReactorKit/ReactorKit.git",requirement: .upToNextMajor(from: "3.0.0")),
