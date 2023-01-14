@@ -130,6 +130,10 @@ extension MainContainerViewController {
         self.containerView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
 
+        viewController.view.snp.makeConstraints {
+            $0.edges.equalTo(containerView)
+        }
+
         _ = panGestureRecognizer
 
         self.originalTabBarPosition = 56
