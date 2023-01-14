@@ -43,6 +43,9 @@ public final class PlayerView: UIView {
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "리와인드(RE:WIND)"
+        $0.setLineHeight(lineHeight: 24)
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textAlignment = .center
     }
     
     internal lazy var artistLabel = UILabel().then {
@@ -51,6 +54,9 @@ public final class PlayerView: UIView {
         $0.alpha = 0.6
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
         $0.text = "이세계아이돌"
+        $0.setLineHeight(lineHeight: 20)
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textAlignment = .center
     }
     
     internal lazy var thumbnailImageView = UIImageView().then {
@@ -302,12 +308,14 @@ private extension PlayerView {
             $0.width.height.equalTo(48)
         }
         titleLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(titleBarView.snp.centerY)
+            $0.top.equalToSuperview().offset(2)
+            $0.left.equalTo(closeButton.snp.right)
+            $0.right.equalToSuperview().offset(-68)
         }
         artistLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(titleBarView.snp.centerY)
+            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.left.equalTo(closeButton.snp.right)
+            $0.right.equalToSuperview().offset(-68)
         }
     }
     private func configureThumbnail() {
