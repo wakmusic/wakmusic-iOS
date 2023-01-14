@@ -6,8 +6,9 @@ import SnapKit
 
 open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var tabBarCoverView: UIView!
-    @IBOutlet weak var tabBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tabBarCoverViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelViewHeightConstraint: NSLayoutConstraint!
@@ -72,7 +73,10 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
+            self.tabBarCoverViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
+
             updatePlayerViewController(value: Float(centerRatio))
+            updateMainTabViewController(value: centerRatio)
             
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
@@ -85,7 +89,7 @@ extension MainContainerViewController {
                            options: [.curveEaseInOut],
                            animations: {
 
-                self.tabBarHeightConstraint.constant = (centerRatio < standard) ? self.originalTabBarPosition : 0
+                self.tabBarCoverViewBottomConstraint.constant = (centerRatio < standard) ? 0 : -self.originalTabBarPosition
                 self.view.layoutIfNeeded()
 
             }, completion: { _ in
@@ -94,12 +98,20 @@ extension MainContainerViewController {
             
             centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) / (screenHeight + originalPanelPosition)
             updatePlayerViewController(value: Float(centerRatio))
+            updateMainTabViewController(value: centerRatio)
 
         default:
             return
         }
 
         self.lastPoint = point
+    }
+    
+    private func updateMainTabViewController(value: CGFloat) {
+        if let navigationController = self.children[1] as? UINavigationController,
+            let mainTabBarViewController = navigationController.visibleViewController as? MainTabBarViewController {
+            mainTabBarViewController.updateLayout(value: value)
+        }
     }
     
     private func updatePlayerViewController(value: Float) {
@@ -113,13 +125,14 @@ extension MainContainerViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarCoverView.isHidden = true
 
-        let viewController = MainTabBarController.viewController()
+        let viewController = MainTabBarViewController.viewController().wrapNavigationController
         self.addChild(viewController)
+        self.containerView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
 
         _ = panGestureRecognizer
 
-        self.originalTabBarPosition = self.tabBarHeightConstraint.constant // 49
+        self.originalTabBarPosition = 56
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
@@ -136,7 +149,9 @@ extension MainContainerViewController {
         vc.view.snp.makeConstraints {
             $0.edges.equalTo(panelView)
         }
-        
+        updatePlayerViewController(value: Float(0))
+
+        /*
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
@@ -163,5 +178,86 @@ extension MainContainerViewController {
         }, completion: { _ in
             self.tabBarCoverView.isHidden = false
         })
+         */
+    }
+}
+
+public extension MainContainerViewController {
+    
+    //expanded: 플레이어 확장/축소 여부
+    func updatePlayerView(expanded: Bool) {
+        
+        let window: UIWindow? = UIApplication.shared.windows.first
+        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+
+        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
+
+        UIView.animate(withDuration: 0.5,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.8,
+                       options: [.curveEaseInOut],
+                       animations: {
+
+            self.tabBarCoverViewBottomConstraint.constant = (expanded) ? -self.originalTabBarPosition : 0
+            self.view.layoutIfNeeded()
+
+        }, completion: { _ in
+            self.tabBarCoverView.isHidden = (expanded) ? false : true
+        })
+        
+        updatePlayerViewController(value: (expanded) ? Float(1) : Float(0))
+        updateMainTabViewController(value: (expanded) ? 1 : 0)
+    }
+    
+    //플레이어 열기
+    func openPlayer() {
+        
+        let vc = PlayerViewController()
+        self.addChild(vc)
+        panelView.addSubview(vc.view)
+        vc.didMove(toParent: self)
+        panelView.isHidden = false
+
+        vc.view.snp.makeConstraints {
+            $0.edges.equalTo(panelView)
+        }
+
+        let window: UIWindow? = UIApplication.shared.windows.first
+        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+
+        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        self.panelViewTopConstraint.constant = -screenHeight
+
+        UIView.animate(withDuration: 0.5,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.8,
+                       options: [.curveEaseInOut],
+                       animations: {
+
+            self.tabBarCoverViewBottomConstraint.constant = -self.originalTabBarPosition
+            self.view.layoutIfNeeded()
+
+        }, completion: { _ in
+            self.tabBarCoverView.isHidden = false
+        })
+        
+        updatePlayerViewController(value: Float(1))
+        updateMainTabViewController(value: 1)
+    }
+    
+    //플레이어 닫기
+    func closePlayer() {
+        
+        self.panelView.subviews.forEach { $0.removeFromSuperview() }
+        self.panelView.isHidden = true
+        
+        guard let playerViewController = self.children.last as? PlayerViewController else { return }
+        
+        playerViewController.willMove(toParent: nil)
+        playerViewController.view.removeFromSuperview()
+        playerViewController.removeFromParent()
     }
 }

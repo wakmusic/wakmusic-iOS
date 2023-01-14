@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TabItemView" customModule="MainTabFeature">
+            <rect key="frame" x="0.0" y="0.0" width="63" height="56"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sNP-fz-7vM">
+                    <rect key="frame" x="0.0" y="0.0" width="63" height="56"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_on" translatesAutoresizingMaskIntoConstraints="NO" id="kIm-bc-TTm">
+                            <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
+                        </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vhm-Xi-Ft1">
+                            <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="홈" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="puE-s5-r5c">
+                            <rect key="frame" x="26.333333333333332" y="39" width="10.666666666666668" height="14"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="14" id="g4I-PE-ma5"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                            <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="puE-s5-r5c" firstAttribute="top" secondItem="kIm-bc-TTm" secondAttribute="bottom" constant="4" id="Jg6-VV-O3M"/>
+                        <constraint firstItem="vhm-Xi-Ft1" firstAttribute="top" secondItem="kIm-bc-TTm" secondAttribute="top" id="M9Z-Fy-QIo"/>
+                        <constraint firstItem="kIm-bc-TTm" firstAttribute="top" secondItem="sNP-fz-7vM" secondAttribute="top" constant="3" id="Rfx-Uh-rZp"/>
+                        <constraint firstItem="kIm-bc-TTm" firstAttribute="centerX" secondItem="sNP-fz-7vM" secondAttribute="centerX" id="RoC-od-U4l"/>
+                        <constraint firstItem="vhm-Xi-Ft1" firstAttribute="leading" secondItem="kIm-bc-TTm" secondAttribute="leading" id="U1m-ww-cOJ"/>
+                        <constraint firstItem="puE-s5-r5c" firstAttribute="centerX" secondItem="kIm-bc-TTm" secondAttribute="centerX" id="Z2k-pq-uEW"/>
+                        <constraint firstItem="vhm-Xi-Ft1" firstAttribute="trailing" secondItem="kIm-bc-TTm" secondAttribute="trailing" id="m2i-qj-wZC"/>
+                        <constraint firstItem="vhm-Xi-Ft1" firstAttribute="bottom" secondItem="kIm-bc-TTm" secondAttribute="bottom" id="txG-3u-xkL"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="sNP-fz-7vM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Qig-c1-WQA"/>
+                <constraint firstAttribute="trailing" secondItem="sNP-fz-7vM" secondAttribute="trailing" id="fj4-5I-mXq"/>
+                <constraint firstAttribute="bottom" secondItem="sNP-fz-7vM" secondAttribute="bottom" id="vjU-Zf-gJr"/>
+                <constraint firstItem="sNP-fz-7vM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zTO-pS-aBd"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="defaultTabImageView" destination="kIm-bc-TTm" id="jsD-So-3Mu"/>
+                <outlet property="lottieContentView" destination="vhm-Xi-Ft1" id="Lxs-RR-Weo"/>
+                <outlet property="titleStringLabel" destination="puE-s5-r5c" id="z3E-yW-PrV"/>
+            </connections>
+            <point key="canvasLocation" x="140" y="21"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="home_on" width="32" height="32"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

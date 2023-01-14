@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="262.33333333333331"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BaG-Ji-1sD">
-                                <rect key="frame" x="101" y="262.33333333333331" width="191" height="195.66666666666669"/>
+                                <rect key="frame" x="114.66666666666667" y="262.33333333333331" width="163.66666666666663" height="167.66666666666669"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="BaG-Ji-1sD" secondAttribute="height" multiplier="156:160" id="daO-lg-zox"/>
                                 </constraints>
@@ -51,7 +51,7 @@
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="pYF-Q1-7Tb"/>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="rDS-yv-3QN"/>
                             <constraint firstItem="lmb-xA-DIU" firstAttribute="height" secondItem="5EZ-qb-Rvc" secondAttribute="height" multiplier="250:812" id="vj1-qE-h2p"/>
-                            <constraint firstItem="BaG-Ji-1sD" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="182:375" id="xvl-ty-34W"/>
+                            <constraint firstItem="BaG-Ji-1sD" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="156:375" id="xvl-ty-34W"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="p7K-rx-PWS"/>
