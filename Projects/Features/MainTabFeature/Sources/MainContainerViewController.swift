@@ -213,8 +213,8 @@ public extension MainContainerViewController {
         
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        
         self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
         self.bottomContainerView.isHidden = (expanded) ? false : true
 
@@ -249,8 +249,8 @@ public extension MainContainerViewController {
 
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
+        
         self.panelViewTopConstraint.constant = -screenHeight
         self.bottomContainerView.isHidden = false
 
