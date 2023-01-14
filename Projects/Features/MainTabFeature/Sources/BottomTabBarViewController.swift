@@ -97,9 +97,6 @@ extension BottomTabBarViewController: TabItemViewDelegate {
         view.isSelected = true
         let newIndex = self.tabs.firstIndex(where: { $0 === view }) ?? 0
         self.currentIndex = newIndex
-        
-        DEBUG_LOG(self.parent)
-        DEBUG_LOG(self.parent?.parent)
 
         //delegate
         self.delegate?.handleTapped(index: previousIndex, current: newIndex)
