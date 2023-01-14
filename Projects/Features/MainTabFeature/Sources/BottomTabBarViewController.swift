@@ -90,7 +90,6 @@ extension BottomTabBarViewController: TabItemViewDelegate {
         }
         
         //previous selected
-//        remove(asChildViewController: viewControllers[self.currentIndex])
         let previousIndex = self.currentIndex
         self.tabs[self.currentIndex].isSelected = false
         
@@ -98,8 +97,11 @@ extension BottomTabBarViewController: TabItemViewDelegate {
         view.isSelected = true
         let newIndex = self.tabs.firstIndex(where: { $0 === view }) ?? 0
         self.currentIndex = newIndex
-//        add(asChildViewController: viewControllers[newIndex])
         
+        DEBUG_LOG(self.parent)
+        DEBUG_LOG(self.parent?.parent)
+
+        //delegate
         self.delegate?.handleTapped(index: previousIndex, current: newIndex)
     }
 }

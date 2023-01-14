@@ -24,11 +24,11 @@ class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, 
     @IBOutlet weak var stackContentViewBottomConstraint: NSLayoutConstraint!
         
     private lazy var viewControllers: [UIViewController] = {
-        return [HomeViewController.viewController(),
-                ChartViewController.viewController(),
-                SearchViewController.viewController(),
-                ArtistViewController.viewController(),
-                StorageViewController.viewController()
+        return [HomeViewController.viewController().wrapNavigationController,
+                ChartViewController.viewController().wrapNavigationController,
+                SearchViewController.viewController().wrapNavigationController,
+                ArtistViewController.viewController().wrapNavigationController,
+                StorageViewController.viewController().wrapNavigationController
         ]
     }()
 

@@ -18,6 +18,11 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
         bind()
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
     public static func viewController() -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -104,6 +109,8 @@ extension ArtistViewController {
     
     private func configureUI() {
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         let sideSpace: CGFloat = 20.0
         let layout = WaterfallLayout()
         layout.delegate = self

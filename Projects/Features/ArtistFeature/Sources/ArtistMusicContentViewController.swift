@@ -27,7 +27,7 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
         configureUI()
         bind()
     }
-
+    
     public static func viewController() -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
