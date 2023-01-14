@@ -6,8 +6,9 @@ import SnapKit
 
 open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var tabBarCoverView: UIView!
-    @IBOutlet weak var tabBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tabBarCoverViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var panelViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var panelViewHeightConstraint: NSLayoutConstraint!
@@ -72,6 +73,8 @@ extension MainContainerViewController {
             newConstant = newConstant < -screenHeight ? -screenHeight : newConstant
 
             self.panelViewTopConstraint.constant = newConstant
+            self.tabBarCoverViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
+
             updatePlayerViewController(value: Float(centerRatio))
             updateMainTabViewController(value: centerRatio)
             
@@ -86,7 +89,7 @@ extension MainContainerViewController {
                            options: [.curveEaseInOut],
                            animations: {
 
-                self.tabBarHeightConstraint.constant = (centerRatio < standard) ? self.originalTabBarPosition : 0
+                self.tabBarCoverViewBottomConstraint.constant = (centerRatio < standard) ? 0 : -self.originalTabBarPosition
                 self.view.layoutIfNeeded()
 
             }, completion: { _ in
@@ -105,7 +108,8 @@ extension MainContainerViewController {
     }
     
     private func updateMainTabViewController(value: CGFloat) {
-        if let mainTabBarViewController: MainTabBarViewController = self.children.first as? MainTabBarViewController {
+        if let navigationController = self.children[1] as? UINavigationController,
+            let mainTabBarViewController = navigationController.visibleViewController as? MainTabBarViewController {
             mainTabBarViewController.updateLayout(value: value)
         }
     }
@@ -121,13 +125,14 @@ extension MainContainerViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarCoverView.isHidden = true
 
-        let viewController = MainTabBarViewController.viewController()
+        let viewController = MainTabBarViewController.viewController().wrapNavigationController
         self.addChild(viewController)
+        self.containerView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
 
         _ = panGestureRecognizer
 
-        self.originalTabBarPosition = self.tabBarHeightConstraint.constant // 56
+        self.originalTabBarPosition = 56
         self.originalPanelPosition = self.panelViewTopConstraint.constant // -56
         self.originalPanelAlpha = self.panelView.alpha
         self.panelView.isHidden = false
@@ -195,7 +200,7 @@ public extension MainContainerViewController {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.tabBarHeightConstraint.constant = (expanded) ? 0 : self.originalTabBarPosition
+            self.tabBarCoverViewBottomConstraint.constant = (expanded) ? -self.originalTabBarPosition : 0
             self.view.layoutIfNeeded()
 
         }, completion: { _ in
@@ -232,7 +237,7 @@ public extension MainContainerViewController {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.tabBarHeightConstraint.constant = 0
+            self.tabBarCoverViewBottomConstraint.constant = -self.originalTabBarPosition
             self.view.layoutIfNeeded()
 
         }, completion: { _ in

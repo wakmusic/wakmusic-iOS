@@ -108,8 +108,10 @@ extension MainTabBarViewController {
     
     func updateLayout(value: CGFloat) {
         
+        guard stackContentViewBottomConstraint != nil else { return }
+        
         stackContentViewBottomConstraint.constant = -56.0 * value
-        stackContentView.alpha = (1 - value)
+        stackContentView.alpha = 1 - value
         view.layoutIfNeeded()
     }
 }
