@@ -48,8 +48,9 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
         bindTable()
         
 
-        
     }
+    
+   
     
     public static func viewController() -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
