@@ -19,9 +19,6 @@ import StorageFeature
 class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var stackContentView: UIView!
-    @IBOutlet weak var stackContentViewBottomConstraint: NSLayoutConstraint!
 
     private lazy var viewControllers: [UIViewController] = {
         return [HomeViewController.viewController().wrapNavigationController,
@@ -66,15 +63,6 @@ extension MainTabBarViewController {
         
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
-    }
-    
-    func updateLayout(value: CGFloat) {
-        
-        guard self.stackContentViewBottomConstraint != nil else { return }
-        
-        self.stackContentViewBottomConstraint.constant = -56.0 * value
-        self.stackContentView.alpha = 1 - value
-        self.view.layoutIfNeeded()
     }
 }
 

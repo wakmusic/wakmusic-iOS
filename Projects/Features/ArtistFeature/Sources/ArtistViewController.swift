@@ -119,7 +119,9 @@ extension ArtistViewController {
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
         layout.headerHeight = 15.0
         layout.footerHeight = 50.0
+        
         self.collectionView.setCollectionViewLayout(layout, animated: false)
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
 }
 
