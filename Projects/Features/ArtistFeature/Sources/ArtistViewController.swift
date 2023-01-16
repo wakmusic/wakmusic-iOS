@@ -121,7 +121,7 @@ extension ArtistViewController {
         layout.footerHeight = 50.0
         
         self.collectionView.setCollectionViewLayout(layout, animated: false)
-        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.collectionView.showsVerticalScrollIndicator = false
     }
 }
 

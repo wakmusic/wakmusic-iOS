@@ -30,6 +30,10 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
     var isBack: Bool = false
     var disposeBag: DisposeBag = DisposeBag()
     
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
