@@ -9,6 +9,7 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import Utility
 
 final class PlayerViewModel: ViewModelType {
     struct Input {

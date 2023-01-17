@@ -14,44 +14,47 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
-import YoutubeKit
-import WebKit
+//import YoutubeKit
+import YouTubePlayerKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var viewModel = PlayerViewModel()
-    private var player: YTSwiftyPlayer!
+    //private var player: YTSwiftyPlayer!
     
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
-    var youtubePlayerView: UIView = UIView()
+    //var youtubePlayerView: UIView = UIView()
+    let youtubePlayer = YouTubePlayer(stringLiteral: "9XYDRL84bk4")
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
         bindUI()
         
-        // Create a new player
-        player = YTSwiftyPlayer(
-            frame: .zero,
-            playerVars: [
-                .playsInline(false),
-                .videoID("pyRHIRVapcE"),
-                .loopVideo(true),
-                .showRelatedVideo(false),
-                .autoplay(true)
-            ])
-        print(player)
-        view.addSubview(youtubePlayerView)
-        youtubePlayerView.snp.makeConstraints {
-            $0.edges.equalTo(playerView.thumbnailImageView.snp.edges)
-        }
-        youtubePlayerView.backgroundColor = .yellow
-        youtubePlayerView = player
-        player.delegate = self
-        //player.loadDefaultPlayer()
-        player.loadVideo(videoID: "pyRHIRVapcE")
+        view.addSubview(YouTubePlayerHostingView(player: youtubePlayer))
+        
+//        // Create a new player
+//        player = YTSwiftyPlayer(
+//            frame: .zero,
+//            playerVars: [
+//                .playsInline(false),
+//                .videoID("pyRHIRVapcE"),
+//                .loopVideo(true),
+//                .showRelatedVideo(false),
+//                .autoplay(true)
+//            ])
+//        print(player)
+//        view.addSubview(youtubePlayerView)
+//        youtubePlayerView.snp.makeConstraints {
+//            $0.edges.equalTo(playerView.thumbnailImageView.snp.edges)
+//        }
+//        youtubePlayerView.backgroundColor = .yellow
+//        youtubePlayerView = player
+//        player.delegate = self
+//        //player.loadDefaultPlayer()
+//        player.loadVideo(videoID: "pyRHIRVapcE")
     }
     
     public override func loadView() {
@@ -72,45 +75,45 @@ public extension PlayerViewController {
     }
 }
 
-extension PlayerViewController: YTSwiftyPlayerDelegate {
-    public func playerReady(_ player: YTSwiftyPlayer) {
-        print(#function)
-        // Player API is available after loading a video.
-        // e.g. player.mute()
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
-        print("\(#function): \(currentTime)")
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
-        print("\(#function): \(state)")
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {
-        print("\(#function): \(playbackRate)")
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didReceiveError error: YTSwiftyPlayerError) {
-        print("\(#function): \(error)")
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {
-        print("\(#function): \(quality)")
-    }
-    
-    public func apiDidChange(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-    
-    public func youtubeIframeAPIReady(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-    
-    public func youtubeIframeAPIFailedToLoad(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-}
+//extension PlayerViewController: YTSwiftyPlayerDelegate {
+//    public func playerReady(_ player: YTSwiftyPlayer) {
+//        print(#function)
+//        // Player API is available after loading a video.
+//        // e.g. player.mute()
+//    }
+//
+//    public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
+//        print("\(#function): \(currentTime)")
+//    }
+//
+//    public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
+//        print("\(#function): \(state)")
+//    }
+//
+//    public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {
+//        print("\(#function): \(playbackRate)")
+//    }
+//
+//    public func player(_ player: YTSwiftyPlayer, didReceiveError error: YTSwiftyPlayerError) {
+//        print("\(#function): \(error)")
+//    }
+//
+//    public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {
+//        print("\(#function): \(quality)")
+//    }
+//
+//    public func apiDidChange(_ player: YTSwiftyPlayer) {
+//        print(#function)
+//    }
+//
+//    public func youtubeIframeAPIReady(_ player: YTSwiftyPlayer) {
+//        print(#function)
+//    }
+//
+//    public func youtubeIframeAPIFailedToLoad(_ player: YTSwiftyPlayer) {
+//        print(#function)
+//    }
+//}
 
 private extension PlayerViewController {
     private func bindViewModel() {
