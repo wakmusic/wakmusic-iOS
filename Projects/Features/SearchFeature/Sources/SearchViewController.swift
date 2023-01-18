@@ -17,11 +17,11 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
     
-    var viewModel = SearchViewModel()
+    lazy var viewModel = SearchViewModel()
     let disposeBag = DisposeBag()
     
-    let beforeVc = BeforeSearchContentViewController.viewController()
-    let afterVc = AfterSearchViewController.viewController()
+    lazy var beforeVc = BeforeSearchContentViewController.viewController()
+    lazy var  afterVc = AfterSearchViewController.viewController()
     
     
     public override func viewDidLoad() {
