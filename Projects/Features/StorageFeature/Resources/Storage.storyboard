@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -45,17 +46,12 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="back"/>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRM-MK-pQf">
-                                        <rect key="frame" x="196.66666666666666" y="22" width="0.0" height="0.0"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="편집" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRM-MK-pQf">
+                                        <rect key="frame" x="181.66666666666666" y="11.999999999999998" width="29.666666666666657" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" name="gray900"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rwF-Mr-r2i">
-                                        <rect key="frame" x="281" y="-1" width="56" height="46"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="add"/>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qT1-vo-rci">
                                         <rect key="frame" x="317" y="-1" width="56" height="46"/>
                                         <state key="normal" title="Button"/>
@@ -64,7 +60,9 @@
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTl-ao-7Zk">
                                         <rect key="frame" x="319.33333333333331" y="5" width="53.666666666666686" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="완료"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="완료">
+                                            <color key="baseForegroundColor" name="POINT"/>
+                                        </buttonConfiguration>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -74,8 +72,6 @@
                                     <constraint firstAttribute="trailing" secondItem="qT1-vo-rci" secondAttribute="trailing" constant="20" id="Ypo-vt-HPO"/>
                                     <constraint firstItem="uRM-MK-pQf" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="bvf-8I-xAJ"/>
                                     <constraint firstItem="uRM-MK-pQf" firstAttribute="centerX" secondItem="c5J-JA-wnR" secondAttribute="centerX" id="cN0-T8-NOX"/>
-                                    <constraint firstItem="rwF-Mr-r2i" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="o7p-pK-Bw8"/>
-                                    <constraint firstItem="qT1-vo-rci" firstAttribute="leading" secondItem="rwF-Mr-r2i" secondAttribute="trailing" constant="-20" id="oLp-Ps-rrF"/>
                                     <constraint firstItem="Bvg-9m-vRr" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="sHv-2m-9yg"/>
                                     <constraint firstAttribute="height" constant="44" id="tcr-bQ-4W0"/>
                                     <constraint firstItem="qT1-vo-rci" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="u2u-ey-J7v"/>
@@ -97,13 +93,13 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4nK-Uo-d2G">
                                                 <rect key="frame" x="16" y="11.999999999999998" width="166.33333333333334" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="gray900"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rg4-eJ-JKx">
                                                 <rect key="frame" x="16.000000000000004" y="40.333333333333343" width="41.333333333333343" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="gray900"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieD-rr-BvR">
@@ -115,6 +111,7 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="4nK-Uo-d2G" secondAttribute="trailing" constant="16" id="35h-AJ-orN"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ieD-rr-BvR" secondAttribute="trailing" constant="80" id="3sz-No-IMh"/>
                                             <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Rg4-eJ-JKx" secondAttribute="bottom" constant="36" id="3vu-9B-Eic"/>
                                             <constraint firstItem="ieD-rr-BvR" firstAttribute="leading" secondItem="Rg4-eJ-JKx" secondAttribute="trailing" constant="9" id="BBv-sk-M7I"/>
                                             <constraint firstItem="Rg4-eJ-JKx" firstAttribute="top" secondItem="4nK-Uo-d2G" secondAttribute="bottom" constant="8" id="FPw-C8-nja"/>
@@ -210,6 +207,17 @@
                             <constraint firstItem="Bha-qf-xk1" firstAttribute="top" secondItem="c5J-JA-wnR" secondAttribute="bottom" id="yy2-Dz-7OP"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="backButton" destination="Bvg-9m-vRr" id="xTv-KL-zUz"/>
+                        <outlet property="completeButton" destination="dTl-ao-7Zk" id="SJE-i1-HNA"/>
+                        <outlet property="editPlayNameButton" destination="ieD-rr-BvR" id="max-Kx-gU0"/>
+                        <outlet property="editStateLabel" destination="uRM-MK-pQf" id="Oi8-fj-qN7"/>
+                        <outlet property="moreButton" destination="qT1-vo-rci" id="ijd-SO-7Lx"/>
+                        <outlet property="playListCountLabel" destination="Rg4-eJ-JKx" id="lY3-Uc-O7a"/>
+                        <outlet property="playListImage" destination="SAe-m3-adq" id="sd6-jQ-xaG"/>
+                        <outlet property="playListNameLabel" destination="4nK-Uo-d2G" id="bln-PO-ai6"/>
+                        <outlet property="tableView" destination="KGO-aq-Wkt" id="1ry-50-Ywb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QcR-tm-Nn5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -217,11 +225,16 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add" width="32" height="32"/>
         <image name="back" width="32" height="32"/>
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
+        <namedColor name="POINT">
+            <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray900">
+            <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
