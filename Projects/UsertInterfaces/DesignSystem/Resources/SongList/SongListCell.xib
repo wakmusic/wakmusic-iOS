@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_thumbnail_large" translatesAutoresizingMaskIntoConstraints="NO" id="QLV-Nm-lsR">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_thumbnail_large" translatesAutoresizingMaskIntoConstraints="NO" id="QLV-Nm-lsR">
                         <rect key="frame" x="20" y="2" width="72" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="2Fd-XR-yxR"/>
@@ -67,6 +67,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="dummy_thumbnail_large" width="324" height="180"/>
+        <image name="dummy_thumbnail_large" width="324" height="182"/>
     </resources>
 </document>

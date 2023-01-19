@@ -86,7 +86,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bha-qf-xk1">
                                 <rect key="frame" x="0.0" y="102.99999999999999" width="393" height="166.66666666666663"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SAe-m3-adq">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SAe-m3-adq">
                                         <rect key="frame" x="20" y="20" width="146.66666666666666" height="146.66666666666666"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="SAe-m3-adq" secondAttribute="height" multiplier="1:1" id="wgU-ZI-YzF"/>
@@ -125,7 +125,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" name="INCREASE"/>
                                 <constraints>
                                     <constraint firstItem="SAe-m3-adq" firstAttribute="top" secondItem="Bha-qf-xk1" secondAttribute="top" constant="20" id="68r-Xw-1oz"/>
                                     <constraint firstAttribute="bottom" secondItem="SAe-m3-adq" secondAttribute="bottom" id="6gC-so-e7r"/>
@@ -139,9 +138,9 @@
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KGO-aq-Wkt">
                                 <rect key="frame" x="0.0" y="269.66666666666669" width="393" height="582.33333333333326"/>
-                                <color key="backgroundColor" name="NEW"/>
+                                <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="AnA-TD-1DQ">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="AnA-TD-1DQ" customClass="PlayListTableViewCell" customModule="StorageFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AnA-TD-1DQ" id="6Tv-EA-86l">
@@ -178,8 +177,8 @@
                                                         <constraint firstAttribute="width" constant="32" id="AUN-uY-02H"/>
                                                         <constraint firstAttribute="height" constant="32" id="E8f-2M-MnK"/>
                                                     </constraints>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="move"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="move"/>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -192,6 +191,12 @@
                                                 <constraint firstItem="GZm-0L-H8S" firstAttribute="centerY" secondItem="NNt-VF-4zE" secondAttribute="centerY" id="uOD-sC-hg6"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="albumImageView" destination="NNt-VF-4zE" id="nh1-jF-bzU"/>
+                                            <outlet property="artistLabel" destination="Ure-8R-syY" id="Fp6-tD-nFl"/>
+                                            <outlet property="button" destination="GZm-0L-H8S" id="OXk-6p-gyP"/>
+                                            <outlet property="titleLabel" destination="mIF-Mn-gBX" id="frc-cQ-zEA"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -234,14 +239,11 @@
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
-        <namedColor name="INCREASE">
-            <color red="0.98000001907348633" green="0.19200000166893005" blue="0.40799999237060547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="NEW">
-            <color red="1" green="0.56099998950958252" blue="0.046999998390674591" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="POINT">
             <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

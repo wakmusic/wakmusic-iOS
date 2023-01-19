@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,7 +25,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7I-eD-s9E">
                             <rect key="frame" x="20" y="16" width="226" height="52"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="0.40211092715231789" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="rzt-kp-cHE"/>
                             </constraints>
@@ -41,7 +40,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50f-Sn-UVp">
                             <rect key="frame" x="254" y="16" width="226" height="52"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="0.40097268211920528" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="랜덤재생">
@@ -52,7 +51,6 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="POINT"/>
                     <constraints>
                         <constraint firstItem="50f-Sn-UVp" firstAttribute="leading" secondItem="f7I-eD-s9E" secondAttribute="trailing" constant="8" id="05p-4L-d5q"/>
                         <constraint firstAttribute="trailing" secondItem="50f-Sn-UVp" secondAttribute="trailing" constant="20" id="PFZ-QS-gec"/>
@@ -77,9 +75,6 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="POINT">
-            <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

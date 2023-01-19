@@ -28,6 +28,7 @@ extension RecommendPlayListCell {
     
     func update(model: RecommendPlayListDTO) {
         
+        //MARK: 폰트설정 
         titleStringLabel.text = model.title
         logoImageView.image = model.image
     }

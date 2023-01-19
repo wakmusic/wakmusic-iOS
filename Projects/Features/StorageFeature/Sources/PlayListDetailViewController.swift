@@ -35,6 +35,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     @IBOutlet weak var editStateLabel: UILabel!
     @IBOutlet weak var playListInfoView: UIView!
     
+    
+    var pt:PlayListType = .custom
     var disposeBag = DisposeBag()
     
     
@@ -49,6 +51,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        print("VIEW DIE LOAD")
         navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
         
         configureUI()
@@ -57,8 +60,11 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     }
     
     
-    public static func viewController() -> PlayListDetailViewController {
+    public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.pt = pt
+        
         return viewController
     }
     
@@ -73,14 +79,13 @@ extension PlayListDetailViewController{
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
         }
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        //tableView.backgroundColor = .clear
+        tableView.backgroundColor = .clear
         
         
         self.completeButton.isHidden = true
         self.editStateLabel.isHidden = true
         
         
-        self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
         
         
         self.playListImage.image = DesignSystemAsset.PlayListTheme.theme0.image
@@ -109,6 +114,18 @@ extension PlayListDetailViewController{
         playListInfoView.layer.borderWidth = 1
         playListInfoView.layer.borderColor = colorFromRGB(0xFCFCFD).cgColor
         playListInfoView.layer.cornerRadius = 8
+        
+        
+        self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+        
+        
+        
+        self.playListImage.image = pt == .wmRecommand ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
+        
+        self.moreButton.isHidden = pt == .wmRecommand
+        
+        
+        self.editPlayListNameButton.isHidden = pt == .wmRecommand
         
         bindRx()
         
@@ -151,16 +168,30 @@ extension PlayListDetailViewController{
 
             guard let self = self else { return UITableViewCell() }
 
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
-                return UITableViewCell()
-            }
             let bgView = UIView()
             bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+            switch self.pt {
             
-            //cell.update(model)
-            cell.selectedBackgroundView = bgView
+            case .custom:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell", for: indexPath) as? PlayListTableViewCell else{
+                    return UITableViewCell()
+                }
+               
+                cell.selectedBackgroundView = bgView
+                cell.update(model,false)
+                
+                return cell
+            case .wmRecommand:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
+                    return UITableViewCell()
+                }
+                
+                cell.selectedBackgroundView = bgView
+                
+                return cell
+            }
             
-            return cell
+
 
 
         }, titleForHeaderInSection: { (datasource, sectionNumber) -> String? in
@@ -169,16 +200,7 @@ extension PlayListDetailViewController{
 
         return datasource
     }
-    
-    public func update(_ pt:PlayListType)
-    {
-        //self.playListImage.image = DesignSystemAsset.RecommendPlayList.dummyPlayList.image
-        
-        //self.moreButton.isHidden = k == .wmRecommand
-       
-        
-        
-    }
+
     
     
     

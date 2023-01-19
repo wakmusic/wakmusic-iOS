@@ -56,7 +56,7 @@ extension PlayButtonGroupView {
         self.addSubview(view)
         
         
-        
+        view.backgroundColor = .clear
         let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
         
         allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
