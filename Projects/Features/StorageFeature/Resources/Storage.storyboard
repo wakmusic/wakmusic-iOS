@@ -44,7 +44,7 @@
                                             <constraint firstAttribute="width" constant="40" id="dgH-pR-fDC"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Button" image="back"/>
+                                        <state key="normal" image="back"/>
                                         <connections>
                                             <action selector="backButtonAction:" destination="RD2-zO-LKw" eventType="touchUpInside" id="gnN-Lz-dqH"/>
                                         </connections>
@@ -116,7 +116,6 @@
                                         <color key="backgroundColor" red="0.9882352941176471" green="0.9882352941176471" blue="0.99215686274509807" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="4nK-Uo-d2G" secondAttribute="trailing" constant="16" id="35h-AJ-orN"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Rg4-eJ-JKx" secondAttribute="bottom" constant="36" id="3vu-9B-Eic"/>
                                             <constraint firstItem="ieD-rr-BvR" firstAttribute="leading" secondItem="Rg4-eJ-JKx" secondAttribute="trailing" constant="9" id="BBv-sk-M7I"/>
                                             <constraint firstItem="Rg4-eJ-JKx" firstAttribute="top" secondItem="4nK-Uo-d2G" secondAttribute="bottom" constant="8" id="FPw-C8-nja"/>
                                             <constraint firstItem="4nK-Uo-d2G" firstAttribute="top" secondItem="7uS-mM-un2" secondAttribute="top" constant="12" id="M6Z-4e-2Rs"/>
@@ -126,6 +125,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" name="INCREASE"/>
                                 <constraints>
                                     <constraint firstItem="SAe-m3-adq" firstAttribute="top" secondItem="Bha-qf-xk1" secondAttribute="top" constant="20" id="68r-Xw-1oz"/>
                                     <constraint firstAttribute="bottom" secondItem="SAe-m3-adq" secondAttribute="bottom" id="6gC-so-e7r"/>
@@ -138,8 +138,8 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KGO-aq-Wkt">
-                                <rect key="frame" x="0.0" y="269.66666666666669" width="393" height="548.33333333333326"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="0.0" y="269.66666666666669" width="393" height="582.33333333333326"/>
+                                <color key="backgroundColor" name="NEW"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="AnA-TD-1DQ">
                                         <rect key="frame" x="0.0" y="50" width="393" height="44"/>
@@ -205,7 +205,7 @@
                             <constraint firstItem="KGO-aq-Wkt" firstAttribute="leading" secondItem="2Ff-59-sdz" secondAttribute="leading" id="V7p-9f-4p2"/>
                             <constraint firstItem="c5J-JA-wnR" firstAttribute="top" secondItem="2Ff-59-sdz" secondAttribute="top" id="alI-5v-Pcq"/>
                             <constraint firstItem="KGO-aq-Wkt" firstAttribute="trailing" secondItem="2Ff-59-sdz" secondAttribute="trailing" id="hYj-WC-4dE"/>
-                            <constraint firstItem="2Ff-59-sdz" firstAttribute="bottom" secondItem="KGO-aq-Wkt" secondAttribute="bottom" id="iES-qs-4hE"/>
+                            <constraint firstAttribute="bottom" secondItem="KGO-aq-Wkt" secondAttribute="bottom" id="iES-qs-4hE"/>
                             <constraint firstItem="c5J-JA-wnR" firstAttribute="leading" secondItem="2Ff-59-sdz" secondAttribute="leading" id="kkh-VO-vYj"/>
                             <constraint firstItem="Bha-qf-xk1" firstAttribute="leading" secondItem="2Ff-59-sdz" secondAttribute="leading" id="wly-0K-pKQ"/>
                             <constraint firstItem="Bha-qf-xk1" firstAttribute="top" secondItem="c5J-JA-wnR" secondAttribute="bottom" id="yy2-Dz-7OP"/>
@@ -234,6 +234,12 @@
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
+        <namedColor name="INCREASE">
+            <color red="0.98000001907348633" green="0.19200000166893005" blue="0.40799999237060547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="NEW">
+            <color red="1" green="0.56099998950958252" blue="0.046999998390674591" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="POINT">
             <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

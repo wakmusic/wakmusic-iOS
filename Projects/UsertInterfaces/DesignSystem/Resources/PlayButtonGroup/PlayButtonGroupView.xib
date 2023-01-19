@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hsP-wA-LdH">
-                    <rect key="frame" x="0.0" y="47" width="500" height="81"/>
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="162"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7I-eD-s9E">
                             <rect key="frame" x="20" y="16" width="226" height="52"/>
@@ -51,7 +52,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.94117647059999998" green="0.95294117649999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="POINT"/>
                     <constraints>
                         <constraint firstItem="50f-Sn-UVp" firstAttribute="leading" secondItem="f7I-eD-s9E" secondAttribute="trailing" constant="8" id="05p-4L-d5q"/>
                         <constraint firstAttribute="trailing" secondItem="50f-Sn-UVp" secondAttribute="trailing" constant="20" id="PFZ-QS-gec"/>
@@ -67,15 +68,18 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="hsP-wA-LdH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="QT8-NY-Nll"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="top" secondItem="hsP-wA-LdH" secondAttribute="top" id="aJC-cU-ZaJ"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="hsP-wA-LdH" secondAttribute="trailing" id="feO-LA-U2s"/>
-                <constraint firstItem="hsP-wA-LdH" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="uxn-U7-SBr"/>
+                <constraint firstAttribute="top" secondItem="hsP-wA-LdH" secondAttribute="top" id="aJC-cU-ZaJ"/>
+                <constraint firstAttribute="trailing" secondItem="hsP-wA-LdH" secondAttribute="trailing" id="feO-LA-U2s"/>
+                <constraint firstItem="hsP-wA-LdH" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="uxn-U7-SBr"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="172.30769230769229" y="66.824644549763036"/>
         </view>
     </objects>
     <resources>
+        <namedColor name="POINT">
+            <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

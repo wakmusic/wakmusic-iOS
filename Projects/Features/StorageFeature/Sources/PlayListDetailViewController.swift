@@ -50,6 +50,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     public override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
+        
         configureUI()
 
         // Do any additional setup after loading the view.
@@ -68,8 +69,11 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
         
+        if #available(iOS 15.0, *) {
+                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
+        }
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        tableView.backgroundColor = .clear
+        //tableView.backgroundColor = .clear
         
         
         self.completeButton.isHidden = true
@@ -121,7 +125,6 @@ extension PlayListDetailViewController{
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         
         dataSource
-            .debug("TEXT")
             .do(onNext: { [weak self] model in
                 
                 guard let self = self else {

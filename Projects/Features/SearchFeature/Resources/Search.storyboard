@@ -76,7 +76,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
-                                <rect key="frame" x="0.0" y="111" width="393" height="707"/>
+                                <rect key="frame" x="0.0" y="115" width="393" height="703"/>
                                 <color key="backgroundColor" name="SUB 1"/>
                             </tableView>
                         </subviews>
@@ -84,7 +84,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="trailing" secondItem="AFm-fr-N46" secondAttribute="trailing" id="7tt-pj-WAb"/>
-                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="52" id="eIZ-1L-S7b"/>
+                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="56" id="eIZ-1L-S7b"/>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="bottom" secondItem="AFm-fr-N46" secondAttribute="bottom" id="fma-yd-7O3"/>
                             <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
                         </constraints>
