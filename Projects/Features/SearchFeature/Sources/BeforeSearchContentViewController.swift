@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import StorageFeature
 
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
@@ -265,7 +266,8 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
         
-        let vc = AfterSearchContentViewController.viewController(.all)
+        let vc = PlayListDetailViewController.viewController()
+        vc.update(.wmRecommand)
         
         self.parent?.navigationController?.pushViewController(vc, animated: true)
         

@@ -5,12 +5,16 @@
 //  Created by yongbeomkwak on 2023/01/15.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
-
 import UIKit
 import Utility
 import DesignSystem
 
-class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
+public enum KindOfPlayList{
+    case custom
+    case wmRecommand
+}
+
+public class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -19,19 +23,27 @@ class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoar
     @IBOutlet weak var playListImage: UIImageView!
     @IBOutlet weak var playListNameLabel: UILabel!
     @IBOutlet weak var playListCountLabel: UILabel!
-    @IBOutlet weak var editPlayNameButton: UIButton!
+    @IBOutlet weak var editPlayListNameButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var editStateLabel: UILabel!
+    @IBOutlet weak var playListInfoView: UIView!
     
-    override func viewDidLoad() {
+    
+    @IBAction func backButtonAction(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
+        configureUI()
 
         // Do any additional setup after loading the view.
     }
     
     
     public static func viewController() -> PlayListDetailViewController {
-        let viewController = PlayListDetailViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        let viewController = PlayListDetailViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         return viewController
     }
     
@@ -42,10 +54,19 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
         
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        
+        
+        self.completeButton.isHidden = true
+        self.editStateLabel.isHidden = true
+        
+        
+        self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+        
+        
         self.playListImage.image = DesignSystemAsset.PlayListTheme.theme0.image
         
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-    
         self.moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
         
         
@@ -66,6 +87,33 @@ extension PlayListDetailViewController{
         self.playListNameLabel.font  = DesignSystemFontFamily.Pretendard.bold.font(size: 20)
         
         
+        playListInfoView.layer.borderWidth = 1
+        playListInfoView.layer.borderColor = colorFromRGB(0xFCFCFD).cgColor
+        playListInfoView.layer.cornerRadius = 8
+        
+        
+        
+        
+        
+        
+        
     }
+    
+    public func update(_ k:KindOfPlayList)
+    {
+        //self.playListImage.image = DesignSystemAsset.RecommendPlayList.dummyPlayList.image
+        
+        //self.moreButton.isHidden = k == .wmRecommand
+       
+        
+        
+    }
+    
+   
+    
+}
+
+
+extension PlayListDetailViewController:UITableViewDelegate{
     
 }

@@ -35,16 +35,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c5J-JA-wnR">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c5J-JA-wnR">
                                 <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvg-9m-vRr">
-                                        <rect key="frame" x="15" y="-1" width="40" height="46"/>
+                                        <rect key="frame" x="15" y="6" width="40" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="dgH-pR-fDC"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="back"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Button" image="back"/>
+                                        <connections>
+                                            <action selector="backButtonAction:" destination="RD2-zO-LKw" eventType="touchUpInside" id="gnN-Lz-dqH"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="편집" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRM-MK-pQf">
                                         <rect key="frame" x="181.66666666666666" y="11.999999999999998" width="29.666666666666657" height="20.333333333333329"/>
@@ -53,25 +56,27 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qT1-vo-rci">
-                                        <rect key="frame" x="317" y="-1" width="56" height="46"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="more"/>
+                                        <rect key="frame" x="341" y="6" width="32" height="32"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="more"/>
                                     </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTl-ao-7Zk">
-                                        <rect key="frame" x="319.33333333333331" y="5" width="53.666666666666686" height="34.333333333333336"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="완료">
-                                            <color key="baseForegroundColor" name="POINT"/>
-                                        </buttonConfiguration>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTl-ao-7Zk">
+                                        <rect key="frame" x="328" y="5" width="45" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="45" id="BsN-yS-DSq"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="완료">
+                                            <color key="titleColor" name="POINT"/>
+                                        </state>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="dTl-ao-7Zk" secondAttribute="trailing" constant="20" id="C5l-ZS-E49"/>
                                     <constraint firstItem="Bvg-9m-vRr" firstAttribute="leading" secondItem="c5J-JA-wnR" secondAttribute="leading" constant="15" id="ESV-3l-Q5Y"/>
-                                    <constraint firstAttribute="trailing" secondItem="qT1-vo-rci" secondAttribute="trailing" constant="20" id="Ypo-vt-HPO"/>
                                     <constraint firstItem="uRM-MK-pQf" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="bvf-8I-xAJ"/>
                                     <constraint firstItem="uRM-MK-pQf" firstAttribute="centerX" secondItem="c5J-JA-wnR" secondAttribute="centerX" id="cN0-T8-NOX"/>
+                                    <constraint firstAttribute="trailing" secondItem="qT1-vo-rci" secondAttribute="trailing" constant="20" id="r43-eq-ExN"/>
                                     <constraint firstItem="Bvg-9m-vRr" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="sHv-2m-9yg"/>
                                     <constraint firstAttribute="height" constant="44" id="tcr-bQ-4W0"/>
                                     <constraint firstItem="qT1-vo-rci" firstAttribute="centerY" secondItem="c5J-JA-wnR" secondAttribute="centerY" id="u2u-ey-J7v"/>
@@ -96,22 +101,21 @@
                                                 <color key="textColor" name="gray900"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rg4-eJ-JKx">
-                                                <rect key="frame" x="16.000000000000004" y="40.333333333333343" width="41.333333333333343" height="20.333333333333329"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100곡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rg4-eJ-JKx">
+                                                <rect key="frame" x="16" y="40.333333333333343" width="43" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="gray900"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieD-rr-BvR">
-                                                <rect key="frame" x="66.333333333333343" y="31.666666666666657" width="48" height="38"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="storage_edit"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieD-rr-BvR">
+                                                <rect key="frame" x="68" y="38.666666666666657" width="24" height="24"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="storage_edit"/>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.9882352941176471" green="0.9882352941176471" blue="0.99215686274509807" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="4nK-Uo-d2G" secondAttribute="trailing" constant="16" id="35h-AJ-orN"/>
-                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ieD-rr-BvR" secondAttribute="trailing" constant="80" id="3sz-No-IMh"/>
                                             <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Rg4-eJ-JKx" secondAttribute="bottom" constant="36" id="3vu-9B-Eic"/>
                                             <constraint firstItem="ieD-rr-BvR" firstAttribute="leading" secondItem="Rg4-eJ-JKx" secondAttribute="trailing" constant="9" id="BBv-sk-M7I"/>
                                             <constraint firstItem="Rg4-eJ-JKx" firstAttribute="top" secondItem="4nK-Uo-d2G" secondAttribute="bottom" constant="8" id="FPw-C8-nja"/>
@@ -210,11 +214,12 @@
                     <connections>
                         <outlet property="backButton" destination="Bvg-9m-vRr" id="xTv-KL-zUz"/>
                         <outlet property="completeButton" destination="dTl-ao-7Zk" id="SJE-i1-HNA"/>
-                        <outlet property="editPlayNameButton" destination="ieD-rr-BvR" id="max-Kx-gU0"/>
+                        <outlet property="editPlayListNameButton" destination="ieD-rr-BvR" id="K5P-hx-FDi"/>
                         <outlet property="editStateLabel" destination="uRM-MK-pQf" id="Oi8-fj-qN7"/>
                         <outlet property="moreButton" destination="qT1-vo-rci" id="ijd-SO-7Lx"/>
                         <outlet property="playListCountLabel" destination="Rg4-eJ-JKx" id="lY3-Uc-O7a"/>
                         <outlet property="playListImage" destination="SAe-m3-adq" id="sd6-jQ-xaG"/>
+                        <outlet property="playListInfoView" destination="7uS-mM-un2" id="DrR-BD-qRn"/>
                         <outlet property="playListNameLabel" destination="4nK-Uo-d2G" id="bln-PO-ai6"/>
                         <outlet property="tableView" destination="KGO-aq-Wkt" id="1ry-50-Ywb"/>
                     </connections>
