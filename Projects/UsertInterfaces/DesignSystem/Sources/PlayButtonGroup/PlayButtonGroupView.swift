@@ -9,21 +9,22 @@
 import UIKit
 import DesignSystem
 
-enum PlayEvent {
+public enum PlayEvent {
     case allPlay
     case shufflePlay
 }
 
-protocol PlayButtonGroupViewDelegate {
-    func pressPlay(_ event:PlayEvent)
+public protocol PlayButtonGroupViewDelegate:AnyObject {
+    
+   func pressPlay(_ event:PlayEvent)
 }
 
-class PlayButtonGroupView: UIView {
+public class PlayButtonGroupView: UIView {
 
     @IBOutlet weak var allPlayButton: UIButton!
     @IBOutlet weak var shufflePlayButton: UIButton!
     
-    var delegate:PlayButtonGroupViewDelegate?
+    public var delegate:PlayButtonGroupViewDelegate?
     
     
     @IBAction func pressAllPlay(_ sender: UIButton) {
@@ -48,12 +49,20 @@ class PlayButtonGroupView: UIView {
 
 extension PlayButtonGroupView {
     private func setupView(){
+        
+        guard let view = Bundle.module.loadNibNamed("PlayButtonGroupView", owner: self, options: nil)?.first as? UIView else { return }
+        view.frame = self.bounds
+        view.layoutIfNeeded()
+        self.addSubview(view)
+        
+        
+        
         let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
         
         allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
                                               range: NSRange(location: 0, length: allPlayAttributedString.string.count))
-
+        
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
