@@ -30,6 +30,10 @@ extension RecommendPlayListCell {
         
         //MARK: 폰트설정 
         titleStringLabel.text = model.title
+        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray600.color
+        
+        
         logoImageView.image = model.image
     }
 }
