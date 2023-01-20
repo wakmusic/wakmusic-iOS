@@ -35,15 +35,40 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     @IBOutlet weak var editStateLabel: UILabel!
     @IBOutlet weak var playListInfoView: UIView!
     
-    
+
     var pt:PlayListType = .custom
     var disposeBag = DisposeBag()
+    lazy var viewModel = PlayListDetailViewModel()
+    
     
     
     @IBAction func backButtonAction(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func pressEditListAction(_ sender: UIButton) {
+        
+        
+        self.moreButton.isHidden = true
+        self.completeButton.isHidden = false
+        self.editStateLabel.isHidden = false
+        viewModel.output.isEditinglist.accept(true)
+        
+    }
+    
+    
+    @IBAction func pressCompleteAction(_ sender: UIButton) {
+        
+        self.moreButton.isHidden = false
+        self.completeButton.isHidden = true
+        self.editStateLabel.isHidden = true
+        viewModel.output.isEditinglist.accept(false)
+        
+        
+    }
+    
+    @IBAction func pressEditNameAction(_ sender: UIButton) {
+    }
     
     var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[PlayListSectionModel.init(model: .wmRecommand, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
     
@@ -157,7 +182,12 @@ extension PlayListDetailViewController{
             .bind(to: tableView.rx.items(dataSource: createDatasource()))
         .disposed(by: disposeBag)
         
+               
         
+                viewModel.output.isEditinglist.withLatestFrom(dataSource)
+                .bind(to: dataSource)
+                .disposed(by: disposeBag)
+                //에딧 상태에 따른 cell 변화를 reload 해주기 위해 
         
       
     }
@@ -178,7 +208,7 @@ extension PlayListDetailViewController{
                 }
                
                 cell.selectedBackgroundView = bgView
-                cell.update(model,false)
+                cell.update(model,self.viewModel.output.isEditinglist.value)
                 
                 return cell
             case .wmRecommand:

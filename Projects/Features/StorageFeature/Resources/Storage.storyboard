@@ -59,6 +59,9 @@
                                         <rect key="frame" x="341" y="6" width="32" height="32"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="more"/>
+                                        <connections>
+                                            <action selector="pressEditListAction:" destination="RD2-zO-LKw" eventType="touchUpInside" id="ddZ-bG-EZc"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTl-ao-7Zk">
                                         <rect key="frame" x="328" y="5" width="45" height="34"/>
@@ -69,6 +72,9 @@
                                         <state key="normal" title="완료">
                                             <color key="titleColor" name="POINT"/>
                                         </state>
+                                        <connections>
+                                            <action selector="pressCompleteAction:" destination="RD2-zO-LKw" eventType="touchUpInside" id="bkf-zY-b4R"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -111,6 +117,9 @@
                                                 <rect key="frame" x="68" y="38.666666666666657" width="24" height="24"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="storage_edit"/>
+                                                <connections>
+                                                    <action selector="pressEditNameAction:" destination="RD2-zO-LKw" eventType="touchUpInside" id="LmV-vC-D8t"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.9882352941176471" green="0.9882352941176471" blue="0.99215686274509807" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
