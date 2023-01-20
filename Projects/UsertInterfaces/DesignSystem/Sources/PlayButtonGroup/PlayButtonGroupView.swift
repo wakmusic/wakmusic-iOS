@@ -67,7 +67,7 @@ extension PlayButtonGroupView {
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         allPlayButton.layer.borderWidth = 1
-        allPlayButton.setAttributedTitle(allPlayAttributedString, for: .normal)
+       
         
         let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
         
@@ -79,7 +79,14 @@ extension PlayButtonGroupView {
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         shufflePlayButton.layer.borderWidth = 1
-        shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
+        
+        
+        
+               //여기 안으로 넣어보세요.
+            allPlayButton.setAttributedTitle(allPlayAttributedString, for: .normal)
+            shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
+            view.layoutIfNeeded() //당장 UI 갱신해 : 사용 이유, 버튼 텍스트 깜빡거림 방지
+        
         
     }
 }
