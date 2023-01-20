@@ -247,7 +247,9 @@ extension PlayListDetailViewController:UITableViewDelegate{
     
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         
-        //view.delegate? = self
+        view.delegate = self
+        
+    
         
         
         return view
@@ -261,6 +263,14 @@ extension PlayListDetailViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return 60
+    }
+    
+    
+}
+
+extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
+    public func pressPlay(_ event: DesignSystem.PlayEvent) {
+        print(event)
     }
     
     

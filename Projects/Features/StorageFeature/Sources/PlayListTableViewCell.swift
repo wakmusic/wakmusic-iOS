@@ -19,7 +19,21 @@ class PlayListTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        //update(SongInfoDTO(name: "라라라", artist: "ㅠㅡㅠㅡ", releaseDay: "12"), false)
+        self.backgroundColor = .clear
+        
+        albumImageView.layer.cornerRadius = 8
+        albumImageView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        albumImageView.layer.borderWidth = 1
+        
+        self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+
+        
+        self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+
+        
+
        
     }
     
@@ -32,11 +46,14 @@ class PlayListTableViewCell: UITableViewCell {
 extension PlayListTableViewCell {
     func update(_ model: SongInfoDTO,_ isEidting:Bool) {
 
-        self.backgroundColor = .clear
+       
+     
+        
         
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        titleLabel.text = "테스트"
-        artistLabel.text = "테스트2"
+        titleLabel.text =  model.name
+        artistLabel.text = model.artist
+        
         button.setImage( isEidting ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)
         
 

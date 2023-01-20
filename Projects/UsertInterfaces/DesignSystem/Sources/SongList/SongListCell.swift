@@ -68,9 +68,9 @@ public extension SongListCell {
 }
 
 public struct SongInfoDTO {
-    var name:String
-    var artist:String
-    var releaseDay:String
+    public var name:String
+    public var artist:String
+    public var releaseDay:String
     
     public init(name: String, artist: String, releaseDay: String) {
         self.name = name
