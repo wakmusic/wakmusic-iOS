@@ -219,7 +219,7 @@ extension SearchViewController {
                 {
                     self.searchTextFiled.rx.text.onNext("")
                     let textPopupViewController = TextPopupViewController.viewController(
-                        text: "검색어를 입려해주세요.",
+                        text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true
                     )
                     let viewController: PanModalPresentable.LayoutType = textPopupViewController //
