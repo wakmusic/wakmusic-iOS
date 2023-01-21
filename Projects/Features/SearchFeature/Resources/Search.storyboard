@@ -119,16 +119,17 @@
                                                 </constraints>
                                             </imageView>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-GJ-8b6">
-                                                <rect key="frame" x="54" y="0.0" width="255" height="56"/>
+                                                <rect key="frame" x="54" y="0.0" width="269" height="56"/>
+                                                <color key="textColor" name="gray900"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwf-8T-rR0" userLabel="CancelButton">
-                                                <rect key="frame" x="314" y="14" width="59" height="28"/>
+                                                <rect key="frame" x="328" y="16" width="45" height="24"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="28" id="XVT-vK-aPk"/>
-                                                    <constraint firstAttribute="width" constant="59" id="jXq-dI-uMa"/>
+                                                    <constraint firstAttribute="height" constant="24" id="XVT-vK-aPk"/>
+                                                    <constraint firstAttribute="width" constant="45" id="jXq-dI-uMa"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>

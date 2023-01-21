@@ -101,7 +101,7 @@ extension SearchViewController {
         
         //MARK: 검색 취소 버튼
         self.cancelButton.titleLabel?.text = "취소"
-        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 15)
+        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         self.cancelButton.layer.cornerRadius = 4
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1

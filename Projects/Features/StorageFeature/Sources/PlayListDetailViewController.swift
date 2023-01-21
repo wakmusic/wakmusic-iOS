@@ -12,6 +12,7 @@ import RxRelay
 import RxSwift
 import RxCocoa
 import RxDataSources
+import PanModal
 
 public enum PlayListType{
     case custom
@@ -68,6 +69,14 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     }
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
+        
+        let createPlayListPopupViewController = CreatePlayListPopupViewController.viewController(
+            title: "플레이리스트 수정하기",
+            btnText: "플레이리스트 수정"
+        )
+        let viewController: PanModalPresentable.LayoutType = createPlayListPopupViewController //
+        self.presentPanModal(viewController) //modal Show
+        
     }
     
     var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[PlayListSectionModel.init(model: .wmRecommand, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
