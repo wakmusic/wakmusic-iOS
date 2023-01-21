@@ -18,6 +18,7 @@ let project = Project.makeModule(
         .SPM.Kingfisher,
         .SPM.Tabman,
         .SPM.RxDataSources,
-        .SPM.RxKeyboard
+        .SPM.RxKeyboard,
+        .SPM.HPParallaxHeader
     ]
 )

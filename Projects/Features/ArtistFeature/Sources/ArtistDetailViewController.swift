@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import HPParallaxHeader
 
 class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -130,7 +131,7 @@ extension ArtistDetailViewController {
         self.addChild(viewController)
         self.musicContentView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
-        
+
         viewController.view.snp.makeConstraints {
             $0.edges.equalTo(musicContentView)
         }
