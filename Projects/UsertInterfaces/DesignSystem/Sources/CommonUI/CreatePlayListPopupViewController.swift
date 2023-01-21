@@ -9,6 +9,9 @@
 import UIKit
 import Utility
 import PanModal
+import RxCocoa
+import RxSwift
+
 public final class  CreatePlayListPopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var saveButton: UIButton!
@@ -25,6 +28,10 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
     var titleString:String = ""
     var btnString:String = ""
     
+    lazy var viewModel = CreatePlayListPopupViewModel()
+    
+    var disposeBag = DisposeBag()
+    
    
    
     
@@ -33,6 +40,7 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
         super.viewDidLoad()
 
         configureUI()
+        bindRx()
         // Do any additional setup after loading the view.
     }
     
@@ -71,7 +79,7 @@ extension CreatePlayListPopupViewController{
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.playListTextField.attributedPlaceholder = NSAttributedString(string: "검색어를 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+        self.playListTextField.attributedPlaceholder = NSAttributedString(string: "플레이리스트 제목을 입력하세요.",attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.playListTextField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
         self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
@@ -83,6 +91,7 @@ extension CreatePlayListPopupViewController{
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
+        self.cancelButton.isHidden = true
         
         
         self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
@@ -109,9 +118,69 @@ extension CreatePlayListPopupViewController{
     }
     
     
-    private func reactSearchHeader(_ isfocused:Bool)
+    private func bindRx()
     {
+        playListTextField.rx.text.orEmpty
+            .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
+            .bind(to: self.viewModel.input.textString)
+            .disposed(by: self.disposeBag)
         
+        
+        
+        self.viewModel.input.textString.subscribe { [weak self] (str:String) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let errorColor = DesignSystemAsset.PrimaryColor.increase.color
+            let passColor = DesignSystemAsset.PrimaryColor.decrease.color
+            
+            print(str)
+            self.countLabel.text = "\(str.count)자"
+            if str.count == 0
+            {
+                self.cancelButton.isHidden = true
+                self.confirmLabel.isHidden = true
+                self.saveButton.isEnabled = false
+                return
+            }
+            
+            else
+            {
+                self.cancelButton.isHidden = false
+                self.confirmLabel.isHidden = false
+            }
+            
+            if  str.isWhiteSpace
+            {
+                self.dividerView.backgroundColor = errorColor
+                self.confirmLabel.text = "제목이 비어있습니다."
+                self.confirmLabel.textColor = errorColor
+                self.countLabel.textColor = errorColor
+                self.saveButton.isEnabled = false
+            }
+            else if str.count > 12 {
+                self.dividerView.backgroundColor = errorColor
+                self.confirmLabel.text = "글자 수를 초과하였습니다."
+                self.confirmLabel.textColor = errorColor
+                self.countLabel.textColor = errorColor
+                self.saveButton.isEnabled = false
+            }
+            
+            else
+            {
+                self.dividerView.backgroundColor = passColor
+                self.confirmLabel.text = "사용할 수 있는 제목입니다."
+                self.confirmLabel.textColor = passColor
+                self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+                self.saveButton.isEnabled = true
+            }
+            
+            
+          
+            
+        }.disposed(by: disposeBag)
       
      
         
