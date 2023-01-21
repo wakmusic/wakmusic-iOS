@@ -16,6 +16,18 @@ class PlayListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
+    
+    @IBAction func PlayOrEditAction(_ sender: UIButton) {
+        
+        if isEdit == false
+        {
+            print("Play")
+        }
+        
+    }
+    var isEdit:Bool = false
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -44,7 +56,7 @@ class PlayListTableViewCell: UITableViewCell {
 }
 
 extension PlayListTableViewCell {
-    func update(_ model: SongInfoDTO,_ isEidting:Bool) {
+    func update(_ model: SongInfoDTO,_ isEditing:Bool) {
 
        
      
@@ -53,8 +65,9 @@ extension PlayListTableViewCell {
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         titleLabel.text =  model.name
         artistLabel.text = model.artist
+        isEdit = isEditing
         
-        button.setImage( isEidting ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)
+        button.setImage( isEditing ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)
         
 
         

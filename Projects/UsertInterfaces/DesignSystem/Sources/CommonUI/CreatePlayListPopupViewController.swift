@@ -11,6 +11,7 @@ import Utility
 import PanModal
 import RxCocoa
 import RxSwift
+import RxKeyboard
 
 
 public enum PlayListControlPopupType{
@@ -35,13 +36,17 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
+
+    @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
+    
     var type:PlayListControlPopupType = .creation
     
     
     @IBAction func cancelAction(_ sender: UIButton) {
         
         playListTextField.rx.text.onNext("")
-        self.view.endEditing(true)
+        viewModel.input.textString.accept("")
+        //self.view.endEditing(true)
         
     }
     
@@ -220,8 +225,34 @@ extension CreatePlayListPopupViewController{
           
             
         }.disposed(by: disposeBag)
-      
-     
+        
+        
+        //키보드 바인딩 작업
+        RxKeyboard.instance.visibleHeight //드라이브: 무조건 메인쓰레드에서 돌아감
+            .skip(1)
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                
+                guard let self = self else {
+                    return
+                }
+                
+                
+                //키보드는 바텀 SafeArea부터 계산되므로 빼야함
+                let window: UIWindow? = UIApplication.shared.windows.first
+                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+                
+               
+                self.fakeViewHeight.constant = keyboardVisibleHeight - safeAreaInsetsBottom
+                self.panModalSetNeedsLayoutUpdate()
+                self.panModalTransition(to: .longForm)
+                print("키보드 높이: \(self.fakeViewHeight.constant)")
+                self.view.layoutIfNeeded()
+                
+                
+                
+                
+            }).disposed(by: disposeBag)
+            
         
         
     }
@@ -245,7 +276,7 @@ extension CreatePlayListPopupViewController: PanModalPresentable {
     public var longFormHeight: PanModalHeight {
     
    
-        return PanModalHeight.contentHeight(300)
+        return PanModalHeight.contentHeight(306 + self.fakeViewHeight.constant)
      }
 
     public var cornerRadius: CGFloat {

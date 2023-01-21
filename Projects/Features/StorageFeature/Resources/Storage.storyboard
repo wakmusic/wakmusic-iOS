@@ -188,6 +188,9 @@
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="move"/>
+                                                    <connections>
+                                                        <action selector="PlayOrEditAction:" destination="AnA-TD-1DQ" eventType="touchUpInside" id="R1t-s8-iGG"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>

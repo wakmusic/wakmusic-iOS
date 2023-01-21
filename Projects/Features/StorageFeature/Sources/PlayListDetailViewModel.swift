@@ -23,7 +23,6 @@ final class PlayListDetailViewModel {
 
     struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let isEditingname:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
     init() {

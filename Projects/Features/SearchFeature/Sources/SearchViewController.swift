@@ -285,8 +285,6 @@ extension SearchViewController {
                 
                 let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom  - 49 //탭바 높이 추가 
                 
-                print(safeAreaInsetsBottom)
-                
                 self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 56
                 self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
                 
