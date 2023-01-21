@@ -72,9 +72,15 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
         let createPlayListPopupViewController = CreatePlayListPopupViewController.viewController(
             title: "플레이리스트 수정하기",
-            btnText: "플레이리스트 수정"
+            btnText: "플레이리스트 수정",
+            type: .edit
         )
+        
+        
+        
         let viewController: PanModalPresentable.LayoutType = createPlayListPopupViewController //
+        
+        
         self.presentPanModal(viewController) //modal Show
         
     }
@@ -91,6 +97,13 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         configureUI()
 
         // Do any additional setup after loading the view.
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print("DIDAPPEAR")
+        
     }
     
     
@@ -284,3 +297,6 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     
     
 }
+
+
+

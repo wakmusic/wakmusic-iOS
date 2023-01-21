@@ -110,6 +110,9 @@
                                         <state key="normal">
                                             <color key="titleColor" name="gray25"/>
                                         </state>
+                                        <connections>
+                                            <action selector="saveAction:" destination="yk9-hj-uZr" eventType="touchUpInside" id="Dw0-dp-9W3"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="plr-Qt-J0G">
                                         <rect key="frame" x="20" y="147" width="0.0" height="37"/>
@@ -145,6 +148,9 @@
                                         <state key="normal" title="취소">
                                             <color key="titleColor" name="gray400"/>
                                         </state>
+                                        <connections>
+                                            <action selector="cancelAction:" destination="yk9-hj-uZr" eventType="touchUpInside" id="8Ym-yL-6LX"/>
+                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ejs-3A-VSi">
                                         <rect key="frame" x="20" y="150" width="353" height="1"/>

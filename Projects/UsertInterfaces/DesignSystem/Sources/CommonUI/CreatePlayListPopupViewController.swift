@@ -12,6 +12,16 @@ import PanModal
 import RxCocoa
 import RxSwift
 
+
+public enum PlayListControlPopupType{
+    case creation
+    case edit
+}
+
+
+
+
+
 public final class  CreatePlayListPopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var saveButton: UIButton!
@@ -25,12 +35,42 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
+    var type:PlayListControlPopupType = .creation
+    
+    
+    @IBAction func cancelAction(_ sender: UIButton) {
+        
+        playListTextField.rx.text.onNext("")
+        self.view.endEditing(true)
+        
+    }
+    
+    
+    @IBAction func saveAction(_ sender: UIButton) {
+        
+        
+        
+        if(type == .creation)
+        {
+            //생성 작업
+        }
+        
+        else
+        {
+            //수정 작업
+        }
+        
+        //네트워크 작업
+        dismiss(animated: true)
+        self.view.endEditing(true)
+    }
+    
     var titleString:String = ""
     var btnString:String = ""
     
     lazy var viewModel = CreatePlayListPopupViewModel()
     
-    var disposeBag = DisposeBag()
+    public var disposeBag = DisposeBag()
     
    
    
@@ -44,12 +84,12 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(title:String,btnText:String) -> CreatePlayListPopupViewController {
+    public static func viewController(title:String,btnText:String,type:PlayListControlPopupType) -> CreatePlayListPopupViewController {
         let viewController = CreatePlayListPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.titleString = title
         viewController.btnString = btnText
-        
+        viewController.type = type
         
         return viewController
     }
@@ -136,7 +176,6 @@ extension CreatePlayListPopupViewController{
             let errorColor = DesignSystemAsset.PrimaryColor.increase.color
             let passColor = DesignSystemAsset.PrimaryColor.decrease.color
             
-            print(str)
             self.countLabel.text = "\(str.count)자"
             if str.count == 0
             {
