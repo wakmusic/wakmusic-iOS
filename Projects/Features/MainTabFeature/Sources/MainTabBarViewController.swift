@@ -29,6 +29,9 @@ class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, 
         ]
     }()
 
+    var previousIndex: Int?
+    var selectedIndex: Int = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,6 +66,20 @@ extension MainTabBarViewController {
         
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
+        
+        self.previousIndex = previous
+        self.selectedIndex = current
+    }
+    
+    func forceUpdateContent(for index: Int) {
+        
+        if let previous = self.previousIndex{
+            remove(asChildViewController: viewControllers[previous])
+        }
+        
+        add(asChildViewController: viewControllers[index])
+        self.previousIndex = self.selectedIndex
+        self.selectedIndex = index
     }
 }
 

@@ -20,6 +20,7 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        DEBUG_LOG("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     

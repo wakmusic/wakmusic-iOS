@@ -31,6 +31,8 @@ extension IntroViewController {
 
     private func configureUI() {
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear

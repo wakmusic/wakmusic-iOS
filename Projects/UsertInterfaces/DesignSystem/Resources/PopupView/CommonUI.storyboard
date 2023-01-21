@@ -88,10 +88,142 @@
             </objects>
             <point key="canvasLocation" x="140" y="-2"/>
         </scene>
+        <!--Play List Edit View Controller-->
+        <scene sceneID="tFt-Wz-yWO">
+            <objects>
+                <viewController storyboardIdentifier="PlayListEditViewController" id="pPP-JP-OTX" customClass="PlayListEditViewController" customModule="DesignSystem" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UuS-yT-4Ge">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TWy-pc-qzS">
+                                <rect key="frame" x="0.0" y="75" width="393" height="56"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="2Up-4b-63E">
+                                        <rect key="frame" x="40" y="0.0" width="313" height="56"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vmD-US-VtC">
+                                                <rect key="frame" x="0.0" y="0.0" width="44.666666666666664" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="전체선택">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="allSelectButtonAction:" destination="pPP-JP-OTX" eventType="touchUpInside" id="chD-Id-Ixe"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYd-L9-rWj">
+                                                <rect key="frame" x="44.666666666666671" y="0.0" width="44.666666666666671" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="노래담기">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p1G-1f-QK4">
+                                                <rect key="frame" x="89.333333333333343" y="0.0" width="44.666666666666657" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="재생목록추가">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9R-RP-5FE">
+                                                <rect key="frame" x="134" y="0.0" width="45" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="재생">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQt-49-2SC">
+                                                <rect key="frame" x="179" y="0.0" width="44.666666666666657" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="삭제">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XTT-is-coB">
+                                                <rect key="frame" x="223.66666666666669" y="0.0" width="44.666666666666686" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="편집">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeW-Jj-NYq">
+                                                <rect key="frame" x="268.33333333333331" y="0.0" width="44.666666666666686" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="공유하기">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="POINT"/>
+                                <constraints>
+                                    <constraint firstItem="2Up-4b-63E" firstAttribute="top" secondItem="TWy-pc-qzS" secondAttribute="top" id="Crd-nU-BR4"/>
+                                    <constraint firstAttribute="bottom" secondItem="2Up-4b-63E" secondAttribute="bottom" id="Jp2-sf-C3H"/>
+                                    <constraint firstAttribute="height" constant="56" id="MjC-GQ-dNq"/>
+                                    <constraint firstItem="2Up-4b-63E" firstAttribute="leading" secondItem="TWy-pc-qzS" secondAttribute="leading" constant="40" id="eNP-7J-yvP"/>
+                                    <constraint firstAttribute="trailing" secondItem="2Up-4b-63E" secondAttribute="trailing" constant="40" id="r7x-z2-rls"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KM5-ul-LPy">
+                                <rect key="frame" x="20" y="59" width="32" height="32"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lke-w1-F88">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-dd-z6e">
+                                        <rect key="frame" x="11.666666666666668" y="5.3333333333333304" width="9" height="21.666666666666671"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" name="POINT"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Lke-w1-F88" firstAttribute="top" secondItem="KM5-ul-LPy" secondAttribute="top" id="32l-rI-73k"/>
+                                    <constraint firstItem="Lke-w1-F88" firstAttribute="leading" secondItem="KM5-ul-LPy" secondAttribute="leading" id="4uI-Uf-Wgn"/>
+                                    <constraint firstItem="6Vn-dd-z6e" firstAttribute="centerY" secondItem="KM5-ul-LPy" secondAttribute="centerY" id="9uk-48-61f"/>
+                                    <constraint firstItem="6Vn-dd-z6e" firstAttribute="centerX" secondItem="KM5-ul-LPy" secondAttribute="centerX" id="NiA-19-YS7"/>
+                                    <constraint firstAttribute="trailing" secondItem="Lke-w1-F88" secondAttribute="trailing" id="XmU-aR-kvM"/>
+                                    <constraint firstAttribute="height" constant="32" id="d5f-PA-VjI"/>
+                                    <constraint firstAttribute="width" constant="32" id="rSG-tQ-Qha"/>
+                                    <constraint firstAttribute="bottom" secondItem="Lke-w1-F88" secondAttribute="bottom" id="sfl-SV-1yI"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Zgz-zs-ZDF"/>
+                        <constraints>
+                            <constraint firstItem="TWy-pc-qzS" firstAttribute="top" secondItem="Zgz-zs-ZDF" secondAttribute="top" constant="16" id="3rR-xf-rST"/>
+                            <constraint firstItem="KM5-ul-LPy" firstAttribute="leading" secondItem="TWy-pc-qzS" secondAttribute="leading" constant="20" id="B2w-0l-luj"/>
+                            <constraint firstItem="Zgz-zs-ZDF" firstAttribute="trailing" secondItem="TWy-pc-qzS" secondAttribute="trailing" id="I4w-s3-40g"/>
+                            <constraint firstItem="TWy-pc-qzS" firstAttribute="leading" secondItem="Zgz-zs-ZDF" secondAttribute="leading" id="ZAe-NR-UYo"/>
+                            <constraint firstItem="KM5-ul-LPy" firstAttribute="top" secondItem="TWy-pc-qzS" secondAttribute="top" constant="-16" id="pIi-cj-MiP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="allSelectButton" destination="vmD-US-VtC" id="Foo-X9-z1r"/>
+                        <outlet property="circleImageView" destination="Lke-w1-F88" id="T5t-he-25O"/>
+                        <outlet property="editButton" destination="XTT-is-coB" id="RtC-Hg-wS1"/>
+                        <outlet property="playButton" destination="x9R-RP-5FE" id="ihx-bT-k32"/>
+                        <outlet property="playListAddButton" destination="p1G-1f-QK4" id="gvP-ay-GOd"/>
+                        <outlet property="removeButton" destination="JQt-49-2SC" id="k2J-de-9to"/>
+                        <outlet property="selectCountLabel" destination="6Vn-dd-z6e" id="zRG-w6-R1o"/>
+                        <outlet property="selectCountView" destination="KM5-ul-LPy" id="rtz-LG-en7"/>
+                        <outlet property="shareButton" destination="QeW-Jj-NYq" id="H8Z-wy-YVY"/>
+                        <outlet property="songAddButton" destination="GYd-L9-rWj" id="0Ai-b0-ufG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ruL-ya-DVc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="943" y="-2"/>
+        </scene>
     </scenes>
     <resources>
         <namedColor name="POINT">
             <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="gray25">
+            <color red="0.99199998378753662" green="0.99199998378753662" blue="0.99199998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

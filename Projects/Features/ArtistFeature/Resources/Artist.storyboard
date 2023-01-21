@@ -232,7 +232,7 @@
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.9882352941176471" green="0.9882352941176471" blue="0.99215686274509807" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="HE6-fo-FPM" secondAttribute="bottom" id="DwA-mq-EGx"/>
                                             <constraint firstItem="HE6-fo-FPM" firstAttribute="top" secondItem="T2t-G0-g3C" secondAttribute="top" id="Izu-Jp-exJ"/>
@@ -348,6 +348,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qxv-p6-EAI">
+                                <rect key="frame" x="0.0" y="59" width="393" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="paR-0f-6gJ"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EqF-3Y-c7v">
                                 <rect key="frame" x="0.0" y="99" width="393" height="80"/>
                                 <subviews>
@@ -406,13 +412,13 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ksh-pj-Ow4">
                                                     <rect key="frame" x="100" y="17.000000000000004" width="206" height="36.333333333333343"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="리와인드 (RE:WIND)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-Yr-eaj">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="리와인드 (RE:WIND)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-Yr-eaj">
                                                             <rect key="frame" x="0.0" y="0.0" width="206" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                             <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이세계아이돌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIv-S7-U4W">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="이세계아이돌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIv-S7-U4W">
                                                             <rect key="frame" x="0.0" y="22" width="206" height="14.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                             <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -450,10 +456,13 @@
                         <viewLayoutGuide key="safeArea" id="RGe-5H-GnI"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="EqF-3Y-c7v" firstAttribute="top" secondItem="RGe-5H-GnI" secondAttribute="top" constant="40" id="Gds-Nq-IOa"/>
+                            <constraint firstItem="Qxv-p6-EAI" firstAttribute="trailing" secondItem="RGe-5H-GnI" secondAttribute="trailing" id="34b-CB-Rjc"/>
+                            <constraint firstItem="EqF-3Y-c7v" firstAttribute="top" secondItem="Qxv-p6-EAI" secondAttribute="bottom" id="NMY-0N-gBQ"/>
                             <constraint firstItem="EqF-3Y-c7v" firstAttribute="trailing" secondItem="RGe-5H-GnI" secondAttribute="trailing" id="WRt-AV-FkI"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="Xon-1C-d7p"/>
                             <constraint firstAttribute="bottom" secondItem="MPq-Ds-wcF" secondAttribute="bottom" id="kbB-VZ-iff"/>
+                            <constraint firstItem="Qxv-p6-EAI" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="noN-re-24Q"/>
+                            <constraint firstItem="Qxv-p6-EAI" firstAttribute="top" secondItem="RGe-5H-GnI" secondAttribute="top" id="oV7-U6-rkF"/>
                             <constraint firstAttribute="trailing" secondItem="MPq-Ds-wcF" secondAttribute="trailing" id="t7q-ao-ZbT"/>
                             <constraint firstItem="EqF-3Y-c7v" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="w6G-Sg-9fu"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="top" secondItem="EqF-3Y-c7v" secondAttribute="bottom" id="woO-bQ-EVq"/>

@@ -26,7 +26,7 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
     
     //Label
     @IBOutlet weak var artistNameLabel: UILabel!
-    
+
     var isBack: Bool = false
     var disposeBag: DisposeBag = DisposeBag()
     
