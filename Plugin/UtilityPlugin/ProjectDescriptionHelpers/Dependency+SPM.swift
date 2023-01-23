@@ -26,7 +26,8 @@ public extension TargetDependency.SPM {
     static let Tabman = TargetDependency.external(name: "Tabman")
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
     static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
-    static let HPParallaxHeader = TargetDependency.external(name: "HPParallaxHeader")    
+    static let HPParallaxHeader = TargetDependency.external(name: "HPParallaxHeader")
+    static let UBottomSheet = TargetDependency.external(name: "UBottomSheet")
 }
 
 public extension Package {

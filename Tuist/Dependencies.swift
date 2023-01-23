@@ -27,7 +27,8 @@ let dependencies = Dependencies(
         .remote(url: "https://github.com/uias/Tabman.git", requirement: .upToNextMajor(from: "3.0.1")),
         .remote(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", requirement: .upToNextMajor(from: "5.0.0")),
         .remote(url: "https://github.com/RxSwiftCommunity/RxKeyboard.git", requirement: .upToNextMajor(from: "2.0.0")),
-        .remote(url: "https://github.com/ngochiencse/HPParallaxHeader", requirement: .upToNextMajor(from: "1.1.8"))
+        .remote(url: "https://github.com/ngochiencse/HPParallaxHeader", requirement: .upToNextMajor(from: "1.1.8")),
+        .remote(url: "https://github.com/OfTheWolf/UBottomSheet", requirement: .upToNextMajor(from: "1.0.10"))
     ],
     platforms: [.iOS]
 )
