@@ -25,9 +25,6 @@ public final class HomeViewController: UIViewController, ViewControllerFromStory
     }
 
     @IBAction func buttonAction(_ sender: Any) {
-        let vc = PlayListEditViewController.viewController()
-        let viewController: PanModalPresentable.LayoutType = vc
-        self.presentPanModal(viewController)
     }
 }
 

@@ -26,12 +26,66 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
 
         configureUI()
         bind()
+        
+        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
     }
     
     public static func viewController() -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
     }
+}
+
+extension ArtistMusicContentViewController: UITableViewDragDelegate, UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        DEBUG_LOG("performDropWith")
+        
+        
+        let destinationIndexPath: IndexPath
+        
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            // Get last index path of table view.
+            let section = tableView.numberOfSections - 1
+            let row = tableView.numberOfRows(inSection: section)
+            destinationIndexPath = IndexPath(row: row, section: section)
+        }
+
+        DEBUG_LOG(destinationIndexPath)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
+        let itemProvider = NSItemProvider(object: "1" as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        var dropProposal = UITableViewDropProposal(operation: .cancel)
+        
+        DEBUG_LOG("destinationIndexPath: \(destinationIndexPath)")
+        // Accept only one drag item.
+        guard session.items.count == 1 else { return dropProposal }
+        
+        // The .move drag operation is available only for dragging within this app and while in edit mode.
+        if tableView.hasActiveDrag {
+//            if tableView.isEditing {
+                dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+//            }
+        } else {
+            // Drag is coming from outside the app.
+            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+        }
+
+        
+        return dropProposal
+    }
+
 }
 
 extension ArtistMusicContentViewController {
@@ -54,7 +108,7 @@ extension ArtistMusicContentViewController {
             .withLatestFrom(dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (indexPath, model) in
                 guard let `self` = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
+//                self.tableView.deselectRow(at: indexPath, animated: true)
                 let model = model[indexPath.row]
             }).disposed(by: disposeBag)
 

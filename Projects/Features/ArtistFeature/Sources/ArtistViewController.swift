@@ -104,8 +104,6 @@ extension ArtistViewController {
                 self.navigationController?.pushViewController(viewController, animated: true)
                 
             }).disposed(by: disposeBag)
-
-
     }
     
     private func configureUI() {

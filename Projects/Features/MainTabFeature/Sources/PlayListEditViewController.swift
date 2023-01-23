@@ -8,6 +8,7 @@
 
 import UIKit
 import Utility
+import DesignSystem
 import PanModal
 
 protocol PlayListEditViewDelegate: AnyObject{
@@ -36,7 +37,7 @@ public final class PlayListEditViewController: UIViewController, ViewControllerF
     }
     
     public static func viewController() -> PlayListEditViewController {
-        let viewController = PlayListEditViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = PlayListEditViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         return viewController
     }
     

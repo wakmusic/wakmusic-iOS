@@ -86,7 +86,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="138" y="5"/>
+            <point key="canvasLocation" x="-7" y="5"/>
         </scene>
         <!--Artist Detail Header View Controller-->
         <scene sceneID="II6-Cb-uhY">
@@ -244,7 +244,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BOc-PB-qQj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="956" y="-452"/>
+            <point key="canvasLocation" x="1639" y="-340"/>
         </scene>
         <!--Artist Detail View Controller-->
         <scene sceneID="c2e-kq-mwt">
@@ -452,7 +452,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aNc-Li-0YJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="956" y="5"/>
+            <point key="canvasLocation" x="825" y="5"/>
         </scene>
         <!--Artist Music View Controller-->
         <scene sceneID="5Ka-cn-Rzy">
@@ -496,7 +496,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fGW-ek-LOP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1799" y="5"/>
+            <point key="canvasLocation" x="1640" y="160"/>
         </scene>
         <!--Artist Music Content View Controller-->
         <scene sceneID="vjP-vv-651">
