@@ -25,7 +25,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7I-eD-s9E">
                             <rect key="frame" x="20" y="16" width="226" height="52"/>
-                            <color key="backgroundColor" red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="0.40211092715231789" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="rzt-kp-cHE"/>
                             </constraints>
@@ -40,7 +40,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50f-Sn-UVp">
                             <rect key="frame" x="254" y="16" width="226" height="52"/>
-                            <color key="backgroundColor" red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="0.40097268211920528" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="랜덤재생">

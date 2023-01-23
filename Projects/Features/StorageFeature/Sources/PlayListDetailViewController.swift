@@ -91,9 +91,11 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
     }
     
-    var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[PlayListSectionModel.init(model: .wmRecommand, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
+    let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+    let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
     
-//    var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[])
+    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,7 +105,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
         // Drag & Drop 기능을 위한 부분
         
-        self.tableView.dragInteractionEnabled = true //첫 화면 시  드래그 앤 드롭 방지
+        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
         self.tableView.dragDelegate = self
         self.tableView.dropDelegate = self
         
@@ -133,7 +135,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
 extension PlayListDetailViewController{
     
     private func configureUI(){
-        
+    
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
         }
@@ -213,8 +215,39 @@ extension PlayListDetailViewController{
                 
                 self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
             })
-            .bind(to: tableView.rx.items(dataSource: createDatasource()))
-        .disposed(by: disposeBag)
+            .bind(to: tableView.rx.items){[weak self] (tableView, index, model) -> UITableViewCell in
+       
+                
+                guard let self = self else { return UITableViewCell() }
+
+                let bgView = UIView()
+                bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+                switch self.pt {
+                    
+                case .custom:
+                    
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? PlayListTableViewCell else{
+                        return UITableViewCell()
+                    }
+                    
+                    cell.selectedBackgroundView = bgView
+                    cell.update(model,self.viewModel.output.isEditinglist.value)
+                    
+                    return cell
+                case .wmRecommand:
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell",for: IndexPath(row: index, section: 0)) as? SongListCell else{
+                        return UITableViewCell()
+                    }
+                    
+                    cell.selectedBackgroundView = bgView
+                    
+                    return cell
+                }
+                
+                
+            }
+            .disposed(by: disposeBag)
+
         
                
         
@@ -228,49 +261,7 @@ extension PlayListDetailViewController{
                 
       
     }
-    
-    func createDatasource() -> RxTableViewSectionedReloadDataSource<PlayListSectionModel>{
-
-        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
-
-            guard let self = self else { return UITableViewCell() }
-
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
-            switch self.pt {
-            
-            case .custom:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell", for: indexPath) as? PlayListTableViewCell else{
-                    return UITableViewCell()
-                }
-               
-                cell.selectedBackgroundView = bgView
-                cell.update(model,self.viewModel.output.isEditinglist.value)
-                
-                return cell
-            case .wmRecommand:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
-                    return UITableViewCell()
-                }
-                
-                cell.selectedBackgroundView = bgView
-                
-                return cell
-            }
-            
-
-
-
-        }, titleForHeaderInSection: { (datasource, sectionNumber) -> String? in
-            return nil
-        })
-
-        return datasource
-    }
-
-    
-    
-    
+ 
 }
    
     
@@ -285,9 +276,7 @@ extension PlayListDetailViewController:UITableViewDelegate{
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         
         view.delegate = self
-        
-    
-        
+
         
         return view
     }
@@ -301,6 +290,16 @@ extension PlayListDetailViewController:UITableViewDelegate{
         
         return 60
     }
+    
+    
+    
+//    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+//
+//        print("from \(sourceIndexPath) to \(proposedDestinationIndexPath)")
+//
+//        return IndexPath(item: 0, section: 0)
+//
+//    }
     
     
 
@@ -322,7 +321,8 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
 extension PlayListDetailViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
-
+        
+        sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -340,8 +340,6 @@ extension PlayListDetailViewController: UITableViewDragDelegate {
 extension PlayListDetailViewController: UITableViewDropDelegate {
     
     
-    
-    
     // 손가락을 화면에서 뗐을 때. 드롭한 데이터를 불러와서 data source를 업데이트 하고, 필요하면 새로운 행을 추가한다.
     public func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         
@@ -355,7 +353,19 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-
+        destIndexPath.accept(destinationIndexPath)
+        
+        
+        
+        var curr = dataSource.value
+        var tmp = curr[sourceIndexPath.value.row]
+        curr.remove(at: sourceIndexPath.value.row)
+        curr.insert(tmp, at: destIndexPath.value.row)
+        
+        print("\(sourceIndexPath.value.row) \(destIndexPath.value.row)")
+        dataSource.accept(curr)
+        
+        
         DEBUG_LOG(destinationIndexPath)
     }
     
@@ -363,7 +373,7 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
     public func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
         var dropProposal = UITableViewDropProposal(operation: .cancel)
         
-        DEBUG_LOG("destinationIndexPath: \(destinationIndexPath)")
+       
         // Accept only one drag item.
         guard session.items.count == 1 else { return dropProposal }
         
@@ -384,7 +394,4 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
     
     
 }
-
-
-
 

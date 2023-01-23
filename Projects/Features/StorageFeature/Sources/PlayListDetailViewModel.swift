@@ -18,6 +18,8 @@ final class PlayListDetailViewModel {
 
     struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         
     }
 
@@ -29,6 +31,7 @@ final class PlayListDetailViewModel {
         
         print("✅ PlayListDetailViewModel 생성")
         
-
     }
+    
+    
 }

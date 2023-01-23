@@ -187,6 +187,8 @@ extension CreatePlayListPopupViewController{
                 self.cancelButton.isHidden = true
                 self.confirmLabel.isHidden = true
                 self.saveButton.isEnabled = false
+                self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+                self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
                 return
             }
             
