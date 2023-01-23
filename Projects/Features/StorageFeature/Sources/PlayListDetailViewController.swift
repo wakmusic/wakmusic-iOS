@@ -57,6 +57,9 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         self.editStateLabel.isHidden = false
         viewModel.output.isEditinglist.accept(true)
         
+        
+        tableView.dragInteractionEnabled = true // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+        
     }
     
     
@@ -67,7 +70,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         self.editStateLabel.isHidden = true
         viewModel.output.isEditinglist.accept(false)
         
-        
+       
+        tableView.dragInteractionEnabled = false // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
     }
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
@@ -87,17 +91,23 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
     }
     
-    var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[PlayListSectionModel.init(model: .wmRecommand, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
+    var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[PlayListSectionModel.init(model: .wmRecommand, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
     
 //    var dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value:[])
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        print("VIEW DIE LOAD")
         navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
         
         configureUI()
-
+        
+        // Drag & Drop 기능을 위한 부분
+        
+        self.tableView.dragInteractionEnabled = true //첫 화면 시  드래그 앤 드롭 방지
+        self.tableView.dragDelegate = self
+        self.tableView.dropDelegate = self
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -130,7 +140,7 @@ extension PlayListDetailViewController{
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
         
-        
+         
         self.completeButton.isHidden = true
         self.editStateLabel.isHidden = true
         
@@ -208,11 +218,14 @@ extension PlayListDetailViewController{
         
                
         
-                viewModel.output.isEditinglist.withLatestFrom(dataSource)
-                .bind(to: dataSource)
-                .disposed(by: disposeBag)
-                //에딧 상태에 따른 cell 변화를 reload 해주기 위해 
+        viewModel.output.isEditinglist.withLatestFrom(dataSource)
+            .bind(to: dataSource)
+            .disposed(by: disposeBag)
+                //에딧 상태에 따른 cell 변화를 reload 해주기 위해
         
+                
+                
+                
       
     }
     
@@ -290,7 +303,13 @@ extension PlayListDetailViewController:UITableViewDelegate{
     }
     
     
+
+
+    
+       
 }
+
+
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: DesignSystem.PlayEvent) {
@@ -299,6 +318,73 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     
     
 }
+
+extension PlayListDetailViewController: UITableViewDragDelegate {
+    public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
+
+        let itemProvider = NSItemProvider(object: "1" as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+        
+        
+        // 애플의 공식 문서에서는 사용자가 특정 행을 드래그하는 것을 원하지 않으면 빈 배열을 리턴하라고 했는데,
+        //빈 배열을 리턴했을 때도 드래그가 가능했습니다. 이 부분은 더 자세히 알아봐야 할 것 같습니다.
+    }
+    
+    
+    
+    
+}
+
+extension PlayListDetailViewController: UITableViewDropDelegate {
+    
+    
+    
+    
+    // 손가락을 화면에서 뗐을 때. 드롭한 데이터를 불러와서 data source를 업데이트 하고, 필요하면 새로운 행을 추가한다.
+    public func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        
+        let destinationIndexPath: IndexPath
+
+                if let indexPath = coordinator.destinationIndexPath {
+                    destinationIndexPath = indexPath
+                } else {
+                    // Get last index path of table view.
+                    let section = tableView.numberOfSections - 1
+                    let row = tableView.numberOfRows(inSection: section)
+                    destinationIndexPath = IndexPath(row: row, section: section)
+                }
+
+        DEBUG_LOG(destinationIndexPath)
+    }
+    
+    // 드래그할 떄 (손가락을 화면에 대고 있을 때)
+    public func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        var dropProposal = UITableViewDropProposal(operation: .cancel)
+        
+        DEBUG_LOG("destinationIndexPath: \(destinationIndexPath)")
+        // Accept only one drag item.
+        guard session.items.count == 1 else { return dropProposal }
+        
+        // The .move drag operation is available only for dragging within this app and while in edit mode.
+        if tableView.hasActiveDrag {
+            //            if tableView.isEditing {
+            dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            //            }
+        } else {
+            // Drag is coming from outside the app.
+            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+        }
+        
+        
+        return dropProposal
+    }
+    
+    
+    
+}
+
 
 
 

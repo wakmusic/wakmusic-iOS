@@ -32,6 +32,8 @@ public extension PreferenceManager {
         
         // UserDefaults와 Rx Subject에 동기화
         UserDefaults.standard.set(currentRecentRecords, forKey: Constants.recentRecords.rawValue)
+        
+        
         recentRecordsSubject.onNext(currentRecentRecords)
     }
     
