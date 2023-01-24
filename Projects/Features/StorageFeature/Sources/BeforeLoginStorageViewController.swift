@@ -12,6 +12,10 @@ import DesignSystem
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    @IBOutlet weak var fakeView: UIView!
+    
     @IBOutlet weak var appLogoImageView: UIImageView!
     
     @IBOutlet weak var appNameLabel: UILabel!
@@ -19,9 +23,18 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var descriptionLabel: UILabel!
     
     @IBOutlet weak var naverLoginButton: UIButton!
+    @IBOutlet weak var naverImageVIew: UIImageView!
+    @IBOutlet weak var naverSuperView: UIView!
     
+
+    
+    @IBOutlet weak var googleImageView: UIImageView!
+    @IBOutlet weak var googleSuperView: UIView!
     @IBOutlet weak var googleLoginButton: UIButton!
+
     
+    @IBOutlet weak var appleImageView: UIImageView!
+    @IBOutlet weak var appleSuperView: UIView!
     @IBOutlet weak var appleLoginButton: UIButton!
     
     @IBOutlet weak var serviceButton: UIButton!
@@ -38,6 +51,9 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
         // Do any additional setup after loading the view.
     }
     
+    
+   
+    
 
     public static func viewController() -> BeforeLoginStorageViewController {
         let viewController = BeforeLoginStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
@@ -49,7 +65,7 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
 extension BeforeLoginStorageViewController{
     
     private func configureUI(){
-        
+        navigationController?.setNavigationBarHidden(true, animated: false)
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
         
         
@@ -65,35 +81,31 @@ extension BeforeLoginStorageViewController{
                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color], range: NSRange(location: 0, length: attr.string.count))
         }
         
-        naverLoginButton.layer.cornerRadius = 12
-        naverLoginButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
-        naverLoginButton.layer.borderWidth = 1
+        
+        let superViewArr:[UIView] = [naverSuperView,googleSuperView,appleSuperView]
+        
+        
+        for sv in superViewArr {
+            sv.layer.cornerRadius = 12
+            sv.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+            sv.layer.borderWidth = 1
+        }
+        
+        
+        naverImageVIew.image = DesignSystemAsset.Signup.naver.image
         naverLoginButton.setAttributedTitle(loginAttributedString[0], for: .normal)
+       
         
         
-        googleLoginButton.layer.cornerRadius = 12
-        googleLoginButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
-        googleLoginButton.layer.borderWidth = 1
+        googleImageView.image = DesignSystemAsset.Signup.google.image
         googleLoginButton.setAttributedTitle(loginAttributedString[1], for: .normal)
         
-        
-        appleLoginButton.layer.cornerRadius = 12
-        appleLoginButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
-        appleLoginButton.layer.borderWidth = 1
+       
+        appleImageView.image = DesignSystemAsset.Signup.apple.image
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
-        
+       
         
          
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         let serviceAttributedString = NSMutableAttributedString.init(string: "서비스 이용약관")
         
@@ -121,6 +133,9 @@ extension BeforeLoginStorageViewController{
         
         
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        
+        
+        
         
         
     }
