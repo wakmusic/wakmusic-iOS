@@ -44,6 +44,7 @@ extension HomeViewController {
                           RecommendPlayListDTO(title: "캐롤", image: DesignSystemAsset.RecommendPlayList.carol.image),
                           RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
         
+        
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,
                                                                 y: 0,
                                                                 width: APP_WIDTH(),

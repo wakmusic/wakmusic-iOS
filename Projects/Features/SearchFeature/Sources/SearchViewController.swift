@@ -17,19 +17,29 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
     
-    var viewModel = SearchViewModel()
+    lazy var viewModel = SearchViewModel()
     let disposeBag = DisposeBag()
     
-    let beforeVc = BeforeSearchContentViewController.viewController()
-    let afterVc = AfterSearchViewController.viewController()
+    lazy var beforeVc = BeforeSearchContentViewController.viewController()
+    lazy var  afterVc = AfterSearchViewController.viewController()
     
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         DEBUG_LOG("\(Self.self) viewDidLoad")
         configureUI()
+       
 
     }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil // 현재 탭에서 화면이동이 일어날 시 , 빠져나올 때 swipe로 이동
+        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
+    }
+    
+   
+    
 //    override public func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
 //
@@ -91,7 +101,7 @@ extension SearchViewController {
         
         //MARK: 검색 취소 버튼
         self.cancelButton.titleLabel?.text = "취소"
-        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 15)
+        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         self.cancelButton.layer.cornerRadius = 4
         self.cancelButton.layer.borderColor =  DesignSystemAsset.GrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
@@ -209,7 +219,7 @@ extension SearchViewController {
                 {
                     self.searchTextFiled.rx.text.onNext("")
                     let textPopupViewController = TextPopupViewController.viewController(
-                        text: "검색어를 입려해주세요.",
+                        text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true
                     )
                     let viewController: PanModalPresentable.LayoutType = textPopupViewController //
@@ -274,8 +284,6 @@ extension SearchViewController {
                 let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
                 
                 let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom  - 49 //탭바 높이 추가 
-                
-                print(safeAreaInsetsBottom)
                 
                 self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 56
                 self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌

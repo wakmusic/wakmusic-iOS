@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import StorageFeature
 
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
@@ -48,8 +49,9 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
         bindTable()
         
 
-        
     }
+    
+   
     
     public static func viewController() -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
@@ -264,10 +266,10 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
         
-        let vc = AfterSearchContentViewController.viewController(.all)
+        let vc = PlayListDetailViewController.viewController(.custom)
         
         self.parent?.navigationController?.pushViewController(vc, animated: true)
-        
+     
         
     }
     

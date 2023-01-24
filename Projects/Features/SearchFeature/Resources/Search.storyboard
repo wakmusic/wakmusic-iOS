@@ -76,7 +76,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
-                                <rect key="frame" x="0.0" y="111" width="393" height="707"/>
+                                <rect key="frame" x="0.0" y="115" width="393" height="703"/>
                                 <color key="backgroundColor" name="SUB 1"/>
                             </tableView>
                         </subviews>
@@ -84,7 +84,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="trailing" secondItem="AFm-fr-N46" secondAttribute="trailing" id="7tt-pj-WAb"/>
-                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="52" id="eIZ-1L-S7b"/>
+                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="56" id="eIZ-1L-S7b"/>
                             <constraint firstItem="rcw-Ju-H6e" firstAttribute="bottom" secondItem="AFm-fr-N46" secondAttribute="bottom" id="fma-yd-7O3"/>
                             <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
                         </constraints>
@@ -119,16 +119,17 @@
                                                 </constraints>
                                             </imageView>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VJU-GJ-8b6">
-                                                <rect key="frame" x="54" y="0.0" width="255" height="56"/>
+                                                <rect key="frame" x="54" y="0.0" width="269" height="56"/>
+                                                <color key="textColor" name="gray900"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwf-8T-rR0" userLabel="CancelButton">
-                                                <rect key="frame" x="314" y="14" width="59" height="28"/>
+                                                <rect key="frame" x="328" y="16" width="45" height="24"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="28" id="XVT-vK-aPk"/>
-                                                    <constraint firstAttribute="width" constant="59" id="jXq-dI-uMa"/>
+                                                    <constraint firstAttribute="height" constant="24" id="XVT-vK-aPk"/>
+                                                    <constraint firstAttribute="width" constant="45" id="jXq-dI-uMa"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
