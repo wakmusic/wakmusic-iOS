@@ -7,7 +7,6 @@
 //
 import UIKit
 import Utility
-import DesignSystem
 import RxRelay
 import RxSwift
 import RxCocoa
@@ -15,14 +14,12 @@ import RxDataSources
 import PanModal
 
 
-// MARK: TODO 리스트 순서 변경
+
 public enum PlayListType{
     case custom
     case wmRecommand
 }
 
-
-typealias PlayListSectionModel = SectionModel<PlayListType,SongInfoDTO>
 
 public class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -115,14 +112,12 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        print("DIDAPPEAR")
-        
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
     
     public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
-        let viewController = PlayListDetailViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.pt = pt
         
@@ -240,6 +235,7 @@ extension PlayListDetailViewController{
                     }
                     
                     cell.selectedBackgroundView = bgView
+                    cell.update(model)
                     
                     return cell
                 }

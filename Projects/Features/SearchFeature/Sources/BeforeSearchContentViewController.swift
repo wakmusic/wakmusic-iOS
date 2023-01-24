@@ -266,7 +266,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
         
-        let vc = PlayListDetailViewController.viewController(.custom)
+        let vc = PlayListDetailViewController.viewController(.wmRecommand)
         
         self.parent?.navigationController?.pushViewController(vc, animated: true)
      
