@@ -28,14 +28,14 @@ public extension WMAPI {
 }
 
 public enum WMDomain: String {
-    case auth = "/api/auth"
-    case charts = "/api/charts"
-    case songs = "/api/songs"
-    case artist = "/api/artist"
-    case user = "/api/user"
-    case playlist = "/api/playlist"
-    case like = "/api/like"
-    case common = "/static"
+    case auth = "api/auth"
+    case charts = "api/charts"
+    case songs = "api/songs"
+    case artist = "api/artist"
+    case user = "api/user"
+    case playlist = "api/playlist"
+    case like = "api/like"
+    case common = "static"
 }
 
 extension WMDomain {
