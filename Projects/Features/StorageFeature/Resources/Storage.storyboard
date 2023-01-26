@@ -159,7 +159,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="J4k-Rw-G6T">
-                                                        <rect key="frame" x="20" y="586" width="353" height="44"/>
+                                                        <rect key="frame" x="20" y="504" width="353" height="44"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1rI-74-Mr9">
                                                                 <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="44"/>
@@ -182,14 +182,14 @@
                                                         </constraints>
                                                     </stackView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="버전 정보 2.0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nCV-3F-Ir0">
-                                                        <rect key="frame" x="144" y="650" width="105" height="89"/>
+                                                        <rect key="frame" x="144" y="568" width="105" height="171"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" name="gray400"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="J4k-Rw-G6T" firstAttribute="top" secondItem="M9P-X7-Cjj" secondAttribute="bottom" constant="122" id="54n-Gt-Le6"/>
+                                                    <constraint firstItem="J4k-Rw-G6T" firstAttribute="top" secondItem="M9P-X7-Cjj" secondAttribute="bottom" constant="40" id="54n-Gt-Le6"/>
                                                     <constraint firstItem="J4k-Rw-G6T" firstAttribute="leading" secondItem="1VD-6i-BTv" secondAttribute="leading" constant="20" id="9eu-Dv-5wP"/>
                                                     <constraint firstItem="M9P-X7-Cjj" firstAttribute="top" secondItem="XiS-Xi-75W" secondAttribute="bottom" constant="40" id="Ac7-h6-U91"/>
                                                     <constraint firstAttribute="trailing" secondItem="J4k-Rw-G6T" secondAttribute="trailing" constant="20" id="DCS-fF-hEc"/>
