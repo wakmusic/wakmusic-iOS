@@ -152,10 +152,12 @@ extension CreatePlayListPopupViewController{
         self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         
         
-        saveButton.setTitle(btnString, for: .normal)
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
-        saveButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        saveButton.setAttributedTitle(NSMutableAttributedString(string:btnString,
+                                                                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                                                             .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        
 
         saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         saveButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)

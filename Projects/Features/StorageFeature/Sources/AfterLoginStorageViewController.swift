@@ -12,6 +12,7 @@ import DesignSystem
 import Pageboy
 import Tabman
 import RxSwift
+import PanModal
 
 class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
@@ -30,6 +31,18 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
         
     }
     
+    @IBAction func pressEditProfileAction(_ sender: UIButton) {
+        
+        let vc = ProfilePopViewController.viewController()
+        
+        
+        let viewController: PanModalPresentable.LayoutType = vc //
+
+        
+        self.presentPanModal(viewController) //modal Show
+        
+        
+    }
     
     
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
