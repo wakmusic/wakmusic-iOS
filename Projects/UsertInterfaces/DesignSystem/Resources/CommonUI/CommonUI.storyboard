@@ -463,10 +463,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lfm-oc-xco">
-                                <rect key="frame" x="0.0" y="59" width="393" height="306"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="393"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FKm-XI-ter">
-                                        <rect key="frame" x="20" y="230" width="353" height="56"/>
+                                        <rect key="frame" x="20" y="317" width="353" height="56"/>
                                         <color key="backgroundColor" name="POINT"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="als-zM-7Dk"/>
@@ -486,16 +486,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="OKM-ju-v51">
-                                        <rect key="frame" x="20" y="77" width="353" height="113"/>
+                                        <rect key="frame" x="20" y="77" width="353" height="200"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rn8-fQ-2mL">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="ypq-pJ-dSg"/>
+                                        </constraints>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rn8-fQ-2mL">
                                             <size key="itemSize" width="128" height="128"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ccE-lQ-LsC">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProfileCollectionViewCell" id="ccE-lQ-LsC" customClass="ProfileCollectionViewCell" customModule="DesignSystem" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="eKV-i4-9yG">
@@ -513,6 +516,9 @@
                                                         <constraint firstItem="m2O-QW-Wrz" firstAttribute="top" secondItem="eKV-i4-9yG" secondAttribute="top" id="wqo-CF-O98"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
+                                                <connections>
+                                                    <outlet property="imageView" destination="m2O-QW-Wrz" id="TUG-O8-pYx"/>
+                                                </connections>
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
@@ -525,14 +531,13 @@
                                     <constraint firstItem="FKm-XI-ter" firstAttribute="top" secondItem="OKM-ju-v51" secondAttribute="bottom" constant="40" id="JjC-4a-TZo"/>
                                     <constraint firstAttribute="trailing" secondItem="FKm-XI-ter" secondAttribute="trailing" constant="20" id="KiK-5b-FsN"/>
                                     <constraint firstAttribute="trailing" secondItem="OKM-ju-v51" secondAttribute="trailing" constant="20" id="ZFz-cy-rnT"/>
-                                    <constraint firstAttribute="height" constant="306" id="bsd-O1-5BE"/>
                                     <constraint firstAttribute="bottom" secondItem="FKm-XI-ter" secondAttribute="bottom" constant="20" id="cx7-Ce-jXF"/>
                                     <constraint firstItem="kmo-S4-OX4" firstAttribute="leading" secondItem="lfm-oc-xco" secondAttribute="leading" constant="20" id="nEe-fo-oTD"/>
                                     <constraint firstItem="kmo-S4-OX4" firstAttribute="top" secondItem="lfm-oc-xco" secondAttribute="top" constant="24" id="ss6-IM-hKI"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sml-vw-qLm">
-                                <rect key="frame" x="0.0" y="365" width="393" height="0.0"/>
+                                <rect key="frame" x="0.0" y="452" width="393" height="0.0"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="G7p-1r-V8K"/>
@@ -551,6 +556,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="collectionVIewHeight" destination="ypq-pJ-dSg" id="lNq-DY-9zz"/>
                         <outlet property="collectionView" destination="OKM-ju-v51" id="T03-NX-3ji"/>
                         <outlet property="saveButton" destination="FKm-XI-ter" id="MQA-r6-IZi"/>
                         <outlet property="titleLabel" destination="kmo-S4-OX4" id="jxN-D7-tdh"/>
