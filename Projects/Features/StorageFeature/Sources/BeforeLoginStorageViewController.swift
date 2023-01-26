@@ -133,7 +133,7 @@ extension BeforeLoginStorageViewController{
         
         
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        versionLabel.text = APP_VERSION()
+        versionLabel.text = "버전정보 \(APP_VERSION())"
         
         
         
