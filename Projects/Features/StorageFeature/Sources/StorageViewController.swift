@@ -9,9 +9,10 @@ public final class StorageViewController: UIViewController, ViewControllerFromSt
     
     @IBOutlet weak public var contentView: UIView!
     
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: true)
     
     lazy var bfLoginView = BeforeLoginStorageViewController.viewController()
+    lazy var afLoginView = AfterLoginStorageViewController.viewController()
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -48,13 +49,13 @@ extension StorageViewController{
                 return
             }
             
-            if(login)
+            if login
             {
-                
+                self.add(asChildViewController: self.afLoginView)
             }
             else
             {
-                print("HELLo")
+                
                 self.add(asChildViewController:self.bfLoginView)
             }
             
