@@ -65,7 +65,7 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
 extension BeforeLoginStorageViewController{
     
     private func configureUI(){
-        navigationController?.setNavigationBarHidden(true, animated: false)
+
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
         
         

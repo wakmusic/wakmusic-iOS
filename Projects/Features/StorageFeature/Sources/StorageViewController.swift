@@ -17,9 +17,12 @@ public final class StorageViewController: UIViewController, ViewControllerFromSt
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         
         configureUI()
+        
+        
+        
         
     }
 
@@ -33,9 +36,7 @@ public final class StorageViewController: UIViewController, ViewControllerFromSt
 extension StorageViewController{
     
     private func configureUI() {
-    
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         bindSubView()
     }

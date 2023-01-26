@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import Pageboy
 import Tabman
+import RxSwift
 
 class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
@@ -20,7 +21,20 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var editButton: UIButton!
+    
+    
+    
+    @IBAction func pressEditAction(_ sender: UIButton) {
+        
+        viewModel.output.isEditing.accept(!viewModel.output.isEditing.value)
+        
+    }
+    
+    
+    
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
+    lazy var viewModel = AfterLoginStroageViewModel()
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +95,33 @@ extension AfterLoginStorageViewController{
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
+        bindRx()
         
+        
+    }
+    
+    private func bindRx()
+    {
+        viewModel.output.isEditing.subscribe { [weak self] (res:Bool) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let attr = NSMutableAttributedString(string: res ? "완료" : "편집",
+                                                 attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
+                                                              .foregroundColor: res ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
+            self.editButton.layer.cornerRadius = 4
+            self.editButton.layer.borderColor = res ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
+            self.editButton.layer.borderWidth = 1
+            self.editButton.backgroundColor = .clear
+            
+            self.editButton.setAttributedTitle(attr, for: .normal)
+            
+            
+            
+            
+        }.disposed(by: disposeBag)
     }
     
 }
