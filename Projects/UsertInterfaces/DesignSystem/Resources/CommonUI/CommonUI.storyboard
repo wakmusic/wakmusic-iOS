@@ -93,7 +93,7 @@
         <!--Play List Control Popup View Controller-->
         <scene sceneID="RXD-LM-lNS">
             <objects>
-                <viewController storyboardIdentifier="CreatePlayListPopupViewController" id="yk9-hj-uZr" customClass="PlayListControlPopupViewController" customModule="DesignSystem" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayListControlPopupViewController" id="yk9-hj-uZr" customClass="PlayListControlPopupViewController" customModule="DesignSystem" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2lo-ni-wn7">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

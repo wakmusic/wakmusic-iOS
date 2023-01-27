@@ -17,15 +17,13 @@ import PanModal
 class MyPlayListViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    var isEdit:BehaviorRelay<Bool> = BehaviorRelay(value: false)
+
     
     var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트2", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트3", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트4", numberOfSong: 100)])
     
     //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
-    let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-    let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+
+    lazy var viewModel = MyPlayListViewModel()
     
     var disposeBag = DisposeBag()
     
@@ -88,14 +86,14 @@ extension MyPlayListViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model: model, isEditing: self.isEdit.value)
+                cell.update(model: model, isEditing: self.viewModel.output.isEditinglist.value)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-        isEdit
+        self.viewModel.output.isEditinglist
             .do(onNext: { [weak self] (res:Bool) in
                 
                 guard let self = self else{
@@ -135,13 +133,13 @@ extension MyPlayListViewController:UITableViewDelegate{
       
 
         header.delegate = self
-        return dataSource.value.isEmpty ? nil :  isEdit.value ? nil : header
+        return dataSource.value.isEmpty ? nil :  self.viewModel.output.isEditinglist.value ? nil : header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return dataSource.value.isEmpty ? 0 : isEdit.value ? 0 : 140
+        return dataSource.value.isEmpty ? 0 : self.viewModel.output.isEditinglist.value ? 0 : 140
         
         
     }
@@ -167,7 +165,7 @@ extension  MyPlayListViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        sourceIndexPath.accept(indexPath)
+        self.viewModel.input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -198,16 +196,15 @@ extension  MyPlayListViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        destIndexPath.accept(destinationIndexPath)
+        self.viewModel.input.destIndexPath.accept(destinationIndexPath)
         
         
         
         var curr = dataSource.value
-        var tmp = curr[sourceIndexPath.value.row]
-        curr.remove(at: sourceIndexPath.value.row)
-        curr.insert(tmp, at: destIndexPath.value.row)
+        var tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
+        curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
         
-        DEBUG_LOG("\(sourceIndexPath.value.row) \(destIndexPath.value.row)")
         dataSource.accept(curr)
         
         

@@ -66,7 +66,7 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        vc1.isEdit.accept(false)
+        vc1.viewModel.output.isEditinglist.accept(false)
         vc2.viewModel.output.isEditinglist.accept(false)
         
         viewModel.output.isEditing.accept(false)
@@ -173,7 +173,7 @@ extension AfterLoginStorageViewController{
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
-                    vc.isEdit.accept(res)
+                    vc.viewModel.output.isEditinglist.accept(res)
                 }
                 
                 else{

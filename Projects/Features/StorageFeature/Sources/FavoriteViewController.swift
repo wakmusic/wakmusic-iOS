@@ -17,7 +17,9 @@ class FavoriteViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    //var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    
+    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [])
     
     lazy var viewModel = FavoriteViewModel()
     var disposeBag = DisposeBag()
