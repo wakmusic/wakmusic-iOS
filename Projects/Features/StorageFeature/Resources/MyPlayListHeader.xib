@@ -35,6 +35,7 @@
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odp-CO-2uu">
                             <rect key="frame" x="0.0" y="0.0" width="560" height="52"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="플레이리스트 만들기">
                                 <color key="titleColor" name="gray900"/>
@@ -44,7 +45,6 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="52" id="2IJ-Rz-JgI"/>
                         <constraint firstAttribute="bottom" secondItem="Odp-CO-2uu" secondAttribute="bottom" id="9wA-lY-bNW"/>
@@ -67,16 +67,16 @@
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HON-xU-WgO">
                             <rect key="frame" x="0.0" y="0.0" width="560" height="52"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="플레이리스트 가져오기">
                                 <color key="titleColor" name="gray900"/>
                             </state>
                             <connections>
-                                <action selector="sharePlayListAction:" destination="-1" eventType="touchUpInside" id="LzR-zu-YoM"/>
+                                <action selector="loadPlayListAction:" destination="-1" eventType="touchUpInside" id="4OI-3u-vfo"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="HON-xU-WgO" firstAttribute="top" secondItem="mqR-h1-U6y" secondAttribute="top" id="678-6a-rF6"/>
                         <constraint firstAttribute="height" constant="52" id="A8V-b1-gDM"/>

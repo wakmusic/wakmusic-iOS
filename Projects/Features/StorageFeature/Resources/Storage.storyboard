@@ -373,11 +373,100 @@
             </objects>
             <point key="canvasLocation" x="1632.824427480916" y="4.9295774647887329"/>
         </scene>
+        <!--My Play List View Controller-->
+        <scene sceneID="Xx3-OI-gKt">
+            <objects>
+                <viewController storyboardIdentifier="MyPlayListViewController" id="sGd-6b-4i6" customClass="MyPlayListViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HZM-LB-aUt">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DGI-pW-v8E">
+                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
+                                <color key="backgroundColor" name="gray100"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyPlayListTableViewCell" id="e4v-he-MOf" customClass="MyPlayListTableViewCell" customModule="StorageFeature">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="e4v-he-MOf" id="VoL-j0-uDR">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="k48-ug-XH5">
+                                                    <rect key="frame" x="20" y="2" width="40" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="TG6-XU-Nfo"/>
+                                                        <constraint firstAttribute="width" constant="40" id="j7X-u2-kPX"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Jhl-EH-Z0M">
+                                                    <rect key="frame" x="68" y="1.6666666666666679" width="41.333333333333343" height="40.666666666666657"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHT-8H-NlU">
+                                                            <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2jM-cH-P2L">
+                                                            <rect key="frame" x="0.0" y="20.333333333333336" width="41.333333333333336" height="20.333333333333336"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8O-jB-v6M">
+                                                    <rect key="frame" x="341" y="6" width="32" height="32"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="play"/>
+                                                    <connections>
+                                                        <action selector="buttonAction:" destination="e4v-he-MOf" eventType="touchUpInside" id="Ra4-r2-JLk"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="k48-ug-XH5" firstAttribute="centerY" secondItem="VoL-j0-uDR" secondAttribute="centerY" id="4lK-pU-xgO"/>
+                                                <constraint firstItem="Jhl-EH-Z0M" firstAttribute="leading" secondItem="k48-ug-XH5" secondAttribute="trailing" constant="8" id="6L2-Qw-7WU"/>
+                                                <constraint firstAttribute="trailing" secondItem="J8O-jB-v6M" secondAttribute="trailing" constant="20" id="Sob-E9-hUU"/>
+                                                <constraint firstItem="k48-ug-XH5" firstAttribute="leading" secondItem="VoL-j0-uDR" secondAttribute="leading" constant="20" id="Y0b-av-soE"/>
+                                                <constraint firstItem="J8O-jB-v6M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="h7k-W5-hW9"/>
+                                                <constraint firstItem="Jhl-EH-Z0M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="wTx-OL-YFd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="listButton" destination="J8O-jB-v6M" id="VqB-W0-MNp"/>
+                                            <outlet property="playListCountLabel" destination="2jM-cH-P2L" id="xA2-nL-NnZ"/>
+                                            <outlet property="playListImageView" destination="k48-ug-XH5" id="WD3-CL-XW9"/>
+                                            <outlet property="playListNameLabel" destination="MHT-8H-NlU" id="PDl-c5-m3R"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="a8M-lJ-S1N"/>
+                        <color key="backgroundColor" name="gray100"/>
+                        <constraints>
+                            <constraint firstItem="a8M-lJ-S1N" firstAttribute="trailing" secondItem="DGI-pW-v8E" secondAttribute="trailing" id="3oq-lY-6qZ"/>
+                            <constraint firstItem="DGI-pW-v8E" firstAttribute="top" secondItem="a8M-lJ-S1N" secondAttribute="top" constant="80" id="T5C-3B-gJu"/>
+                            <constraint firstItem="a8M-lJ-S1N" firstAttribute="bottom" secondItem="DGI-pW-v8E" secondAttribute="bottom" id="c6L-5y-2h2"/>
+                            <constraint firstItem="DGI-pW-v8E" firstAttribute="leading" secondItem="a8M-lJ-S1N" secondAttribute="leading" id="ocf-AQ-eiW"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="DGI-pW-v8E" id="FsG-TW-Sag"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rPG-gd-NXO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1183.969465648855" y="735.91549295774655"/>
+        </scene>
     </scenes>
     <resources>
         <image name="applogo" width="92" height="92"/>
         <image name="logout" width="32" height="32"/>
         <image name="naver" width="24" height="24"/>
+        <image name="play" width="32" height="32"/>
         <image name="profile_0" width="76" height="76"/>
         <image name="request" width="32" height="32"/>
         <namedColor name="gray100">

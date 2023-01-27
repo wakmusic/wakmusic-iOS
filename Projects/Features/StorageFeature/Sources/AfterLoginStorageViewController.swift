@@ -23,6 +23,8 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var editButton: UIButton!
     
+
+    
     
     
     @IBAction func pressEditAction(_ sender: UIButton) {
@@ -45,7 +47,7 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     }
     
     
-    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
+    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(isEditing: false),UIViewController()]
     lazy var viewModel = AfterLoginStroageViewModel()
     let disposeBag = DisposeBag()
     

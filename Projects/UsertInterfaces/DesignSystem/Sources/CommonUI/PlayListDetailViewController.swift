@@ -131,7 +131,6 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
-        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
         
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급

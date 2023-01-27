@@ -16,7 +16,7 @@ enum MyPlayListHeaderButtionType {
 
 protocol MyPlayListHeaderViewDelegate{
     
-    func action(_ tpye:MyPlayListHeaderButtionType )
+    func action(_ type:MyPlayListHeaderButtionType )
     
 }
 
