@@ -305,7 +305,7 @@ extension PlayListDetailViewController:UITableViewDelegate{
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: DesignSystem.PlayEvent) {
-        print(event)
+        DEBUG_LOG(event)
     }
     
     

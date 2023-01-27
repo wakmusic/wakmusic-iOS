@@ -57,6 +57,12 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     //탭맨 페이지 변경 감지 함수
     override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
         
+        
+        guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
+            return
+        }
+        vc.isEdit.accept(false)
+        
         viewModel.output.isEditing.accept(false)
     }
     
@@ -113,8 +119,7 @@ extension AfterLoginStorageViewController{
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
-        
-        bar
+    
         bindRx()
         
     
