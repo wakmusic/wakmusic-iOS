@@ -18,7 +18,7 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var allPlayButton: UIButton!
     @IBOutlet weak var shufflePlayButton: UIButton!
     
-    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: [1,2,3,4,5,6,7,8,9,10])
+    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -56,6 +56,7 @@ extension ArtistMusicContentViewController {
                 guard let `self` = self else { return }
 //                self.tableView.deselectRow(at: indexPath, animated: true)
                 let model = model[indexPath.row]
+
             }).disposed(by: disposeBag)
 
     }

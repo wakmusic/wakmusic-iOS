@@ -19,7 +19,6 @@ let project = Project.makeModule(
         .SPM.Tabman,
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
-        .SPM.HPParallaxHeader,
-        .SPM.UBottomSheet
+        .SPM.HPParallaxHeader
     ]
 )

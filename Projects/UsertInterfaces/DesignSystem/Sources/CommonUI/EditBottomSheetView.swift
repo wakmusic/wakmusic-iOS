@@ -1,21 +1,18 @@
 //
-//  PlayListEditViewController.swift
+//  EditBottomSheetView.swift
 //  DesignSystem
 //
-//  Created by KTH on 2023/01/17.
+//  Created by KTH on 2023/01/25.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
 import UIKit
-import Utility
-import DesignSystem
-import PanModal
 
-protocol PlayListEditViewDelegate: AnyObject{
-    func buttonTapped(type: PlayListEditType)
+protocol EditBottomSheetViewDelegate: AnyObject{
+    func buttonTapped(type: EditBottomSheetType)
 }
 
-public final class PlayListEditViewController: UIViewController, ViewControllerFromStoryBoard {
+public class EditBottomSheetView: UIView {
 
     @IBOutlet weak var allSelectButton: UIButton!
     @IBOutlet weak var songAddButton: UIButton!
@@ -24,56 +21,35 @@ public final class PlayListEditViewController: UIViewController, ViewControllerF
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var circleImageView: UIImageView!
+//    @IBOutlet weak var circleImageView: UIImageView!
     @IBOutlet weak var selectCountView: UIView!
     @IBOutlet weak var selectCountLabel: UILabel!
-    
-    weak var delegate: PlayListEditViewDelegate?
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
 
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setupView()
+    }
+}
+
+public extension EditBottomSheetView {
+    
+    private func setupView(){
+        
+        guard let view = Bundle.module.loadNibNamed("EditBottomSheetView", owner: self, options: nil)?.first as? UIView else { return }
+        view.frame = self.bounds
+        view.layoutIfNeeded()
+        self.addSubview(view)
+        
         configureUI()
     }
     
-    public static func viewController() -> PlayListEditViewController {
-        let viewController = PlayListEditViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
-        return viewController
-    }
-    
-    @IBAction func allSelectButtonAction(_ sender: Any) {
-        DEBUG_LOG("allSelectButtonAction")
-        
-        self.allSelectButton.isSelected = !self.allSelectButton.isSelected
-        
-        let attributedString = NSMutableAttributedString.init(string: self.allSelectButton.isSelected ? "전체선택해제" : "전체선택")
-        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
-                                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color],
-                                        range: NSRange(location: 0, length: attributedString.string.count))
-        
-        self.allSelectButton.setAttributedTitle(attributedString, for: .normal)
-        self.allSelectButton.alignTextBelow(spacing: 0)
-    }
-}
-
-enum PlayListEditType {
-    case playListEdit
-}
-
-public extension PlayListEditViewController {
-    
-    func updateSelectedCount(value: Int) {
-        self.selectCountView.isHidden = (value == 0)
-        self.selectCountLabel.text = (value == 0) ? "" : "\(value)"
-    }
-}
-
-extension PlayListEditViewController {
-    
     private func configureUI() {
-        
-//        circleImageView.image = DesignSystemAsset.PlayListEdit.shadowCircle.image
-        
+                
         selectCountView.backgroundColor = .white
         selectCountView.layer.cornerRadius = selectCountView.frame.width / 2
         selectCountView.clipsToBounds = true
@@ -129,37 +105,13 @@ extension PlayListEditViewController {
     }
 }
 
-extension PlayListEditViewController: PanModalPresentable {
-
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+public extension EditBottomSheetView {
+    func updateSelectedCount(value: Int) {
+        self.selectCountView.isHidden = (value == 0)
+        self.selectCountLabel.text = (value == 0) ? "" : "\(value)"
     }
+}
 
-    public var panModalBackgroundColor: UIColor {
-        return .clear
-    }
-
-    public var panScrollable: UIScrollView? {
-      return nil
-    }
-
-    public var longFormHeight: PanModalHeight {
-         return .contentHeight(56 + 16)
-     }
-
-    public var cornerRadius: CGFloat {
-        return 0
-    }
-
-    public var allowsExtendedPanScrolling: Bool {
-        return true
-    }
-
-    public var showDragIndicator: Bool {
-        return false
-    }
-    
-    public var isUserInteractionEnabled: Bool {
-        return true
-    }
+enum EditBottomSheetType {
+    case playListEdit
 }

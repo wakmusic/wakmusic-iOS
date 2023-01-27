@@ -9,19 +9,109 @@
 import UIKit
 import Utility
 import DesignSystem
+import RxSwift
+import RxCocoa
 
 class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStoryBoard {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @IBOutlet weak var artistImageView: UIImageView!
+    @IBOutlet weak var descriptionView: UIView!
+    @IBOutlet weak var descriptionFrontView: UIView!
+    @IBOutlet weak var descriptionBackView: UIView!
+    @IBOutlet weak var descriptionFrontButton: UIButton!
+    @IBOutlet weak var descriptionBackButton: UIButton!
+    @IBOutlet weak var artistNameLabel: UILabel!
 
-        // Do any additional setup after loading the view.
+    var disposeBag: DisposeBag = DisposeBag()
+    var isBack: Bool = false
+
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureUI()
+        bind()
+    }
 
     public static func viewController() -> ArtistDetailHeaderViewController {
         let viewController = ArtistDetailHeaderViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
     }
+}
 
+extension ArtistDetailHeaderViewController {
+    
+    private func bind() {
+        
+        let mergeObservable = Observable.merge(descriptionFrontButton.rx.tap.map { _ in () },
+                                               descriptionBackButton.rx.tap.map { _ in () })
+
+        mergeObservable
+            .subscribe(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.flip()
+            }).disposed(by: disposeBag)
+
+    }
+    
+    private func flip() {
+        
+        if self.isBack {
+            self.isBack = false
+            self.descriptionFrontView.isHidden = self.isBack
+            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
+            
+            UIView.transition(with: self.descriptionView,
+                              duration: 0.3,
+                              options: .transitionFlipFromLeft,
+                              animations: nil,
+                              completion: { _ in
+            })
+
+        }else{
+            self.isBack = true
+            self.descriptionFrontView.isHidden = self.isBack
+            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
+
+            UIView.transition(with: self.descriptionView,
+                              duration: 0.3,
+                              options: .transitionFlipFromRight,
+                              animations: nil,
+                              completion: { _ in
+            })
+        }
+    }
+    
+    private func configureUI() {
+        
+        artistImageView.image = DesignSystemAsset.Artist.guseguDetail.image
+        descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
+        descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
+        
+        descriptionView.layer.borderWidth = 1
+        descriptionView.layer.borderColor = colorFromRGB(0xFCFCFD).cgColor
+        descriptionView.layer.cornerRadius = 8
+        
+        descriptionFrontView.isHidden = false
+        descriptionBackView.isHidden = true
+        
+        //ArtistName
+        let artistName: String = "고세구"
+        let artistEngName: String = "Gosegu"
+        
+        let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
+                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
+                                                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color])
+        
+        let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
+
+        artistNameAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
+                                                  range: artistEngNameRange)
+
+        self.artistNameLabel.attributedText = artistNameAttributedString
+    }
 }
