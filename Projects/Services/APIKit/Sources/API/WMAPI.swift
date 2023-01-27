@@ -3,7 +3,7 @@ import Foundation
 import ErrorModule
 import KeychainModule
 
-public protocol WMAPI: TargetType {
+public protocol WMAPI: TargetType, JwtAuthorizable {
     var domain: WMDomain { get }
     var urlPath: String { get }
     var errorMap: [Int: WMError] { get }
