@@ -201,9 +201,6 @@ extension AfterLoginStorageViewController{
         
     }
     
-    public func showCreatePlayListModal(){
-        
-    }
     
 }
 
