@@ -309,6 +309,9 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="logout"/>
+                                        <connections>
+                                            <action selector="pressLogoutAction:" destination="53i-Hq-sTM" eventType="touchUpInside" id="OKB-8C-Szw"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="닉네임" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FG5-zK-kAo">
                                         <rect key="frame" x="68" y="17.666666666666671" width="44.333333333333343" height="21"/>

@@ -25,9 +25,6 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     
 
     
-    
-    
-    
     @IBAction func pressEditProfileAction(_ sender: UIButton) {
         
         let vc = ProfilePopViewController.viewController()
@@ -37,6 +34,18 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
 
         
         self.presentPanModal(viewController) //modal Show
+        
+    }
+    
+    
+    @IBAction func pressLogoutAction(_ sender: UIButton) {
+        
+        
+        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false)
+        
+        let viewController:PanModalPresentable.LayoutType = vc
+        
+        self.presentPanModal(viewController)
         
         
     }
