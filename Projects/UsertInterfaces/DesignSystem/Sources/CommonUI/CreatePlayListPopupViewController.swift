@@ -17,8 +17,37 @@ import RxKeyboard
 public enum PlayListControlPopupType{
     case creation
     case edit
+    case load
 }
 
+extension PlayListControlPopupType{
+    
+    var title:String{
+        switch self{
+            
+        case .creation:
+            return "플레이리스트 만들기"
+        case .edit:
+            return "플레이리스트 수정하기"
+        case .load:
+            return "플레이리스트 가져오기"
+        }
+        
+    }
+    
+    var btnText:String{
+        switch self{
+            
+        case .creation:
+            return "플레이리스트 생성"
+        case .edit:
+            return "플레이리스트 수정"
+        case .load:
+           return "가져오기"
+        }
+        
+    }
+}
 
 
 
@@ -39,7 +68,7 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
-    var type:PlayListControlPopupType = .creation
+
     
     
     @IBAction func cancelAction(_ sender: UIButton) {
@@ -70,9 +99,7 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
         self.view.endEditing(true)
     }
     
-    var titleString:String = ""
-    var btnString:String = ""
-    
+    var type:PlayListControlPopupType = .creation
     lazy var viewModel = CreatePlayListPopupViewModel()
     
     public var disposeBag = DisposeBag()
@@ -89,11 +116,9 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(title:String,btnText:String,type:PlayListControlPopupType) -> CreatePlayListPopupViewController {
+    public static func viewController(type:PlayListControlPopupType) -> CreatePlayListPopupViewController {
         let viewController = CreatePlayListPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
-        viewController.titleString = title
-        viewController.btnString = btnText
         viewController.type = type
         
         return viewController
@@ -108,7 +133,7 @@ public final class  CreatePlayListPopupViewController: UIViewController, ViewCon
 extension CreatePlayListPopupViewController{
     private func configureUI() {
 
-        titleLabel.text = titleString
+        titleLabel.text = type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
@@ -154,7 +179,7 @@ extension CreatePlayListPopupViewController{
         
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
-        saveButton.setAttributedTitle(NSMutableAttributedString(string:btnString,
+        saveButton.setAttributedTitle(NSMutableAttributedString(string:type.btnText,
                                                                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                              .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         

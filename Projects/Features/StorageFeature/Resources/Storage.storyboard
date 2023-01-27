@@ -265,13 +265,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Hy-W4-acm">
-                                <rect key="frame" x="0.0" y="115" width="328" height="40"/>
+                                <rect key="frame" x="0.0" y="127" width="328" height="36"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="yKM-SW-F9l"/>
+                                    <constraint firstAttribute="height" constant="36" id="yKM-SW-F9l"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1L-Cy-TDF">
-                                <rect key="frame" x="0.0" y="155" width="393" height="1"/>
+                                <rect key="frame" x="0.0" y="163" width="393" height="1"/>
                                 <color key="backgroundColor" name="gray200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="fua-wm-2xO"/>
@@ -281,15 +281,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JA6-iz-jxx">
-                                <rect key="frame" x="328" y="123" width="45" height="24"/>
+                                <rect key="frame" x="328" y="133" width="45" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="1o1-sF-vEy"/>
                                     <constraint firstAttribute="width" constant="45" id="rbk-Nj-jx2"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <connections>
-                                    <action selector="pressEditAction:" destination="53i-Hq-sTM" eventType="touchUpInside" id="6JZ-eC-nV1"/>
-                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y0G-j2-za7">
                                 <rect key="frame" x="0.0" y="59" width="393" height="56"/>
@@ -352,7 +349,7 @@
                             <constraint firstItem="Y0G-j2-za7" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="JJL-t1-DkP"/>
                             <constraint firstItem="JA6-iz-jxx" firstAttribute="centerY" secondItem="2Hy-W4-acm" secondAttribute="centerY" id="Jtx-Jm-jer"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="PN3-pp-2A8"/>
-                            <constraint firstItem="2Hy-W4-acm" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="bottom" id="R1Q-y6-6Rs"/>
+                            <constraint firstItem="2Hy-W4-acm" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="bottom" constant="12" id="R1Q-y6-6Rs"/>
                             <constraint firstItem="I1L-Cy-TDF" firstAttribute="top" secondItem="2Hy-W4-acm" secondAttribute="bottom" id="T7J-ub-OpF"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="JA6-iz-jxx" secondAttribute="trailing" constant="20" id="Usm-Hh-DGw"/>
                             <constraint firstItem="I1L-Cy-TDF" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="Wez-3G-hkn"/>
@@ -382,7 +379,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DGI-pW-v8E">
-                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
+                                <rect key="frame" x="0.0" y="163" width="393" height="655"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MyPlayListTableViewCell" id="e4v-he-MOf" customClass="MyPlayListTableViewCell" customModule="StorageFeature">
@@ -448,7 +445,7 @@
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="a8M-lJ-S1N" firstAttribute="trailing" secondItem="DGI-pW-v8E" secondAttribute="trailing" id="3oq-lY-6qZ"/>
-                            <constraint firstItem="DGI-pW-v8E" firstAttribute="top" secondItem="a8M-lJ-S1N" secondAttribute="top" constant="80" id="T5C-3B-gJu"/>
+                            <constraint firstItem="DGI-pW-v8E" firstAttribute="top" secondItem="a8M-lJ-S1N" secondAttribute="top" constant="104" id="T5C-3B-gJu"/>
                             <constraint firstItem="a8M-lJ-S1N" firstAttribute="bottom" secondItem="DGI-pW-v8E" secondAttribute="bottom" id="c6L-5y-2h2"/>
                             <constraint firstItem="DGI-pW-v8E" firstAttribute="leading" secondItem="a8M-lJ-S1N" secondAttribute="leading" id="ocf-AQ-eiW"/>
                         </constraints>

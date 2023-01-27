@@ -27,11 +27,6 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     
     
     
-    @IBAction func pressEditAction(_ sender: UIButton) {
-        
-        viewModel.output.isEditing.accept(!viewModel.output.isEditing.value)
-        
-    }
     
     @IBAction func pressEditProfileAction(_ sender: UIButton) {
         
@@ -47,16 +42,24 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     }
     
     
-    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(isEditing: false),UIViewController()]
+    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),UIViewController()]
     lazy var viewModel = AfterLoginStroageViewModel()
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    
 
         // Do any additional setup after loading the view.
     }
+    
+    //탭맨 페이지 변경 감지 함수
+    override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
+        
+        viewModel.output.isEditing.accept(false)
+    }
+    
     
     public static func viewController() -> AfterLoginStorageViewController {
         let viewController = AfterLoginStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
@@ -110,7 +113,11 @@ extension AfterLoginStorageViewController{
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
+        
+        bar
         bindRx()
+        
+    
         
         
     }
@@ -137,6 +144,44 @@ extension AfterLoginStorageViewController{
             
             
         }.disposed(by: disposeBag)
+        
+        
+        
+        editButton.rx.tap
+            .withLatestFrom(viewModel.output.isEditing)
+            .map({!$0})
+            .do(onNext: { [weak self] (res:Bool)  in
+                
+                
+                guard let self = self else{
+                    return
+                }
+                
+                if self.currentIndex ?? 0  == 0 {
+                    
+                    guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
+                        return
+                    }
+                    vc.isEdit.accept(res)
+                }
+                
+                else{
+                    guard let vc =  self.viewControllers[1] as? UIViewController else{
+                        return
+                    }
+                    
+                }
+                
+                
+            })
+            .bind(to: viewModel.output.isEditing)
+            .disposed(by: disposeBag)
+        
+        
+    }
+    
+    public func showCreatePlayListModal(){
+        
     }
     
 }
@@ -167,6 +212,5 @@ extension AfterLoginStorageViewController:PageboyViewControllerDataSource, TMBar
         }
         
     }
-    
     
 }

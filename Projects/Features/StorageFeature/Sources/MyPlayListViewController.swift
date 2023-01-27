@@ -12,15 +12,18 @@ import RxSwift
 import RxRelay
 import RxCocoa
 import DesignSystem
+import PanModal
 
 class MyPlayListViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
     
-    var isEdit:Bool = false
+    var isEdit:BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
-    var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100)])
+    //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100)])
+    
+    var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
     
     var disposeBag = DisposeBag()
     
@@ -33,10 +36,10 @@ class MyPlayListViewController: UIViewController, ViewControllerFromStoryBoard {
     }
     
 
-    public static func viewController(isEditing:Bool) -> MyPlayListViewController {
+    public static func viewController() -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
-        viewController.isEdit = isEditing
+      
         
         return viewController
     }
@@ -47,6 +50,10 @@ extension MyPlayListViewController{
     
     private func configureUI()
     {
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
+        }
+        
         bindRx()
     }
     
@@ -78,11 +85,31 @@ extension MyPlayListViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model: model, isEditing: self.isEdit)
+                cell.update(model: model, isEditing: self.isEdit.value)
               
                         
              return cell
             }.disposed(by: disposeBag)
+        
+        
+        isEdit
+            .do(onNext: { [weak self] (res:Bool) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                
+                self.tableView.dragInteractionEnabled = res
+                
+                
+            })
+            .withLatestFrom(dataSource)
+            .bind(to: dataSource)
+            .disposed(by: disposeBag)
+    
+        
+      
         
     }
     
@@ -103,13 +130,13 @@ extension MyPlayListViewController:UITableViewDelegate{
       
 
         header.delegate = self
-        return isEdit ? nil : header
+        return dataSource.value.isEmpty ? nil :  isEdit.value ? nil : header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return isEdit ? 0 : 140
+        return dataSource.value.isEmpty ? 0 : isEdit.value ? 0 : 140
         
         
     }
@@ -117,16 +144,19 @@ extension MyPlayListViewController:UITableViewDelegate{
 }
 
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
-    func action(_ type: MyPlayListHeaderButtionType) {
+    func action(_ type: PlayListControlPopupType) {
+     
+            
+        let vc =  CreatePlayListPopupViewController.viewController(type: type)
         
-        switch type{
-        
-        case .create:
-            print("Create")
-        case .load:
-            print("lLoad")
-        }
+        let viewController:PanModalPresentable.LayoutType = vc
+        self.presentPanModal(viewController)
+            
+      
     }
     
     
 }
+
+
+

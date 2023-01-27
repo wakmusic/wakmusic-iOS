@@ -5,8 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,8 +12,10 @@
             <connections>
                 <outlet property="createPlayListButton" destination="Odp-CO-2uu" id="qOh-jr-Ro1"/>
                 <outlet property="createPlayListImageView" destination="l5U-p3-A5i" id="ac4-bc-2ws"/>
+                <outlet property="createSuperView" destination="gbw-Kj-GG6" id="6Jo-MQ-AL9"/>
                 <outlet property="loadPlayListButton" destination="HON-xU-WgO" id="6tE-Ba-FA4"/>
                 <outlet property="loadPlayListImageView" destination="7XJ-cc-zkY" id="3J2-H7-d2X"/>
+                <outlet property="loadSuperView" destination="mqR-h1-U6y" id="eAF-zj-jvr"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gbw-Kj-GG6">
-                    <rect key="frame" x="20" y="63" width="560" height="52"/>
+                    <rect key="frame" x="20" y="16" width="560" height="52"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="player_music_add" translatesAutoresizingMaskIntoConstraints="NO" id="l5U-p3-A5i">
                             <rect key="frame" x="32" y="10" width="32" height="32"/>
@@ -35,7 +35,6 @@
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odp-CO-2uu">
                             <rect key="frame" x="0.0" y="0.0" width="560" height="52"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="플레이리스트 만들기">
                                 <color key="titleColor" name="gray900"/>
@@ -45,6 +44,7 @@
                             </connections>
                         </button>
                     </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="52" id="2IJ-Rz-JgI"/>
                         <constraint firstAttribute="bottom" secondItem="Odp-CO-2uu" secondAttribute="bottom" id="9wA-lY-bNW"/>
@@ -56,7 +56,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqR-h1-U6y">
-                    <rect key="frame" x="20" y="123" width="560" height="52"/>
+                    <rect key="frame" x="20" y="76" width="560" height="52"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="share" translatesAutoresizingMaskIntoConstraints="NO" id="7XJ-cc-zkY">
                             <rect key="frame" x="32" y="10" width="32" height="32"/>
@@ -67,7 +67,6 @@
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HON-xU-WgO">
                             <rect key="frame" x="0.0" y="0.0" width="560" height="52"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="플레이리스트 가져오기">
                                 <color key="titleColor" name="gray900"/>
@@ -77,6 +76,7 @@
                             </connections>
                         </button>
                     </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="HON-xU-WgO" firstAttribute="top" secondItem="mqR-h1-U6y" secondAttribute="top" id="678-6a-rF6"/>
                         <constraint firstAttribute="height" constant="52" id="A8V-b1-gDM"/>
@@ -88,14 +88,13 @@
                     </constraints>
                 </view>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" name="WAKTAVERSE"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="mqR-h1-U6y" secondAttribute="trailing" constant="20" id="4ab-qW-mpe"/>
-                <constraint firstItem="gbw-Kj-GG6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="9lI-NI-A3n"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gbw-Kj-GG6" secondAttribute="trailing" constant="20" id="Ke2-rB-3OO"/>
-                <constraint firstItem="gbw-Kj-GG6" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="Qey-aK-yyN"/>
-                <constraint firstItem="mqR-h1-U6y" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="cLT-TZ-ZZM"/>
+                <constraint firstAttribute="trailing" secondItem="mqR-h1-U6y" secondAttribute="trailing" constant="20" id="4ab-qW-mpe"/>
+                <constraint firstItem="gbw-Kj-GG6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="9lI-NI-A3n"/>
+                <constraint firstAttribute="trailing" secondItem="gbw-Kj-GG6" secondAttribute="trailing" constant="20" id="Ke2-rB-3OO"/>
+                <constraint firstItem="gbw-Kj-GG6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="Qey-aK-yyN"/>
+                <constraint firstItem="mqR-h1-U6y" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="cLT-TZ-ZZM"/>
                 <constraint firstItem="mqR-h1-U6y" firstAttribute="top" secondItem="gbw-Kj-GG6" secondAttribute="bottom" constant="8" id="vj6-KW-SU9"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -105,11 +104,11 @@
     <resources>
         <image name="player_music_add" width="33" height="32"/>
         <image name="share" width="32" height="32"/>
+        <namedColor name="WAKTAVERSE">
+            <color red="0.0" green="0.9570000171661377" blue="0.72899997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

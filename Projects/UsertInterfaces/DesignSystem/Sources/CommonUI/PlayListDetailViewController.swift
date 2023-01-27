@@ -73,11 +73,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = CreatePlayListPopupViewController.viewController(
-            title: "플레이리스트 수정하기",
-            btnText: "플레이리스트 수정",
-            type: .edit
-        )
+        let createPlayListPopupViewController = CreatePlayListPopupViewController.viewController(type: .edit)
         
         
         

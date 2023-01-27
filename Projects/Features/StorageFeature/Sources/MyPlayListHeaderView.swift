@@ -9,14 +9,10 @@
 import UIKit
 import DesignSystem
 
-enum MyPlayListHeaderButtionType {
-    case create
-    case load
-}
 
 protocol MyPlayListHeaderViewDelegate{
     
-    func action(_ type:MyPlayListHeaderButtionType )
+    func action(_ type:PlayListControlPopupType )
     
 }
 
@@ -26,16 +22,23 @@ class MyPlayListHeaderView: UIView {
     
     @IBOutlet weak var createPlayListImageView: UIImageView!
     @IBOutlet weak var createPlayListButton: UIButton!
+    @IBOutlet weak var createSuperView: UIView!
     
-
+    
+    
+    @IBOutlet weak var loadSuperView: UIView!
     @IBOutlet weak var loadPlayListImageView: UIImageView!
     @IBOutlet weak var loadPlayListButton: UIButton!
+    
+    
+    
+    
     var delegate:MyPlayListHeaderViewDelegate?
     
     
     
     @IBAction func createPlayListAction(_ sender: UIButton) {
-        delegate?.action(.create)
+        delegate?.action(.creation)
     }
     
     
@@ -77,15 +80,15 @@ class MyPlayListHeaderView: UIView {
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
         
         
-        for btn in [self.createPlayListButton,self.loadPlayListButton] {
+        for view in [self.createSuperView,self.loadSuperView] {
             
-            btn?.layer.cornerRadius = 8
-            btn?.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-            btn?.layer.borderWidth = 1
+            view?.layer.cornerRadius = 8
+            view?.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            view?.layer.borderWidth = 1
         }
         
         
-        
+    
         
         self.createPlayListButton.setAttributedTitle(createAttr, for: .normal)
         self.loadPlayListButton.setAttributedTitle(loadAttr, for: .normal)
