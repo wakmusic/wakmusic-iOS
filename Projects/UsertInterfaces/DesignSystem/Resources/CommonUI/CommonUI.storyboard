@@ -90,10 +90,10 @@
             </objects>
             <point key="canvasLocation" x="140" y="-2"/>
         </scene>
-        <!--Create Play List Popup View Controller-->
+        <!--Play List Control Popup View Controller-->
         <scene sceneID="RXD-LM-lNS">
             <objects>
-                <viewController storyboardIdentifier="CreatePlayListPopupViewController" id="yk9-hj-uZr" customClass="CreatePlayListPopupViewController" customModule="DesignSystem" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreatePlayListPopupViewController" id="yk9-hj-uZr" customClass="PlayListControlPopupViewController" customModule="DesignSystem" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2lo-ni-wn7">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -221,6 +221,9 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="ZPA-US-fa2" id="720-a8-DH2"/>
+                        <outlet property="cancelButtonHeight" destination="B3l-YF-cBf" id="pl7-YP-LDt"/>
+                        <outlet property="cancelButtonWidth" destination="wtS-fm-iLw" id="yIw-IO-sqo"/>
+                        <outlet property="confireLabelGap" destination="iBl-5L-bEM" id="J4b-PR-FcV"/>
                         <outlet property="confirmLabel" destination="plr-Qt-J0G" id="gg1-Zz-u74"/>
                         <outlet property="countLabel" destination="GXT-c1-zrl" id="aBj-po-lkG"/>
                         <outlet property="dividerView" destination="ejs-3A-VSi" id="Q9g-WB-pU1"/>
@@ -234,7 +237,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aEk-jm-TLD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="834" y="-2"/>
+            <point key="canvasLocation" x="832.82442748091603" y="-2.1126760563380285"/>
         </scene>
         <!--Play List Detail View Controller-->
         <scene sceneID="z0q-dU-kIh">

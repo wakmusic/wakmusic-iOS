@@ -152,7 +152,7 @@ extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
     func action(_ type: PlayListControlPopupType) {
      
             
-        let vc =  CreatePlayListPopupViewController.viewController(type: type)
+        let vc =  PlayListControlPopupViewController.viewController(type: type)
         
         let viewController:PanModalPresentable.LayoutType = vc
         self.presentPanModal(viewController)
