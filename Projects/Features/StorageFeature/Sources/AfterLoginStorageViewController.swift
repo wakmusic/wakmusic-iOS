@@ -42,13 +42,14 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     }
     
     
-    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),UIViewController()]
+    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
     lazy var viewModel = AfterLoginStroageViewModel()
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        
     
 
         // Do any additional setup after loading the view.
@@ -58,10 +59,15 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
         
         
-        guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
+        guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
             return
         }
-        vc.isEdit.accept(false)
+        
+        guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
+            return
+        }
+        vc1.isEdit.accept(false)
+        vc2.viewModel.output.isEditinglist.accept(false)
         
         viewModel.output.isEditing.accept(false)
     }
@@ -145,7 +151,7 @@ extension AfterLoginStorageViewController{
             
             self.editButton.setAttributedTitle(attr, for: .normal)
             
-            
+            self.isScrollEnabled = !res //  편집 시 , 옆 탭으로 swipe를 막기 위함
             
             
         }.disposed(by: disposeBag)
@@ -171,9 +177,10 @@ extension AfterLoginStorageViewController{
                 }
                 
                 else{
-                    guard let vc =  self.viewControllers[1] as? UIViewController else{
+                    guard let vc =  self.viewControllers[1] as? FavoriteViewController else{
                         return
                     }
+                    vc.viewModel.output.isEditinglist.accept(res)
                     
                 }
                 

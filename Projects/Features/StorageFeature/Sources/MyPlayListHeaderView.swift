@@ -65,7 +65,7 @@ class MyPlayListHeaderView: UIView {
         if let view = Bundle.module.loadNibNamed("MyPlayListHeader", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
-            view.backgroundColor = .clear
+            view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
             self.addSubview(view)
         }
         
