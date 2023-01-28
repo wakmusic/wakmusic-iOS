@@ -16,8 +16,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JKm-2m-3WL">
+                                <rect key="frame" x="0.0" y="0.0" width="180.33333333333334" height="242"/>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradation_bg" translatesAutoresizingMaskIntoConstraints="NO" id="TWm-vm-MRN">
-                                <rect key="frame" x="190" y="0.0" width="203" height="242"/>
+                                <rect key="frame" x="180.33333333333337" y="0.0" width="242" height="242"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o27-Gb-2NX">
                                 <rect key="frame" x="0.0" y="59" width="393" height="44"/>
@@ -49,15 +52,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="35F-wm-6TL"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="203:242" id="8Pd-y8-GOJ"/>
+                            <constraint firstItem="JKm-2m-3WL" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="172:375" id="3ol-db-hpi"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="height" secondItem="JKm-2m-3WL" secondAttribute="height" id="3sT-lb-z5D"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="1:1" id="8Pd-y8-GOJ"/>
                             <constraint firstItem="H7N-2m-tH8" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Q8j-1U-K8d"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H7N-2m-tH8" secondAttribute="bottom" id="S7A-KA-ula"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="TWm-vm-MRN" secondAttribute="trailing" id="Skp-Lw-Coh"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="leading" secondItem="JKm-2m-3WL" secondAttribute="trailing" id="Szf-tb-fju"/>
+                            <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="bJv-54-8XI"/>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="kVe-av-M3F"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="n2Q-C2-hbh"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H7N-2m-tH8" secondAttribute="trailing" id="nNc-5p-dhM"/>
                             <constraint firstItem="H7N-2m-tH8" firstAttribute="top" secondItem="TWm-vm-MRN" secondAttribute="bottom" id="poH-c9-3JD"/>
                             <constraint firstItem="o27-Gb-2NX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="sXr-X7-ION"/>
+                            <constraint firstItem="JKm-2m-3WL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="v8m-A2-APb"/>
+                            <constraint firstItem="JKm-2m-3WL" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="yTi-tT-gWM"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="홈" id="78J-gZ-QXi"/>
