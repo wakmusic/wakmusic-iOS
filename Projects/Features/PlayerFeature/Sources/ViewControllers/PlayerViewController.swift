@@ -30,7 +30,7 @@ public class PlayerViewController: UIViewController {
         super.viewDidLoad()
         bindViewModel()
         bindUI()
-        setupYoutubeKit()
+        //setupYoutubeKit()
         //youtubePlayerView.backgroundColor = .yellow
         
         
