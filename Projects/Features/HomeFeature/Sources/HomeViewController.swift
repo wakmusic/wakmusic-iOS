@@ -24,7 +24,11 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     @IBAction func buttonAction(_ sender: Any) {
-        let content = TextPopupViewController.viewController(text: "한 줄\n두 줄", cancelButtonIsHidden: true)
+        let content = TextPopupViewController.viewController(text: "한 줄\n두 줄",
+                                                             cancelButtonIsHidden: true,
+                                                             completion: { () in
+            DEBUG_LOG("completion")
+        })
         self.showPanModal(content: content)
     }
 }

@@ -10,17 +10,23 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
 
     var contentString: String = ""
     var cancelButtonIsHidden: Bool = false
-
+    var completion: (() -> Void)?
+    
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
     }
 
-    public static func viewController(text: String = "", cancelButtonIsHidden: Bool) -> TextPopupViewController {
+    public static func viewController(text: String = "", cancelButtonIsHidden: Bool, completion: (() -> Void)? = nil) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
+        viewController.completion = completion
         return viewController
     }
 
@@ -30,6 +36,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
 
     @IBAction func confirmButtonAction(_ sender: Any) {
         dismiss(animated: true)
+        completion?()
     }
 }
 
