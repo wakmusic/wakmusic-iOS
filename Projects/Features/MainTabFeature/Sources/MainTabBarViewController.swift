@@ -10,13 +10,14 @@ import UIKit
 import Utility
 import DesignSystem
 import SnapKit
+import BaseFeature
 import HomeFeature
 import SearchFeature
 import ArtistFeature
 import ChartFeature
 import StorageFeature
 
-class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
     @IBOutlet weak var contentView: UIView!
 
@@ -57,8 +58,6 @@ class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, 
 extension MainTabBarViewController {
     
     private func configureUI() {
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         add(asChildViewController: viewControllers[0])
     }
     

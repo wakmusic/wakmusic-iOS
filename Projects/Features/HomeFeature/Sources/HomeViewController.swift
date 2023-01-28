@@ -2,8 +2,9 @@ import UIKit
 import Utility
 import DesignSystem
 import PanModal
+import BaseFeature
 
-public final class HomeViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tempView: UIView!
     @IBOutlet weak var gradationImageView: UIImageView! {
@@ -14,8 +15,6 @@ public final class HomeViewController: UIViewController, ViewControllerFromStory
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         configurePlayList()
     }
 

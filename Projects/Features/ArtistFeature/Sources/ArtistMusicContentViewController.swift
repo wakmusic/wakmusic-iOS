@@ -11,8 +11,9 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import BaseFeature
 
-class ArtistMusicContentViewController: UIViewController, ViewControllerFromStoryBoard {
+class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var allPlayButton: UIButton!
@@ -58,18 +59,13 @@ extension ArtistMusicContentViewController {
             .withLatestFrom(dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (indexPath, model) in
                 guard let `self` = self else { return }
-//                self.tableView.deselectRow(at: indexPath, animated: true)
-                let model = model[indexPath.row]
-
+                self.tableView.deselectRow(at: indexPath, animated: true)
+//                let model = model[indexPath.row]
             }).disposed(by: disposeBag)
 
     }
     
     private func configureUI() {
-        
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
 
         let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
         

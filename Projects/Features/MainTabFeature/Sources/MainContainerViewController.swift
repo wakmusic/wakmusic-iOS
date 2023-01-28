@@ -1,10 +1,11 @@
 import UIKit
 import Utility
 import DesignSystem
+import BaseFeature
 import PlayerFeature
 import SnapKit
 
-open class MainContainerViewController: UIViewController, ViewControllerFromStoryBoard {
+open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var bottomContainerView: UIView!
@@ -118,8 +119,6 @@ extension MainContainerViewController {
     }
     
     private func configureUI() {
-
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
 
         //Main Content
         let viewController = MainTabBarViewController.viewController().wrapNavigationController

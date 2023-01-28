@@ -1,10 +1,11 @@
 import UIKit
 import Utility
 import DesignSystem
+import BaseFeature
 import MainTabFeature
 import Lottie
 
-open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
+open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var logoContentView: UIView!
 
@@ -30,9 +31,7 @@ extension IntroViewController {
     }
 
     private func configureUI() {
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
+                
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
