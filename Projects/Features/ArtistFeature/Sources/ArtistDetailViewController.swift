@@ -39,8 +39,8 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        addHeader()
-        addContent()
+        configureHeader()
+        configureContent()
     }
     
     public static func viewController() -> ArtistDetailViewController {
@@ -59,7 +59,7 @@ extension ArtistDetailViewController {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
     }
     
-    private func addHeader() {
+    private func configureHeader() {
         self.addChild(headerViewController)
         self.headerContentView.addSubview(headerViewController.view)
         headerViewController.didMove(toParent: self)
@@ -69,7 +69,7 @@ extension ArtistDetailViewController {
         }
     }
     
-    private func addContent() {        
+    private func configureContent() {
         self.add(asChildViewController: contentViewController)
     }
 }
