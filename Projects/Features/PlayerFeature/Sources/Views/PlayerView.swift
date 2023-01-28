@@ -33,34 +33,40 @@ public final class PlayerView: UIView {
     
     private lazy var titleBarView: UIView = UIView()
     
-    private lazy var closeButton = UIButton().then {
+    internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private lazy var titleLabel = UILabel().then {
+    internal lazy var titleLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "리와인드(RE:WIND)"
+        $0.setLineHeight(lineHeight: 24)
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textAlignment = .center
     }
     
-    private lazy var artistLabel = UILabel().then {
+    internal lazy var artistLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.alpha = 0.6
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
         $0.text = "이세계아이돌"
+        $0.setLineHeight(lineHeight: 20)
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textAlignment = .center
     }
     
-    private lazy var thumbnailImageView = UIImageView().then {
+    internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
     
-    private lazy var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
+    internal lazy var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
@@ -68,7 +74,7 @@ public final class PlayerView: UIView {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
     
-    private lazy var playTimeSlider = CustomSlider().then {
+    internal lazy var playTimeSlider = CustomSlider().then {
         let circleSize: CGFloat = 8.0
         let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
                                                                 height: circleSize),
@@ -82,14 +88,14 @@ public final class PlayerView: UIView {
     
     private lazy var playTimeView: UIView = UIView()
     
-    private lazy var currentPlayTimeLabel = UILabel().then {
+    internal lazy var currentPlayTimeLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.PrimaryColor.point.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "0:30"
     }
     
-    private lazy var totalPlayTimeLabel = UILabel().then {
+    internal lazy var totalPlayTimeLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray400.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
@@ -98,7 +104,7 @@ public final class PlayerView: UIView {
     
     private lazy var buttonBarView: UIView = UIView()
     
-    private lazy var playButton = UIButton().then {
+    internal lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.tintColor = .systemGray
         $0.layer.shadowColor = UIColor.gray.withAlphaComponent(0.25).cgColor
@@ -107,22 +113,22 @@ public final class PlayerView: UIView {
         $0.layer.shadowRadius = 40
     }
     
-    private lazy var prevButton = UIButton().then {
+    internal lazy var prevButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private lazy var nextButton = UIButton().then {
+    internal lazy var nextButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private lazy var repeatButton = UIButton().then {
+    internal lazy var repeatButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    private lazy var shuffleButton = UIButton().then {
+    internal lazy var shuffleButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
@@ -137,7 +143,7 @@ public final class PlayerView: UIView {
         $0.distribution = .fillEqually
     }
     
-    private lazy var likeButton = VerticalButton().then {
+    internal lazy var likeButton = VerticalButton().then {
         $0.setImage(DesignSystemAsset.Player.likeOff.image, for: .normal)
         $0.setTitle("1.1만", for: .normal)
         $0.tintColor = .systemGray
@@ -149,18 +155,18 @@ public final class PlayerView: UIView {
     
     private lazy var viewsView: UIView = UIView()
     
-    private lazy var viewsImageView = UIImageView().then {
+    internal lazy var viewsImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.views.image
     }
     
-    private lazy var viewsLabel = UILabel().then {
+    internal lazy var viewsLabel = UILabel().then {
         $0.text = "1.2만"
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
-    private lazy var addPlayistButton = VerticalButton().then {
+    internal lazy var addPlayistButton = VerticalButton().then {
         $0.setImage(DesignSystemAsset.Player.playerMusicAdd.image, for: .normal)
         $0.setTitle("노래담기", for: .normal)
         $0.tintColor = .systemGray
@@ -170,7 +176,7 @@ public final class PlayerView: UIView {
         $0.alignToVertical()
     }
     
-    private lazy var playistButton = VerticalButton().then {
+    internal lazy var playistButton = VerticalButton().then {
         $0.setImage(DesignSystemAsset.Player.playList.image, for: .normal)
         $0.setTitle("재생목록", for: .normal)
         $0.tintColor = .systemGray
@@ -302,12 +308,14 @@ private extension PlayerView {
             $0.width.height.equalTo(48)
         }
         titleLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(titleBarView.snp.centerY)
+            $0.top.equalToSuperview().offset(2)
+            $0.left.equalTo(closeButton.snp.right)
+            $0.right.equalToSuperview().offset(-68)
         }
         artistLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(titleBarView.snp.centerY)
+            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.left.equalTo(closeButton.snp.right)
+            $0.right.equalToSuperview().offset(-68)
         }
     }
     private func configureThumbnail() {
@@ -421,7 +429,6 @@ private extension PlayerView {
         } else {
             x = ((height - (width - 50) / (16/9) - 286 - 18) / 20)
         }
-        print(x)
         return CGFloat(floorf(Float(x)))
     }
     

@@ -7,6 +7,7 @@ public extension TargetDependency {
 public extension TargetDependency.SPM {
     static let Moya = TargetDependency.external(name: "Moya")
     static let RxMoya = TargetDependency.external(name: "RxMoya")
+    static let YoutubeKit = TargetDependency.external(name: "YoutubeKit")
     static let YouTubePlayerKit = TargetDependency.external(name: "YouTubePlayerKit")
     static let PanModal = TargetDependency.external(name: "PanModal")
     static let RxSwift = TargetDependency.external(name: "RxSwift")

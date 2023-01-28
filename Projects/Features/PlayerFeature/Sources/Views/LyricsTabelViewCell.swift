@@ -11,7 +11,7 @@ import DesignSystem
 import SnapKit
 import Then
 
-class LyricsTableViewCell: UITableViewCell {
+internal class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
     
     private lazy var lyricsLabel = UILabel().then {

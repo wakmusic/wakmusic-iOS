@@ -8,12 +8,12 @@
 
 import UIKit
 
-public protocol CustomSliderDelegate: AnyObject {
+internal protocol CustomSliderDelegate: AnyObject {
     func didStartTouches(in slider: CustomSlider)
     func didEndTouches(in slider: CustomSlider)
 }
 
-public class CustomSlider: UISlider {
+internal class CustomSlider: UISlider {
 
     public weak var delegate: CustomSliderDelegate?
 
