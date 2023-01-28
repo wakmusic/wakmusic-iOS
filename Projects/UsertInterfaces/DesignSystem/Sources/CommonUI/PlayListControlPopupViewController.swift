@@ -84,6 +84,8 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
+    let limitCount:Int = 18
+    
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
@@ -306,7 +308,7 @@ extension PlayListControlPopupViewController{
                 self.countLabel.textColor = errorColor
                 self.saveButton.isEnabled = false
             }
-            else if str.count > 12 {
+            else if str.count > self.limitCount {
                 self.dividerView.backgroundColor = errorColor
                 self.confirmLabel.text = "글자 수를 초과하였습니다."
                 self.confirmLabel.textColor = errorColor
