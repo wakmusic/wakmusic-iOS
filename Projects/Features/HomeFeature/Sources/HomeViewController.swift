@@ -15,6 +15,7 @@ public final class HomeViewController: UIViewController, ViewControllerFromStory
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         configurePlayList()
     }
 
@@ -42,6 +43,7 @@ extension HomeViewController {
                           RecommendPlayListDTO(title: "힙합 SWAG", image: DesignSystemAsset.RecommendPlayList.hiphop.image),
                           RecommendPlayListDTO(title: "캐롤", image: DesignSystemAsset.RecommendPlayList.carol.image),
                           RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
+        
         
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,
                                                                 y: 0,

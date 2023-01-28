@@ -18,6 +18,11 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
         bind()
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
     public static func viewController() -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -104,6 +109,8 @@ extension ArtistViewController {
     
     private func configureUI() {
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         let sideSpace: CGFloat = 20.0
         let layout = WaterfallLayout()
         layout.delegate = self
@@ -112,7 +119,9 @@ extension ArtistViewController {
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
         layout.headerHeight = 15.0
         layout.footerHeight = 50.0
+        
         self.collectionView.setCollectionViewLayout(layout, animated: false)
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
 }
 

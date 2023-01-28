@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import StorageFeature
 
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
@@ -48,8 +49,9 @@ class BeforeSearchContentViewController: UIViewController,ViewControllerFromStor
         bindTable()
         
 
-        
     }
+    
+   
     
     public static func viewController() -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
@@ -129,28 +131,13 @@ extension BeforeSearchContentViewController {
         
         parent.viewModel.output.isFoucused
             .withLatestFrom(parent.viewModel.input.textString) {($0,$1)}
-            .subscribe(onNext: { [weak self] (focus:Bool,str:String) in
-                
-                
-                guard let self = self else {
-                    return
-                }
-                
-                print(focus == false && str.isWhiteSpace)
-                if focus == false && str.isWhiteSpace == true //포커싱이 없고 빈 문자열 상태면 , 추천리스트 팝업
-                {
-                    self.viewModel.output.showRecommand.accept(true)
-                }
-                else
-                {
-                    self.viewModel.output.showRecommand.accept(false)
-                }
-                
-                self.tableView.reloadData() //헤더를 갈아끼기위한 reload
-                
-                
-            }).disposed(by: disposeBag)
-        
+            .map { (focus:Bool, str:String) -> Bool in
+                return focus == false && str.isWhiteSpace  == true
+            }
+            .bind(to: viewModel.output.showRecommand)
+            .disposed(by: disposeBag)
+
+//
        
         
         
@@ -210,9 +197,10 @@ extension BeforeSearchContentViewController {
 // 테이블뷰 rx
 
 extension BeforeSearchContentViewController:UITableViewDelegate{
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 50
-//    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
@@ -225,11 +213,11 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
         else if PreferenceManager.shared.recentRecords.count == 0
         {
-            return 300
+            return  (APP_HEIGHT() * 3) / 8
         }
         else
         {
-            return 40
+            return 76
         }
         
         
@@ -248,7 +236,11 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
                                                 ,height: RecommendPlayListView.getViewHeight(model: dataSource)))
         
+        
+        
         recommendView.dataSource = self.dataSource
+        recommendView.delegate = self
+        
         if viewModel.output.showRecommand.value
         {
             return recommendView
@@ -268,8 +260,20 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
     }
 
 
+}
 
 
+extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
+    func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
+        
+        let vc = PlayListDetailViewController.viewController(.wmRecommand)
+        
+        self.parent?.navigationController?.pushViewController(vc, animated: true)
+     
+        
+    }
+    
+    
 }
 
 

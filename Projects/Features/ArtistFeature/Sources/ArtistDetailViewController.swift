@@ -37,13 +37,6 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
         bind()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        guard let child = self.children.first as? ArtistMusicViewController else { return }
-        child.view.frame = musicContentView.bounds
-    }
-    
     public static func viewController() -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -133,6 +126,10 @@ extension ArtistDetailViewController {
         self.addChild(viewController)
         self.musicContentView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
+        
+        viewController.view.snp.makeConstraints {
+            $0.edges.equalTo(musicContentView)
+        }
         
         self.view.layoutIfNeeded()
     }

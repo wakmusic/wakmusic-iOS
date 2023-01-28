@@ -17,6 +17,14 @@ public func APP_HEIGHT() -> CGFloat {
     return UIScreen.main.bounds.size.height
 }
 
+public func PLAYER_HEIGHT() -> CGFloat {
+    return 56.0
+}
+
+public func STATUS_BAR_HEGHIT() -> CGFloat {
+    return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
+}
+
 public func APP_VERSION() -> String {
     return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
 }
