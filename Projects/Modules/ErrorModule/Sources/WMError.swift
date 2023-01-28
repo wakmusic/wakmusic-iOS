@@ -5,6 +5,7 @@ public enum WMError: Error {
     case custom(message: String = "알 수 없는 오류가 발생하였습니다", code: Int = 500)
     case badRequest
     case tokenExpired
+    case notFound
     case tooManyRequest
     case internalServerError
 }
@@ -20,6 +21,9 @@ extension WMError: LocalizedError {
 
         case .badRequest:
             return "요청이 잘못되었습니다."
+
+        case .notFound:
+            return "요청한 것을 찾을 수 없습니다."
 
         case .tokenExpired:
             return "인증이 만료되었습니다. 다시 로그인해주세요!"
