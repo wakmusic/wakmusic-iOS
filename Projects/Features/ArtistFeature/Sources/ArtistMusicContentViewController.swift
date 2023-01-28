@@ -21,6 +21,10 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
     var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
 
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,6 +67,10 @@ extension ArtistMusicContentViewController {
     
     private func configureUI() {
         
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+
         let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
         
         allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),

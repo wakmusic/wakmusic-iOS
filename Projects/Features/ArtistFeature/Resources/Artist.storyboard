@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -171,17 +170,29 @@
                                                         <state key="normal" image="document_on"/>
                                                     </button>
                                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="msH-8e-y5Q">
-                                                        <rect key="frame" x="16" y="48.000000000000007" width="166.33333333333334" height="124.66666666666669"/>
+                                                        <rect key="frame" x="16" y="48.000000000000007" width="172.33333333333334" height="124.66666666666669"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QM3-xt-i3B">
-                                                                <rect key="frame" x="0.0" y="0.0" width="166.33333333333334" height="71.666666666666671"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="272.33333333333331"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sd9-6x-4Kf">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="166.33333333333334" height="71.666666666666671"/>
-                                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
-                                                                        <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vC1-9M-cmr">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="272.33333333333331"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sd9-6x-4Kf">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="166.33333333333334" height="272.33333333333331"/>
+                                                                                <string key="text">공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. 공백 포함 120자 이내 소개글이 나옵니다. 초과하면 스크롤이 생깁니다. </string>
+                                                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
+                                                                                <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstItem="Sd9-6x-4Kf" firstAttribute="top" secondItem="vC1-9M-cmr" secondAttribute="top" id="1eu-5V-0dm"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="Sd9-6x-4Kf" secondAttribute="bottom" id="MHr-Ky-OR5"/>
+                                                                            <constraint firstItem="Sd9-6x-4Kf" firstAttribute="leading" secondItem="vC1-9M-cmr" secondAttribute="leading" id="NBe-RM-NNp"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Sd9-6x-4Kf" secondAttribute="trailing" constant="6" id="vzh-Tf-R0I"/>
+                                                                        </constraints>
+                                                                    </view>
                                                                 </subviews>
                                                             </stackView>
                                                         </subviews>
@@ -201,7 +212,7 @@
                                                     <constraint firstAttribute="bottom" secondItem="msH-8e-y5Q" secondAttribute="bottom" constant="16" id="Dci-Jw-Es2"/>
                                                     <constraint firstItem="cYZ-24-Z5e" firstAttribute="top" secondItem="6eV-FK-IbB" secondAttribute="top" constant="16" id="HXJ-aa-JAz"/>
                                                     <constraint firstItem="msH-8e-y5Q" firstAttribute="leading" secondItem="6eV-FK-IbB" secondAttribute="leading" constant="16" id="j2c-AI-xRV"/>
-                                                    <constraint firstAttribute="trailing" secondItem="msH-8e-y5Q" secondAttribute="trailing" constant="16" id="kT1-FY-q3n"/>
+                                                    <constraint firstAttribute="trailing" secondItem="msH-8e-y5Q" secondAttribute="trailing" constant="10" id="kT1-FY-q3n"/>
                                                     <constraint firstItem="cYZ-24-Z5e" firstAttribute="leading" secondItem="6eV-FK-IbB" secondAttribute="leading" constant="16" id="osQ-OX-Jn6"/>
                                                     <constraint firstAttribute="trailing" secondItem="oAc-YA-UoU" secondAttribute="trailing" constant="16" id="qJd-Ra-vi3"/>
                                                 </constraints>
@@ -241,13 +252,18 @@
                     </view>
                     <size key="freeformSize" width="393" height="230"/>
                     <connections>
+                        <outlet property="artistGroupLabel" destination="he6-oI-bGB" id="uQN-HD-EDe"/>
                         <outlet property="artistImageView" destination="meV-gF-5BZ" id="dUg-HZ-EFX"/>
+                        <outlet property="artistIntroLabel" destination="ne5-kV-2su" id="I4d-LH-IDA"/>
                         <outlet property="artistNameLabel" destination="7rb-8Q-BEe" id="JdJ-eX-T81"/>
                         <outlet property="descriptionBackButton" destination="oAc-YA-UoU" id="yYA-wc-8Gr"/>
                         <outlet property="descriptionBackView" destination="6eV-FK-IbB" id="oy1-Mp-Hy2"/>
                         <outlet property="descriptionFrontButton" destination="4gB-Rq-DeW" id="Dtw-9j-o0K"/>
                         <outlet property="descriptionFrontView" destination="FNn-dd-tDU" id="HhE-11-Vrb"/>
                         <outlet property="descriptionView" destination="Xk9-8B-9HP" id="5Uk-95-pN3"/>
+                        <outlet property="introDescriptionLabel" destination="Sd9-6x-4Kf" id="HFj-NG-Q0F"/>
+                        <outlet property="introTitleLabel" destination="cYZ-24-Z5e" id="cgp-o6-sZO"/>
+                        <outlet property="scrollView" destination="msH-8e-y5Q" id="mUr-SR-OYU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BOc-PB-qQj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -329,9 +345,9 @@
                     </view>
                     <connections>
                         <outlet property="backButton" destination="2VE-qp-fkm" id="10e-xz-U9r"/>
+                        <outlet property="contentView" destination="dJE-xf-aMp" id="xKa-Jn-VHb"/>
                         <outlet property="gradationImageView" destination="2TJ-8q-Vmp" id="HdG-ec-cb3"/>
                         <outlet property="headerContentView" destination="dh2-cR-oMY" id="qKF-pd-9JN"/>
-                        <outlet property="musicContentView" destination="dJE-xf-aMp" id="NN7-PO-hgF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aNc-Li-0YJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -364,7 +380,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MZi-yO-j9I"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.95294117647058818" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="RCc-Qd-jFG" firstAttribute="top" secondItem="MZi-yO-j9I" secondAttribute="top" id="3wn-y6-lQY"/>
                             <constraint firstItem="MZi-yO-j9I" firstAttribute="trailing" secondItem="RCc-Qd-jFG" secondAttribute="trailing" id="Ny0-aN-kZK"/>
@@ -526,8 +542,5 @@
         <image name="back" width="32" height="32"/>
         <image name="document_off" width="24" height="24"/>
         <image name="document_on" width="24" height="24"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

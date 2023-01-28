@@ -13,12 +13,22 @@ import RxSwift
 import RxCocoa
 import HPParallaxHeader
 
-class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard {
-
+class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+    
     @IBOutlet weak var gradationImageView: UIImageView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var headerContentView: UIView!
-    @IBOutlet weak var musicContentView: UIView!
+    @IBOutlet weak var contentView: UIView!
+    
+    private lazy var headerViewController: ArtistDetailHeaderViewController = {
+        let header = ArtistDetailHeaderViewController.viewController()
+        return header
+    }()
+    
+    private lazy var contentViewController: ArtistMusicViewController = {
+        let content = ArtistMusicViewController.viewController()
+        return content
+    }()
 
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -28,9 +38,9 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
-        bind()
+        addHeader()
+        addContent()
     }
     
     public static func viewController() -> ArtistDetailViewController {
@@ -44,35 +54,22 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
 }
 
 extension ArtistDetailViewController {
-    
-    private func bind() {
-        
-        
-    }
-    
     private func configureUI() {
-        
         gradationImageView.image = DesignSystemAsset.Artist.artistDetailBg.image
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+    }
+    
+    private func addHeader() {
+        self.addChild(headerViewController)
+        self.headerContentView.addSubview(headerViewController.view)
+        headerViewController.didMove(toParent: self)
 
-        //Header
-        let header = ArtistDetailHeaderViewController.viewController()
-        self.addChild(header)
-        self.headerContentView.addSubview(header.view)
-        header.didMove(toParent: self)
-
-        header.view.snp.makeConstraints {
+        headerViewController.view.snp.makeConstraints {
             $0.edges.equalTo(headerContentView)
         }
-
-        //Content
-        let content = ArtistMusicViewController.viewController()
-        self.addChild(content)
-        self.musicContentView.addSubview(content.view)
-        content.didMove(toParent: self)
-
-        content.view.snp.makeConstraints {
-            $0.edges.equalTo(musicContentView)
-        }
+    }
+    
+    private func addContent() {        
+        self.add(asChildViewController: contentViewController)
     }
 }
