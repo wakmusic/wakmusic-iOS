@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EntireSectionHeader" customModule="SearchFeature_SearchFeature" customModuleProvider="target">
+            <connections>
+                <outlet property="categoryLabel" destination="HCH-Vt-HrF" id="LDX-xp-qLB"/>
+                <outlet property="moveTabButton" destination="3kH-8C-bYa" id="z94-Ni-OAR"/>
+                <outlet property="numberOfSongLabel" destination="v0r-r8-7jX" id="r5B-26-WNY"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HCH-Vt-HrF">
+                    <rect key="frame" x="20" y="139" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0r-r8-7jX">
+                    <rect key="frame" x="66" y="139" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleAspectFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-8C-bYa">
+                    <rect key="frame" x="276.66666666666669" y="138.66666666666666" width="99.333333333333314" height="22"/>
+                    <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="ㅁㄴㅇㅁㄴㅇ" image="search_arrow_right">
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration"/>
+                    </state>
+                    <connections>
+                        <action selector="switchTabAction:" destination="-1" eventType="touchUpInside" id="FUG-Tv-cYl"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="HCH-Vt-HrF" secondAttribute="bottom" constant="6" id="0Dp-vR-Wje"/>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="centerY" secondItem="HCH-Vt-HrF" secondAttribute="centerY" id="0dm-a6-Dmx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3kH-8C-bYa" secondAttribute="trailing" constant="24" id="M4X-Ni-79w"/>
+                <constraint firstItem="v0r-r8-7jX" firstAttribute="leading" secondItem="HCH-Vt-HrF" secondAttribute="trailing" constant="4" id="OqN-ii-kot"/>
+                <constraint firstItem="HCH-Vt-HrF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="d0m-Za-bxb"/>
+                <constraint firstItem="v0r-r8-7jX" firstAttribute="centerY" secondItem="HCH-Vt-HrF" secondAttribute="centerY" id="kpn-XU-vIc"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="27.69230769230769" y="20.616113744075829"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="search_arrow_right" width="5.3333334922790527" height="10"/>
+    </resources>
+</document>

@@ -1,20 +1,17 @@
 //
 //  WarningView.swift
-//  SearchFeature
-//
 //  Created by yongbeomkwak on 2023/01/07.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
-
 import UIKit
-import DesignSystem
 
-class WarningView: UIView {
+public class WarningView: UIView {
 
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var warningLabelView: UILabel!
     @IBOutlet weak var warningImageView: UIImageView!
-    var text:String = ""
+    
+    public var text:String = ""
     {
         didSet{
             warningLabelView.text = text
@@ -22,7 +19,7 @@ class WarningView: UIView {
     }
     
     
-    override init(frame: CGRect) { //코드쪽에서 생성 시 호출
+   public override init(frame: CGRect) { //코드쪽에서 생성 시 호출
         super.init(frame: frame)
         self.setupView()
     }
@@ -36,6 +33,7 @@ class WarningView: UIView {
     
     private func setupView()
     {
+        
         if let view = Bundle.module.loadNibNamed("WarningView", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임

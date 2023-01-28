@@ -25,6 +25,9 @@ public extension TargetDependency.SPM {
     static let Nimble = TargetDependency.external(name: "Nimble")
     static let Needle = TargetDependency.external(name: "NeedleFoundation")
     static let Tabman = TargetDependency.external(name: "Tabman")
+    static let RxDataSources = TargetDependency.external(name: "RxDataSources")
+    static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
+    static let HPParallaxHeader = TargetDependency.external(name: "HPParallaxHeader")
 }
 
 public extension Package {

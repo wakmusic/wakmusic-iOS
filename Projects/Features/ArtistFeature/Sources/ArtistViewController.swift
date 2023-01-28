@@ -3,6 +3,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import HPParallaxHeader
 
 public final class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -16,6 +17,12 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
 
         configureUI()
         bind()
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DEBUG_LOG("viewDidAppear")
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     public static func viewController() -> ArtistViewController {
@@ -98,12 +105,12 @@ extension ArtistViewController {
                 self.navigationController?.pushViewController(viewController, animated: true)
                 
             }).disposed(by: disposeBag)
-
-
     }
     
     private func configureUI() {
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+
         let sideSpace: CGFloat = 20.0
         let layout = WaterfallLayout()
         layout.delegate = self
@@ -112,7 +119,9 @@ extension ArtistViewController {
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
         layout.headerHeight = 15.0
         layout.footerHeight = 50.0
+        
         self.collectionView.setCollectionViewLayout(layout, animated: false)
+        self.collectionView.showsVerticalScrollIndicator = false
     }
 }
 

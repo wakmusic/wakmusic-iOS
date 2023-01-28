@@ -11,8 +11,6 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import HomeFeature
-import SearchFeature
 
 class ArtistMusicContentViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -20,8 +18,12 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var allPlayButton: UIButton!
     @IBOutlet weak var shufflePlayButton: UIButton!
     
-    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: [1,2,3,4,5,6,7,8,9,10])
+    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
+
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ class ArtistMusicContentViewController: UIViewController, ViewControllerFromStor
         configureUI()
         bind()
     }
-
+    
     public static func viewController() -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -56,14 +58,19 @@ extension ArtistMusicContentViewController {
             .withLatestFrom(dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (indexPath, model) in
                 guard let `self` = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
+//                self.tableView.deselectRow(at: indexPath, animated: true)
                 let model = model[indexPath.row]
+
             }).disposed(by: disposeBag)
 
     }
     
     private func configureUI() {
         
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+
         let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
         
         allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
@@ -87,6 +94,9 @@ extension ArtistMusicContentViewController {
         shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         shufflePlayButton.layer.borderWidth = 1
         shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
+        
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
 }
 

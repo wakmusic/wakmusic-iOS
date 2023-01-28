@@ -50,6 +50,7 @@ public extension RecommendPlayListView {
     
     private func setupView(){
         
+        
         guard let view = Bundle.module.loadNibNamed("RecommendPlayListView", owner: self, options: nil)?.first as? UIView else { return }
         view.frame = self.bounds
         view.layoutIfNeeded()

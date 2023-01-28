@@ -36,7 +36,6 @@ class ArtistMusicCell: UITableViewCell {
 extension ArtistMusicCell {
     
     static func getCellHeight() -> CGFloat {
-        
         let base: CGFloat = 10 + 10
         let width: CGFloat = (72.0 * APP_WIDTH()) / 375.0
         let height: CGFloat = (width * 40.0) / 72.0

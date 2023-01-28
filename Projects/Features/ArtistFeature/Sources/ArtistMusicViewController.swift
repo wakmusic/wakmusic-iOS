@@ -16,16 +16,28 @@ class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBo
 
     @IBOutlet weak var tabBarContentView: UIView!
     
-    private var viewControllers: [UIViewController] = [ArtistMusicContentViewController.viewController(),
-                                                       ArtistMusicContentViewController.viewController(),
-                                                       ArtistMusicContentViewController.viewController()]
+    private lazy var viewControllers: [UIViewController] = {
+        let viewControllers = [ArtistMusicContentViewController.viewController(),
+                               ArtistMusicContentViewController.viewController(),
+                               ArtistMusicContentViewController.viewController()]
+        return viewControllers
+    }()
+
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
     }
     
+    override func pageboyViewController(_ pageboyViewController: PageboyViewController,
+                                        didScrollToPageAt index: TabmanViewController.PageIndex,
+                                        direction: PageboyViewController.NavigationDirection,
+                                        animated: Bool) {
+    }
+
     public static func viewController() -> ArtistMusicViewController {
         let viewController = ArtistMusicViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         return viewController
@@ -49,10 +61,10 @@ extension ArtistMusicViewController {
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
-            button.tintColor = colorFromRGB(0x98A2B3)
-            button.selectedTintColor = colorFromRGB(0x101828)
-            button.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            button.selectedFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
         
         // indicator
