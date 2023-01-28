@@ -31,7 +31,7 @@ class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard
     }()
 
     var previousIndex: Int?
-    var selectedIndex: Int = 0
+    var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +58,8 @@ class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard
 extension MainTabBarViewController {
     
     private func configureUI() {
-        add(asChildViewController: viewControllers[0])
+        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
+        add(asChildViewController: viewControllers[startPage])
     }
     
     func updateContent(previous: Int, current: Int) {
@@ -68,6 +69,7 @@ extension MainTabBarViewController {
         
         self.previousIndex = previous
         self.selectedIndex = current
+        Utility.PreferenceManager.startPage = current
     }
     
     func forceUpdateContent(for index: Int) {
@@ -75,10 +77,11 @@ extension MainTabBarViewController {
         if let previous = self.previousIndex{
             remove(asChildViewController: viewControllers[previous])
         }
-        
         add(asChildViewController: viewControllers[index])
+        
         self.previousIndex = self.selectedIndex
         self.selectedIndex = index
+        Utility.PreferenceManager.startPage = index
     }
 }
 
