@@ -18,7 +18,6 @@ let project = Project.makeModule(
         .SPM.Kingfisher,
         .SPM.Tabman,
         .SPM.YoutubeKit,
-        .SPM.YouTubePlayerKit
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
         .SPM.HPParallaxHeader
