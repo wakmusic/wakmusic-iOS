@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SwiftUI
+import PanModal
 
 public extension UIViewController {
 
@@ -36,5 +37,9 @@ public extension UIViewController {
         Preview(viewController: self)
     }
     #endif
-
+    
+    func showPanModal(content: UIViewController & PanModalPresentable) {
+        let viewController: PanModalPresentable.LayoutType = content
+        self.presentPanModal(viewController)
+    }
 }
