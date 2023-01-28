@@ -71,7 +71,8 @@ extension BottomTabBarViewController {
     private func configureUI() {
         
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
-        
+        DEBUG_LOG("startPage: \(startPage)")
+
         for (index, model) in self.tabItems.enumerated() {
             let tabView = self.tabs[index]
             model.isSelected = (index == startPage)

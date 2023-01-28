@@ -17,7 +17,7 @@ public final class PreferenceManager {
     /// UserDefaults에 저장 된 데이터에 접근하기 위한 키 값의 나열.
     enum Constants: String {
         case recentRecords // 최근 검색어
-        case startPage
+        case startPage //시작 페이지(탭)
     }
 
     /// Rx에서 접근하기 위한 서브젝트
