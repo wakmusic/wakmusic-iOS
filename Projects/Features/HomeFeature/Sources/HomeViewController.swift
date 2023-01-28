@@ -24,7 +24,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     @IBAction func buttonAction(_ sender: Any) {
-        self.showToast(text: "토스트 팝업 입니다 일정 시간이 지나면 사라집니다.")
+        self.showPanModal(content: NoticePopupViewController())
     }
 }
 
