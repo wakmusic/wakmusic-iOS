@@ -3,6 +3,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import HPParallaxHeader
 
 public final class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -20,6 +21,7 @@ public final class ArtistViewController: UIViewController, ViewControllerFromSto
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        DEBUG_LOG("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
@@ -103,8 +105,6 @@ extension ArtistViewController {
                 self.navigationController?.pushViewController(viewController, animated: true)
                 
             }).disposed(by: disposeBag)
-
-
     }
     
     private func configureUI() {
@@ -121,7 +121,7 @@ extension ArtistViewController {
         layout.footerHeight = 50.0
         
         self.collectionView.setCollectionViewLayout(layout, animated: false)
-        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.collectionView.showsVerticalScrollIndicator = false
     }
 }
 

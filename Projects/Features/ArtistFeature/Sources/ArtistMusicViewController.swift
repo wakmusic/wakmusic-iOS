@@ -16,14 +16,26 @@ class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBo
 
     @IBOutlet weak var tabBarContentView: UIView!
     
-    private var viewControllers: [UIViewController] = [ArtistMusicContentViewController.viewController(),
-                                                       ArtistMusicContentViewController.viewController(),
-                                                       ArtistMusicContentViewController.viewController()]
+    private lazy var viewControllers: [UIViewController] = {
+        let viewControllers = [ArtistMusicContentViewController.viewController(),
+                               ArtistMusicContentViewController.viewController(),
+                               ArtistMusicContentViewController.viewController()]
+        return viewControllers
+    }()
+
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
+    }
+    
+    override func pageboyViewController(_ pageboyViewController: PageboyViewController,
+                                        didScrollToPageAt index: TabmanViewController.PageIndex,
+                                        direction: PageboyViewController.NavigationDirection,
+                                        animated: Bool) {
     }
 
     public static func viewController() -> ArtistMusicViewController {

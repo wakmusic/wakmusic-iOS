@@ -25,12 +25,8 @@ public final class HomeViewController: UIViewController, ViewControllerFromStory
     }
 
     @IBAction func buttonAction(_ sender: Any) {
-        let textPopupViewController = TextPopupViewController.viewController(
-            text: "한 줄\n두 줄",
-            cancelButtonIsHidden: false
-        )
-        let viewController: PanModalPresentable.LayoutType = textPopupViewController
-        self.presentPanModal(viewController)
+        let content = TextPopupViewController.viewController(text: "한 줄\n두 줄", cancelButtonIsHidden: true)
+        self.showPanModal(content: content)
     }
 }
 

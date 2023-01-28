@@ -11,30 +11,36 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import HPParallaxHeader
 
-class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard {
-
+class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+    
     @IBOutlet weak var gradationImageView: UIImageView!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var musicContentView: UIView!
-    @IBOutlet weak var artistImageView: UIImageView!
-    @IBOutlet weak var descriptionView: UIView!
-    @IBOutlet weak var descriptionFrontView: UIView!
-    @IBOutlet weak var descriptionBackView: UIView!
-    @IBOutlet weak var descriptionFrontButton: UIButton!
-    @IBOutlet weak var descriptionBackButton: UIButton!
+    @IBOutlet weak var headerContentView: UIView!
+    @IBOutlet weak var contentView: UIView!
     
-    //Label
-    @IBOutlet weak var artistNameLabel: UILabel!
+    private lazy var headerViewController: ArtistDetailHeaderViewController = {
+        let header = ArtistDetailHeaderViewController.viewController()
+        return header
+    }()
     
-    var isBack: Bool = false
+    private lazy var contentViewController: ArtistMusicViewController = {
+        let content = ArtistMusicViewController.viewController()
+        return content
+    }()
+
     var disposeBag: DisposeBag = DisposeBag()
     
+    deinit {
+        DEBUG_LOG("\(Self.self) Deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
-        bind()
+        configureHeader()
+        configureContent()
     }
     
     public static func viewController() -> ArtistDetailViewController {
@@ -48,89 +54,22 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
 }
 
 extension ArtistDetailViewController {
-    
-    private func bind() {
-        
-        let mergeObservable = Observable.merge(descriptionFrontButton.rx.tap.map { _ in () },
-                                               descriptionBackButton.rx.tap.map { _ in () })
-
-        mergeObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.flip()
-            }).disposed(by: disposeBag)
-
-    }
-    
-    private func flip() {
-        
-        if self.isBack {
-            self.isBack = false
-            self.descriptionFrontView.isHidden = self.isBack
-            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
-            
-            UIView.transition(with: self.descriptionView,
-                              duration: 0.3,
-                              options: .transitionFlipFromLeft,
-                              animations: nil,
-                              completion: { _ in
-            })
-
-        }else{
-            self.isBack = true
-            self.descriptionFrontView.isHidden = self.isBack
-            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
-
-            UIView.transition(with: self.descriptionView,
-                              duration: 0.3,
-                              options: .transitionFlipFromRight,
-                              animations: nil,
-                              completion: { _ in
-            })
-        }
-    }
-    
     private func configureUI() {
-        
         gradationImageView.image = DesignSystemAsset.Artist.artistDetailBg.image
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-        artistImageView.image = DesignSystemAsset.Artist.guseguDetail.image
-        
-        descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
-        descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
-        
-        descriptionView.layer.borderWidth = 1
-        descriptionView.layer.borderColor = colorFromRGB(0xFCFCFD).cgColor
-        descriptionView.layer.cornerRadius = 8
-        
-        descriptionFrontView.isHidden = false
-        descriptionBackView.isHidden = true
-        
-        //ArtistName
-        let artistName: String = "고세구"
-        let artistEngName: String = "Gosegu"
-        
-        let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
-                                                                    attributes: [.font: UIFont.systemFont(ofSize: 24, weight: .bold),
-                                                                                 .foregroundColor: colorFromRGB(0x101828)])
-        
-        let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
+    }
+    
+    private func configureHeader() {
+        self.addChild(headerViewController)
+        self.headerContentView.addSubview(headerViewController.view)
+        headerViewController.didMove(toParent: self)
 
-        artistNameAttributedString.addAttributes([.font: UIFont.systemFont(ofSize: 14, weight: .light),
-                                                  .foregroundColor: colorFromRGB(0x101828)],
-                                                  range: artistEngNameRange)
-
-        self.artistNameLabel.attributedText = artistNameAttributedString
-        
-        let viewController = ArtistMusicViewController.viewController()
-        self.addChild(viewController)
-        self.musicContentView.addSubview(viewController.view)
-        viewController.didMove(toParent: self)
-        
-        viewController.view.snp.makeConstraints {
-            $0.edges.equalTo(musicContentView)
+        headerViewController.view.snp.makeConstraints {
+            $0.edges.equalTo(headerContentView)
         }
-        
-        self.view.layoutIfNeeded()
+    }
+    
+    private func configureContent() {
+        self.add(asChildViewController: contentViewController)
     }
 }
