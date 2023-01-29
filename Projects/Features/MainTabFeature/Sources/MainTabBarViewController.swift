@@ -10,13 +10,14 @@ import UIKit
 import Utility
 import DesignSystem
 import SnapKit
+import BaseFeature
 import HomeFeature
 import SearchFeature
 import ArtistFeature
 import ChartFeature
 import StorageFeature
 
-class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
     @IBOutlet weak var contentView: UIView!
 
@@ -30,8 +31,8 @@ class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, 
     }()
 
     var previousIndex: Int?
-    var selectedIndex: Int = 0
-
+    var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,14 +56,15 @@ class MainTabBarViewController: UIViewController, ViewControllerFromStoryBoard, 
 }
 
 extension MainTabBarViewController {
-    
+
     private func configureUI() {
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        add(asChildViewController: viewControllers[0])
+        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
+        add(asChildViewController: viewControllers[startPage])
     }
     
     func updateContent(previous: Int, current: Int) {
+        
+        Utility.PreferenceManager.startPage = current
         
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
@@ -73,11 +75,13 @@ extension MainTabBarViewController {
     
     func forceUpdateContent(for index: Int) {
         
+        Utility.PreferenceManager.startPage = index
+
         if let previous = self.previousIndex{
             remove(asChildViewController: viewControllers[previous])
         }
-        
         add(asChildViewController: viewControllers[index])
+        
         self.previousIndex = self.selectedIndex
         self.selectedIndex = index
     }

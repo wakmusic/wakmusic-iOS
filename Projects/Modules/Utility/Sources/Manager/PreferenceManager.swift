@@ -17,6 +17,7 @@ public final class PreferenceManager {
     /// UserDefaults에 저장 된 데이터에 접근하기 위한 키 값의 나열.
     enum Constants: String {
         case recentRecords // 최근 검색어
+        case startPage //시작 페이지(탭)
     }
 
     /// Rx에서 접근하기 위한 서브젝트
@@ -28,6 +29,9 @@ public final class PreferenceManager {
         let records = (UserDefaults.standard.array(forKey: Constants.recentRecords.rawValue) as? [String]) ?? []
         return records
     }
+    
+    @UserDefaultWrapper(key: Constants.startPage.rawValue, defaultValue: nil)
+    public static var startPage: Int?
 }
 
 

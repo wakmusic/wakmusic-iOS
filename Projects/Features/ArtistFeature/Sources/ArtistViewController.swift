@@ -4,8 +4,9 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import HPParallaxHeader
+import BaseFeature
 
-public final class ArtistViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -109,8 +110,6 @@ extension ArtistViewController {
     
     private func configureUI() {
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-
         let sideSpace: CGFloat = 20.0
         let layout = WaterfallLayout()
         layout.delegate = self

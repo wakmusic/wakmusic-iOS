@@ -18,7 +18,7 @@ class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard
 
     @IBOutlet weak var stackView: UIStackView!
     
-    var currentIndex = 0
+    var currentIndex = Utility.PreferenceManager.startPage ?? 0
     weak var delegate: BottomTabBarViewDelegate?
 
     private lazy var tabs: [TabItemView] = {
@@ -70,9 +70,12 @@ extension BottomTabBarViewController {
     
     private func configureUI() {
         
+        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
+        DEBUG_LOG("startPage: \(startPage)")
+
         for (index, model) in self.tabItems.enumerated() {
             let tabView = self.tabs[index]
-            model.isSelected = index == 0
+            model.isSelected = (index == startPage)
             tabView.item = model
             tabView.delegate = self
             self.stackView.addArrangedSubview(tabView)

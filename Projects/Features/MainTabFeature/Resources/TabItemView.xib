@@ -18,8 +18,12 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sNP-fz-7vM">
                     <rect key="frame" x="0.0" y="0.0" width="63" height="56"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_on" translatesAutoresizingMaskIntoConstraints="NO" id="kIm-bc-TTm">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kIm-bc-TTm">
                             <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="32" id="HR5-db-m3K"/>
+                                <constraint firstAttribute="height" constant="32" id="rtW-5d-1kD"/>
+                            </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vhm-Xi-Ft1">
                             <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
@@ -64,7 +68,6 @@
         </view>
     </objects>
     <resources>
-        <image name="home_on" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -20,6 +20,6 @@ let project = Project.makeModule(
         .SPM.YoutubeKit,
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
-        .SPM.HPParallaxHeader
+        .SPM.SwiftEntryKit
     ]
 )
