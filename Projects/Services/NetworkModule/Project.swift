@@ -6,6 +6,7 @@ let project = Project.makeModule(
     product: .staticFramework,
     dependencies: [
         .Project.Module.Utility,
-        .Project.Service.APIKit
+        .Project.Service.APIKit,
+        .Project.Service.Domain
     ]
 )

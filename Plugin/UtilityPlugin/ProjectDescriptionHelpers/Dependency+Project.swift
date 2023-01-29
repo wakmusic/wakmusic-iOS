@@ -26,6 +26,8 @@ public extension TargetDependency.Project.Module {
     static let FeatureThirdPartyLib = TargetDependency.module(name: "FeatureThirdPartyLib")
     static let ThirdPartyLib = TargetDependency.module(name: "ThirdPartyLib")
     static let Utility = TargetDependency.module(name: "Utility")
+    static let KeychainModule = TargetDependency.module(name: "KeychainModule")
+    static let ErrorModule = TargetDependency.module(name: "ErrorModule")
 }
 
 public extension TargetDependency.Project.Service {
@@ -33,6 +35,7 @@ public extension TargetDependency.Project.Service {
     static let Data = TargetDependency.service(name: "DataModule")
     static let Domain = TargetDependency.service(name: "DomainModule")
     static let DatabaseModule = TargetDependency.service(name: "DatabaseModule")
+    static let DataMappingModule = TargetDependency.service(name: "DataMappingModule")
     static let NetworkModule = TargetDependency.service(name: "NetworkModule")
 }
 
