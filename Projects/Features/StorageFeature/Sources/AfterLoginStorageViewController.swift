@@ -23,7 +23,15 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var editButton: UIButton!
     
-
+    
+    
+    @IBAction func pressRequestAction(_ sender: UIButton) {
+        
+        let viewController = RequestViewController.viewController()
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     
     @IBAction func pressEditProfileAction(_ sender: UIButton) {
         

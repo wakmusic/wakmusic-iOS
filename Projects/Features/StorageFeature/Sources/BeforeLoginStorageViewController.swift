@@ -88,7 +88,7 @@ extension BeforeLoginStorageViewController{
         for sv in superViewArr {
             sv.layer.cornerRadius = 12
             sv.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
-            sv.layer.borderWidth = 1
+            sv.layer.borderWidth = 3
         }
         
         
@@ -134,6 +134,8 @@ extension BeforeLoginStorageViewController{
         
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
+        
+    
         
         
         
