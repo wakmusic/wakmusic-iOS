@@ -29,6 +29,15 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBOutlet weak var versionLabel: UILabel!
     
+    
+
+    @IBAction func pressBackAction(_ sender: UIButton) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
