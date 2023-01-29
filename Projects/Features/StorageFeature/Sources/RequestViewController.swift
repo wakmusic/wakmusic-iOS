@@ -38,6 +38,18 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     
     
     
+    
+    
+    @IBAction func moveQnaAction(_ sender: UIButton) {
+        
+        let viewController = QnAViewController.viewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
+        
+    }
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
