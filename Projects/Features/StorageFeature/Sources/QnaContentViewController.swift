@@ -32,6 +32,10 @@ class QnaContentViewController: UIViewController, ViewControllerFromStoryBoard {
         // Do any additional setup after loading the view.
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
+    }
     
     
 
