@@ -42,7 +42,7 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
         
-        let viewController = QnAViewController.viewController()
+        let viewController = QnaViewController.viewController()
         self.navigationController?.pushViewController(viewController, animated: true)
         
     }
