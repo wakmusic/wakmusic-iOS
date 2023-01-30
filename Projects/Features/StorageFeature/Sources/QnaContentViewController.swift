@@ -54,13 +54,20 @@ extension QnaContentViewController{
         tableView.delegate = self
 
         tableView.reloadData()
-        bindRx()
         
     }
     
-    private func bindRx(){
+    private func scrollToBottom(indexPath:IndexPath){
+
         
-    }
+
+           DispatchQueue.main.async {
+
+               self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+
+           }
+
+       }
     
 }
 
@@ -125,6 +132,15 @@ extension QnaContentViewController:UITableViewDelegate{
         
         dataSource[indexPath.section].isOpened = !dataSource[indexPath.section].isOpened
         tableView.reloadSections([indexPath.section], with: .none)
+        
+        
+        let next = IndexPath(row: 1, section: indexPath.section  )
+        
+        
+        if(dataSource[indexPath.section].isOpened  )
+        {
+            self.scrollToBottom(indexPath: next)
+        }
         
         
         
