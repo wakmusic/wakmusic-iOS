@@ -40,7 +40,7 @@ class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
     
     
-    let viewControllers:[UIViewController] = [QnaContentViewController.viewController([QnAModel.init(categoty: "플레이리스트", question: "플레이리스트는 어떻게 만드나요?", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false)]),UIViewController()]
+    let viewControllers:[UIViewController] = [QnaContentViewController.viewController([QnAModel.init(categoty: "플레이리스트", question: "플레이리스트는 어떻게 만드나요?", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false)]),UIViewController(),UIViewController(),UIViewController()]
     
     
 
@@ -60,16 +60,22 @@ extension QnaViewController {
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
+        
+        
+        
         //탭바 설정
         self.dataSource = self
         let bar = TMBar.ButtonBar()
-        
+
+
         
         // 배경색
        
         bar.backgroundView.style = .flat(color: colorFromRGB(0xF0F3F6))
         
+        
         // 간격 설정
+        
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .intrinsic
         bar.layout.transitionStyle = .progressive
@@ -83,12 +89,17 @@ extension QnaViewController {
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
         
+        var tmp =  UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 1))
+        tmp.backgroundColor = .red
+        
+        bar.insertSubview(tmp, at: 0)
         // indicator
         bar.indicator.weight = .custom(value: 3)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
+       
         
     }
     
@@ -112,12 +123,14 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
         
         switch index{
         case 0:
-            return TMBarItem(title: " 전체")
+ 
+            return TMBarItem(title: "전체    ")
         default:
-            let title = "카테고리\(index)"
+            let title = "카테고리\(index)  "
            return TMBarItem(title: title)
         }
         
     }
-    
+ 
 }
+

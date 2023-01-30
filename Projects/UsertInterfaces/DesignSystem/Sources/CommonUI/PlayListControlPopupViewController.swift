@@ -84,7 +84,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
-    let limitCount:Int = 18
+    let limitCount:Int = 12
     
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!

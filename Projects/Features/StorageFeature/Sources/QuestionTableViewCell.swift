@@ -21,7 +21,7 @@ class QuestionTableViewCell: UITableViewCell {
         // Initialization code
         categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleLabel.setLineSpacing(lineSpacing: 10)
+        titleLabel.setLineSpacing(lineSpacing: 7)
     }
 
 

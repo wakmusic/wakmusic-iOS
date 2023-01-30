@@ -19,7 +19,7 @@ class AnswerTableViewCell: UITableViewCell {
         // Initialization code
         
         answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        answerLabel.setLineSpacing(lineSpacing: 10)
+        answerLabel.setLineSpacing(lineSpacing: 6)
     }
 
     
