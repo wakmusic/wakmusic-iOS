@@ -134,10 +134,10 @@ extension QnaContentViewController:UITableViewDelegate{
         tableView.reloadSections([indexPath.section], with: .none)
         
         
-        let next = IndexPath(row: 1, section: indexPath.section  )
+        let next = IndexPath(row: 1, section: indexPath.section  ) //row 1이 답변 쪽
         
         
-        if(dataSource[indexPath.section].isOpened  )
+        if dataSource[indexPath.section].isOpened
         {
             self.scrollToBottom(indexPath: next)
         }

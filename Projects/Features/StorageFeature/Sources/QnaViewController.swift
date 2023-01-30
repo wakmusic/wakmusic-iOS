@@ -71,7 +71,7 @@ extension QnaViewController {
         
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        bar.layout.contentMode = .fit
+        bar.layout.contentMode = .intrinsic
         bar.layout.transitionStyle = .progressive
         
         
@@ -112,7 +112,7 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
         
         switch index{
         case 0:
-            return TMBarItem(title: "전체")
+            return TMBarItem(title: " 전체")
         default:
             let title = "카테고리\(index)"
            return TMBarItem(title: title)
