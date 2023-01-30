@@ -89,15 +89,19 @@ extension QnaViewController {
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
         
-        var tmp =  UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 1))
-        tmp.backgroundColor = .red
+      
         
-        bar.insertSubview(tmp, at: 0)
+        
         // indicator
-        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
-        addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
+
+        
+        addBar(bar, dataSource: self, at: .custom(view: tabBarView,layout: nil))
+        
+        //회색 구분선 추가
+        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
         
        
         
