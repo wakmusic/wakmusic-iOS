@@ -13,8 +13,9 @@ import RxRelay
 import RxCocoa
 import DesignSystem
 import PanModal
+import BaseFeature
 
-class MyPlayListViewController: UIViewController, ViewControllerFromStoryBoard {
+class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -50,9 +51,6 @@ extension MyPlayListViewController{
     
     private func configureUI()
     {
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
-        }
         self.tableView.dragDelegate = self
         self.tableView.dropDelegate = self
         bindRx()
@@ -149,16 +147,9 @@ extension MyPlayListViewController:UITableViewDelegate{
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
     func action(_ type: PlayListControlPopupType) {
      
-            
         let vc =  PlayListControlPopupViewController.viewController(type: type)
-        
-        let viewController:PanModalPresentable.LayoutType = vc
-        self.presentPanModal(viewController)
-            
-      
-    }
-    
-    
+        self.showPanModal(content: vc)
+    }    
 }
 
 extension  MyPlayListViewController: UITableViewDragDelegate {

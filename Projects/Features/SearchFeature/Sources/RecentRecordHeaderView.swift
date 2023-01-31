@@ -19,8 +19,9 @@ class RecentRecordHeaderView: UIView {
     
     
     @IBAction func removeAll(_ sender: UIButton) {
-        PreferenceManager.shared.allRemoveRecentRecords()
+        Utility.PreferenceManager.recentRecords = nil
     }
+    
     override init(frame: CGRect) { //코드쪽에서 생성 시 호출
         super.init(frame: frame)
         self.setupView()

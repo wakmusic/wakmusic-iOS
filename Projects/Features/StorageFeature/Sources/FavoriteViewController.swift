@@ -11,8 +11,9 @@ import Utility
 import RxRelay
 import DesignSystem
 import RxSwift
+import BaseFeature
 
-class FavoriteViewController: UIViewController, ViewControllerFromStoryBoard {
+class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -50,9 +51,6 @@ extension FavoriteViewController{
         tableView.dropDelegate = self
         tableView.dragDelegate = self
         
-        if #available(iOS 15.0, *) {
-                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
-        }
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
         

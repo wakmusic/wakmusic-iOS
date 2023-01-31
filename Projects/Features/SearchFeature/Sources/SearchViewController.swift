@@ -6,8 +6,9 @@ import RxSwift
 import PanModal
 import SnapKit
 import RxKeyboard
+import BaseFeature
 
-public final class SearchViewController: UIViewController, ViewControllerFromStoryBoard,ContainerViewType {
+public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
 
     @IBOutlet weak var searchImageView:UIImageView!
     @IBOutlet weak var searchTextFiled:UITextField!
@@ -92,9 +93,7 @@ extension SearchViewController {
     
     
     private func configureUI() {
-        
-        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
-        
+                
         // MARK:검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)
         let headerFontSize:CGFloat = 16
@@ -224,9 +223,7 @@ extension SearchViewController {
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true
                     )
-                    let viewController: PanModalPresentable.LayoutType = textPopupViewController //
-                    self.presentPanModal(viewController) //modal Show
-                    
+                    self.showPanModal(content: textPopupViewController)
                 }
                 else
                 {

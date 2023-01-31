@@ -11,7 +11,6 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import HPParallaxHeader
 
 class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     

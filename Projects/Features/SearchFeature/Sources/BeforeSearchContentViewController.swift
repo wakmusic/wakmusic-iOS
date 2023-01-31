@@ -12,7 +12,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import StorageFeature
-
+import BaseFeature
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
     
@@ -22,7 +22,7 @@ protocol BeforeSearchContentViewDelegate:AnyObject{
 
 
 
-class BeforeSearchContentViewController: UIViewController,ViewControllerFromStoryBoard {
+class BeforeSearchContentViewController: BaseViewController,ViewControllerFromStoryBoard {
 
     
     @IBOutlet weak var tableView: UITableView!
@@ -68,10 +68,6 @@ extension BeforeSearchContentViewController {
     
     private func configureUI() {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
-        if #available(iOS 15.0, *) {
-                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
-        }
     }
     
     
@@ -85,10 +81,8 @@ extension BeforeSearchContentViewController {
         
         
    
-        //cell 그리기
-        
-        
-        let combine = Observable.combineLatest(viewModel.output.showRecommand,PreferenceManager.shared.rx.recentRecords){($0,$1)}
+        //cell 그리기        
+        let combine = Observable.combineLatest(viewModel.output.showRecommand, Utility.PreferenceManager.$recentRecords){ ($0, $1 ?? []) }
             //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
         
         combine.map({ (showRecommand:Bool,item:[String]) -> [String] in
@@ -215,7 +209,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
             return RecommendPlayListView.getViewHeight(model: dataSource)
         }
         
-        else if PreferenceManager.shared.recentRecords.count == 0
+        else if (Utility.PreferenceManager.recentRecords ?? []).count == 0
         {
             return  (APP_HEIGHT() * 3) / 8
         }
@@ -250,7 +244,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
             return recommendView
         }
         
-        else if PreferenceManager.shared.recentRecords.count == 0
+        else if (Utility.PreferenceManager.recentRecords ?? []).count == 0
         {
             return warningView
         }

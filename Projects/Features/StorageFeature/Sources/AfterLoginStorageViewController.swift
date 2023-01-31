@@ -36,26 +36,14 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     @IBAction func pressEditProfileAction(_ sender: UIButton) {
         
         let vc = ProfilePopViewController.viewController()
-        
-        
-        let viewController: PanModalPresentable.LayoutType = vc //
-
-        
-        self.presentPanModal(viewController) //modal Show
-        
+        self.showPanModal(content: vc)
     }
     
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
         
-        
         let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false)
-        
-        let viewController:PanModalPresentable.LayoutType = vc
-        
-        self.presentPanModal(viewController)
-        
-        
+        self.showPanModal(content: vc)
     }
     
     
@@ -141,7 +129,8 @@ extension AfterLoginStorageViewController{
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
-        
+        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
+
     
         bindRx()
         

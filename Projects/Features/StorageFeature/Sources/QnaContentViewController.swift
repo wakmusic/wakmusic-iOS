@@ -67,7 +67,7 @@ extension QnaContentViewController{
 
            DispatchQueue.main.async {
 
-               self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+               self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
 
            }
 

@@ -71,8 +71,9 @@ extension ArtistMusicViewController {
         bar.indicator.weight = .custom(value: 3)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
-        
+
         addBar(bar, dataSource: self, at: .custom(view: tabBarContentView, layout: nil))
+        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
 }
 

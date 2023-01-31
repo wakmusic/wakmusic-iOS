@@ -19,21 +19,13 @@ public final class PreferenceManager {
         case recentRecords // 최근 검색어
         case startPage //시작 페이지(탭)
     }
-
-    /// Rx에서 접근하기 위한 서브젝트
-    public var recentRecordsSubject: BehaviorSubject<[String]> =
-        BehaviorSubject(value: UserDefaults.standard.array(forKey: Constants.recentRecords.rawValue) as? [String] ?? [])
-
-    /// UserDefaults에 저장 된 최근 검색어 데이터를 저장하는 프로퍼티
-    public var recentRecords: [String]{
-        let records = (UserDefaults.standard.array(forKey: Constants.recentRecords.rawValue) as? [String]) ?? []
-        return records
-    }
     
+    @UserDefaultWrapper(key: Constants.recentRecords.rawValue, defaultValue: nil)
+    public static var recentRecords: [String]?
+
     @UserDefaultWrapper(key: Constants.startPage.rawValue, defaultValue: nil)
     public static var startPage: Int?
 }
-
 
 @propertyWrapper
 public final class UserDefaultWrapper<T: Codable> {
@@ -52,6 +44,8 @@ public final class UserDefaultWrapper<T: Codable> {
                 if let lodedObejct = try? decoder.decode(T.self, from: savedData) {
                     return lodedObejct
                 }
+            }else if UserDefaults.standard.array(forKey: key) != nil{
+                return UserDefaults.standard.array(forKey: key) as? T
             }
             return defaultValue
         }
@@ -61,7 +55,6 @@ public final class UserDefaultWrapper<T: Codable> {
                 UserDefaults.standard.setValue(encoded, forKey: key)
             }
             subject.onNext(newValue)
-
         }
     }
     
