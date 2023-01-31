@@ -43,7 +43,17 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     
     @IBAction func backButtonAction(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        let isEdit: Bool = viewModel.output.isEditinglist.value
+        
+        if isEdit {
+            let vc = TextPopupViewController.viewController(text: "편집중이에여", cancelButtonIsHidden: false) {
+                //self.navigationController?.popViewController(animated: true)
+                
+            }
+            self.showPanModal(content: vc)
+        }else{
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
@@ -74,14 +84,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
         let createPlayListPopupViewController = PlayListControlPopupViewController.viewController(type: .edit)
-        
-        
-        
-        let viewController: PanModalPresentable.LayoutType = createPlayListPopupViewController //
-        
-        
-        self.presentPanModal(viewController) //modal Show
-        
+        self.showPanModal(content: createPlayListPopupViewController)
     }
     
     let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
@@ -111,7 +114,6 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
-    
     public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
@@ -121,7 +123,6 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     }
     
 }
-
 
 extension PlayListDetailViewController{
     
@@ -244,7 +245,16 @@ extension PlayListDetailViewController{
         
                
         
-        viewModel.output.isEditinglist.withLatestFrom(dataSource)
+        viewModel.output.isEditinglist
+            .do(onNext: { [weak self] isEdit in
+                guard let self = self else { return }
+                if isEdit {
+                    self.navigationController?.interactivePopGestureRecognizer?.delegate = self //(false)
+                }else{
+                    self.navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
+                }
+            })
+            .withLatestFrom(dataSource)
             .bind(to: dataSource)
             .disposed(by: disposeBag)
                 //에딧 상태에 따른 cell 변화를 reload 해주기 위해
@@ -386,5 +396,12 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
     
     
     
+}
+
+extension PlayListDetailViewController: UIGestureRecognizerDelegate {
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
 }
 

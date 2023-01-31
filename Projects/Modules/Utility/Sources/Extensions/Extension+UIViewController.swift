@@ -44,14 +44,14 @@ public extension UIViewController {
         self.presentPanModal(viewController)
     }
     
-    func showToast(text: String) {
+    func showToast(text: String, font: UIFont) {
         var attributes = EKAttributes.bottomFloat
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
         attributes.roundCorners = .all(radius: 20)
 
         let style = EKProperty.LabelStyle(
-            font: .systemFont(ofSize: 14, weight: .light),
+            font: font,
             color: EKColor(rgb: 0xFCFCFD),
             alignment: .center
         )

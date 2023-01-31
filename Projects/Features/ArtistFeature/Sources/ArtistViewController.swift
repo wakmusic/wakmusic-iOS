@@ -3,7 +3,6 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import HPParallaxHeader
 import BaseFeature
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {

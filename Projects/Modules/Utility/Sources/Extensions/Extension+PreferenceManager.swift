@@ -15,7 +15,7 @@ public extension PreferenceManager {
     /// - Parameter word: 최근 검색어
     func addRecentRecords(word: String) {
         let maxSize: Int = 10
-        var currentRecentRecords = self.recentRecords
+        var currentRecentRecords = Utility.PreferenceManager.recentRecords ?? []
         
         if currentRecentRecords.contains(word) {
             if let i = currentRecentRecords.firstIndex(where: { $0 == word }){
@@ -30,37 +30,18 @@ public extension PreferenceManager {
             currentRecentRecords.insert(word, at: 0)
         }
         
-        // UserDefaults와 Rx Subject에 동기화
-        UserDefaults.standard.set(currentRecentRecords, forKey: Constants.recentRecords.rawValue)
-        
-        
-        recentRecordsSubject.onNext(currentRecentRecords)
+        Utility.PreferenceManager.recentRecords = currentRecentRecords
     }
     
     /// 최근 검색어를 삭제
     /// - Parameter word: 최근 검색어
     func removeRecentRecords(word: String) {
-        var currentRecentRecords = self.recentRecords
+        var currentRecentRecords = Utility.PreferenceManager.recentRecords ?? []
 
         if let i = currentRecentRecords.firstIndex(where: { $0 == word }){
             currentRecentRecords.remove(at: i)
         }
         
-        UserDefaults.standard.set(currentRecentRecords, forKey: Constants.recentRecords.rawValue)
-        recentRecordsSubject.onNext(currentRecentRecords)
-    }
-    
-    /// 모든 최근 검색어를 삭제
-    func allRemoveRecentRecords() {
-        UserDefaults.standard.set(nil, forKey: Constants.recentRecords.rawValue)
-        recentRecordsSubject.onNext([])
-    }
-}
-
-extension PreferenceManager: ReactiveCompatible {}
-
-public extension Reactive where Base: PreferenceManager {
-    var recentRecords: Observable<[String]> {
-        return base.recentRecordsSubject
+        Utility.PreferenceManager.recentRecords = currentRecentRecords
     }
 }

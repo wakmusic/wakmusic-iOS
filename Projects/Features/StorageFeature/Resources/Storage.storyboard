@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -292,16 +292,6 @@
                                     <constraint firstAttribute="height" constant="36" id="yKM-SW-F9l"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1L-Cy-TDF">
-                                <rect key="frame" x="0.0" y="155" width="393" height="1"/>
-                                <color key="backgroundColor" name="gray200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="fua-wm-2xO"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JA6-iz-jxx">
                                 <rect key="frame" x="328" y="125" width="45" height="24"/>
                                 <constraints>
@@ -372,15 +362,12 @@
                         <viewLayoutGuide key="safeArea" id="gpa-Bd-Phk"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
-                            <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="I1L-Cy-TDF" secondAttribute="trailing" id="0Rt-kO-FXy"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="Y0G-j2-za7" secondAttribute="trailing" id="5zd-CL-gSc"/>
                             <constraint firstItem="Y0G-j2-za7" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="JJL-t1-DkP"/>
                             <constraint firstItem="JA6-iz-jxx" firstAttribute="centerY" secondItem="2Hy-W4-acm" secondAttribute="centerY" id="Jtx-Jm-jer"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="PN3-pp-2A8"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="bottom" constant="12" id="R1Q-y6-6Rs"/>
-                            <constraint firstItem="I1L-Cy-TDF" firstAttribute="top" secondItem="2Hy-W4-acm" secondAttribute="bottom" id="T7J-ub-OpF"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="JA6-iz-jxx" secondAttribute="trailing" constant="20" id="Usm-Hh-DGw"/>
-                            <constraint firstItem="I1L-Cy-TDF" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="Wez-3G-hkn"/>
                             <constraint firstItem="JA6-iz-jxx" firstAttribute="leading" secondItem="2Hy-W4-acm" secondAttribute="trailing" id="j7S-Yf-ly2"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="top" id="nlk-oo-Gwc"/>
                         </constraints>

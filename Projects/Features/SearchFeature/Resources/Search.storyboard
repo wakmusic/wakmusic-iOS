@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -33,16 +33,6 @@
                                     <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh9-hM-9M7">
-                                <rect key="frame" x="0.0" y="115" width="393" height="1"/>
-                                <color key="backgroundColor" name="gray200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="LqB-NS-3TQ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="n2C-C8-98k"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -50,11 +40,8 @@
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="5nx-1t-MMz" secondAttribute="trailing" id="9pS-Rx-amP"/>
                             <constraint firstItem="e54-rK-aGI" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="Dbx-SV-Dap"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="top" secondItem="e54-rK-aGI" secondAttribute="bottom" id="DzQ-zd-5S7"/>
-                            <constraint firstItem="Rh9-hM-9M7" firstAttribute="leading" secondItem="Mad-wb-Q4D" secondAttribute="leading" id="EkC-41-0se"/>
-                            <constraint firstItem="Rh9-hM-9M7" firstAttribute="top" secondItem="5nx-1t-MMz" secondAttribute="bottom" id="TnP-0B-j0c"/>
                             <constraint firstItem="e54-rK-aGI" firstAttribute="top" secondItem="n2C-C8-98k" secondAttribute="top" id="TrZ-MK-hLn"/>
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="e54-rK-aGI" secondAttribute="trailing" id="UXQ-CF-bOV"/>
-                            <constraint firstAttribute="trailing" secondItem="Rh9-hM-9M7" secondAttribute="trailing" id="u5r-9d-6rE"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="xnX-8T-irg"/>
                         </constraints>
                     </view>
@@ -278,9 +265,6 @@
         </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="gray200">
-            <color red="0.89399999380111694" green="0.90600001811981201" blue="0.92500001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray400">
             <color red="0.59600001573562622" green="0.63499999046325684" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

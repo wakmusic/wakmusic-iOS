@@ -20,7 +20,7 @@ public extension UIView {
         propertyAnimator.startAnimation()
     }
     
-    func showToast(text: String) {
+    func showToast(text: String, font: UIFont) {
         var attributes = EKAttributes.bottomFloat
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))

@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 import DesignSystem
-
+import BaseFeature
 
 
 typealias SearchSectionModel = SectionModel<SearchType,SongInfoDTO>
@@ -27,7 +27,7 @@ enum SearchType:Int{
 
 
 
-class AfterSearchContentViewController: UIViewController, ViewControllerFromStoryBoard {
+class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -75,9 +75,6 @@ class AfterSearchContentViewController: UIViewController, ViewControllerFromStor
 extension AfterSearchContentViewController{
     private func configureUI()
     {
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
-        }
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         //self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56)) // 미니 플레이어 만큼 밑에서 뛰움
         //self.view.backgroundColor = .

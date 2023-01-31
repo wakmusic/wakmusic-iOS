@@ -368,26 +368,13 @@
                                     <constraint firstAttribute="height" constant="40" id="qqA-qi-okr"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v4O-eG-GQl">
-                                <rect key="frame" x="0.0" y="98" width="393" height="1"/>
-                                <color key="backgroundColor" red="0.89411764705882346" green="0.90588235294117647" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="Wd0-yX-Epj"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MZi-yO-j9I"/>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.95294117647058818" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="RCc-Qd-jFG" firstAttribute="top" secondItem="MZi-yO-j9I" secondAttribute="top" id="3wn-y6-lQY"/>
                             <constraint firstItem="MZi-yO-j9I" firstAttribute="trailing" secondItem="RCc-Qd-jFG" secondAttribute="trailing" id="Ny0-aN-kZK"/>
-                            <constraint firstItem="v4O-eG-GQl" firstAttribute="leading" secondItem="RCc-Qd-jFG" secondAttribute="leading" id="cwe-FM-DZG"/>
-                            <constraint firstItem="v4O-eG-GQl" firstAttribute="trailing" secondItem="RCc-Qd-jFG" secondAttribute="trailing" id="n97-1Q-Kql"/>
                             <constraint firstItem="RCc-Qd-jFG" firstAttribute="leading" secondItem="MZi-yO-j9I" secondAttribute="leading" id="nYd-qV-Kq6"/>
-                            <constraint firstItem="v4O-eG-GQl" firstAttribute="bottom" secondItem="RCc-Qd-jFG" secondAttribute="bottom" id="r6V-AH-Deq"/>
                         </constraints>
                     </view>
                     <connections>

@@ -4,8 +4,9 @@ import DesignSystem
 import RxCocoa
 import RxRelay
 import RxSwift
+import BaseFeature
 
-public final class StorageViewController: UIViewController, ViewControllerFromStoryBoard,ContainerViewType {
+public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
     
     @IBOutlet weak public var contentView: UIView!
     
@@ -36,8 +37,6 @@ public final class StorageViewController: UIViewController, ViewControllerFromSt
 extension StorageViewController{
     
     private func configureUI() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        
         bindSubView()
     }
     

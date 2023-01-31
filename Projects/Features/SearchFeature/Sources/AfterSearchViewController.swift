@@ -31,6 +31,11 @@ class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBo
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.scrollToPage(.at(index: 0), animated: false)
+    }
+    
 
     public static func viewController() -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
@@ -69,7 +74,8 @@ extension AfterSearchViewController {
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
-        
+        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
+
 
     
         
