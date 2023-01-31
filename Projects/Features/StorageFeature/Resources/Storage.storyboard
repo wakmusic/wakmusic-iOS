@@ -287,7 +287,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Hy-W4-acm">
-                                <rect key="frame" x="0.0" y="119" width="328" height="36"/>
+                                <rect key="frame" x="0.0" y="119" width="393" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="yKM-SW-F9l"/>
                                 </constraints>
@@ -368,7 +368,7 @@
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="PN3-pp-2A8"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="bottom" constant="12" id="R1Q-y6-6Rs"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="JA6-iz-jxx" secondAttribute="trailing" constant="20" id="Usm-Hh-DGw"/>
-                            <constraint firstItem="JA6-iz-jxx" firstAttribute="leading" secondItem="2Hy-W4-acm" secondAttribute="trailing" id="j7S-Yf-ly2"/>
+                            <constraint firstItem="2Hy-W4-acm" firstAttribute="trailing" secondItem="gpa-Bd-Phk" secondAttribute="trailing" id="Xg5-sg-fpQ"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="top" id="nlk-oo-Gwc"/>
                         </constraints>
                     </view>
