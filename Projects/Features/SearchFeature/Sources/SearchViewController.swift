@@ -35,7 +35,7 @@ public final class SearchViewController: UIViewController, ViewControllerFromSto
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil // 현재 탭에서 화면이동이 일어날 시 , 빠져나올 때 swipe로 이동
-        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
+        
     }
     
    
@@ -92,6 +92,8 @@ extension SearchViewController {
     
     
     private func configureUI() {
+        
+        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
         
         // MARK:검색 돋보기 이미지
         self.searchImageView.image = DesignSystemAsset.Search.search.image.withRenderingMode(.alwaysTemplate)

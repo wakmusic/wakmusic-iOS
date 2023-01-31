@@ -73,11 +73,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = CreatePlayListPopupViewController.viewController(
-            title: "플레이리스트 수정하기",
-            btnText: "플레이리스트 수정",
-            type: .edit
-        )
+        let createPlayListPopupViewController = PlayListControlPopupViewController.viewController(type: .edit)
         
         
         
@@ -96,7 +92,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(true, animated: true) // 뷰 컨트롤러가 나타날 때 숨기기
+       
         
         configureUI()
         
@@ -131,6 +127,7 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
+        
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
         }
@@ -308,7 +305,7 @@ extension PlayListDetailViewController:UITableViewDelegate{
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: DesignSystem.PlayEvent) {
-        print(event)
+        DEBUG_LOG(event)
     }
     
     

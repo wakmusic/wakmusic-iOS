@@ -68,6 +68,10 @@ extension BeforeSearchContentViewController {
     
     private func configureUI() {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        
+        if #available(iOS 15.0, *) {
+                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
+        }
     }
     
     
@@ -266,7 +270,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
         
-        let vc = PlayListDetailViewController.viewController(.wmRecommand)
+        let vc = PlayListDetailViewController.viewController(.custom)
         
         self.parent?.navigationController?.pushViewController(vc, animated: true)
      
