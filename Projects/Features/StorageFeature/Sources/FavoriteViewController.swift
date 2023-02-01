@@ -18,9 +18,9 @@ class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tableView: UITableView!
     
     
-    //var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [])
+    //var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [])
     
     lazy var viewModel = FavoriteViewModel()
     var disposeBag = DisposeBag()
@@ -28,6 +28,10 @@ class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+        tableView.addGestureRecognizer(longPress)
+        
         configureUI()
 
         // Do any additional setup after loading the view.
@@ -56,6 +60,14 @@ extension FavoriteViewController{
         
         bindRx()
         
+    }
+    
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+        
+        
+        if  !viewModel.output.isEditinglist.value && sender.state == .began {
+            viewModel.output.isEditinglist.accept(true)
+        }
     }
     
     private func bindRx()
@@ -93,16 +105,19 @@ extension FavoriteViewController{
         
         
         viewModel.output.isEditinglist
-            .do(onNext: { [weak self] (res:Bool) in
+            .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
                     return
                 }
                 
+                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
-                self.tableView.dragInteractionEnabled = res
-                
-                DEBUG_LOG("RES: \(res)")
+                guard let parent = self.parent?.parent as? AfterLoginStorageViewController else{
+                    return
+                }
+                // 탭맨 쪽 편집 변경
+                parent.viewModel.output.isEditing.accept(isEdit)
                 
                 
             })

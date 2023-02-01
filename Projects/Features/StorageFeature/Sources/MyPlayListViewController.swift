@@ -31,6 +31,10 @@ class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+        tableView.addGestureRecognizer(longPress)
+        
         configureUI()
 
         // Do any additional setup after loading the view.
@@ -56,6 +60,14 @@ extension MyPlayListViewController{
         bindRx()
     }
     
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+        
+        
+        if  !viewModel.output.isEditinglist.value && sender.state == .began {
+            viewModel.output.isEditinglist.accept(true)
+        }
+    }
+    
     private func bindRx()
     {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -72,6 +84,9 @@ extension MyPlayListViewController{
             
             
             self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+            
+            
+            
         })
             .bind(to: tableView.rx.items){[weak self] (tableView,index,model) -> UITableViewCell in
                 guard let self = self else{return UITableViewCell()}
@@ -92,16 +107,24 @@ extension MyPlayListViewController{
         
         
         self.viewModel.output.isEditinglist
-            .do(onNext: { [weak self] (res:Bool) in
+            .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
                     return
                 }
                 
+                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
-                self.tableView.dragInteractionEnabled = res
+                guard let parent = self.parent?.parent as? AfterLoginStorageViewController else{
+                    return
+                }
+                // 탭맨 쪽 편집 변경
+                parent.viewModel.output.isEditing.accept(isEdit)
                 
-                DEBUG_LOG("RES: \(res)")
+            
+                
+                
+        
                 
                 
             })
