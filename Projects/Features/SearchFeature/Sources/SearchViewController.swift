@@ -229,6 +229,9 @@ extension SearchViewController {
                 {
                     PreferenceManager.shared.addRecentRecords(word: str)
                     self.bindSubView(true)
+                    UIView.setAnimationsEnabled(false)
+                    self.view.endEditing(true) //바인드 서브 뷰를 먼저 해야 tabMan tabBar가 짤리는 버그를 방지
+                    UIView.setAnimationsEnabled(true)
                     
                 }
                 
@@ -326,7 +329,11 @@ extension SearchViewController:BeforeSearchContentViewDelegate{
         viewModel.output.isFoucused.accept(false)
         PreferenceManager.shared.addRecentRecords(word: keyword)
         self.bindSubView(true)
+        
+        
+        UIView.setAnimationsEnabled(false)
         view.endEditing(true) //바인드 서브 뷰를 먼저 해야 tabMan tabBar가 짤리는 버그를 방지
+        UIView.setAnimationsEnabled(true)
     }
     
     
