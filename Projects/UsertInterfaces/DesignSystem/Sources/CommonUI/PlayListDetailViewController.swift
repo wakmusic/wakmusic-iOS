@@ -118,7 +118,7 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        
         
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
@@ -240,6 +240,7 @@ extension PlayListDetailViewController{
             .do(onNext: { [weak self] isEdit in
                 guard let self = self else { return }
                 
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 self.moreButton.isHidden = isEdit
