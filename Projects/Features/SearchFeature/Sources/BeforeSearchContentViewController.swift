@@ -229,6 +229,16 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         let recentRecordHeaderView = RecentRecordHeaderView()
         
         
+        //최근 검색어 전체 삭제 버튼 클릭 이벤트 받는 통로
+        recentRecordHeaderView.completionHandler = {
+            let textPopupViewController = TextPopupViewController.viewController(
+                text: "전체 내역을 삭제하시겠습니까?",
+                cancelButtonIsHidden: false) { //승인 핸들러
+                    Utility.PreferenceManager.recentRecords = nil
+                }
+            self.showPanModal(content: textPopupViewController)
+           
+        }
         
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
                                                 ,height: RecommendPlayListView.getViewHeight(model: dataSource)))

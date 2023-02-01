@@ -27,11 +27,17 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var saveButton: UIButton!
+    
+    var completion: (() -> Void)?
+    
+    
     @IBAction func saveAction(_ sender: UIButton) {
         
         //MARK: TODO 네트워크 작업 !!
-        
         dismiss(animated: true)
+        completion?()
+        
+        
     }
     
     var dataSource:BehaviorRelay<[Model]> = BehaviorRelay.init(value: [Model(type: .panzee, isSelected: true),Model(type: .leaf, isSelected: false),Model(type: .pigeon, isSelected: false),Model(type: .bat, isSelected: false),Model(type: .germ, isSelected: false),Model(type: .gorani, isSelected: false),Model(type: .fox, isSelected: false),Model(type: .poopDog, isSelected: false)])
@@ -51,8 +57,10 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController() -> ProfilePopViewController {
+    public static func viewController(completion: (() -> Void)? = nil) -> ProfilePopViewController {
         let viewController = ProfilePopViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        
+        viewController.completion = completion
         
 
         

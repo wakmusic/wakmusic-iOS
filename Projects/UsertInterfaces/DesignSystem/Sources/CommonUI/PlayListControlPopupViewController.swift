@@ -85,6 +85,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     @IBOutlet weak var confirmLabel: UILabel!
     
     let limitCount:Int = 12
+    var completion: (() -> Void)?
     
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
@@ -133,9 +134,9 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
             // 그냥 닫기
         }
         
-        
-        
+
         //네트워크 작업
+        completion?()
         dismiss(animated: true)
         self.view.endEditing(true)
     }
@@ -157,10 +158,11 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(type:PlayListControlPopupType) -> PlayListControlPopupViewController {
+    public static func viewController(type:PlayListControlPopupType,completion: (() -> Void)? = nil) -> PlayListControlPopupViewController {
         let viewController = PlayListControlPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.type = type
+        viewController.completion = completion
         
         return viewController
     }

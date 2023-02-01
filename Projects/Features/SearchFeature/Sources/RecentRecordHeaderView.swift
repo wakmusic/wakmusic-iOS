@@ -9,6 +9,9 @@
 import UIKit
 import DesignSystem
 import Utility
+
+
+
 class RecentRecordHeaderView: UIView {
 
     
@@ -16,10 +19,13 @@ class RecentRecordHeaderView: UIView {
     
     @IBOutlet weak var removeAllButton: UIButton!
     @IBOutlet weak var recentLabel: UILabel!
-    
+    //1. 넘겨주는 연결통로
+     var completionHandler: (() -> ())?
     
     @IBAction func removeAll(_ sender: UIButton) {
-        Utility.PreferenceManager.recentRecords = nil
+        
+        completionHandler?()
+       
     }
     
     override init(frame: CGRect) { //코드쪽에서 생성 시 호출
