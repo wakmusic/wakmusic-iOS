@@ -14,13 +14,11 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
-import YoutubeKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var viewModel = PlayerViewModel()
-    private var player: YTSwiftyPlayer!
-    
+    var youTubePlayer = YouTubePlayer(configuration: .init(autoPlay: true, showControls: false, showRelatedVideos: false))
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
@@ -30,30 +28,15 @@ public class PlayerViewController: UIViewController {
         super.viewDidLoad()
         bindViewModel()
         bindUI()
-        //setupYoutubeKit()
-        //youtubePlayerView.backgroundColor = .yellow
-        
+        setupYoutubePlayer()
         
     }
     
-    func setupYoutubeKit() {
-        // Create a new player
-        player = YTSwiftyPlayer(
-            frame: .zero,
-            playerVars: [
-                .playsInline(true),
-                .videoID("tOYkNo3QEys"),
-                .loopVideo(true),
-                .showRelatedVideo(false),
-                .autoplay(true)
-            ])
-        youtubePlayerView = player
-        player.delegate = self
-        player.loadDefaultPlayer()
-        
-        view.addSubview(youtubePlayerView)
+    func setupYoutubePlayer() {
+        youtubePlayerView = YouTubePlayerHostingView(player: youTubePlayer)
+        self.view.addSubview(youtubePlayerView)
         youtubePlayerView.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
+            $0.centerX.centerY.equalTo(playerView.thumbnailImageView)
             $0.width.equalTo(320)
             $0.height.equalTo(180)
         }
@@ -77,46 +60,6 @@ public extension PlayerViewController {
     }
 }
 
-extension PlayerViewController: YTSwiftyPlayerDelegate {
-    public func playerReady(_ player: YTSwiftyPlayer) {
-        print(#function)
-        // Player API is available after loading a video.
-        // e.g. player.mute()
-    }
-
-    public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
-        print("\(#function): \(currentTime)")
-    }
-
-    public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
-        print("\(#function): \(state)")
-    }
-
-    public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {
-        print("\(#function): \(playbackRate)")
-    }
-
-    public func player(_ player: YTSwiftyPlayer, didReceiveError error: YTSwiftyPlayerError) {
-        print("\(#function): \(error)")
-    }
-
-    public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {
-        print("\(#function): \(quality)")
-    }
-
-    public func apiDidChange(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-
-    public func youtubeIframeAPIReady(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-
-    public func youtubeIframeAPIFailedToLoad(_ player: YTSwiftyPlayer) {
-        print(#function)
-    }
-}
-
 private extension PlayerViewController {
     private func bindViewModel() {
         let input = PlayerViewModel.Input(
@@ -135,6 +78,25 @@ private extension PlayerViewController {
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
         )
         let output = self.viewModel.transform(from: input)
+        
+        output.didPlay
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 }
+            .drive(onNext: { [weak self] _ in
+                print("didPlay")
+                //self?.youTubePlayer.load(source: .video(id: "fgSXAKsq-Vo"))
+                self?.youTubePlayer.load(source: .url("https://youtube.com/watch?v=fgSXAKsq-Vo"))
+            })
+            .disposed(by: disposeBag)
+        
+        output.didClose
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 }
+            .drive(onNext: { [weak self] _ in
+                print("didClose")
+                self?.youTubePlayer.stop()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindUI() {
