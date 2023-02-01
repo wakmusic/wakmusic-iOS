@@ -21,21 +21,20 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e54-rK-aGI">
                                 <rect key="frame" x="0.0" y="59" width="393" height="16"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="nJ5-2M-ZsW"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nx-1t-MMz">
                                 <rect key="frame" x="0.0" y="75" width="393" height="40"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="gray100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="n2C-C8-98k"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="5nx-1t-MMz" secondAttribute="trailing" id="9pS-Rx-amP"/>
                             <constraint firstItem="e54-rK-aGI" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="Dbx-SV-Dap"/>

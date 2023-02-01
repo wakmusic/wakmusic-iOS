@@ -108,7 +108,7 @@ extension AfterLoginStorageViewController{
         
         // 배경색
        
-        bar.backgroundView.style = .flat(color: colorFromRGB(0xF0F3F6))
+        bar.backgroundView.style = .flat(color: .red)
         
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
