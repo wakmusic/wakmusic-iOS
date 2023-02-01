@@ -24,7 +24,7 @@ class ArtistMusicCell: UITableViewCell {
         self.contentView.backgroundColor = .clear
         
         albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
+        albumImageView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         albumImageView.layer.borderWidth = 1
 
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
