@@ -118,6 +118,7 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
@@ -245,7 +246,7 @@ extension PlayListDetailViewController{
                 self.completeButton.isHidden = !isEdit
                 self.editStateLabel.isHidden = !isEdit
                 
-                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
+                
             })
             .withLatestFrom(dataSource)
             .bind(to: dataSource)
