@@ -46,7 +46,10 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         let isEdit: Bool = viewModel.output.isEditinglist.value
         
         if isEdit {
-            let vc = TextPopupViewController.viewController(text: "저장하지 않고 나가시겠습니까?", cancelButtonIsHidden: false) {
+            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false) {
+                
+                //TODO: 저장 코드
+                
                 self.navigationController?.popViewController(animated: true)
                 
             }
