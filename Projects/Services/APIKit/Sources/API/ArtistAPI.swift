@@ -13,7 +13,7 @@ import Foundation
 
 public enum ArtistAPI {
     case fetchArtistList
-    case fetchArtistSongList(id: String, sort: ArtistSortType)
+    case fetchArtistSongList(id: String, sort: ArtistSortType, page: Int)
     case fetchArtistImage(type: ArtistImageType, id: String)
 }
 
@@ -52,10 +52,11 @@ extension ArtistAPI: WMAPI {
         switch self {
         case .fetchArtistList:
             return .requestPlain
-        case let .fetchArtistSongList(id, sort):
+        case let .fetchArtistSongList(id, sort, page):
             return .requestParameters(parameters: [
                 "id": id,
-                "sort": sort.rawValue
+                "sort": sort.rawValue,
+                "start": (page == 1) ? 0 : (page - 1) * 30
             ], encoding: URLEncoding.queryString)
         case .fetchArtistImage:
             return .requestPlain
