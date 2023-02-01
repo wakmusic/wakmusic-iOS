@@ -16,8 +16,6 @@ import BaseFeature
 class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var allPlayButton: UIButton!
-    @IBOutlet weak var shufflePlayButton: UIButton!
     
     var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
@@ -66,31 +64,6 @@ extension ArtistMusicContentViewController {
     }
     
     private func configureUI() {
-
-        let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
-        
-        allPlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
-                                              range: NSRange(location: 0, length: allPlayAttributedString.string.count))
-
-        allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        allPlayButton.layer.cornerRadius = 8
-        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        allPlayButton.layer.borderWidth = 1
-        allPlayButton.setAttributedTitle(allPlayAttributedString, for: .normal)
-        
-        let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
-        
-        shufflePlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
-                                                  range: NSRange(location: 0, length: shufflePlayAttributedString.string.count))
-        
-        shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        shufflePlayButton.layer.cornerRadius = 8
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        shufflePlayButton.layer.borderWidth = 1
-        shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
-        
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
@@ -100,5 +73,21 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 80
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
+        view.delegate = self
+        return view
+    }
+}
+
+extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
+    public func pressPlay(_ event: DesignSystem.PlayEvent) {
+        DEBUG_LOG(event)
     }
 }
