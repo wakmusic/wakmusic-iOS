@@ -47,7 +47,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
         if isEdit {
             let vc = TextPopupViewController.viewController(text: "저장하지 않고 나가시겠습니까?", cancelButtonIsHidden: false) {
-                //self.navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
                 
             }
             self.showPanModal(content: vc)
