@@ -46,7 +46,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         let isEdit: Bool = viewModel.output.isEditinglist.value
         
         if isEdit {
-            let vc = TextPopupViewController.viewController(text: "편집중이에여", cancelButtonIsHidden: false) {
+            let vc = TextPopupViewController.viewController(text: "저장하지 않고 나가시겠습니까?", cancelButtonIsHidden: false) {
                 //self.navigationController?.popViewController(animated: true)
                 
             }
@@ -58,27 +58,19 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-        
-        self.moreButton.isHidden = true
-        self.completeButton.isHidden = false
-        self.editStateLabel.isHidden = false
         viewModel.output.isEditinglist.accept(true)
         
         
-        tableView.dragInteractionEnabled = true // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+       
         
     }
     
     
     @IBAction func pressCompleteAction(_ sender: UIButton) {
         
-        self.moreButton.isHidden = false
-        self.completeButton.isHidden = true
-        self.editStateLabel.isHidden = true
         viewModel.output.isEditinglist.accept(false)
         
        
-        tableView.dragInteractionEnabled = false // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
     }
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
@@ -105,13 +97,11 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         self.tableView.dragDelegate = self
         self.tableView.dropDelegate = self
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+        tableView.addGestureRecognizer(longPress)
+        
         
         // Do any additional setup after loading the view.
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
     public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
@@ -248,11 +238,14 @@ extension PlayListDetailViewController{
         viewModel.output.isEditinglist
             .do(onNext: { [weak self] isEdit in
                 guard let self = self else { return }
-                if isEdit {
-                    self.navigationController?.interactivePopGestureRecognizer?.delegate = self //(false)
-                }else{
-                    self.navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
-                }
+                
+                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+                
+                self.moreButton.isHidden = isEdit
+                self.completeButton.isHidden = !isEdit
+                self.editStateLabel.isHidden = !isEdit
+                
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
             })
             .withLatestFrom(dataSource)
             .bind(to: dataSource)
@@ -263,6 +256,15 @@ extension PlayListDetailViewController{
                 
                 
       
+    }
+    
+    
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+        
+        
+        if  !viewModel.output.isEditinglist.value && sender.state == .began {
+            viewModel.output.isEditinglist.accept(true)
+        }
     }
  
 }
