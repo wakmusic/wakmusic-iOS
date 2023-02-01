@@ -86,6 +86,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     
     let limitCount:Int = 12
     var completion: (() -> Void)?
+    var shareCode:String?
     
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
@@ -102,7 +103,8 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
         if type == .share
         {
             UIPasteboard.general.string = viewModel.input.textString.value
-            //TODO: 복사 완료 토스트 팝업
+            completion?() //토스트 팝업을 위한 컴플리션
+            
         }
         else
         {
@@ -158,10 +160,11 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(type:PlayListControlPopupType,completion: (() -> Void)? = nil) -> PlayListControlPopupViewController {
+    public static func viewController(type:PlayListControlPopupType,shareCode:String? = nil,completion: (() -> Void)? = nil) -> PlayListControlPopupViewController {
         let viewController = PlayListControlPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.type = type
+        viewController.shareCode = shareCode
         viewController.completion = completion
         
         return viewController
@@ -194,6 +197,14 @@ extension PlayListControlPopupViewController{
         
         self.playListTextField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ? "플레이리스트 제목을 입력하세요." :"코드를 입력해주세요." ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.playListTextField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        
+        if type == .share { //공유는 오직 읽기 전용
+            self.playListTextField.isEnabled = false
+            self.viewModel.input.textString.accept(shareCode!)
+            self.playListTextField.text = shareCode!
+        }
+        
+       
         
         self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
         
