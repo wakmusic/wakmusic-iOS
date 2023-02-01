@@ -20,9 +20,8 @@ public enum ArtistAPI {
 extension ArtistAPI: WMAPI {
     public var domain: WMDomain {
         switch self{
-        case .fetchArtistList:
-            return .artist
-        case .fetchArtistSongList:
+        case .fetchArtistList,
+             .fetchArtistSongList:
             return .artist
         case .fetchArtistImage:
             return .common
@@ -36,8 +35,7 @@ extension ArtistAPI: WMAPI {
         case .fetchArtistSongList:
             return "/albums"
         case let .fetchArtistImage(type, id):
-            let ext: String = (type == .big) ? ".jpg" : ".png"
-            return "/static/artist/\(type.rawValue)/\(id)\(ext)"
+            return "/artist/\(type.rawValue)/\(id)\(type.extString)"
         }
     }
     
@@ -52,13 +50,13 @@ extension ArtistAPI: WMAPI {
     
     public var task: Moya.Task {
         switch self {
+        case .fetchArtistList:
+            return .requestPlain
         case let .fetchArtistSongList(id, sort):
             return .requestParameters(parameters: [
                 "id": id,
                 "sort": sort.rawValue
             ], encoding: URLEncoding.queryString)
-        case .fetchArtistList:
-            return .requestPlain
         case .fetchArtistImage:
             return .requestPlain
         }
