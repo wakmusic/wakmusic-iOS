@@ -1,7 +1,6 @@
 import UIKit
 import Utility
 import PanModal
-
 public final class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var contentLabel: UILabel!
