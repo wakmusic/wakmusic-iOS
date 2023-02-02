@@ -9,6 +9,8 @@
 import UIKit
 import Utility
 import DesignSystem
+import NaverThirdPartyLogin
+import RxSwift
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -42,6 +44,11 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
     
+    let disposeBag = DisposeBag()
+    
+    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +70,13 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
 }
 
 extension BeforeLoginStorageViewController{
+    
+    private func configureNaver(){
+        
+        naverLoginInstance?.delegate = self 
+        
+    }
+    
     
     private func configureUI(){
 
@@ -135,11 +149,43 @@ extension BeforeLoginStorageViewController{
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
+        
+        naverLoginButton.rx.tap.subscribe (onNext:{  [weak self] in
+            guard let self = self else{
+                return
+            }
+            
+            
+            self.naverLoginInstance?.requestThirdPartyLogin()
+            
+             // naverLoginInstance?.requestDeleteToken()  로그아웃
+        }).disposed(by: disposeBag)
+        
     
         
         
         
         
     }
+    
+}
+
+extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegate{
+    func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
+        print()
+    }
+    
+    func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
+        print()
+    }
+    
+    func oauth20ConnectionDidFinishDeleteToken() {
+        print()
+    }
+    
+    func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+        print()
+    }
+    
     
 }
