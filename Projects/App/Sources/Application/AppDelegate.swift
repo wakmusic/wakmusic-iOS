@@ -1,5 +1,6 @@
 import UIKit
 import RootFeature
+import NaverThirdPartyLogin
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,7 +8,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        application.registerForRemoteNotifications()
+        let instance = NaverThirdPartyLoginConnection.getSharedInstance()
+        instance?.isNaverAppOauthEnable = true //네이버앱 로그인 설정
+        instance?.isInAppOauthEnable = true //사파리 로그인 설정
+        instance?.setOnlyPortraitSupportInIphone(true)
+        
+        instance?.serviceUrlScheme = "waktaverseMusic.naver" //URL Scheme
+        instance?.consumerKey = "eSgFVfD8xaTjK8GDRoyu" //클라이언트 아이디
+        instance?.consumerSecret = "aRtLNRjqmN" //시크릿 아이디
+        instance?.appName = "WAKTAVERSE Music" //앱이름
+        
+
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+            NaverThirdPartyLoginConnection.getSharedInstance()?.application(app, open: url, options: options)
+            return true
     }
 
     
