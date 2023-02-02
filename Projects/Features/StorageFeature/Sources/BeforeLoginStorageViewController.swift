@@ -73,7 +73,18 @@ extension BeforeLoginStorageViewController{
     
     private func configureNaver(){
         
-        naverLoginInstance?.delegate = self 
+        naverLoginInstance?.delegate = self
+        
+        naverLoginButton.rx.tap.subscribe (onNext:{  [weak self] in
+            guard let self = self else{
+                return
+            }
+            
+            
+            self.naverLoginInstance?.requestThirdPartyLogin()
+            
+            //self.naverLoginInstance?.requestDeleteToken()
+        }).disposed(by: disposeBag)
         
     }
     
@@ -149,42 +160,75 @@ extension BeforeLoginStorageViewController{
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
-        
-        naverLoginButton.rx.tap.subscribe (onNext:{  [weak self] in
-            guard let self = self else{
-                return
-            }
-            
-            
-            self.naverLoginInstance?.requestThirdPartyLogin()
-            
-             // naverLoginInstance?.requestDeleteToken()  로그아웃
-        }).disposed(by: disposeBag)
-        
-    
-        
-        
-        
+        configureNaver()
+                
         
     }
+    
+    private func naverLoginPaser(){
+        
+        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
+                
+                if !accessToken {
+                  return
+                }
+                
+                guard let tokenType = naverLoginInstance?.tokenType else { return }
+                guard let accessToken = naverLoginInstance?.accessToken else { return }
+                  
+                let requestUrl = "https://openapi.naver.com/v1/nid/me"
+                let url = URL(string: requestUrl)!
+                
+                let authorization = "\(tokenType) \(accessToken)"
+        
+            URLSession.shared.dataTask(with: <#T##URLRequest#>, completionHandler: <#T##(Data?, URLResponse?, Error?) -> Void#>)
+
+                let req = AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization])
+
+                req.responseJSON { response in
+
+                  guard let body = response.value as? [String: Any] else { return }
+
+                    if let resultCode = body["message"] as? String{
+                        if resultCode.trimmingCharacters(in: .whitespaces) == "success"{
+                            let resultJson = body["response"] as! [String: Any]
+
+
+
+                            let nickName = resultJson["nickname"] as? String ?? ""
+
+
+                            print("네이버 로그인 닉네임 ",nickName)
+                        }
+                        else{
+                            //실패
+                        }
+                    }
+                }
+    }
+    
+    
+    
+    
     
 }
 
 extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegate{
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        print()
+        print("네이버 로그인 성공")
+        self.naverLoginPaser()
     }
     
     func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        print()
+        print("네이버 토큰\(naverLoginInstance?.accessToken)")
     }
     
     func oauth20ConnectionDidFinishDeleteToken() {
-        print()
+        print("네이버 로그아웃")
     }
     
     func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-        print()
+        print("에러 = \(error.localizedDescription)")
     }
     
     
