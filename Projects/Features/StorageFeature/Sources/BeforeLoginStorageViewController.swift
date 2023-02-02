@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import NaverThirdPartyLogin
 import RxSwift
+import Alamofire
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -81,7 +82,7 @@ extension BeforeLoginStorageViewController{
             }
             
             
-            self.naverLoginInstance?.requestThirdPartyLogin()
+            //self.naverLoginInstance?.requestThirdPartyLogin()
             
             //self.naverLoginInstance?.requestDeleteToken()
         }).disposed(by: disposeBag)
@@ -180,31 +181,17 @@ extension BeforeLoginStorageViewController{
                 let url = URL(string: requestUrl)!
                 
                 let authorization = "\(tokenType) \(accessToken)"
+                print("TOKEN은 받앗다")
+
+        AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization]).responseData{ response in
+         
+            print(response.value!)
+            
         
-            URLSession.shared.dataTask(with: <#T##URLRequest#>, completionHandler: <#T##(Data?, URLResponse?, Error?) -> Void#>)
-
-                let req = AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization])
-
-                req.responseJSON { response in
-
-                  guard let body = response.value as? [String: Any] else { return }
-
-                    if let resultCode = body["message"] as? String{
-                        if resultCode.trimmingCharacters(in: .whitespaces) == "success"{
-                            let resultJson = body["response"] as! [String: Any]
-
-
-
-                            let nickName = resultJson["nickname"] as? String ?? ""
-
-
-                            print("네이버 로그인 닉네임 ",nickName)
-                        }
-                        else{
-                            //실패
-                        }
-                    }
-                }
+            
+         
+        }
+      
     }
     
     
@@ -233,3 +220,5 @@ extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegat
     
     
 }
+
+
