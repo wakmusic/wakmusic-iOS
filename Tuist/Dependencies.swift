@@ -29,7 +29,7 @@ let dependencies = Dependencies(
         .remote(url: "https://github.com/RxSwiftCommunity/RxKeyboard.git", requirement: .upToNextMajor(from: "2.0.0")),
         .remote(url: "https://github.com/huri000/SwiftEntryKit", requirement: .upToNextMajor(from: "2.0.0")),
         .remote(url: "https://github.com/kyungkoo/naveridlogin-ios-sp", requirement: .upToNextMajor(from: "4.1.5")),
-        .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .upToNextMajor(from: "7.0.0"))
+        .remote(url: "https://github.com/google/GoogleSignIn-iOS.git",requirement: .upToNextMajor(from: "7.0.0") )
     ],
     platforms: [.iOS]
 )
