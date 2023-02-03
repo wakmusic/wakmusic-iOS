@@ -18,7 +18,7 @@ import RxSwift
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var viewModel = PlayerViewModel()
-    var youTubePlayer = YouTubePlayer(configuration: .init(autoPlay: true, showControls: false, showRelatedVideos: false))
+    var youtubePlayer: YouTubePlayer?
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
@@ -26,6 +26,7 @@ public class PlayerViewController: UIViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         bindViewModel()
         bindUI()
         setupYoutubePlayer()
@@ -33,18 +34,33 @@ public class PlayerViewController: UIViewController {
     }
     
     func setupYoutubePlayer() {
-        youtubePlayerView = YouTubePlayerHostingView(player: youTubePlayer)
-        self.view.addSubview(youtubePlayerView)
-        youtubePlayerView.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(playerView.thumbnailImageView)
+        let configuration = YouTubePlayer.Configuration(
+            autoPlay: true,
+            showControls: false,
+            loopEnabled: true,
+            showRelatedVideos: false
+        )
+        
+        self.youtubePlayer = YouTubePlayer(
+            source: .video(id: "fgSXAKsq-Vo"),
+            configuration: configuration
+        )
+        
+        guard let youtubePlayer = self.youtubePlayer else { return }
+        
+        self.youtubePlayerView = YouTubePlayerHostingView(player: youtubePlayer)
+        
+        self.view.addSubview(self.youtubePlayerView)
+        self.youtubePlayerView.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
             $0.width.equalTo(320)
             $0.height.equalTo(180)
         }
+        
     }
     
     public override func loadView() {
         super.loadView()
-        
         playerView = PlayerView(frame: self.view.frame)
         miniPlayerView = MiniPlayerView(frame: self.view.frame)
         miniPlayerView.layer.opacity = 0
@@ -83,9 +99,10 @@ private extension PlayerViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                guard let youtubePlayer = self.youtubePlayer else { return }
                 print("didPlay")
-                //self?.youTubePlayer.load(source: .video(id: "fgSXAKsq-Vo"))
-                self?.youTubePlayer.load(source: .url("https://youtube.com/watch?v=fgSXAKsq-Vo"))
+                youtubePlayer.load(source: .video(id: "1hcdQixxJdA"))
             })
             .disposed(by: disposeBag)
         
@@ -94,7 +111,7 @@ private extension PlayerViewController {
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
                 print("didClose")
-                self?.youTubePlayer.stop()
+                self?.youtubePlayer?.stop()
             })
             .disposed(by: disposeBag)
     }
