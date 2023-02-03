@@ -14,7 +14,7 @@ protocol BottomTabBarViewDelegate: AnyObject {
     func handleTapped(index previous: Int, current: Int)
 }
 
-class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
+public class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var stackView: UIStackView!
     
@@ -54,7 +54,7 @@ class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard
         ]
     }()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
