@@ -17,6 +17,7 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
 
         configureUI()
         bind()
+        //브런치 이름을 변경합니다.
     }
     
     public override func viewDidAppear(_ animated: Bool) {
