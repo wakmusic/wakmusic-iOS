@@ -14,7 +14,7 @@ import RxSwift
 import Alamofire
 import AuthenticationServices
 
-class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
+class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -64,14 +64,14 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
    
     
 
-    public static func viewController() -> BeforeLoginStorageViewController {
-        let viewController = BeforeLoginStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+    public static func viewController() -> LoginViewController {
+        let viewController = LoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         return viewController
     }
 
 }
 
-extension BeforeLoginStorageViewController{
+extension LoginViewController{
     
     private func configureNaver(){
         
@@ -255,7 +255,7 @@ extension BeforeLoginStorageViewController{
     
 }
 
-extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegate{
+extension LoginViewController:NaverThirdPartyLoginConnectionDelegate{
     func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         print("네이버 로그인 성공")
         self.naverLoginPaser()
@@ -276,7 +276,7 @@ extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegat
     
 }
 
-extension BeforeLoginStorageViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!

@@ -12,7 +12,7 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
-    lazy var bfLoginView = BeforeLoginStorageViewController.viewController()
+    lazy var bfLoginView = LoginViewController.viewController()
     lazy var afLoginView = AfterLoginStorageViewController.viewController()
     let disposeBag = DisposeBag()
     

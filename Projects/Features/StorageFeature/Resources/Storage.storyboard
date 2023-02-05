@@ -42,10 +42,10 @@
             </objects>
             <point key="canvasLocation" x="138" y="5"/>
         </scene>
-        <!--Before Login Storage View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="nqf-Ix-B1u">
             <objects>
-                <viewController storyboardIdentifier="BeforeLoginStorageViewController" id="n6Y-mu-W9h" customClass="BeforeLoginStorageViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="n6Y-mu-W9h" customClass="LoginViewController" customModule="StorageFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1DT-6x-02y">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
