@@ -14,7 +14,7 @@ import RxSwift
 import Alamofire
 import AuthenticationServices
 
-class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
+public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -52,7 +52,7 @@ class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     
     
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
@@ -65,7 +65,7 @@ class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     
 
     public static func viewController() -> LoginViewController {
-        let viewController = LoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = LoginViewController.viewController(storyBoardName: "SignIn", bundle: Bundle.module)
         return viewController
     }
 
@@ -256,20 +256,20 @@ extension LoginViewController{
 }
 
 extension LoginViewController:NaverThirdPartyLoginConnectionDelegate{
-    func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
+    public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         print("네이버 로그인 성공")
         self.naverLoginPaser()
     }
     
-    func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
+    public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         print("네이버 토큰\(naverLoginInstance?.accessToken)")
     }
     
-    func oauth20ConnectionDidFinishDeleteToken() {
+    public func oauth20ConnectionDidFinishDeleteToken() {
         print("네이버 로그아웃")
     }
     
-    func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+    public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         print("에러 = \(error.localizedDescription)")
     }
     
@@ -278,7 +278,7 @@ extension LoginViewController:NaverThirdPartyLoginConnectionDelegate{
 
 extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
     
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }
     
