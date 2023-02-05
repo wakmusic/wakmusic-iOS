@@ -17,7 +17,7 @@ public extension TargetDependency.SPM {
     static let SnapKit = TargetDependency.external(name: "SnapKit")
     static let ReachabilitySwift = TargetDependency.external(name: "ReachabilitySwift")
     static let Lottie = TargetDependency.external(name: "Lottie")
-    static let Firebase = TargetDependency.external(name: "FirebaseAnalytics")
+    //static let Firebase = TargetDependency.external(name: "FirebaseAnalytics")
     static let PinLayout = TargetDependency.external(name: "PinLayout")
     static let FlexLayout = TargetDependency.external(name: "FlexLayout")
     static let Quick = TargetDependency.external(name: "Quick")

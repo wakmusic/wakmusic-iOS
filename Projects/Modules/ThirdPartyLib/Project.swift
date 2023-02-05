@@ -8,7 +8,7 @@ let project = Project.makeModule(
     dependencies: [
         .SPM.GoogoleLogin,
         .SPM.NaverLogin,
-        .SPM.Firebase,
+      //  .SPM.Firebase,
         .SPM.RxSwift,
         .SPM.RxMoya,
         .SPM.Moya
