@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import NeedleFoundation
-
+import PlayerFeature
 import RootFeature
 import MainTabFeature
 import KeychainModule
@@ -29,5 +29,20 @@ public final class AppComponent: BootstrapComponent {
 public extension AppComponent {
     var mainContainerComponent: MainContainerComponent {
         MainContainerComponent(parent: self)
+    }
+    
+    var bottomTabBarComponent: BottomTabBarComponent {
+        BottomTabBarComponent(parent: self)
+    }
+
+    var mainTabBarComponent: MainTabBarComponent {
+        MainTabBarComponent(parent: self)
+    }
+}
+
+// MARK: - Player
+public extension AppComponent {
+    var playerComponent: PlayerComponent {
+        PlayerComponent(parent: self)
     }
 }
