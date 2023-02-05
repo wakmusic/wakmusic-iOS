@@ -12,6 +12,7 @@ import DesignSystem
 import NaverThirdPartyLogin
 import RxSwift
 import Alamofire
+import AuthenticationServices
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -97,8 +98,32 @@ extension BeforeLoginStorageViewController{
                 return
             }
             
+           
+            
         }).disposed(by: disposeBag)
         
+        
+    }
+    
+    private func configureApple(){
+        
+        appleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            request.requestedScopes = [.fullName]
+            
+            
+            let auth = ASAuthorizationController(authorizationRequests: [request])
+            auth.delegate = self
+            auth.presentationContextProvider = self
+            auth.performRequests()
+            
+        }).disposed(by: disposeBag)
         
     }
     
@@ -176,7 +201,7 @@ extension BeforeLoginStorageViewController{
         
         configureNaver()
                 
-        
+        configureApple()
     }
     
     private func naverLoginPaser(){
@@ -251,4 +276,12 @@ extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegat
     
 }
 
-
+extension BeforeLoginStorageViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    
+    
+}
