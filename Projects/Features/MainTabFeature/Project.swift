@@ -10,7 +10,8 @@ let project = Project.makeModule(
         .Project.Features.ChartFeature,
         .Project.Features.SearchFeature,
         .Project.Features.ArtistFeature,
-        .Project.Features.StorageFeature
+        .Project.Features.StorageFeature,
+        .Project.Features.PlayerFeature
     ]
     , resources: ["Resources/**"]
 )

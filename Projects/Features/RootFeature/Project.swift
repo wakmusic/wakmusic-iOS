@@ -6,9 +6,7 @@ let project = Project.makeModule(
     product: .staticFramework,
     dependencies: [
         .Project.Features.BaseFeature,
-        .Project.Features.MainTabFeature,
-        .Project.Features.PlayerFeature,
-        .Project.Features.SignInFeature
+        .Project.Features.MainTabFeature
     ]
     , resources: ["Resources/**"]
 )
