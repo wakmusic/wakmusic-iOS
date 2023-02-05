@@ -32,7 +32,6 @@ let targets: [Target] = [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-            .SPM.Firebase,
             .SPM.Nimble,
             .SPM.Quick
         ],
