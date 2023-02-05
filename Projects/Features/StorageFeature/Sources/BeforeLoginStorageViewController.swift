@@ -12,6 +12,7 @@ import DesignSystem
 import NaverThirdPartyLogin
 import RxSwift
 import Alamofire
+import AuthenticationServices
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -82,9 +83,46 @@ extension BeforeLoginStorageViewController{
             }
             
             
-            //self.naverLoginInstance?.requestThirdPartyLogin()
+            self.naverLoginInstance?.requestThirdPartyLogin() // 로그인
             
-            //self.naverLoginInstance?.requestDeleteToken()
+            //self.naverLoginInstance?.requestDeleteToken() //로그아웃
+        }).disposed(by: disposeBag)
+        
+    }
+    
+    private func configureGoogle(){
+        
+        googleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+           
+            
+        }).disposed(by: disposeBag)
+        
+        
+    }
+    
+    private func configureApple(){
+        
+        appleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            request.requestedScopes = [.fullName]
+            
+            
+            let auth = ASAuthorizationController(authorizationRequests: [request])
+            auth.delegate = self
+            auth.presentationContextProvider = self
+            auth.performRequests()
+            
         }).disposed(by: disposeBag)
         
     }
@@ -163,7 +201,7 @@ extension BeforeLoginStorageViewController{
         
         configureNaver()
                 
-        
+        configureApple()
     }
     
     private func naverLoginPaser(){
@@ -185,13 +223,30 @@ extension BeforeLoginStorageViewController{
 
         AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization]).responseData{ response in
          
-            print(response.value!)
+            print(response.data!)
             
         
             
          
         }
       
+    }
+    
+    private func googleLogin(){
+        
+//        let vc = BeforeLoginStorageViewController.viewController()
+//
+//        let config = GIDConfiguration(clientID: "153264578078-lhvohrjr856u7bg8c41fefkgirk1dql9.apps.googleusercontent.com")
+//
+//        GIDSignIn.sharedInstance.signIn(withPresenting: vc) { user,_ in
+//
+//            guard let user = user else { return }
+//
+//            print(user)
+//
+//        }
+        
+        
     }
     
     
@@ -221,4 +276,12 @@ extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegat
     
 }
 
-
+extension BeforeLoginStorageViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    
+    
+}
