@@ -46,12 +46,18 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         let isEdit: Bool = viewModel.output.isEditinglist.value
         
         if isEdit {
-            let vc = TextPopupViewController.viewController(text: "저장하지 않고 나가시겠습니까?", cancelButtonIsHidden: false) {
-                self.navigationController?.popViewController(animated: true)
+            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+                //TODO: 저장 코드
                 
-            }
+               // self.navigationController?.popViewController(animated: true)
+                self.viewModel.output.isEditinglist.accept(false)
+                
+            },cancelCompletion: {
+                self.viewModel.output.isEditinglist.accept(false)
+            })
             self.showPanModal(content: vc)
         }else{
+            
             self.navigationController?.popViewController(animated: true)
         }
     }
@@ -118,6 +124,7 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
+        
         
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
@@ -239,13 +246,14 @@ extension PlayListDetailViewController{
             .do(onNext: { [weak self] isEdit in
                 guard let self = self else { return }
                 
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 self.moreButton.isHidden = isEdit
                 self.completeButton.isHidden = !isEdit
                 self.editStateLabel.isHidden = !isEdit
                 
-                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
+                
             })
             .withLatestFrom(dataSource)
             .bind(to: dataSource)

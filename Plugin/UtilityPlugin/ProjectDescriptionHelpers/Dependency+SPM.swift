@@ -27,6 +27,8 @@ public extension TargetDependency.SPM {
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
     static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
+    static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
+    static let GoogoleLogin = TargetDependency.external(name: "GoogleSignIn")
 }
 
 public extension Package {

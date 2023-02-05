@@ -10,7 +10,7 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     @IBOutlet weak public var contentView: UIView!
     
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: true)
+    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
     lazy var bfLoginView = BeforeLoginStorageViewController.viewController()
     lazy var afLoginView = AfterLoginStorageViewController.viewController()

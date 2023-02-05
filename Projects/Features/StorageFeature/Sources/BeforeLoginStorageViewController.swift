@@ -9,6 +9,10 @@
 import UIKit
 import Utility
 import DesignSystem
+import NaverThirdPartyLogin
+import RxSwift
+import Alamofire
+import AuthenticationServices
 
 class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -42,6 +46,11 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
     
+    let disposeBag = DisposeBag()
+    
+    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +72,61 @@ class BeforeLoginStorageViewController: UIViewController, ViewControllerFromStor
 }
 
 extension BeforeLoginStorageViewController{
+    
+    private func configureNaver(){
+        
+        naverLoginInstance?.delegate = self
+        
+        naverLoginButton.rx.tap.subscribe (onNext:{  [weak self] in
+            guard let self = self else{
+                return
+            }
+            
+            
+            self.naverLoginInstance?.requestThirdPartyLogin() // 로그인
+            
+            //self.naverLoginInstance?.requestDeleteToken() //로그아웃
+        }).disposed(by: disposeBag)
+        
+    }
+    
+    private func configureGoogle(){
+        
+        googleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+           
+            
+        }).disposed(by: disposeBag)
+        
+        
+    }
+    
+    private func configureApple(){
+        
+        appleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            request.requestedScopes = [.fullName]
+            
+            
+            let auth = ASAuthorizationController(authorizationRequests: [request])
+            auth.delegate = self
+            auth.presentationContextProvider = self
+            auth.performRequests()
+            
+        }).disposed(by: disposeBag)
+        
+    }
+    
     
     private func configureUI(){
 
@@ -135,11 +199,89 @@ extension BeforeLoginStorageViewController{
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
+        configureNaver()
+                
+        configureApple()
+    }
     
+    private func naverLoginPaser(){
         
+        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
+                
+                if !accessToken {
+                  return
+                }
+                
+                guard let tokenType = naverLoginInstance?.tokenType else { return }
+                guard let accessToken = naverLoginInstance?.accessToken else { return }
+                  
+                let requestUrl = "https://openapi.naver.com/v1/nid/me"
+                let url = URL(string: requestUrl)!
+                
+                let authorization = "\(tokenType) \(accessToken)"
+                print("TOKEN은 받앗다")
+
+        AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization]).responseData{ response in
+         
+            print(response.data!)
+            
         
+            
+         
+        }
+      
+    }
+    
+    private func googleLogin(){
+        
+//        let vc = BeforeLoginStorageViewController.viewController()
+//
+//        let config = GIDConfiguration(clientID: "153264578078-lhvohrjr856u7bg8c41fefkgirk1dql9.apps.googleusercontent.com")
+//
+//        GIDSignIn.sharedInstance.signIn(withPresenting: vc) { user,_ in
+//
+//            guard let user = user else { return }
+//
+//            print(user)
+//
+//        }
         
         
     }
+    
+    
+    
+    
+    
+}
+
+extension BeforeLoginStorageViewController:NaverThirdPartyLoginConnectionDelegate{
+    func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
+        print("네이버 로그인 성공")
+        self.naverLoginPaser()
+    }
+    
+    func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
+        print("네이버 토큰\(naverLoginInstance?.accessToken)")
+    }
+    
+    func oauth20ConnectionDidFinishDeleteToken() {
+        print("네이버 로그아웃")
+    }
+    
+    func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+        print("에러 = \(error.localizedDescription)")
+    }
+    
+    
+}
+
+extension BeforeLoginStorageViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    
     
 }

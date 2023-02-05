@@ -1,7 +1,6 @@
 import UIKit
 import Utility
 import PanModal
-
 public final class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var contentLabel: UILabel!
@@ -11,6 +10,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var contentString: String = ""
     var cancelButtonIsHidden: Bool = false
     var completion: (() -> Void)?
+    var cancelCompletion: (() -> Void)?
     
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -22,16 +22,18 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         configureUI()
     }
 
-    public static func viewController(text: String = "", cancelButtonIsHidden: Bool, completion: (() -> Void)? = nil) -> TextPopupViewController {
+    public static func viewController(text: String = "", cancelButtonIsHidden: Bool, completion: (() -> Void)? = nil, cancelCompletion: (() -> Void)? = nil) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
         viewController.completion = completion
+        viewController.cancelCompletion = cancelCompletion
         return viewController
     }
 
     @IBAction func cancelButtonAction(_ sender: Any) {
         dismiss(animated: true)
+        cancelCompletion?()
     }
 
     @IBAction func confirmButtonAction(_ sender: Any) {

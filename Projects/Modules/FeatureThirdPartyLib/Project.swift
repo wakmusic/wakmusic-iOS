@@ -20,6 +20,8 @@ let project = Project.makeModule(
         .SPM.YoutubeKit,
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
-        .SPM.SwiftEntryKit
+        .SPM.SwiftEntryKit,
+        .SPM.NaverLogin,
+        .SPM.GoogoleLogin
     ]
 )
