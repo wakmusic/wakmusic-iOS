@@ -20,6 +20,10 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     var lastPoint: CGPoint = .zero
     var originalTabBarPosition: CGFloat = 0
 
+    var bottomTabBarComponent: BottomTabBarComponent!
+    var mainTabBarComponent: MainTabBarComponent!
+    var playerComponent: PlayerComponent!
+
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self,
                                              action: #selector(panGesture(_:)))
@@ -34,8 +38,17 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         configurePlayer()
     }
 
-    public static func viewController() -> MainContainerViewController {
+    public static func viewController(
+        bottomTabBarComponent: BottomTabBarComponent,
+        mainTabBarComponent: MainTabBarComponent,
+        playerComponent: PlayerComponent
+    ) -> MainContainerViewController {
         let viewController = MainContainerViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
+
+        viewController.bottomTabBarComponent = bottomTabBarComponent
+        viewController.mainTabBarComponent = mainTabBarComponent
+        viewController.playerComponent = playerComponent
+
         return viewController
     }
 }
@@ -121,7 +134,7 @@ extension MainContainerViewController {
     private func configureUI() {
 
         //Main Content
-        let viewController = MainTabBarViewController.viewController().wrapNavigationController
+        let viewController = mainTabBarComponent.makeView().wrapNavigationController
         self.addChild(viewController)
         self.containerView.addSubview(viewController.view)
         viewController.didMove(toParent: self)

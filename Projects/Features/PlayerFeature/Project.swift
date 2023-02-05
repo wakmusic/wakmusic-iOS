@@ -5,7 +5,7 @@ let project = Project.makeModule(
     name: "PlayerFeature",
     product: .staticFramework,
     dependencies: [
-        .Project.Features.BaseFeature
+        .Project.Features.BaseFeature,
     ]
     , resources: ["Resources/**"]
 

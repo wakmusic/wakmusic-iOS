@@ -17,9 +17,9 @@ import ArtistFeature
 import ChartFeature
 import StorageFeature
 
-class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak public var contentView: UIView!
 
     private lazy var viewControllers: [UIViewController] = {
         return [HomeViewController.viewController().wrapNavigationController,
@@ -33,18 +33,18 @@ class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard
     var previousIndex: Int?
     var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
@@ -89,7 +89,7 @@ extension MainTabBarViewController {
 
 extension MainTabBarViewController: UIGestureRecognizerDelegate {
     
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
 }
