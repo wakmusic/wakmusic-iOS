@@ -115,7 +115,7 @@ extension MyPlayListViewController{
                 
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
-                guard let parent = self.parent?.parent as? AfterLoginStorageViewController else{
+                guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
                 // 탭맨 쪽 편집 변경

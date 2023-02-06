@@ -42,10 +42,10 @@
             </objects>
             <point key="canvasLocation" x="138" y="5"/>
         </scene>
-        <!--After Login Storage View Controller-->
+        <!--After Login View Controller-->
         <scene sceneID="5O4-cM-7oj">
             <objects>
-                <viewController storyboardIdentifier="AfterLoginStorageViewController" id="53i-Hq-sTM" customClass="AfterLoginStorageViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AfterLoginViewController" id="53i-Hq-sTM" customClass="AfterLoginViewController" customModule="StorageFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HgV-st-ifZ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -174,11 +174,25 @@
                                         <color key="textColor" name="gray900"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jah-go-H3G">
+                                        <rect key="frame" x="309" y="16" width="64" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="64" id="M2a-ZF-vVS"/>
+                                            <constraint firstAttribute="height" constant="24" id="ndt-7s-eDO"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="presswithDrawAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="kSc-wa-32x"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="18z-j6-4h7"/>
                                     <constraint firstItem="0kU-I9-SMy" firstAttribute="centerY" secondItem="iYI-0E-bmv" secondAttribute="centerY" id="Bm1-i9-kLI"/>
                                     <constraint firstItem="PAf-9b-HCS" firstAttribute="leading" secondItem="iYI-0E-bmv" secondAttribute="leading" constant="20" id="IAs-tY-hEq"/>
+                                    <constraint firstAttribute="trailing" secondItem="jah-go-H3G" secondAttribute="trailing" constant="20" id="Lxk-eC-xTQ"/>
+                                    <constraint firstItem="jah-go-H3G" firstAttribute="centerY" secondItem="0kU-I9-SMy" secondAttribute="centerY" id="dcq-TR-H1c"/>
                                     <constraint firstItem="0kU-I9-SMy" firstAttribute="centerX" secondItem="iYI-0E-bmv" secondAttribute="centerX" id="lUh-Fd-kNY"/>
                                     <constraint firstItem="PAf-9b-HCS" firstAttribute="centerY" secondItem="iYI-0E-bmv" secondAttribute="centerY" id="zjz-E3-hjz"/>
                                 </constraints>
@@ -375,6 +389,7 @@
                         <outlet property="songRequestButton" destination="z9t-XK-NGW" id="y6D-73-Okw"/>
                         <outlet property="titleLabel" destination="0kU-I9-SMy" id="dcs-G3-6nH"/>
                         <outlet property="versionLabel" destination="8hi-iv-sF0" id="HIR-NZ-1sK"/>
+                        <outlet property="withdrawButton" destination="jah-go-H3G" id="ZEd-cZ-RFo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XLZ-bI-9wh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

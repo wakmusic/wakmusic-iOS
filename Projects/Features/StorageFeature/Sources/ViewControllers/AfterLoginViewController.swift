@@ -14,7 +14,7 @@ import Tabman
 import RxSwift
 import PanModal
 
-class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromStoryBoard {
+class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var profileLabel: UILabel!
@@ -78,8 +78,8 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
     }
     
     
-    public static func viewController() -> AfterLoginStorageViewController {
-        let viewController = AfterLoginStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+    public static func viewController() -> AfterLoginViewController {
+        let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         return viewController
     }
 
@@ -87,7 +87,7 @@ class AfterLoginStorageViewController: TabmanViewController, ViewControllerFromS
 
 
 
-extension AfterLoginStorageViewController{
+extension AfterLoginViewController{
     
     private func configureUI(){
         profileImageButton.setImage(DesignSystemAsset.Profile.profile0.image, for: .normal)
@@ -201,7 +201,7 @@ extension AfterLoginStorageViewController{
     
 }
 
-extension AfterLoginStorageViewController:PageboyViewControllerDataSource, TMBarDataSource {
+extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSource {
     func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         self.viewControllers.count
     }
