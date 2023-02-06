@@ -13,7 +13,7 @@ import NaverThirdPartyLogin
 import RxSwift
 import Alamofire
 import AuthenticationServices
-import GoogleSignIn
+
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
 

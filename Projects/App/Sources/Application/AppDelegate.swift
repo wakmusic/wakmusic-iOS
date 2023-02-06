@@ -2,7 +2,6 @@ import UIKit
 import RootFeature
 import NaverThirdPartyLogin
 
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -22,17 +21,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerSecret = "aRtLNRjqmN" //시크릿 아이디
         naverInstance?.appName = "WAKTAVERSE Music" //앱이름
         
+        
+        
+        
         return true
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
            
-            NaverThirdPartyLoginConnection.getSharedInstance()?.application(app, open: url, options: options)
+        NaverThirdPartyLoginConnection.getSharedInstance()?.application(app, open: url, options: options)
             
-    
+//        var handled:Bool
+//
+//        handled = GIDSignIn.sharedInstance.handle(url)
+//
+//        if handled {
+//            return true
+//        }
+//        else {
+//            return false
+//        }
+        
        
         
-            return true
+        return true
     }
 
     func application(
