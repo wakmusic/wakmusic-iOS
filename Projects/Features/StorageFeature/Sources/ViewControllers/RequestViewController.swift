@@ -30,7 +30,8 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var versionLabel: UILabel!
     
     
-
+    @IBOutlet weak var withdrawButton: UIButton!
+    
     @IBAction func pressBackAction(_ sender: UIButton) {
         
         self.navigationController?.popViewController(animated: true)
@@ -45,6 +46,26 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
         let viewController = QnaViewController.viewController()
         self.navigationController?.pushViewController(viewController, animated: true)
         
+    }
+    
+    
+    @IBAction func presswithDrawAction(_ sender: UIButton) {
+        
+        let withdrawVc = TextPopupViewController.viewController(text: "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다.", cancelButtonIsHidden: true,completion: {
+            // 회원탈퇴 작업
+        })
+        
+        let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: {
+            self.showPanModal(content: withdrawVc)
+        })
+        
+        
+        let firstConfirmVc = TextPopupViewController.viewController(text: "회원탈퇴 신청을 하시겠습니까?", cancelButtonIsHidden: false,completion: {
+            self.showPanModal(content: secondConfirmVc)
+        })
+        
+        
+        self.showPanModal(content: firstConfirmVc)
     }
     
     
@@ -140,6 +161,17 @@ extension RequestViewController{
         
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
+        
+        
+        let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
+        
+        withDrawAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
+                                               .foregroundColor: DesignSystemAsset.GrayColor.gray400.color], range: NSRange(location: 0, length: withDrawAttributedString.string.count))
+        
+        withdrawButton.layer.borderWidth = 1
+        withdrawButton.layer.cornerRadius = 4
+        withdrawButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+        withdrawButton.setAttributedTitle(withDrawAttributedString, for: .normal)
         
         
        
