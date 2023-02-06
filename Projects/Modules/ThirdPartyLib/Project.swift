@@ -6,7 +6,7 @@ let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .framework,
     dependencies: [
-        .SPM.GoogoleLogin,
+        //.SPM.GoogoleLogin,
         .SPM.NaverLogin,
         .SPM.Firebase,
         .SPM.RxSwift,

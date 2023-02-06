@@ -1,5 +1,5 @@
 //
-//  FavoriteViewController.swift
+//  MyPlayListViewController.swift
 //  StorageFeature
 //
 //  Created by yongbeomkwak on 2023/01/27.
@@ -8,26 +8,29 @@
 
 import UIKit
 import Utility
-import RxRelay
-import DesignSystem
 import RxSwift
+import RxRelay
+import RxCocoa
+import DesignSystem
+import PanModal
 import BaseFeature
 
-class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
+class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
+
     
+    var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트2", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트3", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트4", numberOfSong: 100)])
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
+
+    lazy var viewModel = MyPlayListViewModel()
     
-    //var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [])
-    
-    lazy var viewModel = FavoriteViewModel()
     var disposeBag = DisposeBag()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
         tableView.addGestureRecognizer(longPress)
@@ -38,8 +41,8 @@ class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
     }
     
 
-    public static func viewController() -> FavoriteViewController {
-        let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+    public static func viewController() -> MyPlayListViewController {
+        let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
       
         
@@ -48,18 +51,13 @@ class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
 
 }
 
-extension FavoriteViewController{
+extension MyPlayListViewController{
     
     private func configureUI()
     {
-        tableView.dropDelegate = self
-        tableView.dragDelegate = self
-        
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        tableView.backgroundColor = .clear
-        
+        self.tableView.dragDelegate = self
+        self.tableView.dropDelegate = self
         bindRx()
-        
     }
     
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
@@ -82,29 +80,33 @@ extension FavoriteViewController{
             }
             
             let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-            warningView.text = "좋아요 한 곡이 없습니다."
+            warningView.text = "내 리스트가 없습니다."
             
             
             self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+            
+            
+            
         })
-            .bind(to: tableView.rx.items){[weak self] (tableView:UITableView,index:Int,model:SongInfoDTO) -> UITableViewCell in
+            .bind(to: tableView.rx.items){[weak self] (tableView,index,model) -> UITableViewCell in
                 guard let self = self else{return UITableViewCell()}
                 
                 let bgView = UIView()
                 bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
                 
-                guard let cell = tableView.dequeueReusableCell(withIdentifier:  "FavoriteTableViewCell", for: IndexPath(row: index, section: 0)) as? FavoriteTableViewCell
+                
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? MyPlayListTableViewCell
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model, self.viewModel.output.isEditinglist.value)
+                cell.update(model: model, isEditing: self.viewModel.output.isEditinglist.value)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-        viewModel.output.isEditinglist
+        self.viewModel.output.isEditinglist
             .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
@@ -113,11 +115,16 @@ extension FavoriteViewController{
                 
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
-                guard let parent = self.parent?.parent as? AfterLoginStorageViewController else{
+                guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
                 // 탭맨 쪽 편집 변경
                 parent.viewModel.output.isEditing.accept(isEdit)
+                
+            
+                
+                
+        
                 
                 
             })
@@ -132,16 +139,53 @@ extension FavoriteViewController{
     
 }
 
-extension FavoriteViewController:UITableViewDelegate{
+
+
+extension MyPlayListViewController:UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
+        
+        let header = MyPlayListHeaderView()
+      
+
+        header.delegate = self
+        return dataSource.value.isEmpty ? nil :  self.viewModel.output.isEditinglist.value ? nil : header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        
+        return dataSource.value.isEmpty ? 0 : self.viewModel.output.isEditinglist.value ? 0 : 140
+        
+        
+    }
+    
 }
 
+extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
+    func action(_ type: PlayListControlPopupType) {
+     
+        let vc =  PlayListControlPopupViewController.viewController(type: type) {
+            
+//            if type == .share {
+//                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+//            }
+            
+            if type == .load {
+                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+            }
 
-extension  FavoriteViewController: UITableViewDragDelegate {
+        }
+        self.showPanModal(content: vc)
+    }    
+}
+
+extension  MyPlayListViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
@@ -160,7 +204,7 @@ extension  FavoriteViewController: UITableViewDragDelegate {
     
 }
 
-extension  FavoriteViewController: UITableViewDropDelegate {
+extension  MyPlayListViewController: UITableViewDropDelegate {
     
     
     // 손가락을 화면에서 뗐을 때. 드롭한 데이터를 불러와서 data source를 업데이트 하고, 필요하면 새로운 행을 추가한다.
@@ -180,11 +224,11 @@ extension  FavoriteViewController: UITableViewDropDelegate {
         
         
         
-        
         var curr = dataSource.value
         var tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
         curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
         curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
+        
         dataSource.accept(curr)
         
         
@@ -212,7 +256,5 @@ extension  FavoriteViewController: UITableViewDropDelegate {
         
         return dropProposal
     }
-    
-    
     
 }

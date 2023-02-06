@@ -14,6 +14,7 @@ import RxSwift
 import Alamofire
 import AuthenticationServices
 
+
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -115,7 +116,7 @@ extension LoginViewController{
             
             let appleIdProvider = ASAuthorizationAppleIDProvider()
             let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName]
+            request.requestedScopes = [.fullName,.email]
             
             
             let auth = ASAuthorizationController(authorizationRequests: [request])
@@ -280,6 +281,23 @@ extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationC
     
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
+    }
+    
+    
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            
+            let userIdentifer = credential.user
+            let username = credential.fullName!
+            let userEmail = credential.email!
+            
+            
+            DEBUG_LOG("Success\n \(userIdentifer)\n \(username)\n \(userEmail)")
+        }
+    }
+    
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        DEBUG_LOG("Apple Login Fail")
     }
     
     
