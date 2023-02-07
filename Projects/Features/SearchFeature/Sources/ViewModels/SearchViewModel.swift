@@ -9,8 +9,12 @@
 import Foundation
 import RxSwift
 import RxRelay
+import DataModule
+import BaseFeature
 
-final class SearchViewModel {
+final class SearchViewModel:ViewModelType {
+   
+    
 
     let input = Input()
     let output = Output()
@@ -24,11 +28,21 @@ final class SearchViewModel {
     struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
+    
+    func transform(from input: Input) -> Output {
+        //hello
+        let output = Output()
+        
+        
+        return output
+    }
 
     init() {
         
         print("✅ SearchViewModel 생성")
         
-
+        
+        
+        
     }
 }

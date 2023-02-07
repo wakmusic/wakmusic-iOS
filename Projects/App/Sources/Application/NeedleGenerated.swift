@@ -1,9 +1,12 @@
 
 
+import DataModule
+import DomainModule
 import Foundation
 import KeychainModule
 import MainTabFeature
 import NeedleFoundation
+import NetworkModule
 import PlayerFeature
 import RootFeature
 import UIKit
@@ -96,6 +99,9 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["remoteChartDataSource-any RemoteSearchDataSource"] = { self.remoteChartDataSource as Any }
+        localTable["searchRepository-any SearchRepository"] = { self.searchRepository as Any }
+        localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
     }
 }
 extension PlayerComponent: Registration {

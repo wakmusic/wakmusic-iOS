@@ -15,7 +15,7 @@ extension SearchAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchSearchSong:
-            return "/"
+            return "/search"
         }
     }
         
