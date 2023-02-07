@@ -28,7 +28,7 @@ extension SearchAPI: WMAPI {
             case let .fetchSearchSong(type,keyword):
                 return .requestParameters(parameters: [
                     "type": type.rawValue,
-                    "sort": "popular",
+                    "sort": "popular", //기본 인기순으로
                     "keyword": keyword
                 ], encoding: URLEncoding.queryString)
                 
