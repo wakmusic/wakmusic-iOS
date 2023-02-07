@@ -9,8 +9,16 @@
 import DomainModule
 import DataModule
 import NetworkModule
+import SearchFeature
 
 public extension AppComponent {
+    
+    var searchComponent: SearchComponent {
+        shared {
+            SearchComponent(parent: self)
+        }
+    }
+    
     var remoteChartDataSource: any RemoteSearchDataSource {
         shared {
             RemoteSearchDataSourceImpl(keychain: keychain)

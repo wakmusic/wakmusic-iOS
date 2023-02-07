@@ -1,4 +1,6 @@
 import UIKit
+import DomainModule
+import NeedleFoundation
 import Utility
 import DesignSystem
 import RxCocoa
@@ -7,6 +9,19 @@ import PanModal
 import SnapKit
 import RxKeyboard
 import BaseFeature
+
+public protocol SearchDependency: Dependency {
+    var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
+}
+
+public final class SearchComponent: Component<SearchDependency> {
+    public func makeView() -> SearchViewController {
+        return SearchViewController.viewController(
+            viewModel: .init(fetchSearchSongUseCase: dependency.fetchSearchSongUseCase.self)
+        )
+    }
+}
+
 
 public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
 
@@ -18,11 +33,11 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
     
-    lazy var viewModel = SearchViewModel()
+    var viewModel:SearchViewModel!
     let disposeBag = DisposeBag()
     
     lazy var beforeVc = BeforeSearchContentViewController.viewController()
-    lazy var  afterVc = AfterSearchViewController.viewController()
+    lazy var afterVc = AfterSearchViewController.viewController()
     
     
     public override func viewDidLoad() {
@@ -67,8 +82,14 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     
    
 
-    public static func viewController() -> SearchViewController {
+    public static func viewController(
+        viewModel:SearchViewModel
+    ) -> SearchViewController {
+        
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        
         return viewController
     }
     

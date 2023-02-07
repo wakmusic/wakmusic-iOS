@@ -9,27 +9,36 @@
 import Foundation
 import RxSwift
 import RxRelay
-import DataModule
 import BaseFeature
+import DomainModule
 
-final class SearchViewModel:ViewModelType {
+public  final class SearchViewModel:ViewModelType {
    
     
 
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
+    var fetchSearchSongUseCase:FetchSearchSongUseCase
+    
+    public init(
+        fetchSearchSongUseCase: any FetchSearchSongUseCase
+    ){
+        self.fetchSearchSongUseCase = fetchSearchSongUseCase
+        
+        print("✅ SearchViewModel 생성")
+    }
 
-    struct Input {
+    public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         
     }
 
-    struct Output {
+    public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
     
-    func transform(from input: Input) -> Output {
+    public func transform(from input: Input) -> Output {
         //hello
         let output = Output()
         
@@ -37,12 +46,4 @@ final class SearchViewModel:ViewModelType {
         return output
     }
 
-    init() {
-        
-        print("✅ SearchViewModel 생성")
-        
-        
-        
-        
-    }
 }

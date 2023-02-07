@@ -24,7 +24,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     private lazy var viewControllers: [UIViewController] = {
         return [HomeViewController.viewController().wrapNavigationController,
                 ChartViewController.viewController().wrapNavigationController,
-                SearchViewController.viewController().wrapNavigationController,
+                searchComponent.makeView().wrapNavigationController,
                 ArtistViewController.viewController().wrapNavigationController,
                 StorageViewController.viewController().wrapNavigationController
         ]
@@ -32,6 +32,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
 
     var previousIndex: Int?
     var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
+    var searchComponent: SearchComponent!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +50,13 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
-    public static func viewController() -> MainTabBarViewController {
+    public static func viewController(
+        searchComponent: SearchComponent
+    ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
+        
+        viewController.searchComponent = searchComponent
+        
         return viewController
     }
 }
