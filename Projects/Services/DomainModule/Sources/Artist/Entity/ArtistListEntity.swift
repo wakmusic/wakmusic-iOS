@@ -19,7 +19,8 @@ public struct ArtistListEntity: Equatable {
         color: [[String]],
         youtube: String,
         twitch: String,
-        instagram: String
+        instagram: String,
+        isHiddenItem: Bool
     ) {
         self.ID = ID
         self.name = name
@@ -31,6 +32,7 @@ public struct ArtistListEntity: Equatable {
         self.youtube = youtube
         self.twitch = twitch
         self.instagram = instagram
+        self.isHiddenItem = isHiddenItem
     }
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -41,4 +43,5 @@ public struct ArtistListEntity: Equatable {
     public let title, description: String
     public let color: [[String]]
     public let youtube, twitch, instagram: String
+    public var isHiddenItem: Bool = false
 }

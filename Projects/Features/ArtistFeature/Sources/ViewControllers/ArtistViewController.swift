@@ -4,20 +4,24 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import BaseFeature
+import DomainModule
+import NeedleFoundation
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     var disposeBag: DisposeBag = DisposeBag()
-    var dataSource: BehaviorRelay<[ArtistListDTO]> = BehaviorRelay(value: [])
+    
+    var viewModel: ArtistViewModel!
+    private lazy var input = ArtistViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
-        bind()
-        //브런치 이름을 변경합니다.
+        bindRx()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -26,59 +30,44 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
-    public static func viewController() -> ArtistViewController {
+    public static func viewController(viewModel: ArtistViewModel) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        viewController.viewModel = viewModel
         return viewController
     }
 }
 
 extension ArtistViewController {
     
-    private func bind() {
+    private func bindRx() {
         
-        let models = [ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image),
-                      ArtistListDTO(name: "아이네", image: DesignSystemAsset.Artist.ine.image),
-                      ArtistListDTO(name: "징버거", image: DesignSystemAsset.Artist.jingburger.image),
-                      ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
-                      ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
-                      ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
-                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
-                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image),
-                      ArtistListDTO(name: "아이네", image: DesignSystemAsset.Artist.ine.image),
-                      ArtistListDTO(name: "징버거", image: DesignSystemAsset.Artist.jingburger.image),
-                      ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
-                      ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
-                      ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
-                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
-                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image),
-                      ArtistListDTO(name: "아이네", image: DesignSystemAsset.Artist.ine.image),
-                      ArtistListDTO(name: "징버거", image: DesignSystemAsset.Artist.jingburger.image),
-                      ArtistListDTO(name: "릴파", image: DesignSystemAsset.Artist.lilpa.image),
-                      ArtistListDTO(name: "주르르", image: DesignSystemAsset.Artist.jururu.image),
-                      ArtistListDTO(name: "고세구", image: DesignSystemAsset.Artist.gosegu.image),
-                      ArtistListDTO(name: "비챤", image: DesignSystemAsset.Artist.viichan.image),
-                      ArtistListDTO(name: "우왁굳", image: DesignSystemAsset.Artist.woowakgood.image)]
-        
-        Observable.just(models)
-            .map({ (model) in
+        output.dataSource
+            .map{ (model) -> [ArtistListEntity] in
                 guard !model.isEmpty else { return model }
                 var newModel = model
 
                 if model.count == 1 {
-                    let hiddenItem: ArtistListDTO = ArtistListDTO(name: "", image: UIImage(), isHiddenItem: true)
+                    let hiddenItem: ArtistListEntity = ArtistListEntity(
+                        ID: "",
+                        name: "",
+                        short: "",
+                        group: "",
+                        title: "",
+                        description: "",
+                        color: [],
+                        youtube: "",
+                        twitch: "",
+                        instagram: "",
+                        isHiddenItem: true
+                    )
                     newModel.append(hiddenItem)
                     return newModel
 
-                } else {
+                }else {
                     newModel.swapAt(0, 1)
                 }
-
                 return newModel
-            })
-            .bind(to: dataSource)
-            .disposed(by: disposeBag)
-
-        dataSource
+            }
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistListCell",
@@ -90,7 +79,7 @@ extension ArtistViewController {
             }.disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
-            .withLatestFrom(dataSource) { ($0, $1) }
+            .withLatestFrom(output.dataSource) { ($0, $1) }
             .do(onNext: { [weak self] (indexPath, _) in
                 guard let `self` = self,
                       let cell = self.collectionView.cellForItem(at: indexPath) as? ArtistListCell else { return }

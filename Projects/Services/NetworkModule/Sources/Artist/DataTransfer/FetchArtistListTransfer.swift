@@ -23,7 +23,8 @@ public extension ArtistListResponseDTO {
             color: color ?? [],
             youtube: youtube ?? "",
             twitch: twitch ?? "",
-            instagram: instagram ?? ""
+            instagram: instagram ?? "",
+            isHiddenItem: false
         )
     }
 }

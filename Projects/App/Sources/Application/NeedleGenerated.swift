@@ -1,5 +1,6 @@
 
 
+import ArtistFeature
 import BaseFeature
 import DataModule
 import DesignSystem
@@ -33,6 +34,19 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
+private class ArtistDependency132a213bf62ad60c622cProvider: ArtistDependency {
+    var fetchArtistListUseCase: any FetchArtistListUseCase {
+        return appComponent.fetchArtistListUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ArtistComponent
+private func factorye0c5444f5894148bdd93f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ArtistDependency132a213bf62ad60c622cProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
 
 
@@ -47,6 +61,9 @@ private func factorybc7f802f601dd5913533e3b0c44298fc1c149afb(_ component: Needle
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var searchComponent: SearchComponent {
         return appComponent.searchComponent
+    }
+    var artistComponent: ArtistComponent {
+        return appComponent.artistComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -119,6 +136,10 @@ extension AppComponent: Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { self.keychain as Any }
+        localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
+        localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
+        localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
+        localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { self.fetchArtistListUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -129,6 +150,11 @@ extension AppComponent: Registration {
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
     }
 }
+extension ArtistComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ArtistDependency.fetchArtistListUseCase] = "fetchArtistListUseCase-any FetchArtistListUseCase"
+    }
+}
 extension PlayerComponent: Registration {
     public func registerItems() {
 
@@ -137,6 +163,7 @@ extension PlayerComponent: Registration {
 extension MainTabBarComponent: Registration {
     public func registerItems() {
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
+        keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
     }
 }
 extension BottomTabBarComponent: Registration {
@@ -178,6 +205,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 
 @inline(never) private func register1() {
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->ArtistComponent", factorye0c5444f5894148bdd93f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)

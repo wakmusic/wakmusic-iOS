@@ -15,10 +15,7 @@ import Utility
 
 public final class ArtistViewModel: ViewModelType {
     
-    let input = Input()
-    let output = Output()
     var disposeBag = DisposeBag()
-
     var fetchArtistListUseCase: FetchArtistListUseCase
 
     public init(
@@ -31,18 +28,20 @@ public final class ArtistViewModel: ViewModelType {
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[ArtistListEntity]> = BehaviorRelay(value: [])
+        var dataSource: BehaviorRelay<[ArtistListEntity]>
     }
     
     public func transform(from input: Input) -> Output {
         
+        let dataSource: BehaviorRelay<[ArtistListEntity]> = BehaviorRelay(value: [])
+
         fetchArtistListUseCase.execute()
             .debug("fetchArtistListUseCase")
             .catchAndReturn([])
             .asObservable()
-            .bind(to: output.dataSource)
+            .bind(to: dataSource)
             .disposed(by: disposeBag)
 
-        return output
+        return Output(dataSource: dataSource)
     }
 }

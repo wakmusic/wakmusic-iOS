@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import Utility
+import DomainModule
 
 class ArtistListCell: UICollectionViewCell {
 
@@ -17,17 +18,11 @@ class ArtistListCell: UICollectionViewCell {
 
 extension ArtistListCell {
 
-    func update(model: ArtistListDTO) {
+    func update(model: ArtistListEntity) {
 
-        self.contentView.alpha = (model.isHiddenItem ?? false) ? 0 : 1
+        self.contentView.alpha = model.isHiddenItem ? 0 : 1
 
         artistLabel.text = model.name
-        artistImageView.image = model.image
+//        artistImageView.image = model.image
     }
-}
-
-struct ArtistListDTO {
-    let name: String
-    let image: UIImage
-    var isHiddenItem: Bool? = false
 }
