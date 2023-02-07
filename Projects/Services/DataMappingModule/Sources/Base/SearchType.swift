@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum SearchSortType: String, Codable {
+public enum SearchType: String, Codable {
     case title
     case artist
     case remix
