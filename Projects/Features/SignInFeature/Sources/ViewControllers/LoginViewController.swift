@@ -287,12 +287,11 @@ extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationC
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
             
-            let userIdentifer = credential.user
+            let userIdentifer = credential.user.identity
             let username = credential.fullName!
-            let userEmail = credential.email!
             
             
-            DEBUG_LOG("Success\n \(userIdentifer)\n \(username)\n \(userEmail)")
+            DEBUG_LOG("Success\n \(userIdentifer)\n \(username)\n")
         }
     }
     
