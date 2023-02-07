@@ -11,6 +11,7 @@ import RxSwift
 import RxRelay
 import BaseFeature
 import DomainModule
+import Utility
 
 public  final class SearchViewModel:ViewModelType {
    
@@ -27,6 +28,11 @@ public  final class SearchViewModel:ViewModelType {
         self.fetchSearchSongUseCase = fetchSearchSongUseCase
         
         print("✅ SearchViewModel 생성")
+        
+        fetchSearchSongUseCase.execute(type: .title, keyword: "리와인드")
+            .subscribe(onSuccess: { (res:[SearchEntity]) in
+                DEBUG_LOG("RESULT \(res)")
+            }).disposed(by: disposeBag)
     }
 
     public struct Input {

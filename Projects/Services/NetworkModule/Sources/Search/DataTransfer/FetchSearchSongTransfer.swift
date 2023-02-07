@@ -2,11 +2,11 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-public extension FetchSearchSongResponseDTO {
-    func toDomain() -> [SearchEntity] {
-        list.map { $0.toDomain() }
-    }
-}
+//public extension FetchSearchSongResponseDTO {
+//    func toDomain() -> [SearchEntity] {
+//        list.map { $0.toDomain() }
+//    }
+//}
 
 public extension SingleSearchSongResponseDTO {
     func toDomain() -> SearchEntity {

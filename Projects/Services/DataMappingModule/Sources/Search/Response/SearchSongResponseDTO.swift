@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct FetchSearchSongResponseDTO: Decodable {
-    public let list: [SingleSearchSongResponseDTO]
-}
+//public struct FetchSearchSongResponseDTO: Decodable {
+//    public let list: [SingleSearchSongResponseDTO]
+//}
 
 
 public struct SingleSearchSongResponseDTO: Decodable {
