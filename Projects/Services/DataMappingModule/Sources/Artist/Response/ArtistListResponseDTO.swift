@@ -9,12 +9,11 @@
 import Foundation
 
 public struct ArtistListResponseDTO: Codable, Equatable {
-    let ID, name, short, group: String
-    let title, description: String
-    let color: [[String]]?
-    let youtube, twitch, instagram: String?
-    
-    
+    public let ID, name, short, group: String
+    public let title, description: String
+    public let color: [[String]]?
+    public let youtube, twitch, instagram: String?
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
     }

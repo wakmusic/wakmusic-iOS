@@ -30,7 +30,7 @@ public enum ArtistImageType: String, Codable {
     case big
     case group
     case full
-    
+
     public var extString: String {
         switch self {
         case .big:
