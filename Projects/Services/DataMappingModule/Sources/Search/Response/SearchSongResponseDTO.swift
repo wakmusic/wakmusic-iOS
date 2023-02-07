@@ -8,17 +8,13 @@
 
 import Foundation
 
-public struct SearchSongResponseDTO: Codable, Equatable {
-    let ID, title, artist, remix, reaction: String
-    let date, views, last: Int
+public struct FetchSearchSongResponseDTO: Decodable {
+    public let list: [SingleSearchSongResponseDTO]
+}
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.ID == rhs.ID
-    }
 
-    private enum CodingKeys: String, CodingKey {
-        case ID = "id"
-        case title, artist, remix, reaction
-        case date, views, last
-    }
+public struct SingleSearchSongResponseDTO: Decodable {
+    public let id, title, artist, remix: String
+    public let reaction: String
+    public let date, views, last: Int
 }

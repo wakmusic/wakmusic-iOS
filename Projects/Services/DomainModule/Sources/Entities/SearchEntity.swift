@@ -9,7 +9,7 @@ public struct SearchEntity: Equatable {
         reaction: String,
         views: Int,
         last: Int,
-        date: Int
+        date: String
     ) {
         self.id = id
         self.title = title
@@ -23,5 +23,6 @@ public struct SearchEntity: Equatable {
     
     public let id, title, artist, remix: String
     public let reaction: String
-    public let date,views, last: Int
+    public let views, last: Int
+    public let date: String
 }
