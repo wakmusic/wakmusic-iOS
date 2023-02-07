@@ -2,17 +2,15 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-public extension FetchChartRankingResponseDTO {
-    func toDomain() -> [ChartRankingEntity] {
-        list.map { $0.toDomain() }
-    }
-}
+//public extension FetchSearchSongResponseDTO {
+//    func toDomain() -> [SearchEntity] {
+//        list.map { $0.toDomain() }
+//    }
+//}
 
-public extension SingleChartRankingResponseDTO {
-    
-    
-    func toDomain() -> ChartRankingEntity {
-        ChartRankingEntity(
+public extension SingleSearchSongResponseDTO {
+    func toDomain() -> SearchEntity {
+        SearchEntity(
             id: id,
             title: title,
             artist: artist,

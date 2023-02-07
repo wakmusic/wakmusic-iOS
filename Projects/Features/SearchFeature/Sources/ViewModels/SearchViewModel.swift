@@ -9,26 +9,47 @@
 import Foundation
 import RxSwift
 import RxRelay
+import BaseFeature
+import DomainModule
+import Utility
 
-final class SearchViewModel {
+public  final class SearchViewModel:ViewModelType {
+   
+    
 
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
+    var fetchSearchSongUseCase:FetchSearchSongUseCase
+    
+    public init(
+        fetchSearchSongUseCase: any FetchSearchSongUseCase
+    ){
+        self.fetchSearchSongUseCase = fetchSearchSongUseCase
+        
+        print("✅ SearchViewModel 생성")
+        
+        fetchSearchSongUseCase.execute(type: .title, keyword: "리와인드")
+            .subscribe(onSuccess: { (res:[SearchEntity]) in
+                DEBUG_LOG("RESULT \(res)")
+            }).disposed(by: disposeBag)
+    }
 
-    struct Input {
+    public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         
     }
 
-    struct Output {
+    public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
-
-    init() {
+    
+    public func transform(from input: Input) -> Output {
+        //hello
+        let output = Output()
         
-        print("✅ SearchViewModel 생성")
         
-
+        return output
     }
+
 }

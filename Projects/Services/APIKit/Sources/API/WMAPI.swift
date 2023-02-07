@@ -11,7 +11,7 @@ public protocol WMAPI: TargetType, JwtAuthorizable {
 
 public extension WMAPI {
     var baseURL: URL {
-        URL(string: "https://app-api.wakmusic.xyz")!
+        URL(string: "https://test.wakmusic.xyz")!
     }
 
     var path: String {

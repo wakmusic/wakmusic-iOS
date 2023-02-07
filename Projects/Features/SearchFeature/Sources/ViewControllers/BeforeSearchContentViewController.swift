@@ -233,9 +233,9 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         recentRecordHeaderView.completionHandler = {
             let textPopupViewController = TextPopupViewController.viewController(
                 text: "전체 내역을 삭제하시겠습니까?",
-                cancelButtonIsHidden: false) { //승인 핸들러
-                    Utility.PreferenceManager.recentRecords = nil
-                }
+                cancelButtonIsHidden: false,completion: { //승인 핸들러
+                        Utility.PreferenceManager.recentRecords = nil
+                })
             self.showPanModal(content: textPopupViewController)
            
         }
