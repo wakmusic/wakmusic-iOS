@@ -16,11 +16,11 @@ public enum SearchType: String, Codable {
     public var display: String {
         switch self {
         case .title:
-            return "제목"
+            return "title"
         case .artist:
-            return "가수"
+            return "artist"
         case .remix:
-            return "조교"
+            return "remix"
         }
     }
 }
