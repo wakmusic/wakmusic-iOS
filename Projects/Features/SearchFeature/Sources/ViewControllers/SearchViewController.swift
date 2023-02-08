@@ -11,13 +11,14 @@ import RxKeyboard
 import BaseFeature
 
 public protocol SearchDependency: Dependency {
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
+    //var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
+    
 }
 
 public final class SearchComponent: Component<SearchDependency> {
     public func makeView() -> SearchViewController {
         return SearchViewController.viewController(
-            viewModel: .init(fetchSearchSongUseCase: dependency.fetchSearchSongUseCase.self)
+            viewModel: .init()
         )
     }
 }

@@ -275,7 +275,7 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
         
         let vc = PlayListDetailViewController.viewController(.custom)
         
-        self.parent?.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: true)
      
         
     }
