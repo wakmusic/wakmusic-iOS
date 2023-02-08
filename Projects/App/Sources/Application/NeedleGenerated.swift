@@ -101,17 +101,15 @@ private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: Needle
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
-        return appComponent.fetchSearchSongUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
+
+
+    init() {
+
     }
 }
 /// ^->AppComponent->SearchComponent
-private func factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SearchDependencya86903a2c751a4f762e8Provider(appComponent: parent1(component) as! AppComponent)
+private func factorye3d049458b2ccbbcb3b6e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SearchDependencya86903a2c751a4f762e8Provider()
 }
 
 #else
@@ -158,7 +156,7 @@ extension RootComponent: Registration {
 }
 extension SearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\SearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
+
     }
 }
 
@@ -183,7 +181,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6e3b0c44298fc1c149afb)
 }
 #endif
 

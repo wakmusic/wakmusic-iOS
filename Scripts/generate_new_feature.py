@@ -7,6 +7,7 @@ def make_new_feature(feature_name, has_demo=False):
     make_dir(f"{feature_name}Feature")
     make_project_file(feature_name, f"{feature_name}Feature", has_demo)
     make_sources(feature_name)
+    make_resources(feature_name)
     make_tests(feature_name)
     if has_demo:
         make_demo(feature_name)
@@ -40,6 +41,7 @@ let project = Project.makeModule(
         .Project.Features.BaseFeature"""
     file_content += ",\n        ".join(dependencies)
     file_content += "\n    ]" 
+    file_content += ', resources: ["Resources/**"]'
     file_content += ",\n    hasDemo: true" if has_demo else ""
     file_content += "\n)"
     write_code_in_file(project_path, file_content)
@@ -47,6 +49,12 @@ let project = Project.makeModule(
 def make_sources(feature_name):
     make_dir(f'{feature_name}Feature/Sources')
     feature_file_path = f'{feature_name}Feature/Sources/{feature_name}Feature.swift'
+    feature_content = '// This is for tuist'
+    write_code_in_file(feature_file_path, feature_content)
+
+def make_resources(feature_name):
+    make_dir(f'{feature_name}Feature/Resources')
+    feature_file_path = f'{feature_name}Feature/Resources/{feature_name}Feature.txt'
     feature_content = '// This is for tuist'
     write_code_in_file(feature_file_path, feature_content)
 
