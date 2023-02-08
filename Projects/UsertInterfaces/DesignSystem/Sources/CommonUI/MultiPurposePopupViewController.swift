@@ -14,14 +14,15 @@ import RxSwift
 import RxKeyboard
 
 
-public enum PlayListControlPopupType{
+public enum PurposeType{
     case creation
     case edit
     case load
     case share
+    case nickname
 }
 
-extension PlayListControlPopupType{
+extension PurposeType{
     
     var title:String{
         switch self{
@@ -34,7 +35,12 @@ extension PlayListControlPopupType{
             return "플레이리스트 가져오기"
         case .share:
             return "플레이리스트 공유하기"
+        
+        case .nickname:
+            return "닉네임 수정"
+            
         }
+        
         
     }
     
@@ -50,7 +56,11 @@ extension PlayListControlPopupType{
             return "플레이리스트 코드"
         case .share:
             return "플레이리스트 코드"
+        case .nickname:
+            return "닉네임"
+            
         }
+    
     }
     
     var btnText:String{
@@ -63,6 +73,8 @@ extension PlayListControlPopupType{
            return "가져오기"
         case .share:
             return "확인"
+        case .nickname:
+            return "완료"
         }
         
     }
@@ -71,7 +83,7 @@ extension PlayListControlPopupType{
 
 
 
-public final class  PlayListControlPopupViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class  MultiPurposePopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var saveButton: UIButton!
     
@@ -79,7 +91,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var dividerView: UIView!
-    @IBOutlet weak var playListTextField: UITextField!
+    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
@@ -108,7 +120,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
         }
         else
         {
-            playListTextField.rx.text.onNext("")
+            textField.rx.text.onNext("")
             viewModel.input.textString.accept("")
         }
         
@@ -118,32 +130,14 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
     
     @IBAction func saveAction(_ sender: UIButton) {
         
-        
-        
-        switch type{
-            
-        case .creation:
-            break
-            //생성 작업
-        case .edit:
-            break
-            //수정 작업
-        case .load:
-            break
-            // 가져오기 만약 없다면 오류 토스트 팝업
-        case .share:
-            break
-            // 그냥 닫기
-        }
-        
-
+    
         //네트워크 작업
         completion?()
         dismiss(animated: true)
         self.view.endEditing(true)
     }
     
-    var type:PlayListControlPopupType = .creation
+    var type:PurposeType = .creation
     lazy var viewModel = CreatePlayListPopupViewModel()
     
     public var disposeBag = DisposeBag()
@@ -160,8 +154,8 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(type:PlayListControlPopupType,shareCode:String? = nil,completion: (() -> Void)? = nil) -> PlayListControlPopupViewController {
-        let viewController = PlayListControlPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+    public static func viewController(type:PurposeType,shareCode:String? = nil,completion: (() -> Void)? = nil) -> MultiPurposePopupViewController {
+        let viewController = MultiPurposePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.type = type
         viewController.shareCode = shareCode
@@ -176,7 +170,7 @@ public final class  PlayListControlPopupViewController: UIViewController, ViewCo
 }
 
 
-extension PlayListControlPopupViewController{
+extension MultiPurposePopupViewController{
     private func configureUI() {
 
         titleLabel.text = type.title
@@ -195,13 +189,13 @@ extension PlayListControlPopupViewController{
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.playListTextField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ? "플레이리스트 제목을 입력하세요." :"코드를 입력해주세요." ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
-        self.playListTextField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        self.textField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ?  "플레이리스트 제목을 입력하세요." : type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+        self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
         if type == .share { //공유는 오직 읽기 전용
-            self.playListTextField.isEnabled = false
+            self.textField.isEnabled = false
             self.viewModel.input.textString.accept(shareCode!)
-            self.playListTextField.text = shareCode!
+            self.textField.text = shareCode!
         }
         
        
@@ -253,8 +247,8 @@ extension PlayListControlPopupViewController{
     
         }
         
-        if type == .creation || type == .edit{
-            bindRxCreationOrEdit()
+        if type == .creation || type == .edit || type == .nickname{
+            bindRxCreationOrEditOrNickName()
         }
         else{
             bindRxLoadOrShare()
@@ -278,9 +272,9 @@ extension PlayListControlPopupViewController{
     }
     
     
-    private func bindRxCreationOrEdit()
+    private func bindRxCreationOrEditOrNickName()
     {
-        playListTextField.rx.text.orEmpty
+        textField.rx.text.orEmpty
             .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
@@ -332,7 +326,7 @@ extension PlayListControlPopupViewController{
             else
             {
                 self.dividerView.backgroundColor = passColor
-                self.confirmLabel.text = "사용할 수 있는 제목입니다."
+                self.confirmLabel.text =  self.type == .nickname ? "사용할 수 있는 닉네임입니다." : "사용할 수 있는 제목입니다."
                 self.confirmLabel.textColor = passColor
                 self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
                 self.saveButton.isEnabled = true
@@ -350,7 +344,7 @@ extension PlayListControlPopupViewController{
     
     private func bindRxLoadOrShare() {
         
-        playListTextField.rx.text.orEmpty
+        textField.rx.text.orEmpty
             .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .bind(to: self.viewModel.input.textString)
             .disposed(by: self.disposeBag)
@@ -429,7 +423,7 @@ extension PlayListControlPopupViewController{
 }
 
 
-extension PlayListControlPopupViewController: PanModalPresentable {
+extension MultiPurposePopupViewController: PanModalPresentable {
 
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

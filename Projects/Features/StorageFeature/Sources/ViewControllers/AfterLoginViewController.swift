@@ -35,9 +35,13 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     
     @IBAction func pressEditProfileAction(_ sender: UIButton) {
         
-        let vc = ProfilePopViewController.viewController()
+       // let vc = ProfilePopViewController.viewController()
+        let vc = MultiPurposePopupViewController.viewController(type: .nickname)
+        
         self.showPanModal(content: vc)
     }
+    
+    
     
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {

@@ -168,9 +168,9 @@ extension MyPlayListViewController:UITableViewDelegate{
 }
 
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
-    func action(_ type: PlayListControlPopupType) {
+    func action(_ type: PurposeType) {
      
-        let vc =  PlayListControlPopupViewController.viewController(type: type) {
+        let vc =  MultiPurposePopupViewController.viewController(type: type) {
             
 //            if type == .share {
 //                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))

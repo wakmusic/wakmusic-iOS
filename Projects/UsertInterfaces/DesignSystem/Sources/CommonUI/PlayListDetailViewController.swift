@@ -81,7 +81,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = PlayListControlPopupViewController.viewController(type: .edit)
+        let createPlayListPopupViewController = MultiPurposePopupViewController.viewController(type: .edit)
         self.showPanModal(content: createPlayListPopupViewController)
     }
     
