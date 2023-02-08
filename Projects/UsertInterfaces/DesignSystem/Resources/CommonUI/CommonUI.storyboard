@@ -457,6 +457,57 @@
             </objects>
             <point key="canvasLocation" x="140" y="-680"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="uiA-nn-e4G">
+            <objects>
+                <viewController id="U19-uz-dz7" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3B4-bb-nwb">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJn-dZ-dJH">
+                                <rect key="frame" x="0.0" y="59" width="393" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXO-Wj-3k3">
+                                        <rect key="frame" x="175.66666666666666" y="13.666666666666671" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVV-UI-0tD">
+                                        <rect key="frame" x="341" y="8" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="oHh-M7-7wv"/>
+                                            <constraint firstAttribute="height" constant="32" id="ppS-ms-KH8"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="mini_close"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="gVV-UI-0tD" firstAttribute="centerY" secondItem="bXO-Wj-3k3" secondAttribute="centerY" id="0eH-PU-E6f"/>
+                                    <constraint firstAttribute="trailing" secondItem="gVV-UI-0tD" secondAttribute="trailing" constant="18" id="3ak-J6-96Z"/>
+                                    <constraint firstItem="bXO-Wj-3k3" firstAttribute="centerY" secondItem="qJn-dZ-dJH" secondAttribute="centerY" id="7nw-NV-Iqc"/>
+                                    <constraint firstItem="bXO-Wj-3k3" firstAttribute="centerX" secondItem="qJn-dZ-dJH" secondAttribute="centerX" id="7pg-AP-H4Z"/>
+                                    <constraint firstAttribute="height" constant="48" id="VwS-nc-lIC"/>
+                                    <constraint firstAttribute="trailing" secondItem="gVV-UI-0tD" secondAttribute="trailing" constant="20" id="gSE-EB-YoB"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ygc-Dn-amk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qJn-dZ-dJH" firstAttribute="leading" secondItem="ygc-Dn-amk" secondAttribute="leading" id="IWL-Qa-wRe"/>
+                            <constraint firstItem="qJn-dZ-dJH" firstAttribute="top" secondItem="ygc-Dn-amk" secondAttribute="top" id="qvS-WN-KMh"/>
+                            <constraint firstItem="ygc-Dn-amk" firstAttribute="trailing" secondItem="qJn-dZ-dJH" secondAttribute="trailing" id="wMP-5I-fON"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="67i-0q-7u9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1445" y="-725"/>
+        </scene>
         <!--Profile Pop View Controller-->
         <scene sceneID="7DC-1X-VBa">
             <objects>
@@ -572,6 +623,7 @@
     </scenes>
     <resources>
         <image name="back" width="32" height="32"/>
+        <image name="mini_close" width="32" height="32"/>
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
