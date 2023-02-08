@@ -36,9 +36,37 @@ public final class ArtistViewModel: ViewModelType {
         let dataSource: BehaviorRelay<[ArtistListEntity]> = BehaviorRelay(value: [])
 
         fetchArtistListUseCase.execute()
-            .debug("fetchArtistListUseCase")
             .catchAndReturn([])
             .asObservable()
+            .map{ (model) -> [ArtistListEntity] in
+                guard !model.isEmpty else {
+                    DEBUG_LOG("데이터가 없습니다.")
+                    return model
+                }
+                var newModel = model
+
+                if model.count == 1 {
+                    let hiddenItem: ArtistListEntity = ArtistListEntity(
+                        ID: "",
+                        name: "",
+                        short: "",
+                        group: "",
+                        title: "",
+                        description: "",
+                        color: [],
+                        youtube: "",
+                        twitch: "",
+                        instagram: "",
+                        isHiddenItem: true
+                    )
+                    newModel.append(hiddenItem)
+                    return newModel
+
+                }else {
+                    newModel.swapAt(0, 1)
+                }
+                return newModel
+            }
             .bind(to: dataSource)
             .disposed(by: disposeBag)
 

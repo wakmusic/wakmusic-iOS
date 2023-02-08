@@ -6,14 +6,16 @@ import RxCocoa
 import BaseFeature
 import DomainModule
 import NeedleFoundation
+import PDFKit
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var disposeBag: DisposeBag = DisposeBag()
     
-    var viewModel: ArtistViewModel!
+    private var viewModel: ArtistViewModel!
     private lazy var input = ArtistViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
 
@@ -26,7 +28,6 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DEBUG_LOG("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
@@ -42,32 +43,13 @@ extension ArtistViewController {
     private func bindRx() {
         
         output.dataSource
-            .map{ (model) -> [ArtistListEntity] in
-                guard !model.isEmpty else { return model }
-                var newModel = model
-
-                if model.count == 1 {
-                    let hiddenItem: ArtistListEntity = ArtistListEntity(
-                        ID: "",
-                        name: "",
-                        short: "",
-                        group: "",
-                        title: "",
-                        description: "",
-                        color: [],
-                        youtube: "",
-                        twitch: "",
-                        instagram: "",
-                        isHiddenItem: true
-                    )
-                    newModel.append(hiddenItem)
-                    return newModel
-
-                }else {
-                    newModel.swapAt(0, 1)
+            .skip(1)
+            .do(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
                 }
-                return newModel
-            }
+            })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistListCell",
@@ -86,18 +68,19 @@ extension ArtistViewController {
                 cell.animateSizeDownToUp(timeInterval: 0.3)
             })
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
-            .subscribe(onNext:{ [weak self] (indexPath, dataSource) in
+            .map { $0.1[$0.0.row] }
+            .subscribe(onNext:{ [weak self] (model) in
                 guard let `self` = self else { return }
-
-                let model = dataSource[indexPath.row]
                 DEBUG_LOG(model)
-                let viewController = ArtistDetailViewController.viewController()
-                self.navigationController?.pushViewController(viewController, animated: true)
+//                let viewController = ArtistDetailViewController.viewController()
+//                self.navigationController?.pushViewController(viewController, animated: true)
                 
             }).disposed(by: disposeBag)
     }
     
     private func configureUI() {
+        
+        activityIndicator.startAnimating()
         
         let sideSpace: CGFloat = 20.0
         let layout = WaterfallLayout()
@@ -105,7 +88,7 @@ extension ArtistViewController {
         layout.sectionInset = UIEdgeInsets(top: 15, left: sideSpace, bottom: 15, right: sideSpace)
 //        layout.minimumLineSpacing = 15
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
-        layout.headerHeight = 15.0
+        layout.headerHeight = 0
         layout.footerHeight = 50.0
         
         self.collectionView.setCollectionViewLayout(layout, animated: false)
@@ -123,14 +106,11 @@ extension ArtistViewController: WaterfallLayoutDelegate {
 
         let sideSpace: CGFloat = 8.0
         let width: CGFloat = APP_WIDTH() - ((sideSpace * 2.0) + 40.0)
-        let spacingWithNameHeight: CGFloat = 4.0 + 24.0 + 40.0
+        let spacingWithNameHeight: CGFloat = 4.0 + 24.0 + 40.0 + 15
         let imageHeight: CGFloat = width * rate
         
         switch indexPath.item {
-        case 0:
-            return CGSize(width: width, height: (imageHeight) + (width / 2) + spacingWithNameHeight)
-
-        case 2:
+        case 0, 2:
             return CGSize(width: width, height: (imageHeight) + (width / 2) + spacingWithNameHeight)
 
         default:
