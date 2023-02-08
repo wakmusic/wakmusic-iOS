@@ -481,7 +481,7 @@
                                             <constraint firstAttribute="height" constant="32" id="ppS-ms-KH8"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="mini_close"/>
+                                        <state key="normal" image="cross_close"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -623,7 +623,7 @@
     </scenes>
     <resources>
         <image name="back" width="32" height="32"/>
-        <image name="mini_close" width="32" height="32"/>
+        <image name="cross_close" width="24" height="24"/>
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
