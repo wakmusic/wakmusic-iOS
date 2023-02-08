@@ -200,9 +200,44 @@ extension LoginViewController{
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
+        bindRx()
+        
         configureNaver()
                 
         configureApple()
+    }
+    
+    
+    private func bindRx(){
+        
+        self.serviceButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let vc = ContractViewController.viewController(type: .service)
+            vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+            
+            self.present(vc, animated: true)
+            
+            
+        }).disposed(by: disposeBag)
+        
+        self.privacyButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let vc = ContractViewController.viewController(type: .privacy)
+            vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+            
+            self.present(vc, animated: true)
+            
+            
+        }).disposed(by: disposeBag)
+        
     }
     
     private func naverLoginPaser(){
