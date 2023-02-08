@@ -272,6 +272,7 @@ extension PlayListDetailViewController{
         
         if  !viewModel.output.isEditinglist.value && sender.state == .began {
             viewModel.output.isEditinglist.accept(true)
+            UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
         }
     }
  
