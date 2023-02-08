@@ -16,14 +16,13 @@ import PanModal
 
 class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
-    @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var profileLabel: UILabel!
     @IBOutlet weak var logoutButton: UIButton!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var editButton: UIButton!
-    
-    
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var profileButton: UIButton!
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
@@ -33,11 +32,12 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     }
     
     
-    @IBAction func pressEditProfileAction(_ sender: UIButton) {
+   
         
-        let vc = ProfilePopViewController.viewController()
-        self.showPanModal(content: vc)
-    }
+
+    
+    
+    
     
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
@@ -90,9 +90,11 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
 extension AfterLoginViewController{
     
     private func configureUI(){
-        profileImageButton.setImage(DesignSystemAsset.Profile.profile0.image, for: .normal)
+//        profileImageButton.setImage(DesignSystemAsset.Profile.profile0.image, for: .normal)
         
-        profileLabel.text = "닉네임"
+        profileImageView.image = DesignSystemAsset.Profile.profile0.image
+        
+        profileLabel.text = "닉네임12345777"
         profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
         logoutButton.setImage(DesignSystemAsset.Storage.logout.image, for: .normal)
@@ -194,6 +196,16 @@ extension AfterLoginViewController{
             })
             .bind(to: viewModel.output.isEditing)
             .disposed(by: disposeBag)
+                
+                
+        
+            profileButton.rx.tap.subscribe(onNext: {
+                //       // let vc = ProfilePopViewController.viewController()
+            let vc = MultiPurposePopupViewController.viewController(type: .nickname)
+    
+            self.showPanModal(content: vc)
+                
+            }).disposed(by: disposeBag)
         
         
     }

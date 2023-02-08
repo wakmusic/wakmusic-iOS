@@ -81,7 +81,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = PlayListControlPopupViewController.viewController(type: .edit)
+        let createPlayListPopupViewController = MultiPurposePopupViewController.viewController(type: .edit)
         self.showPanModal(content: createPlayListPopupViewController)
     }
     
@@ -272,6 +272,7 @@ extension PlayListDetailViewController{
         
         if  !viewModel.output.isEditinglist.value && sender.state == .began {
             viewModel.output.isEditinglist.accept(true)
+            UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
         }
     }
  

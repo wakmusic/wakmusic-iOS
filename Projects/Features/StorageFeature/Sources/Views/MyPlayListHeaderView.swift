@@ -12,7 +12,7 @@ import DesignSystem
 
 protocol MyPlayListHeaderViewDelegate{
     
-    func action(_ type:PlayListControlPopupType )
+    func action(_ type:PurposeType )
     
 }
 
