@@ -507,20 +507,20 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVV-UI-0tD">
-                                                <rect key="frame" x="341" y="8" width="32" height="32"/>
+                                                <rect key="frame" x="333" y="0.0" width="40" height="48"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="32" id="oHh-M7-7wv"/>
-                                                    <constraint firstAttribute="height" constant="32" id="ppS-ms-KH8"/>
+                                                    <constraint firstAttribute="width" constant="40" id="Q2U-Rj-2Mk"/>
                                                 </constraints>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="cross_close"/>
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="gVV-UI-0tD" firstAttribute="centerY" secondItem="bXO-Wj-3k3" secondAttribute="centerY" id="0eH-PU-E6f"/>
                                             <constraint firstItem="bXO-Wj-3k3" firstAttribute="centerY" secondItem="qJn-dZ-dJH" secondAttribute="centerY" id="7nw-NV-Iqc"/>
                                             <constraint firstItem="bXO-Wj-3k3" firstAttribute="centerX" secondItem="qJn-dZ-dJH" secondAttribute="centerX" id="7pg-AP-H4Z"/>
+                                            <constraint firstAttribute="bottom" secondItem="gVV-UI-0tD" secondAttribute="bottom" id="R0A-vd-YCA"/>
                                             <constraint firstAttribute="height" constant="48" id="VwS-nc-lIC"/>
+                                            <constraint firstItem="gVV-UI-0tD" firstAttribute="top" secondItem="qJn-dZ-dJH" secondAttribute="top" id="b4S-y8-vmk"/>
                                             <constraint firstAttribute="trailing" secondItem="gVV-UI-0tD" secondAttribute="trailing" constant="20" id="gSE-EB-YoB"/>
                                         </constraints>
                                     </view>
@@ -675,7 +675,7 @@
     </scenes>
     <resources>
         <image name="back" width="32" height="32"/>
-        <image name="cross_close" width="21.333333969116211" height="21.333333969116211"/>
+        <image name="cross_close" width="32" height="32"/>
         <image name="more" width="32" height="32"/>
         <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
