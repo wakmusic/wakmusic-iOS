@@ -2,11 +2,9 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "PlayerFeature",
+    name: "CommonFeature",
     product: .staticFramework,
     dependencies: [
-        .Project.Features.CommonFeature,
-    ]
-    , resources: ["Resources/**"]
-
+        .Project.Features.BaseFeature
+    ], resources: ["Resources/**"]
 )
