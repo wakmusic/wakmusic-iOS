@@ -318,6 +318,9 @@
                                                                                 </constraints>
                                                                                 <state key="normal" title="Button"/>
                                                                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                                                <connections>
+                                                                                    <action selector="pressServiceAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="Dle-Yc-40a"/>
+                                                                                </connections>
                                                                             </button>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaO-B6-A4K">
                                                                                 <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="44"/>
@@ -326,6 +329,9 @@
                                                                                 </constraints>
                                                                                 <state key="normal" title="Button"/>
                                                                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                                                <connections>
+                                                                                    <action selector="pressPrivacyAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="W2j-PZ-rjm"/>
+                                                                                </connections>
                                                                             </button>
                                                                         </subviews>
                                                                     </stackView>
