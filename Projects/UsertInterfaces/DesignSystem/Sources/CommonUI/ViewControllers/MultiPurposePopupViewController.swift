@@ -440,7 +440,7 @@ extension MultiPurposePopupViewController: PanModalPresentable {
     public var longFormHeight: PanModalHeight {
     
    
-        return PanModalHeight.contentHeight(306 + self.fakeViewHeight.constant)
+        return PanModalHeight.contentHeight(296 + self.fakeViewHeight.constant)
      }
 
     public var cornerRadius: CGFloat {

@@ -148,7 +148,7 @@ extension ProfilePopViewController: PanModalPresentable {
     public var longFormHeight: PanModalHeight {
     
    
-        return PanModalHeight.contentHeight( rowHeight + 200 )
+        return PanModalHeight.contentHeight( rowHeight + 190 )
      }
 
     public var cornerRadius: CGFloat {

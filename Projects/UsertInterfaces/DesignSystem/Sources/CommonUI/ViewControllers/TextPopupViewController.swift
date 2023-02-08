@@ -79,7 +79,7 @@ extension TextPopupViewController: PanModalPresentable {
             width: APP_WIDTH()-40,
             font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18))
         
-         let spacingHeight: CGFloat = 60 + 52 + 56 + 20
+         let spacingHeight: CGFloat = 60 + 52 + 56 + 10
          return .contentHeight(spacingHeight + stringHeight)
      }
 
