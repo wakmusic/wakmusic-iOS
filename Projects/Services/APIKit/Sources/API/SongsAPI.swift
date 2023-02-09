@@ -3,11 +3,11 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 
-public enum SearchAPI {
+public enum SongsAPI {
     case fetchSearchSong(type: SearchType,keyword: String)
 }
 
-extension SearchAPI: WMAPI {
+extension SongsAPI: WMAPI {
     public var domain: WMDomain {
         .songs
     }

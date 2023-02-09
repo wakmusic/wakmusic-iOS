@@ -6,7 +6,7 @@ import ErrorModule
 import Foundation
 
 
-public final class RemoteSearchDataSourceImpl: BaseRemoteDataSource<SearchAPI>, RemoteSearchDataSource {
+public final class RemoteSearchDataSourceImpl: BaseRemoteDataSource<SongsAPI>, RemoteSearchDataSource {
     public func fetchSearchSong(type: SearchType, keyword: String) ->  Single<[SearchEntity]> {
         request(.fetchSearchSong(type: type, keyword: keyword))
             .map([SingleSearchSongResponseDTO].self)

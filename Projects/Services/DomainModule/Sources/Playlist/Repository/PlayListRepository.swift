@@ -3,6 +3,6 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 
-public protocol RecommendPlayListRepository {
+public protocol PlayListRepository {
     func fetchRecommendPlayLists() -> Single<[RecommendPlayListEntity]>
 }
