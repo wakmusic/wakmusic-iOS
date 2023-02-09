@@ -92,11 +92,22 @@ extension ContractViewController{
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-       
-        
-        if let url = URL(string: type.url), let document = PDFDocument(url: url) {
-            loadPdf(document: document)
+
+    
+        DispatchQueue.global(qos: .default).async { // PDFDocument 코드를 default 에서 처리
+
+            if let url = URL(string: self.type.url), let document = PDFDocument(url: url) {
+                
+                DispatchQueue.main.async {
+                    self.loadPdf(document: document) // UI 작업이라 main 스레드로
+                }
+                
+                
+            }
         }
+        
+            
+        
         
         bindRx()
     }
