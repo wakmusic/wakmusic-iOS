@@ -13,6 +13,10 @@ public extension WMAPI {
     var baseURL: URL {
         URL(string: "https://test.wakmusic.xyz")!
     }
+    
+    var imageBaseURL: URL {
+        URL(string: "https://static.wakmusic.xyz")!
+    }
 
     var path: String {
         domain.asURLString + urlPath
