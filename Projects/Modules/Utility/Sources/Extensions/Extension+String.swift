@@ -18,16 +18,7 @@ public extension String {
     var isWhiteSpace: Bool{
             return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0
     }
-    
-    
-    ///   해당 id에 해당하는 Youtube URL 반환합니다.
-    /// - Returns: 유튜브 썸네일 URL
-    
-    var fetchYoutubeThumbnail: URL? {
-        return URL(string: "https://i.ytimg.com/vi/\(self)/hqdefault.jpg")
-    }
-    
-    
+        
     /// String(text) 높이 값을 계산하여 반환합니다.
     /// - Parameter width: 스트링이 들어갈 최대 너비
     /// - Parameter font: 사용 된 폰트 값
