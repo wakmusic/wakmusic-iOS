@@ -13,6 +13,7 @@ import RxSwift
 import RxDataSources
 import DesignSystem
 import BaseFeature
+import CommonFeature
 
 
 typealias SearchSectionModel = SectionModel<SearchType,SongInfoDTO>

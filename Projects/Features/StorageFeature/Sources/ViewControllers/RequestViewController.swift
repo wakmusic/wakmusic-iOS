@@ -9,6 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import CommonFeature
 
 class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
 

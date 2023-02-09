@@ -13,6 +13,7 @@ import Pageboy
 import Tabman
 import RxSwift
 import PanModal
+import CommonFeature
 
 class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 

@@ -1,0 +1,8 @@
+disabled_rules: #rules identifiers to exclude from running
+  - line_length
+  - control_statement
+  - todo
+
+identifier_name:
+  allowed_symbols: "_"
+  min_length: 1

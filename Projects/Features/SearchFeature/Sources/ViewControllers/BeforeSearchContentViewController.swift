@@ -12,6 +12,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import BaseFeature
+import CommonFeature
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
     
@@ -271,7 +272,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    func itemSelected(model: DesignSystem.RecommendPlayListDTO) {
+    func itemSelected(model: RecommendPlayListDTO) {
         
         let vc = PlayListDetailViewController.viewController(.custom)
         
