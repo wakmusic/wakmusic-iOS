@@ -11,7 +11,6 @@ import UIKit
 import NeedleFoundation
 import DomainModule
 
-//MARK :Artist
 public protocol ArtistDependency: Dependency {
     var fetchArtistListUseCase: any FetchArtistListUseCase { get }
     var artistDetailComponent: ArtistDetailComponent { get }
@@ -20,18 +19,8 @@ public protocol ArtistDependency: Dependency {
 public final class ArtistComponent: Component<ArtistDependency> {
     public func makeView() -> ArtistViewController {
         return ArtistViewController.viewController(
-            viewModel: ArtistViewModel(fetchArtistListUseCase: dependency.fetchArtistListUseCase.self),
-            artistDetailComponent: dependency.artistDetailComponent.self
+            viewModel: ArtistViewModel(fetchArtistListUseCase: dependency.fetchArtistListUseCase),
+            artistDetailComponent: dependency.artistDetailComponent
         )
-    }
-}
-
-//MARK :Artist Detail
-public protocol ArtistDetailDependency: Dependency {
-}
-
-public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
-    public func makeView(model: ArtistListEntity) -> ArtistDetailViewController {
-        return ArtistDetailViewController.viewController(model: model)
     }
 }
