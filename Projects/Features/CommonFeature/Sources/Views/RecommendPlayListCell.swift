@@ -13,8 +13,8 @@ import DesignSystem
 public class RecommendPlayListCell: UICollectionViewCell {
     
     @IBOutlet weak var titleStringLabel: UILabel!
-    @IBOutlet weak var logoImageView: UIImageView!
     
+    @IBOutlet weak var logoImageView: UIImageView!
     public override func awakeFromNib() {
         super.awakeFromNib()
         

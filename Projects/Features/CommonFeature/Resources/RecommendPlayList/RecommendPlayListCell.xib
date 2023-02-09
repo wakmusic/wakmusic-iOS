@@ -10,20 +10,20 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecommendPlayListCell" id="dYp-Dv-9CU" customClass="RecommendPlayListCell" customModule="CommonFeature" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecommendPlayListCell" id="n1a-Kg-Q4v" customClass="RecommendPlayListCell" customModule="CommonFeature">
             <rect key="frame" x="0.0" y="0.0" width="164" height="80"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="YM6-Lx-DVU">
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gZD-6H-uqh">
                 <rect key="frame" x="0.0" y="0.0" width="164" height="80"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tpK-NJ-9Qp">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6bv-vR-KlZ">
                         <rect key="frame" x="100" y="16" width="48" height="48"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="tpK-NJ-9Qp" secondAttribute="height" multiplier="1:1" id="sSs-rG-d0w"/>
+                            <constraint firstAttribute="width" secondItem="6bv-vR-KlZ" secondAttribute="height" multiplier="1:1" id="5I1-Sz-vKn"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캐롤" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9tb-cH-sWI">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캐롤" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ur-ig-foP">
                         <rect key="frame" x="16" y="31.666666666666671" width="80" height="17"/>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                         <color key="textColor" red="0.2784313725" green="0.3294117647" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -32,17 +32,17 @@
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="tpK-NJ-9Qp" firstAttribute="height" secondItem="YM6-Lx-DVU" secondAttribute="height" multiplier="48:80" id="D29-Ja-FFJ"/>
-                    <constraint firstItem="tpK-NJ-9Qp" firstAttribute="centerY" secondItem="YM6-Lx-DVU" secondAttribute="centerY" id="PrG-73-Noj"/>
-                    <constraint firstItem="9tb-cH-sWI" firstAttribute="centerY" secondItem="YM6-Lx-DVU" secondAttribute="centerY" id="Q8C-Yj-DFh"/>
-                    <constraint firstItem="9tb-cH-sWI" firstAttribute="leading" secondItem="YM6-Lx-DVU" secondAttribute="leading" constant="16" id="TCd-CI-KcC"/>
-                    <constraint firstAttribute="trailing" secondItem="tpK-NJ-9Qp" secondAttribute="trailing" constant="16" id="eUb-u3-hhK"/>
-                    <constraint firstItem="tpK-NJ-9Qp" firstAttribute="leading" secondItem="9tb-cH-sWI" secondAttribute="trailing" constant="4" id="idW-43-1YC"/>
+                    <constraint firstItem="5ur-ig-foP" firstAttribute="centerY" secondItem="gZD-6H-uqh" secondAttribute="centerY" id="1eH-Cc-aTc"/>
+                    <constraint firstItem="6bv-vR-KlZ" firstAttribute="height" secondItem="gZD-6H-uqh" secondAttribute="height" multiplier="48:80" id="7tX-Nc-nrS"/>
+                    <constraint firstItem="6bv-vR-KlZ" firstAttribute="centerY" secondItem="gZD-6H-uqh" secondAttribute="centerY" id="DyU-PI-80b"/>
+                    <constraint firstItem="6bv-vR-KlZ" firstAttribute="leading" secondItem="5ur-ig-foP" secondAttribute="trailing" constant="4" id="QU4-Cp-SEb"/>
+                    <constraint firstItem="5ur-ig-foP" firstAttribute="leading" secondItem="gZD-6H-uqh" secondAttribute="leading" constant="16" id="faK-47-EcZ"/>
+                    <constraint firstAttribute="trailing" secondItem="6bv-vR-KlZ" secondAttribute="trailing" constant="16" id="uhj-gl-Dva"/>
                 </constraints>
             </collectionViewCellContentView>
             <connections>
-                <outlet property="logoImageView" destination="tpK-NJ-9Qp" id="7kK-xv-cAo"/>
-                <outlet property="titleStringLabel" destination="9tb-cH-sWI" id="iiP-eW-gob"/>
+                <outlet property="logoImageView" destination="6bv-vR-KlZ" id="31f-ZF-syD"/>
+                <outlet property="titleStringLabel" destination="5ur-ig-foP" id="srf-c8-EGY"/>
             </connections>
             <point key="canvasLocation" x="-157" y="25"/>
         </collectionViewCell>
