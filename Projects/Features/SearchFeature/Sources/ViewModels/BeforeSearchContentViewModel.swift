@@ -22,7 +22,7 @@ final class BeforeSearchContentViewModel {
     }
 
     struct Output {
-        let showRecommand:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
     init() {

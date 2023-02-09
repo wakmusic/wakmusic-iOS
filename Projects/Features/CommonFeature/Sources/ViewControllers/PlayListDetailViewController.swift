@@ -18,7 +18,7 @@ import DesignSystem
 
 public enum PlayListType{
     case custom
-    case wmRecommand
+    case wmRecommend
 }
 
 
@@ -179,12 +179,12 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = pt == .wmRecommand ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
+        self.playListImage.image = pt == .wmRecommend ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
         
-        self.moreButton.isHidden = pt == .wmRecommand
+        self.moreButton.isHidden = pt == .wmRecommend
         
         
-        self.editPlayListNameButton.isHidden = pt == .wmRecommand
+        self.editPlayListNameButton.isHidden = pt == .wmRecommend
         
         bindRx()
         
@@ -232,7 +232,7 @@ extension PlayListDetailViewController{
                     cell.update(model,self.viewModel.output.isEditinglist.value)
                     
                     return cell
-                case .wmRecommand:
+                case .wmRecommend:
                     guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell",for: IndexPath(row: index, section: 0)) as? SongListCell else{
                         return UITableViewCell()
                     }

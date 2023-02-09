@@ -82,11 +82,11 @@ extension BeforeSearchContentViewController {
         
    
         //cell 그리기        
-        let combine = Observable.combineLatest(viewModel.output.showRecommand, Utility.PreferenceManager.$recentRecords){ ($0, $1 ?? []) }
+        let combine = Observable.combineLatest(viewModel.output.showRecommend, Utility.PreferenceManager.$recentRecords){ ($0, $1 ?? []) }
             //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
         
-        combine.map({ (showRecommand:Bool,item:[String]) -> [String] in
-            if showRecommand //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
+        combine.map({ (showRecommend:Bool,item:[String]) -> [String] in
+            if showRecommend //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
             {
                 return []
             }
@@ -132,7 +132,7 @@ extension BeforeSearchContentViewController {
             .map { (focus:Bool, str:String) -> Bool in
                 return focus == false && str.isWhiteSpace  == true
             }
-            .bind(to: viewModel.output.showRecommand)
+            .bind(to: viewModel.output.showRecommend)
             .disposed(by: disposeBag)
 
 //
@@ -204,7 +204,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
         
         
-        if viewModel.output.showRecommand.value
+        if viewModel.output.showRecommend.value
         {
             return RecommendPlayListView.getViewHeight(model: dataSource)
         }
@@ -249,7 +249,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         recommendView.dataSource = self.dataSource
         recommendView.delegate = self
         
-        if viewModel.output.showRecommand.value
+        if viewModel.output.showRecommend.value
         {
             return recommendView
         }

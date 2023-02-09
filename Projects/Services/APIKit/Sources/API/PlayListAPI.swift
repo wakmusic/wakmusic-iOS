@@ -3,20 +3,20 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 
-public enum SongsAPI {
-    case fetchSearchSong(type: SearchType,keyword: String)
+public enum PlayListAPI {
+    case fetchRecommendPlayList
 }
 
-extension SongsAPI: WMAPI {
-
+extension PlayListAPI: WMAPI {
     public var domain: WMDomain {
-        .songs
+        .playlist
     }
 
     public var urlPath: String {
         switch self {
-        case .fetchSearchSong:
-            return "/search"
+            
+        case .fetchRecommendPlayList:
+            return "/recommended"
         }
     }
         
@@ -26,14 +26,10 @@ extension SongsAPI: WMAPI {
         
         public var task: Moya.Task {
             switch self {
-            case let .fetchSearchSong(type,keyword):
-                return .requestParameters(parameters: [
-                    "type": type.rawValue,
-                    "sort": "popular", //기본 인기순으로
-                    "keyword": keyword
-                ], encoding: URLEncoding.queryString)
-                
-                
+           
+            
+            case .fetchRecommendPlayList:
+                return .requestPlain
             }
             
         }
