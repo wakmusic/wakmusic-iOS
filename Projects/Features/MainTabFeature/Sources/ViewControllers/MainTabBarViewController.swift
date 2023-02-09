@@ -25,15 +25,17 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
         return [HomeViewController.viewController().wrapNavigationController,
                 ChartViewController.viewController().wrapNavigationController,
                 searchComponent.makeView().wrapNavigationController,
-                ArtistViewController.viewController().wrapNavigationController,
+                artistComponent.makeView().wrapNavigationController,
                 StorageViewController.viewController().wrapNavigationController
         ]
     }()
 
     var previousIndex: Int?
     var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-    var searchComponent: SearchComponent!
     
+    var searchComponent: SearchComponent!
+    var artistComponent: ArtistComponent!
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,12 +53,14 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     }
 
     public static func viewController(
-        searchComponent: SearchComponent
+        searchComponent: SearchComponent,
+        artistComponent: ArtistComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         
         viewController.searchComponent = searchComponent
-        
+        viewController.artistComponent = artistComponent
+
         return viewController
     }
 }

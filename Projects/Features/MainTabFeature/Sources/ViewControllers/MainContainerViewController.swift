@@ -144,7 +144,7 @@ extension MainContainerViewController {
         }
         
         //Bottom TabBar
-        let bottomTabBar = BottomTabBarViewController.viewController()
+        let bottomTabBar = bottomTabBarComponent.makeView()
         self.addChild(bottomTabBar)
         self.bottomContainerView.addSubview(bottomTabBar.view)
         
@@ -166,7 +166,7 @@ extension MainContainerViewController {
     }
     
     private func configurePlayer() {
-        let vc = PlayerViewController()
+        let vc = playerComponent.makeView()
         self.addChild(vc)
         panelView.addSubview(vc.view)
         vc.didMove(toParent: self)

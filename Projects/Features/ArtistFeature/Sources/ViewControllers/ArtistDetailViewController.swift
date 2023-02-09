@@ -11,13 +11,14 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import DomainModule
 
-class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     
-    @IBOutlet weak var gradationImageView: UIImageView!
+    @IBOutlet weak var gradationView: UIView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var headerContentView: UIView!
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak public var contentView: UIView!
     
     private lazy var headerViewController: ArtistDetailHeaderViewController = {
         let header = ArtistDetailHeaderViewController.viewController()
@@ -29,21 +30,23 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
         return content
     }()
 
+    var model: ArtistListEntity?
     var disposeBag: DisposeBag = DisposeBag()
     
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureHeader()
         configureContent()
     }
     
-    public static func viewController() -> ArtistDetailViewController {
+    public static func viewController(model: ArtistListEntity? = nil) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        viewController.model = model
         return viewController
     }
     
@@ -54,8 +57,22 @@ class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard
 
 extension ArtistDetailViewController {
     private func configureUI() {
-        gradationImageView.image = DesignSystemAsset.Artist.artistDetailBg.image
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+
+        //TO-DO
+//        gradationView
+        
+//        guard let model = self.model else { return }
+//
+//        let gradient = CAGradientLayer()
+//
+//        // frame을 잡아주고
+//        gradient.frame = gradationView.bounds
+//
+//        // 섞어줄 색을 colors에 넣어준 뒤
+//        gradient.colors = model.color.map { $0.first }.compactMap{ $0 }.map{ colorFromRGB($0, alpha: 0.6).cgColor }
+//        
+//        gradationView.layer.addSublayer(gradient)
     }
     
     private func configureHeader() {
@@ -66,6 +83,9 @@ extension ArtistDetailViewController {
         headerViewController.view.snp.makeConstraints {
             $0.edges.equalTo(headerContentView)
         }
+        
+        guard let model = self.model else { return }
+        headerViewController.update(model: model)
     }
     
     private func configureContent() {
