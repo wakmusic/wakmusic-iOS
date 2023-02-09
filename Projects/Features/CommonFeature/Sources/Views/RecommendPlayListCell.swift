@@ -8,12 +8,13 @@
 
 import UIKit
 import Utility
+import DesignSystem
 
 public class RecommendPlayListCell: UICollectionViewCell {
     
     @IBOutlet weak var titleStringLabel: UILabel!
-    @IBOutlet weak var logoImageView: UIImageView!
     
+    @IBOutlet weak var logoImageView: UIImageView!
     public override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -28,7 +29,7 @@ extension RecommendPlayListCell {
     
     func update(model: RecommendPlayListDTO) {
         
-        //MARK: 폰트설정 
+        //MARK: 폰트설정
         titleStringLabel.text = model.title
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray600.color

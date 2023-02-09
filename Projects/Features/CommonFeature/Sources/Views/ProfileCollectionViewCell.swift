@@ -8,6 +8,7 @@
 
 import UIKit
 import Utility
+import DesignSystem
 
 
 public enum FanType{

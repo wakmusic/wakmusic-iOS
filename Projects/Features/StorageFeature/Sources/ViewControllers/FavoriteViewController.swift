@@ -12,6 +12,7 @@ import RxRelay
 import DesignSystem
 import RxSwift
 import BaseFeature
+import CommonFeature
 
 class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
 

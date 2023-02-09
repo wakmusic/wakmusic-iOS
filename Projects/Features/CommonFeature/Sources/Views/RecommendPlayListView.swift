@@ -8,6 +8,7 @@
 
 import UIKit
 import Utility
+import DesignSystem
 
 public protocol RecommendPlayListViewDelegate: AnyObject {
     func itemSelected(model: RecommendPlayListDTO)

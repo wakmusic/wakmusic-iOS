@@ -12,6 +12,7 @@ import PanModal
 import RxCocoa
 import RxSwift
 import RxKeyboard
+import DesignSystem
 
 
 public enum PurposeType{
@@ -189,7 +190,8 @@ extension MultiPurposePopupViewController{
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.textField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ?  "플레이리스트 제목을 입력하세요." : type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+        self.textField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ?
+                                                                  "플레이리스트 제목을 입력하세요." : type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
         if type == .share { //공유는 오직 읽기 전용

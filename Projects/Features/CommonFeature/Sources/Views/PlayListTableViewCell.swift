@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DesignSystem
 
 class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var button:UIButton!
@@ -16,7 +17,7 @@ class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     
-    @IBAction func PlayOrEditAction(_ sender: UIButton) {
+    @IBAction func playOrEditAction(_ sender: UIButton) {
         
         if isEdit == false
         {

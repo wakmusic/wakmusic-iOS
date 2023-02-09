@@ -11,6 +11,7 @@ import Utility
 import PanModal
 import SnapKit
 import Then
+import DesignSystem
 
 public class NoticePopupViewController: UIViewController {
 

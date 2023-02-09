@@ -10,6 +10,7 @@ import UIKit
 import Utility
 import RxSwift
 import PDFKit
+import DesignSystem
 
 public enum ContractType{
     case privacy

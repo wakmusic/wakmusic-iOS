@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DesignSystem
 
 public enum PlayEvent {
     case allPlay

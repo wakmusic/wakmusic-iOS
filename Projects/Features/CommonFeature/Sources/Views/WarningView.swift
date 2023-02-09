@@ -4,6 +4,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 import UIKit
+import DesignSystem
 
 public class WarningView: UIView {
 
@@ -34,7 +35,7 @@ public class WarningView: UIView {
     private func setupView()
     {
         
-        if let view = Bundle.module.loadNibNamed("WarningView", owner: self,options: nil)!.first as? UIView{
+        if let view = Bundle.module.loadNibNamed("Warning", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
             view.backgroundColor = .clear //헤더 영역 흰 색 방지

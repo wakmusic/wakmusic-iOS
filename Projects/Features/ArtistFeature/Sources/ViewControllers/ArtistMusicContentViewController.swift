@@ -12,6 +12,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import BaseFeature
+import CommonFeature
 
 class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -87,7 +88,7 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 }
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
-    public func pressPlay(_ event: DesignSystem.PlayEvent) {
+    public func pressPlay(_ event: PlayEvent) {
         DEBUG_LOG(event)
     }
 }

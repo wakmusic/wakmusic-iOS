@@ -12,6 +12,7 @@ import PanModal
 import RxCocoa
 import RxRelay
 import RxSwift
+import DesignSystem
 
 
 public struct Model {
@@ -40,7 +41,11 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
         
     }
     
-    var dataSource:BehaviorRelay<[Model]> = BehaviorRelay.init(value: [Model(type: .panzee, isSelected: true),Model(type: .leaf, isSelected: false),Model(type: .pigeon, isSelected: false),Model(type: .bat, isSelected: false),Model(type: .germ, isSelected: false),Model(type: .gorani, isSelected: false),Model(type: .fox, isSelected: false),Model(type: .poopDog, isSelected: false)])
+    var dataSource:BehaviorRelay<[Model]> = BehaviorRelay.init(value: [
+        Model(type: .panzee, isSelected: true),Model(type: .leaf, isSelected: false),
+        Model(type: .pigeon, isSelected: false),Model(type: .bat, isSelected: false),
+        Model(type: .germ, isSelected: false),Model(type: .gorani, isSelected: false),
+        Model(type: .fox, isSelected: false),Model(type: .poopDog, isSelected: false)])
     
     
     var disposeBag = DisposeBag()
@@ -76,7 +81,10 @@ extension ProfilePopViewController{
         
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
-        saveButton.setAttributedTitle(NSMutableAttributedString(string:"완료",attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),.foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        saveButton.setAttributedTitle(
+            NSMutableAttributedString(
+                string:"완료",
+                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),.foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
      
         collectionVIewHeight.constant = rowHeight  + 10

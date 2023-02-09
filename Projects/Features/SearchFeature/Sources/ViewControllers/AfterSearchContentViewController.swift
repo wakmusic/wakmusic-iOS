@@ -13,6 +13,7 @@ import RxSwift
 import RxDataSources
 import DesignSystem
 import BaseFeature
+import CommonFeature
 
 
 typealias SearchSectionModel = SectionModel<SearchType,SongInfoDTO>
@@ -86,7 +87,7 @@ extension AfterSearchContentViewController{
         
         //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
-        tableView.register(UINib(nibName:"SongListCell", bundle: DesignSystemResources.bundle), forCellReuseIdentifier: "SongListCell")
+        tableView.register(UINib(nibName:"SongListCell", bundle: CommonFeatureResources.bundle), forCellReuseIdentifier: "SongListCell")
         
         dataSource
             .do(onNext: { [weak self] model in

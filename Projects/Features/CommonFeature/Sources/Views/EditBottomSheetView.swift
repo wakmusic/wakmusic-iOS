@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DesignSystem
 
 protocol EditBottomSheetViewDelegate: AnyObject{
     func buttonTapped(type: EditBottomSheetType)
@@ -79,20 +80,20 @@ public extension EditBottomSheetView {
         guard titles.count == images.count,
               titles.count == buttons.count else { return }
         
-        for i in 0..<titles.count {
-            buttons[i].setImage(images[i], for: .normal)
+        for index in 0..<titles.count {
+            buttons[index].setImage(images[index], for: .normal)
             
-            if buttons[i] == allSelectButton {
-                buttons[i].setImage(DesignSystemAsset.PlayListEdit.checkOn.image, for: .selected)
+            if buttons[index] == allSelectButton {
+                buttons[index].setImage(DesignSystemAsset.PlayListEdit.checkOn.image, for: .selected)
             }
             
-            let attributedString = NSMutableAttributedString.init(string: titles[i])
+            let attributedString = NSMutableAttributedString.init(string: titles[index])
             attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                             .foregroundColor: DesignSystemAsset.GrayColor.gray25.color],
                                             range: NSRange(location: 0, length: attributedString.string.count))
 
-            buttons[i].setAttributedTitle(attributedString, for: .normal)
-            buttons[i].alignTextBelow(spacing: 0)
+            buttons[index].setAttributedTitle(attributedString, for: .normal)
+            buttons[index].alignTextBelow(spacing: 0)
         }
         
         allSelectButton.isHidden = false

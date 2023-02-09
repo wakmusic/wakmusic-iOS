@@ -14,6 +14,7 @@ import RxCocoa
 import DesignSystem
 import PanModal
 import BaseFeature
+import CommonFeature
 
 class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
