@@ -8,10 +8,6 @@
 
 import Foundation
 
-//public struct FetchSearchSongResponseDTO: Decodable {
-//    public let list: [SingleSearchSongResponseDTO]
-//}
-
 
 public struct SingleSearchSongResponseDTO: Decodable {
     public let id, title, artist, remix: String

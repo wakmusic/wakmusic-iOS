@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct RecommendPlayListResponseDTO: Decodable {
+public struct SingleRecommendPlayListResponseDTO: Decodable {
     public let id, title: String
     public let `public`: Bool
 }
