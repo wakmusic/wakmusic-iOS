@@ -13,6 +13,7 @@ import RxSwift
 import RxCocoa
 import BaseFeature
 import CommonFeature
+import DataMappingModule
 
 class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -20,7 +21,8 @@ class ArtistMusicContentViewController: BaseViewController, ViewControllerFromSt
     
     var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
-
+    var type: ArtistSongSortType = .new
+    
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
@@ -32,8 +34,9 @@ class ArtistMusicContentViewController: BaseViewController, ViewControllerFromSt
         bind()
     }
     
-    public static func viewController() -> ArtistMusicContentViewController {
+    public static func viewController(type: ArtistSongSortType) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        viewController.type = type
         return viewController
     }
 }

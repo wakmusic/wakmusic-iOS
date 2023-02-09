@@ -17,12 +17,12 @@ class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBo
     @IBOutlet weak var tabBarContentView: UIView!
     
     private lazy var viewControllers: [UIViewController] = {
-        let viewControllers = [ArtistMusicContentViewController.viewController(),
-                               ArtistMusicContentViewController.viewController(),
-                               ArtistMusicContentViewController.viewController()]
+        let viewControllers = [ArtistMusicContentViewController.viewController(type: .new),
+                               ArtistMusicContentViewController.viewController(type: .popular),
+                               ArtistMusicContentViewController.viewController(type: .old)]
         return viewControllers
     }()
-
+    
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }

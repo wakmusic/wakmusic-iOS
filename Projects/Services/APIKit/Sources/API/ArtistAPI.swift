@@ -13,7 +13,7 @@ import Foundation
 
 public enum ArtistAPI {
     case fetchArtistList
-    case fetchArtistSongList(id: String, sort: ArtistSortType, page: Int)
+    case fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int)
     case fetchArtistImage(type: ArtistImageType, id: String)
 }
 
