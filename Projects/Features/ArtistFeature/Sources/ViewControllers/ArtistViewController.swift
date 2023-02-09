@@ -18,6 +18,8 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
     private var viewModel: ArtistViewModel!
     private lazy var input = ArtistViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
+    
+    var artistDetailComponent: ArtistDetailComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +33,13 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
-    public static func viewController(viewModel: ArtistViewModel) -> ArtistViewController {
+    public static func viewController(
+        viewModel: ArtistViewModel,
+        artistDetailComponent: ArtistDetailComponent
+    ) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.viewModel = viewModel
+        viewController.artistDetailComponent = artistDetailComponent
         return viewController
     }
 }
@@ -71,10 +77,8 @@ extension ArtistViewController {
             .map { $0.1[$0.0.row] }
             .subscribe(onNext:{ [weak self] (model) in
                 guard let `self` = self else { return }
-                DEBUG_LOG(model)
-//                let viewController = ArtistDetailViewController.viewController()
-//                self.navigationController?.pushViewController(viewController, animated: true)
-                
+                let viewController = self.artistDetailComponent.makeView(model: model)
+                self.navigationController?.pushViewController(viewController, animated: true)
             }).disposed(by: disposeBag)
     }
     

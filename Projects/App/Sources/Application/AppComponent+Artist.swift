@@ -13,6 +13,7 @@ import ArtistFeature
 
 public extension AppComponent {
     
+    //MARK: Artist
     var artistComponent: ArtistComponent {
         shared {
             ArtistComponent(parent: self)
@@ -24,6 +25,7 @@ public extension AppComponent {
             RemoteArtistDataSourceImpl(keychain: keychain)
         }
     }
+    
     var artistRepository: any ArtistRepository {
         shared {
             ArtistRepositoryImpl(remoteArtistDataSource: remoteArtistDataSource)
@@ -31,9 +33,15 @@ public extension AppComponent {
     }
     
     var fetchArtistListUseCase: any FetchArtistListUseCase {
-        
         shared {
             FetchArtistListUseCaseImpl(artistRepository: artistRepository)
+        }
+    }
+    
+    //MARK: Artist Detail
+    var artistDetailComponent: ArtistDetailComponent {
+        shared {
+            ArtistDetailComponent(parent: self)
         }
     }
 }

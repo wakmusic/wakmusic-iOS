@@ -18,11 +18,6 @@ class ArtistListCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        artistLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        artistLabel.textColor = DesignSystemAsset.GrayColor.gray600.color
-        artistLabel.setLineSpacing(kernValue: -1)
-        artistLabel.textAlignment = .center
     }
 }
 
@@ -32,7 +27,13 @@ extension ArtistListCell {
 
         self.contentView.alpha = model.isHiddenItem ? 0 : 1
         
-        artistLabel.text = model.name
+        let artistNameAttributedString = NSMutableAttributedString(string: model.name,
+                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                                                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                                                                                 .kern: -1])
+        artistLabel.attributedText = artistNameAttributedString
+        artistLabel.textAlignment = .center
+
         artistImageView.kf.setImage(with: URL(string: "https://static.wakmusic.xyz/static/artist/round/\(model.ID).png"),
                                     placeholder: nil,
                                     options: [.transition(.fade(0.2))])

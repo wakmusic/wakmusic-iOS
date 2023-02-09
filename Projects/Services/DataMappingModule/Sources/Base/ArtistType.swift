@@ -8,11 +8,11 @@
 
 import Foundation
 
-public enum ArtistSortType: String, Codable {
+public enum ArtistSongSortType: String, Codable {
     case new
     case popular
     case old
-
+    
     public var display: String {
         switch self {
         case .new:

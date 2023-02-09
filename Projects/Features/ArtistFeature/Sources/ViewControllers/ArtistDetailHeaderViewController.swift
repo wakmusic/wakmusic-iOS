@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
+import DomainModule
 
 class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStoryBoard {
 
@@ -52,6 +53,36 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 }
 
 extension ArtistDetailHeaderViewController {
+    
+    func update(model: ArtistListEntity) {
+        
+        let artistName: String = model.name
+        let artistEngName: String = model.ID
+        
+        let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
+                                                                   attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
+                                                                                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                                                                                .kern: -1.5])
+        
+        let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
+        
+        artistNameAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                                                  .kern: -1],
+                                                  range: artistEngNameRange)
+        
+        self.artistNameLabel.attributedText = artistNameAttributedString
+        
+        self.artistGroupLabel.text = model.group
+        self.artistIntroLabel.text = model.title
+        
+        self.introTitleLabel.text = "소개글"
+        self.introDescriptionLabel.text = model.description
+        
+        artistImageView.kf.setImage(with: URL(string: "https://static.wakmusic.xyz/static/artist/square/\(model.ID).png"),
+                                    placeholder: nil,
+                                    options: [.transition(.fade(0.2))])
+    }
     
     private func bind() {
         
@@ -106,32 +137,21 @@ extension ArtistDetailHeaderViewController {
         
         descriptionFrontView.isHidden = false
         descriptionBackView.isHidden = true
+                
+        artistGroupLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        artistGroupLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+
+        artistIntroLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        artistIntroLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        artistIntroLabel.textAlignment = .left
         
-        //ArtistName
-        let artistName: String = "고세구"
-        let artistEngName: String = "Gosegu"
+        introTitleLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 14)
+        introTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
-        let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
-                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
-                                                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color])
-        let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
-        artistNameAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
-                                                  range: artistEngNameRange)
-        self.artistNameLabel.attributedText = artistNameAttributedString
-        
-        self.artistGroupLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.artistGroupLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        introDescriptionLabel.textAlignment = .left
 
-        self.artistIntroLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.artistIntroLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-
-        self.introTitleLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 14)
-        self.introTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-
-        self.introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-
-        self.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
     }
 }

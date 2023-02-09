@@ -28,7 +28,7 @@ public final class ArtistViewModel: ViewModelType {
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[ArtistListEntity]>
+        let dataSource: BehaviorRelay<[ArtistListEntity]>
     }
     
     public func transform(from input: Input) -> Output {
