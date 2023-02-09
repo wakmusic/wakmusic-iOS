@@ -8,6 +8,7 @@ public enum SongsAPI {
 }
 
 extension SongsAPI: WMAPI {
+
     public var domain: WMDomain {
         .songs
     }
