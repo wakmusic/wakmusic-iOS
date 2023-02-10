@@ -25,7 +25,7 @@ public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
     }
     
     public func execute() -> Single<[DomainModule.RecommendPlayListEntity]> {
-        playListRepository.fetchRecommendPlayLists()
+        playListRepository.fetchRecommendPlayList()
     }
 
    
