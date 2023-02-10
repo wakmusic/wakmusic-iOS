@@ -24,19 +24,3 @@ public enum ArtistSongSortType: String, Codable {
         }
     }
 }
-
-public enum ArtistImageType: String, Codable {
-    case card
-    case big
-    case group
-    case full
-
-    public var extString: String {
-        switch self {
-        case .big:
-            return ".jpg"
-        default:
-            return ".png"
-        }
-    }
-}

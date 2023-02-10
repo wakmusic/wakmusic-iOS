@@ -14,7 +14,6 @@ import Foundation
 public enum ArtistAPI {
     case fetchArtistList
     case fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int)
-    case fetchArtistImage(type: ArtistImageType, id: String)
 }
 
 extension ArtistAPI: WMAPI {
@@ -23,8 +22,6 @@ extension ArtistAPI: WMAPI {
         case .fetchArtistList,
              .fetchArtistSongList:
             return .artist
-        case .fetchArtistImage:
-            return .common
         }
     }
     
@@ -34,16 +31,13 @@ extension ArtistAPI: WMAPI {
             return "/list"
         case .fetchArtistSongList:
             return "/albums"
-        case let .fetchArtistImage(type, id):
-            return "/artist/\(type.rawValue)/\(id)\(type.extString)"
         }
     }
     
     public var method: Moya.Method {
         switch self {
         case .fetchArtistList,
-             .fetchArtistSongList,
-             .fetchArtistImage:
+             .fetchArtistSongList:
             return .get
         }
     }
@@ -58,8 +52,6 @@ extension ArtistAPI: WMAPI {
                 "sort": sort.rawValue,
                 "start": (page == 1) ? 0 : (page - 1) * 30
             ], encoding: URLEncoding.queryString)
-        case .fetchArtistImage:
-            return .requestPlain
         }
     }
     
