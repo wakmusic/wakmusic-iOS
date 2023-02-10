@@ -24,8 +24,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     var disposeBag = DisposeBag()
     
     private var viewModel: ArtistMusicContentViewModel!
-    private lazy var input = ArtistMusicContentViewModel.Input()
-    private lazy var output = viewModel.transform(from: input)
+    fileprivate lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
+    fileprivate lazy var output = viewModel.transform(from: input)
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -70,6 +70,20 @@ extension ArtistMusicContentViewController {
                 return cell
             }.disposed(by: disposeBag)
         
+        tableView.rx.willDisplayCell
+            .map { $1 }
+            .withLatestFrom(output.dataSource, resultSelector: { (indexPath, datasource) -> (IndexPath, [ArtistSongListEntity]) in
+                return (indexPath, datasource)
+            })
+            .filter{ (indexPath, datasources) -> Bool in
+                return indexPath.item == datasources.count-1
+            }
+            .withLatestFrom(output.canLoadMore)
+            .filter{ $0 }
+            .map { _ in return () }
+            .bind(to: rx.loadMore)
+            .disposed(by: disposeBag)
+
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (indexPath, _) in
@@ -107,5 +121,20 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         DEBUG_LOG(event)
+    }
+}
+
+extension Reactive where Base: ArtistMusicContentViewController{
+    var refresh: Binder<Void> {
+        return Binder(base) { viewController, _ in
+            viewController.input.pageID.accept(1)
+        }
+    }
+
+    var loadMore: Binder<Void> {
+        return Binder(base) { viewController, _ in
+            let pageID = viewController.input.pageID.value
+            viewController.input.pageID.accept(pageID + 1)
+        }
     }
 }

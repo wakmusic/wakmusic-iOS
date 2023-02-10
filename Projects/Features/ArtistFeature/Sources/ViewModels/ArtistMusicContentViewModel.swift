@@ -32,23 +32,48 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     }
     
     public struct Input {
+        var pageID: BehaviorRelay<Int>
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[ArtistSongListEntity]>
+        var canLoadMore: BehaviorRelay<Bool>
+        var dataSource: BehaviorRelay<[ArtistSongListEntity]>
     }
     
     public func transform(from input: Input) -> Output {
         let ID: String = model?.ID ?? ""
-        let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
+        let type: ArtistSongSortType = self.type
+        let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
         
-        fetchArtistSongListUseCase
-            .execute(id: ID, sort: type, page: 1)
-            .catchAndReturn([])
+        let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
+        let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+
+        let refresh = Observable.combineLatest(dataSource, input.pageID) { (dataSource, pageID) -> [ArtistSongListEntity] in
+            return pageID == 1 ? [] : dataSource
+        }
+
+        input.pageID
+            .flatMap { (pageID) -> Single<[ArtistSongListEntity]> in
+                return fetchArtistSongListUseCase
+                        .execute(id: ID, sort: type, page: pageID)
+                        .catchAndReturn([])
+            }
             .asObservable()
+            .do(onNext: { (model) in
+                canLoadMore.accept(!model.isEmpty)
+                DEBUG_LOG("Page: \(input.pageID.value) Called, NextPage Exist: \(!model.isEmpty)")
+            }, onError: { _ in
+                canLoadMore.accept(false)
+            })
+            .withLatestFrom(refresh, resultSelector: { (newModels, datasources) -> [ArtistSongListEntity] in
+                return datasources + newModels
+            })
             .bind(to: dataSource)
             .disposed(by: disposeBag)
-        
-        return Output(dataSource: dataSource)
+
+        return Output(
+            canLoadMore: canLoadMore,
+            dataSource: dataSource
+        )
     }
 }
