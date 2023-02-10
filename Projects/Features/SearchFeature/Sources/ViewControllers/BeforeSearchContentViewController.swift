@@ -91,7 +91,7 @@ extension BeforeSearchContentViewController {
             //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
         
         combine
-            .debug("DEBUG")
+            .skip(2)
             .map({ (showRecommend:Bool,item:[String],_) -> [String] in
             if showRecommend //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
             {
