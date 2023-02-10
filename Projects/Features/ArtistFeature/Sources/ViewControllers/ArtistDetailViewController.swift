@@ -30,6 +30,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         return content
     }()
 
+    var gradientLayer = CAGradientLayer()
     var model: ArtistListEntity?
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -44,6 +45,11 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         configureUI()
         configureHeader()
         configureContent()
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.gradientLayer.frame = self.gradationView.bounds
     }
     
     public static func viewController(
@@ -70,18 +76,15 @@ extension ArtistDetailViewController {
         let flatColor: String = model.color.first?.first ?? ""
         
         guard !flatColor.isEmpty else { return }
-        
-        let layer = CAGradientLayer()
-        layer.frame = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: gradationView.bounds.height)
-        
+                
         let startAlpha: CGFloat = 0.6
         let value: CGFloat = 0.1
         let colors = Array(0...6).enumerated().map { (i, _) in
             return colorFromRGB(flatColor, alpha: startAlpha - (CGFloat(i) * value)).cgColor
         }
         
-        layer.colors = colors
-        gradationView.layer.addSublayer(layer)
+        gradientLayer.colors = colors
+        gradationView.layer.addSublayer(gradientLayer)
     }
     
     private func configureHeader() {

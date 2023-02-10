@@ -290,10 +290,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0qp-BF-xDH">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="bty-8b-8u9"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="210"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PRy-Jh-l65">
                                 <rect key="frame" x="0.0" y="59" width="393" height="48"/>
@@ -341,6 +338,7 @@
                         <viewLayoutGuide key="safeArea" id="xjg-5g-cse"/>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.95294117647058818" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="0qp-BF-xDH" firstAttribute="height" secondItem="pXR-lz-QGP" secondAttribute="height" multiplier="200:812" id="809-1f-hUH"/>
                             <constraint firstItem="xjg-5g-cse" firstAttribute="trailing" secondItem="PRy-Jh-l65" secondAttribute="trailing" id="9pW-NX-azx"/>
                             <constraint firstItem="PRy-Jh-l65" firstAttribute="top" secondItem="xjg-5g-cse" secondAttribute="top" id="Gzy-bg-SOD"/>
                             <constraint firstItem="0qp-BF-xDH" firstAttribute="top" secondItem="pXR-lz-QGP" secondAttribute="top" id="LjD-rI-hoM"/>
