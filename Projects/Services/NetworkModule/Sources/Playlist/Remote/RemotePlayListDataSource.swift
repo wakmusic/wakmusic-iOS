@@ -4,6 +4,6 @@ import DomainModule
 import RxSwift
 import Foundation
 
-public protocol PlayListDataSource {
+public protocol RemotePlayListDataSource {
     func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
 }

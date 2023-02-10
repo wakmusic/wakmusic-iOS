@@ -2,6 +2,6 @@ import Foundation
 import RxSwift
 import DataMappingModule
 
-public protocol FetchRecommendPlaylistsUseCase {
+public protocol FetchRecommendPlayListUseCase {
     func execute() -> Single<[RecommendPlayListEntity]>
 }

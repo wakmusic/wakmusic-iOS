@@ -9,26 +9,46 @@
 import Foundation
 import RxSwift
 import RxRelay
+import BaseFeature
+import DomainModule
+import Utility
 
-final class BeforeSearchContentViewModel {
+public final class BeforeSearchContentViewModel:ViewModelType {
+  
+    
 
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
+    
+    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
-    struct Input {
+    public init(
+        fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+    ){
+        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        print("✅ BeforeSearchContentViewModel 생성")
+        
+        
+        fetchRecommendPlayListUseCase.execute().subscribe(onSuccess: {
+            DEBUG_LOG($0)
+        }).disposed(by: disposeBag)
+    }
+    
+    
+    public struct Input {
         
         
     }
 
-    struct Output {
+    public struct Output {
         let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
-    init() {
+    
+    public func transform(from input: Input) -> Output {
+        let output = Output()
         
-        print("✅ BeforeSearchContentViewModel 생성")
-        
-
+        return output
     }
 }

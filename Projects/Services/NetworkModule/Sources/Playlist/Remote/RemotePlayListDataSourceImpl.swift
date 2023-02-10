@@ -6,13 +6,12 @@ import ErrorModule
 import Foundation
 
 
-public final class PlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, PlayListDataSource {
+public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
     public func fetchRecommendPlayList() ->Single<[RecommendPlayListEntity]> {
         request(.fetchRecommendPlayList)
             .map([SingleRecommendPlayListResponseDTO].self)
             .map{$0.map{$0.toDomain()}}
-        
-       
+   
     }
     
    

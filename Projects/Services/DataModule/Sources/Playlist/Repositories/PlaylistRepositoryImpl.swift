@@ -16,10 +16,10 @@ import RxSwift
 public struct PlayListRepositoryImpl: PlayListRepository {
    
     
-    private let remotePlayListDataSource: any PlayListDataSource
+    private let remotePlayListDataSource: any RemotePlayListDataSource
     
     public init(
-        remotePlayListDataSource: PlayListDataSource
+        remotePlayListDataSource: RemotePlayListDataSource
     ) {
         self.remotePlayListDataSource = remotePlayListDataSource
     }

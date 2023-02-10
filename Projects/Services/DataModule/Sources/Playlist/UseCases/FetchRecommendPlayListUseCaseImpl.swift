@@ -12,7 +12,7 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlaylistsUseCase {
+public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
    
     
 

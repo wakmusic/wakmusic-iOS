@@ -13,6 +13,10 @@ import RxSwift
 import RxCocoa
 import BaseFeature
 import CommonFeature
+import NeedleFoundation
+import DomainModule
+
+
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
     
@@ -22,7 +26,7 @@ protocol BeforeSearchContentViewDelegate:AnyObject{
 
 
 
-class BeforeSearchContentViewController: BaseViewController,ViewControllerFromStoryBoard {
+public final class BeforeSearchContentViewController: BaseViewController,ViewControllerFromStoryBoard {
 
     
     @IBOutlet weak var tableView: UITableView!
@@ -30,7 +34,7 @@ class BeforeSearchContentViewController: BaseViewController,ViewControllerFromSt
     
     let disposeBag = DisposeBag()
     var delegate:BeforeSearchContentViewDelegate?
-    var viewModel = BeforeSearchContentViewModel()
+    var viewModel:BeforeSearchContentViewModel!
     let dataSource = [RecommendPlayListDTO(title: "고멤가요제", image: DesignSystemAsset.RecommendPlayList.gomemSongFestival.image),
                       RecommendPlayListDTO(title: "연말공모전", image: DesignSystemAsset.RecommendPlayList.competition.image),
                       RecommendPlayListDTO(title: "상콘 OST", image: DesignSystemAsset.RecommendPlayList.situationalplayOST.image),
@@ -39,7 +43,7 @@ class BeforeSearchContentViewController: BaseViewController,ViewControllerFromSt
                       RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
     
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         DEBUG_LOG("\(Self.self) viewDidLoad")
@@ -53,8 +57,12 @@ class BeforeSearchContentViewController: BaseViewController,ViewControllerFromSt
     
    
     
-    public static func viewController() -> BeforeSearchContentViewController {
+    public static func viewController(viewModel:BeforeSearchContentViewModel) -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        
+        
+        viewController.viewModel = viewModel
+        
         return viewController
     }
     
@@ -196,11 +204,11 @@ extension BeforeSearchContentViewController {
 
 extension BeforeSearchContentViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
         
@@ -221,7 +229,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
         
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
@@ -272,7 +280,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    func itemSelected(model: RecommendPlayListDTO) {
+    public func itemSelected(model: RecommendPlayListDTO) {
         
         let vc = PlayListDetailViewController.viewController(.custom)
         
