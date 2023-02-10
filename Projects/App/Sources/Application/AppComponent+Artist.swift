@@ -15,9 +15,7 @@ public extension AppComponent {
     
     //MARK: Artist
     var artistComponent: ArtistComponent {
-        shared {
-            ArtistComponent(parent: self)
-        }
+        ArtistComponent(parent: self)
     }
     
     var remoteArtistDataSource: RemoteArtistDataSourceImpl {
@@ -40,8 +38,6 @@ public extension AppComponent {
     
     //MARK: Artist Detail
     var artistDetailComponent: ArtistDetailComponent {
-        shared {
-            ArtistDetailComponent(parent: self)
-        }
+        ArtistDetailComponent(parent: self)
     }
 }
