@@ -230,7 +230,6 @@
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="6eV-FK-IbB" secondAttribute="trailing" id="8cy-j8-g8s"/>
                                             <constraint firstAttribute="bottom" secondItem="6eV-FK-IbB" secondAttribute="bottom" id="9Oc-00-15I"/>
@@ -290,7 +289,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0qp-BF-xDH">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0qp-BF-xDH">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="bty-8b-8u9"/>

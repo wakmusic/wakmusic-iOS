@@ -79,9 +79,11 @@ extension ArtistDetailHeaderViewController {
         self.introTitleLabel.text = "소개글"
         self.introDescriptionLabel.text = model.description
         
-        artistImageView.kf.setImage(with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
-                                    placeholder: nil,
-                                    options: [.transition(.fade(0.2))])
+        artistImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
     
     private func bind() {
@@ -131,8 +133,9 @@ extension ArtistDetailHeaderViewController {
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         
+        descriptionView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color
         descriptionView.layer.borderWidth = 1
-        descriptionView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
+        descriptionView.layer.borderColor = UIColor.white.cgColor
         descriptionView.layer.cornerRadius = 8
         
         descriptionFrontView.isHidden = false

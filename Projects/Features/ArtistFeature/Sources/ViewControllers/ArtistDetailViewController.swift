@@ -65,20 +65,22 @@ extension ArtistDetailViewController {
     private func configureUI() {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
 
-        //TO-DO
-//        gradationView
+        guard let model = self.model else { return }
+
+        let flatColor: String = model.color.first?.first ?? ""
         
-//        guard let model = self.model else { return }
-//
-//        let gradient = CAGradientLayer()
-//
-//        // frame을 잡아주고
-//        gradient.frame = gradationView.bounds
-//
-//        // 섞어줄 색을 colors에 넣어준 뒤
-//        gradient.colors = model.color.map { $0.first }.compactMap{ $0 }.map{ colorFromRGB($0, alpha: 0.6).cgColor }
-//        
-//        gradationView.layer.addSublayer(gradient)
+        guard !flatColor.isEmpty else { return }
+        
+        let layer = CAGradientLayer()
+        layer.frame = gradationView.bounds
+        
+        let value: CGFloat = 0.1
+        let colors = Array(0...4).enumerated().map { (i, _) in
+            return colorFromRGB(flatColor, alpha: 0.4 - (CGFloat(i) * value)).cgColor
+        }
+        
+        layer.colors = colors
+        gradationView.layer.addSublayer(layer)
     }
     
     private func configureHeader() {
