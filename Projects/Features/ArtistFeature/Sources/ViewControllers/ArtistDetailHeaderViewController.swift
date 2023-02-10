@@ -75,6 +75,7 @@ extension ArtistDetailHeaderViewController {
         
         self.artistGroupLabel.text = model.group
         self.artistIntroLabel.text = model.title
+        self.artistIntroLabel.lineBreakMode = .byCharWrapping
         
         self.introTitleLabel.text = "소개글"
         self.introDescriptionLabel.text = model.description
