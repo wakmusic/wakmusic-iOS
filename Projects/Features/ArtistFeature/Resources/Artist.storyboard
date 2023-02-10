@@ -314,10 +314,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dh2-cR-oMY">
-                                <rect key="frame" x="0.0" y="106.99999999999999" width="393" height="228.66666666666663"/>
+                                <rect key="frame" x="0.0" y="106.99999999999999" width="393" height="216.66666666666663"/>
                                 <subviews>
                                     <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U82-KJ-pYl">
-                                        <rect key="frame" x="20" y="20" width="146.66666666666666" height="188.66666666666666"/>
+                                        <rect key="frame" x="20" y="8" width="146.66666666666666" height="188.66666666666666"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="U82-KJ-pYl" secondAttribute="height" multiplier="140:180" id="nxO-cx-InJ"/>
                                         </constraints>
@@ -325,13 +325,13 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="U82-KJ-pYl" secondAttribute="bottom" constant="20" id="9Rn-Oe-iSK"/>
-                                    <constraint firstItem="U82-KJ-pYl" firstAttribute="top" secondItem="dh2-cR-oMY" secondAttribute="top" constant="20" id="BBR-D2-Lzt"/>
+                                    <constraint firstItem="U82-KJ-pYl" firstAttribute="top" secondItem="dh2-cR-oMY" secondAttribute="top" constant="8" id="BBR-D2-Lzt"/>
                                     <constraint firstItem="U82-KJ-pYl" firstAttribute="width" secondItem="dh2-cR-oMY" secondAttribute="width" multiplier="140:375" id="PJy-BE-TcB"/>
                                     <constraint firstItem="U82-KJ-pYl" firstAttribute="leading" secondItem="dh2-cR-oMY" secondAttribute="leading" constant="20" id="Ydn-Y7-tgc"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJE-xf-aMp">
-                                <rect key="frame" x="0.0" y="335.66666666666669" width="393" height="516.33333333333326"/>
+                                <rect key="frame" x="0.0" y="323.66666666666669" width="393" height="528.33333333333326"/>
                                 <color key="backgroundColor" red="0.94117647058823528" green="0.95294117647058818" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
