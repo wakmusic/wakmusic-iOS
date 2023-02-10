@@ -79,7 +79,7 @@ extension ArtistDetailHeaderViewController {
         self.introTitleLabel.text = "소개글"
         self.introDescriptionLabel.text = model.description
         
-        artistImageView.kf.setImage(with: URL(string: "https://static.wakmusic.xyz/static/artist/square/\(model.ID).png"),
+        artistImageView.kf.setImage(with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
                                     placeholder: nil,
                                     options: [.transition(.fade(0.2))])
     }
