@@ -47,10 +47,10 @@ extension ArtistMusicCell {
         
         titleStringLabel.text = model.title
         groupStringLabel.text = model.artist
-        releaseDateLabel.text = String(model.date).changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
+        releaseDateLabel.text = model.date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         
         albumImageView.kf.setImage(with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.ID).toString),
-                                    placeholder: nil,
-                                    options: [.transition(.fade(0.2))])
+                                   placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+                                   options: [.transition(.fade(0.2))])
     }
 }
