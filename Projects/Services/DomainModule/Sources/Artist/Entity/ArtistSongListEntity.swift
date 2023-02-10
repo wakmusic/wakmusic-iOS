@@ -15,7 +15,7 @@ public struct ArtistSongListEntity: Equatable {
         artist: String,
         remix: String,
         reaction: String,
-        date: Int,
+        date: String,
         views: Int,
         last: Int
     ){
@@ -33,6 +33,6 @@ public struct ArtistSongListEntity: Equatable {
         return lhs.ID == rhs.ID
     }
     
-    public let ID, title, artist, remix, reaction: String
-    public let date, views, last: Int
+    public let ID, title, artist, remix, reaction, date: String
+    public let views, last: Int
 }
