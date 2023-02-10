@@ -46,4 +46,14 @@ public extension AppComponent {
             FetchArtistSongListUseCaseImpl(artistRepository: artistRepository)
         }
     }
+    
+    //MARK: Artist Detail > Artist Music
+    var artistMusicComponent: ArtistMusicComponent {
+        ArtistMusicComponent(parent: self)
+    }
+
+    //MARK: Artist Detail > Artist Music > Artist Music Content
+    var artistMusicContentComponent: ArtistMusicContentComponent {
+        ArtistMusicContentComponent(parent: self)
+    }
 }

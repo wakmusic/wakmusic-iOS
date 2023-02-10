@@ -11,35 +11,46 @@ import Utility
 import DesignSystem
 import Pageboy
 import Tabman
+import DomainModule
 
-class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBoard {
+public class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tabBarContentView: UIView!
     
     private lazy var viewControllers: [UIViewController] = {
-        let viewControllers = [ArtistMusicContentViewController.viewController(type: .new),
-                               ArtistMusicContentViewController.viewController(type: .popular),
-                               ArtistMusicContentViewController.viewController(type: .old)]
+        let viewControllers = [
+            artistMusicContentComponent.makeView(type: .new, model: model),
+            artistMusicContentComponent.makeView(type: .popular, model: model),
+            artistMusicContentComponent.makeView(type: .old, model: model)
+        ]
         return viewControllers
     }()
+    
+    var artistMusicContentComponent: ArtistMusicContentComponent!
+    var model: ArtistListEntity?
     
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
     
-    override func pageboyViewController(_ pageboyViewController: PageboyViewController,
-                                        didScrollToPageAt index: TabmanViewController.PageIndex,
-                                        direction: PageboyViewController.NavigationDirection,
-                                        animated: Bool) {
+    public override func pageboyViewController(_ pageboyViewController: PageboyViewController,
+                                               didScrollToPageAt index: TabmanViewController.PageIndex,
+                                               direction: PageboyViewController.NavigationDirection,
+                                               animated: Bool) {
     }
 
-    public static func viewController() -> ArtistMusicViewController {
+    public static func viewController(
+        model: ArtistListEntity?,
+        artistMusicContentComponent: ArtistMusicContentComponent
+    ) -> ArtistMusicViewController {
         let viewController = ArtistMusicViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        viewController.model = model
+        viewController.artistMusicContentComponent = artistMusicContentComponent
         return viewController
     }
 }
@@ -79,7 +90,7 @@ extension ArtistMusicViewController {
 
 extension ArtistMusicViewController: PageboyViewControllerDataSource, TMBarDataSource {
     
-    func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
+    public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         switch index {
         case 0:
             return TMBarItem(title: "최신순")
@@ -93,15 +104,15 @@ extension ArtistMusicViewController: PageboyViewControllerDataSource, TMBarDataS
         }
     }
 
-    func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
+    public func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
         return viewControllers.count
     }
     
-    func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
         return viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
         return nil
     }
 }

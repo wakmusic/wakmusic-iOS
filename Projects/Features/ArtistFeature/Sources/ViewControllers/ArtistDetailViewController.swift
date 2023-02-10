@@ -26,13 +26,15 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     }()
     
     private lazy var contentViewController: ArtistMusicViewController = {
-        let content = ArtistMusicViewController.viewController()
+        let content = artistMusicComponent.makeView(model: model)
         return content
     }()
 
     var model: ArtistListEntity?
     var disposeBag: DisposeBag = DisposeBag()
     
+    var artistMusicComponent: ArtistMusicComponent!
+
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
@@ -44,9 +46,13 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         configureContent()
     }
     
-    public static func viewController(model: ArtistListEntity? = nil) -> ArtistDetailViewController {
+    public static func viewController(
+        model: ArtistListEntity? = nil,
+        artistMusicComponent: ArtistMusicComponent
+    ) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.model = model
+        viewController.artistMusicComponent = artistMusicComponent
         return viewController
     }
     

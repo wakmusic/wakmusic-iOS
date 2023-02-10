@@ -14,29 +14,34 @@ import RxCocoa
 import BaseFeature
 import CommonFeature
 import DataMappingModule
+import DomainModule
 
-class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var dataSource: BehaviorRelay<[Int]> = BehaviorRelay(value: Array(0...9))
     var disposeBag = DisposeBag()
-    var type: ArtistSongSortType = .new
     
+    private var viewModel: ArtistMusicContentViewModel!
+    private lazy var input = ArtistMusicContentViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
         bind()
     }
     
-    public static func viewController(type: ArtistSongSortType) -> ArtistMusicContentViewController {
+    public static func viewController(
+        viewModel: ArtistMusicContentViewModel
+    ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
-        viewController.type = type
+        viewController.viewModel = viewModel
         return viewController
     }
 }
@@ -44,21 +49,22 @@ class ArtistMusicContentViewController: BaseViewController, ViewControllerFromSt
 extension ArtistMusicContentViewController {
     
     private func bind() {
-        
+                
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
-        dataSource
+        output.dataSource
+            .skip(1)
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else{
                     return UITableViewCell()
                 }
-                cell.update()
+                cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
         
         tableView.rx.itemSelected
-            .withLatestFrom(dataSource) { ($0, $1) }
+            .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (indexPath, model) in
                 guard let `self` = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
@@ -75,15 +81,15 @@ extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: UITableViewDelegate {
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 80
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
         return view

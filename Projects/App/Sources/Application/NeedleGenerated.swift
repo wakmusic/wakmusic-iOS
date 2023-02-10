@@ -3,6 +3,7 @@
 import ArtistFeature
 import BaseFeature
 import CommonFeature
+import DataMappingModule
 import DataModule
 import DesignSystem
 import DomainModule
@@ -52,15 +53,43 @@ private func factorye0c5444f5894148bdd93f47b58f8f304c97af4d5(_ component: Needle
     return ArtistDependency132a213bf62ad60c622cProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class ArtistDetailDependencyee413dcf7a70e89df6d9Provider: ArtistDetailDependency {
-
-
-    init() {
-
+    var artistMusicComponent: ArtistMusicComponent {
+        return appComponent.artistMusicComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->ArtistDetailComponent
-private func factory35314797fadaf164ece6e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ArtistDetailDependencyee413dcf7a70e89df6d9Provider()
+private func factory35314797fadaf164ece6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ArtistDetailDependencyee413dcf7a70e89df6d9Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class ArtistMusicContentDependency1615ac8469e54ec51921Provider: ArtistMusicContentDependency {
+    var fetchArtistSongListUseCase: any FetchArtistSongListUseCase {
+        return appComponent.fetchArtistSongListUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ArtistMusicContentComponent
+private func factory8b6ffa46033e2529b5daf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ArtistMusicContentDependency1615ac8469e54ec51921Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class ArtistMusicDependencya0f5073287829dfbc260Provider: ArtistMusicDependency {
+    var artistMusicContentComponent: ArtistMusicContentComponent {
+        return appComponent.artistMusicContentComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ArtistMusicComponent
+private func factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ArtistMusicDependencya0f5073287829dfbc260Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
 
@@ -155,6 +184,8 @@ extension AppComponent: Registration {
         localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { self.fetchArtistListUseCase as Any }
         localTable["artistDetailComponent-ArtistDetailComponent"] = { self.artistDetailComponent as Any }
         localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
+        localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
+        localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -173,7 +204,17 @@ extension ArtistComponent: Registration {
 }
 extension ArtistDetailComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\ArtistDetailDependency.artistMusicComponent] = "artistMusicComponent-ArtistMusicComponent"
+    }
+}
+extension ArtistMusicContentComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ArtistMusicContentDependency.fetchArtistSongListUseCase] = "fetchArtistSongListUseCase-any FetchArtistSongListUseCase"
+    }
+}
+extension ArtistMusicComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ArtistMusicDependency.artistMusicContentComponent] = "artistMusicContentComponent-ArtistMusicContentComponent"
     }
 }
 extension PlayerComponent: Registration {
@@ -227,7 +268,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 @inline(never) private func register1() {
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->ArtistComponent", factorye0c5444f5894148bdd93f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ArtistDetailComponent", factory35314797fadaf164ece6e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ArtistDetailComponent", factory35314797fadaf164ece6f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ArtistMusicContentComponent", factory8b6ffa46033e2529b5daf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)

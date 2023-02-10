@@ -9,6 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import DomainModule
 
 class ArtistMusicCell: UITableViewCell {
 
@@ -23,10 +24,9 @@ class ArtistMusicCell: UITableViewCell {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        albumImageView.layer.borderWidth = 1
-
+        albumImageView.layer.cornerRadius = 4
+        albumImageView.contentMode = .scaleAspectFill
+        
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         releaseDateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
@@ -43,7 +43,14 @@ extension ArtistMusicCell {
         return base + height
     }
     
-    func update() {
-        albumImageView.image = DesignSystemAsset.Logo.placeHolderSmall.image
+    func update(model: ArtistSongListEntity) {
+        
+        titleStringLabel.text = model.title
+        groupStringLabel.text = model.artist
+        releaseDateLabel.text = String(model.date).changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
+        
+        albumImageView.kf.setImage(with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.ID).toString),
+                                    placeholder: nil,
+                                    options: [.transition(.fade(0.2))])
     }
 }
