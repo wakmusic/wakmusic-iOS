@@ -12,7 +12,7 @@ public enum ArtistSongSortType: String, Codable {
     case new
     case popular
     case old
-    
+
     public var display: String {
         switch self {
         case .new:

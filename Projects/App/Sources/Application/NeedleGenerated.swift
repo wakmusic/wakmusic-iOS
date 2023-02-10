@@ -154,6 +154,7 @@ extension AppComponent: Registration {
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
         localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { self.fetchArtistListUseCase as Any }
         localTable["artistDetailComponent-ArtistDetailComponent"] = { self.artistDetailComponent as Any }
+        localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }

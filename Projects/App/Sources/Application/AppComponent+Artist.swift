@@ -40,4 +40,10 @@ public extension AppComponent {
     var artistDetailComponent: ArtistDetailComponent {
         ArtistDetailComponent(parent: self)
     }
+    
+    var fetchArtistSongListUseCase: any FetchArtistSongListUseCase {
+        shared {
+            FetchArtistSongListUseCaseImpl(artistRepository: artistRepository)
+        }
+    }
 }

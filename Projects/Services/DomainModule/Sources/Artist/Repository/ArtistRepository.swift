@@ -13,4 +13,5 @@ import ErrorModule
 
 public protocol ArtistRepository {
     func fetchArtistList() -> Single<[ArtistListEntity]>
+    func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]>
 }
