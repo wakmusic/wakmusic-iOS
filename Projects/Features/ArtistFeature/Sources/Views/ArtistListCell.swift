@@ -27,16 +27,20 @@ extension ArtistListCell {
 
         self.contentView.alpha = model.isHiddenItem ? 0 : 1
         
-        let artistNameAttributedString = NSMutableAttributedString(string: model.name,
-                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                                                                                 .kern: -1])
+        let artistNameAttributedString = NSMutableAttributedString(
+            string: model.name,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                         .kern: -1]
+        )
+        
         artistLabel.attributedText = artistNameAttributedString
         artistLabel.textAlignment = .center
 
-        artistImageView.kf.setImage(with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID).toString),
-                                    placeholder: nil,
-                                    options: [.transition(.fade(0.2))])
-
+        artistImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
 }
