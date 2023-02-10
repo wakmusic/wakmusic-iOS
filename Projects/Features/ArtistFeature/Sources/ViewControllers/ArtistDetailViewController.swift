@@ -72,7 +72,7 @@ extension ArtistDetailViewController {
         guard !flatColor.isEmpty else { return }
         
         let layer = CAGradientLayer()
-        layer.frame = gradationView.bounds
+        layer.frame = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: gradationView.bounds.height)
         
         let startAlpha: CGFloat = 0.6
         let value: CGFloat = 0.1
