@@ -19,6 +19,7 @@ import DomainModule
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
     
     var disposeBag = DisposeBag()
     
@@ -54,6 +55,12 @@ extension ArtistMusicContentViewController {
 
         output.dataSource
             .skip(1)
+            .do(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    self.activityIncidator.stopAnimating()
+                }
+            })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else{
@@ -65,7 +72,7 @@ extension ArtistMusicContentViewController {
         
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (indexPath, model) in
+            .subscribe(onNext: { [weak self] (indexPath, _) in
                 guard let `self` = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
 //                let model = model[indexPath.row]
@@ -74,6 +81,7 @@ extension ArtistMusicContentViewController {
     }
     
     private func configureUI() {
+        self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }

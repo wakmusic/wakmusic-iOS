@@ -474,13 +474,18 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="fAb-qJ-0HO">
+                                <rect key="frame" x="186.66666666666666" y="465.66666666666669" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="RGe-5H-GnI"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Qxv-p6-EAI" firstAttribute="trailing" secondItem="RGe-5H-GnI" secondAttribute="trailing" id="34b-CB-Rjc"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="top" secondItem="Qxv-p6-EAI" secondAttribute="bottom" id="JRv-Au-ZWH"/>
+                            <constraint firstItem="fAb-qJ-0HO" firstAttribute="centerX" secondItem="MPq-Ds-wcF" secondAttribute="centerX" id="KOh-Xb-vJU"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="Xon-1C-d7p"/>
+                            <constraint firstItem="fAb-qJ-0HO" firstAttribute="centerY" secondItem="MPq-Ds-wcF" secondAttribute="centerY" id="fKd-0V-Pnj"/>
                             <constraint firstAttribute="bottom" secondItem="MPq-Ds-wcF" secondAttribute="bottom" id="kbB-VZ-iff"/>
                             <constraint firstItem="Qxv-p6-EAI" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="noN-re-24Q"/>
                             <constraint firstItem="Qxv-p6-EAI" firstAttribute="top" secondItem="RGe-5H-GnI" secondAttribute="top" id="oV7-U6-rkF"/>
@@ -488,6 +493,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIncidator" destination="fAb-qJ-0HO" id="7K4-yw-ofF"/>
                         <outlet property="tableView" destination="MPq-Ds-wcF" id="xt0-Bw-pl3"/>
                     </connections>
                 </viewController>
