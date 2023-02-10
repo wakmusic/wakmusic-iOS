@@ -18,7 +18,7 @@ public final class BeforeSearchContentViewModel:ViewModelType {
     
 
     let input = Input()
-    let output = Output()
+
     var disposeBag = DisposeBag()
     
     var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
@@ -28,11 +28,6 @@ public final class BeforeSearchContentViewModel:ViewModelType {
     ){
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         print("✅ BeforeSearchContentViewModel 생성")
-        
-        
-        fetchRecommendPlayListUseCase.execute().subscribe(onSuccess: {
-            DEBUG_LOG($0)
-        }).disposed(by: disposeBag)
     }
     
     
@@ -42,13 +37,29 @@ public final class BeforeSearchContentViewModel:ViewModelType {
     }
 
     public struct Output {
-        let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let showRecommend:BehaviorRelay<Bool>
+        let dataSource:BehaviorRelay<[RecommendPlayListEntity]>
     }
 
     
     public func transform(from input: Input) -> Output {
-        let output = Output()
         
-        return output
+        let dataSource:BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:true)
+        
+        fetchRecommendPlayListUseCase
+            .execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map({ (model) -> [RecommendPlayListEntity] in
+                DEBUG_LOG("qweqwe \(model)")
+                
+                return model
+            })
+            .bind(to: dataSource)
+            .disposed(by: disposeBag)
+    
+        
+        return Output(showRecommend: showRecommend, dataSource: dataSource)
     }
 }

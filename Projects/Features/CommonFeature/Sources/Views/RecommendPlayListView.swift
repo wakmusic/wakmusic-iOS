@@ -9,9 +9,10 @@
 import UIKit
 import Utility
 import DesignSystem
+import DomainModule
 
 public protocol RecommendPlayListViewDelegate: AnyObject {
-    func itemSelected(model: RecommendPlayListDTO)
+    func itemSelected(model: RecommendPlayListEntity)
 }
 
 public class RecommendPlayListView: UIView {
@@ -30,22 +31,14 @@ public class RecommendPlayListView: UIView {
         self.setupView()
     }
     
-    public var dataSource: [RecommendPlayListDTO] = [] {
+    public var dataSource: [RecommendPlayListEntity] = [] {
         didSet{
             collectionView.reloadData()
         }
     }
 }
 
-public struct RecommendPlayListDTO {
-    let title: String
-    let image: UIImage
-    
-    public init(title: String, image: UIImage) {
-        self.title = title
-        self.image = image
-    }
-}
+
 
 public extension RecommendPlayListView {
     
@@ -64,7 +57,12 @@ public extension RecommendPlayListView {
         collectionView.delegate = self
     }
     
-    static func getViewHeight(model: [RecommendPlayListDTO]) -> CGFloat {
+    static func getViewHeight(model: [RecommendPlayListEntity]) -> CGFloat {
+        
+        guard !model.isEmpty else {
+            return 0 
+        }
+        
         
         let base: CGFloat = 32 + 24 + 20 + 32
         let spacing: CGFloat = 8.0

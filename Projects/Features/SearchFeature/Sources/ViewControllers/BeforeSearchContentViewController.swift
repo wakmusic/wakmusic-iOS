@@ -35,12 +35,9 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     let disposeBag = DisposeBag()
     var delegate:BeforeSearchContentViewDelegate?
     var viewModel:BeforeSearchContentViewModel!
-    let dataSource = [RecommendPlayListDTO(title: "고멤가요제", image: DesignSystemAsset.RecommendPlayList.gomemSongFestival.image),
-                      RecommendPlayListDTO(title: "연말공모전", image: DesignSystemAsset.RecommendPlayList.competition.image),
-                      RecommendPlayListDTO(title: "상콘 OST", image: DesignSystemAsset.RecommendPlayList.situationalplayOST.image),
-                      RecommendPlayListDTO(title: "힙합 SWAG", image: DesignSystemAsset.RecommendPlayList.hiphop.image),
-                      RecommendPlayListDTO(title: "캐롤", image: DesignSystemAsset.RecommendPlayList.carol.image),
-                      RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
+    private lazy var input =  viewModel.input
+    private lazy var output = viewModel.transform(from: input)
+
     
     
     public override func viewDidLoad() {
@@ -90,10 +87,12 @@ extension BeforeSearchContentViewController {
         
    
         //cell 그리기        
-        let combine = Observable.combineLatest(viewModel.output.showRecommend, Utility.PreferenceManager.$recentRecords){ ($0, $1 ?? []) }
+        let combine = Observable.combineLatest(output.showRecommend, Utility.PreferenceManager.$recentRecords,output.dataSource){ ($0, $1 ?? [] , $2 ) }
             //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
         
-        combine.map({ (showRecommend:Bool,item:[String]) -> [String] in
+        combine
+            .debug("DEBUG")
+            .map({ (showRecommend:Bool,item:[String],_) -> [String] in
             if showRecommend //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
             {
                 return []
@@ -140,7 +139,7 @@ extension BeforeSearchContentViewController {
             .map { (focus:Bool, str:String) -> Bool in
                 return focus == false && str.isWhiteSpace  == true
             }
-            .bind(to: viewModel.output.showRecommend)
+            .bind(to: output.showRecommend)
             .disposed(by: disposeBag)
 
 //
@@ -212,9 +211,9 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
         
         
-        if viewModel.output.showRecommend.value
+        if output.showRecommend.value
         {
-            return RecommendPlayListView.getViewHeight(model: dataSource)
+            return RecommendPlayListView.getViewHeight(model: output.dataSource.value)
         }
         
         else if (Utility.PreferenceManager.recentRecords ?? []).count == 0
@@ -250,14 +249,14 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         }
         
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
-                                                ,height: RecommendPlayListView.getViewHeight(model: dataSource)))
+                                                                ,height: RecommendPlayListView.getViewHeight(model:output.dataSource.value)))
         
         
         
-        recommendView.dataSource = self.dataSource
+        recommendView.dataSource = self.output.dataSource.value
         recommendView.delegate = self
         
-        if viewModel.output.showRecommend.value
+        if output.showRecommend.value
         {
             return recommendView
         }
@@ -280,7 +279,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    public func itemSelected(model: RecommendPlayListDTO) {
+    public func itemSelected(model: RecommendPlayListEntity) {
         
         let vc = PlayListDetailViewController.viewController(.custom)
         
@@ -293,12 +292,4 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
 }
 
 
-//extension BeforeSearchContentViewController:RecentRecordDelegate
-//{
-//    func selectedItems(_ keyword: String) {
-//
-//
-//    }
-//
-//
-//}
+
