@@ -75,8 +75,8 @@ extension ArtistDetailViewController {
         layer.frame = gradationView.bounds
         
         let value: CGFloat = 0.1
-        let colors = Array(0...4).enumerated().map { (i, _) in
-            return colorFromRGB(flatColor, alpha: 0.4 - (CGFloat(i) * value)).cgColor
+        let colors = Array(0...6).enumerated().map { (i, _) in
+            return colorFromRGB(flatColor, alpha: 0.6 - (CGFloat(i) * value)).cgColor
         }
         
         layer.colors = colors

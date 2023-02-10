@@ -133,9 +133,9 @@ extension ArtistDetailHeaderViewController {
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         
-        descriptionView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color
+        descriptionView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         descriptionView.layer.borderWidth = 1
-        descriptionView.layer.borderColor = UIColor.white.cgColor
+        descriptionView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         descriptionView.layer.cornerRadius = 8
         
         descriptionFrontView.isHidden = false
