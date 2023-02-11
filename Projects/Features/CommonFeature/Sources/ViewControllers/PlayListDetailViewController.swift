@@ -13,16 +13,14 @@ import RxCocoa
 import RxDataSources
 import PanModal
 import DesignSystem
+import BaseFeature
+import Kingfisher
 
 
 
-public enum PlayListType{
-    case custom
-    case wmRecommend
-}
 
 
-public class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -37,9 +35,10 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     @IBOutlet weak var playListInfoView: UIView!
     
 
-    var pt:PlayListType = .custom
     var disposeBag = DisposeBag()
-    lazy var viewModel = PlayListDetailViewModel()
+    var viewModel:PlayListDetailViewModel!
+   
+    
     
     
     
@@ -86,17 +85,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         self.showPanModal(content: createPlayListPopupViewController)
     }
     
-    let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-    let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [
-        SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    
     
     
     public override func viewDidLoad() {
@@ -105,23 +95,16 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
         configureUI()
         
-        // Drag & Drop 기능을 위한 부분
-        
-        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
-        self.tableView.dragDelegate = self
-        self.tableView.dropDelegate = self
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-        tableView.addGestureRecognizer(longPress)
+      
         
         
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
+    public static func viewController(viewModel:PlayListDetailViewModel) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
-        viewController.pt = pt
+        viewController.viewModel = viewModel
         
         return viewController
     }
@@ -132,11 +115,23 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
+    
+       
         
+        // Drag & Drop 기능을 위한 부분
         
-        if #available(iOS 15.0, *) {
-                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
+        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
+        self.tableView.dragDelegate = viewModel.type == .wmRecommend ? nil : self
+        self.tableView.dropDelegate = viewModel.type == .wmRecommend ? nil : self
+        
+        if viewModel.type != .wmRecommend {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+            tableView.addGestureRecognizer(longPress)
         }
+        
+        
+        
+        
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
         
@@ -147,7 +142,7 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = DesignSystemAsset.PlayListTheme.theme0.image
+       
         
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
@@ -179,12 +174,12 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = pt == .wmRecommend ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
+        self.playListImage.layer.cornerRadius = 12
         
-        self.moreButton.isHidden = pt == .wmRecommend
+        self.moreButton.isHidden = viewModel.type == .wmRecommend
         
         
-        self.editPlayListNameButton.isHidden = pt == .wmRecommend
+        self.editPlayListNameButton.isHidden = viewModel.type == .wmRecommend
         
         bindRx()
         
@@ -200,7 +195,8 @@ extension PlayListDetailViewController{
         //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         
-        dataSource
+        viewModel.output.dataSource
+            .skip(1)
             .do(onNext: { [weak self] model in
                 
                 guard let self = self else {
@@ -220,7 +216,7 @@ extension PlayListDetailViewController{
 
                 let bgView = UIView()
                 bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
-                switch self.pt {
+                switch self.viewModel.type {
                     
                 case .custom:
                     
@@ -241,6 +237,8 @@ extension PlayListDetailViewController{
                     cell.update(model)
                     
                     return cell
+                case .none:
+                    return UITableViewCell()
                 }
                 
                 
@@ -251,8 +249,10 @@ extension PlayListDetailViewController{
                
         
         viewModel.output.isEditinglist
+            .skip(1)
             .do(onNext: { [weak self] isEdit in
                 guard let self = self else { return }
+                
                 
                 self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
@@ -263,11 +263,25 @@ extension PlayListDetailViewController{
                 
                 
             })
-            .withLatestFrom(dataSource)
-            .bind(to: dataSource)
+                .withLatestFrom(viewModel.output.dataSource)
+                .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
                 //에딧 상태에 따른 cell 변화를 reload 해주기 위해
         
+                
+        viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
+            
+            guard let self = self else{
+                return
+            }
+            let type = self.viewModel.type
+            
+            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image).toURL : WMImageAPI.fetchPlayList(id: model.image).toURL)
+            
+            self.playListCountLabel.text = model.songCount
+            self.playListNameLabel.text = model.title
+            
+        }).disposed(by: disposeBag)
                 
                 
                 
@@ -278,7 +292,7 @@ extension PlayListDetailViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began {
+        if  !viewModel.output.isEditinglist.value && sender.state == .began  {
             viewModel.output.isEditinglist.accept(true)
             UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
         }
@@ -344,7 +358,7 @@ extension PlayListDetailViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        sourceIndexPath.accept(indexPath)
+        viewModel.input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -375,20 +389,18 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        destIndexPath.accept(destinationIndexPath)
+        viewModel.input.destIndexPath.accept(destinationIndexPath)
         
         
         
-        var curr = dataSource.value
-        var tmp = curr[sourceIndexPath.value.row]
-        curr.remove(at: sourceIndexPath.value.row)
-        curr.insert(tmp, at: destIndexPath.value.row)
+        var curr = viewModel.output.dataSource.value
+        var tmp = curr[viewModel.input.sourceIndexPath.value.row]
+        curr.remove(at: viewModel.input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: viewModel.input.destIndexPath.value.row)
+
+        viewModel.output.dataSource.accept(curr)
         
-        print("\(sourceIndexPath.value.row) \(destIndexPath.value.row)")
-        dataSource.accept(curr)
         
-        
-        DEBUG_LOG(destinationIndexPath)
     }
     
     // 드래그할 떄 (손가락을 화면에 대고 있을 때)

@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct SingleSearchSongResponseDTO: Decodable {
+public struct SingleSongResponseDTO: Decodable {
     public let id, title, artist, remix: String
     public let reaction: String
     public let date, views, last: Int

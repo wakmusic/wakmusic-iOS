@@ -9,6 +9,8 @@
 import UIKit
 import Utility
 import DesignSystem
+import DomainModule
+import Kingfisher
 
 public class RecommendPlayListCell: UICollectionViewCell {
     
@@ -22,12 +24,15 @@ public class RecommendPlayListCell: UICollectionViewCell {
         self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.borderWidth = 1
         self.contentView.backgroundColor = colorFromRGB(0xFCFCFD)
+        
+        self.logoImageView.layer.cornerRadius = self.logoImageView.frame.width / 2
     }
 }
 
 extension RecommendPlayListCell {
     
-    func update(model: RecommendPlayListDTO) {
+    func update(model: RecommendPlayListEntity) {
+        
         
         //MARK: 폰트설정
         titleStringLabel.text = model.title
@@ -35,6 +40,8 @@ extension RecommendPlayListCell {
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray600.color
         
         
-        logoImageView.image = model.image
+        logoImageView.kf.setImage(with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id).toURL
+                                  ,placeholder: nil,
+                                  options: [.transition(.fade(0.2))])
     }
 }

@@ -14,7 +14,7 @@ public struct SearchRepositoryImpl: SearchRepository {
         self.remoteSearchDataSource = remoteSearchDataSource
     }
     
-    public func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SearchEntity]> {
+    public func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SongEntity]> {
         remoteSearchDataSource.fetchSearchSong(type: type, keyword: keyword)
     }
 

@@ -41,6 +41,8 @@ public class BaseRemoteDataSource<API: WMAPI> {
 
 private extension BaseRemoteDataSource {
     func defaultRequest(_ api: API) -> Single<Response> {
+        
+        DEBUG_LOG(api.domain.rawValue + api.urlPath)
         return provider.rx.request(api)
             .timeout(.seconds(5), scheduler: MainScheduler.asyncInstance)
             .catch { error in

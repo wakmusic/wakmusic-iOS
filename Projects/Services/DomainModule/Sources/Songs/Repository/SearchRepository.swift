@@ -4,5 +4,5 @@ import ErrorModule
 import Foundation
 
 public protocol SearchRepository {
-    func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SearchEntity]>
+    func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SongEntity]>
 }

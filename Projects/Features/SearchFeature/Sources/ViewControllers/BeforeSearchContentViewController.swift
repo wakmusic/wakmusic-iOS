@@ -13,6 +13,10 @@ import RxSwift
 import RxCocoa
 import BaseFeature
 import CommonFeature
+import NeedleFoundation
+import DomainModule
+
+
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
     
@@ -22,7 +26,7 @@ protocol BeforeSearchContentViewDelegate:AnyObject{
 
 
 
-class BeforeSearchContentViewController: BaseViewController,ViewControllerFromStoryBoard {
+public final class BeforeSearchContentViewController: BaseViewController,ViewControllerFromStoryBoard {
 
     
     @IBOutlet weak var tableView: UITableView!
@@ -30,16 +34,16 @@ class BeforeSearchContentViewController: BaseViewController,ViewControllerFromSt
     
     let disposeBag = DisposeBag()
     var delegate:BeforeSearchContentViewDelegate?
-    var viewModel = BeforeSearchContentViewModel()
-    let dataSource = [RecommendPlayListDTO(title: "고멤가요제", image: DesignSystemAsset.RecommendPlayList.gomemSongFestival.image),
-                      RecommendPlayListDTO(title: "연말공모전", image: DesignSystemAsset.RecommendPlayList.competition.image),
-                      RecommendPlayListDTO(title: "상콘 OST", image: DesignSystemAsset.RecommendPlayList.situationalplayOST.image),
-                      RecommendPlayListDTO(title: "힙합 SWAG", image: DesignSystemAsset.RecommendPlayList.hiphop.image),
-                      RecommendPlayListDTO(title: "캐롤", image: DesignSystemAsset.RecommendPlayList.carol.image),
-                      RecommendPlayListDTO(title: "노동요", image: DesignSystemAsset.RecommendPlayList.workSong.image)]
+    
+    var recommendPlayListDetailComponent: PlayListDetailComponent!
+  
+    var viewModel:BeforeSearchContentViewModel!
+    private lazy var input =  viewModel.input
+    private lazy var output = viewModel.transform(from: input)
+
     
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         DEBUG_LOG("\(Self.self) viewDidLoad")
@@ -53,8 +57,12 @@ class BeforeSearchContentViewController: BaseViewController,ViewControllerFromSt
     
    
     
-    public static func viewController() -> BeforeSearchContentViewController {
+    public static func viewController(recommendPlayListDetailComponent:PlayListDetailComponent,viewModel:BeforeSearchContentViewModel) -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        
+        viewController.recommendPlayListDetailComponent = recommendPlayListDetailComponent
+        viewController.viewModel = viewModel
+        
         return viewController
     }
     
@@ -82,10 +90,12 @@ extension BeforeSearchContentViewController {
         
    
         //cell 그리기        
-        let combine = Observable.combineLatest(viewModel.output.showRecommend, Utility.PreferenceManager.$recentRecords){ ($0, $1 ?? []) }
+        let combine = Observable.combineLatest(output.showRecommend, Utility.PreferenceManager.$recentRecords,output.dataSource){ ($0, $1 ?? [] , $2 ) }
             //추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
         
-        combine.map({ (showRecommend:Bool,item:[String]) -> [String] in
+        combine
+            .skip(2)
+            .map({ (showRecommend:Bool,item:[String],_) -> [String] in
             if showRecommend //만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
             {
                 return []
@@ -132,7 +142,7 @@ extension BeforeSearchContentViewController {
             .map { (focus:Bool, str:String) -> Bool in
                 return focus == false && str.isWhiteSpace  == true
             }
-            .bind(to: viewModel.output.showRecommend)
+            .bind(to: output.showRecommend)
             .disposed(by: disposeBag)
 
 //
@@ -196,17 +206,17 @@ extension BeforeSearchContentViewController {
 
 extension BeforeSearchContentViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
         
-        if viewModel.output.showRecommend.value
+        if output.showRecommend.value
         {
-            return RecommendPlayListView.getViewHeight(model: dataSource)
+            return RecommendPlayListView.getViewHeight(model: output.dataSource.value)
         }
         
         else if (Utility.PreferenceManager.recentRecords ?? []).count == 0
@@ -221,7 +231,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
         
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
@@ -242,14 +252,14 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         }
         
         let recommendView = RecommendPlayListView(frame: CGRect(x: 0,y: 0,width: APP_WIDTH()
-                                                ,height: RecommendPlayListView.getViewHeight(model: dataSource)))
+                                                                ,height: RecommendPlayListView.getViewHeight(model:output.dataSource.value)))
         
         
         
-        recommendView.dataSource = self.dataSource
+        recommendView.dataSource = self.output.dataSource.value
         recommendView.delegate = self
         
-        if viewModel.output.showRecommend.value
+        if output.showRecommend.value
         {
             return recommendView
         }
@@ -272,11 +282,10 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    func itemSelected(model: RecommendPlayListDTO) {
+    public func itemSelected(model: RecommendPlayListEntity) {
         
-        let vc = PlayListDetailViewController.viewController(.custom)
-        
-        self.navigationController?.pushViewController(vc, animated: true)
+        lazy var playListDetailVc = recommendPlayListDetailComponent.makeView(id:model.id)
+        self.navigationController?.pushViewController(playListDetailVc, animated: true)
      
         
     }
@@ -285,12 +294,4 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
 }
 
 
-//extension BeforeSearchContentViewController:RecentRecordDelegate
-//{
-//    func selectedItems(_ keyword: String) {
-//
-//
-//    }
-//
-//
-//}
+

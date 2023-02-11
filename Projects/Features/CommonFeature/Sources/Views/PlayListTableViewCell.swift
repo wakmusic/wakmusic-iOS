@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import DomainModule
 
 class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var button:UIButton!
@@ -33,9 +34,8 @@ class PlayListTableViewCell: UITableViewCell {
         
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        albumImageView.layer.borderWidth = 1
+        albumImageView.layer.cornerRadius = 4
+
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
@@ -56,11 +56,11 @@ class PlayListTableViewCell: UITableViewCell {
 }
 
 extension PlayListTableViewCell {
-    func update(_ model: SongInfoDTO,_ isEditing:Bool) {
+    func update(_ model: SongEntity,_ isEditing:Bool) {
 
        
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        titleLabel.text =  model.name
+        titleLabel.text =  model.title
         artistLabel.text = model.artist
         isEdit = isEditing
         

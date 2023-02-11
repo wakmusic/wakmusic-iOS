@@ -9,6 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import DomainModule
 
 public class SongListCell: UITableViewCell {
 
@@ -26,9 +27,8 @@ public class SongListCell: UITableViewCell {
 
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
-        albumImageView.layer.borderWidth = 1
+        albumImageView.layer.cornerRadius = 4
+
     }
 }
 
@@ -43,14 +43,14 @@ public extension SongListCell {
         return base + height
     }
     
-    func update(_ song:SongInfoDTO) {
+    func update(_ song:SongEntity) {
         
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         
         
-        self.titleLabel.text = song.name
+        self.titleLabel.text = song.title
         self.artistLabel.text = song.artist
-        self.releaseDateLabel.text = song.releaseDay
+        self.releaseDateLabel.text = song.date
         
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
@@ -62,11 +62,9 @@ public extension SongListCell {
         self.releaseDateLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
         
-        
-        
-        
     }
 }
+
 
 public struct SongInfoDTO {
     public var name:String
@@ -79,4 +77,3 @@ public struct SongInfoDTO {
         self.releaseDay = releaseDay
     }
 }
-

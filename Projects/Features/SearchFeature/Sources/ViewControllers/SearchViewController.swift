@@ -11,18 +11,7 @@ import SnapKit
 import RxKeyboard
 import BaseFeature
 
-public protocol SearchDependency: Dependency {
-    //var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
-    
-}
 
-public final class SearchComponent: Component<SearchDependency> {
-    public func makeView() -> SearchViewController {
-        return SearchViewController.viewController(
-            viewModel: .init()
-        )
-    }
-}
 
 
 public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
@@ -37,8 +26,9 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     
     var viewModel:SearchViewModel!
     let disposeBag = DisposeBag()
+    var beforesearchComponent: BeforeSearchComponent!
     
-    lazy var beforeVc = BeforeSearchContentViewController.viewController()
+    lazy var beforeVc =  beforesearchComponent.makeView()
     lazy var afterVc = AfterSearchViewController.viewController()
     
     
@@ -52,7 +42,7 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil // 현재 탭에서 화면이동이 일어날 시 , 빠져나올 때 swipe로 이동
+       // navigationController?.interactivePopGestureRecognizer?.delegate = nil // 현재 탭에서 화면이동이 일어날 시 , 빠져나올 때 swipe로 이동
         
     }
     
@@ -85,12 +75,14 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
    
 
     public static func viewController(
-        viewModel:SearchViewModel
+        viewModel:SearchViewModel,
+        beforeSearchComponent:BeforeSearchComponent
     ) -> SearchViewController {
         
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
+        viewController.beforesearchComponent = beforeSearchComponent
         
         return viewController
     }

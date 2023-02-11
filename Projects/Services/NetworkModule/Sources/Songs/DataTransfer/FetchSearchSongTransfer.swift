@@ -3,9 +3,9 @@ import DomainModule
 import Utility
 
 
-public extension SingleSearchSongResponseDTO {
-    func toDomain() -> SearchEntity {
-        SearchEntity(
+public extension SingleSongResponseDTO {
+    func toDomain() -> SongEntity {
+        SongEntity(
             id: id,
             title: title,
             artist: artist,

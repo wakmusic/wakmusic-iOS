@@ -9,26 +9,55 @@
 import Foundation
 import RxSwift
 import RxRelay
+import BaseFeature
+import DomainModule
+import Utility
 
-final class BeforeSearchContentViewModel {
+public final class BeforeSearchContentViewModel:ViewModelType {
+  
+    
 
     let input = Input()
-    let output = Output()
+
     var disposeBag = DisposeBag()
+    
+    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
-    struct Input {
-        
-        
-    }
-
-    struct Output {
-        let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-    }
-
-    init() {
-        
+    public init(
+        fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+    ){
+        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         print("✅ BeforeSearchContentViewModel 생성")
+    }
+    
+    
+    public struct Input {
         
+        
+    }
 
+    public struct Output {
+        let showRecommend:BehaviorRelay<Bool>
+        let dataSource:BehaviorRelay<[RecommendPlayListEntity]>
+    }
+
+    
+    public func transform(from input: Input) -> Output {
+        
+        let dataSource:BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:true)
+        
+        fetchRecommendPlayListUseCase
+            .execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map({ (model) -> [RecommendPlayListEntity] in
+                return model
+            })
+            .bind(to: dataSource)
+            .disposed(by: disposeBag)
+    
+        
+        return Output(showRecommend: showRecommend, dataSource: dataSource)
     }
 }

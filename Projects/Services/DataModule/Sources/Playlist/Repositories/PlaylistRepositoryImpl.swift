@@ -16,17 +16,20 @@ import RxSwift
 public struct PlayListRepositoryImpl: PlayListRepository {
    
     
-    private let remotePlayListDataSource: any PlayListDataSource
+    private let remotePlayListDataSource: any RemotePlayListDataSource
     
     public init(
-        remotePlayListDataSource: PlayListDataSource
+        remotePlayListDataSource: RemotePlayListDataSource
     ) {
         self.remotePlayListDataSource = remotePlayListDataSource
     }
     
-    public func fetchRecommendPlayLists() -> Single<[RecommendPlayListEntity]> {
+    public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {
         remotePlayListDataSource.fetchRecommendPlayList()
     }
     
+    public func fetchPlayListDetail(id:String,type:PlayListType) -> Single<PlayListDetailEntity> {
+        remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
+    }
    
 }

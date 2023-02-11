@@ -162,15 +162,46 @@ private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: Needle
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
-
-
-    init() {
-
+    var beforeSearchComponent: BeforeSearchComponent {
+        return appComponent.beforeSearchComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->SearchComponent
-private func factorye3d049458b2ccbbcb3b6e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SearchDependencya86903a2c751a4f762e8Provider()
+private func factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SearchDependencya86903a2c751a4f762e8Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDependency {
+    var recommendPlayListDetailComponent: PlayListDetailComponent {
+        return appComponent.recommendPlayListDetailComponent
+    }
+    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
+        return appComponent.fetchRecommendPlayListUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->BeforeSearchComponent
+private func factory9bb852337d5550979293f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return BeforeSearchDependencyebdecb1d478a4766488dProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDetailDependency {
+    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
+        return appComponent.fetchPlayListDetailUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->PlayListDetailComponent
+private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
 
 #else
@@ -178,6 +209,13 @@ extension AppComponent: Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { self.keychain as Any }
+        localTable["searchComponent-SearchComponent"] = { self.searchComponent as Any }
+        localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
+        localTable["recommendPlayListDetailComponent-PlayListDetailComponent"] = { self.recommendPlayListDetailComponent as Any }
+        localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
+        localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
+        localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
+        localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
@@ -190,10 +228,6 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["searchComponent-SearchComponent"] = { self.searchComponent as Any }
-        localTable["remoteChartDataSource-any RemoteSearchDataSource"] = { self.remoteChartDataSource as Any }
-        localTable["searchRepository-any SearchRepository"] = { self.searchRepository as Any }
-        localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
@@ -247,7 +281,18 @@ extension RootComponent: Registration {
 }
 extension SearchComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\SearchDependency.beforeSearchComponent] = "beforeSearchComponent-BeforeSearchComponent"
+    }
+}
+extension BeforeSearchComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\BeforeSearchDependency.recommendPlayListDetailComponent] = "recommendPlayListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
+    }
+}
+extension PlayListDetailComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
     }
 }
 
@@ -276,7 +321,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
 }
 #endif
 

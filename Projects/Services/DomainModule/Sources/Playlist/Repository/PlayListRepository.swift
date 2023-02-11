@@ -4,5 +4,6 @@ import ErrorModule
 import Foundation
 
 public protocol PlayListRepository {
-    func fetchRecommendPlayLists() -> Single<[RecommendPlayListEntity]>
+    func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
+    func fetchPlayListDetail(id:String,type:PlayListType) -> Single<PlayListDetailEntity>
 }
