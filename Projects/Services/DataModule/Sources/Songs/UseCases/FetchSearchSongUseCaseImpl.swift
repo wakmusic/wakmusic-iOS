@@ -13,7 +13,7 @@ public struct FetchSearchSongUseCaseImpl: FetchSearchSongUseCase {
         self.searchRepository = searchRepository
     }
     
-    public func execute(type: SearchType, keyword: String) -> Single<[SearchEntity]> {
+    public func execute(type: SearchType, keyword: String) -> Single<[SongEntity]> {
         searchRepository.fetchSearchSong(type: type, keyword: keyword)
     }
 

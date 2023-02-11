@@ -12,19 +12,19 @@ public struct RecommendPlayListDetailEntity: Equatable {
     public init(
         id: String,
         title: String,
-        song_ids: [String],
+        songs: [SongEntity],
         `public`:Bool
         
     ) {
         self.id = id
         self.title = title
-        self.song_ids = song_ids
+        self.songs = songs
         self.public = `public`
    
     }
     
     public let id, title : String
-    public let song_ids: [String]
+    public let songs: [SongEntity]
     public let `public` : Bool
     
 }

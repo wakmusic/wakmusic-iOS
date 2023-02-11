@@ -13,6 +13,7 @@ import RxCocoa
 import RxDataSources
 import PanModal
 import DesignSystem
+import BaseFeature
 
 
 
@@ -118,7 +119,7 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(_ pt:PlayListType) -> PlayListDetailViewController {
+    public static func viewController(_ pt:PlayListType,viewModel:any ViewModelType) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.pt = pt

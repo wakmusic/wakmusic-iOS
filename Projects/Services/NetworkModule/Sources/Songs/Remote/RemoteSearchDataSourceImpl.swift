@@ -7,9 +7,9 @@ import Foundation
 
 
 public final class RemoteSearchDataSourceImpl: BaseRemoteDataSource<SongsAPI>, RemoteSearchDataSource {
-    public func fetchSearchSong(type: SearchType, keyword: String) ->  Single<[SearchEntity]> {
+    public func fetchSearchSong(type: SearchType, keyword: String) ->  Single<[SongEntity]> {
         request(.fetchSearchSong(type: type, keyword: keyword))
-            .map([SingleSearchSongResponseDTO].self)
+            .map([SingleSongResponseDTO].self)
             .map{$0.map{$0.toDomain()}}
             
             

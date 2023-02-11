@@ -3,5 +3,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchRecommendPlayListDetailUseCase {
-    func execute() -> Single<[RecommendPlayListDetailEntity]>
+    func execute(id:String) -> Single<[RecommendPlayListDetailEntity]>
 }

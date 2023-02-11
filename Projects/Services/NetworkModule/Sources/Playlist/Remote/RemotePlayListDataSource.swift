@@ -6,4 +6,5 @@ import Foundation
 
 public protocol RemotePlayListDataSource {
     func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
+    func fetchRecommendPlayListDetail(id:String) -> Single<[RecommendPlayListDetailEntity]>
 }

@@ -28,5 +28,8 @@ public struct PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchRecommendPlayList()
     }
     
+    public func fetchRecommendPlayListDetail(id:String) -> Single<[RecommendPlayListDetailEntity]> {
+        remotePlayListDataSource.fetchRecommendPlayListDetail(id: id)
+    }
    
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SearchEntity: Equatable {
+public struct SongEntity: Equatable {
     public init(
         id: String,
         title: String,

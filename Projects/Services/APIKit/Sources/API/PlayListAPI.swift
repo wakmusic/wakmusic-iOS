@@ -5,6 +5,7 @@ import Foundation
 
 public enum PlayListAPI {
     case fetchRecommendPlayList
+    case fetchRecommendPlayListDetail(id:String)
 }
 
 extension PlayListAPI: WMAPI {
@@ -17,6 +18,9 @@ extension PlayListAPI: WMAPI {
             
         case .fetchRecommendPlayList:
             return "/recommended"
+     
+        case .fetchRecommendPlayListDetail(id: let id):
+            return "/recommended/\(id)"
         }
     }
         
@@ -26,9 +30,9 @@ extension PlayListAPI: WMAPI {
         
         public var task: Moya.Task {
             switch self {
-           
-            
             case .fetchRecommendPlayList:
+                return .requestPlain
+            case .fetchRecommendPlayListDetail(id:_):
                 return .requestPlain
             }
             

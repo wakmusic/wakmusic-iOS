@@ -9,21 +9,23 @@
 import Foundation
 import RxSwift
 import RxRelay
+import BaseFeature
 
-final class PlayListDetailViewModel {
+public final class PlayListDetailViewModel:ViewModelType {
+   
 
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
 
-    struct Input {
+    public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         
     }
 
-    struct Output {
+    public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
@@ -32,6 +34,12 @@ final class PlayListDetailViewModel {
         print("✅ PlayListDetailViewModel 생성")
         
     }
+    
+    public func transform(from input: Input) -> Output {
+        
+        return output
+    }
+    
     
     
 }

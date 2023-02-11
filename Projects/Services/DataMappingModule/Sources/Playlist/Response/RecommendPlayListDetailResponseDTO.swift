@@ -11,6 +11,6 @@ import Foundation
 
 public struct SingleRecommendPlayListDetailResponseDTO: Decodable {
     public let id, title: String
-    public let song_ids: [String]
+    public let songs: [SingleSongResponseDTO]
     public let `public`: Bool
 }

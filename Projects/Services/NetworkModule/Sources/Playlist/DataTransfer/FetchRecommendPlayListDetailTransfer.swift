@@ -1,9 +1,15 @@
-//
-//  FetchRecommendPlayListDetailTransfer.swift
-//  NetworkModule
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
+import DataMappingModule
+import DomainModule
+import Utility
 
-import Foundation
+
+public extension SingleRecommendPlayListDetailResponseDTO {
+    func toDomain() -> RecommendPlayListDetailEntity {
+        RecommendPlayListDetailEntity(
+            id: id,
+            title: title,
+            songs: songs.map({$0.toDomain()}),
+            public: `public`
+        )
+    }
+}

@@ -5,5 +5,5 @@ import RxSwift
 import Foundation
 
 public protocol RemoteSearchDataSource {
-    func fetchSearchSong(type: SearchType,keyword: String) -> Single<[SearchEntity]>
+    func fetchSearchSong(type: SearchType,keyword: String) -> Single<[SongEntity]>
 }
