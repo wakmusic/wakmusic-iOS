@@ -52,8 +52,6 @@ public final class BeforeSearchContentViewModel:ViewModelType {
             .catchAndReturn([])
             .asObservable()
             .map({ (model) -> [RecommendPlayListEntity] in
-                DEBUG_LOG("qweqwe \(model)")
-                
                 return model
             })
             .bind(to: dataSource)

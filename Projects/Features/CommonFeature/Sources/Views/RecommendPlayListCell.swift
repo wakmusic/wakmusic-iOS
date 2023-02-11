@@ -24,6 +24,8 @@ public class RecommendPlayListCell: UICollectionViewCell {
         self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.borderWidth = 1
         self.contentView.backgroundColor = colorFromRGB(0xFCFCFD)
+        
+        self.logoImageView.layer.cornerRadius = self.logoImageView.frame.width / 2
     }
 }
 

@@ -12,7 +12,7 @@ public struct RecommendPlayListEntity: Equatable {
     public init(
         id: String,
         title: String,
-        `public`:Bool
+        `public`: Bool
     ) {
         self.id = id
         self.title = title

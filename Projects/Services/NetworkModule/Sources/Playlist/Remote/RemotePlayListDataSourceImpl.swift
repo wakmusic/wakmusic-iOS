@@ -16,10 +16,10 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
    
     }
     
-    public func fetchRecommendPlayListDetail(id: String) ->Single<[RecommendPlayListDetailEntity]> {
-        request(.fetchRecommendPlayListDetail(id: id))
-            .map([SingleRecommendPlayListDetailResponseDTO].self)
-            .map{$0.map{$0.toDomain()}}
+    public func fetchPlayListDetail(id: String,type:PlayListType) ->Single<PlayListDetailEntity> {
+        request(.fetchPlayListDetail(id: id,type: type))
+            .map(SinglePlayListDetailResponseDTO.self)
+            .map({$0.toDomain()})
     }
     
    

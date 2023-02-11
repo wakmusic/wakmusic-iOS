@@ -28,6 +28,8 @@ enum SearchType:Int{
 
 
 
+
+
 class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
@@ -162,7 +164,7 @@ extension AfterSearchContentViewController{
             let bgView = UIView()
             bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
             
-            cell.update(model)
+           // cell.update(model)
             cell.selectedBackgroundView = bgView
             //cell.selectedBa = DesignSystemAsset.GrayColor.gray200.color
             

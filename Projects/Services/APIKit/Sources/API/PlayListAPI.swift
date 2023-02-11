@@ -3,9 +3,12 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 
+
+
+
 public enum PlayListAPI {
     case fetchRecommendPlayList
-    case fetchRecommendPlayListDetail(id:String)
+    case fetchPlayListDetail(id:String,type:PlayListType)
 }
 
 extension PlayListAPI: WMAPI {
@@ -18,9 +21,18 @@ extension PlayListAPI: WMAPI {
             
         case .fetchRecommendPlayList:
             return "/recommended"
-     
-        case .fetchRecommendPlayListDetail(id: let id):
-            return "/recommended/\(id)"
+            
+            
+        case .fetchPlayListDetail(id: let id, type: let type):
+            
+            switch type {
+                
+            case .custom:
+                return "/\(id)/detail"
+            case .wmRecommend:
+                return "/recommended/\(id)"
+            }
+            
         }
     }
         
@@ -32,7 +44,8 @@ extension PlayListAPI: WMAPI {
             switch self {
             case .fetchRecommendPlayList:
                 return .requestPlain
-            case .fetchRecommendPlayListDetail(id:_):
+         
+            case .fetchPlayListDetail:
                 return .requestPlain
             }
             

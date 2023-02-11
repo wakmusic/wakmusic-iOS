@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import DomainModule
 
 class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var button:UIButton!
@@ -55,11 +56,11 @@ class PlayListTableViewCell: UITableViewCell {
 }
 
 extension PlayListTableViewCell {
-    func update(_ model: SongInfoDTO,_ isEditing:Bool) {
+    func update(_ model: SongEntity,_ isEditing:Bool) {
 
        
         albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        titleLabel.text =  model.name
+        titleLabel.text =  model.title
         artistLabel.text = model.artist
         isEdit = isEditing
         

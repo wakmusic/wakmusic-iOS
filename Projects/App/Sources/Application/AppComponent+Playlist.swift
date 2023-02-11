@@ -24,9 +24,9 @@ public extension AppComponent {
         
     }
     
-    var recommendPlayListDetailComponent: RecommendPlayListDetailComponent {
+    var recommendPlayListDetailComponent: PlayListDetailComponent {
         
-        RecommendPlayListDetailComponent(parent: self)
+        PlayListDetailComponent(parent: self)
     }
     
     var remotePlayListDataSource: any RemotePlayListDataSource {
@@ -46,10 +46,10 @@ public extension AppComponent {
         }
     }
     
-    var fetchRecommendPlayListDetailUseCase: any FetchRecommendPlayListDetailUseCase {
+    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
         
         shared {
-          FetchRecommendPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+          FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
         }
     }
     

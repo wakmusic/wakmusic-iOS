@@ -35,8 +35,8 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     let disposeBag = DisposeBag()
     var delegate:BeforeSearchContentViewDelegate?
     
-    var recommendPlayListDetailComponent: RecommendPlayListDetailComponent!
-    lazy var playListDetailVc = recommendPlayListDetailComponent.makeView()
+    var recommendPlayListDetailComponent: PlayListDetailComponent!
+  
     var viewModel:BeforeSearchContentViewModel!
     private lazy var input =  viewModel.input
     private lazy var output = viewModel.transform(from: input)
@@ -57,7 +57,7 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     
    
     
-    public static func viewController(recommendPlayListDetailComponent:RecommendPlayListDetailComponent,viewModel:BeforeSearchContentViewModel) -> BeforeSearchContentViewController {
+    public static func viewController(recommendPlayListDetailComponent:PlayListDetailComponent,viewModel:BeforeSearchContentViewModel) -> BeforeSearchContentViewController {
         let viewController =  BeforeSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         
         viewController.recommendPlayListDetailComponent = recommendPlayListDetailComponent
@@ -284,7 +284,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
         
-        
+        lazy var playListDetailVc = recommendPlayListDetailComponent.makeView(id:model.id)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
      
         

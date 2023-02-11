@@ -12,7 +12,7 @@ import DomainModule
 import CommonFeature
 
 public protocol BeforeSearchDependency: Dependency {
-    var recommendPlayListDetailComponent : RecommendPlayListDetailComponent { get  }
+    var recommendPlayListDetailComponent : PlayListDetailComponent { get  }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {get}
   
     

@@ -5,5 +5,5 @@ import Foundation
 
 public protocol PlayListRepository {
     func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
-    func fetchRecommendPlayListDetail(id:String) -> Single<[RecommendPlayListDetailEntity]>
+    func fetchPlayListDetail(id:String,type:PlayListType) -> Single<PlayListDetailEntity>
 }

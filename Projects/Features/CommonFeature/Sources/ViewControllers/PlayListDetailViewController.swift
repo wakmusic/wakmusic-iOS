@@ -14,13 +14,13 @@ import RxDataSources
 import PanModal
 import DesignSystem
 import BaseFeature
+import Kingfisher
 
 
 
 
 
-
-public class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -37,6 +37,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
 
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
+   
+    
     
     
     
@@ -83,17 +85,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         self.showPanModal(content: createPlayListPopupViewController)
     }
     
-    let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-    let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [
-        SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),
-        SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+    
     
     
     public override func viewDidLoad() {
@@ -123,9 +116,7 @@ extension PlayListDetailViewController{
     private func configureUI(){
     
     
-        if #available(iOS 15.0, *) {
-                tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
-        }
+       
         
         // Drag & Drop 기능을 위한 부분
         
@@ -151,7 +142,7 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = DesignSystemAsset.PlayListTheme.theme0.image
+       
         
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
@@ -183,7 +174,7 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = viewModel.type == .wmRecommend ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
+        self.playListImage.layer.cornerRadius = 12
         
         self.moreButton.isHidden = viewModel.type == .wmRecommend
         
@@ -204,7 +195,8 @@ extension PlayListDetailViewController{
         //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         
-        dataSource
+        viewModel.output.dataSource
+            .skip(1)
             .do(onNext: { [weak self] model in
                 
                 guard let self = self else {
@@ -271,11 +263,25 @@ extension PlayListDetailViewController{
                 
                 
             })
-            .withLatestFrom(dataSource)
-            .bind(to: dataSource)
+                .withLatestFrom(viewModel.output.dataSource)
+                .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
                 //에딧 상태에 따른 cell 변화를 reload 해주기 위해
         
+                
+        viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
+            
+            guard let self = self else{
+                return
+            }
+            let type = self.viewModel.type
+            
+            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image).toURL : WMImageAPI.fetchPlayList(id: model.image).toURL)
+            
+            self.playListCountLabel.text = model.songCount
+            self.playListNameLabel.text = model.title
+            
+        }).disposed(by: disposeBag)
                 
                 
                 
@@ -352,7 +358,7 @@ extension PlayListDetailViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        sourceIndexPath.accept(indexPath)
+        viewModel.input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -383,20 +389,18 @@ extension PlayListDetailViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        destIndexPath.accept(destinationIndexPath)
+        viewModel.input.destIndexPath.accept(destinationIndexPath)
         
         
         
-        var curr = dataSource.value
-        var tmp = curr[sourceIndexPath.value.row]
-        curr.remove(at: sourceIndexPath.value.row)
-        curr.insert(tmp, at: destIndexPath.value.row)
+        var curr = viewModel.output.dataSource.value
+        var tmp = curr[viewModel.input.sourceIndexPath.value.row]
+        curr.remove(at: viewModel.input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: viewModel.input.destIndexPath.value.row)
+
+        viewModel.output.dataSource.accept(curr)
         
-        print("\(sourceIndexPath.value.row) \(destIndexPath.value.row)")
-        dataSource.accept(curr)
         
-        
-        DEBUG_LOG(destinationIndexPath)
     }
     
     // 드래그할 떄 (손가락을 화면에 대고 있을 때)
