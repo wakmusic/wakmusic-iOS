@@ -9,8 +9,10 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import CommonFeature
 
 public protocol BeforeSearchDependency: Dependency {
+    var recommendPlayListDetailComponent : RecommendPlayListDetailComponent { get  }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {get}
   
     
@@ -18,7 +20,7 @@ public protocol BeforeSearchDependency: Dependency {
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> BeforeSearchContentViewController {
-        return BeforeSearchContentViewController.viewController(viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase) )
+        return BeforeSearchContentViewController.viewController(recommendPlayListDetailComponent: dependency.recommendPlayListDetailComponent, viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase) )
         
     }
 }

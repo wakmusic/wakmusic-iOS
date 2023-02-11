@@ -17,10 +17,7 @@ import BaseFeature
 
 
 
-public enum PlayListType{
-    case custom
-    case wmRecommend
-}
+
 
 
 public class PlayListDetailViewController: UIViewController,ViewControllerFromStoryBoard {
@@ -38,9 +35,8 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
     @IBOutlet weak var playListInfoView: UIView!
     
 
-    var pt:PlayListType = .custom
     var disposeBag = DisposeBag()
-    lazy var viewModel = PlayListDetailViewModel()
+    var viewModel:PlayListDetailViewModel!
     
     
     
@@ -106,23 +102,16 @@ public class PlayListDetailViewController: UIViewController,ViewControllerFromSt
         
         configureUI()
         
-        // Drag & Drop 기능을 위한 부분
-        
-        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
-        self.tableView.dragDelegate = self
-        self.tableView.dropDelegate = self
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-        tableView.addGestureRecognizer(longPress)
+      
         
         
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(_ pt:PlayListType,viewModel:any ViewModelType) -> PlayListDetailViewController {
+    public static func viewController(viewModel:PlayListDetailViewModel) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
-        viewController.pt = pt
+        viewController.viewModel = viewModel
         
         return viewController
     }
@@ -133,11 +122,25 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
-        
-        
+    
         if #available(iOS 15.0, *) {
                 tableView.sectionHeaderTopPadding = 0 //섹션 해더를 쓸 경우 꼭 언급
         }
+        
+        // Drag & Drop 기능을 위한 부분
+        
+        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
+        self.tableView.dragDelegate = viewModel.type == .wmRecommend ? nil : self
+        self.tableView.dropDelegate = viewModel.type == .wmRecommend ? nil : self
+        
+        if viewModel.type != .wmRecommend {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+            tableView.addGestureRecognizer(longPress)
+        }
+        
+        
+        
+        
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
         
@@ -180,12 +183,12 @@ extension PlayListDetailViewController{
         
         
         
-        self.playListImage.image = pt == .wmRecommend ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
+        self.playListImage.image = viewModel.type == .wmRecommend ? DesignSystemAsset.RecommendPlayList.dummyPlayList.image :  DesignSystemAsset.PlayListTheme.theme0.image
         
-        self.moreButton.isHidden = pt == .wmRecommend
+        self.moreButton.isHidden = viewModel.type == .wmRecommend
         
         
-        self.editPlayListNameButton.isHidden = pt == .wmRecommend
+        self.editPlayListNameButton.isHidden = viewModel.type == .wmRecommend
         
         bindRx()
         
@@ -221,7 +224,7 @@ extension PlayListDetailViewController{
 
                 let bgView = UIView()
                 bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
-                switch self.pt {
+                switch self.viewModel.type {
                     
                 case .custom:
                     
@@ -242,6 +245,8 @@ extension PlayListDetailViewController{
                     cell.update(model)
                     
                     return cell
+                case .none:
+                    return UITableViewCell()
                 }
                 
                 
@@ -252,8 +257,10 @@ extension PlayListDetailViewController{
                
         
         viewModel.output.isEditinglist
+            .skip(1)
             .do(onNext: { [weak self] isEdit in
                 guard let self = self else { return }
+                
                 
                 self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
@@ -279,7 +286,7 @@ extension PlayListDetailViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began {
+        if  !viewModel.output.isEditinglist.value && sender.state == .began  {
             viewModel.output.isEditinglist.accept(true)
             UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
         }

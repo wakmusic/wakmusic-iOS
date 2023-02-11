@@ -10,12 +10,20 @@ import Foundation
 import RxSwift
 import RxRelay
 import BaseFeature
+import DomainModule
+
+public enum PlayListType{
+    case custom
+    case wmRecommend
+}
 
 public final class PlayListDetailViewModel:ViewModelType {
    
 
     let input = Input()
     let output = Output()
+    var type:PlayListType!
+    var fetchRecommendPlayListDetailUseCase:FetchRecommendPlayListDetailUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -23,13 +31,17 @@ public final class PlayListDetailViewModel:ViewModelType {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         
+        
     }
 
     public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
-    init() {
+    public init(type:PlayListType,fetchRecommendPlayListDetailUseCase:FetchRecommendPlayListDetailUseCase) {
+        
+        self.type = type
+        self.fetchRecommendPlayListDetailUseCase = fetchRecommendPlayListDetailUseCase
         
         print("✅ PlayListDetailViewModel 생성")
         

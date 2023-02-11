@@ -10,6 +10,7 @@ import DomainModule
 import DataModule
 import NetworkModule
 import SearchFeature
+import CommonFeature
 
 //MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
@@ -21,6 +22,11 @@ public extension AppComponent {
         
         BeforeSearchComponent(parent: self)
         
+    }
+    
+    var recommendPlayListDetailComponent: RecommendPlayListDetailComponent {
+        
+        RecommendPlayListDetailComponent(parent: self)
     }
     
     var remotePlayListDataSource: any RemotePlayListDataSource {
@@ -39,4 +45,12 @@ public extension AppComponent {
           FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
+    
+    var fetchRecommendPlayListDetailUseCase: any FetchRecommendPlayListDetailUseCase {
+        
+        shared {
+          FetchRecommendPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
 }
