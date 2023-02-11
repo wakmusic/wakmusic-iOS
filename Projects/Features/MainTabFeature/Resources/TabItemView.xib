@@ -19,17 +19,17 @@
                     <rect key="frame" x="0.0" y="0.0" width="63" height="56"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kIm-bc-TTm">
-                            <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
+                            <rect key="frame" x="15.666666666666664" y="5" width="32" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="HR5-db-m3K"/>
                                 <constraint firstAttribute="height" constant="32" id="rtW-5d-1kD"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vhm-Xi-Ft1">
-                            <rect key="frame" x="15.666666666666664" y="3" width="32" height="32"/>
+                            <rect key="frame" x="15.666666666666664" y="5" width="32" height="32"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="홈" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="puE-s5-r5c">
-                            <rect key="frame" x="26.333333333333332" y="39" width="10.666666666666668" height="14"/>
+                            <rect key="frame" x="26.333333333333332" y="37" width="10.666666666666668" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="14" id="g4I-PE-ma5"/>
                             </constraints>
@@ -39,9 +39,9 @@
                         </label>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="puE-s5-r5c" firstAttribute="top" secondItem="kIm-bc-TTm" secondAttribute="bottom" constant="4" id="Jg6-VV-O3M"/>
+                        <constraint firstItem="puE-s5-r5c" firstAttribute="top" secondItem="kIm-bc-TTm" secondAttribute="bottom" id="Jg6-VV-O3M"/>
                         <constraint firstItem="vhm-Xi-Ft1" firstAttribute="top" secondItem="kIm-bc-TTm" secondAttribute="top" id="M9Z-Fy-QIo"/>
-                        <constraint firstItem="kIm-bc-TTm" firstAttribute="top" secondItem="sNP-fz-7vM" secondAttribute="top" constant="3" id="Rfx-Uh-rZp"/>
+                        <constraint firstItem="kIm-bc-TTm" firstAttribute="top" secondItem="sNP-fz-7vM" secondAttribute="top" constant="5" id="Rfx-Uh-rZp"/>
                         <constraint firstItem="kIm-bc-TTm" firstAttribute="centerX" secondItem="sNP-fz-7vM" secondAttribute="centerX" id="RoC-od-U4l"/>
                         <constraint firstItem="vhm-Xi-Ft1" firstAttribute="leading" secondItem="kIm-bc-TTm" secondAttribute="leading" id="U1m-ww-cOJ"/>
                         <constraint firstItem="puE-s5-r5c" firstAttribute="centerX" secondItem="kIm-bc-TTm" secondAttribute="centerX" id="Z2k-pq-uEW"/>

@@ -57,7 +57,7 @@ extension ArtistDetailHeaderViewController {
     func update(model: ArtistListEntity) {
         
         let artistName: String = model.name
-        let artistEngName: String = model.ID
+        let artistEngName: String = model.ID.capitalizingFirstLetter
         
         let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
