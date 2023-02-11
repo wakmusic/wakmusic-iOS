@@ -33,9 +33,8 @@ class PlayListTableViewCell: UITableViewCell {
         
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        albumImageView.layer.borderWidth = 1
+        albumImageView.layer.cornerRadius = 4
+
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)

@@ -26,9 +26,8 @@ public class SongListCell: UITableViewCell {
 
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.layer.borderColor = colorFromRGB(0xE4E7EC).cgColor
-        albumImageView.layer.borderWidth = 1
+        albumImageView.layer.cornerRadius = 4
+
     }
 }
 
