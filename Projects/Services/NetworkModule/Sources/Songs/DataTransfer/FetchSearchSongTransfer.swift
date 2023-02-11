@@ -13,7 +13,7 @@ public extension SingleSongResponseDTO {
             reaction: reaction,
             views: views,
             last: last,
-            date: date.toWMDateString()
+            date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }
 }
