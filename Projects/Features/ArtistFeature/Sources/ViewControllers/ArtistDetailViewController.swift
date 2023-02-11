@@ -26,13 +26,16 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     }()
     
     private lazy var contentViewController: ArtistMusicViewController = {
-        let content = ArtistMusicViewController.viewController()
+        let content = artistMusicComponent.makeView(model: model)
         return content
     }()
 
+    var gradientLayer = CAGradientLayer()
     var model: ArtistListEntity?
     var disposeBag: DisposeBag = DisposeBag()
     
+    var artistMusicComponent: ArtistMusicComponent!
+
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
@@ -44,9 +47,18 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         configureContent()
     }
     
-    public static func viewController(model: ArtistListEntity? = nil) -> ArtistDetailViewController {
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.gradientLayer.frame = self.gradationView.bounds
+    }
+    
+    public static func viewController(
+        model: ArtistListEntity? = nil,
+        artistMusicComponent: ArtistMusicComponent
+    ) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.model = model
+        viewController.artistMusicComponent = artistMusicComponent
         return viewController
     }
     
@@ -59,20 +71,20 @@ extension ArtistDetailViewController {
     private func configureUI() {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
 
-        //TO-DO
-//        gradationView
+        guard let model = self.model else { return }
+
+        let flatColor: String = model.color.first?.first ?? ""
         
-//        guard let model = self.model else { return }
-//
-//        let gradient = CAGradientLayer()
-//
-//        // frame을 잡아주고
-//        gradient.frame = gradationView.bounds
-//
-//        // 섞어줄 색을 colors에 넣어준 뒤
-//        gradient.colors = model.color.map { $0.first }.compactMap{ $0 }.map{ colorFromRGB($0, alpha: 0.6).cgColor }
-//        
-//        gradationView.layer.addSublayer(gradient)
+        guard !flatColor.isEmpty else { return }
+                
+        let startAlpha: CGFloat = 0.6
+        let value: CGFloat = 0.1
+        let colors = Array(0...Int(startAlpha*10)).enumerated().map { (i, _) in
+            return colorFromRGB(flatColor, alpha: startAlpha - (CGFloat(i) * value)).cgColor
+        }
+        
+        gradientLayer.colors = colors
+        gradationView.layer.addSublayer(gradientLayer)
     }
     
     private func configureHeader() {

@@ -75,13 +75,16 @@ extension ArtistDetailHeaderViewController {
         
         self.artistGroupLabel.text = model.group
         self.artistIntroLabel.text = model.title
+        self.artistIntroLabel.lineBreakMode = .byCharWrapping
         
         self.introTitleLabel.text = "소개글"
         self.introDescriptionLabel.text = model.description
         
-        artistImageView.kf.setImage(with: URL(string: "https://static.wakmusic.xyz/static/artist/square/\(model.ID).png"),
-                                    placeholder: nil,
-                                    options: [.transition(.fade(0.2))])
+        artistImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
     
     private func bind() {
@@ -131,6 +134,7 @@ extension ArtistDetailHeaderViewController {
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         
+        descriptionView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         descriptionView.layer.borderWidth = 1
         descriptionView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         descriptionView.layer.cornerRadius = 8

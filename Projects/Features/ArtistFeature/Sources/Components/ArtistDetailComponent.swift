@@ -12,10 +12,14 @@ import NeedleFoundation
 import DomainModule
 
 public protocol ArtistDetailDependency: Dependency {
+    var artistMusicComponent: ArtistMusicComponent { get }
 }
 
 public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
     public func makeView(model: ArtistListEntity) -> ArtistDetailViewController {
-        return ArtistDetailViewController.viewController(model: model)
+        return ArtistDetailViewController.viewController(
+            model: model,
+            artistMusicComponent: dependency.artistMusicComponent
+        )
     }
 }

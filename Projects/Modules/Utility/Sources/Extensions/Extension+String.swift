@@ -11,10 +11,8 @@ import UIKit
 
 public extension String {
 
-    
     ///   문자열이 스페이스바 또는 공백으로만 이뤄졌는지 체크
     /// - Returns: 완전환 공백 체크 = true 
-    
     var isWhiteSpace: Bool{
             return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0
     }
@@ -39,7 +37,4 @@ public extension String {
 
         return boundingBox.height
     }
-    
-    
-    
 }

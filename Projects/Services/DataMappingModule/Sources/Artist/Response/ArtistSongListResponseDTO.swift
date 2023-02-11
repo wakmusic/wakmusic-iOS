@@ -9,9 +9,9 @@
 import Foundation
 
 public struct ArtistSongListResponseDTO: Codable, Equatable {
-    let ID, title, artist, remix: String
-    let reaction: String
-    let date, views, last: Int
+    public let ID, title, artist, remix: String
+    public let reaction: String
+    public let date, views, last: Int
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
