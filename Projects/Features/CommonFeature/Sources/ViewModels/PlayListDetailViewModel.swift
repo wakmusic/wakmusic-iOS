@@ -73,6 +73,10 @@ public final class PlayListDetailViewModel:ViewModelType {
         
     }
     
+    deinit{
+        DEBUG_LOG("❌ PlayListDetailViewModel 소멸")
+    }
+    
     public func transform(from input: Input) -> Output {
         
         var output = Output()

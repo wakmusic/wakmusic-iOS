@@ -46,13 +46,22 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         let isEdit: Bool = viewModel.output.isEditinglist.value
         
         if isEdit {
-            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+            
+            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {[weak self] in
+                
+                guard let self =  self else {
+                    return
+                }
                 //TODO: 저장 코드
                 
                // self.navigationController?.popViewController(animated: true)
                 self.viewModel.output.isEditinglist.accept(false)
                 
-            },cancelCompletion: {
+            },cancelCompletion: { [weak self] in
+                
+                guard let self =  self else {
+                    return
+                }
                 self.viewModel.output.isEditinglist.accept(false)
             })
             self.showPanModal(content: vc)
@@ -99,6 +108,11 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         
         
         // Do any additional setup after loading the view.
+    }
+    
+    deinit {
+        DEBUG_LOG("\(Self.self) deinit")
+        
     }
     
     public static func viewController(viewModel:PlayListDetailViewModel) -> PlayListDetailViewController {
@@ -189,6 +203,7 @@ extension PlayListDetailViewController{
     
     private func bindRx()
     {
+       
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         tableView.register(UINib(nibName:"SongListCell", bundle: CommonFeatureResources.bundle), forCellReuseIdentifier: "SongListCell")
         

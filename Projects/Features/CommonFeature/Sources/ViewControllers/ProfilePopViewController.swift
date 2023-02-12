@@ -62,6 +62,11 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
         // Do any additional setup after loading the view.
     }
     
+    deinit {
+        DEBUG_LOG("\(Self.self) deinit")
+        
+    }
+    
     public static func viewController(completion: (() -> Void)? = nil) -> ProfilePopViewController {
         let viewController = ProfilePopViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         

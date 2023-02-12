@@ -154,6 +154,10 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         //bindRx()
         // Do any additional setup after loading the view.
     }
+    deinit {
+        DEBUG_LOG("\(Self.self) deinit")
+        
+    }
     
     public static func viewController(type:PurposeType,shareCode:String? = nil,completion: (() -> Void)? = nil) -> MultiPurposePopupViewController {
         let viewController = MultiPurposePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
@@ -222,7 +226,7 @@ extension MultiPurposePopupViewController{
             self.cancelButton.isHidden = true
         }
         
-        if (type == .creation || type == .edit)
+        if (type == .creation || type == .edit || type == .nickname)
         {
             self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
             self.confirmLabel.isHidden = true
@@ -278,6 +282,7 @@ extension MultiPurposePopupViewController{
     {
         
         limitCount = type == .nickname ? 8 : 12
+        limitLabel.text = "/\(limitCount)"
         
         textField.rx.text.orEmpty
             .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
@@ -310,6 +315,7 @@ extension MultiPurposePopupViewController{
             {
                 self.cancelButton.isHidden = false
                 self.confirmLabel.isHidden = false
+                self.countLabel.isHidden = false
             }
             
             if  str.isWhiteSpace

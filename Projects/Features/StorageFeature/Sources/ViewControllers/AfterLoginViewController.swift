@@ -34,12 +34,7 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     
     
    
-        
 
-    
-    
-    
-    
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
         
@@ -200,9 +195,15 @@ extension AfterLoginViewController{
                 
                 
         
-            profileButton.rx.tap.subscribe(onNext: {
+            profileButton.rx.tap.subscribe(onNext: { [weak self] in
+                
+                guard let self = self else{
+                    return
+                }
+                
                 //       // let vc = ProfilePopViewController.viewController()
-            let vc = MultiPurposePopupViewController.viewController(type: .nickname)
+                let vc = ProfilePopViewController.viewController()
+                //MultiPurposePopupViewController.viewController(type: .nickname)
     
             self.showPanModal(content: vc)
                 
