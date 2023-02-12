@@ -97,7 +97,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
-    let limitCount:Int = 12
+    var limitCount:Int = 12
     var completion: (() -> Void)?
     var shareCode:String?
     
@@ -276,6 +276,9 @@ extension MultiPurposePopupViewController{
     
     private func bindRxCreationOrEditOrNickName()
     {
+        
+        limitCount = type == .nickname ? 8 : 12
+        
         textField.rx.text.orEmpty
             .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .bind(to: self.viewModel.input.textString)
