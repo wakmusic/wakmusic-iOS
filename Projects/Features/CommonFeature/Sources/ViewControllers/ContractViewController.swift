@@ -57,6 +57,10 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
 
         // Do any additional setup after loading the view.
     }
+    deinit {
+        DEBUG_LOG("\(Self.self) deinit")
+        
+    }
     
 
     public static func viewController(type:ContractType) -> ContractViewController {
@@ -94,8 +98,8 @@ extension ContractViewController{
         
 
     
-        DispatchQueue.global(qos: .default).async { // PDFDocument 코드를 default 에서 처리
-
+        DispatchQueue.global(qos: .default).async {
+            
             if let url = URL(string: self.type.url), let document = PDFDocument(url: url) {
                 
                 DispatchQueue.main.async {
@@ -114,14 +118,24 @@ extension ContractViewController{
     
     private func bindRx(){
         
-        closeButton.rx.tap.subscribe(onNext: {
+        closeButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self =  self else {
+                return
+            }
+            
             self.dismiss(animated: true)
             
             
             
         }).disposed(by: disposeBag)
-        
-        confirmButton.rx.tap.subscribe(onNext: {
+         
+        confirmButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self =  self else {
+                return
+            }
+            
             
             self.dismiss(animated: true )
             
