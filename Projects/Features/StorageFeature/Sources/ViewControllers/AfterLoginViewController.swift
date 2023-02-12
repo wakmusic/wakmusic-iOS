@@ -95,7 +95,7 @@ extension AfterLoginViewController{
         
         profileImageView.image = DesignSystemAsset.Profile.profile0.image
         
-        profileLabel.text = "닉네임12345777"
+        profileLabel.text = "닉네임12345777".correctionNickName
         profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
         logoutButton.setImage(DesignSystemAsset.Storage.logout.image, for: .normal)

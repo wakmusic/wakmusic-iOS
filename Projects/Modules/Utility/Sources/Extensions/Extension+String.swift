@@ -43,4 +43,10 @@ public extension String {
         // 첫 글자는 대문자로 + 대문자로 변환한 첫 글자는 잘라낸 후 더한다.
         return prefix(1).uppercased() + self.lowercased().dropFirst()
     }
+    
+    
+    var correctionNickName: String {
+        let limit: Int = 8
+        return self.count > limit ? String(self.prefix(limit)) + "..." : self
+    }
 }
