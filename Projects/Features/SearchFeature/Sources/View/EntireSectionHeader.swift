@@ -15,7 +15,7 @@ import DesignSystem
 
 
 protocol EntireSectionHeaderDelegate:AnyObject {
-    func switchTapEvent(_ type:SearchType)
+    func switchTapEvent(_ type:SectionType)
 }
 
 class EntireSectionHeader: UIView {
@@ -24,7 +24,7 @@ class EntireSectionHeader: UIView {
     @IBOutlet weak var moveTabButton: UIButton!
     @IBOutlet weak var numberOfSongLabel: UILabel!
     var delegate:EntireSectionHeaderDelegate?
-    var type:SearchType = .all
+    var type:SectionType = .all
     @IBAction func switchTabAction(_ sender: Any) {
         self.delegate?.switchTapEvent(type)
     }
@@ -80,7 +80,7 @@ extension EntireSectionHeader {
 
     }
     
-    public func update(_ type:SearchType,_ count:Int)
+    public func update(_ type:SectionType,_ count:Int)
     {
         self.categoryLabel.text = type == .song ? "노래" : type == .artist ? "가수" : "조교"
         self.numberOfSongLabel.text = String(count)

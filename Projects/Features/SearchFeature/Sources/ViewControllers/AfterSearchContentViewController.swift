@@ -16,21 +16,16 @@ import BaseFeature
 import CommonFeature
 
 
-typealias SearchSectionModel = SectionModel<SearchType,SongInfoDTO>
-
-
-enum SearchType:Int{
-    case all = 0
-    case song
-    case artist
-    case assistant
-}
+typealias SearchSectionModel = SectionModel<SectionType,SongInfoDTO>
 
 
 
 
 
-class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+
+
+
+public final class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -38,15 +33,16 @@ class AfterSearchContentViewController: BaseViewController, ViewControllerFromSt
     //갯수
     //배열 
     
-    var searchType:SearchType = .all
+    var viewModel:AfterSearchContentViewModel!
+    
     
     //var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[])
-    var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[SearchSectionModel.init(model: .song, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .artist, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .assistant, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
+    var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[SearchSectionModel.init(model: .song, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .artist, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .remix, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
     
    
     var disposeBag = DisposeBag()
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
     
@@ -58,9 +54,11 @@ class AfterSearchContentViewController: BaseViewController, ViewControllerFromSt
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(_ type:SearchType) -> AfterSearchContentViewController{
+    public static func viewController(viewModel:AfterSearchContentViewModel) -> AfterSearchContentViewController{
         let viewController = AfterSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
-        viewController.searchType = type
+        
+        viewController.viewModel = viewModel
+       
         
         DEBUG_LOG("After After")
         
@@ -118,11 +116,11 @@ extension AfterSearchContentViewController:UITableViewDelegate{
     
     
         
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
         let songlistHeader = EntireSectionHeader()
@@ -131,7 +129,7 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         
         
         
-        if searchType != .all
+        if viewModel.searchType != .all
         {
             return nil
         }
@@ -140,10 +138,10 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         return songlistHeader
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return  searchType == .all ? 44 : 0
+        return  viewModel.searchType == .all ? 44 : 0
         
         
     }
@@ -180,7 +178,7 @@ extension AfterSearchContentViewController{
 }
 
 extension AfterSearchContentViewController:EntireSectionHeaderDelegate{
-    func switchTapEvent(_ type: SearchType) {
+    func switchTapEvent(_ type: SectionType) {
         
         guard let tabMan = parent?.parent as? AfterSearchViewController else {
             return

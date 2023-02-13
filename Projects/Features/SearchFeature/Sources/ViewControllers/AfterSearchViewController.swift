@@ -14,31 +14,42 @@ import Tabman
 
 
 
-class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
 
     @IBOutlet weak var tabBarView: UIView!
     
     @IBOutlet weak var fakeView: UIView!
-    private var viewControllers: [UIViewController] = [AfterSearchContentViewController.viewController(.all),
-                                                       AfterSearchContentViewController.viewController(.song),
-                                                       AfterSearchContentViewController.viewController(.artist),
-                                                       AfterSearchContentViewController.viewController(.assistant)]
     
     
-    override func viewDidLoad() {
+    
+    
+
+    
+    var viewModel:AfterSearchViewModel!
+    var afterSearchContentComponent:AfterSearchContentComponent!
+    
+    private var viewControllers: [UIViewController]!
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.scrollToPage(.at(index: 0), animated: false)
     }
     
 
-    public static func viewController() -> AfterSearchViewController {
+    public static func viewController(afterSearchContentComponent:AfterSearchContentComponent,viewModel:AfterSearchViewModel) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        viewController.afterSearchContentComponent = afterSearchContentComponent
+        
+        viewController.viewControllers = [afterSearchContentComponent.makeView(type: .all), afterSearchContentComponent.makeView(type: .song), afterSearchContentComponent.makeView(type: .artist), afterSearchContentComponent.makeView(type: .remix)]
+        
         return viewController
     }
 
@@ -85,19 +96,19 @@ extension AfterSearchViewController {
 
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
-    func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
+    public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         viewControllers.count
     }
     
-    func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
         nil
     }
     
-    func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+    public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         switch index {
         case 0:
             return TMBarItem(title: "전체")
