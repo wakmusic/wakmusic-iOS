@@ -31,7 +31,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     let disposeBag = DisposeBag()
     
     
-    private var viewControllers: [UIViewController] = []
+    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
     private lazy var input = AfterSearchViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
     
