@@ -72,8 +72,8 @@ extension AfterSearchContentViewController{
     private func configureUI()
     {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        //self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56)) // 미니 플레이어 만큼 밑에서 뛰움
-        //self.view.backgroundColor = .
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        
     }
     
     private func bindRx()
@@ -87,9 +87,13 @@ extension AfterSearchContentViewController{
         output.dataSource
             .do(onNext: { [weak self] model in
                 
+        
+                
                 guard let self = self else {
                     return
                 }
+                
+                self.tableView.isHidden = false // 검색 완료 시 보여줌
                 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/2))
                 warningView.text = "검색결과가 없습니다."

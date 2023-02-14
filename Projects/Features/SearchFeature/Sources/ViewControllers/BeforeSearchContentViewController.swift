@@ -75,6 +75,7 @@ extension BeforeSearchContentViewController {
     
     
     private func configureUI() {
+      
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
     

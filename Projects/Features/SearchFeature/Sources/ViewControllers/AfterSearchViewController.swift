@@ -129,6 +129,26 @@ extension AfterSearchViewController {
         .disposed(by: disposeBag)
         
         
+        output.isFetchStart
+            .subscribe(onNext: { [weak self] _ in
+            
+            guard let self = self else{
+                return
+            }
+                
+            guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
+                return
+            }
+           
+                child.tableView.isHidden = true // 검색 시작 시 테이블 뷰 숨김
+            
+            
+
+        })
+        .disposed(by: disposeBag)
+        
+        
+        
     }
 }
 

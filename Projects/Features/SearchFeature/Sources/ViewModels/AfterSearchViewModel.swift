@@ -15,6 +15,7 @@ import Utility
 
 
 
+
 public final class AfterSearchViewModel:ViewModelType {
    
     
@@ -46,14 +47,25 @@ public final class AfterSearchViewModel:ViewModelType {
         
         let result:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
         
+        // 검색 후 재 검색 시 남아 있는 데이터 처리를 위한 변수
+        let isFetchStart:PublishSubject<Void> = PublishSubject()
+
+        
+        
     }
     
     public func transform(from input: Input) -> Output {
-        //hello
+        
         let output = Output()
 
         input.text
             .filter({!$0.isEmpty}) //빈 것에 대한 예외 처리
+            .do(onNext: { _ in
+                
+                // 네트워크 시작점을 포착하기 위한 구간 
+                
+                output.isFetchStart.onNext(())
+            })
             .flatMap { [weak self] (str:String) -> Observable<(([SongEntity], [SongEntity]), [SongEntity])> in
                 
                 guard let self = self else{
