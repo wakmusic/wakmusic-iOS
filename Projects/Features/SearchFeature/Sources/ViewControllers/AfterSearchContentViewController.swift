@@ -124,7 +124,7 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         
         
         
-        if viewModel.sectionType != .all
+        if viewModel.sectionType != .all || self.output.dataSource.value[section].items.count == 0
         {
             return nil
         }
@@ -136,7 +136,7 @@ extension AfterSearchContentViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return  viewModel.sectionType == .all ? 44 : 0
+        return  self.output.dataSource.value[section].items.count != 0 ? 44 : 0
         
         
     }
