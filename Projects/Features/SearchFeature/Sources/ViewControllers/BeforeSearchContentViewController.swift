@@ -33,7 +33,7 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     
     
     let disposeBag = DisposeBag()
-    var delegate:BeforeSearchContentViewDelegate?
+    weak var delegate:BeforeSearchContentViewDelegate?
     
     var recommendPlayListDetailComponent: PlayListDetailComponent!
   
@@ -75,6 +75,7 @@ extension BeforeSearchContentViewController {
     
     
     private func configureUI() {
+      
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
     
@@ -225,7 +226,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         }
         else
         {
-            return 76
+            return 68
         }
         
         

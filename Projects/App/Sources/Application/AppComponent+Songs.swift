@@ -19,20 +19,30 @@ public extension AppComponent {
         
     }
     
-//    var remoteSearchDataSource: any RemoteSearchDataSource {
-//        shared {
-//            RemoteSearchDataSourceImpl(keychain: keychain)
-//        }
-//    }
-//    var searchRepository: any SearchRepository {
-//        shared {
-//            SearchRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
-//        }
-//    }
-//    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
-//
-//        shared {
-//           FetchSearchSongUseCaseImpl(searchRepository: searchRepository)
-//        }
-//    }
+    var afterSearchComponent: AfterSearchComponent {
+        
+        AfterSearchComponent(parent: self)
+    }
+    
+    var afterSearchContentComponent: AfterSearchContentComponent {
+        
+        AfterSearchContentComponent(parent: self)
+    }
+    
+    var remoteSearchDataSource: any RemoteSearchDataSource {
+        shared {
+            RemoteSearchDataSourceImpl(keychain: keychain)
+        }
+    }
+    var searchRepository: any SearchRepository {
+        shared {
+            SearchRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
+        }
+    }
+    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
+
+        shared {
+           FetchSearchSongUseCaseImpl(searchRepository: searchRepository)
+        }
+    }
 }

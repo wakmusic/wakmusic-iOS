@@ -10,6 +10,7 @@ import UIKit
 import Utility
 import DesignSystem
 import DomainModule
+import Kingfisher
 
 public class SongListCell: UITableViewCell {
 
@@ -45,7 +46,7 @@ public extension SongListCell {
     
     func update(_ song:SongEntity) {
         
-        albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
+        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: song.id).toURL)
         
         
         self.titleLabel.text = song.title

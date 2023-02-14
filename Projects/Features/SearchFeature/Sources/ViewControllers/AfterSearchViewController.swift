@@ -11,34 +11,50 @@ import Utility
 import DesignSystem
 import Pageboy
 import Tabman
+import RxSwift
 
 
 
-class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
 
     @IBOutlet weak var tabBarView: UIView!
     
     @IBOutlet weak var fakeView: UIView!
-    private var viewControllers: [UIViewController] = [AfterSearchContentViewController.viewController(.all),
-                                                       AfterSearchContentViewController.viewController(.song),
-                                                       AfterSearchContentViewController.viewController(.artist),
-                                                       AfterSearchContentViewController.viewController(.assistant)]
     
     
-    override func viewDidLoad() {
+
+    var viewModel:AfterSearchViewModel!
+    var afterSearchContentComponent:AfterSearchContentComponent!
+    let disposeBag = DisposeBag()
+    
+    
+    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
+    lazy var input = AfterSearchViewModel.Input()
+     lazy var output = viewModel.transform(from: input)
+    
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.scrollToPage(.at(index: 0), animated: false)
     }
     
 
-    public static func viewController() -> AfterSearchViewController {
+    public static func viewController(afterSearchContentComponent:AfterSearchContentComponent,viewModel:AfterSearchViewModel) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        viewController.afterSearchContentComponent = afterSearchContentComponent
+        
+     
+        
+        
+        
         return viewController
     }
 
@@ -78,6 +94,59 @@ extension AfterSearchViewController {
 
 
     
+        bindRx()
+        
+        
+    }
+    
+    private func bindRx(){
+        
+        output.result
+            .skip(1)
+            .subscribe(onNext: { [weak self] result in
+            
+            guard let self = self else{
+                return
+            }
+            
+
+            
+            guard let comp = self.afterSearchContentComponent else {
+                return
+            }
+            
+            self.viewControllers = [
+                comp.makeView(type: .all, dataSource: result[0]),
+                comp.makeView(type: .song, dataSource: result[1]),
+                comp.makeView(type: .artist, dataSource: result[2]),
+                comp.makeView(type: .remix, dataSource: result[3])
+            ]
+                
+            self.reloadData()
+            
+            
+        })
+        .disposed(by: disposeBag)
+        
+        
+        output.isFetchStart
+            .subscribe(onNext: { [weak self] _ in
+            
+            guard let self = self else{
+                return
+            }
+                
+            guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
+                return
+            }
+           
+                child.tableView.isHidden = true // 검색 시작 시 테이블 뷰 숨김
+            
+            
+
+        })
+        .disposed(by: disposeBag)
+        
         
         
     }
@@ -85,19 +154,19 @@ extension AfterSearchViewController {
 
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
-    func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
+    public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         viewControllers.count
     }
     
-    func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
         nil
     }
     
-    func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+    public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         switch index {
         case 0:
             return TMBarItem(title: "전체")

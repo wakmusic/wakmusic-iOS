@@ -26,10 +26,11 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     
     var viewModel:SearchViewModel!
     let disposeBag = DisposeBag()
-    var beforesearchComponent: BeforeSearchComponent!
+    var beforeSearchComponent: BeforeSearchComponent!
+    var afterSearchComponent: AfterSearchComponent!
     
-    lazy var beforeVc =  beforesearchComponent.makeView()
-    lazy var afterVc = AfterSearchViewController.viewController()
+    lazy var beforeVc =  beforeSearchComponent.makeView()
+    lazy var afterVc =   afterSearchComponent.makeView()
     
     
     public override func viewDidLoad() {
@@ -76,13 +77,15 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
 
     public static func viewController(
         viewModel:SearchViewModel,
-        beforeSearchComponent:BeforeSearchComponent
+        beforeSearchComponent:BeforeSearchComponent,
+        afterSearchComponent: AfterSearchComponent
     ) -> SearchViewController {
         
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
-        viewController.beforesearchComponent = beforeSearchComponent
+        viewController.beforeSearchComponent = beforeSearchComponent
+        viewController.afterSearchComponent = afterSearchComponent
         
         return viewController
     }
@@ -166,13 +169,14 @@ extension SearchViewController {
             {
                 self.remove(asChildViewController: beforeVc)
                 self.add(asChildViewController: afterVc)
+                afterVc.input.text.accept(viewModel.input.textString.value)
             }
             
             
         }else if let nowChildVc = children.first as? AfterSearchViewController{
             print("현재 :\(nowChildVc) 서치완료:  \(afterSearch)")
             
-            if(afterSearch == true)
+            if afterSearch == true
             {
                 return
             }
