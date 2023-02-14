@@ -10,7 +10,7 @@ import Foundation
 import RxDataSources
 import DomainModule
 
-public typealias SearchSectionModel = SectionModel<TabPosition,SongEntity>
+public typealias SearchSectionModel = SectionModel<(TabPosition,Int),SongEntity>
 
 public enum TabPosition:Int{
     case all = 0

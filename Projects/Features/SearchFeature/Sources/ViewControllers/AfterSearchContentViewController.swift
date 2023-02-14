@@ -95,7 +95,10 @@ extension AfterSearchContentViewController{
                 warningView.text = "검색결과가 없습니다."
                 
                 
-                self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+                let isEmpty = model.first?.items.isEmpty ?? false
+                
+                
+                self.tableView.tableHeaderView = isEmpty ?  warningView : nil
             })
             .bind(to: tableView.rx.items(dataSource: createDatasource()))
         .disposed(by: disposeBag)
@@ -124,11 +127,17 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         
         
         
-        if viewModel.sectionType != .all || self.output.dataSource.value[section].items.count == 0
+        if viewModel.sectionType != .all
         {
             return nil
         }
-        songlistHeader.update(self.output.dataSource.value[section].model, self.output.dataSource.value[section].items.count)
+        
+        if self.output.dataSource.value[section].items.count == 0
+        {
+            return nil
+        }
+        
+        songlistHeader.update(self.output.dataSource.value[section].model)
         songlistHeader.delegate = self
         return songlistHeader
     }
@@ -136,7 +145,17 @@ extension AfterSearchContentViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return  self.output.dataSource.value[section].items.count != 0 ? 44 : 0
+        if viewModel.sectionType != .all
+        {
+            return 0
+        }
+        
+        if self.output.dataSource.value[section].items.count == 0
+        {
+            return 0
+        }
+        
+        return 44
         
         
     }

@@ -22,18 +22,16 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var fakeView: UIView!
     
     
-    
-    
 
-    
     var viewModel:AfterSearchViewModel!
     var afterSearchContentComponent:AfterSearchContentComponent!
     let disposeBag = DisposeBag()
     
     
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
-    private lazy var input = AfterSearchViewModel.Input()
-    private lazy var output = viewModel.transform(from: input)
+    lazy var input = AfterSearchViewModel.Input()
+     lazy var output = viewModel.transform(from: input)
+    
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,9 +115,13 @@ extension AfterSearchViewController {
                 return
             }
             
-            self.viewControllers = [comp.makeView(type: .all, dataSource: result),comp.makeView(type: .song, dataSource: result),
-                                    comp.makeView(type: .artist, dataSource: result),comp.makeView(type: .remix, dataSource: result)
+            self.viewControllers = [
+                comp.makeView(type: .all, dataSource: result[0]),
+                comp.makeView(type: .song, dataSource: result[1]),
+                comp.makeView(type: .artist, dataSource: result[2]),
+                comp.makeView(type: .remix, dataSource: result[3])
             ]
+                
             self.reloadData()
             
             

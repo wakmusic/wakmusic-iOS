@@ -34,7 +34,9 @@ class RecentRecordTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         recentRemoveButton.setImage(DesignSystemAsset.Search.keywordRemove.image, for: .normal)
-
+        
+        recentLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        recentLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         // Initialization code
     }
     

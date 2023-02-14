@@ -225,7 +225,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
         }
         else
         {
-            return 76
+            return 68
         }
         
         

@@ -80,11 +80,11 @@ extension EntireSectionHeader {
 
     }
     
-    public func update(_ type:TabPosition,_ count:Int)
+    public func update(_ type:(TabPosition,Int))
     {
-        self.categoryLabel.text = type == .song ? "노래" : type == .artist ? "가수" : "조교"
-        self.numberOfSongLabel.text = String(count)
-        self.type = type
+        self.categoryLabel.text = type.0 == .song ? "노래" : type.0 == .artist ? "가수" : "조교"
+        self.numberOfSongLabel.text = String(type.1)
+        self.type = type.0
     }
 }
 

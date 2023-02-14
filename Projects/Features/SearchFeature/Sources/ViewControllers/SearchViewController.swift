@@ -169,6 +169,7 @@ extension SearchViewController {
             {
                 self.remove(asChildViewController: beforeVc)
                 self.add(asChildViewController: afterVc)
+                afterVc.input.text.accept(viewModel.input.textString.value)
             }
             
             
