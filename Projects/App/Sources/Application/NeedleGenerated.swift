@@ -165,6 +165,9 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var afterSearchContentComponent: AfterSearchContentComponent {
         return appComponent.afterSearchContentComponent
     }
+    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
+        return appComponent.fetchSearchSongUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -175,17 +178,15 @@ private func factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5(_ component: Needle
     return AfterSearchDependency61822c19bc2eb46d7c52Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchComponentDependency028b0697c8624344f660Provider: AfterSearchComponentDependency {
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
-        return appComponent.fetchSearchSongUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
+
+
+    init() {
+
     }
 }
 /// ^->AppComponent->AfterSearchContentComponent
-private func factorycaaccdf52467bfa87f73f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AfterSearchComponentDependency028b0697c8624344f660Provider(appComponent: parent1(component) as! AppComponent)
+private func factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AfterSearchComponentDependency028b0697c8624344f660Provider()
 }
 private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
     var beforeSearchComponent: BeforeSearchComponent {
@@ -316,11 +317,12 @@ extension RootComponent: Registration {
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
+        keyPathToName[\AfterSearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
     }
 }
 extension AfterSearchContentComponent: Registration {
     public func registerItems() {
-        keyPathToName[\AfterSearchComponentDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
+
     }
 }
 extension SearchComponent: Registration {
@@ -367,7 +369,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)

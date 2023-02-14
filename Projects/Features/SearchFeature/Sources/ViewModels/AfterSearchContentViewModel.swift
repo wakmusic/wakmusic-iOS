@@ -12,38 +12,33 @@ import RxRelay
 import BaseFeature
 import DomainModule
 import Utility
+import RxDataSources
 
-public enum SectionType:Int{
-    case all = 0
-    case song
-    case artist
-    case remix
-}
+
 
 public  final class AfterSearchContentViewModel:ViewModelType {
    
     
 
-    let input = Input()
-    let output = Output()
+
     
     var disposeBag = DisposeBag()
-    var searchType:SectionType!
-    var fetchSearchSongUseCase:FetchSearchSongUseCase!
+    var sectionType:TabPosition!
+    var dataSource:[SearchSectionModel]
+
     
     
-    public init(type:SectionType,fetchSearchSongUseCase:FetchSearchSongUseCase){
+    public init(type:TabPosition,dataSource:[SearchSectionModel]){
         
         // AfterSearchContent 를 없애고 AfterSearch 쪽으로 들어감 
         print("✅ AfterSearchContentViewModel 생성")
         
-        self.searchType = type
-        self.fetchSearchSongUseCase = fetchSearchSongUseCase
+        self.sectionType = type
+        self.dataSource = dataSource
+      
         
         
-        fetchSearchSongUseCase.execute(type: .title, keyword: "리와인드")
-            .subscribe(onSuccess: {DEBUG_LOG($0)})
-            .disposed(by: disposeBag)
+        
     }
 
     public struct Input {
@@ -52,12 +47,19 @@ public  final class AfterSearchContentViewModel:ViewModelType {
     }
 
     public struct Output {
-        let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let dataSource:BehaviorRelay<[SearchSectionModel]> =  BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
     public func transform(from input: Input) -> Output {
-        //hello
+        
         let output = Output()
+        output.dataSource.accept(dataSource)
+        
+    
+        
+        
+        
+        
         
         
         return output

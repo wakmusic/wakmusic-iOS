@@ -19,17 +19,22 @@ public final class AfterSearchViewModel:ViewModelType {
    
     
 
-    let input = Input()
-    let output = Output()
-    
-    var disposeBag = DisposeBag()
 
     
-    public init(){
+    var disposeBag = DisposeBag()
+    var fetchSearchSongUseCase:FetchSearchSongUseCase!
+    
+    public init(fetchSearchSongUseCase:FetchSearchSongUseCase){
         
         print("✅ AfterSearchViewModel 생성")
+        self.fetchSearchSongUseCase = fetchSearchSongUseCase
         
-    
+        
+
+        
+        
+        
+        
     }
 
     public struct Input {
@@ -39,11 +44,33 @@ public final class AfterSearchViewModel:ViewModelType {
 
     public struct Output {
         
+        let result:BehaviorRelay<[SearchSectionModel]> = BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
     public func transform(from input: Input) -> Output {
         //hello
         let output = Output()
+        
+        
+        let zip = Observable.zip(fetchSearchSongUseCase.execute(type: .title, keyword: "리와인드").asObservable(), fetchSearchSongUseCase.execute(type: .artist, keyword: "리와인드").asObservable())
+        let remix = fetchSearchSongUseCase.execute(type: .remix, keyword: "리와인드").asObservable()
+        
+        
+        let reuslt = Observable.zip(zip, remix)
+        
+        reuslt.map{ [weak self] (res,r3) in
+            
+            let (r1, r2) = res
+        
+            let tmp : [SearchSectionModel] = [SearchSectionModel(model: .song, items: r1)] + [SearchSectionModel(model: .artist, items: r2)] + [SearchSectionModel(model: .remix, items: r3)]
+            
+            
+            return tmp
+        }.bind(to: output.result)
+            .disposed(by: disposeBag)
+    
+        
+        
         
         
         return output

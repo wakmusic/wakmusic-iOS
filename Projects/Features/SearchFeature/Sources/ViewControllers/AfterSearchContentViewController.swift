@@ -14,15 +14,11 @@ import RxDataSources
 import DesignSystem
 import BaseFeature
 import CommonFeature
+import DomainModule
 
-
-typealias SearchSectionModel = SectionModel<SectionType,SongInfoDTO>
-
-
-
-
-
-
+/*
+var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[SearchSectionModel.init(model: .song, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .artist, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .assistant, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
+*/
 
 
 public final class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
@@ -34,10 +30,9 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     //배열 
     
     var viewModel:AfterSearchContentViewModel!
+    lazy var input = AfterSearchContentViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     
-    
-    //var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[])
-    var dataSource: BehaviorRelay<[SearchSectionModel]> = BehaviorRelay(value:[SearchSectionModel.init(model: .song, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .artist, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")]),SearchSectionModel.init(model: .remix, items: [SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])])
     
    
     var disposeBag = DisposeBag()
@@ -89,7 +84,7 @@ extension AfterSearchContentViewController{
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         tableView.register(UINib(nibName:"SongListCell", bundle: CommonFeatureResources.bundle), forCellReuseIdentifier: "SongListCell")
         
-        dataSource
+        output.dataSource
             .do(onNext: { [weak self] model in
                 
                 guard let self = self else {
@@ -129,11 +124,11 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         
         
         
-        if viewModel.searchType != .all
+        if viewModel.sectionType != .all
         {
             return nil
         }
-        songlistHeader.update(self.dataSource.value[section].model, self.dataSource.value[section].items.count)
+        songlistHeader.update(self.output.dataSource.value[section].model, self.output.dataSource.value[section].items.count)
         songlistHeader.delegate = self
         return songlistHeader
     }
@@ -141,7 +136,7 @@ extension AfterSearchContentViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return  viewModel.searchType == .all ? 44 : 0
+        return  viewModel.sectionType == .all ? 44 : 0
         
         
     }
@@ -162,9 +157,9 @@ extension AfterSearchContentViewController{
             let bgView = UIView()
             bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
             
-           // cell.update(model)
+            cell.update(model)
             cell.selectedBackgroundView = bgView
-            //cell.selectedBa = DesignSystemAsset.GrayColor.gray200.color
+
             
             return cell
 
@@ -178,7 +173,7 @@ extension AfterSearchContentViewController{
 }
 
 extension AfterSearchContentViewController:EntireSectionHeaderDelegate{
-    func switchTapEvent(_ type: SectionType) {
+    func switchTapEvent(_ type: TabPosition) {
         
         guard let tabMan = parent?.parent as? AfterSearchViewController else {
             return

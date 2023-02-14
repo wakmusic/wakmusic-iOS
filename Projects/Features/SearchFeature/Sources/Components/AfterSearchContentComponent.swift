@@ -12,12 +12,12 @@ import DomainModule
 import CommonFeature
 
 public protocol AfterSearchComponentDependency: Dependency {
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
+    
 }
 
 public final class AfterSearchContentComponent: Component<AfterSearchComponentDependency> {
-    public func makeView(type:SectionType) -> AfterSearchContentViewController {
-        return AfterSearchContentViewController.viewController(viewModel:.init(type: type, fetchSearchSongUseCase: dependency.fetchSearchSongUseCase))
+    public func makeView(type:TabPosition,dataSource:[SearchSectionModel]) -> AfterSearchContentViewController {
+        return AfterSearchContentViewController.viewController(viewModel:.init(type: type,dataSource: dataSource))
         
     }
 }

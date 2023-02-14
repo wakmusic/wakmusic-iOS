@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import Pageboy
 import Tabman
+import RxSwift
 
 
 
@@ -27,8 +28,12 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     
     var viewModel:AfterSearchViewModel!
     var afterSearchContentComponent:AfterSearchContentComponent!
+    let disposeBag = DisposeBag()
     
-    private var viewControllers: [UIViewController]!
+    
+    private var viewControllers: [UIViewController] = []
+    private lazy var input = AfterSearchViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +53,9 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         viewController.viewModel = viewModel
         viewController.afterSearchContentComponent = afterSearchContentComponent
         
-        viewController.viewControllers = [afterSearchContentComponent.makeView(type: .all), afterSearchContentComponent.makeView(type: .song), afterSearchContentComponent.makeView(type: .artist), afterSearchContentComponent.makeView(type: .remix)]
+     
+        
+        
         
         return viewController
     }
@@ -89,6 +96,35 @@ extension AfterSearchViewController {
 
 
     
+        bindRx()
+        
+        
+    }
+    
+    private func bindRx(){
+        
+        output.result
+            .skip(1)
+            .subscribe(onNext: { [weak self] result in
+            
+            guard let self = self else{
+                return
+            }
+            
+
+            
+            guard let comp = self.afterSearchContentComponent else {
+                return
+            }
+            
+            self.viewControllers = [comp.makeView(type: .all, dataSource: result),comp.makeView(type: .song, dataSource: result),
+                                    comp.makeView(type: .artist, dataSource: result),comp.makeView(type: .remix, dataSource: result)
+            ]
+            self.reloadData()
+            
+            
+        })
+        .disposed(by: disposeBag)
         
         
     }
