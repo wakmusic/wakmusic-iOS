@@ -11,7 +11,7 @@ import DesignSystem
 import CommonFeature
 
 
-protocol MyPlayListHeaderViewDelegate{
+public protocol MyPlayListHeaderViewDelegate : AnyObject {
     
     func action(_ type:PurposeType )
     
@@ -34,7 +34,7 @@ class MyPlayListHeaderView: UIView {
     
     
     
-    var delegate:MyPlayListHeaderViewDelegate?
+    weak var delegate:MyPlayListHeaderViewDelegate?
     
     
     

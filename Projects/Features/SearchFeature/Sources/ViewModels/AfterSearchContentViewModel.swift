@@ -34,6 +34,7 @@ public  final class AfterSearchContentViewModel:ViewModelType {
     
     public init(type:SectionType,fetchSearchSongUseCase:FetchSearchSongUseCase){
         
+        // AfterSearchContent 를 없애고 AfterSearch 쪽으로 들어감 
         print("✅ AfterSearchContentViewModel 생성")
         
         self.searchType = type

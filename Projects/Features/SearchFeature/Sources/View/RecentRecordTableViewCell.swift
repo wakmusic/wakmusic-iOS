@@ -28,7 +28,7 @@ class RecentRecordTableViewCell: UITableViewCell {
     @IBOutlet weak var recentLabel: UILabel!
     @IBOutlet weak var recentRemoveButton: UIButton!
     
-    //var delegate:RecentRecordDelegate?
+    //weak var delegate:RecentRecordDelegate?
     
     override func awakeFromNib() { //View의 DidLoad쪽과 같은 역할
         super.awakeFromNib()

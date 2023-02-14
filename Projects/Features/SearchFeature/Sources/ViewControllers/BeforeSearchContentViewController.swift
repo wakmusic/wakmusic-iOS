@@ -33,7 +33,7 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     
     
     let disposeBag = DisposeBag()
-    var delegate:BeforeSearchContentViewDelegate?
+    weak var delegate:BeforeSearchContentViewDelegate?
     
     var recommendPlayListDetailComponent: PlayListDetailComponent!
   

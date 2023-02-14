@@ -23,7 +23,7 @@ class EntireSectionHeader: UIView {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var moveTabButton: UIButton!
     @IBOutlet weak var numberOfSongLabel: UILabel!
-    var delegate:EntireSectionHeaderDelegate?
+    weak var delegate:EntireSectionHeaderDelegate?
     var type:SectionType = .all
     @IBAction func switchTabAction(_ sender: Any) {
         self.delegate?.switchTapEvent(type)

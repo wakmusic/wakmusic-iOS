@@ -24,7 +24,7 @@ public class PlayButtonGroupView: UIView {
     @IBOutlet weak var allPlayButton: UIButton!
     @IBOutlet weak var shufflePlayButton: UIButton!
     
-    public var delegate:PlayButtonGroupViewDelegate?
+    public weak var delegate:PlayButtonGroupViewDelegate?
     
     
     @IBAction func pressAllPlay(_ sender: UIButton) {
