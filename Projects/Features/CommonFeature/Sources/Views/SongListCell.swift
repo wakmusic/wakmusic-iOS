@@ -46,7 +46,7 @@ public extension SongListCell {
     
     func update(_ song:SongEntity) {
         
-        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: song.id).toURL)
+        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: song.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
         
         
         self.titleLabel.text = song.title
