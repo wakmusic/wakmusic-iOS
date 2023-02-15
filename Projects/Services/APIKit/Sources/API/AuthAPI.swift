@@ -4,7 +4,7 @@ import ErrorModule
 import Foundation
 
 public enum AuthAPI {
-    case postLoginInfo(id:String,type:ProviderType)
+    case fetchToken(id:String,type:ProviderType)
     
 }
 
@@ -22,7 +22,7 @@ extension AuthAPI: WMAPI {
         
         switch self{
             
-        case .postLoginInfo:
+        case .fetchToken:
             return "/login/mobile"
         }
         
@@ -33,7 +33,7 @@ extension AuthAPI: WMAPI {
         
         switch self {
             
-        case .postLoginInfo:
+        case .fetchToken:
             return .post
         }
         
@@ -44,7 +44,7 @@ extension AuthAPI: WMAPI {
         
         switch self {
             
-        case .postLoginInfo(id: let id, type: let type):
+        case .fetchToken(id: let id, type: let type):
             return .requestJSONEncodable(AuthModel(id: id,provider: type.rawValue))
         }
         
