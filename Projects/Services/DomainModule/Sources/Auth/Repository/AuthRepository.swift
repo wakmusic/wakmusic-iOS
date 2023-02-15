@@ -5,6 +5,6 @@ import ErrorModule
 import Foundation
 
 public protocol AuthRepository {
-    func postLoginInfo(id:String,type:ProviderType) -> Single<[AuthLoginEntity]>
+    func fetchToken(id:String,type:ProviderType) -> Single<AuthLoginEntity>
 
 }
