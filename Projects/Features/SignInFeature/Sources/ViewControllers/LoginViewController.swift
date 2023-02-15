@@ -50,7 +50,7 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     
     let disposeBag = DisposeBag()
     
-//    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+
     
     var viewModel:LoginViewModel!
     
@@ -82,7 +82,7 @@ extension LoginViewController{
     
     private func configureNaver(){
         
-//        naverLoginInstance?.delegate = self
+
         
         naverLoginButton.rx.tap
             .bind(to: viewModel.input.pressNaverLoginButton)
@@ -264,26 +264,7 @@ extension LoginViewController{
     
 }
 
-//extension LoginViewController:NaverThirdPartyLoginConnectionDelegate{
-//    public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-//        print("네이버 로그인 성공")
-//        self.naverLoginPaser()
-//    }
-//    
-//    public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-//        print("네이버 토큰\(naverLoginInstance?.accessToken)")
-//    }
-//    
-//    public func oauth20ConnectionDidFinishDeleteToken() {
-//        print("네이버 로그아웃")
-//    }
-//    
-//    public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-//        print("에러 = \(error.localizedDescription)")
-//    }
-//    
-//    
-//}
+
 
 extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
     
