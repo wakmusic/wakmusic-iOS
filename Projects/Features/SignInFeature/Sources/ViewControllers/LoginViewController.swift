@@ -52,6 +52,7 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     
+    var viewModel:LoginViewModel!
     
     
     public override func viewDidLoad() {
@@ -66,8 +67,10 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
    
     
 
-    public static func viewController() -> LoginViewController {
+    public static func viewController(viewModel:LoginViewModel) -> LoginViewController {
         let viewController = LoginViewController.viewController(storyBoardName: "SignIn", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
         return viewController
     }
 

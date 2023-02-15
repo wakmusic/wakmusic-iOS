@@ -19,7 +19,9 @@ import RxCocoa
 import RxKeyboard
 import RxSwift
 import SearchFeature
+import SignInFeature
 import SnapKit
+import StorageFeature
 import UIKit
 import Utility
 
@@ -109,6 +111,9 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var artistComponent: ArtistComponent {
         return appComponent.artistComponent
     }
+    var storageComponent: StorageComponent {
+        return appComponent.storageComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -148,6 +153,19 @@ private class MainContainerDependencyd9d908a1d0cf8937bbadProvider: MainContainer
 private func factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MainContainerDependencyd9d908a1d0cf8937bbadProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
+    var signInComponent: SignInComponent {
+        return appComponent.signInComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->StorageComponent
+private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
         return appComponent.mainContainerComponent
@@ -160,6 +178,19 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 /// ^->AppComponent->RootComponent
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
+    var fetchTokenUseCase: any FetchTokenUseCase {
+        return appComponent.fetchTokenUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SignInComponent
+private func factoryda2925fd76da866a652af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SignInDependency5dda0dd015447272446cProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
     var afterSearchContentComponent: AfterSearchContentComponent {
@@ -245,6 +276,11 @@ extension AppComponent: Registration {
         localTable["remoteSearchDataSource-any RemoteSearchDataSource"] = { self.remoteSearchDataSource as Any }
         localTable["searchRepository-any SearchRepository"] = { self.searchRepository as Any }
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
+        localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
+        localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
+        localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
+        localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
+        localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
         localTable["recommendPlayListDetailComponent-PlayListDetailComponent"] = { self.recommendPlayListDetailComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
@@ -295,6 +331,7 @@ extension MainTabBarComponent: Registration {
     public func registerItems() {
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
+        keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
     }
 }
 extension BottomTabBarComponent: Registration {
@@ -309,9 +346,19 @@ extension MainContainerComponent: Registration {
         keyPathToName[\MainContainerDependency.playerComponent] = "playerComponent-PlayerComponent"
     }
 }
+extension StorageComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\StorageDependency.signInComponent] = "signInComponent-SignInComponent"
+    }
+}
 extension RootComponent: Registration {
     public func registerItems() {
         keyPathToName[\RootDependency.mainContainerComponent] = "mainContainerComponent-MainContainerComponent"
+    }
+}
+extension SignInComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\SignInDependency.fetchTokenUseCase] = "fetchTokenUseCase-any FetchTokenUseCase"
     }
 }
 extension AfterSearchComponent: Registration {
@@ -367,7 +414,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
