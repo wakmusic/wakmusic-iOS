@@ -12,7 +12,9 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
+public struct FetchNaverUserInfoUseCaseImpl: FetchNaverUserInfoUseCase {
+    
+    
     
     private let authRepository: any AuthRepository
     
@@ -21,9 +23,10 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
     }
     
 
-    public func execute(id: String, type:ProviderType) -> Single<AuthLoginEntity> {
-        authRepository.fetchToken(id: id, type: type)
+    public func execute(tokenType: String, accessToken: String) ->Single<NaverUserInfoEntity> {
+        authRepository.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
     }
+   
     
     
 

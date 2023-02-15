@@ -5,6 +5,7 @@ import Foundation
 
 public enum AuthAPI {
     case fetchToken(id:String,type:ProviderType)
+    case fetchNaverUserInfo(tokenType:String,accessToken:String)
     
 }
 
@@ -14,16 +15,40 @@ public struct AuthModel:Encodable {
 }
 
 extension AuthAPI: WMAPI {
+    
+    public var baseURL: URL {
+        
+        switch self {
+            
+        case .fetchToken:
+            return URL(string: "https://test.wakmusic.xyz")!
+        case .fetchNaverUserInfo:
+            return URL(string: "https://openapi.naver.com")!
+        }
+        
+    }
+    
+    
     public var domain: WMDomain {
-        .auth
+             
+        switch  self {
+            
+        case .fetchToken:
+            return .auth
+        case .fetchNaverUserInfo:
+            return .naver
+        }
     }
 
     public var urlPath: String {
         
-        switch self{
+  
+        switch self {
             
         case .fetchToken:
             return "/login/mobile"
+        case .fetchNaverUserInfo:
+            return ""
         }
         
        
@@ -35,9 +60,22 @@ extension AuthAPI: WMAPI {
             
         case .fetchToken:
             return .post
+        case .fetchNaverUserInfo:
+            return .get
         }
         
        
+    }
+    
+    public var headers: [String : String]? {
+        
+        switch self {
+            
+        case .fetchToken:
+            return ["Content-Type": "application/json"]
+        case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
+            return   ["Authorization": "\(tokenType) \(accessToken)"]
+        }
     }
 
     public var task: Moya.Task {
@@ -46,6 +84,9 @@ extension AuthAPI: WMAPI {
             
         case .fetchToken(id: let id, type: let type):
             return .requestJSONEncodable(AuthModel(id: id,provider: type.rawValue))
+            
+        case .fetchNaverUserInfo:
+            return .requestPlain
         }
         
     }

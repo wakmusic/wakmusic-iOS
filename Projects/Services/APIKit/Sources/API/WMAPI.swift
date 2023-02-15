@@ -36,6 +36,7 @@ public enum WMDomain: String {
     case playlist = "api/playlist"
     case like = "api/like"
     case common = "static"
+    case naver = "/v1/nid/me"
 }
 
 extension WMDomain {

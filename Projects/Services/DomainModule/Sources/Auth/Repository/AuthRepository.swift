@@ -6,5 +6,6 @@ import Foundation
 
 public protocol AuthRepository {
     func fetchToken(id:String,type:ProviderType) -> Single<AuthLoginEntity>
+    func fetchNaverUserInfo(tokenType:String,accessToken:String) -> Single<NaverUserInfoEntity>
 
 }

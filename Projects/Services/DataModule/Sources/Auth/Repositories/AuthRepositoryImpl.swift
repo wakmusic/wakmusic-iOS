@@ -14,6 +14,8 @@ import DatabaseModule
 import RxSwift
 
 public struct AuthRepositoryImpl: AuthRepository {
+ 
+    
     
     private let remoteAuthDataSource: any RemoteAuthDataSource
     
@@ -26,5 +28,8 @@ public struct AuthRepositoryImpl: AuthRepository {
         remoteAuthDataSource.fetchToken(id: id, type: type)
     }
     
+    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> RxSwift.Single<DomainModule.NaverUserInfoEntity> {
+        remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
+    }
    
 }

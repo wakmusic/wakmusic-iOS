@@ -49,6 +49,13 @@ public extension AppComponent {
         }
     }
     
+    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
+        
+        shared {
+            FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
+        }
+    }
+    
     
   
     

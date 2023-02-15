@@ -183,6 +183,9 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
     var fetchTokenUseCase: any FetchTokenUseCase {
         return appComponent.fetchTokenUseCase
     }
+    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
+        return appComponent.fetchNaverUserInfoUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -281,6 +284,7 @@ extension AppComponent: Registration {
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
+        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { self.fetchNaverUserInfoUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
         localTable["recommendPlayListDetailComponent-PlayListDetailComponent"] = { self.recommendPlayListDetailComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
@@ -359,6 +363,7 @@ extension RootComponent: Registration {
 extension SignInComponent: Registration {
     public func registerItems() {
         keyPathToName[\SignInDependency.fetchTokenUseCase] = "fetchTokenUseCase-any FetchTokenUseCase"
+        keyPathToName[\SignInDependency.fetchNaverUserInfoUseCase] = "fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"
     }
 }
 extension AfterSearchComponent: Registration {
