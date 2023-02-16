@@ -56,7 +56,7 @@ extension AuthAPI: WMAPI {
         case .fetchNaverUserInfo:
             return ""
         case .fetUserInfo:
-            return ""
+            return "/"
         }
         
        
@@ -86,7 +86,7 @@ extension AuthAPI: WMAPI {
         case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
             return   ["Authorization": "\(tokenType) \(accessToken)"]
         case .fetUserInfo(token: let token):
-            return   ["Authorization": "Bearer \(token)"]
+            return   ["Authorization":"Bearer \(token)"]
         }
     }
 

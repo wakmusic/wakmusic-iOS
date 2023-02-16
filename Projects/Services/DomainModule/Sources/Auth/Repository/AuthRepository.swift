@@ -1,5 +1,4 @@
 import RxSwift
-import DomainModule
 import DataMappingModule
 import ErrorModule
 import Foundation

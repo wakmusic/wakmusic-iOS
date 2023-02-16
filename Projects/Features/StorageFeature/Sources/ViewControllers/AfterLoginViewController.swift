@@ -15,7 +15,7 @@ import RxSwift
 import PanModal
 import CommonFeature
 
-class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
+public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var profileLabel: UILabel!
     @IBOutlet weak var logoutButton: UIButton!
@@ -44,10 +44,10 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     
     
     private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
-    lazy var viewModel = AfterLoginStroageViewModel()
+    var viewModel:AfterLoginViewModel!
     let disposeBag = DisposeBag()
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         
@@ -57,7 +57,7 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     }
     
     //탭맨 페이지 변경 감지 함수
-    override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
+    public override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
         
         
         guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
@@ -74,8 +74,10 @@ class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoa
     }
     
     
-    public static func viewController() -> AfterLoginViewController {
+    public static func viewController(viewModel:AfterLoginViewModel) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
         return viewController
     }
 
@@ -216,19 +218,19 @@ extension AfterLoginViewController{
 }
 
 extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSource {
-    func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
+    public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         self.viewControllers.count
     }
     
-    func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
         nil
     }
     
-    func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+    public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         
         switch index{
         case 0:

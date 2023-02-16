@@ -13,12 +13,13 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     
     
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:true)
     
     var signInComponent:SignInComponent!
+    var afterLoginComponent:AfterLoginComponent!
     
     lazy var bfLoginView = signInComponent.makeView()
-    lazy var afLoginView = AfterLoginViewController.viewController()
+    lazy var afLoginView = afterLoginComponent.makeView()
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -32,10 +33,11 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
         
     }
 
-    public static func viewController(signInComponent:SignInComponent) -> StorageViewController {
+    public static func viewController(signInComponent:SignInComponent,afterLoginComponent:AfterLoginComponent) -> StorageViewController {
         let viewController = StorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.signInComponent = signInComponent
+        viewController.afterLoginComponent = afterLoginComponent
         
         return viewController
     }
