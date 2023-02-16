@@ -59,18 +59,31 @@ extension ArtistDetailHeaderViewController {
         let artistName: String = model.name
         let artistEngName: String = model.ID.capitalizingFirstLetter
         
-        let artistNameAttributedString = NSMutableAttributedString(string: artistName + " " + artistEngName,
-                                                                   attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
-                                                                                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                                                                                .kern: -1.5])
-        
+        var artistNameAttributedString = NSMutableAttributedString(
+            string: artistName + " " + artistEngName,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        let artistNameRange = (artistNameAttributedString.string as NSString).range(of: artistName)
+
         let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
         
-        artistNameAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                                                  .kern: -1],
-                                                  range: artistEngNameRange)
+        artistNameAttributedString.addAttributes(
+            [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+            .kern: -0.5],
+            range: artistEngNameRange
+        )
         
+        let availableWidth: CGFloat = APP_WIDTH() - (((140 * APP_WIDTH()) / 375.0) + 109.0)
+        let prepareWidth: CGFloat = artistNameAttributedString.width(containerHeight: 36)
+        
+        artistNameAttributedString.addAttributes(
+            [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= prepareWidth ? 24 : 20)],
+            range: artistNameRange
+        )
+
         self.artistNameLabel.attributedText = artistNameAttributedString
         
         self.artistGroupLabel.text = model.group
