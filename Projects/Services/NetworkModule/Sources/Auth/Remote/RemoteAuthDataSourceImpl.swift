@@ -7,8 +7,8 @@ import Foundation
 
 
 public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
-    
-    
+   
+
     public func fetchToken(id: String, type: ProviderType) -> Single<AuthLoginEntity> {
         request(.fetchToken(id: id, type: type))
             .map(AuthLoginResponseDTO.self)
@@ -20,6 +20,14 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map(NaverUserInfoResponseDTO.self)
             .map({$0.toDomain()})
     }
+    
+    public func fetchUserInfo(token: String) -> Single<AuthUserInfoEntity> {
+        request(.fetUserInfo(token: token))
+            .map(AuthUserInfoResponseDTO.self)
+            .map({$0.toDomain()})
+    }
+    
+    
     
    
     
