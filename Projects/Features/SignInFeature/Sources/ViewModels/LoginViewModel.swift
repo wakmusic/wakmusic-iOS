@@ -29,6 +29,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
     var fetchNaverUserInfo: FetchNaverUserInfoUseCase!
     var disposeBag = DisposeBag()
     var naverToken:PublishSubject<(String,String)> = PublishSubject()
+    var appleToken:PublishSubject<String> = PublishSubject()
     
     public init(fetchTokenUseCase:FetchTokenUseCase,fetchNaverUserInfo:FetchNaverUserInfoUseCase){
         
@@ -42,7 +43,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
         
         print("✅ LoginViewModel 생성")
         
-
+        //MARK: 네이버 로그인 및 이벤트
         
         input.pressNaverLoginButton
             .subscribe(onNext: {
@@ -83,6 +84,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
             .disposed(by: disposeBag)
         
         
+        //MARK: 애플로그인 및 이벤트
         
         input.pressAppleLoginButton.subscribe(onNext: {
             let appleIdProvider = ASAuthorizationAppleIDProvider()
@@ -97,6 +99,19 @@ public  final class LoginViewModel:NSObject, ViewModelType {
             
         }).disposed(by: disposeBag)
         
+        
+        appleToken
+            .filter({!$0.isEmpty})
+            .flatMap { [weak self] (id:String) -> Observable<AuthLoginEntity> in
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                return self.fetchTokenUseCase.execute(id: id, type: .apple)
+                        .catchAndReturn(AuthLoginEntity(token: ""))
+                        .asObservable()
+            }.subscribe(onNext: {DEBUG_LOG($0)})
+            .disposed(by: disposeBag)
         
         
         
@@ -183,6 +198,8 @@ extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationContro
             let username = credential.fullName! // 무작위 유저네임
             
             DEBUG_LOG(userIdentifer)
+            appleToken.onNext(userIdentifer)
+            
 
 
         }
