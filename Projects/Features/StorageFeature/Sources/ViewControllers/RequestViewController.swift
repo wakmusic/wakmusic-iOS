@@ -11,7 +11,7 @@ import Utility
 import DesignSystem
 import CommonFeature
 
-class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -89,7 +89,10 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
         
     }
     
-    override func viewDidLoad() {
+    var viewModel:RequestViewModel!
+    
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
@@ -103,8 +106,11 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     }
     
 
-    public static func viewController() -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        
         return viewController
     }
 

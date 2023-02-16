@@ -35,6 +35,10 @@ public extension AppComponent {
         AfterLoginComponent(parent: self)
     }
     
+    var requestComponent: RequestComponent {
+        RequestComponent(parent: self)
+    }
+    
    
     
     var remoteAuthDataSource: any RemoteAuthDataSource {
@@ -70,6 +74,14 @@ public extension AppComponent {
         shared {
             FetchUserInfoUseCaseImpl(authRepository: authRepository)
         }
+    }
+    
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        
+        shared {
+            WithdrawUserInfoUseCaseImpl(authRepository: authRepository)
+        }
+        
     }
     
     

@@ -11,20 +11,23 @@ import Utility
 import RxSwift
 import RxRelay
 import DomainModule
+import BaseFeature
 
-final public class AfterLoginViewModel {
+final public class AfterLoginViewModel:ViewModelType {
+    
+    
+    
 
-    let input = Input()
-    let output = Output()
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
 
-    struct Input {
+
+    public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         
     }
 
-    struct Output {
+    public struct Output {
         let isEditing:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
@@ -44,5 +47,13 @@ final public class AfterLoginViewModel {
         print("✅ AfterLoginViewModel 생성")
         
 
+    }
+    
+    public func transform(from input: Input) -> Output {
+        var output = Output()
+        
+        
+        
+        return output
     }
 }

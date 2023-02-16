@@ -121,7 +121,7 @@ extension MyPlayListViewController{
                     return
                 }
                 // 탭맨 쪽 편집 변경
-                parent.viewModel.output.isEditing.accept(isEdit)
+                parent.output.isEditing.accept(isEdit)
                 
             
                 
