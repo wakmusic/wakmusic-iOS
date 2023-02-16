@@ -13,9 +13,11 @@ import BaseFeature
 import DomainModule
 import Utility
 import NaverThirdPartyLogin
+import AuthenticationServices
 
 
 public  final class LoginViewModel:NSObject, ViewModelType {
+    // 네이버 델리게이트를 받기위한 NSObject 상속
    
 
     var input = Input()
@@ -43,7 +45,6 @@ public  final class LoginViewModel:NSObject, ViewModelType {
 
         
         input.pressNaverLoginButton
-            .debug("PUSH2")
             .subscribe(onNext: {
             
             
@@ -80,14 +81,34 @@ public  final class LoginViewModel:NSObject, ViewModelType {
             }
             .subscribe(onNext: {DEBUG_LOG($0)})
             .disposed(by: disposeBag)
+        
+        
+        
+        input.pressAppleLoginButton.subscribe(onNext: {
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            request.requestedScopes = [.fullName,.email]
+            
+            
+            let auth = ASAuthorizationController(authorizationRequests: [request])
+            auth.delegate = self
+            auth.presentationContextProvider = self
+            auth.performRequests()
+            
+        }).disposed(by: disposeBag)
+        
+        
+        
+        
     }
 
     public struct Input {
         let pressNaverLoginButton:PublishRelay<Void> = PublishRelay()
+        let pressAppleLoginButton:PublishRelay<Void> = PublishRelay()
     }
 
     public struct Output {
-       
+     
     }
     
     public func transform(from input: Input) -> Output {
@@ -146,4 +167,31 @@ extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
     }
     
     
+}
+
+extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return UIApplication.shared.windows.last!
+    }
+
+
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+
+            let userIdentifer = credential.user
+            let username = credential.fullName! // 무작위 유저네임
+            
+            DEBUG_LOG(userIdentifer)
+
+
+        }
+    }
+
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        DEBUG_LOG("Apple Login Fail")
+    }
+
+
+
 }

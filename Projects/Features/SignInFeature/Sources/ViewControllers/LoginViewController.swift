@@ -107,23 +107,11 @@ extension LoginViewController{
     
     private func configureApple(){
         
-        appleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-            let appleIdProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName,.email]
-            
-            
-            let auth = ASAuthorizationController(authorizationRequests: [request])
-            auth.delegate = self
-            auth.presentationContextProvider = self
-            auth.performRequests()
-            
-        }).disposed(by: disposeBag)
+        appleLoginButton.rx.tap
+            .bind(to: viewModel.input.pressAppleLoginButton)
+            .disposed(by: disposeBag)
+        
+    
         
     }
     
@@ -266,27 +254,27 @@ extension LoginViewController{
 
 
 
-extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
-    
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
-    }
-    
-    
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            
-            let userIdentifer = credential.user
-            let username = credential.fullName! // 무작위 유저네임
-            
-            
-        }
-    }
-    
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        DEBUG_LOG("Apple Login Fail")
-    }
-    
-    
-    
-}
+//extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+//
+//    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//        return self.view.window!
+//    }
+//
+//
+//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+//        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//
+//            let userIdentifer = credential.user
+//            let username = credential.fullName! // 무작위 유저네임
+//
+//
+//        }
+//    }
+//
+//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+//        DEBUG_LOG("Apple Login Fail")
+//    }
+//
+//
+//
+//}

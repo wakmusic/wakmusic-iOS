@@ -13,7 +13,7 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     
     
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:true)
+    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     
     var signInComponent:SignInComponent!
     
