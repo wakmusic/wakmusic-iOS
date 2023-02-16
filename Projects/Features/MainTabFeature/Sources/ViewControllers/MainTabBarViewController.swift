@@ -26,7 +26,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
                 ChartViewController.viewController().wrapNavigationController,
                 searchComponent.makeView().wrapNavigationController,
                 artistComponent.makeView().wrapNavigationController,
-                StorageViewController.viewController().wrapNavigationController
+                storageComponent.makeView().wrapNavigationController
         ]
     }()
 
@@ -35,6 +35,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     
     var searchComponent: SearchComponent!
     var artistComponent: ArtistComponent!
+    var storageComponent: StorageComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,12 +55,16 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
 
     public static func viewController(
         searchComponent: SearchComponent,
-        artistComponent: ArtistComponent
+        artistComponent: ArtistComponent,
+        storageCompoent: StorageComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
+        
+        
+        viewController.storageComponent = storageCompoent
 
         return viewController
     }

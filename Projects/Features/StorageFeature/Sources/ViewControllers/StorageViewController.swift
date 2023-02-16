@@ -11,9 +11,13 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     @IBOutlet weak public var contentView: UIView!
     
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:true)
     
-    lazy var bfLoginView = LoginViewController.viewController()
+    
+    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+    
+    var signInComponent:SignInComponent!
+    
+    lazy var bfLoginView = signInComponent.makeView()
     lazy var afLoginView = AfterLoginViewController.viewController()
     let disposeBag = DisposeBag()
     
@@ -28,8 +32,11 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
         
     }
 
-    public static func viewController() -> StorageViewController {
+    public static func viewController(signInComponent:SignInComponent) -> StorageViewController {
         let viewController = StorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.signInComponent = signInComponent
+        
         return viewController
     }
 }

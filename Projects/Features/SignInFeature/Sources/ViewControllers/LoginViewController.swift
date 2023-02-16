@@ -50,8 +50,11 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     
     let disposeBag = DisposeBag()
     
-    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+
     
+    var viewModel:LoginViewModel!
+    
+
     
     
     public override func viewDidLoad() {
@@ -66,8 +69,10 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
    
     
 
-    public static func viewController() -> LoginViewController {
+    public static func viewController(viewModel:LoginViewModel) -> LoginViewController {
         let viewController = LoginViewController.viewController(storyBoardName: "SignIn", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
         return viewController
     }
 
@@ -77,18 +82,11 @@ extension LoginViewController{
     
     private func configureNaver(){
         
-        naverLoginInstance?.delegate = self
+
         
-        naverLoginButton.rx.tap.subscribe (onNext:{  [weak self] in
-            guard let self = self else{
-                return
-            }
-            
-            
-            self.naverLoginInstance?.requestThirdPartyLogin() // 로그인
-            
-            //self.naverLoginInstance?.requestDeleteToken() //로그아웃
-        }).disposed(by: disposeBag)
+        naverLoginButton.rx.tap
+            .bind(to: viewModel.input.pressNaverLoginButton)
+            .disposed(by: disposeBag)
         
     }
     
@@ -109,23 +107,11 @@ extension LoginViewController{
     
     private func configureApple(){
         
-        appleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-            let appleIdProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName,.email]
-            
-            
-            let auth = ASAuthorizationController(authorizationRequests: [request])
-            auth.delegate = self
-            auth.presentationContextProvider = self
-            auth.performRequests()
-            
-        }).disposed(by: disposeBag)
+        appleLoginButton.rx.tap
+            .bind(to: viewModel.input.pressAppleLoginButton)
+            .disposed(by: disposeBag)
+        
+    
         
     }
     
@@ -241,33 +227,7 @@ extension LoginViewController{
         
     }
     
-    private func naverLoginPaser(){
-        
-        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-                
-                if !accessToken {
-                  return
-                }
-                
-                guard let tokenType = naverLoginInstance?.tokenType else { return }
-                guard let accessToken = naverLoginInstance?.accessToken else { return }
-                  
-                let requestUrl = "https://openapi.naver.com/v1/nid/me"
-                let url = URL(string: requestUrl)!
-                
-                let authorization = "\(tokenType) \(accessToken)"
-                print("TOKEN은 받앗다")
-
-        AF.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: ["Authorization": authorization]).responseData{ response in
-         
-            print(response.data!)
-            
-        
-            
-         
-        }
-      
-    }
+    
     
     private func googleLogin(){
         
@@ -292,48 +252,29 @@ extension LoginViewController{
     
 }
 
-extension LoginViewController:NaverThirdPartyLoginConnectionDelegate{
-    public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        print("네이버 로그인 성공")
-        self.naverLoginPaser()
-    }
-    
-    public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        print("네이버 토큰\(naverLoginInstance?.accessToken)")
-    }
-    
-    public func oauth20ConnectionDidFinishDeleteToken() {
-        print("네이버 로그아웃")
-    }
-    
-    public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-        print("에러 = \(error.localizedDescription)")
-    }
-    
-    
-}
 
-extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
-    
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
-    }
-    
-    
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            
-            let userIdentifer = credential.user
-            let username = credential.fullName! // 무작위 유저네임
-            
-            
-        }
-    }
-    
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        DEBUG_LOG("Apple Login Fail")
-    }
-    
-    
-    
-}
+
+//extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
+//
+//    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//        return self.view.window!
+//    }
+//
+//
+//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+//        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//
+//            let userIdentifer = credential.user
+//            let username = credential.fullName! // 무작위 유저네임
+//
+//
+//        }
+//    }
+//
+//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+//        DEBUG_LOG("Apple Login Fail")
+//    }
+//
+//
+//
+//}
