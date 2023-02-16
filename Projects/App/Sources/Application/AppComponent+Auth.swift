@@ -30,6 +30,11 @@ public extension AppComponent {
         
     }
     
+    var afterLoginComponent: AfterLoginComponent {
+        
+        AfterLoginComponent(parent: self)
+    }
+    
    
     
     var remoteAuthDataSource: any RemoteAuthDataSource {
@@ -42,6 +47,8 @@ public extension AppComponent {
             AuthRepositoryImpl(remoteAuthDataSource: remoteAuthDataSource)
         }
     }
+    
+    
     var fetchTokenUseCase: any FetchTokenUseCase {
         
         shared {
@@ -53,6 +60,15 @@ public extension AppComponent {
         
         shared {
             FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
+        }
+    }
+    
+    
+    
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
+        
+        shared {
+            FetchUserInfoUseCaseImpl(authRepository: authRepository)
         }
     }
     
