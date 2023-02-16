@@ -14,6 +14,10 @@ import DatabaseModule
 import RxSwift
 
 public struct AuthRepositoryImpl: AuthRepository {
+   
+    
+    
+    
 
 
     private let remoteAuthDataSource: any RemoteAuthDataSource
@@ -34,5 +38,13 @@ public struct AuthRepositoryImpl: AuthRepository {
     public func fetchUserInfo(token: String) -> Single<AuthUserInfoEntity> {
         remoteAuthDataSource.fetchUserInfo(token: token)
     }
+    
+    public func withdrawUserInfo(token: String) -> Completable {
+        remoteAuthDataSource.withdrawUserInfo(token: token)
+    }
+    
+    
+    
+    
    
 }
