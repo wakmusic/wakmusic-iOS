@@ -37,6 +37,8 @@ public class BaseRemoteDataSource<API: WMAPI> {
             return Disposables.create(disposabels)
         }
     }
+    
+   
 }
 
 private extension BaseRemoteDataSource {
@@ -52,6 +54,10 @@ private extension BaseRemoteDataSource {
                 return Single.error(api.errorMap[errorCode] ?? error)
             }
     }
+    
+    
+    
+    
     func checkIsApiNeedsAuthorization(_ api: API) -> Bool {
         api.jwtTokenType == .accessToken
     }

@@ -7,6 +7,7 @@ public enum AuthAPI {
     case fetchToken(id:String,type:ProviderType)
     case fetchNaverUserInfo(tokenType:String,accessToken:String)
     case fetUserInfo(token:String)
+    case withdrawUserInfo(token:String)
     
 }
 
@@ -19,15 +20,11 @@ extension AuthAPI: WMAPI {
     
     public var baseURL: URL {
         
-        let defualt = URL(string: "https://test.wakmusic.xyz")!
         switch self {
-            
-        case .fetchToken:
-            return defualt
+        case .fetchToken,.fetUserInfo,.withdrawUserInfo:
+            return URL(string: "https://test.wakmusic.xyz")!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
-        case .fetUserInfo:
-            return defualt
         }
         
     }
@@ -37,13 +34,12 @@ extension AuthAPI: WMAPI {
              
         switch  self {
             
-        case .fetchToken:
+        case .fetchToken,.fetUserInfo,.withdrawUserInfo:
             return .auth
         case .fetchNaverUserInfo:
             return .naver
-        case .fetUserInfo:
-            return .auth
         }
+    
     }
 
     public var urlPath: String {
@@ -57,6 +53,8 @@ extension AuthAPI: WMAPI {
             return ""
         case .fetUserInfo:
             return "/"
+        case .withdrawUserInfo:
+            return "/remove"
         }
         
        
@@ -72,6 +70,8 @@ extension AuthAPI: WMAPI {
             return .get
         case .fetUserInfo:
              return .get
+        case .withdrawUserInfo:
+            return .delete
         }
         
        
@@ -85,9 +85,11 @@ extension AuthAPI: WMAPI {
             return ["Content-Type": "application/json"]
         case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
             return   ["Authorization": "\(tokenType) \(accessToken)"]
-        case .fetUserInfo(token: let token):
+        case .fetUserInfo(token: let token), .withdrawUserInfo(token: let token):
             return   ["Authorization":"Bearer \(token)"]
+            
         }
+
     }
 
     public var task: Moya.Task {
@@ -97,7 +99,7 @@ extension AuthAPI: WMAPI {
         case .fetchToken(id: let id, type: let type):
             return .requestJSONEncodable(AuthModel(id: id,provider: type.rawValue))
             
-        case .fetchNaverUserInfo,.fetUserInfo:
+        case .fetchNaverUserInfo,.fetUserInfo,.withdrawUserInfo:
             return .requestPlain
         }
         

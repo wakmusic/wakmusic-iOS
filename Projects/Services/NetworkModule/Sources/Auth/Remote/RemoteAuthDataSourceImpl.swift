@@ -8,6 +8,8 @@ import Foundation
 
 public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
    
+    
+   
 
     public func fetchToken(id: String, type: ProviderType) -> Single<AuthLoginEntity> {
         request(.fetchToken(id: id, type: type))
@@ -25,6 +27,12 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
         request(.fetUserInfo(token: token))
             .map(AuthUserInfoResponseDTO.self)
             .map({$0.toDomain()})
+    }
+    
+    public func withdrawUserInfo(token: String) -> Completable {
+        request(.withdrawUserInfo(token: token))
+                .asCompletable()
+          
     }
     
     

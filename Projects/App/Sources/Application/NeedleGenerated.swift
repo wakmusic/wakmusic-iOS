@@ -173,6 +173,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
+    var requestComponent: RequestComponent {
+        return appComponent.requestComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -181,6 +184,19 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
 /// ^->AppComponent->AfterLoginComponent
 private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->RequestComponent
+private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
@@ -298,11 +314,13 @@ extension AppComponent: Registration {
         localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
         localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { self.afterLoginComponent as Any }
+        localTable["requestComponent-RequestComponent"] = { self.requestComponent as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
         localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { self.fetchNaverUserInfoUseCase as Any }
         localTable["fetchUserInfoUseCase-any FetchUserInfoUseCase"] = { self.fetchUserInfoUseCase as Any }
+        localTable["withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"] = { self.withdrawUserInfoUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
         localTable["recommendPlayListDetailComponent-PlayListDetailComponent"] = { self.recommendPlayListDetailComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
@@ -377,6 +395,12 @@ extension StorageComponent: Registration {
 extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+        keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
+    }
+}
+extension RequestComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
     }
 }
 extension RootComponent: Registration {
@@ -445,6 +469,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)

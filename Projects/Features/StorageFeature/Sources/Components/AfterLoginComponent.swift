@@ -12,12 +12,16 @@ import DomainModule
 
 public protocol AfterLoginDependency: Dependency {
    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
+   var requestComponent: RequestComponent {get}
+
+    
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {
     public func makeView() -> AfterLoginViewController {
         return AfterLoginViewController.viewController(
-            viewModel: .init(fetchUserInfoUseCase: dependency.fetchUserInfoUseCase)
+            viewModel: .init(fetchUserInfoUseCase: dependency.fetchUserInfoUseCase),
+            requestComponent: dependency.requestComponent
         )
     }
 }

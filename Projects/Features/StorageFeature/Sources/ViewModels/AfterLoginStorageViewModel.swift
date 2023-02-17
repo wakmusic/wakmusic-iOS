@@ -11,20 +11,23 @@ import Utility
 import RxSwift
 import RxRelay
 import DomainModule
+import BaseFeature
 
-final public class AfterLoginViewModel {
+final public class AfterLoginViewModel:ViewModelType {
+    
+    
+    
 
-    let input = Input()
-    let output = Output()
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
 
-    struct Input {
+
+    public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         
     }
 
-    struct Output {
+    public struct Output {
         let isEditing:BehaviorRelay<Bool> = BehaviorRelay(value:false)
     }
 
@@ -35,7 +38,7 @@ final public class AfterLoginViewModel {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         
         
-        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjU0NjM3MCwiZXhwIjoxNjc3MTUxMTcwfQ.Vp37aAzTNuro6bnz2bw7AC6cfVU5mBunj4FM-AvULQc")
+        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjYxOTY2MSwiZXhwIjoxNjc3MjI0NDYxfQ.vrOCsbXaV4lgrp8ohUG9l2uI8mXHDmvY3Qb_jasnX18")
             .subscribe(onSuccess: {DEBUG_LOG($0)})
             .disposed(by: disposeBag)
         
@@ -44,5 +47,13 @@ final public class AfterLoginViewModel {
         print("✅ AfterLoginViewModel 생성")
         
 
+    }
+    
+    public func transform(from input: Input) -> Output {
+        var output = Output()
+        
+        
+        
+        return output
     }
 }

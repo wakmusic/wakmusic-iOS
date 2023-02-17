@@ -10,8 +10,9 @@ import UIKit
 import Utility
 import DesignSystem
 import CommonFeature
+import RxSwift
 
-class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -52,12 +53,16 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
         
-        let withdrawVc = TextPopupViewController.viewController(text: "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다.", cancelButtonIsHidden: true,completion: {
+       
+        let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: { 
+            
+            
             // 회원탈퇴 작업
-        })
-        
-        let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: {
-            self.showPanModal(content: withdrawVc)
+            self.input.pressWithdraw.onNext(())
+            
+            
+            
+            
         })
         
         
@@ -89,7 +94,12 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
         
     }
     
-    override func viewDidLoad() {
+    var viewModel:RequestViewModel!
+    lazy var input = RequestViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    var disposeBag = DisposeBag()
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
@@ -103,8 +113,11 @@ class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     }
     
 
-    public static func viewController() -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        
         return viewController
     }
 
@@ -195,10 +208,31 @@ extension RequestViewController{
        
         fakeViewHeight.constant = calculateFakeViewHeight()
         self.view.layoutIfNeeded()
+        bindRx()
         
         
     }
     
+    private func bindRx(){
+        output.statusCode.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            DEBUG_LOG($0.isEmpty)
+            
+            let withdrawVc = TextPopupViewController.viewController(
+                text: $0.isEmpty ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0 ,
+                cancelButtonIsHidden: true)
+            
+            self.showPanModal(content: withdrawVc)
+            
+
+            
+        })
+        .disposed(by: disposeBag)
+    }
     
     private func calculateFakeViewHeight() -> CGFloat{
         let window: UIWindow? = UIApplication.shared.windows.first
@@ -214,14 +248,11 @@ extension RequestViewController{
         let gapBtwBattomButtonsAndVersionLabel:CGFloat = 20
         let versionLabelHeight:CGFloat = 18
         let mainTabBarHeight:CGFloat = 56
-        let playerHeight:CGFloat =  56 //TODO: 유무에 따라 변경 56 or 0
 
     
-        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight + playerHeight +  20))
+        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
         
 
-        
-        DEBUG_LOG(res)
         return res
          
         

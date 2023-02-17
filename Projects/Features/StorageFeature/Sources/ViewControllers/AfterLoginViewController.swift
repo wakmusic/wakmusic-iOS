@@ -27,7 +27,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
-        let viewController = RequestViewController.viewController()
+        let viewController = requestComponent.makeView()
         
         self.navigationController?.pushViewController(viewController, animated: true)
     }
@@ -45,6 +45,11 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
     var viewModel:AfterLoginViewModel!
+    var requestComponent:RequestComponent!
+    
+    lazy var input = AfterLoginViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -70,14 +75,15 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         vc1.viewModel.output.isEditinglist.accept(false)
         vc2.viewModel.output.isEditinglist.accept(false)
         
-        viewModel.output.isEditing.accept(false)
+        output.isEditing.accept(false)
     }
     
     
-    public static func viewController(viewModel:AfterLoginViewModel) -> AfterLoginViewController {
+    public static func viewController(viewModel:AfterLoginViewModel,requestComponent:RequestComponent) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
+        viewController.requestComponent = requestComponent
         return viewController
     }
 
@@ -141,7 +147,7 @@ extension AfterLoginViewController{
     
     private func bindRx()
     {
-        viewModel.output.isEditing.subscribe { [weak self] (res:Bool) in
+        output.isEditing.subscribe { [weak self] (res:Bool) in
             
             guard let self = self else{
                 return
@@ -165,7 +171,7 @@ extension AfterLoginViewController{
         
         
         editButton.rx.tap
-            .withLatestFrom(viewModel.output.isEditing)
+            .withLatestFrom(output.isEditing)
             .map({!$0})
             .do(onNext: { [weak self] (res:Bool)  in
                 
@@ -192,7 +198,7 @@ extension AfterLoginViewController{
                 
                 
             })
-            .bind(to: viewModel.output.isEditing)
+            .bind(to: output.isEditing)
             .disposed(by: disposeBag)
                 
                 
