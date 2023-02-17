@@ -299,6 +299,19 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
+    var setProfileUseCase: any SetProfileUseCase {
+        return appComponent.setProfileUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ProfilePopComponent
+private func factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfilePopDependency081172e20caa75abdb54Provider(appComponent: parent1(component) as! AppComponent)
+}
 
 #else
 extension AppComponent: Registration {
@@ -335,6 +348,10 @@ extension AppComponent: Registration {
         localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
         localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
         localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
+        localTable["profileComponent-ProfilePopComponent"] = { self.profileComponent as Any }
+        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
+        localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
+        localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -442,6 +459,11 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
     }
 }
+extension ProfilePopComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
+    }
+}
 
 
 #endif
@@ -477,6 +499,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }
 #endif
 
