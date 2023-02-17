@@ -14,6 +14,7 @@ import Tabman
 import RxSwift
 import PanModal
 import CommonFeature
+import KeychainModule
 
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
@@ -38,10 +39,13 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
         
-        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false)
+        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false, completion: {
+            let keychain = KeychainImpl()
+            keychain.delete(type: .accessToken)
+            Utility.PreferenceManager.userInfo = nil
+        })
         self.showPanModal(content: vc)
     }
-    
     
     private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
     var viewModel:AfterLoginViewModel!
@@ -94,11 +98,10 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
 extension AfterLoginViewController{
     
     private func configureUI(){
-//        profileImageButton.setImage(DesignSystemAsset.Profile.profile0.image, for: .normal)
         
         profileImageView.image = DesignSystemAsset.Profile.profile0.image
+        profileImageView.layer.cornerRadius = 20
         
-        profileLabel.text = "닉네임12345777".correctionNickName
         profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
         logoutButton.setImage(DesignSystemAsset.Storage.logout.image, for: .normal)
@@ -218,9 +221,23 @@ extension AfterLoginViewController{
             }).disposed(by: disposeBag)
         
         
+        Utility.PreferenceManager.$userInfo
+            .filter { $0 != nil }
+            .subscribe(onNext: { [weak self] (model) in
+                guard let self = self, let model = model else{
+                    return
+                }
+
+                DEBUG_LOG(model)
+                self.profileLabel.text = model.displayName.correctionNickName
+                self.profileImageView.kf.setImage(
+                    with: URL(string: WMImageAPI.fetchProfile(name: model.profile).toString),
+                    placeholder: nil,
+                    options: [.transition(.fade(0.2))]
+                )
+                
+            }).disposed(by: disposeBag)
     }
-    
-    
 }
 
 extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSource {

@@ -24,74 +24,44 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var descriptionLabel: UILabel!
     
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var serviceButton: UIButton!
-    
     @IBOutlet weak var privacyButton: UIButton!
-    
     @IBOutlet weak var versionLabel: UILabel!
-    
-    
     @IBOutlet weak var withdrawButton: UIButton!
     
     @IBAction func pressBackAction(_ sender: UIButton) {
-        
         self.navigationController?.popViewController(animated: true)
     }
     
-    
-    
-    
-    
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        
         let viewController = QnaViewController.viewController()
         self.navigationController?.pushViewController(viewController, animated: true)
-        
     }
-    
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
         
-       
-        let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: { 
-            
-            
+        let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: {
             // 회원탈퇴 작업
             self.input.pressWithdraw.onNext(())
-            
-            
-            
-            
         })
-        
         
         let firstConfirmVc = TextPopupViewController.viewController(text: "회원탈퇴 신청을 하시겠습니까?", cancelButtonIsHidden: false,completion: {
             self.showPanModal(content: secondConfirmVc)
         })
         
-        
         self.showPanModal(content: firstConfirmVc)
     }
     
-    
     @IBAction func pressServiceAction(_ sender: UIButton) {
-        
         let vc = ContractViewController.viewController(type: .service)
         vc.modalPresentationStyle = .fullScreen //꽉찬 모달
-        
         self.present(vc, animated: true)
-        
-        
     }
     
     @IBAction func pressPrivacyAction(_ sender: UIButton) {
-        
         let vc = ContractViewController.viewController(type: .privacy)
         vc.modalPresentationStyle = .fullScreen //꽉찬 모달
-        
         self.present(vc, animated: true)
-        
     }
     
     var viewModel:RequestViewModel!
@@ -223,13 +193,11 @@ extension RequestViewController{
             DEBUG_LOG($0.isEmpty)
             
             let withdrawVc = TextPopupViewController.viewController(
-                text: $0.isEmpty ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0 ,
-                cancelButtonIsHidden: true)
+                text: $0.isEmpty ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0,
+                cancelButtonIsHidden: true
+            )
             
             self.showPanModal(content: withdrawVc)
-            
-
-            
         })
         .disposed(by: disposeBag)
     }
@@ -249,17 +217,8 @@ extension RequestViewController{
         let versionLabelHeight:CGFloat = 18
         let mainTabBarHeight:CGFloat = 56
 
-    
         let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
         
-
         return res
-         
-        
-        
-        
-        
     }
-    
-    
 }
