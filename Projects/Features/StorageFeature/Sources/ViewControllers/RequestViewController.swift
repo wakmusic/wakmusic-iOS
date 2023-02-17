@@ -248,10 +248,9 @@ extension RequestViewController{
         let gapBtwBattomButtonsAndVersionLabel:CGFloat = 20
         let versionLabelHeight:CGFloat = 18
         let mainTabBarHeight:CGFloat = 56
-        let playerHeight:CGFloat =  56 //TODO: 유무에 따라 변경 56 or 0
 
     
-        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight + playerHeight +  20))
+        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
         
 
         return res
