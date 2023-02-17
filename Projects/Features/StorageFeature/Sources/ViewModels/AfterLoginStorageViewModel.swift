@@ -38,7 +38,7 @@ final public class AfterLoginViewModel:ViewModelType {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         
         
-        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjU0NjM3MCwiZXhwIjoxNjc3MTUxMTcwfQ.Vp37aAzTNuro6bnz2bw7AC6cfVU5mBunj4FM-AvULQc")
+        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjYxOTY2MSwiZXhwIjoxNjc3MjI0NDYxfQ.vrOCsbXaV4lgrp8ohUG9l2uI8mXHDmvY3Qb_jasnX18")
             .subscribe(onSuccess: {DEBUG_LOG($0)})
             .disposed(by: disposeBag)
         

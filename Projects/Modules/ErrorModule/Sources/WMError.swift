@@ -22,7 +22,7 @@ extension WMError: LocalizedError {
         case .badRequest:
             return "요청이 잘못되었습니다."
 
-        case .notFound:
+        case .notFound: //404
             return "요청한 것을 찾을 수 없습니다."
 
         case .tokenExpired:
@@ -38,7 +38,7 @@ extension WMError: LocalizedError {
 }
 
 public extension Error {
-    var asDMSError: WMError {
+    var asWMError: WMError {
         self as? WMError ?? .unknown
     }
 }

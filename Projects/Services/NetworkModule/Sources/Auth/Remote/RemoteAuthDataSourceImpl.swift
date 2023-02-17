@@ -31,7 +31,8 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
     
     public func withdrawUserInfo(token: String) -> Completable {
         request(.withdrawUserInfo(token: token))
-            .asCompletable()
+                .asCompletable()
+          
     }
     
     

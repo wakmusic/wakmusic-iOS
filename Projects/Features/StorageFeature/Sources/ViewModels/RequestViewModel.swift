@@ -29,7 +29,7 @@ final public class RequestViewModel:ViewModelType {
     }
 
     public struct Output {
-        
+        let statusCode:PublishSubject<String> = PublishSubject()
     }
 
     public init(
@@ -38,11 +38,12 @@ final public class RequestViewModel:ViewModelType {
         
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
         
-      
-        
-        
-        
+  
         print("✅ RequestViewModel 생성")
+        
+        
+        
+       
         
 
     }
@@ -50,8 +51,32 @@ final public class RequestViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         var output = Output()
         
+     
+        input.pressWithdraw
+            .take(1)
+            .flatMap({[weak self] () -> Completable  in
+            
+            guard let self = self else {
+                return Completable.empty()
+            }
+            
+                return self.withDrawUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDU5Ny4wMGIyMWU3MWM2MmU0M2U2YmQ4MTQ3NmRjOTcxYmEyMi4wNzUyIiwiaWF0IjoxNjc2NjM4ODIwLCJleHAiOjE2NzcyNDM2MjB9.FgTlHG0ZeerkAvgTb78_QLeHbZFpZz8TdedekHq4TXo")
+        })
+        .debug("TTT")
+        .subscribe(onError: { (error:Error) in
+            
+                    let error = error.asWMError
+                    DEBUG_LOG(error.errorDescription!)
+                    output.statusCode.onNext(error.errorDescription!)
+        },onCompleted: {
+            DEBUG_LOG("성공성공성공")
+            output.statusCode.onNext("")
+        }).disposed(by: disposeBag)
+        
+
         
         
         return output
     }
 }
+
