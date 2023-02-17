@@ -17,7 +17,7 @@ public protocol ProfilePopDependency: Dependency {
 }
 
 public final class ProfilePopComponent: Component<ProfilePopDependency> {
-    public func makeView(id:String) -> ProfilePopViewController  {
+    public func makeView() -> ProfilePopViewController  {
         return ProfilePopViewController.viewController()
         
     }
