@@ -245,36 +245,4 @@ extension LoginViewController{
         
         
     }
-    
-    
-    
-    
-    
 }
-
-
-
-//extension LoginViewController:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
-//
-//    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-//        return self.view.window!
-//    }
-//
-//
-//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-//        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-//
-//            let userIdentifer = credential.user
-//            let username = credential.fullName! // 무작위 유저네임
-//
-//
-//        }
-//    }
-//
-//    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-//        DEBUG_LOG("Apple Login Fail")
-//    }
-//
-//
-//
-//}

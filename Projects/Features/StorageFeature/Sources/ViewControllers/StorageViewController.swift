@@ -48,6 +48,7 @@ extension StorageViewController{
     private func bindRx() {
         
         Utility.PreferenceManager.$userInfo
+            .debug("$userInfo")
             .subscribe(onNext: { [weak self] (model) in
                 guard let self = self else{
                     return

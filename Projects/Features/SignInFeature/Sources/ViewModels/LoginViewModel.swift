@@ -15,6 +15,7 @@ import Utility
 import NaverThirdPartyLogin
 import AuthenticationServices
 import KeychainModule
+import CryptoSwift
 
 public  final class LoginViewModel:NSObject, ViewModelType {
     // 네이버 델리게이트를 받기위한 NSObject 상속
@@ -136,12 +137,11 @@ public  final class LoginViewModel:NSObject, ViewModelType {
                     .asObservable()
             }
             .subscribe(onNext: {
-                DEBUG_LOG($0)
                 PreferenceManager.shared.setUserInfo(
-                    ID: $0.id,
+                    ID: AES256.encrypt(string: $0.id),
                     platform: $0.platform,
                     profile: $0.profile,
-                    displayName: $0.displayName,
+                    displayName: AES256.encrypt(string: $0.displayName),
                     firstLoginTime: $0.first_login_time,
                     first: $0.first
                 )

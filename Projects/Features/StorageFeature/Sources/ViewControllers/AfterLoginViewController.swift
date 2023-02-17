@@ -228,8 +228,7 @@ extension AfterLoginViewController{
                     return
                 }
 
-                DEBUG_LOG(model)
-                self.profileLabel.text = model.displayName.correctionNickName
+                self.profileLabel.text = AES256.decrypt(encoded: model.displayName).correctionNickName
                 self.profileImageView.kf.setImage(
                     with: URL(string: WMImageAPI.fetchProfile(name: model.profile).toString),
                     placeholder: nil,
