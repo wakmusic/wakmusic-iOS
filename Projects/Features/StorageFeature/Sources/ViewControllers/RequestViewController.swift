@@ -191,12 +191,16 @@ extension RequestViewController{
             }
             
             DEBUG_LOG($0.isEmpty)
+            let completed: Bool = $0.isEmpty
             
             let withdrawVc = TextPopupViewController.viewController(
                 text: $0.isEmpty ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0,
-                cancelButtonIsHidden: true
-            )
-            
+                cancelButtonIsHidden: true,
+                completion: {
+                    if completed {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                })
             self.showPanModal(content: withdrawVc)
         })
         .disposed(by: disposeBag)

@@ -39,7 +39,8 @@ final public class RequestViewModel:ViewModelType {
         let output = Output()
      
         input.pressWithdraw
-            .flatMapFirst({[weak self] () -> Completable  in
+            .take(1)
+            .flatMap({[weak self] () -> Completable in
                 guard let self = self else {
                     return Completable.empty()
                 }

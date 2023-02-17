@@ -11,9 +11,7 @@ import KeychainModule
 public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
     
     @IBOutlet weak public var contentView: UIView!
-    
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    
+
     var signInComponent:SignInComponent!
     var afterLoginComponent:AfterLoginComponent!
     
@@ -38,11 +36,9 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     }
 }
 
-
 extension StorageViewController{
     
     private func configureUI() {
-
     }
     
     private func bindRx() {
@@ -53,10 +49,9 @@ extension StorageViewController{
                 guard let self = self else{
                     return
                 }
+                let isLogin: Bool = model != nil
 
-                let login: Bool = model != nil
-                
-                if login{
+                if isLogin{
                     self.remove(asChildViewController: self.bfLoginView)
                     self.add(asChildViewController: self.afLoginView)
                     
