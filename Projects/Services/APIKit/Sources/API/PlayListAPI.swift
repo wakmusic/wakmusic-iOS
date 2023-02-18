@@ -5,10 +5,16 @@ import Foundation
 
 
 
+public struct CreatePlayListRequset:Encodable {
+    var title:String
+    var image:String
+}
+
 
 public enum PlayListAPI {
     case fetchRecommendPlayList
     case fetchPlayListDetail(id:String,type:PlayListType)
+    case createPlayList(token:String,title:String)
 }
 
 extension PlayListAPI: WMAPI {
@@ -33,12 +39,36 @@ extension PlayListAPI: WMAPI {
                 return "/recommended/\(id)"
             }
             
+        case .createPlayList:
+            return "/create"
         }
     }
         
         public var method: Moya.Method {
-            return .get
+            
+            switch self {
+                
+            case .fetchRecommendPlayList,.fetchPlayListDetail:
+                return .get
+            
+            case .createPlayList:
+                return .post
+            }
+            
         }
+    
+        public var headers: [String : String]? {
+            
+            switch self {
+                
+            case .fetchRecommendPlayList,.fetchPlayListDetail:
+                return ["Content-Type": "application/json"]
+                
+            case .createPlayList(token: let token,_):
+                return ["Authorization":"Bearer \(token)"]
+            }
+        }
+    
         
         public var task: Moya.Task {
             switch self {
@@ -47,6 +77,11 @@ extension PlayListAPI: WMAPI {
          
             case .fetchPlayListDetail:
                 return .requestPlain
+                
+             
+            case .createPlayList(_, title: let title):
+                return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
+                
             }
             
         }
