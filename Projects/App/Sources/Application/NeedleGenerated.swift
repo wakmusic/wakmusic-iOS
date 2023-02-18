@@ -346,6 +346,10 @@ extension AppComponent: Registration {
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
+        localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
+        localTable["editPlayListUseCase-any EditPlayListUseCase"] = { self.editPlayListUseCase as Any }
+        localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
+        localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }

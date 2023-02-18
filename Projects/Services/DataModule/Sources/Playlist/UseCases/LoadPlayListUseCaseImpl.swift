@@ -12,10 +12,10 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
+public struct LoadPlayListUseCaseImpl: LoadPlayListUseCase {
    
     
-
+   
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -24,9 +24,10 @@ public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
         self.playListRepository = playListRepository
     }
     
-    public func execute() -> Single<[RecommendPlayListEntity]> {
-        playListRepository.fetchRecommendPlayList()
+    public func execute(key:String) -> Single<PlayListBaseEntity> {
+        playListRepository.loadPlayList(key: key)
     }
+    
 
    
 }

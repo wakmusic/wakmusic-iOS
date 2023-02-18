@@ -14,6 +14,8 @@ import DatabaseModule
 import RxSwift
 
 public struct PlayListRepositoryImpl: PlayListRepository {
+    
+    
    
     
     private let remotePlayListDataSource: any RemotePlayListDataSource
@@ -30,6 +32,22 @@ public struct PlayListRepositoryImpl: PlayListRepository {
     
     public func fetchPlayListDetail(id:String,type:PlayListType) -> Single<PlayListDetailEntity> {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
+    }
+    
+    public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
+        remotePlayListDataSource.createPlayList(title: title)
+    }
+    
+    public func editPlayList(key: String, title: String, songs: [String]) -> Single<BaseEntity> {
+        remotePlayListDataSource.editPlayList(key: key, title: title, songs: songs)
+    }
+    
+    public func deletePlayList(key: String) -> Single<BaseEntity> {
+        remotePlayListDataSource.deletePlayList(key: key)
+    }
+    
+    public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
+        remotePlayListDataSource.loadPlayList(key: key)
     }
    
 }
