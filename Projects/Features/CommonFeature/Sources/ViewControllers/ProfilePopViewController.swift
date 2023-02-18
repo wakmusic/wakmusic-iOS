@@ -25,16 +25,10 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    var viewModel: ProfilePopViewModel!
     var completion: (() -> Void)?
-    
-    @IBAction func saveAction(_ sender: UIButton) {
-        
-        //MARK: TODO 네트워크 작업 !!
-        dismiss(animated: true)
-        completion?()
-    }
-    
     var dataSource: BehaviorRelay<[ProfileResponseDTO]> = {
         let currentFanType = FanType(rawValue: Utility.PreferenceManager.userInfo?.profile ?? "") ?? .panchi
         let dataSource = BehaviorRelay.init(
@@ -66,8 +60,9 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
         bindRx()
     }
     
-    public static func viewController(completion: (() -> Void)? = nil) -> ProfilePopViewController {
+    public static func viewController(viewModel: ProfilePopViewModel, completion: (() -> Void)? = nil) -> ProfilePopViewController {
         let viewController = ProfilePopViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        viewController.viewModel = viewModel
         viewController.completion = completion
         return viewController
     }
@@ -87,6 +82,7 @@ extension ProfilePopViewController{
             ), for: .normal
         )
      
+        self.activityIndicator.color = .white
         self.collectionVIewHeight.constant = rowHeight  + 10
     }
     
@@ -117,6 +113,50 @@ extension ProfilePopViewController{
             }
             .bind(to: dataSource)
             .disposed(by: disposeBag)
+        
+        saveButton.rx.tap
+            .do(onNext: { [weak self] _ in
+                self?.activityIndicator.startAnimating()
+                self?.saveButton.setAttributedTitle(
+                    NSMutableAttributedString(
+                        string:"",
+                        attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                     .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
+                    ), for: .normal
+                )
+            })
+            .withLatestFrom(dataSource)
+            .map{ (model) in
+                let fanType: FanType = model.filter { $0.isSelected }.first?.type ?? .panchi
+                return fanType
+            }
+            .bind(to: viewModel.input.setProfileRequest)
+            .disposed(by: disposeBag)
+        
+        viewModel.output.resultDescription
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (result) in
+                guard let self = self else { return }
+                
+                self.activityIndicator.stopAnimating()
+                self.saveButton.setAttributedTitle(
+                    NSMutableAttributedString(
+                        string:"완료",
+                        attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                     .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
+                    ), for: .normal
+                )
+
+                let isCompleted: Bool = result.isEmpty
+                
+                if isCompleted {
+                    self.dismiss(animated: true)
+                    
+                }else{
+                    self.showToast(text: result, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                }
+                
+            }).disposed(by: disposeBag)
     }
 }
 
