@@ -1,4 +1,5 @@
 import Moya
+import KeychainModule
 import DataMappingModule
 import ErrorModule
 import Foundation
@@ -79,7 +80,7 @@ extension PlayListAPI: WMAPI {
     
         public var headers: [String : String]? {
             
-            let token = ""
+            let token: String = KeychainImpl().load(type: .accessToken)
             
             switch self {
                 
