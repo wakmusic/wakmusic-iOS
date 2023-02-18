@@ -45,11 +45,11 @@ extension StorageViewController{
         
         Utility.PreferenceManager.$userInfo
             .debug("$userInfo")
-            .subscribe(onNext: { [weak self] (model) in
+            .map { $0 != nil }
+            .subscribe(onNext: { [weak self] (isLogin) in
                 guard let self = self else{
                     return
                 }
-                let isLogin: Bool = model != nil
 
                 if isLogin{
                     self.remove(asChildViewController: self.bfLoginView)
