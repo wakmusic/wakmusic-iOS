@@ -47,6 +47,13 @@ public extension AppComponent {
         
     }
     
+    var setUserNameUseCase: any SetUserNameUseCase {
+        
+        shared{
+            SetUserNameUseCaseImpl(userRepository: userRepository)
+        }
+    }
+    
     
     
     

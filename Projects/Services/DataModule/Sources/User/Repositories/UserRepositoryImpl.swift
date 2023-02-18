@@ -14,6 +14,8 @@ import DatabaseModule
 import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
+    
+    
       
     private let remoteUserDataSource: any RemoteUserDataSource
     
@@ -26,6 +28,10 @@ public struct UserRepositoryImpl: UserRepository {
     
     public func setProfile(token: String, image: String) -> Completable {
         remoteUserDataSource.setProfile(token: token, image: image)
+    }
+    
+    public func setUserName(token: String, name: String) -> Completable {
+        remoteUserDataSource.setUserName(token: token, name: name)
     }
  
 }

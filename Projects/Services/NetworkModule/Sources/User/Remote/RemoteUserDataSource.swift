@@ -6,4 +6,5 @@ import Foundation
 
 public protocol RemoteUserDataSource {
     func setProfile(token:String,image:String) -> Completable
+    func setUserName(token:String,name:String) -> Completable
 }
