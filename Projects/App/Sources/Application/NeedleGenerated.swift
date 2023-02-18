@@ -2,6 +2,7 @@
 
 import ArtistFeature
 import BaseFeature
+import ChartFeature
 import CommonFeature
 import DataMappingModule
 import DataModule
@@ -105,6 +106,9 @@ private func factorybc7f802f601dd5913533e3b0c44298fc1c149afb(_ component: Needle
     return PlayerDependencyf8a3d594cc3b9254f8adProvider()
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
+    var chartComponent: ChartComponent {
+        return appComponent.chartComponent
+    }
     var searchComponent: SearchComponent {
         return appComponent.searchComponent
     }
@@ -152,6 +156,17 @@ private class MainContainerDependencyd9d908a1d0cf8937bbadProvider: MainContainer
 /// ^->AppComponent->MainContainerComponent
 private func factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MainContainerDependencyd9d908a1d0cf8937bbadProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->ChartComponent
+private func factoryeac6a4df54bbd391d31be3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ChartDependencyafd8882010751c9ef054Provider()
 }
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInComponent: SignInComponent {
@@ -378,6 +393,11 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
+        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
+        localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
+        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
+        localTable["fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"] = { self.fetchChartUpdateTimeUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
@@ -408,6 +428,7 @@ extension PlayerComponent: Registration {
 }
 extension MainTabBarComponent: Registration {
     public func registerItems() {
+        keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
@@ -423,6 +444,11 @@ extension MainContainerComponent: Registration {
         keyPathToName[\MainContainerDependency.bottomTabBarComponent] = "bottomTabBarComponent-BottomTabBarComponent"
         keyPathToName[\MainContainerDependency.mainTabBarComponent] = "mainTabBarComponent-MainTabBarComponent"
         keyPathToName[\MainContainerDependency.playerComponent] = "playerComponent-PlayerComponent"
+    }
+}
+extension ChartComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension StorageComponent: Registration {
@@ -514,6 +540,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31be3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
