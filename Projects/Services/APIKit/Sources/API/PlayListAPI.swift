@@ -10,11 +10,17 @@ public struct CreatePlayListRequset:Encodable {
     var image:String
 }
 
+public struct EditPlayListRequset:Encodable {
+    var title:String
+    var songs:[String]
+}
+
 
 public enum PlayListAPI {
     case fetchRecommendPlayList
     case fetchPlayListDetail(id:String,type:PlayListType)
-    case createPlayList(token:String,title:String)
+    case createPlayList(title:String)
+    case editPlayList(key:String,title:String,songs:[String])
 }
 
 extension PlayListAPI: WMAPI {
@@ -41,6 +47,9 @@ extension PlayListAPI: WMAPI {
             
         case .createPlayList:
             return "/create"
+       
+        case .editPlayList(key: let key):
+            return "/\(key)/edit"
         }
     }
         
@@ -53,18 +62,22 @@ extension PlayListAPI: WMAPI {
             
             case .createPlayList:
                 return .post
+            case .editPlayList:
+                return .patch
             }
             
         }
     
         public var headers: [String : String]? {
             
+            let token = ""
+            
             switch self {
                 
             case .fetchRecommendPlayList,.fetchPlayListDetail:
                 return ["Content-Type": "application/json"]
                 
-            case .createPlayList(token: let token,_):
+            case .createPlayList,.editPlayList:
                 return ["Authorization":"Bearer \(token)"]
             }
         }
@@ -74,16 +87,19 @@ extension PlayListAPI: WMAPI {
             switch self {
             case .fetchRecommendPlayList:
                 return .requestPlain
-         
+                
             case .fetchPlayListDetail:
                 return .requestPlain
                 
-             
-            case .createPlayList(_, title: let title):
+                
+            case .createPlayList(title: let title):
                 return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
                 
+                
+                
+            case .editPlayList(_,title: let title, songs: let songs):
+                return .requestJSONEncodable(EditPlayListRequset(title: title, songs: songs))
             }
-            
         }
             
             public var jwtTokenType: JwtTokenType {
