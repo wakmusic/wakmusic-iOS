@@ -21,6 +21,7 @@ public enum PlayListAPI {
     case fetchPlayListDetail(id:String,type:PlayListType)
     case createPlayList(title:String)
     case editPlayList(key:String,title:String,songs:[String])
+    case deletePlayList(key:String)
 }
 
 extension PlayListAPI: WMAPI {
@@ -50,6 +51,8 @@ extension PlayListAPI: WMAPI {
        
         case .editPlayList(key: let key):
             return "/\(key)/edit"
+        case .deletePlayList(key: let key):
+            return "/\(key)/delete"
         }
     }
         
@@ -64,6 +67,8 @@ extension PlayListAPI: WMAPI {
                 return .post
             case .editPlayList:
                 return .patch
+            case .deletePlayList:
+                return .delete
             }
             
         }
@@ -77,7 +82,7 @@ extension PlayListAPI: WMAPI {
             case .fetchRecommendPlayList,.fetchPlayListDetail:
                 return ["Content-Type": "application/json"]
                 
-            case .createPlayList,.editPlayList:
+            case .createPlayList,.editPlayList,.deletePlayList:
                 return ["Authorization":"Bearer \(token)"]
             }
         }
@@ -88,7 +93,7 @@ extension PlayListAPI: WMAPI {
             case .fetchRecommendPlayList:
                 return .requestPlain
                 
-            case .fetchPlayListDetail:
+            case .fetchPlayListDetail,.deletePlayList:
                 return .requestPlain
                 
                 
