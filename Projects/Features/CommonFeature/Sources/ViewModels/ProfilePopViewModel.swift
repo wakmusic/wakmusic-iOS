@@ -20,7 +20,6 @@ public final class ProfilePopViewModel {
     let output = Output()
     var disposeBag = DisposeBag()
     var setProfileUseCase: SetProfileUseCase
-    var fetchUserInfoUseCase: FetchUserInfoUseCase
     
     public struct Input {
         var setProfileRequest: PublishSubject<FanType> = PublishSubject()
@@ -31,11 +30,9 @@ public final class ProfilePopViewModel {
     }
     
     public init(
-        setProfileUseCase: any SetProfileUseCase,
-        fetchUserInfoUseCase: any FetchUserInfoUseCase
+        setProfileUseCase: any SetProfileUseCase
     ){
         self.setProfileUseCase = setProfileUseCase
-        self.fetchUserInfoUseCase = fetchUserInfoUseCase
         
         input.setProfileRequest
             .flatMap { [weak self] (fanType) -> Observable<BaseEntity> in
