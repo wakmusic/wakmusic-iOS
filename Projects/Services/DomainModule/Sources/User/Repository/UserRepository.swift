@@ -12,8 +12,8 @@ import DataMappingModule
 import ErrorModule
 
 public protocol UserRepository {
-    func setProfile(token:String,image:String) -> Completable
-    func setUserName(token:String,name:String) -> Completable
+    func setProfile(token:String,image:String) -> Single<BaseEntity>
+    func setUserName(token:String,name:String) -> Single<BaseEntity>
     func fetchSubPlayList(token:String) -> Single<[SubPlayListEntity]>
     func fetchFavoriteSongs(token:String) -> Single<[FavoriteSongEntity]>
 

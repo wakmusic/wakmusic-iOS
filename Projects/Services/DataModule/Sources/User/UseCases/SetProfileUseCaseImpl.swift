@@ -23,7 +23,7 @@ public struct SetProfileUseCaseImpl: SetProfileUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute(token: String, image: String) -> Completable {
+    public func execute(token: String, image: String) -> Single<BaseEntity> {
         userRepository.setProfile(token: token, image: image)
     }
     

@@ -27,11 +27,11 @@ public struct UserRepositoryImpl: UserRepository {
     }
     
     
-    public func setProfile(token: String, image: String) -> Completable {
+    public func setProfile(token: String, image: String) -> Single<BaseEntity> {
         remoteUserDataSource.setProfile(token: token, image: image)
     }
     
-    public func setUserName(token: String, name: String) -> Completable {
+    public func setUserName(token: String, name: String) -> Single<BaseEntity> {
         remoteUserDataSource.setUserName(token: token, name: name)
     }
     

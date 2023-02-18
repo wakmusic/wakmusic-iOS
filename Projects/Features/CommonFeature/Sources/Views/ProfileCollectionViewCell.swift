@@ -11,66 +11,61 @@ import Utility
 import DesignSystem
 
 
-public enum FanType{
-    case panzee
-    case leaf
-    case pigeon
+public enum FanType: String{
+    case panchi
+    case ifari
+    case dulgi
     case bat
-    case germ
+    case segyun
     case gorani
-    case fox
-    case poopDog
-    
+    case jupock
+    case ddong
 }
 
 extension FanType{
     var profileImage:UIImage{
         switch self {
-        case .panzee:
+        case .panchi:
             return DesignSystemAsset.Profile.profile0.image
-        case .leaf:
+        case .ifari:
             return DesignSystemAsset.Profile.profile1.image
-        case .pigeon:
+        case .dulgi:
             return DesignSystemAsset.Profile.profile2.image
         case .bat:
             return DesignSystemAsset.Profile.profile3.image
-        case .germ:
+        case .segyun:
             return DesignSystemAsset.Profile.profile4.image
         case .gorani:
             return DesignSystemAsset.Profile.profile5.image
-        case .fox:
+        case .jupock:
             return DesignSystemAsset.Profile.profile6.image
-        case .poopDog:
+        case .ddong:
             return DesignSystemAsset.Profile.profile7.image
         }
     }
 }
 
 public class ProfileCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var imageView: UIImageView!
     
     public override func awakeFromNib() {
         super.awakeFromNib()
-        
     }
-    
-    
 }
-
 
 public extension ProfileCollectionViewCell{
     
-    func update(_ model:Model){
-        self.imageView.image = model.type.profileImage
-        
+    func update(_ model: ProfileResponseDTO){
         
         self.imageView.layer.cornerRadius = ((APP_WIDTH() - 70) / 4) / 2
         self.imageView.layer.borderColor = model.isSelected ? DesignSystemAsset.PrimaryColor.point.color.cgColor : UIColor.clear.cgColor
-        
         self.imageView.layer.borderWidth = 3
         
+        self.imageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchProfile(name: model.type.rawValue).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
-    
 }
