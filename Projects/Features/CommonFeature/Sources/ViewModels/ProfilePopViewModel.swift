@@ -25,11 +25,13 @@ public final class ProfilePopViewModel {
     
     public struct Input {
         var setProfileRequest: PublishSubject<String> = PublishSubject()
+        var itemSelected: PublishRelay<IndexPath> = PublishRelay()
     }
 
     public struct Output {
         var resultDescription: PublishSubject<String> = PublishSubject()
         var dataSource: BehaviorRelay<[ProfileListEntity]> = BehaviorRelay(value: [])
+        var collectionViewHeight: PublishRelay<CGFloat> = PublishRelay()
     }
     
     public init(
@@ -53,6 +55,28 @@ public final class ProfilePopViewModel {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
+        output.dataSource
+            .map{ [weak self] (model) -> CGFloat in
+                guard let self = self, !model.isEmpty else { return 0 }
+                return self.getCollectionViewHeight(model: model)
+            }
+            .bind(to: output.collectionViewHeight)
+            .disposed(by: disposeBag)
+        
+        input.itemSelected
+            .withLatestFrom(output.dataSource){ ($0, $1) }
+            .map{ (indexPath: IndexPath, dataSource: [ProfileListEntity]) -> [ProfileListEntity] in
+                var newModel = dataSource
+                guard let index = newModel.firstIndex(where:{$0.isSelected}) else {
+                    return dataSource
+                }
+                newModel[index].isSelected = false  //이전 선택 false
+                newModel[indexPath.row].isSelected = true //현재 선택 true
+                return newModel
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
         input.setProfileRequest
             .flatMap { [weak self] (id) -> Observable<BaseEntity> in
                 guard let self = self else { return Observable.empty() }
@@ -71,5 +95,25 @@ public final class ProfilePopViewModel {
             })
             .disposed(by: disposeBag)
         
+    }
+    
+    private func getCollectionViewHeight(model: [ProfileListEntity]) -> CGFloat {
+        
+        let spacing: CGFloat = 10.0
+        let itemHeight: CGFloat = (APP_WIDTH()-70)/4
+        
+        let mok: Int = model.count / 4
+        let remain: Int = model.count % 4
+        
+        if model.count == 1 {
+            return itemHeight
+            
+        }else{
+            if remain == 0 {
+                return (CGFloat(mok) * itemHeight) + (CGFloat(mok-1) * spacing)
+            }else{
+                return (CGFloat(mok) * itemHeight) + (CGFloat(remain) * itemHeight) + (CGFloat(mok-1) * spacing) + (CGFloat(remain) * spacing)
+            }
+        }
     }
 }

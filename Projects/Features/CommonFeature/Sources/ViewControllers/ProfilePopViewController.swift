@@ -90,17 +90,7 @@ extension ProfilePopViewController{
             }.disposed(by:disposeBag)
         
         collectionView.rx.itemSelected
-            .withLatestFrom(viewModel.output.dataSource){ ($0, $1) }
-            .map{ (indexPath: IndexPath, dataSource: [ProfileListEntity]) -> [ProfileListEntity] in
-                var newModel = dataSource
-                guard let index = newModel.firstIndex(where:{$0.isSelected}) else {
-                    return dataSource
-                }
-                newModel[index].isSelected = false  //이전 선택 false
-                newModel[indexPath.row].isSelected = true //현재 선택 true
-                return newModel
-            }
-            .bind(to: viewModel.output.dataSource)
+            .bind(to: viewModel.input.itemSelected)
             .disposed(by: disposeBag)
         
         saveButton.rx.tap
@@ -156,6 +146,16 @@ extension ProfilePopViewController{
                 }
                 
             }).disposed(by: disposeBag)
+                
+        viewModel.output.collectionViewHeight
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (height) in
+                guard let self = self else { return }
+                self.collectionVIewHeight.constant = height
+                self.panModalSetNeedsLayoutUpdate()
+                self.panModalTransition(to: .longForm)
+                self.view.layoutIfNeeded()
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -173,10 +173,8 @@ extension ProfilePopViewController: PanModalPresentable {
       return nil
     }
 
-    public var longFormHeight: PanModalHeight {
-    
-   
-        return PanModalHeight.contentHeight( rowHeight + 190 )
+    public var longFormHeight: PanModalHeight {   
+        return PanModalHeight.contentHeight(collectionVIewHeight.constant + 190)
      }
 
     public var cornerRadius: CGFloat {
