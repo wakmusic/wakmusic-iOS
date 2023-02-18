@@ -8,7 +8,12 @@ import Foundation
 
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
   
-  
+    public func fetchProfileList() -> Single<[ProfileListEntity]> {
+        return request(.fetchProfileList)
+            .map([String].self)
+            .map { $0.map { ProfileListEntity(id: $0, isSelected: false) }}
+    }
+    
     public func setProfile(image: String) -> Single<BaseEntity> {
         
         return request(.setProfile(image: image))

@@ -26,7 +26,10 @@ public struct UserRepositoryImpl: UserRepository {
         self.remoteUserDataSource = remoteUserDataSource
     }
     
-    
+    public func fetchProfileList() -> Single<[ProfileListEntity]> {
+        remoteUserDataSource.fetchProfileList()
+    }
+
     public func setProfile(image: String) -> Single<BaseEntity> {
         remoteUserDataSource.setProfile(image: image)
     }

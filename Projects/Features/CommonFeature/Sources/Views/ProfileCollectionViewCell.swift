@@ -9,7 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
-
+import DomainModule
 
 public enum FanType: String{
     case panchi
@@ -33,14 +33,14 @@ public class ProfileCollectionViewCell: UICollectionViewCell {
 
 public extension ProfileCollectionViewCell{
     
-    func update(_ model: ProfileResponseDTO){
+    func update(_ model: ProfileListEntity){
         
         self.imageView.layer.cornerRadius = ((APP_WIDTH() - 70) / 4) / 2
         self.imageView.layer.borderColor = model.isSelected ? DesignSystemAsset.PrimaryColor.point.color.cgColor : UIColor.clear.cgColor
         self.imageView.layer.borderWidth = 3
         
         self.imageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchProfile(name: model.type.rawValue).toString),
+            with: URL(string: WMImageAPI.fetchProfile(name: model.id).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

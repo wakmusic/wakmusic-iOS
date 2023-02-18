@@ -306,6 +306,9 @@ private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: Needle
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
+        return appComponent.fetchProfileListUseCase
+    }
     var setProfileUseCase: any SetProfileUseCase {
         return appComponent.setProfileUseCase
     }
@@ -357,6 +360,7 @@ extension AppComponent: Registration {
         localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
         localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
         localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
+        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
         localTable["fetchSubPlayList-any FetchSubPlayListUseCase"] = { self.fetchSubPlayList as Any }
@@ -472,6 +476,7 @@ extension PlayListDetailComponent: Registration {
 }
 extension ProfilePopComponent: Registration {
     public func registerItems() {
+        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
         keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
     }
 }
