@@ -5,10 +5,15 @@ import Foundation
 
 public enum UserAPI {
     case setProfile(token:String,image:String)
+    case setUserName(token:String,name:String)
 }
 
 public struct RequsetProfileModel:Encodable {
     var image:String
+}
+
+public struct RequsetUserNameModel:Encodable {
+    var username:String
 }
 
 extension UserAPI: WMAPI {
@@ -23,30 +28,39 @@ extension UserAPI: WMAPI {
             
         case .setProfile:
             return "/profile/set"
+        case .setUserName:
+            return "/username"
         }
         
     }
         
         public var method: Moya.Method {
-            return .post
-        }
-        
-        public var task: Moya.Task {
             
             switch self {
                 
-            case .setProfile(_, image: let image):
-                return .requestJSONEncodable(RequsetProfileModel(image: image))
+            case .setProfile,.setUserName:
+                return .post
             }
-                
             
         }
+        
+            public var task: Moya.Task {
+                
+                switch self {
+                    
+                case .setProfile(_, image: let image):
+                    return .requestJSONEncodable(RequsetProfileModel(image: image))
+                    
+                case .setUserName(_, name: let name):
+                    return .requestJSONEncodable(RequsetUserNameModel(username: name))
+                }
+            }
     
         public var headers: [String : String]? {
             
             switch self {
                 
-            case .setProfile(token: let token,_):
+            case .setProfile(token: let token,_), .setUserName(token: let token,_):
                 return ["Authorization":"Bearer \(token)"]
             }
         }
