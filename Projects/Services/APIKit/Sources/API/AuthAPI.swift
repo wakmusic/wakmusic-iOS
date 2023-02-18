@@ -11,7 +11,7 @@ public enum AuthAPI {
     
 }
 
-public struct AuthModel:Encodable {
+public struct RequestAuthModel:Encodable {
     var id:String
     var provider:String
 }
@@ -97,7 +97,7 @@ extension AuthAPI: WMAPI {
         switch self {
             
         case .fetchToken(id: let id, type: let type):
-            return .requestJSONEncodable(AuthModel(id: id,provider: type.rawValue))
+            return .requestJSONEncodable(RequestAuthModel(id: id,provider: type.rawValue))
             
         case .fetchNaverUserInfo,.fetUserInfo,.withdrawUserInfo:
             return .requestPlain
