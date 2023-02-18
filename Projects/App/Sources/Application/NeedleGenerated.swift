@@ -309,9 +309,6 @@ private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDepend
     var setProfileUseCase: any SetProfileUseCase {
         return appComponent.setProfileUseCase
     }
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
-        return appComponent.fetchUserInfoUseCase
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -476,7 +473,6 @@ extension PlayListDetailComponent: Registration {
 extension ProfilePopComponent: Registration {
     public func registerItems() {
         keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
-        keyPathToName[\ProfilePopDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
 

@@ -44,7 +44,6 @@ extension StorageViewController{
     private func bindRx() {
         
         Utility.PreferenceManager.$userInfo
-            .debug("$userInfo")
             .map { $0 != nil }
             .subscribe(onNext: { [weak self] (isLogin) in
                 guard let self = self else{

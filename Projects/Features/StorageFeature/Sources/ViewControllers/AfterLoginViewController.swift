@@ -101,14 +101,6 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
 extension AfterLoginViewController{
     
     private func configureUI(){
-        
-        let currentFanType = FanType(rawValue: Utility.PreferenceManager.userInfo?.profile ?? "") ?? .panchi
-
-        profileImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchProfile(name: currentFanType.rawValue).toString),
-            placeholder: nil,
-            options: [.transition(.fade(0.2))]
-        )
 
         profileImageView.layer.cornerRadius = 20
         
@@ -161,7 +153,6 @@ extension AfterLoginViewController{
     private func bindRx()
     {
         output.isEditing.subscribe { [weak self] (res:Bool) in
-            
             guard let self = self else{
                 return
             }
@@ -173,22 +164,16 @@ extension AfterLoginViewController{
             self.editButton.layer.borderColor = res ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
             self.editButton.layer.borderWidth = 1
             self.editButton.backgroundColor = .clear
-            
             self.editButton.setAttributedTitle(attr, for: .normal)
             
             self.isScrollEnabled = !res //  편집 시 , 옆 탭으로 swipe를 막기 위함
             
-            
         }.disposed(by: disposeBag)
-        
-        
-        
+                
         editButton.rx.tap
             .withLatestFrom(output.isEditing)
             .map({!$0})
             .do(onNext: { [weak self] (res:Bool)  in
-                
-                
                 guard let self = self else{
                     return
                 }
@@ -206,36 +191,28 @@ extension AfterLoginViewController{
                         return
                     }
                     vc.viewModel.output.isEditinglist.accept(res)
-                    
                 }
-                
-                
             })
             .bind(to: output.isEditing)
             .disposed(by: disposeBag)
-                
-                
-        
-            profileButton.rx.tap.subscribe(onNext: { [weak self] in
-                
-                guard let self = self else{
-                    return
-                }
-                
-                let vc = self.profilePopComponent.makeView()
-                //MultiPurposePopupViewController.viewController(type: .nickname)
-    
-                self.showPanModal(content: vc)
-                
-            }).disposed(by: disposeBag)
+
+        profileButton.rx.tap.subscribe(onNext: { [weak self] in
+            guard let self = self else{
+                return
+            }
+            let vc = self.profilePopComponent.makeView()
+            //MultiPurposePopupViewController.viewController(type: .nickname)
+            self.showPanModal(content: vc)
+            
+        }).disposed(by: disposeBag)
         
         Utility.PreferenceManager.$userInfo
+            .debug("$userInfo")
             .filter { $0 != nil }
             .subscribe(onNext: { [weak self] (model) in
-                guard let self = self, let model = model else{
+                guard let self = self, let model = model else {
                     return
                 }
-
                 self.profileLabel.text = AES256.decrypt(encoded: model.displayName).correctionNickName
                 self.profileImageView.kf.setImage(
                     with: URL(string: WMImageAPI.fetchProfile(name: model.profile).toString),
@@ -273,5 +250,4 @@ extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSou
         }
         
     }
-    
 }
