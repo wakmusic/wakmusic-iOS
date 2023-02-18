@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol SetUserNameUseCase {
-    func execute(token:String,name:String) -> Single<BaseEntity>
+    func execute(name:String) -> Single<BaseEntity>
 }

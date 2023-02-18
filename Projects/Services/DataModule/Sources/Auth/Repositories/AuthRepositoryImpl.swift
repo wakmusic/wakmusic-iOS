@@ -35,12 +35,12 @@ public struct AuthRepositoryImpl: AuthRepository {
         remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
     }
     
-    public func fetchUserInfo(token: String) -> Single<AuthUserInfoEntity> {
-        remoteAuthDataSource.fetchUserInfo(token: token)
+    public func fetchUserInfo() -> Single<AuthUserInfoEntity> {
+        remoteAuthDataSource.fetchUserInfo()
     }
     
-    public func withdrawUserInfo(token: String) -> Single<BaseEntity> {
-        remoteAuthDataSource.withdrawUserInfo(token: token)
+    public func withdrawUserInfo() -> Single<BaseEntity> {
+        remoteAuthDataSource.withdrawUserInfo()
     }
     
     

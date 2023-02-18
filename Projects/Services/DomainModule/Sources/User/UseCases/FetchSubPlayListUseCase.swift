@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchSubPlayListUseCase {
-    func execute(token:String) -> Single<[SubPlayListEntity]>
+    func execute() -> Single<[SubPlayListEntity]>
 }

@@ -3,5 +3,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchUserInfoUseCase {
-    func execute(token:String) -> Single<AuthUserInfoEntity>
+    func execute() -> Single<AuthUserInfoEntity>
 }

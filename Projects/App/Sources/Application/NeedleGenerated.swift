@@ -173,6 +173,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
+    var setProfileUseCase: any SetProfileUseCase {
+        return appComponent.setProfileUseCase
+    }
     var requestComponent: RequestComponent {
         return appComponent.requestComponent
     }
@@ -418,6 +421,7 @@ extension StorageComponent: Registration {
 extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+        keyPathToName[\AfterLoginDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
     }
 }

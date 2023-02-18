@@ -99,7 +99,14 @@ extension AfterLoginViewController{
     
     private func configureUI(){
         
-        profileImageView.image = DesignSystemAsset.Profile.profile0.image
+        let currentFanType = FanType(rawValue: Utility.PreferenceManager.userInfo?.profile ?? "") ?? .panchi
+
+        profileImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchProfile(name: currentFanType.rawValue).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
+
         profileImageView.layer.cornerRadius = 20
         
         profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)

@@ -5,10 +5,10 @@ import Foundation
 import KeychainModule
 
 public enum UserAPI {
-    case setProfile(token:String,image:String)
-    case setUserName(token:String,name:String)
-    case fetchSubPlayList(token:String)
-    case fetchFavoriteSongs(token:String)
+    case setProfile(image: String)
+    case setUserName(name: String)
+    case fetchSubPlayList
+    case fetchFavoriteSongs
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -49,9 +49,9 @@ extension UserAPI: WMAPI {
     
     public var task: Moya.Task {
         switch self {
-        case .setProfile(_, image: let image):
+        case let .setProfile(image):
             return .requestJSONEncodable(RequsetProfileModel(image: image))
-        case .setUserName(_, name: let name):
+        case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
         case .fetchSubPlayList,.fetchFavoriteSongs:
             return .requestPlain
@@ -61,10 +61,10 @@ extension UserAPI: WMAPI {
     public var headers: [String : String]? {
         let token: String = KeychainImpl().load(type: .accessToken)
         switch self {
-        case .setProfile(token: let token,_)
-            ,.setUserName(token: let token,_)
-            ,.fetchSubPlayList(token: let token)
-            ,.fetchFavoriteSongs(token: let token):
+        case .setProfile,
+             .setUserName,
+             .fetchSubPlayList,
+             .fetchFavoriteSongs:
             return ["Authorization":"Bearer \(token)"]
         }
     }

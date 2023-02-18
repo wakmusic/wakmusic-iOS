@@ -9,31 +9,31 @@ import Foundation
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
   
   
-    public func setProfile(token: String, image: String) -> Single<BaseEntity> {
+    public func setProfile(image: String) -> Single<BaseEntity> {
         
-        return request(.setProfile(token: token, image: image))
+        return request(.setProfile(image: image))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
     
-    public func setUserName(token: String, name: String) -> Single<BaseEntity> {
+    public func setUserName(name: String) -> Single<BaseEntity> {
         
-        return request(.setUserName(token: token, name: name))
+        return request(.setUserName(name: name))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
     
-    public func fetchSubPlayList(token: String) -> Single<[SubPlayListEntity]> {
+    public func fetchSubPlayList() -> Single<[SubPlayListEntity]> {
         
-        return request(.fetchSubPlayList(token: token))
+        return request(.fetchSubPlayList)
             .map([SubPlayListResponseDTO].self)
             .map({$0.map{$0.toDomain()}})
         
     }
     
-    public func fetchFavoriteSong(token: String) -> Single<[FavoriteSongEntity]> {
+    public func fetchFavoriteSong() -> Single<[FavoriteSongEntity]> {
     
-        return request(.fetchFavoriteSongs(token: token))
+        return request(.fetchFavoriteSongs)
             .map([FavoriteSongsResponseDTO].self)
             .map({$0.map({$0.toDomain()})})
     }

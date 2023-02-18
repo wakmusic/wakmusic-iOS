@@ -23,8 +23,8 @@ public struct FetchFavoriteSongsUseCaseImpl: FetchFavoriteSongsUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute(token: String) -> Single<[FavoriteSongEntity]> {
-        userRepository.fetchFavoriteSongs(token: token)
+    public func execute() -> Single<[FavoriteSongEntity]> {
+        userRepository.fetchFavoriteSongs()
     }
     
 

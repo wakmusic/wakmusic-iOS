@@ -22,29 +22,6 @@ public enum FanType: String{
     case ddong
 }
 
-extension FanType{
-    var profileImage:UIImage{
-        switch self {
-        case .panchi:
-            return DesignSystemAsset.Profile.profile0.image
-        case .ifari:
-            return DesignSystemAsset.Profile.profile1.image
-        case .dulgi:
-            return DesignSystemAsset.Profile.profile2.image
-        case .bat:
-            return DesignSystemAsset.Profile.profile3.image
-        case .segyun:
-            return DesignSystemAsset.Profile.profile4.image
-        case .gorani:
-            return DesignSystemAsset.Profile.profile5.image
-        case .jupock:
-            return DesignSystemAsset.Profile.profile6.image
-        case .ddong:
-            return DesignSystemAsset.Profile.profile7.image
-        }
-    }
-}
-
 public class ProfileCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!

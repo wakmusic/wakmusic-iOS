@@ -21,8 +21,8 @@ public struct FetchUserInfoUseCaseImpl: FetchUserInfoUseCase {
         self.authRepository = authRepository
     }
     
-    public func execute(token: String) -> Single<AuthUserInfoEntity> {
-        authRepository.fetchUserInfo(token: token)
+    public func execute() -> Single<AuthUserInfoEntity> {
+        authRepository.fetchUserInfo()
     }
 
    

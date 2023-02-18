@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol SetProfileUseCase {
-    func execute(token:String,image:String) -> Single<BaseEntity>
+    func execute(image:String) -> Single<BaseEntity>
 }

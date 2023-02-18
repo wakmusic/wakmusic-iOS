@@ -27,20 +27,20 @@ public struct UserRepositoryImpl: UserRepository {
     }
     
     
-    public func setProfile(token: String, image: String) -> Single<BaseEntity> {
-        remoteUserDataSource.setProfile(token: token, image: image)
+    public func setProfile(image: String) -> Single<BaseEntity> {
+        remoteUserDataSource.setProfile(image: image)
     }
     
-    public func setUserName(token: String, name: String) -> Single<BaseEntity> {
-        remoteUserDataSource.setUserName(token: token, name: name)
+    public func setUserName(name: String) -> Single<BaseEntity> {
+        remoteUserDataSource.setUserName(name: name)
     }
     
-    public func fetchSubPlayList(token: String) -> Single<[SubPlayListEntity]> {
-        remoteUserDataSource.fetchSubPlayList(token: token)
+    public func fetchSubPlayList() -> Single<[SubPlayListEntity]> {
+        remoteUserDataSource.fetchSubPlayList()
     }
     
-    public func fetchFavoriteSongs(token: String) -> Single<[FavoriteSongEntity]> {
-        remoteUserDataSource.fetchFavoriteSong(token: token)
+    public func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]> {
+        remoteUserDataSource.fetchFavoriteSong()
     }
     
  

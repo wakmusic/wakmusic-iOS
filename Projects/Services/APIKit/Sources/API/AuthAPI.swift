@@ -2,12 +2,13 @@ import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
+import KeychainModule
 
 public enum AuthAPI {
     case fetchToken(id:String,type:ProviderType)
     case fetchNaverUserInfo(tokenType:String,accessToken:String)
-    case fetUserInfo(token:String)
-    case withdrawUserInfo(token:String)
+    case fetUserInfo
+    case withdrawUserInfo
     
 }
 
@@ -26,27 +27,19 @@ extension AuthAPI: WMAPI {
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
-        
     }
-    
-    
+        
     public var domain: WMDomain {
-             
         switch  self {
-            
         case .fetchToken,.fetUserInfo,.withdrawUserInfo:
             return .auth
         case .fetchNaverUserInfo:
             return .naver
         }
-    
     }
 
     public var urlPath: String {
-        
-  
         switch self {
-            
         case .fetchToken:
             return "/login/mobile"
         case .fetchNaverUserInfo:
@@ -56,14 +49,10 @@ extension AuthAPI: WMAPI {
         case .withdrawUserInfo:
             return "/remove"
         }
-        
-       
     }
 
     public var method: Moya.Method {
-        
         switch self {
-            
         case .fetchToken:
             return .post
         case .fetchNaverUserInfo:
@@ -73,23 +62,18 @@ extension AuthAPI: WMAPI {
         case .withdrawUserInfo:
             return .delete
         }
-        
-       
     }
     
     public var headers: [String : String]? {
-        
         switch self {
-            
         case .fetchToken:
             return ["Content-Type": "application/json"]
         case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
             return   ["Authorization": "\(tokenType) \(accessToken)"]
-        case .fetUserInfo(token: let token), .withdrawUserInfo(token: let token):
+        case .fetUserInfo, .withdrawUserInfo:
+            let token: String = KeychainImpl().load(type: .accessToken)
             return   ["Authorization":"Bearer \(token)"]
-            
         }
-
     }
 
     public var task: Moya.Task {

@@ -44,11 +44,7 @@ final public class RequestViewModel:ViewModelType {
                 guard let self = self else {
                     return Observable.empty()
                 }
-                
-                let keychain = KeychainImpl()
-                let token: String = keychain.load(type: .accessToken)
-
-                return self.withDrawUserInfoUseCase.execute(token: token).asObservable()
+                return self.withDrawUserInfoUseCase.execute().asObservable()
             }
             .subscribe(onNext: { (model) in
                 DEBUG_LOG("성공성공성공: \(model)")

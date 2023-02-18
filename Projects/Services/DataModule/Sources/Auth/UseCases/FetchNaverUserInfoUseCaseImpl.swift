@@ -23,7 +23,7 @@ public struct FetchNaverUserInfoUseCaseImpl: FetchNaverUserInfoUseCase {
     }
     
 
-    public func execute(tokenType: String, accessToken: String) ->Single<NaverUserInfoEntity> {
+    public func execute(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
         authRepository.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
     }
    

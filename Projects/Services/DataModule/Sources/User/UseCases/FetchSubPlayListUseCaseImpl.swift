@@ -25,8 +25,8 @@ public struct FetchSubPlayListUseCaseImpl: FetchSubPlayListUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute(token: String) -> Single<[SubPlayListEntity]> {
-        userRepository.fetchSubPlayList(token: token)
+    public func execute() -> Single<[SubPlayListEntity]> {
+        userRepository.fetchSubPlayList()
     }
     
 

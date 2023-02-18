@@ -20,6 +20,7 @@ final public class AfterLoginViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
+    var setProfileUseCase: SetProfileUseCase!
 
 
     public struct Input {
@@ -32,13 +33,14 @@ final public class AfterLoginViewModel:ViewModelType {
     }
 
     public init(
-        fetchUserInfoUseCase:FetchUserInfoUseCase
+        fetchUserInfoUseCase:FetchUserInfoUseCase,
+        setProfileUseCase: SetProfileUseCase
     ) {
         
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        self.setProfileUseCase = setProfileUseCase
         
-        
-        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjYxOTY2MSwiZXhwIjoxNjc3MjI0NDYxfQ.vrOCsbXaV4lgrp8ohUG9l2uI8mXHDmvY3Qb_jasnX18")
+        self.fetchUserInfoUseCase.execute()
             .subscribe(onSuccess: {DEBUG_LOG($0)})
             .disposed(by: disposeBag)
         
