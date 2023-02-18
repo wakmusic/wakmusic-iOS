@@ -21,5 +21,6 @@ let project = Project.makeModule(
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
         .SPM.SwiftEntryKit,
+        .SPM.CryptoSwift
     ]
 )

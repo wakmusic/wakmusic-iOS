@@ -16,6 +16,7 @@ public final class PreferenceManager {
     
     /// UserDefaults에 저장 된 데이터에 접근하기 위한 키 값의 나열.
     enum Constants: String {
+        case user
         case recentRecords // 최근 검색어
         case startPage //시작 페이지(탭)
     }
@@ -25,6 +26,9 @@ public final class PreferenceManager {
 
     @UserDefaultWrapper(key: Constants.startPage.rawValue, defaultValue: nil)
     public static var startPage: Int?
+    
+    @UserDefaultWrapper(key: Constants.user.rawValue, defaultValue: nil)
+    public static var userInfo: UserInfo?
 }
 
 @propertyWrapper
@@ -62,5 +66,4 @@ public final class UserDefaultWrapper<T: Codable> {
     public var projectedValue: Observable<T?> {
         return subject.asObservable()
     }
-    
 }

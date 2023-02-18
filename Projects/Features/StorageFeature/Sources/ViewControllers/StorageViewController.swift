@@ -6,15 +6,12 @@ import RxCocoa
 import RxRelay
 import RxSwift
 import BaseFeature
+import KeychainModule
 
 public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard,ContainerViewType {
     
     @IBOutlet weak public var contentView: UIView!
-    
-    
-    
-    var isLogin:BehaviorRelay<Bool> = BehaviorRelay(value:true)
-    
+
     var signInComponent:SignInComponent!
     var afterLoginComponent:AfterLoginComponent!
     
@@ -24,13 +21,9 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+    
         configureUI()
-        
-        
-        
-        
+        bindRx()
     }
 
     public static func viewController(signInComponent:SignInComponent,afterLoginComponent:AfterLoginComponent) -> StorageViewController {
@@ -43,37 +36,31 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
     }
 }
 
-
 extension StorageViewController{
     
     private func configureUI() {
-        bindSubView()
     }
     
-    private func bindSubView()
-    {
+    private func bindRx() {
         
-        isLogin.subscribe { [weak self] (login:Bool) in
-            
-            guard let self = self else{
-                return
-            }
-            
-            if login
-            {
-                self.add(asChildViewController: self.afLoginView)
-            }
-            else
-            {
-                
-                self.add(asChildViewController:self.bfLoginView)
-            }
-            
-            
-            
-        }.disposed(by: disposeBag)
-        
-        
+        Utility.PreferenceManager.$userInfo
+            .debug("$userInfo")
+            .map { $0 != nil }
+            .subscribe(onNext: { [weak self] (isLogin) in
+                guard let self = self else{
+                    return
+                }
+
+                if isLogin{
+                    self.remove(asChildViewController: self.bfLoginView)
+                    self.add(asChildViewController: self.afLoginView)
+                    
+                }else{
+                    self.remove(asChildViewController: self.afLoginView)
+                    self.add(asChildViewController:self.bfLoginView)
+                }
+
+            }).disposed(by: disposeBag)
+
     }
-    
 }

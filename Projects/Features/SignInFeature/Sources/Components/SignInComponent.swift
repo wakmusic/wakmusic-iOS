@@ -13,10 +13,13 @@ import DomainModule
 public protocol SignInDependency: Dependency {
     var fetchTokenUseCase: any FetchTokenUseCase {get}
     var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {get}
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
 }
 
 public final class SignInComponent: Component<SignInDependency> {
     public func makeView() -> LoginViewController {
-        return LoginViewController.viewController(viewModel: .init(fetchTokenUseCase: dependency.fetchTokenUseCase,fetchNaverUserInfo: dependency.fetchNaverUserInfoUseCase))
+        return LoginViewController.viewController(viewModel: .init(fetchTokenUseCase: dependency.fetchTokenUseCase,
+                                                                   fetchNaverUserInfoUseCase: dependency.fetchNaverUserInfoUseCase,
+                                                                   fetchUserInfoUseCase: dependency.fetchUserInfoUseCase))
     }
 }

@@ -428,17 +428,23 @@
                                                         <constraint firstAttribute="height" constant="40" id="5JJ-og-yWo"/>
                                                     </constraints>
                                                 </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ksh-pj-Ow4">
-                                                    <rect key="frame" x="100" y="17.000000000000004" width="203" height="36.333333333333343"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ksh-pj-Ow4">
+                                                    <rect key="frame" x="100" y="14" width="203" height="42"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="리와인드 (RE:WIND)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9nq-Yr-eaj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="203" height="17"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="203" height="24"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="24" id="jSD-fG-jgT"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                             <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이세계아이돌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIv-S7-U4W">
-                                                            <rect key="frame" x="0.0" y="22" width="203" height="14.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="24" width="203" height="18"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="18" id="SIA-lI-X5t"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                             <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>

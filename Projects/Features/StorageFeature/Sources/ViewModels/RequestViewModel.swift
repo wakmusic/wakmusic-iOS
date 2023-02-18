@@ -12,20 +12,15 @@ import RxSwift
 import RxRelay
 import DomainModule
 import BaseFeature
+import KeychainModule
 
 final public class RequestViewModel:ViewModelType {
-    
-    
-    
 
     var disposeBag = DisposeBag()
     var withDrawUserInfoUseCase: WithdrawUserInfoUseCase
 
-
     public struct Input {
         let pressWithdraw:PublishSubject<Void> = PublishSubject()
-        
-        
     }
 
     public struct Output {
@@ -37,46 +32,38 @@ final public class RequestViewModel:ViewModelType {
     ) {
         
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
-        
-  
-        print("✅ RequestViewModel 생성")
-        
-        
-        
-       
-        
-
+        DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
     public func transform(from input: Input) -> Output {
-        var output = Output()
-        
+        let output = Output()
      
         input.pressWithdraw
-            .take(1)
-            .flatMap({[weak self] () -> Completable  in
-            
-            guard let self = self else {
-                return Completable.empty()
-            }
-            
-                return self.withDrawUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDU5Ny4wMGIyMWU3MWM2MmU0M2U2YmQ4MTQ3NmRjOTcxYmEyMi4wNzUyIiwiaWF0IjoxNjc2NjM4ODIwLCJleHAiOjE2NzcyNDM2MjB9.FgTlHG0ZeerkAvgTb78_QLeHbZFpZz8TdedekHq4TXo")
-        })
-        .debug("TTT")
-        .subscribe(onError: { (error:Error) in
-            
-                    let error = error.asWMError
-                    DEBUG_LOG(error.errorDescription!)
-                    output.statusCode.onNext(error.errorDescription!)
-        },onCompleted: {
-            DEBUG_LOG("성공성공성공")
-            output.statusCode.onNext("")
-        }).disposed(by: disposeBag)
-        
+            .debug("pressWithdraw")
+            .flatMap{ [weak self] () -> Observable<BaseEntity> in
+                guard let self = self else {
+                    return Observable.empty()
+                }
+                
+                let keychain = KeychainImpl()
+                let token: String = keychain.load(type: .accessToken)
 
-        
-        
+                return self.withDrawUserInfoUseCase.execute(token: token).asObservable()
+            }
+            .subscribe(onNext: { (model) in
+                DEBUG_LOG("성공성공성공: \(model)")
+                let keychain = KeychainImpl()
+                keychain.delete(type: .accessToken)
+                Utility.PreferenceManager.userInfo = nil
+                output.statusCode.onNext("")
+                
+            }, onError: { (error) in
+                let error = error.asWMError
+                DEBUG_LOG(error.errorDescription!)
+                output.statusCode.onNext(error.errorDescription!)
+                
+            }).disposed(by: disposeBag)
+
         return output
     }
 }
-

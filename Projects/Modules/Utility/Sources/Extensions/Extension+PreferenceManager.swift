@@ -43,5 +43,26 @@ public extension PreferenceManager {
         }
         
         Utility.PreferenceManager.recentRecords = currentRecentRecords
+        
+    }
+    
+    /// 유저 정보 저장
+    func setUserInfo(
+        ID: String,
+        platform: String,
+        profile: String,
+        displayName: String,
+        firstLoginTime: Int,
+        first: Bool
+    ) {
+        let userInfo = UserInfo(
+            ID: ID,
+            platform: platform,
+            profile: profile,
+            displayName: displayName,
+            firstLoginTime: firstLoginTime,
+            first: first
+        )
+        Utility.PreferenceManager.userInfo = userInfo
     }
 }

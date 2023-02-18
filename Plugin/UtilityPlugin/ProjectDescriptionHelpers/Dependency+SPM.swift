@@ -29,6 +29,7 @@ public extension TargetDependency.SPM {
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
    // static let GoogoleLogin = TargetDependency.external(name: "GoogleSignIn")
+    static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
 }
 
 public extension Package {

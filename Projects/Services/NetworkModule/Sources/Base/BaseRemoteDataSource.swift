@@ -37,14 +37,11 @@ public class BaseRemoteDataSource<API: WMAPI> {
             return Disposables.create(disposabels)
         }
     }
-    
-   
 }
 
 private extension BaseRemoteDataSource {
     func defaultRequest(_ api: API) -> Single<Response> {
-        
-        DEBUG_LOG(api.domain.rawValue + api.urlPath)
+        DEBUG_LOG("[\(api.method.rawValue)] \(api.baseURL.absoluteString + api.domain.rawValue + api.urlPath)\n\(api.task)")
         return provider.rx.request(api)
             .timeout(.seconds(5), scheduler: MainScheduler.asyncInstance)
             .catch { error in
@@ -54,12 +51,8 @@ private extension BaseRemoteDataSource {
                 return Single.error(api.errorMap[errorCode] ?? error)
             }
     }
-    
-    
-    
-    
+
     func checkIsApiNeedsAuthorization(_ api: API) -> Bool {
         api.jwtTokenType == .accessToken
     }
-
 }
