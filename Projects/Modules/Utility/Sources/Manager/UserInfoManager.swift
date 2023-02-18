@@ -20,3 +20,13 @@ public struct UserInfo: Codable, Equatable {
         return lhs.ID == rhs.ID
     }
 }
+
+public extension UserInfo {
+    func update(displayName: String) -> UserInfo {
+        return UserInfo(ID: self.ID, platform: self.platform, profile: self.profile, displayName: displayName, firstLoginTime: self.firstLoginTime, first: self.first)
+    }
+    
+    func update(profile: String) -> UserInfo {
+        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, displayName: self.displayName, firstLoginTime: self.firstLoginTime, first: self.first)
+    }
+}
