@@ -7,6 +7,7 @@ public enum UserAPI {
     case setProfile(token:String,image:String)
     case setUserName(token:String,name:String)
     case fetchSubPlayList(token:String)
+    case fetchFavoriteSongs(token:String)
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -33,6 +34,8 @@ extension UserAPI: WMAPI {
             return "/username"
         case .fetchSubPlayList:
             return "/playlists"
+        case .fetchFavoriteSongs:
+            return "/likes"
         }
         
     }
@@ -44,7 +47,7 @@ extension UserAPI: WMAPI {
             case .setProfile,.setUserName:
                 return .post
             
-            case .fetchSubPlayList:
+            case .fetchSubPlayList,.fetchFavoriteSongs:
                 return .get
     
             }
@@ -62,7 +65,7 @@ extension UserAPI: WMAPI {
                 case .setUserName(_, name: let name):
                     return .requestJSONEncodable(RequsetUserNameModel(username: name))
                 
-                case .fetchSubPlayList:
+                case .fetchSubPlayList,.fetchFavoriteSongs:
                     return .requestPlain
                     
                 }
@@ -72,7 +75,10 @@ extension UserAPI: WMAPI {
             
             switch self {
                 
-            case .setProfile(token: let token,_), .setUserName(token: let token,_),.fetchSubPlayList(token: let token):
+            case .setProfile(token: let token,_)
+                ,.setUserName(token: let token,_)
+                ,.fetchSubPlayList(token: let token)
+                ,.fetchFavoriteSongs(token: let token):
                 return ["Authorization":"Bearer \(token)"]
             }
         }

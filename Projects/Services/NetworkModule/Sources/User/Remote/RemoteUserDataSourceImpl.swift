@@ -7,8 +7,7 @@ import Foundation
 
 
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
-    
-    
+  
   
     public func setProfile(token: String, image: String) -> Completable {
         
@@ -29,6 +28,15 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map({$0.map{$0.toDomain()}})
         
     }
+    
+    public func fetchFavoriteSong(token: String) -> Single<[FavoriteSongEntity]> {
+    
+        return request(.fetchFavoriteSongs(token: token))
+            .map([FavoriteSongsResponseDTO].self)
+            .map({$0.map({$0.toDomain()})})
+    }
+    
+    
     
     
    

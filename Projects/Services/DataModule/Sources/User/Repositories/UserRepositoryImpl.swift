@@ -15,6 +15,8 @@ import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
     
+    
+    
   
     private let remoteUserDataSource: any RemoteUserDataSource
     
@@ -36,5 +38,10 @@ public struct UserRepositoryImpl: UserRepository {
     public func fetchSubPlayList(token: String) -> Single<[SubPlayListEntity]> {
         remoteUserDataSource.fetchSubPlayList(token: token)
     }
+    
+    public func fetchFavoriteSongs(token: String) -> Single<[FavoriteSongEntity]> {
+        remoteUserDataSource.fetchFavoriteSong(token: token)
+    }
+    
  
 }

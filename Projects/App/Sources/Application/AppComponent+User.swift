@@ -62,6 +62,14 @@ public extension AppComponent {
         
     }
     
+    var fetchFavoriteSongs: any FetchFavoriteSongsUseCase {
+        
+        shared {
+            FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
+        }
+        
+    }
+    
     
     
    
