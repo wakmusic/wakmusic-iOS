@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchFavoriteSongsUseCase {
-    func execute(token:String) -> Single<[FavoriteSongEntity]>
+    func execute() -> Single<[FavoriteSongEntity]>
 }

@@ -19,43 +19,35 @@ import StorageFeature
 
 public extension AppComponent {
     
-
-   
-    
-    var profileComponent:  ProfilePopComponent {
+    var profilePopComponent:  ProfilePopComponent {
         ProfilePopComponent(parent: self)
     }
-   
     
     var remoteUserDataSource: any RemoteUserDataSource {
         shared {
             RemoteUserDataSourceImpl(keychain: keychain)
         }
     }
+    
     var userRepository: any UserRepository {
         shared {
             UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)
         }
     }
     
-    
     var setProfileUseCase: any SetProfileUseCase {
-        
         shared {
             SetProfileUseCaseImpl(userRepository: userRepository)
         }
-        
     }
     
     var setUserNameUseCase: any SetUserNameUseCase {
-        
         shared{
             SetUserNameUseCaseImpl(userRepository: userRepository)
         }
     }
     
     var fetchSubPlayList: any FetchSubPlayListUseCase {
-        
         shared {
             FetchSubPlayListUseCaseImpl(userRepository: userRepository)
         }
@@ -63,17 +55,8 @@ public extension AppComponent {
     }
     
     var fetchFavoriteSongs: any FetchFavoriteSongsUseCase {
-        
         shared {
             FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
         }
-        
     }
-    
-    
-    
-   
-    
-  
-    
 }

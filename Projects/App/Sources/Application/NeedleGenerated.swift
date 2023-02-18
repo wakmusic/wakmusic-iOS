@@ -176,6 +176,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var requestComponent: RequestComponent {
         return appComponent.requestComponent
     }
+    var profilePopComponent: ProfilePopComponent {
+        return appComponent.profilePopComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -306,6 +309,9 @@ private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDepend
     var setProfileUseCase: any SetProfileUseCase {
         return appComponent.setProfileUseCase
     }
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
+        return appComponent.fetchUserInfoUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -351,7 +357,7 @@ extension AppComponent: Registration {
         localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
         localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
         localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
-        localTable["profileComponent-ProfilePopComponent"] = { self.profileComponent as Any }
+        localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
         localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
         localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
@@ -419,6 +425,7 @@ extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
+        keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
     }
 }
 extension RequestComponent: Registration {
@@ -469,6 +476,7 @@ extension PlayListDetailComponent: Registration {
 extension ProfilePopComponent: Registration {
     public func registerItems() {
         keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
+        keyPathToName[\ProfilePopDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
 

@@ -9,19 +9,22 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import CommonFeature
 
 public protocol AfterLoginDependency: Dependency {
-   var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
-   var requestComponent: RequestComponent {get}
-
-    
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
+    var requestComponent: RequestComponent {get}
+    var profilePopComponent: ProfilePopComponent {get}
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {
     public func makeView() -> AfterLoginViewController {
         return AfterLoginViewController.viewController(
-            viewModel: .init(fetchUserInfoUseCase: dependency.fetchUserInfoUseCase),
-            requestComponent: dependency.requestComponent
+            viewModel: .init(
+                fetchUserInfoUseCase: dependency.fetchUserInfoUseCase
+            ),
+            requestComponent: dependency.requestComponent,
+            profilePopComponent: dependency.profilePopComponent
         )
     }
 }

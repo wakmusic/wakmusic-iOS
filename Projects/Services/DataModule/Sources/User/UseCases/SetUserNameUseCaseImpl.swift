@@ -23,8 +23,8 @@ public struct SetUserNameUseCaseImpl: SetUserNameUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute(token: String, name: String) -> Completable {
-        userRepository.setUserName(token: token, name: name)
+    public func execute(name: String) -> Single<BaseEntity> {
+        userRepository.setUserName(name: name)
     }
     
 

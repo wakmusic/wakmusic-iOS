@@ -50,7 +50,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
     var viewModel:AfterLoginViewModel!
     var requestComponent:RequestComponent!
-    
+    var profilePopComponent: ProfilePopComponent!
+
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
@@ -83,23 +84,32 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     }
     
     
-    public static func viewController(viewModel:AfterLoginViewModel,requestComponent:RequestComponent) -> AfterLoginViewController {
+    public static func viewController(
+        viewModel:AfterLoginViewModel,
+        requestComponent:RequestComponent,
+        profilePopComponent: ProfilePopComponent
+    ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.requestComponent = requestComponent
+        viewController.profilePopComponent = profilePopComponent
         return viewController
     }
-
 }
-
-
 
 extension AfterLoginViewController{
     
     private func configureUI(){
         
-        profileImageView.image = DesignSystemAsset.Profile.profile0.image
+        let currentFanType = FanType(rawValue: Utility.PreferenceManager.userInfo?.profile ?? "") ?? .panchi
+
+        profileImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchProfile(name: currentFanType.rawValue).toString),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
+
         profileImageView.layer.cornerRadius = 20
         
         profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -212,14 +222,12 @@ extension AfterLoginViewController{
                     return
                 }
                 
-                //       // let vc = ProfilePopViewController.viewController()
-                let vc = ProfilePopViewController.viewController()
+                let vc = self.profilePopComponent.makeView()
                 //MultiPurposePopupViewController.viewController(type: .nickname)
     
-            self.showPanModal(content: vc)
+                self.showPanModal(content: vc)
                 
             }).disposed(by: disposeBag)
-        
         
         Utility.PreferenceManager.$userInfo
             .filter { $0 != nil }

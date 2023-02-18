@@ -14,17 +14,12 @@ import DomainModule
 import BaseFeature
 
 final public class AfterLoginViewModel:ViewModelType {
-    
-    
-    
 
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
 
-
     public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
-        
     }
 
     public struct Output {
@@ -36,23 +31,11 @@ final public class AfterLoginViewModel:ViewModelType {
     ) {
         
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
-        
-        
-        self.fetchUserInfoUseCase.execute(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExNDgxMDA3NTUyNTM4MjA5NzcyNCIsImlhdCI6MTY3NjYxOTY2MSwiZXhwIjoxNjc3MjI0NDYxfQ.vrOCsbXaV4lgrp8ohUG9l2uI8mXHDmvY3Qb_jasnX18")
-            .subscribe(onSuccess: {DEBUG_LOG($0)})
-            .disposed(by: disposeBag)
-        
-        
-        
-        print("✅ AfterLoginViewModel 생성")
-        
-
+        DEBUG_LOG("✅ AfterLoginViewModel 생성")
     }
     
     public func transform(from input: Input) -> Output {
         var output = Output()
-        
-        
         
         return output
     }

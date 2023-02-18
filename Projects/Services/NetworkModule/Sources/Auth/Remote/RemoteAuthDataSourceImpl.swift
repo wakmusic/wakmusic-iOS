@@ -23,14 +23,14 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map({$0.toDomain()})
     }
     
-    public func fetchUserInfo(token: String) -> Single<AuthUserInfoEntity> {
-        request(.fetUserInfo(token: token))
+    public func fetchUserInfo() -> Single<AuthUserInfoEntity> {
+        request(.fetUserInfo)
             .map(AuthUserInfoResponseDTO.self)
             .map({$0.toDomain()})
     }
     
-    public func withdrawUserInfo(token: String) -> Single<BaseEntity> {
-        request(.withdrawUserInfo(token: token))
+    public func withdrawUserInfo() -> Single<BaseEntity> {
+        request(.withdrawUserInfo)
             .map(BaseResponseDTO.self)
             .map{ $0.toDomain() }
     }
