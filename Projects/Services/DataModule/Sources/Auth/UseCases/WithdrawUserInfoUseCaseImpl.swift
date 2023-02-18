@@ -23,7 +23,7 @@ public struct WithdrawUserInfoUseCaseImpl: WithdrawUserInfoUseCase {
         self.authRepository = authRepository
     }
     
-    public func execute(token: String) -> Completable {
+    public func execute(token: String) -> Single<BaseEntity> {
         authRepository.withdrawUserInfo(token: token)
     }
     

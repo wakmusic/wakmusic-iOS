@@ -39,7 +39,7 @@ public struct AuthRepositoryImpl: AuthRepository {
         remoteAuthDataSource.fetchUserInfo(token: token)
     }
     
-    public func withdrawUserInfo(token: String) -> Completable {
+    public func withdrawUserInfo(token: String) -> Single<BaseEntity> {
         remoteAuthDataSource.withdrawUserInfo(token: token)
     }
     

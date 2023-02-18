@@ -184,8 +184,8 @@ extension RequestViewController{
     }
     
     private func bindRx(){
+        
         output.statusCode.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }

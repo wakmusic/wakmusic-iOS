@@ -3,5 +3,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol WithdrawUserInfoUseCase {
-    func execute(token:String) -> Completable
+    func execute(token:String) -> Single<BaseEntity>
 }

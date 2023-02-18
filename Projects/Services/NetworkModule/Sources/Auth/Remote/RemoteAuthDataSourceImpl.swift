@@ -29,15 +29,9 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map({$0.toDomain()})
     }
     
-    public func withdrawUserInfo(token: String) -> Completable {
+    public func withdrawUserInfo(token: String) -> Single<BaseEntity> {
         request(.withdrawUserInfo(token: token))
-                .asCompletable()
-          
+            .map(BaseResponseDTO.self)
+            .map{ $0.toDomain() }
     }
-    
-    
-    
-   
-    
- 
 }

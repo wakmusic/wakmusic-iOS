@@ -39,30 +39,29 @@ final public class RequestViewModel:ViewModelType {
         let output = Output()
      
         input.pressWithdraw
-            .take(1)
-            .flatMap({[weak self] () -> Completable in
+            .debug("pressWithdraw")
+            .flatMap{ [weak self] () -> Observable<BaseEntity> in
                 guard let self = self else {
-                    return Completable.empty()
+                    return Observable.empty()
                 }
                 
                 let keychain = KeychainImpl()
                 let token: String = keychain.load(type: .accessToken)
 
-                return self.withDrawUserInfoUseCase.execute(token: token)
-            })
-            .asCompletable()
-            .debug("TTT")
-            .subscribe(onCompleted: {
-                DEBUG_LOG("성공성공성공")
+                return self.withDrawUserInfoUseCase.execute(token: token).asObservable()
+            }
+            .subscribe(onNext: { (model) in
+                DEBUG_LOG("성공성공성공: \(model)")
                 let keychain = KeychainImpl()
                 keychain.delete(type: .accessToken)
                 Utility.PreferenceManager.userInfo = nil
                 output.statusCode.onNext("")
-
+                
             }, onError: { (error) in
                 let error = error.asWMError
                 DEBUG_LOG(error.errorDescription!)
                 output.statusCode.onNext(error.errorDescription!)
+                
             }).disposed(by: disposeBag)
 
         return output
