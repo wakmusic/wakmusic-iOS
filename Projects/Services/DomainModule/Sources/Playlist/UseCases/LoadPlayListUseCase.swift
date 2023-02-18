@@ -3,5 +3,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol LoadPlayListUseCase {
-    func execute() -> Single<PlayListBaseEntity>
+    func execute(key: String) -> Single<PlayListBaseEntity>
 }

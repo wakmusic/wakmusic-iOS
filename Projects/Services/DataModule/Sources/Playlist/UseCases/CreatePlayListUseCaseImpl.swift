@@ -12,7 +12,9 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
+public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {
+   
+    
    
     
 
@@ -24,8 +26,8 @@ public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
         self.playListRepository = playListRepository
     }
     
-    public func execute() -> Single<[RecommendPlayListEntity]> {
-        playListRepository.fetchRecommendPlayList()
+    public func execute(title:String) -> Single<PlayListBaseEntity> {
+        playListRepository.createPlayList(title: title)
     }
 
    
