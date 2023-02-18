@@ -353,6 +353,7 @@ extension AppComponent: Registration {
         localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
+        localTable["fetchSubPlayList-any FetchSubPlayListUseCase"] = { self.fetchSubPlayList as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }

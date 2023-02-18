@@ -15,8 +15,7 @@ import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
     
-    
-      
+  
     private let remoteUserDataSource: any RemoteUserDataSource
     
     public init(
@@ -32,6 +31,10 @@ public struct UserRepositoryImpl: UserRepository {
     
     public func setUserName(token: String, name: String) -> Completable {
         remoteUserDataSource.setUserName(token: token, name: name)
+    }
+    
+    public func fetchSubPlayList(token: String) -> Single<[SubPlayListEntity]> {
+        remoteUserDataSource.fetchSubPlayList(token: token)
     }
  
 }

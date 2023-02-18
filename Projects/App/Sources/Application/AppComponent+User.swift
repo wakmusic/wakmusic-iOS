@@ -54,6 +54,13 @@ public extension AppComponent {
         }
     }
     
+    var fetchSubPlayList: any FetchSubPlayListUseCase {
+        
+        shared {
+            FetchSubPlayListUseCaseImpl(userRepository: userRepository)
+        }
+        
+    }
     
     
     

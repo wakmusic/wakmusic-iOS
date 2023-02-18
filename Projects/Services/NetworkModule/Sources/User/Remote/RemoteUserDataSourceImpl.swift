@@ -9,7 +9,7 @@ import Foundation
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
     
     
-    
+  
     public func setProfile(token: String, image: String) -> Completable {
         
         return request(.setProfile(token: token, image: image))
@@ -21,6 +21,15 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
         return request(.setUserName(token: token, name: name))
             .asCompletable()
     }
+    
+    public func fetchSubPlayList(token: String) -> Single<[SubPlayListEntity]> {
+        
+        return request(.fetchSubPlayList(token: token))
+            .map([SubPlayListResponseDTO].self)
+            .map({$0.map{$0.toDomain()}})
+        
+    }
+    
     
    
     
