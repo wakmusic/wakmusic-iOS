@@ -12,6 +12,7 @@ import DataMappingModule
 import ErrorModule
 
 public protocol UserRepository {
+    func fetchProfileList() -> Single<[ProfileListEntity]>
     func setProfile(image:String) -> Single<BaseEntity>
     func setUserName(name:String) -> Single<BaseEntity>
     func fetchSubPlayList() -> Single<[SubPlayListEntity]>

@@ -5,6 +5,7 @@ import Foundation
 import KeychainModule
 
 public enum UserAPI {
+    case fetchProfileList
     case setProfile(image: String)
     case setUserName(name: String)
     case fetchSubPlayList
@@ -27,6 +28,8 @@ extension UserAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
+        case .fetchProfileList:
+            return "/profile/list"
         case .setProfile:
             return "/profile/set"
         case .setUserName:
@@ -40,9 +43,9 @@ extension UserAPI: WMAPI {
         
     public var method: Moya.Method {
         switch self {
-        case .setProfile,.setUserName:
+        case .setProfile, .setUserName:
             return .post
-        case .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
             return .get
         }
     }
@@ -53,7 +56,7 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetProfileModel(image: image))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
-        case .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
             return .requestPlain
         }
     }
@@ -61,7 +64,8 @@ extension UserAPI: WMAPI {
     public var headers: [String : String]? {
         let token: String = KeychainImpl().load(type: .accessToken)
         switch self {
-        case .setProfile,
+        case .fetchProfileList,
+             .setProfile,
              .setUserName,
              .fetchSubPlayList,
              .fetchFavoriteSongs:

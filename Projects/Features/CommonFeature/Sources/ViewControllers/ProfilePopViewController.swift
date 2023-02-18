@@ -13,6 +13,7 @@ import RxCocoa
 import RxRelay
 import RxSwift
 import DesignSystem
+import DomainModule
 
 public struct ProfileResponseDTO {
     var type: FanType
@@ -25,27 +26,10 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var dataLoadActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var viewModel: ProfilePopViewModel!
-    var completion: (() -> Void)?
-    var dataSource: BehaviorRelay<[ProfileResponseDTO]> = {
-        let currentFanType = FanType(rawValue: Utility.PreferenceManager.userInfo?.profile ?? "") ?? .panchi
-        let dataSource = BehaviorRelay.init(
-            value: [
-                ProfileResponseDTO(type: .panchi, isSelected: currentFanType == .panchi),
-                ProfileResponseDTO(type: .ifari, isSelected: currentFanType == .ifari),
-                ProfileResponseDTO(type: .dulgi, isSelected: currentFanType == .dulgi),
-                ProfileResponseDTO(type: .bat, isSelected: currentFanType == .bat),
-                ProfileResponseDTO(type: .segyun, isSelected: currentFanType == .segyun),
-                ProfileResponseDTO(type: .gorani, isSelected: currentFanType == .gorani),
-                ProfileResponseDTO(type: .jupock, isSelected: currentFanType == .jupock),
-                ProfileResponseDTO(type: .ddong, isSelected: currentFanType == .ddong)
-            ]
-        )
-        return dataSource
-    }()
-    
+    var viewModel: ProfilePopViewModel!    
     var disposeBag = DisposeBag()
     var rowHeight:CGFloat = (( APP_WIDTH() - 70) / 4) * 2
     
@@ -60,10 +44,9 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
         bindRx()
     }
     
-    public static func viewController(viewModel: ProfilePopViewModel, completion: (() -> Void)? = nil) -> ProfilePopViewController {
+    public static func viewController(viewModel: ProfilePopViewModel) -> ProfilePopViewController {
         let viewController = ProfilePopViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.completion = completion
         return viewController
     }
 }
@@ -82,39 +65,50 @@ extension ProfilePopViewController{
             ), for: .normal
         )
      
+        self.dataLoadActivityIndicator.startAnimating()
         self.activityIndicator.color = .white
         self.collectionVIewHeight.constant = rowHeight  + 10
     }
     
     private func bindRx(){
         
-        self.collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
 
-        dataSource.bind(to: collectionView.rx.items) { (collectionView: UICollectionView, index: Int, model: ProfileResponseDTO) -> UICollectionViewCell in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileCollectionViewCell", for: IndexPath(row: index, section: 0)) as? ProfileCollectionViewCell else {
-                return UICollectionViewCell()
-            }
-            cell.update(model)
-            return cell
+        viewModel.output.dataSource
+            .skip(1)
+            .do(onNext: { [weak self] _ in
+                self?.dataLoadActivityIndicator.stopAnimating()
+            })
+            .bind(to: collectionView.rx.items) { (collectionView: UICollectionView, index: Int, model: ProfileListEntity) -> UICollectionViewCell in
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileCollectionViewCell",
+                                                                    for: IndexPath(row: index, section: 0)) as? ProfileCollectionViewCell else {
+                    return UICollectionViewCell()
+                }
+                cell.update(model)
+                return cell
                      
-        }.disposed(by:disposeBag)
+            }.disposed(by:disposeBag)
         
         collectionView.rx.itemSelected
-            .withLatestFrom(dataSource){($0,$1)}
-            .map{ (indexPath: IndexPath, dataSource: [ProfileResponseDTO]) -> [ProfileResponseDTO] in
-                var newModel = dataSource
-                guard let index = newModel.firstIndex(where:{$0.isSelected}) else {
-                    return dataSource
-                }
-                
-                newModel[index].isSelected = false  //이전 선택 false
-                newModel[indexPath.row].isSelected = true //현재 선택 true
-                return newModel
-            }
-            .bind(to: dataSource)
+            .bind(to: viewModel.input.itemSelected)
             .disposed(by: disposeBag)
         
         saveButton.rx.tap
+            .withLatestFrom(viewModel.output.dataSource)
+            .map{ (model) in
+                let id: String = model.filter { $0.isSelected }.first?.id ?? "unknown"
+                return id
+            }
+            .filter{ [weak self] (id) in
+                guard let self = self else { return false }
+                let currentProfile = Utility.PreferenceManager.userInfo?.profile ?? "unknown"
+                guard currentProfile != id else {
+                    self.showToast(text: "현재 설정 된 프로필 입니다. 다른 프로필을 선택해주세요.",
+                                   font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    return false
+                }
+                return true
+            }
             .do(onNext: { [weak self] _ in
                 self?.activityIndicator.startAnimating()
                 self?.saveButton.setAttributedTitle(
@@ -125,11 +119,6 @@ extension ProfilePopViewController{
                     ), for: .normal
                 )
             })
-            .withLatestFrom(dataSource)
-            .map{ (model) in
-                let fanType: FanType = model.filter { $0.isSelected }.first?.type ?? .panchi
-                return fanType
-            }
             .bind(to: viewModel.input.setProfileRequest)
             .disposed(by: disposeBag)
         
@@ -157,6 +146,16 @@ extension ProfilePopViewController{
                 }
                 
             }).disposed(by: disposeBag)
+                
+        viewModel.output.collectionViewHeight
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (height) in
+                guard let self = self else { return }
+                self.collectionVIewHeight.constant = height
+                self.panModalSetNeedsLayoutUpdate()
+                self.panModalTransition(to: .longForm)
+                self.view.layoutIfNeeded()
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -174,10 +173,8 @@ extension ProfilePopViewController: PanModalPresentable {
       return nil
     }
 
-    public var longFormHeight: PanModalHeight {
-    
-   
-        return PanModalHeight.contentHeight( rowHeight + 190 )
+    public var longFormHeight: PanModalHeight {   
+        return PanModalHeight.contentHeight(collectionVIewHeight.constant + 190)
      }
 
     public var cornerRadius: CGFloat {

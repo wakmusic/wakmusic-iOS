@@ -11,13 +11,17 @@ import NeedleFoundation
 import DomainModule
 
 public protocol ProfilePopDependency: Dependency {
+    var fetchProfileListUseCase: any FetchProfileListUseCase {get}
     var setProfileUseCase: any SetProfileUseCase {get}
 }
 
 public final class ProfilePopComponent: Component<ProfilePopDependency> {
     public func makeView() -> ProfilePopViewController  {
         return ProfilePopViewController.viewController(
-            viewModel: .init(setProfileUseCase: dependency.setProfileUseCase)
+            viewModel: .init(
+                fetchProfileListUseCase: dependency.fetchProfileListUseCase,
+                setProfileUseCase: dependency.setProfileUseCase
+            )
         )
     }
 }

@@ -569,16 +569,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V9H-wA-KUm">
-                                <rect key="frame" x="0.0" y="59" width="393" height="383"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="390"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="프로필을 선택해주세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2X-pO-pAO">
-                                        <rect key="frame" x="20" y="24" width="152" height="21"/>
+                                        <rect key="frame" x="20" y="24" width="152" height="28"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="aPD-2B-TKa"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KwK-JC-p7o">
-                                        <rect key="frame" x="20" y="77" width="353" height="200"/>
+                                        <rect key="frame" x="20" y="84" width="353" height="200"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="tkY-5y-7kU"/>
@@ -614,8 +617,11 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="txY-oG-L0v">
+                                        <rect key="frame" x="186.66666666666666" y="174" width="20" height="20"/>
+                                    </activityIndicatorView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6L-ho-ZqM">
-                                        <rect key="frame" x="20" y="317" width="353" height="56"/>
+                                        <rect key="frame" x="20" y="324" width="353" height="56"/>
                                         <color key="backgroundColor" name="POINT"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="GK1-iC-MhY"/>
@@ -626,7 +632,7 @@
                                         </state>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YRo-p1-dbC">
-                                        <rect key="frame" x="186.66666666666666" y="335" width="20" height="20"/>
+                                        <rect key="frame" x="186.66666666666666" y="342" width="20" height="20"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -635,8 +641,10 @@
                                     <constraint firstAttribute="trailing" secondItem="KwK-JC-p7o" secondAttribute="trailing" constant="20" id="Gxx-5V-wCx"/>
                                     <constraint firstItem="KwK-JC-p7o" firstAttribute="leading" secondItem="V9H-wA-KUm" secondAttribute="leading" constant="20" id="PcJ-gI-qoL"/>
                                     <constraint firstItem="KwK-JC-p7o" firstAttribute="top" secondItem="L2X-pO-pAO" secondAttribute="bottom" constant="32" id="Pyy-Hv-DP4"/>
+                                    <constraint firstItem="txY-oG-L0v" firstAttribute="centerY" secondItem="KwK-JC-p7o" secondAttribute="centerY" id="f0G-TR-hj3"/>
                                     <constraint firstItem="YRo-p1-dbC" firstAttribute="centerY" secondItem="h6L-ho-ZqM" secondAttribute="centerY" id="f0Y-rQ-UwF"/>
                                     <constraint firstItem="h6L-ho-ZqM" firstAttribute="leading" secondItem="V9H-wA-KUm" secondAttribute="leading" constant="20" id="fID-eS-Ika"/>
+                                    <constraint firstItem="txY-oG-L0v" firstAttribute="centerX" secondItem="KwK-JC-p7o" secondAttribute="centerX" id="hnN-1v-cs4"/>
                                     <constraint firstItem="YRo-p1-dbC" firstAttribute="centerX" secondItem="h6L-ho-ZqM" secondAttribute="centerX" id="inZ-B9-MUy"/>
                                     <constraint firstItem="L2X-pO-pAO" firstAttribute="top" secondItem="V9H-wA-KUm" secondAttribute="top" constant="24" id="miA-qG-s5W"/>
                                     <constraint firstAttribute="bottom" secondItem="h6L-ho-ZqM" secondAttribute="bottom" constant="10" id="oUU-GW-4mM"/>
@@ -645,7 +653,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="971-k9-c7R">
-                                <rect key="frame" x="0.0" y="442" width="393" height="0.0"/>
+                                <rect key="frame" x="0.0" y="449" width="393" height="0.0"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" id="289-JC-UFB"/>
@@ -667,6 +675,7 @@
                         <outlet property="activityIndicator" destination="YRo-p1-dbC" id="rtY-N9-Ilg"/>
                         <outlet property="collectionVIewHeight" destination="tkY-5y-7kU" id="Pf7-J7-Fgn"/>
                         <outlet property="collectionView" destination="KwK-JC-p7o" id="3Rs-mG-hNn"/>
+                        <outlet property="dataLoadActivityIndicator" destination="txY-oG-L0v" id="7MD-wh-CZ2"/>
                         <outlet property="saveButton" destination="h6L-ho-ZqM" id="Msz-e9-z3B"/>
                         <outlet property="titleLabel" destination="L2X-pO-pAO" id="VIt-Uz-tg9"/>
                     </connections>
