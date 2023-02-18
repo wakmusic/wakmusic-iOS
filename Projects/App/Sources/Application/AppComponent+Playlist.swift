@@ -53,4 +53,28 @@ public extension AppComponent {
         }
     }
     
+    var createPlayListUseCase: any CreatePlayListUseCase {
+        shared {
+            CreatePlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
+    var editPlayListUseCase: any EditPlayListUseCase {
+        shared {
+            EditPlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
+    var deletePlayListUseCase: any DeletePlayListUseCase {
+        shared {
+            DeletePlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
+    var loadPlayListUseCase: any LoadPlayListUseCase {
+        shared {
+            LoadPlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
 }
