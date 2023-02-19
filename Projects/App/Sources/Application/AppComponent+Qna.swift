@@ -18,32 +18,36 @@ import StorageFeature
 
 
 public extension AppComponent {
+
+    
     
 
     
-//    var remoteUserDataSource: any RemoteUserDataSource {
-//        shared {
-//            RemoteUserDataSourceImpl(keychain: keychain)
-//        }
-//    }
-//    
-//    var userRepository: any UserRepository {
-//        shared {
-//            UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)
-//        }
-//    }
-//    
-//    var fetchProfileListUseCase: any FetchProfileListUseCase{
-//        shared {
-//            FetchProfileListUseCaseImpl(userRepository: userRepository)
-//        }
-//    }
-//    
-//    var setProfileUseCase: any SetProfileUseCase {
-//        shared {
-//            SetProfileUseCaseImpl(userRepository: userRepository)
-//        }
-//    }
+    var remoteQnaDataSource: any RemoteQnaDataSource {
+        shared {
+            RemoteQnaDataSourceImpl(keychain: keychain)
+        }
+    }
+    
+    var qnaRepository: any QnaRepository {
+        shared {
+            
+            QnaRepositoryImpl(remoteQnaDataSource: remoteQnaDataSource)
+        }
+    }
+    
+    
+    var fetchQnaCategoriesUseCase: any FetchQnaCategoriesUseCase{
+        shared {
+            FetchQnaCategoriesUseCaseImpl(qnaRepository: qnaRepository)
+        }
+    }
+    
+    var fetchQnaUseCase: any FetchQnaUseCase {
+        shared {
+            FetchQnaUseCaseImpl(qnaRepository: qnaRepository)
+        }
+    }
     
  
 }

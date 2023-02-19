@@ -13,7 +13,7 @@ import DomainModule
 import ErrorModule
 
 public struct FetchQnaCategoriesUseCaseImpl: FetchQnaCategoriesUseCase {
-   
+
 
     private let qnaRepository: any QnaRepository
 
@@ -23,7 +23,7 @@ public struct FetchQnaCategoriesUseCaseImpl: FetchQnaCategoriesUseCase {
         self.qnaRepository = qnaRepository
     }
     
-    public func execute() -> <[QnaCategoryEntity]> {
+    public func execute() -> Single<[QnaCategoryEntity]> {
         qnaRepository.fetchQnaCategories()
     }
 
