@@ -378,10 +378,6 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
-        localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
-        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
-        localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
