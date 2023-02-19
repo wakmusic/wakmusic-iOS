@@ -18,6 +18,7 @@ import YoutubeKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private var anyCancellable = Set<AnyCancellable>()
     var viewModel = PlayerViewModel()
 //    var youtubePlayer: YouTubePlayer?
     private var youtubePlayer: YTSwiftyPlayer!
@@ -130,14 +131,6 @@ public class PlayerViewController: UIViewController {
 
     }
     
-    public override func loadView() {
-        super.loadView()
-        playerView = PlayerView(frame: self.view.frame)
-        miniPlayerView = MiniPlayerView(frame: self.view.frame)
-        miniPlayerView.layer.opacity = 0
-        self.view.addSubview(playerView)
-        self.view.addSubview(miniPlayerView)
-    }
 }
 
 public extension PlayerViewController {
@@ -185,12 +178,15 @@ private extension PlayerViewController {
     }
     
     private func bindUI() {
-    }
-}
+        self.playerView.playButton.rx.tap.bind { _ in
+            print("clicked")
+            //self.youtubePlayer.load(source: .video(id: "1hcdQixxJdA"))
+            
+            self.youtubePlayer.play()
+        }.disposed(by: disposeBag)
+        
+        self.youtubePlayer.$source.sink { print($0?.id) }.store(in: &anyCancellable)
 
-struct NewPlayerViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayerViewController().toPreview()
     }
 }
 
