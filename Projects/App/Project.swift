@@ -26,12 +26,12 @@ let targets: [Target] = [
         infoPlist: .file(path: "Support/Info.plist"),
         sources: ["Sources/**"],
         resources: ["Resources/**"],
+        entitlements: "Support/\(Environment.appName).entitlements",
         scripts: scripts,
         dependencies: [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-            .SPM.Firebase,
             .SPM.Nimble,
             .SPM.Quick
         ],

@@ -9,6 +9,8 @@ public extension FetchChartRankingResponseDTO {
 }
 
 public extension SingleChartRankingResponseDTO {
+    
+    
     func toDomain() -> ChartRankingEntity {
         ChartRankingEntity(
             id: id,
@@ -18,7 +20,7 @@ public extension SingleChartRankingResponseDTO {
             reaction: reaction,
             views: views,
             last: last,
-            date: date.toWMChartDate()
+            date: date.toWMDateString()
         )
     }
 }

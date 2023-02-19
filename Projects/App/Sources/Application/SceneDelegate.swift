@@ -4,6 +4,8 @@ import RootFeature
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+   
 
     func scene(
         _ scene: UIScene,
@@ -12,11 +14,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: scene)
-        let viewController = IntroViewController.viewController().wrapNavigationController
-        
-        
-
-        self.window?.rootViewController = viewController
+        registerProviderFactories()
+        let root = AppComponent()
+        self.window?.rootViewController = root.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
     }
 

@@ -11,9 +11,9 @@ public protocol WMAPI: TargetType, JwtAuthorizable {
 
 public extension WMAPI {
     var baseURL: URL {
-        URL(string: "https://app-api.wakmusic.xyz")!
+        URL(string: "https://test.wakmusic.xyz")!
     }
-
+    
     var path: String {
         domain.asURLString + urlPath
     }
@@ -36,6 +36,7 @@ public enum WMDomain: String {
     case playlist = "api/playlist"
     case like = "api/like"
     case common = "static"
+    case naver = "/v1/nid/me"
 }
 
 extension WMDomain {

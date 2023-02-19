@@ -5,6 +5,8 @@ import DomainModule
 import ErrorModule
 import Foundation
 
+
+
 public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, RemoteChartDataSource {
     public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[DomainModule.ChartRankingEntity]> {
         request(.fetchChartRanking(type: type, limit: limit))

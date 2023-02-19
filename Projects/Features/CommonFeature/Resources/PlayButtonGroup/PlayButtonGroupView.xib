@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayButtonGroupView" customModule="CommonFeature" customModuleProvider="target">
+            <connections>
+                <outlet property="allPlayButton" destination="a7q-5P-N7c" id="AbO-pt-6xL"/>
+                <outlet property="shufflePlayButton" destination="mrp-Jo-QAZ" id="ljx-ce-vV9"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="M7V-vf-ZE2">
+            <rect key="frame" x="0.0" y="0.0" width="500" height="162"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cbp-wu-RRk">
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="162"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-5P-N7c">
+                            <rect key="frame" x="20" y="16" width="226" height="52"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="EUK-yc-Goe"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="전체재생">
+                                <color key="titleColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="pressAllPlay:" destination="-1" eventType="touchUpInside" id="ns6-Ju-OAE"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mrp-Jo-QAZ">
+                            <rect key="frame" x="254" y="16" width="226" height="52"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="랜덤재생">
+                                <color key="titleColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="pressSufflePlay:" destination="-1" eventType="touchUpInside" id="pto-qL-sQD"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="a7q-5P-N7c" firstAttribute="height" secondItem="mrp-Jo-QAZ" secondAttribute="height" id="2M6-2f-sRY"/>
+                        <constraint firstItem="a7q-5P-N7c" firstAttribute="width" secondItem="mrp-Jo-QAZ" secondAttribute="width" id="8Ts-vR-23f"/>
+                        <constraint firstItem="mrp-Jo-QAZ" firstAttribute="leading" secondItem="a7q-5P-N7c" secondAttribute="trailing" constant="8" id="A7S-kC-zTX"/>
+                        <constraint firstItem="mrp-Jo-QAZ" firstAttribute="centerY" secondItem="a7q-5P-N7c" secondAttribute="centerY" id="Crj-ZF-WcR"/>
+                        <constraint firstAttribute="trailing" secondItem="mrp-Jo-QAZ" secondAttribute="trailing" constant="20" id="EWD-Px-3zN"/>
+                        <constraint firstItem="a7q-5P-N7c" firstAttribute="top" secondItem="Cbp-wu-RRk" secondAttribute="top" constant="16" id="MiK-59-bOc"/>
+                        <constraint firstItem="a7q-5P-N7c" firstAttribute="leading" secondItem="Cbp-wu-RRk" secondAttribute="leading" constant="20" id="OFi-yL-jhO"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="8K7-gl-GNT"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Cbp-wu-RRk" firstAttribute="leading" secondItem="8K7-gl-GNT" secondAttribute="leading" id="CTF-UM-lpu"/>
+                <constraint firstAttribute="trailing" secondItem="Cbp-wu-RRk" secondAttribute="trailing" id="WQ4-kg-jBq"/>
+                <constraint firstItem="Cbp-wu-RRk" firstAttribute="bottom" secondItem="M7V-vf-ZE2" secondAttribute="bottom" id="X41-c7-xgq"/>
+                <constraint firstAttribute="top" secondItem="Cbp-wu-RRk" secondAttribute="top" id="lrj-VO-aK3"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="172.30769230769229" y="66.824644549763036"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

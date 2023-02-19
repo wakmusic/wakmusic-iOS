@@ -11,13 +11,12 @@ import UIKit
 
 public extension String {
 
-    
     ///   문자열이 스페이스바 또는 공백으로만 이뤄졌는지 체크
     /// - Returns: 완전환 공백 체크 = true 
-    
     var isWhiteSpace: Bool{
             return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0
     }
+        
     /// String(text) 높이 값을 계산하여 반환합니다.
     /// - Parameter width: 스트링이 들어갈 최대 너비
     /// - Parameter font: 사용 된 폰트 값
@@ -37,5 +36,17 @@ public extension String {
                                             attributes: [NSAttributedString.Key.font: font], context: nil)
 
         return boundingBox.height
+    }
+    
+    /// String(text)의 첫 글자만 대문자로 변환합니다.
+    var capitalizingFirstLetter: String {
+        // 첫 글자는 대문자로 + 대문자로 변환한 첫 글자는 잘라낸 후 더한다.
+        return prefix(1).uppercased() + self.lowercased().dropFirst()
+    }
+    
+    
+    var correctionNickName: String {
+        let limit: Int = 8
+        return self.count > limit ? String(self.prefix(limit)) + "..." : self
     }
 }
