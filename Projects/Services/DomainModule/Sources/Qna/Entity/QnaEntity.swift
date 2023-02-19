@@ -22,4 +22,3 @@ public struct QnaEntity: Equatable {
     public let category,question,description:String
     
 }
-
