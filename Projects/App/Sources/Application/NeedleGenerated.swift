@@ -378,6 +378,10 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
+        localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
+        localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
+        localTable["fetchQnaUseCase-any FetchQnaUseCase"] = { self.fetchQnaUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
