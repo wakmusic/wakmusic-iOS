@@ -44,7 +44,6 @@ public final class ProfilePopViewModel {
         fetchProfileListUseCase.execute()
             .asObservable()
             .catchAndReturn([])
-            .debug("fetchProfileListUseCase")
             .map({ (model) -> [ProfileListEntity] in
                 let currentProfile = Utility.PreferenceManager.userInfo?.profile ?? "unknown"
                 
