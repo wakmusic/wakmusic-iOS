@@ -43,6 +43,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             let keychain = KeychainImpl()
             keychain.delete(type: .accessToken)
             Utility.PreferenceManager.userInfo = nil
+            
+            //TODO: 플랫품에 따른 로그아웃 구현 
         })
         self.showPanModal(content: vc)
     }
