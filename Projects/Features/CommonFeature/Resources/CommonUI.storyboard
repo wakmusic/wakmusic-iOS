@@ -620,16 +620,13 @@
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="txY-oG-L0v">
                                         <rect key="frame" x="186.66666666666666" y="174" width="20" height="20"/>
                                     </activityIndicatorView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6L-ho-ZqM">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6L-ho-ZqM">
                                         <rect key="frame" x="20" y="324" width="353" height="56"/>
                                         <color key="backgroundColor" name="POINT"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="GK1-iC-MhY"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal">
-                                            <color key="titleColor" name="gray25"/>
-                                        </state>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YRo-p1-dbC">
                                         <rect key="frame" x="186.66666666666666" y="342" width="20" height="20"/>
