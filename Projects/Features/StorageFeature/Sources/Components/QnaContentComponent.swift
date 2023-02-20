@@ -15,7 +15,7 @@ public protocol QnaContentDependency: Dependency {
 }
 
 public final class QnaContentComponent: Component<QnaContentDependency> {
-    public func makeView() -> QnaContentViewController {
-        return QnaContentViewController.viewController([])
+    public func makeView(dataSource:[QnaEntity]) -> QnaContentViewController {
+        return QnaContentViewController.viewController(viewModel: .init(dataSource: dataSource))
     }
 }

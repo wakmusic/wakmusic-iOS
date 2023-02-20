@@ -25,6 +25,9 @@ public final class QnaContentViewController: UIViewController, ViewControllerFro
     
     var dataSource:[QnAModel] = []
     
+    var viewModel:QnaContentViewModel!
+    
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,10 +42,10 @@ public final class QnaContentViewController: UIViewController, ViewControllerFro
     
     
 
-    public static func viewController(_ datas:[QnAModel]) -> QnaContentViewController {
+    public static func viewController(viewModel:QnaContentViewModel) -> QnaContentViewController {
         let viewController = QnaContentViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
-        viewController.dataSource = datas
+        viewController.viewModel = viewModel
         return viewController
     }
 

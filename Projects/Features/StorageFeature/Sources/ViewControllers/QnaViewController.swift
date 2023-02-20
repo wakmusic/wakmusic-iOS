@@ -57,7 +57,6 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
         viewController.viewModel = viewModel
         viewController.qnaContentComponent = qnaContentComponent
         
-        viewController.viewControllers = [qnaContentComponent.makeView()]
         
         return viewController
     }
@@ -136,8 +135,8 @@ extension QnaViewController {
                 
                 var tmp:[UIViewController] = []
                 
-                for r in result {
-                    tmp.append(comp.makeView())
+                for _ in result {
+                    tmp.append(comp.makeView(dataSource: []))
                 }
                 
                 self.viewControllers = tmp
@@ -173,6 +172,9 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     }
     
     public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+        
+        
+        
         
         switch index {
         case 0:
