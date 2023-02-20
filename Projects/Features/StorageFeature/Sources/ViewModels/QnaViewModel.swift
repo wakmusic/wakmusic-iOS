@@ -18,7 +18,9 @@ final public class QnaViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
     
-    var fetchQnaCategoriesUseCase: FetchQnaCategoriesUseCase
+    var fetchQnaCategoriesUseCase: FetchQnaCategoriesUseCase!
+    var fetchQnaUseCase: FetchQnaUseCase!
+    
     
 
     public struct Input {
@@ -26,26 +28,37 @@ final public class QnaViewModel:ViewModelType {
     }
 
     public struct Output {
-        
+        let categories:PublishSubject<[QnaCategoryEntity]> = PublishSubject()
     }
 
     public init(
-        fetchQnaCategoriesUseCase: FetchQnaCategoriesUseCase
+        fetchQnaCategoriesUseCase: FetchQnaCategoriesUseCase,
+        fetchQnaUseCase : FetchQnaUseCase
     ) {
         
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.fetchQnaCategoriesUseCase = fetchQnaCategoriesUseCase
-        
-        
-        
-        fetchQnaCategoriesUseCase.execute()
-            .subscribe { 
-                DEBUG_LOG($0)
-            }.disposed(by: disposeBag)
+        self.fetchQnaUseCase = fetchQnaUseCase
+
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
+        
+        fetchQnaCategoriesUseCase.execute()
+            .filter({!$0.isEmpty})
+            .map({
+                var result:[QnaCategoryEntity] = [QnaCategoryEntity(category: "전체    ")]
+                
+                result += $0
+                
+                DEBUG_LOG(result)
+                
+                return result
+            })
+            .asObservable()
+            .bind(to: output.categories)
+            .disposed(by: disposeBag)
  
         return output
     }

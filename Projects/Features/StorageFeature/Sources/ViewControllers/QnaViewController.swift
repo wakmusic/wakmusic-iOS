@@ -11,6 +11,7 @@ import Utility
 import Tabman
 import Pageboy
 import DesignSystem
+import RxSwift
 
 public final class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
@@ -39,9 +40,11 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
     }
     
     
-    
+    var disposeBag = DisposeBag()
     var viewModel:QnaViewModel!
     var qnaContentComponent:QnaContentComponent!
+    lazy var input = QnaViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     
     
     var viewControllers:[UIViewController] = [UIViewController(),UIViewController(),UIViewController()]
@@ -113,7 +116,37 @@ extension QnaViewController {
         //회색 구분선 추가
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
         
-       
+       bindRx()
+        
+    }
+    
+    func bindRx(){
+        
+        output.categories
+            .subscribe(onNext: { [weak self] result in
+                
+                guard let self = self else {
+                    return
+                }
+                
+                guard let comp = self.qnaContentComponent else {
+                    return
+                }
+                
+                
+                var tmp:[UIViewController] = []
+                
+                for r in result {
+                    tmp.append(comp.makeView())
+                }
+                
+                self.viewControllers = tmp
+                
+                DEBUG_LOG(tmp)
+                
+                
+                
+            }).disposed(by: disposeBag)
         
     }
     
@@ -122,10 +155,16 @@ extension QnaViewController {
 
 extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
-        self.viewControllers.count
+        DEBUG_LOG(self.viewControllers.count)
+        
+        return self.viewControllers.count
+        
+        
     }
     
     public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+        
+        
         viewControllers[index]
     }
     
@@ -135,14 +174,21 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     
     public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         
-        switch index{
+        switch index {
         case 0:
- 
-            return TMBarItem(title: "전체    ")
+            return TMBarItem(title: "전체")
+        case 1:
+            return TMBarItem(title: "노래")
+        case 2:
+           return TMBarItem(title: "가수")
+        case 3:
+           return TMBarItem(title: "조교")
         default:
-            let title = "카테고리\(index)  "
+            let title = "Page \(index)"
            return TMBarItem(title: title)
         }
+        
+        
         
     }
  

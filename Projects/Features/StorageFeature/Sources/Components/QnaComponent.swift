@@ -15,12 +15,13 @@ public protocol QnaDependency: Dependency {
 
     var qnaContentComponent : QnaContentComponent {get}
     var fetchQnaCategoriesUseCase : any FetchQnaCategoriesUseCase {get}
+    var fetchQnaUseCase : any FetchQnaUseCase {get}
     
 
 }
 
 public final class QnaComponent: Component<QnaDependency> {
     public func makeView() -> QnaViewController {
-        return QnaViewController.viewController(viewModel: .init(fetchQnaCategoriesUseCase: dependency.fetchQnaCategoriesUseCase), qnaContentComponent: dependency.qnaContentComponent)
+        return QnaViewController.viewController(viewModel: .init(fetchQnaCategoriesUseCase: dependency.fetchQnaCategoriesUseCase,fetchQnaUseCase: dependency.fetchQnaUseCase), qnaContentComponent: dependency.qnaContentComponent)
     }
 }

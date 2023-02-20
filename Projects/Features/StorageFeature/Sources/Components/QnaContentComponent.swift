@@ -11,8 +11,7 @@ import NeedleFoundation
 import DomainModule
 
 public protocol QnaContentDependency: Dependency {
-    
-    var fetchQnaUseCase : any FetchQnaUseCase {get}
+
 }
 
 public final class QnaContentComponent: Component<QnaContentDependency> {
