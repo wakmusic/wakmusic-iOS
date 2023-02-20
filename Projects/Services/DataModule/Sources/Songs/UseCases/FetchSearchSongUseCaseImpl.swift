@@ -5,16 +5,16 @@ import ErrorModule
 
 public struct FetchSearchSongUseCaseImpl: FetchSearchSongUseCase {
     
-    private let searchRepository: any SearchRepository
+    private let songsRepository: any SongsRepository
 
     public init(
-        searchRepository: SearchRepository
+        songsRepository: SongsRepository
     ) {
-        self.searchRepository = searchRepository
+        self.songsRepository = songsRepository
     }
     
     public func execute(type: SearchType, keyword: String) -> Single<[SongEntity]> {
-        searchRepository.fetchSearchSong(type: type, keyword: keyword)
+        songsRepository.fetchSearchSong(type: type, keyword: keyword)
     }
 
   

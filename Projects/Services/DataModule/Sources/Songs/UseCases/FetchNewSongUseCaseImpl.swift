@@ -4,15 +4,15 @@ import DomainModule
 import ErrorModule
 
 public struct FetchNewSongUseCaseImpl: FetchNewSongUseCase {
-    private let homeRepository: any HomeRepository
+    private let songsRepository: any SongsRepository
 
     public init(
-        homeRepository: HomeRepository
+        songsRepository: SongsRepository
     ) {
-        self.homeRepository = homeRepository
+        self.songsRepository = songsRepository
     }
   
     public func execute(type: NewSongGroupType) -> Single<[NewSongEntity]> {
-        homeRepository.fetchNewSong(type: type)
+        songsRepository.fetchNewSong(type: type)
     }
 }

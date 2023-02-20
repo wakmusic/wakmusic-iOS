@@ -23,6 +23,7 @@ public final class HomeViewModel: ViewModelType {
         fetchNewSongUseCase: any FetchNewSongUseCase
     ){
         self.fetchNewSongUseCase = fetchNewSongUseCase
+        DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
     public struct Input {
@@ -36,12 +37,13 @@ public final class HomeViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
      
         let dataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
-
-        self.fetchNewSongUseCase.execute(type: .all)
-            .asObservable()
-            .bind(to: dataSource)
-            .disposed(by: disposeBag)
         
+        self.fetchNewSongUseCase.execute(type: .all)
+            .debug("fetchNewSongUseCase")
+            .asObservable()
+            .subscribe()
+            .disposed(by: disposeBag)
+
         return Output(dataSource: dataSource)
     }
 }
