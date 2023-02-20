@@ -54,7 +54,7 @@ public class PlayerViewController: UIViewController {
             frame: .init(x: 0, y: 0, width: 320, height: 180),
             playerVars: [
                 .playsInline(true),
-                .videoID("PVRkT5ZvXLU"),
+                .videoID("wSG93VZoMFg"),
                 .loopVideo(true),
                 .showRelatedVideo(false),
                 .autoplay(true)
@@ -63,7 +63,9 @@ public class PlayerViewController: UIViewController {
         player.delegate = self
         self.youtubePlayerView.addSubview(player)
         
-        player.loadPlayerHTML(playerHtml)
+        let playerPath = PlayerFeatureResources.bundle.path(forResource: "YoutubePlayer", ofType: "html")!
+        let htmlString = (try? String(contentsOfFile: playerPath, encoding: .utf8)) ?? ""
+        player.loadPlayerHTML(htmlString)
     }
     
 }
@@ -98,8 +100,8 @@ private extension PlayerViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
-                print("didPlay")
-                self?.player.loadVideo(videoID: "dfcztPNevwg")
+                guard let self = self else { return }
+                self.player.playerState == .playing ? self.player.pauseVideo() : self.player.playVideo()
             })
             .disposed(by: disposeBag)
 

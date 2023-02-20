@@ -69,6 +69,14 @@ final class PlayerViewModel: ViewModelType {
             output.didClose.accept(true)
         }.disposed(by: disposeBag)
         
+        input.prevButtonDidTapEvent.subscribe { _ in
+            
+        }.disposed(by: disposeBag)
+        
+        input.nextButtonDidTapEvent.subscribe { _ in
+            
+        }.disposed(by: disposeBag)
+        
         return output
     }
 }
