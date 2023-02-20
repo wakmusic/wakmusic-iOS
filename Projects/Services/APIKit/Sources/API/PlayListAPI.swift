@@ -78,21 +78,7 @@ extension PlayListAPI: WMAPI {
             
         }
     
-        public var headers: [String : String]? {
-            
-            let token: String = KeychainImpl().load(type: .accessToken)
-            
-            switch self {
-                
-            case .fetchRecommendPlayList,.fetchPlayListDetail:
-                return ["Content-Type": "application/json"]
-                
-            case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList:
-                return ["Authorization":"Bearer \(token)"]
-            }
-        }
-    
-        
+       
         public var task: Moya.Task {
             switch self {
             case .fetchRecommendPlayList:
@@ -113,7 +99,14 @@ extension PlayListAPI: WMAPI {
         }
             
             public var jwtTokenType: JwtTokenType {
-                return .none
+                switch self {
+                    
+                case .fetchRecommendPlayList,.fetchPlayListDetail:
+                    return .none
+                    
+                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList:
+                    return .accessToken
+                }
             }
             
             public var errorMap: [Int: WMError] {

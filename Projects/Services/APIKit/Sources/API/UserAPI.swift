@@ -61,20 +61,10 @@ extension UserAPI: WMAPI {
         }
     }
 
-    public var headers: [String : String]? {
-        let token: String = KeychainImpl().load(type: .accessToken)
-        switch self {
-        case .fetchProfileList,
-             .setProfile,
-             .setUserName,
-             .fetchSubPlayList,
-             .fetchFavoriteSongs:
-            return ["Authorization":"Bearer \(token)"]
-        }
-    }
+    
         
     public var jwtTokenType: JwtTokenType {
-        return .none
+        return .accessToken
     }
     
     public var errorMap: [Int: WMError] {
