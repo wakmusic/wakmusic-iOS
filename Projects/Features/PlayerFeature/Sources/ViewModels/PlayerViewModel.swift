@@ -40,6 +40,8 @@ final class PlayerViewModel: ViewModelType {
         var viewsCountText = BehaviorRelay<String>(value: "")
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
+        var didPrev = PublishRelay<Bool>()
+        var didNext = PublishRelay<Bool>()
     }
     
     private let useCase: PlayerUseCase
@@ -70,11 +72,11 @@ final class PlayerViewModel: ViewModelType {
         }.disposed(by: disposeBag)
         
         input.prevButtonDidTapEvent.subscribe { _ in
-            
+            output.didPrev.accept(true)
         }.disposed(by: disposeBag)
         
         input.nextButtonDidTapEvent.subscribe { _ in
-            
+            output.didNext.accept(true)
         }.disposed(by: disposeBag)
         
         return output

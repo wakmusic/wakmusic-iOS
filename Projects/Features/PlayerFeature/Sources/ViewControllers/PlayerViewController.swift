@@ -13,7 +13,6 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
-//import YoutubeKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -101,6 +100,25 @@ private extension PlayerViewController {
                 print("didClose")
             })
             .disposed(by: disposeBag)
+        
+        output.didPrev
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 }
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.playState.backWard()
+            })
+            .disposed(by: disposeBag)
+        
+        output.didNext
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 }
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.playState.forWard()
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     private func bindUI() {

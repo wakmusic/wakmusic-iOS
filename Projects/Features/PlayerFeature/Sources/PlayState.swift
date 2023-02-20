@@ -25,6 +25,7 @@ final public class PlayState {
         currentSong = "wSG93VZoMFg"
         progress = PlayProgress()
         playList = PlayList()
+        playList.list = ["wSG93VZoMFg", "jzt_aR_PSGo", "Gce2fYnlw0w", "UMIP5k1QvW8", "tT-kuonVzfY"]
         state = .unstarted
         
         player = YTSwiftyPlayer(
@@ -72,21 +73,24 @@ extension PlayState {
     func forWard() {
         self.playList.next()
         self.currentSong = playList.current
-        play()
+        guard let currentSong = currentSong else { return }
+        load(at: currentSong)
     }
 
     /// ⏪ 이전 곡으로 변경 후 재생
     func backWard() {
         self.playList.back()
         self.currentSong = playList.current
-        play()
+        guard let currentSong = currentSong else { return }
+        load(at: currentSong)
     }
 
     /// ♻️ 첫번째 곡으로 변경 후 재생
     func playAgain() {
         self.playList.currentPlayIndex = 0
-        currentSong = playList.first
-        play()
+        self.currentSong = playList.first
+        guard let currentSong = currentSong else { return }
+        load(at: currentSong)
     }
 
 }
