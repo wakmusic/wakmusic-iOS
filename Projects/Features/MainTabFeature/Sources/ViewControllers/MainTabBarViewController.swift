@@ -22,7 +22,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak public var contentView: UIView!
 
     private lazy var viewControllers: [UIViewController] = {
-        return [HomeViewController.viewController().wrapNavigationController,
+        return [homeComponent.makeView().wrapNavigationController,
                 ChartViewController.viewController().wrapNavigationController,
                 searchComponent.makeView().wrapNavigationController,
                 artistComponent.makeView().wrapNavigationController,
@@ -33,6 +33,7 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     var previousIndex: Int?
     var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     
+    var homeComponent: HomeComponent!
     var searchComponent: SearchComponent!
     var artistComponent: ArtistComponent!
     var storageComponent: StorageComponent!
@@ -54,16 +55,15 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     }
 
     public static func viewController(
+        homeComponent: HomeComponent,
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
-        
+        viewController.homeComponent = homeComponent
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
-        
-        
         viewController.storageComponent = storageCompoent
 
         return viewController

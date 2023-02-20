@@ -82,8 +82,6 @@ extension LoginViewController{
     
     private func configureNaver(){
         
-
-        
         naverLoginButton.rx.tap
             .bind(to: viewModel.input.pressNaverLoginButton)
             .disposed(by: disposeBag)

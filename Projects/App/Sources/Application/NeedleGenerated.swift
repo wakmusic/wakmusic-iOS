@@ -8,6 +8,7 @@ import DataModule
 import DesignSystem
 import DomainModule
 import Foundation
+import HomeFeature
 import KeychainModule
 import MainTabFeature
 import NeedleFoundation
@@ -105,6 +106,9 @@ private func factorybc7f802f601dd5913533e3b0c44298fc1c149afb(_ component: Needle
     return PlayerDependencyf8a3d594cc3b9254f8adProvider()
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
+    var homeComponent: HomeComponent {
+        return appComponent.homeComponent
+    }
     var searchComponent: SearchComponent {
         return appComponent.searchComponent
     }
@@ -232,6 +236,19 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
 /// ^->AppComponent->SignInComponent
 private func factoryda2925fd76da866a652af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SignInDependency5dda0dd015447272446cProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
+    var fetchNewSongUseCase: any FetchNewSongUseCase {
+        return appComponent.fetchNewSongUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->HomeComponent
+private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
     var afterSearchContentComponent: AfterSearchContentComponent {
@@ -378,6 +395,10 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
+        localTable["remoteNewSongDataSource-RemoteNewSongDataSourceImpl"] = { self.remoteNewSongDataSource as Any }
+        localTable["homeRepository-any HomeRepository"] = { self.homeRepository as Any }
+        localTable["fetchNewSongUseCase-any FetchNewSongUseCase"] = { self.fetchNewSongUseCase as Any }
         localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
         localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
         localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
@@ -412,6 +433,7 @@ extension PlayerComponent: Registration {
 }
 extension MainTabBarComponent: Registration {
     public func registerItems() {
+        keyPathToName[\MainTabBarDependency.homeComponent] = "homeComponent-HomeComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
@@ -457,6 +479,11 @@ extension SignInComponent: Registration {
         keyPathToName[\SignInDependency.fetchTokenUseCase] = "fetchTokenUseCase-any FetchTokenUseCase"
         keyPathToName[\SignInDependency.fetchNaverUserInfoUseCase] = "fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"
         keyPathToName[\SignInDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+    }
+}
+extension HomeComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\HomeDependency.fetchNewSongUseCase] = "fetchNewSongUseCase-any FetchNewSongUseCase"
     }
 }
 extension AfterSearchComponent: Registration {
@@ -523,6 +550,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
