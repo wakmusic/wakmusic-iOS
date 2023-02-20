@@ -38,6 +38,8 @@ final class PlayerViewModel: ViewModelType {
         var totalTimeText = BehaviorRelay<String>(value: "0:00")
         var likeCountText = BehaviorRelay<String>(value: "")
         var viewsCountText = BehaviorRelay<String>(value: "")
+        var didPlay = PublishRelay<Bool>()
+        var didClose = PublishRelay<Bool>()
     }
     
     private let useCase: PlayerUseCase
@@ -52,13 +54,19 @@ final class PlayerViewModel: ViewModelType {
         let output = Output()
         
         Observable.of(input.playButtonDidTapEvent, input.miniPlayButtonDidTapEvent).merge()
-            .subscribe { [weak self] _ in
+            .subscribe(onNext: { _ in
                 print("플레이버튼 눌림")
-            }
+                output.didPlay.accept(true)
+            })
             .disposed(by: disposeBag)
         
         input.miniExtendButtonDidTapEvent.subscribe { _ in
             print("미니플레이어 확장버튼 눌림")
+        }.disposed(by: disposeBag)
+        
+        input.miniCloseButtonDidTapEvent.subscribe { _ in
+            print("미니플레이어 닫기버튼 눌림")
+            output.didClose.accept(true)
         }.disposed(by: disposeBag)
         
         return output
