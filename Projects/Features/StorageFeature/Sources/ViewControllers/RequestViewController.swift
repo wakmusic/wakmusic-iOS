@@ -34,7 +34,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let viewController = QnaViewController.viewController()
+        let viewController = qnaComponent.makeView()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -67,6 +67,9 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     var viewModel:RequestViewModel!
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
+    
+    var qnaComponent:QnaComponent!
+    
     var disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -83,10 +86,11 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
 
-    public static func viewController(viewModel:RequestViewModel) -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
+        viewController.qnaComponent = qnaComponent
         
         return viewController
     }

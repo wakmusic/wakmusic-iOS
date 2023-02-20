@@ -12,19 +12,20 @@ import Tabman
 import Pageboy
 import DesignSystem
 
-class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
+public final class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabBarView: UIView!
     
+    
     @IBAction func pressBackAction(_ sender: UIButton) {
         
         self.navigationController?.popViewController(animated: true)
         
     }
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
@@ -39,13 +40,22 @@ class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
     
     
+    var viewModel:QnaViewModel!
+    var qnaContentComponent:QnaContentComponent!
     
-    let viewControllers:[UIViewController] = [QnaContentViewController.viewController([QnAModel.init(categoty: "플레이리스트", question: "플레이리스트는 어떻게 만드나요?", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false)]),UIViewController(),UIViewController(),UIViewController()]
+    
+    var viewControllers:[UIViewController] = [UIViewController(),UIViewController(),UIViewController()]
     
     
 
-    public static func viewController() -> QnaViewController {
+    public static func viewController(viewModel:QnaViewModel,qnaContentComponent:QnaContentComponent) -> QnaViewController {
         let viewController = QnaViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        viewController.qnaContentComponent = qnaContentComponent
+        
+        viewController.viewControllers = [qnaContentComponent.makeView()]
+        
         return viewController
     }
     
@@ -111,19 +121,19 @@ extension QnaViewController {
 
 
 extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
-    func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
+    public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         self.viewControllers.count
     }
     
-    func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
         viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
         nil
     }
     
-    func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+    public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         
         switch index{
         case 0:

@@ -1,5 +1,4 @@
 import Foundation
-import DomainModule
 
 public struct QnaEntity: Equatable {
     public init(
@@ -7,7 +6,8 @@ public struct QnaEntity: Equatable {
         create_at: Int,
         category:String,
         question:String,
-        description:String
+        description:String,
+        isOpen:Bool
      
     ) {
         self.id = id
@@ -15,10 +15,12 @@ public struct QnaEntity: Equatable {
         self.category = category
         self.question = question
         self.description = description
+        self.isOpen = isOpen
         
     }
     
     public let id,create_at: Int
     public let category,question,description:String
+    public let isOpen:Bool
     
 }

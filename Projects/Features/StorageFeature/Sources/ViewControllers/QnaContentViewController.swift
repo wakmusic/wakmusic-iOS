@@ -19,13 +19,13 @@ public struct QnAModel{
     var isOpened:Bool
 }
 
-class QnaContentViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class QnaContentViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBOutlet weak var tableView: UITableView!
     
     var dataSource:[QnAModel] = []
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
@@ -78,10 +78,10 @@ extension QnaContentViewController{
 
 extension QnaContentViewController:UITableViewDataSource{
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let data = dataSource[section]
     
@@ -99,7 +99,7 @@ extension QnaContentViewController:UITableViewDataSource{
         return count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let Qcell = tableView.dequeueReusableCell(withIdentifier: "QuestionTableViewCell", for: indexPath) as? QuestionTableViewCell else{
             return UITableViewCell()
@@ -130,7 +130,7 @@ extension QnaContentViewController:UITableViewDataSource{
 
 extension QnaContentViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -150,7 +150,7 @@ extension QnaContentViewController:UITableViewDelegate{
         
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 }
