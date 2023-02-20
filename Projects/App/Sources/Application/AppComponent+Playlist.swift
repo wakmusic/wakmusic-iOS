@@ -24,7 +24,7 @@ public extension AppComponent {
         
     }
     
-    var recommendPlayListDetailComponent: PlayListDetailComponent {
+    var playListDetailComponent: PlayListDetailComponent {
         
         PlayListDetailComponent(parent: self)
     }

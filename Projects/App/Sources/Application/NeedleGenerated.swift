@@ -277,8 +277,8 @@ private func factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5(_ component: Needle
     return SearchDependencya86903a2c751a4f762e8Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDependency {
-    var recommendPlayListDetailComponent: PlayListDetailComponent {
-        return appComponent.recommendPlayListDetailComponent
+    var playListDetailComponent: PlayListDetailComponent {
+        return appComponent.playListDetailComponent
     }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
@@ -349,7 +349,7 @@ extension AppComponent: Registration {
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { self.cancelLikeSongUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
-        localTable["recommendPlayListDetailComponent-PlayListDetailComponent"] = { self.recommendPlayListDetailComponent as Any }
+        localTable["playListDetailComponent-PlayListDetailComponent"] = { self.playListDetailComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
@@ -478,7 +478,7 @@ extension SearchComponent: Registration {
 }
 extension BeforeSearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\BeforeSearchDependency.recommendPlayListDetailComponent] = "recommendPlayListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\BeforeSearchDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
     }
 }

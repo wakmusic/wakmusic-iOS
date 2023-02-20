@@ -18,7 +18,7 @@ import YoutubeKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private var anyCancellable = Set<AnyCancellable>()
+    //private var anyCancellable = Set<AnyCancellable>()
     var viewModel = PlayerViewModel()
 //    var youtubePlayer: YouTubePlayer?
     private var youtubePlayer: YTSwiftyPlayer!
@@ -104,29 +104,29 @@ public class PlayerViewController: UIViewController {
         
         self.view.addSubview(self.youtubePlayerView)
         
-        self.youtubePlayerView.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
-            $0.width.equalTo(320)
-            $0.height.equalTo(180)
-        }
-        self.youtubePlayerView.isHidden = true
-        self.youtubePlayer = YTSwiftyPlayer(
-            frame: .init(x: 0, y: 0, width: 320, height: 190),
-            playerVars: [
-                .playsInline(true),
-                .loopVideo(true),
-                .showRelatedVideo(false),
-                .autoplay(true)
-            ])
-        self.youtubePlayerView.addSubview(youtubePlayer)
-        youtubePlayer.delegate = self
+//        self.youtubePlayerView.snp.makeConstraints {
+//            $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
+//            $0.width.equalTo(320)
+//            $0.height.equalTo(180)
+//        }
+//        self.youtubePlayerView.isHidden = true
+//        self.youtubePlayer = YTSwiftyPlayer(
+//            frame: .init(x: 0, y: 0, width: 320, height: 190),
+//            playerVars: [
+//                .playsInline(true),
+//                .loopVideo(true),
+//                .showRelatedVideo(false),
+//                .autoplay(true)
+//            ])
+//        self.youtubePlayerView.addSubview(youtubePlayer)
+//        youtubePlayer.delegate = self
 //        // Load video player
 //        let playerPath = YoutubeKitResources.bundle
 //            .path(forResource: "player", ofType: "html")!
 //        let htmlString = (try? String(contentsOfFile: playerPath, encoding: .utf8)) ?? ""
-        self.youtubePlayer.loadVideo(videoID: "fgSXAKsq-Vo")
+//        self.youtubePlayer.loadVideo(videoID: "fgSXAKsq-Vo")
 
-        youtubePlayer.loadPlayerHTML(htmlStr)
+//        youtubePlayer.loadPlayerHTML(htmlStr)
 //        youtubePlayer.loadDefaultPlayer()
 
     }
@@ -135,57 +135,57 @@ public class PlayerViewController: UIViewController {
 
 public extension PlayerViewController {
     func updateOpacity(value: Float) {
-        playerView.layer.opacity = value
-        miniPlayerView.layer.opacity = 1 - value
+//        playerView.layer.opacity = value
+//        miniPlayerView.layer.opacity = 1 - value
     }
 }
 
 private extension PlayerViewController {
     private func bindViewModel() {
-        let input = PlayerViewModel.Input(
-            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map {_ in },
-            closeButtonDidTapEvent: self.playerView.closeButton.rx.tap.asObservable(),
-            playButtonDidTapEvent: self.playerView.playButton.rx.tap.asObservable(),
-            prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
-            nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
-            repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
-            shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
-            likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
-            addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
-            playlistButtonDidTapEvent: self.playerView.playistButton.rx.tap.asObservable(),
-            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
-            miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
-            miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
-        )
-        let output = self.viewModel.transform(from: input)
-        
-        output.didPlay
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                print("didPlay")
-                self?.youtubePlayer.loadVideo(videoID: "dfcztPNevwg")
-            })
-            .disposed(by: disposeBag)
-        
-        output.didClose
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                print("didClose")
-            })
-            .disposed(by: disposeBag)
+//        let input = PlayerViewModel.Input(
+//            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map {_ in },
+//            closeButtonDidTapEvent: self.playerView.closeButton.rx.tap.asObservable(),
+//            playButtonDidTapEvent: self.playerView.playButton.rx.tap.asObservable(),
+//            prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
+//            nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
+//            repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
+//            shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
+//            likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
+//            addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
+//            playlistButtonDidTapEvent: self.playerView.playistButton.rx.tap.asObservable(),
+//            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
+//            miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
+//            miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
+//        )
+//        let output = self.viewModel.transform(from: input)
+//
+//        output.didPlay
+//            .asDriver(onErrorJustReturn: false)
+//            .filter { $0 }
+//            .drive(onNext: { [weak self] _ in
+//                print("didPlay")
+//                self?.youtubePlayer.loadVideo(videoID: "dfcztPNevwg")
+//            })
+//            .disposed(by: disposeBag)
+//
+//        output.didClose
+//            .asDriver(onErrorJustReturn: false)
+//            .filter { $0 }
+//            .drive(onNext: { [weak self] _ in
+//                print("didClose")
+//            })
+//            .disposed(by: disposeBag)
     }
     
     private func bindUI() {
-        self.playerView.playButton.rx.tap.bind { _ in
-            print("clicked")
-            //self.youtubePlayer.load(source: .video(id: "1hcdQixxJdA"))
-            
-            self.youtubePlayer.play()
-        }.disposed(by: disposeBag)
+//        self.playerView.playButton.rx.tap.bind { _ in
+//            print("clicked")
+//            //self.youtubePlayer.load(source: .video(id: "1hcdQixxJdA"))
+//
+//           // self.youtubePlayer.play()
+//        }.disposed(by: disposeBag)
         
-        self.youtubePlayer.$source.sink { print($0?.id) }.store(in: &anyCancellable)
+       // self.youtubePlayer.$source.sink { print($0?.id) }.store(in: &anyCancellable)
 
     }
 }

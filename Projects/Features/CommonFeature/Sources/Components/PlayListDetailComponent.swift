@@ -9,6 +9,7 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import DataMappingModule
 
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {get}
@@ -17,8 +18,8 @@ public protocol PlayListDetailDependency: Dependency {
 }
 
 public final class PlayListDetailComponent: Component<PlayListDetailDependency> {
-    public func makeView(id:String) -> PlayListDetailViewController {
-        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:.wmRecommend,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase))
+    public func makeView(id:String,type:PlayListType) -> PlayListDetailViewController {
+        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:type,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase))
         
     }
 }
