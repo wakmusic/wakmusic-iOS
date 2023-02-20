@@ -18,7 +18,7 @@ import YoutubeKit
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var viewModel = PlayerViewModel()
-    private var youtubePlayer: YTSwiftyPlayer!
+    private var player: YTSwiftyPlayer!
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
@@ -44,13 +44,13 @@ public class PlayerViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
-        setupYoutubePlayer()
+        configureYoutubePlayer()
         bindViewModel()
         bindUI()
     }
     
-    func setupYoutubePlayer() {
-        self.youtubePlayer = YTSwiftyPlayer(
+    func configureYoutubePlayer() {
+        self.player = YTSwiftyPlayer(
             frame: .init(x: 0, y: 0, width: 320, height: 180),
             playerVars: [
                 .playsInline(true),
@@ -60,10 +60,10 @@ public class PlayerViewController: UIViewController {
                 .autoplay(true)
             ])
         
-        youtubePlayer.delegate = self
-        self.youtubePlayerView.addSubview(youtubePlayer)
+        player.delegate = self
+        self.youtubePlayerView.addSubview(player)
         
-        youtubePlayer.loadPlayerHTML(playerHtml)
+        player.loadPlayerHTML(playerHtml)
     }
     
 }
@@ -99,7 +99,7 @@ private extension PlayerViewController {
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
                 print("didPlay")
-                self?.youtubePlayer.loadVideo(videoID: "dfcztPNevwg")
+                self?.player.loadVideo(videoID: "dfcztPNevwg")
             })
             .disposed(by: disposeBag)
 
