@@ -12,20 +12,13 @@ import RxSwift
 import RxCocoa
 import RxRelay
 
-public struct QnAModel{
-    var categoty:String
-    var question:String
-    var ansewr:String
-    var isOpened:Bool
-}
-
 public final class QnaContentViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var dataSource:[QnAModel] = []
     
     var viewModel:QnaContentViewModel!
+
     
     
     public override func viewDidLoad() {
@@ -82,16 +75,16 @@ extension QnaContentViewController{
 extension QnaContentViewController:UITableViewDataSource{
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return dataSource.count
+        return viewModel.dataSource.count
     }
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        let data = dataSource[section]
+        var data = viewModel.dataSource[section]
     
         
         var count:Int = 0
         
-        if data.isOpened {
+        if data.isOpen {
             count = 2
         }
         else{
@@ -110,9 +103,12 @@ extension QnaContentViewController:UITableViewDataSource{
         guard let Acell = tableView.dequeueReusableCell(withIdentifier: "AnswerTableViewCell", for: indexPath) as? AnswerTableViewCell else {
             return UITableViewCell()
         }
-        Qcell.update(model: dataSource[indexPath.section])
+        
+        var data = viewModel.dataSource
+        
+        Qcell.update(model: data[indexPath.section])
         Qcell.selectionStyle = .none // 선택 시 깜빡임 방지
-        Acell.update(model: dataSource[indexPath.section])
+        Acell.update(model: data[indexPath.section])
         Acell.selectionStyle = .none
         
         
@@ -137,14 +133,19 @@ extension QnaContentViewController:UITableViewDelegate{
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        dataSource[indexPath.section].isOpened = !dataSource[indexPath.section].isOpened
+        var data = viewModel.dataSource
+        
+        data[indexPath.section].isOpen = !data[indexPath.section].isOpen
+        
+        viewModel.dataSource = data
+        
         tableView.reloadSections([indexPath.section], with: .none)
         
         
         let next = IndexPath(row: 1, section: indexPath.section  ) //row 1이 답변 쪽
         
         
-        if dataSource[indexPath.section].isOpened
+        if data[indexPath.section].isOpen
         {
             self.scrollToBottom(indexPath: next)
         }

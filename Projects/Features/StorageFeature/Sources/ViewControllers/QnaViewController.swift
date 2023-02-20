@@ -47,7 +47,7 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
     lazy var output = viewModel.transform(from: input)
     
     
-    var viewControllers:[UIViewController] = [UIViewController(),UIViewController(),UIViewController()]
+    var viewControllers:[UIViewController] = []
     
     
 
@@ -121,32 +121,47 @@ extension QnaViewController {
     
     func bindRx(){
         
-        output.categories
-            .subscribe(onNext: { [weak self] result in
+        output.dataSource.subscribe { [weak self] (categories, qna) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            guard let comp = self.qnaContentComponent else{
+                return
+            }
+            
+            
+
+            
+            self.viewControllers  = categories.enumerated().map { (i,c) in
                 
-                guard let self = self else {
-                    return
+                if i == 0 {
+                    return comp.makeView(dataSource: qna  )
                 }
                 
-                guard let comp = self.qnaContentComponent else {
-                    return
+                else {
+                    
+                    
+                    
+                    return comp.makeView(dataSource:  qna.filter({
+                        $0.category.replacingOccurrences(of: " ", with: "") == c.category.replacingOccurrences(of: " ", with: "")
+                        
+                    }))
                 }
                 
                 
-                var tmp:[UIViewController] = []
-                
-                for _ in result {
-                    tmp.append(comp.makeView(dataSource: []))
-                }
-                
-                self.viewControllers = tmp
-                
-                DEBUG_LOG(tmp)
-                
-                
-                
-            }).disposed(by: disposeBag)
+            }
+            
+            
+            self.reloadData()
+            
+            
+            
+        }.disposed(by: disposeBag)
         
+        
+    
     }
     
 }
@@ -173,22 +188,8 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     
     public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         
-        
-        
-        
-        switch index {
-        case 0:
-            return TMBarItem(title: "전체")
-        case 1:
-            return TMBarItem(title: "노래")
-        case 2:
-           return TMBarItem(title: "가수")
-        case 3:
-           return TMBarItem(title: "조교")
-        default:
-            let title = "Page \(index)"
-           return TMBarItem(title: title)
-        }
+        return TMBarItem(title: output.dataSource.value.0[index].category)
+      
         
         
         

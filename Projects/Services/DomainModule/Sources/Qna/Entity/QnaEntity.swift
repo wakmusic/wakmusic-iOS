@@ -21,6 +21,6 @@ public struct QnaEntity: Equatable {
     
     public let id,create_at: Int
     public let category,question,description:String
-    public let isOpen:Bool
+    public var isOpen:Bool
     
 }

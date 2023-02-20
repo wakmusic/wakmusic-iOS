@@ -28,7 +28,9 @@ final public class QnaViewModel:ViewModelType {
     }
 
     public struct Output {
-        let categories:PublishSubject<[QnaCategoryEntity]> = PublishSubject()
+        
+        let dataSource:BehaviorRelay<([QnaCategoryEntity],[QnaEntity])> = BehaviorRelay(value: ([],[]))
+    
     }
 
     public init(
@@ -45,21 +47,42 @@ final public class QnaViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
         
-        fetchQnaCategoriesUseCase.execute()
+        
+   
+        
+        let zip1 = fetchQnaCategoriesUseCase.execute()
             .filter({!$0.isEmpty})
             .map({
                 var result:[QnaCategoryEntity] = [QnaCategoryEntity(category: "전체    ")]
+        
+                
                 
                 result += $0
+                    .map({
+                    $0.category.count < 6 ?
+                    QnaCategoryEntity(category: $0.category + String(repeating: " ", count: 6 - $0.category.count))  :
+                    $0 })
+                
                 
                 DEBUG_LOG(result)
                 
                 return result
             })
             .asObservable()
-            .bind(to: output.categories)
+            
+            
+        
+        let zip2 = fetchQnaUseCase.execute()
+            .filter({!$0.isEmpty})
+            .asObservable()
+        
+        
+        Observable.zip(zip1, zip2)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
- 
+            
+        
+        
         return output
     }
 }

@@ -26,7 +26,7 @@ final public class QnaContentViewModel:ViewModelType {
     }
 
     public struct Output {
-        let dataSource:BehaviorRelay<[QnaEntity]> =  BehaviorRelay<[QnaEntity]>(value: [])
+      
 
     }
 
@@ -42,6 +42,8 @@ final public class QnaContentViewModel:ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
+        
+   
         
         
         return output
