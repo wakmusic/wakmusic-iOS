@@ -13,12 +13,12 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
-import YoutubeKit
+//import YoutubeKit
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var viewModel = PlayerViewModel()
-    private var player: YTSwiftyPlayer!
+    let playState = PlayState.shared
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
@@ -39,33 +39,14 @@ public class PlayerViewController: UIViewController {
             $0.width.equalTo(320)
             $0.height.equalTo(180)
         }
+        self.youtubePlayerView.addSubview(playState.player)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
-        configureYoutubePlayer()
         bindViewModel()
         bindUI()
-    }
-    
-    func configureYoutubePlayer() {
-        self.player = YTSwiftyPlayer(
-            frame: .init(x: 0, y: 0, width: 320, height: 180),
-            playerVars: [
-                .playsInline(true),
-                .videoID("wSG93VZoMFg"),
-                .loopVideo(true),
-                .showRelatedVideo(false),
-                .autoplay(true)
-            ])
-        
-        player.delegate = self
-        self.youtubePlayerView.addSubview(player)
-        
-        let playerPath = PlayerFeatureResources.bundle.path(forResource: "YoutubePlayer", ofType: "html")!
-        let htmlString = (try? String(contentsOfFile: playerPath, encoding: .utf8)) ?? ""
-        player.loadPlayerHTML(htmlString)
     }
     
 }
@@ -101,7 +82,15 @@ private extension PlayerViewController {
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.player.playerState == .playing ? self.player.pauseVideo() : self.player.playVideo()
+                if self.playState.state == .playing {
+                    self.playState.pause()
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
+                } else {
+                    self.playState.play()
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
+                }
             })
             .disposed(by: disposeBag)
 
@@ -118,42 +107,3 @@ private extension PlayerViewController {
 
     }
 }
-
-extension PlayerViewController: YTSwiftyPlayerDelegate {
-    public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didReceiveError error: YTSwiftyPlayerError) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {
-        
-    }
-    
-    public func playerReady(_ player: YTSwiftyPlayer) {
-        
-    }
-    
-    public func apiDidChange(_ player: YTSwiftyPlayer) {
-        
-    }
-    
-    public func youtubeIframeAPIReady(_ player: YTSwiftyPlayer) {
-        
-    }
-    
-    public func youtubeIframeAPIFailedToLoad(_ player: YTSwiftyPlayer) {
-        
-    }
-}
-
