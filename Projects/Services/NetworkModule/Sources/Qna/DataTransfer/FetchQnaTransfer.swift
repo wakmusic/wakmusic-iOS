@@ -11,7 +11,8 @@ public extension QnaResponseDTO {
             create_at:create_at,
             category:category,
             question:question,
-            description:description
+            description:description,
+            isOpen: false
         )
         
     }

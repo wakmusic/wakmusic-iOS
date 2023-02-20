@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import DomainModule
 
 class QuestionTableViewCell: UITableViewCell {
 
@@ -28,11 +29,11 @@ class QuestionTableViewCell: UITableViewCell {
 }
 
 extension QuestionTableViewCell{
-    public func update(model:QnAModel){
+    public func update(model:QnaEntity){
             
-        categoryLabel.text = model.categoty
+        categoryLabel.text = model.category
         titleLabel.text = model.question
-        expandImageView.image = model.isOpened ? DesignSystemAsset.Navigation.fold.image : DesignSystemAsset.Navigation.close.image
+        expandImageView.image = model.isOpen ? DesignSystemAsset.Navigation.fold.image : DesignSystemAsset.Navigation.close.image
 
     }
     

@@ -188,9 +188,31 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
 private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class QnaDependencybc3f0a2d4f873ad1b160Provider: QnaDependency {
+    var qnaContentComponent: QnaContentComponent {
+        return appComponent.qnaContentComponent
+    }
+    var fetchQnaCategoriesUseCase: any FetchQnaCategoriesUseCase {
+        return appComponent.fetchQnaCategoriesUseCase
+    }
+    var fetchQnaUseCase: any FetchQnaUseCase {
+        return appComponent.fetchQnaUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->QnaComponent
+private func factory49a98666675cb7a82038f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QnaDependencybc3f0a2d4f873ad1b160Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
         return appComponent.withdrawUserInfoUseCase
+    }
+    var qnaComponent: QnaComponent {
+        return appComponent.qnaComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -200,6 +222,17 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
 /// ^->AppComponent->RequestComponent
 private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class QnaContentDependency68ed55648233d525d265Provider: QnaContentDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->QnaContentComponent
+private func factory1501f7005831c8411229e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QnaContentDependency68ed55648233d525d265Provider()
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
@@ -378,6 +411,8 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
+        localTable["qnaContentComponent-QnaContentComponent"] = { self.qnaContentComponent as Any }
         localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
         localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
         localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
@@ -442,9 +477,22 @@ extension AfterLoginComponent: Registration {
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
     }
 }
+extension QnaComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\QnaDependency.qnaContentComponent] = "qnaContentComponent-QnaContentComponent"
+        keyPathToName[\QnaDependency.fetchQnaCategoriesUseCase] = "fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"
+        keyPathToName[\QnaDependency.fetchQnaUseCase] = "fetchQnaUseCase-any FetchQnaUseCase"
+    }
+}
 extension RequestComponent: Registration {
     public func registerItems() {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
+    }
+}
+extension QnaContentComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension RootComponent: Registration {
@@ -520,7 +568,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)

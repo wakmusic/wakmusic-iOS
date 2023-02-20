@@ -20,6 +20,16 @@ import StorageFeature
 public extension AppComponent {
 
     
+    var qnaComponent:  QnaComponent {
+        
+        QnaComponent(parent: self)
+    }
+    
+    var qnaContentComponent:  QnaContentComponent {
+        
+        QnaContentComponent(parent: self)
+    }
+    
     
 
     
