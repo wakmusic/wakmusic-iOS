@@ -29,7 +29,7 @@ public final class ProfilePopViewModel {
     }
 
     public struct Output {
-        var resultDescription: PublishSubject<String> = PublishSubject()
+        var setProfileResult: PublishSubject<BaseEntity> = PublishSubject()
         var dataSource: BehaviorRelay<[ProfileListEntity]> = BehaviorRelay(value: [])
         var collectionViewHeight: PublishRelay<CGFloat> = PublishRelay()
     }
@@ -80,20 +80,21 @@ public final class ProfilePopViewModel {
             .flatMap { [weak self] (id) -> Observable<BaseEntity> in
                 guard let self = self else { return Observable.empty() }
                 return self.setProfileUseCase.execute(image: id)
-                    .asObservable()
+                    .catch{ (error) in
+                        return Single<BaseEntity>.create { single in
+                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    }.asObservable()
             }
             .withLatestFrom(input.setProfileRequest) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (model, id) in
-                guard let self = self, model.status == 200 else { return }
-                Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: id)
-                self.output.resultDescription.onNext("")
-
-            }, onError: { [weak self] (error) in
-                guard let self = self else { return }
-                self.output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
+            .do(onNext: { (model, profile) in
+                guard model.status == 200 else { return }
+                Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: profile)
             })
+            .map { $0.0 }
+            .bind(to: output.setProfileResult)
             .disposed(by: disposeBag)
-        
     }
     
     private func getCollectionViewHeight(model: [ProfileListEntity]) -> CGFloat {

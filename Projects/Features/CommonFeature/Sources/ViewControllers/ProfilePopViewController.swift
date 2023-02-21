@@ -122,7 +122,7 @@ extension ProfilePopViewController{
             .bind(to: viewModel.input.setProfileRequest)
             .disposed(by: disposeBag)
         
-        viewModel.output.resultDescription
+        viewModel.output.setProfileResult
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (result) in
                 guard let self = self else { return }
@@ -135,14 +135,12 @@ extension ProfilePopViewController{
                                      .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
                     ), for: .normal
                 )
-
-                let isCompleted: Bool = result.isEmpty
                 
-                if isCompleted {
+                if result.status == 200 {
                     self.dismiss(animated: true)
                     
                 }else{
-                    self.showToast(text: result, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 }
                 
             }).disposed(by: disposeBag)
