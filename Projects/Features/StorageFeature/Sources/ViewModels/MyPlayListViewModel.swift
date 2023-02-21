@@ -24,6 +24,8 @@ public final class MyPlayListViewModel:ViewModelType {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         
+        let playListLoad:BehaviorRelay<Void> = BehaviorRelay(value: ())
+        
     }
 
     public struct Output {
@@ -44,10 +46,20 @@ public final class MyPlayListViewModel:ViewModelType {
         
         var output = Output()
         
-        self.fetchSubPlayListUseCase.execute()
-            .asObservable()
+        input.playListLoad
+            .flatMap({ [weak self] () -> Observable<[SubPlayListEntity]> in
+                
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                return self.fetchSubPlayListUseCase.execute()
+                    .asObservable()
+            })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+        
+      
         
         
         

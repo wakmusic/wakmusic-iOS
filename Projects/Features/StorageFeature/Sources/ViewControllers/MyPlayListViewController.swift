@@ -137,6 +137,12 @@ extension MyPlayListViewController{
             .disposed(by: disposeBag)
     
         
+                
+            NotificationCenter.default.rx.notification(.playListRefresh)
+                .map({_ in () })
+                .bind(to: input.playListLoad)
+                .disposed(by: disposeBag)
+                
       
         
     }

@@ -94,10 +94,13 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { result in
                         
-                        if result.status != 200 {
+                        if !result.description.isEmpty  {
                             output.result.onNext(result)
                             return
                         }
+                        
+                        //리프래쉬 작업
+                        NotificationCenter.default.post(name: .playListRefresh, object: nil)
 
                     })
                     .disposed(by: self.disposeBag)
@@ -136,10 +139,13 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { result in
                         
-                        if result.status != 200 {
+                        if !result.description.isEmpty {
                             output.result.onNext(result)
                             return
                         }
+                        
+                        //리프래쉬 작업
+                        NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         
                     })
                     .disposed(by: self.disposeBag)
