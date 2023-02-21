@@ -97,11 +97,6 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
-    var limitCount:Int = 12
-    var completion: (() -> Void)?
-    var shareCode:String?
-    
-
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var confireLabelGap: NSLayoutConstraint!
@@ -113,16 +108,16 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBAction func cancelAction(_ sender: UIButton) {
         
         
-        if type == .share
+        if viewModel.type == .share
         {
-            UIPasteboard.general.string = viewModel.input.textString.value
+            UIPasteboard.general.string = input.textString.value
             completion?() //토스트 팝업을 위한 컴플리션
             
         }
         else
         {
             textField.rx.text.onNext("")
-            viewModel.input.textString.accept("")
+            input.textString.accept("")
         }
         
         
@@ -138,8 +133,12 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         self.view.endEditing(true)
     }
     
-    var type:PurposeType = .creation
-    lazy var viewModel = CreatePlayListPopupViewModel()
+    var viewModel:MultiPurposePopupViewModel!
+    var limitCount:Int = 12
+    var completion: (() -> Void)?
+    var shareCode:String?
+    lazy var input = MultiPurposePopupViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     
     public var disposeBag = DisposeBag()
     
@@ -159,13 +158,12 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         
     }
     
-    public static func viewController(type:PurposeType,shareCode:String? = nil,completion: (() -> Void)? = nil) -> MultiPurposePopupViewController {
+    public static func viewController(viewModel:MultiPurposePopupViewModel) -> MultiPurposePopupViewController {
         let viewController = MultiPurposePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
-        viewController.type = type
-        viewController.shareCode = shareCode
-        viewController.completion = completion
-        
+        viewController.viewModel = viewModel
+    
+       
         return viewController
     }
     
@@ -178,12 +176,12 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
 extension MultiPurposePopupViewController{
     private func configureUI() {
 
-        titleLabel.text = type.title
+        titleLabel.text = viewModel.type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
         
-        subTitleLabel.text = type.subTitle
+        subTitleLabel.text = viewModel.type.subTitle
         subTitleLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 16)
         subTitleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         
@@ -194,11 +192,11 @@ extension MultiPurposePopupViewController{
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
-        self.textField.attributedPlaceholder = NSAttributedString(string: type == .creation || type == .edit ?
-                                                                  "플레이리스트 제목을 입력하세요." : type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+        self.textField.attributedPlaceholder = NSAttributedString(string: viewModel.type == .creation || viewModel.type == .edit ?
+                                                                  "플레이리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
-        if type == .share { //공유는 오직 읽기 전용
+        if viewModel.type == .share { //공유는 오직 읽기 전용
             self.textField.isEnabled = false
             self.viewModel.input.textString.accept(shareCode!)
             self.textField.text = shareCode!
@@ -208,7 +206,7 @@ extension MultiPurposePopupViewController{
         
         self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
         
-        if type == .share
+        if viewModel.type == .share
         {
             self.cancelButtonWidth.constant = 32
             self.cancelButtonHeight.constant = 32
@@ -226,7 +224,7 @@ extension MultiPurposePopupViewController{
             self.cancelButton.isHidden = true
         }
         
-        if (type == .creation || type == .edit || type == .nickname)
+        if (viewModel.type == .creation || viewModel.type == .edit || viewModel.type == .nickname)
         {
             self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
             self.confirmLabel.isHidden = true
@@ -244,7 +242,7 @@ extension MultiPurposePopupViewController{
             self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
             self.confirmLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
             self.confirmLabel.isHidden = false
-            self.confirmLabel.text =  type == .load ?  "· 플레이리스트 코드로 플레이리스트를 가져올 수 있습니다." : "· 플레이리스트 코드로 플레이리스트를 공유할 수 있습니다."
+            self.confirmLabel.text =  viewModel.type == .load ?  "· 플레이리스트 코드로 플레이리스트를 가져올 수 있습니다." : "· 플레이리스트 코드로 플레이리스트를 공유할 수 있습니다."
             self.confireLabelGap.constant = 12
             
             
@@ -253,7 +251,7 @@ extension MultiPurposePopupViewController{
     
         }
         
-        if type == .creation || type == .edit || type == .nickname{
+        if viewModel.type == .creation || viewModel.type == .edit || viewModel.type == .nickname{
             bindRxCreationOrEditOrNickName()
         }
         else{
@@ -267,7 +265,7 @@ extension MultiPurposePopupViewController{
         
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
-        saveButton.setAttributedTitle(NSMutableAttributedString(string:type.btnText,
+        saveButton.setAttributedTitle(NSMutableAttributedString(string:viewModel.type.btnText,
                                                                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                              .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
@@ -281,7 +279,7 @@ extension MultiPurposePopupViewController{
     private func bindRxCreationOrEditOrNickName()
     {
         
-        limitCount = type == .nickname ? 8 : 12
+        limitCount = viewModel.type == .nickname ? 8 : 12
         limitLabel.text = "/\(limitCount)"
         
         textField.rx.text.orEmpty
@@ -337,7 +335,7 @@ extension MultiPurposePopupViewController{
             else
             {
                 self.dividerView.backgroundColor = passColor
-                self.confirmLabel.text =  self.type == .nickname ? "사용할 수 있는 닉네임입니다." : "사용할 수 있는 제목입니다."
+                self.confirmLabel.text =  self.viewModel.type == .nickname ? "사용할 수 있는 닉네임입니다." : "사용할 수 있는 제목입니다."
                 self.confirmLabel.textColor = passColor
                 self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
                 self.saveButton.isEnabled = true

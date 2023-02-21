@@ -16,7 +16,7 @@ import PanModal
 import BaseFeature
 import CommonFeature
 
-class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -25,11 +25,12 @@ class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard
     
     //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
 
-    lazy var viewModel = MyPlayListViewModel()
+    var multiPurposePopComponent:MultiPurposePopComponent!
+    var viewModel:MyPlayListViewModel!
     
     var disposeBag = DisposeBag()
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         
@@ -42,10 +43,11 @@ class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard
     }
     
 
-    public static func viewController() -> MyPlayListViewController {
+    public static func viewController(viewModel:MyPlayListViewModel,multiPurposePopComponent:MultiPurposePopComponent) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
-      
+        viewController.viewModel = viewModel
+        viewController.multiPurposePopComponent = multiPurposePopComponent
         
         return viewController
     }
@@ -145,11 +147,11 @@ extension MyPlayListViewController{
 
 extension MyPlayListViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
         let header = MyPlayListHeaderView()
@@ -159,7 +161,7 @@ extension MyPlayListViewController:UITableViewDelegate{
         return dataSource.value.isEmpty ? nil :  self.viewModel.output.isEditinglist.value ? nil : header
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
         return dataSource.value.isEmpty ? 0 : self.viewModel.output.isEditinglist.value ? 0 : 140
@@ -170,19 +172,20 @@ extension MyPlayListViewController:UITableViewDelegate{
 }
 
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
-    func action(_ type: PurposeType) {
+    public func action(_ type: PurposeType) {
      
-        let vc =  MultiPurposePopupViewController.viewController(type: type) {
-            
-//            if type == .share {
+        let vc =  multiPurposePopComponent.makeView(type: type)
+        
+        
+//        if type == .share {
 //                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
-//            }
-            
-            if type == .load {
-                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
-            }
+//        }
+//
+//        if type == .load {
+//                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+//        }
 
-        }
+        
         self.showPanModal(content: vc)
     }    
 }

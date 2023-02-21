@@ -49,11 +49,13 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         self.showPanModal(content: vc)
     }
     
-    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
+    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
     var viewModel:AfterLoginViewModel!
+    
     var requestComponent:RequestComponent!
     var profilePopComponent: ProfilePopComponent!
-
+    var myPlayListComponent: MyPlayListComponent!
+    
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
@@ -89,13 +91,19 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     public static func viewController(
         viewModel:AfterLoginViewModel,
         requestComponent:RequestComponent,
-        profilePopComponent: ProfilePopComponent
+        profilePopComponent: ProfilePopComponent,
+        myPlayListComponent: MyPlayListComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.requestComponent = requestComponent
         viewController.profilePopComponent = profilePopComponent
+        viewController.myPlayListComponent = myPlayListComponent
+
+        
+        viewController.viewControllers = [myPlayListComponent.makeView(),FavoriteViewController.viewController()]
+        
         return viewController
     }
 }
@@ -154,6 +162,10 @@ extension AfterLoginViewController{
     
     private func bindRx()
     {
+        
+        
+        
+        
         output.isEditing.subscribe { [weak self] (res:Bool) in
             guard let self = self else{
                 return

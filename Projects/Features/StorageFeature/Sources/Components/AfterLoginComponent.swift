@@ -15,6 +15,7 @@ public protocol AfterLoginDependency: Dependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
     var requestComponent: RequestComponent {get}
     var profilePopComponent: ProfilePopComponent {get}
+    var myPlayListComponent: MyPlayListComponent {get}
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {
@@ -24,7 +25,8 @@ public final class AfterLoginComponent: Component<AfterLoginDependency> {
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase
             ),
             requestComponent: dependency.requestComponent,
-            profilePopComponent: dependency.profilePopComponent
+            profilePopComponent: dependency.profilePopComponent,
+            myPlayListComponent: dependency.myPlayListComponent
         )
     }
 }
