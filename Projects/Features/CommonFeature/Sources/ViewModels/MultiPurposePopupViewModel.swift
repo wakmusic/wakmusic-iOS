@@ -92,7 +92,14 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         
                         return Observable.just(BaseEntity(status: 0,description: base.description))
                     })
-                    .subscribe()
+                    .subscribe(onNext: { result in
+                        
+                        if result.status != 200 {
+                            output.result.onNext(result)
+                            return
+                        }
+
+                    })
                     .disposed(by: self.disposeBag)
             
             case .nickname:
@@ -116,8 +123,24 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             
             case .load:
                 self.loadPlayListUseCase.execute(key: text)
-                    .subscribe(onSuccess: {
-                        DEBUG_LOG($0)
+                    .catch({ (error:Error) in
+                        return Single<PlayListBaseEntity>.create { single in
+                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    })
+                    .asObservable()
+                    .flatMap({ base -> Observable<BaseEntity> in
+                        
+                        return Observable.just(BaseEntity(status: 0,description: base.description))
+                    })
+                    .subscribe(onNext: { result in
+                        
+                        if result.status != 200 {
+                            output.result.onNext(result)
+                            return
+                        }
+                        
                     })
                     .disposed(by: self.disposeBag)
             
