@@ -75,14 +75,22 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 return
             }
             
+            let text = input.textString.value
             
             switch self.type{
                 
             case .creation:
-                self.createPlayListUseCase.execute(title: input.textString.value)
+                self.createPlayListUseCase.execute(title:text )
                     .subscribe()
                     .disposed(by: self.disposeBag)
             
+            case .nickname:
+                self.setUserNameUseCase.execute(name:text)
+                    .subscribe(onSuccess: { _ in
+                        Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))
+                    }).disposed(by: self.disposeBag)
+        
+                
 
             default :
                 DEBUG_LOG(input.textString.value)

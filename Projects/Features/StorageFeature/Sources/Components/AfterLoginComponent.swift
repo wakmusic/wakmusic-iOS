@@ -16,6 +16,7 @@ public protocol AfterLoginDependency: Dependency {
     var requestComponent: RequestComponent {get}
     var profilePopComponent: ProfilePopComponent {get}
     var myPlayListComponent: MyPlayListComponent {get}
+    var multiPurposePopComponent: MultiPurposePopComponent {get}
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {
@@ -26,7 +27,8 @@ public final class AfterLoginComponent: Component<AfterLoginDependency> {
             ),
             requestComponent: dependency.requestComponent,
             profilePopComponent: dependency.profilePopComponent,
-            myPlayListComponent: dependency.myPlayListComponent
+            myPlayListComponent: dependency.myPlayListComponent,
+            multiPurposePopComponent: dependency.multiPurposePopComponent
         )
     }
 }

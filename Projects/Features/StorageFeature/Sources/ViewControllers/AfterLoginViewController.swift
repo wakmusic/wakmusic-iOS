@@ -55,6 +55,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     var requestComponent:RequestComponent!
     var profilePopComponent: ProfilePopComponent!
     var myPlayListComponent: MyPlayListComponent!
+    var multiPurposePopComponent : MultiPurposePopComponent!
     
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -92,7 +93,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewModel:AfterLoginViewModel,
         requestComponent:RequestComponent,
         profilePopComponent: ProfilePopComponent,
-        myPlayListComponent: MyPlayListComponent
+        myPlayListComponent: MyPlayListComponent,
+        multiPurposePopComponent : MultiPurposePopComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
@@ -100,6 +102,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.requestComponent = requestComponent
         viewController.profilePopComponent = profilePopComponent
         viewController.myPlayListComponent = myPlayListComponent
+        viewController.multiPurposePopComponent = multiPurposePopComponent
 
         
         viewController.viewControllers = [myPlayListComponent.makeView(),FavoriteViewController.viewController()]
@@ -163,9 +166,6 @@ extension AfterLoginViewController{
     private func bindRx()
     {
         
-        
-        
-        
         output.isEditing.subscribe { [weak self] (res:Bool) in
             guard let self = self else{
                 return
@@ -214,8 +214,8 @@ extension AfterLoginViewController{
             guard let self = self else{
                 return
             }
-            let vc = self.profilePopComponent.makeView()
-            //MultiPurposePopupViewController.viewController(type: .nickname)
+            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
+            //self.profilePopComponent.makeView()
             self.showPanModal(content: vc)
             
         }).disposed(by: disposeBag)

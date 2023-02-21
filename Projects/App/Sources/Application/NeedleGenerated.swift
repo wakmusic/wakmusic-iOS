@@ -198,6 +198,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var myPlayListComponent: MyPlayListComponent {
         return appComponent.myPlayListComponent
     }
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        return appComponent.multiPurposePopComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -525,6 +528,7 @@ extension AfterLoginComponent: Registration {
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
+        keyPathToName[\AfterLoginDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
     }
 }
 extension QnaComponent: Registration {
