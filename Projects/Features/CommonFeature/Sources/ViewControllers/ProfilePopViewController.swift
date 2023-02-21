@@ -135,14 +135,12 @@ extension ProfilePopViewController{
                                      .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
                     ), for: .normal
                 )
-
-                let isCompleted: Bool = result.isEmpty
                 
-                if isCompleted {
+                if result.status == 200 {
                     self.dismiss(animated: true)
                     
                 }else{
-                    self.showToast(text: result, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 }
                 
             }).disposed(by: disposeBag)

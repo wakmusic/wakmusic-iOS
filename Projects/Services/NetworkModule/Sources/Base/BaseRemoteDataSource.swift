@@ -45,13 +45,6 @@ private extension BaseRemoteDataSource {
         return provider.rx.request(api)
             .timeout(.seconds(5), scheduler: MainScheduler.asyncInstance)
             .catch { error in
-                
-                
-              UIApplication.shared.windows.first?.showToast(
-                text: error.localizedDescription, font: .systemFont(ofSize: 14, weight: .light))
-                
-                
-                
                 guard let errorCode = (error as? MoyaError)?.response?.statusCode else {
                     return Single.error(error)
                 }

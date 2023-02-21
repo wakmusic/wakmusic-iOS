@@ -189,19 +189,17 @@ extension RequestViewController{
     
     private func bindRx(){
         
-        output.statusCode.subscribe(onNext: { [weak self] in
+        output.withDrawResult.subscribe(onNext: { [weak self] in
             guard let self = self else{
                 return
             }
             
-            DEBUG_LOG($0.isEmpty)
-            let completed: Bool = $0.isEmpty
-            
+            let status: Int = $0.status
             let withdrawVc = TextPopupViewController.viewController(
-                text: $0.isEmpty ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0,
+                text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0.description,
                 cancelButtonIsHidden: true,
                 completion: {
-                    if completed {
+                    if status == 200 {
                         self.navigationController?.popViewController(animated: true)
                     }
                 })

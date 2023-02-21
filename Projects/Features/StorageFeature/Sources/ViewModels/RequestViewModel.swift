@@ -24,7 +24,7 @@ final public class RequestViewModel:ViewModelType {
     }
 
     public struct Output {
-        let statusCode:PublishSubject<String> = PublishSubject()
+        let withDrawResult: PublishSubject<BaseEntity> = PublishSubject()
     }
 
     public init(
@@ -44,21 +44,22 @@ final public class RequestViewModel:ViewModelType {
                 guard let self = self else {
                     return Observable.empty()
                 }
-                return self.withDrawUserInfoUseCase.execute().asObservable()
+                return self.withDrawUserInfoUseCase.execute()
+                    .catch{ (error) in
+                        return Single<BaseEntity>.create { single in
+                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    }.asObservable()
             }
-            .subscribe(onNext: { (model) in
+            .do(onNext: { (model) in
                 DEBUG_LOG("성공성공성공: \(model)")
                 let keychain = KeychainImpl()
                 keychain.delete(type: .accessToken)
                 Utility.PreferenceManager.userInfo = nil
-                output.statusCode.onNext("")
-                
-            }, onError: { (error) in
-                let error = error.asWMError
-                DEBUG_LOG(error.errorDescription!)
-                output.statusCode.onNext(error.errorDescription!)
-                
-            }).disposed(by: disposeBag)
+            })
+            .bind(to: output.withDrawResult)
+            .disposed(by: disposeBag)
 
         return output
     }
