@@ -1,5 +1,4 @@
 import Foundation
-import Foundation
 import NeedleFoundation
 
 public protocol ChartDependency: Dependency {

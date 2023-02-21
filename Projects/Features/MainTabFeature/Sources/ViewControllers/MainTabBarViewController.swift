@@ -22,11 +22,12 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     @IBOutlet weak public var contentView: UIView!
 
     private lazy var viewControllers: [UIViewController] = {
-        return [HomeViewController.viewController().wrapNavigationController,
-                chartComponent.makeView().wrapNavigationController,
-                searchComponent.makeView().wrapNavigationController,
-                artistComponent.makeView().wrapNavigationController,
-                storageComponent.makeView().wrapNavigationController
+        return [
+            HomeViewController.viewController().wrapNavigationController,
+            chartComponent.makeView(),
+            searchComponent.makeView().wrapNavigationController,
+            artistComponent.makeView().wrapNavigationController,
+            storageComponent.makeView().wrapNavigationController
         ]
     }()
 
