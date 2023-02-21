@@ -40,6 +40,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
         let pressCancel:PublishSubject<Void> = PublishSubject()
         let pressConfirm:PublishSubject<Void> = PublishSubject()
+        var resultDescription: PublishSubject<String> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -81,13 +82,25 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 
             case .creation:
                 self.createPlayListUseCase.execute(title:text )
-                    .subscribe()
+                    .subscribe(onError: { [weak self] (error) in
+                        guard let self = self else { return }
+                        output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
+                    })
                     .disposed(by: self.disposeBag)
             
             case .nickname:
                 self.setUserNameUseCase.execute(name:text)
-                    .subscribe(onSuccess: { _ in
+                    .subscribe(onSuccess: { result in
+                        
+                        if result.status != 200 {
+                            return
+                        }
+                        
                         Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))
+                        
+                    },onError: { [weak self] (error) in
+                        guard let self = self else { return }
+                        output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
                     }).disposed(by: self.disposeBag)
         
                 
