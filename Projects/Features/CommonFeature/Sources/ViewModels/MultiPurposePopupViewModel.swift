@@ -33,12 +33,12 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
-        
+        let pressConfirm:PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let pressConfirm:PublishSubject<Void> = PublishSubject()
+        
         var resultDescription: PublishSubject<String> = PublishSubject()
     }
 
@@ -69,14 +69,14 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         var output = Output()
         
         
-        output.pressConfirm.subscribe(onNext: { [weak self] in
+        input.pressConfirm
+            .withLatestFrom(input.textString)
+            .subscribe(onNext: { [weak self] (text:String) in
             
             guard let self = self else{
                 return
             }
-            
-            let text = input.textString.value
-            
+      
             switch self.type{
                 
             case .creation:

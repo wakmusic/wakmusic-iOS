@@ -131,7 +131,8 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     
         //네트워크 작업
         //completion?()
-        output.pressConfirm.onNext(())
+        input.pressConfirm.onNext(())
+        
         dismiss(animated: true)
         self.view.endEditing(true)
     }
