@@ -84,6 +84,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             return
         }
         //skip(2) 원인
+    
+        
         vc1.output.isEditinglist.accept(false)
         vc2.output.isEditinglist.accept(false)
         
@@ -126,7 +128,10 @@ extension AfterLoginViewController{
         
         requestButton.setImage(DesignSystemAsset.Storage.request.image, for: .normal)
         
-        
+        editButton.layer.cornerRadius = 4
+        editButton.layer.borderWidth = 1
+        editButton.backgroundColor = .clear
+        editButton.isHidden = true
         
         //탭바 설정
         self.dataSource = self
@@ -160,6 +165,7 @@ extension AfterLoginViewController{
 
     
         bindRx()
+        bindEditButtonVisable()
         
     
         
@@ -177,10 +183,10 @@ extension AfterLoginViewController{
             let attr = NSMutableAttributedString(string: res ? "완료" : "편집",
                                                  attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
                                                               .foregroundColor: res ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
-            self.editButton.layer.cornerRadius = 4
+            
             self.editButton.layer.borderColor = res ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
-            self.editButton.layer.borderWidth = 1
-            self.editButton.backgroundColor = .clear
+         
+            
             self.editButton.setAttributedTitle(attr, for: .normal)
             
             self.isScrollEnabled = !res //  편집 시 , 옆 탭으로 swipe를 막기 위함
@@ -238,7 +244,42 @@ extension AfterLoginViewController{
                 )
                 
             }).disposed(by: disposeBag)
+        
+       
+        
     }
+    
+    
+    func bindEditButtonVisable(){
+        guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
+                    return
+                }
+
+        guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
+                    return
+                }
+
+        vc1.output.dataSource
+                .skip(1)
+                .filter({ [weak self] _  in
+                    guard let self = self else { return false }
+                    return (self.currentIndex ?? 0) == 0
+                })
+                .map { $0.isEmpty }
+                .bind(to: editButton.rx.isHidden)
+                .disposed(by: disposeBag)
+
+        vc2.output.dataSource
+            .skip(1)
+            .filter({ [weak self] _  in
+                guard let self = self else { return false }
+                return (self.currentIndex ?? 0) == 1
+            })
+            .map { $0.isEmpty }
+            .bind(to: editButton.rx.isHidden)
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSource {
