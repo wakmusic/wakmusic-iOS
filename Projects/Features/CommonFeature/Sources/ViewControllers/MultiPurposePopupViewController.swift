@@ -108,6 +108,8 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBAction func cancelAction(_ sender: UIButton) {
         
         
+
+        
         if viewModel.type == .share
         {
             UIPasteboard.general.string = input.textString.value //클립보드 복사

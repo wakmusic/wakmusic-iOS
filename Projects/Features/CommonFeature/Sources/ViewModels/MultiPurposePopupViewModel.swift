@@ -38,7 +38,6 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let pressCancel:PublishSubject<Void> = PublishSubject()
         let pressConfirm:PublishSubject<Void> = PublishSubject()
         var resultDescription: PublishSubject<String> = PublishSubject()
     }
@@ -102,8 +101,14 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         guard let self = self else { return }
                         output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
                     }).disposed(by: self.disposeBag)
-        
-                
+            
+            case .load:
+                self.loadPlayListUseCase.execute(key: text)
+                    .subscribe(onSuccess: {
+                        DEBUG_LOG($0)
+                    })
+                    .disposed(by: self.disposeBag)
+            
 
             default :
                 DEBUG_LOG(input.textString.value)
@@ -113,6 +118,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             
         }).disposed(by: disposeBag)
         
+      
         
         return output
     }
