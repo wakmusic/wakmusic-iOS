@@ -29,7 +29,7 @@ public final class ProfilePopViewModel {
     }
 
     public struct Output {
-        var resultDescription: PublishSubject<BaseEntity> = PublishSubject()
+        var setProfileResult: PublishSubject<BaseEntity> = PublishSubject()
         var dataSource: BehaviorRelay<[ProfileListEntity]> = BehaviorRelay(value: [])
         var collectionViewHeight: PublishRelay<CGFloat> = PublishRelay()
     }
@@ -93,7 +93,7 @@ public final class ProfilePopViewModel {
                 Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: profile)
             })
             .map { $0.0 }
-            .bind(to: output.resultDescription)
+            .bind(to: output.setProfileResult)
             .disposed(by: disposeBag)
     }
     

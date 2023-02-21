@@ -122,7 +122,7 @@ extension ProfilePopViewController{
             .bind(to: viewModel.input.setProfileRequest)
             .disposed(by: disposeBag)
         
-        viewModel.output.resultDescription
+        viewModel.output.setProfileResult
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (result) in
                 guard let self = self else { return }
