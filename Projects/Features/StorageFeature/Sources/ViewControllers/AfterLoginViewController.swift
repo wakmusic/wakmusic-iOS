@@ -49,11 +49,15 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         self.showPanModal(content: vc)
     }
     
-    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
+    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
     var viewModel:AfterLoginViewModel!
+    
     var requestComponent:RequestComponent!
     var profilePopComponent: ProfilePopComponent!
-
+    var myPlayListComponent: MyPlayListComponent!
+    var multiPurposePopComponent : MultiPurposePopComponent!
+    var favoriteComponent:  FavoriteComponent!
+    
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
@@ -79,8 +83,9 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        vc1.viewModel.output.isEditinglist.accept(false)
-        vc2.viewModel.output.isEditinglist.accept(false)
+        //skip(2) 원인
+        vc1.output.isEditinglist.accept(false)
+        vc2.output.isEditinglist.accept(false)
         
         output.isEditing.accept(false)
     }
@@ -89,13 +94,22 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     public static func viewController(
         viewModel:AfterLoginViewModel,
         requestComponent:RequestComponent,
-        profilePopComponent: ProfilePopComponent
+        profilePopComponent: ProfilePopComponent,
+        myPlayListComponent: MyPlayListComponent,
+        multiPurposePopComponent : MultiPurposePopComponent,
+        favoriteComponent : FavoriteComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.requestComponent = requestComponent
         viewController.profilePopComponent = profilePopComponent
+        viewController.myPlayListComponent = myPlayListComponent
+        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.favoriteComponent = favoriteComponent
+        
+        viewController.viewControllers = [myPlayListComponent.makeView(),favoriteComponent.makeView()]
+        
         return viewController
     }
 }
@@ -154,6 +168,7 @@ extension AfterLoginViewController{
     
     private func bindRx()
     {
+        
         output.isEditing.subscribe { [weak self] (res:Bool) in
             guard let self = self else{
                 return
@@ -185,14 +200,14 @@ extension AfterLoginViewController{
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+                    vc.output.isEditinglist.accept(res)
                 }
                 
                 else{
                     guard let vc =  self.viewControllers[1] as? FavoriteViewController else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+                    vc.output.isEditinglist.accept(res)
                 }
             })
             .bind(to: output.isEditing)
@@ -202,8 +217,8 @@ extension AfterLoginViewController{
             guard let self = self else{
                 return
             }
-            let vc = self.profilePopComponent.makeView()
-            //MultiPurposePopupViewController.viewController(type: .nickname)
+            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
+            //self.profilePopComponent.makeView()
             self.showPanModal(content: vc)
             
         }).disposed(by: disposeBag)

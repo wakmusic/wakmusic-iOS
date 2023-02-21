@@ -169,6 +169,22 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
 private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        return appComponent.multiPurposePopComponent
+    }
+    var fetchSubPlayListUseCase: any FetchSubPlayListUseCase {
+        return appComponent.fetchSubPlayListUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->MyPlayListComponent
+private func factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MyPlayListDependency067bbf42b28f80e413acProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
@@ -179,6 +195,15 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var profilePopComponent: ProfilePopComponent {
         return appComponent.profilePopComponent
     }
+    var myPlayListComponent: MyPlayListComponent {
+        return appComponent.myPlayListComponent
+    }
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        return appComponent.multiPurposePopComponent
+    }
+    var favoriteComponent: FavoriteComponent {
+        return appComponent.favoriteComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -187,6 +212,19 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
 /// ^->AppComponent->AfterLoginComponent
 private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
+        return appComponent.fetchFavoriteSongsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->FavoriteComponent
+private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FavoriteDependency8f7fd37aeb6f0e5d0e30Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class QnaDependencybc3f0a2d4f873ad1b160Provider: QnaDependency {
     var qnaContentComponent: QnaContentComponent {
@@ -325,9 +363,31 @@ private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDe
 private func factory9bb852337d5550979293f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return BeforeSearchDependencyebdecb1d478a4766488dProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurposePopDependency {
+    var createPlayListUseCase: any CreatePlayListUseCase {
+        return appComponent.createPlayListUseCase
+    }
+    var loadPlayListUseCase: any LoadPlayListUseCase {
+        return appComponent.loadPlayListUseCase
+    }
+    var setUserNameUseCase: any SetUserNameUseCase {
+        return appComponent.setUserNameUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->MultiPurposePopComponent
+private func factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MultiPurposePopDependency30141c7a9a9e67e148afProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDetailDependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
         return appComponent.fetchPlayListDetailUseCase
+    }
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        return appComponent.multiPurposePopComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -383,6 +443,8 @@ extension AppComponent: Registration {
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { self.cancelLikeSongUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { self.beforeSearchComponent as Any }
         localTable["playListDetailComponent-PlayListDetailComponent"] = { self.playListDetailComponent as Any }
+        localTable["multiPurposePopComponent-MultiPurposePopComponent"] = { self.multiPurposePopComponent as Any }
+        localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
@@ -400,13 +462,14 @@ extension AppComponent: Registration {
         localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
         localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
         localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
+        localTable["favoriteComponent-FavoriteComponent"] = { self.favoriteComponent as Any }
         localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
         localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
         localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
-        localTable["fetchSubPlayList-any FetchSubPlayListUseCase"] = { self.fetchSubPlayList as Any }
-        localTable["fetchFavoriteSongs-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongs as Any }
+        localTable["fetchSubPlayListUseCase-any FetchSubPlayListUseCase"] = { self.fetchSubPlayListUseCase as Any }
+        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -470,11 +533,25 @@ extension StorageComponent: Registration {
         keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
     }
 }
+extension MyPlayListComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\MyPlayListDependency.fetchSubPlayListUseCase] = "fetchSubPlayListUseCase-any FetchSubPlayListUseCase"
+    }
+}
 extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
+        keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
+        keyPathToName[\AfterLoginDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\AfterLoginDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
+    }
+}
+extension FavoriteComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
     }
 }
 extension QnaComponent: Registration {
@@ -530,9 +607,17 @@ extension BeforeSearchComponent: Registration {
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
     }
 }
+extension MultiPurposePopComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
+        keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
+        keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
+    }
+}
 extension PlayListDetailComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
+        keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
     }
 }
 extension ProfilePopComponent: Registration {
@@ -567,7 +652,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
@@ -577,6 +664,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }

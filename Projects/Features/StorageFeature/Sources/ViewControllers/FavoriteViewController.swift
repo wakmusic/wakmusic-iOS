@@ -13,21 +13,23 @@ import DesignSystem
 import RxSwift
 import BaseFeature
 import CommonFeature
+import DomainModule
 
-class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
     
-    var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [SongInfoDTO(name: "리와인드1 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드4 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드2 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드5 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드26(RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12"),SongInfoDTO(name: "리와인드3 (RE:WIND)", artist: "이세계아이돌", releaseDay: "2022.12.12")])
+  
+    var viewModel: FavoriteViewModel!
+    lazy var input = FavoriteViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     
-    //var dataSource: BehaviorRelay<[SongInfoDTO]> = BehaviorRelay(value: [])
     
-    lazy var viewModel = FavoriteViewModel()
     var disposeBag = DisposeBag()
     
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
@@ -39,10 +41,11 @@ class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
     }
     
 
-    public static func viewController() -> FavoriteViewController {
+    public static func viewController(viewModel:FavoriteViewModel) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
       
+        viewController.viewModel = viewModel
         
         return viewController
     }
@@ -66,8 +69,8 @@ extension FavoriteViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began {
-            viewModel.output.isEditinglist.accept(true)
+        if  !output.isEditinglist.value && sender.state == .began {
+            output.isEditinglist.accept(true)
             UIImpactFeedbackGenerator(style: .light).impactOccurred() // 진동 코드
         }
     }
@@ -76,7 +79,8 @@ extension FavoriteViewController{
     {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        dataSource
+        output.dataSource
+        .skip(1)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -85,11 +89,12 @@ extension FavoriteViewController{
             
             let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
             warningView.text = "좋아요 한 곡이 없습니다."
-            
+        
             
             self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
         })
-            .bind(to: tableView.rx.items){[weak self] (tableView:UITableView,index:Int,model:SongInfoDTO) -> UITableViewCell in
+            
+            .bind(to: tableView.rx.items){[weak self] (tableView:UITableView,index:Int,model:FavoriteSongEntity) -> UITableViewCell in
                 guard let self = self else{return UITableViewCell()}
                 
                 let bgView = UIView()
@@ -99,14 +104,14 @@ extension FavoriteViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model, self.viewModel.output.isEditinglist.value)
+                cell.update(model, self.output.isEditinglist.value)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-        viewModel.output.isEditinglist
+            output.isEditinglist
             .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
@@ -123,8 +128,8 @@ extension FavoriteViewController{
                 
                 
             })
-            .withLatestFrom(dataSource)
-            .bind(to: dataSource)
+                .withLatestFrom(output.dataSource)
+                .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         
@@ -136,7 +141,7 @@ extension FavoriteViewController{
 
 extension FavoriteViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
         
@@ -147,7 +152,7 @@ extension  FavoriteViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        self.viewModel.input.sourceIndexPath.accept(indexPath)
+        self.input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -178,16 +183,16 @@ extension  FavoriteViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+        self.input.destIndexPath.accept(destinationIndexPath)
         
         
         
         
-        var curr = dataSource.value
-        var tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
-        curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
-        curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
-        dataSource.accept(curr)
+        var curr = output.dataSource.value
+        var tmp = curr[self.input.sourceIndexPath.value.row]
+        curr.remove(at: self.input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: self.input.destIndexPath.value.row)
+        output.dataSource.accept(curr)
         
         
         DEBUG_LOG(destinationIndexPath)

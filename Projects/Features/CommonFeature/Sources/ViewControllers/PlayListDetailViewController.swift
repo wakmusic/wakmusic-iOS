@@ -37,7 +37,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
 
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
-   
+    var multiPurposePopComponent:MultiPurposePopComponent!
     
     
     
@@ -90,7 +90,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = MultiPurposePopupViewController.viewController(type: .edit)
+        let createPlayListPopupViewController = multiPurposePopComponent.makeView(type: .creation)
         self.showPanModal(content: createPlayListPopupViewController)
     }
     
@@ -115,10 +115,11 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         
     }
     
-    public static func viewController(viewModel:PlayListDetailViewModel) -> PlayListDetailViewController {
+    public static func viewController(viewModel:PlayListDetailViewModel,multiPurposePopComponent:MultiPurposePopComponent) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
+        viewController.multiPurposePopComponent = multiPurposePopComponent
         
         return viewController
     }
