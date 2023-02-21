@@ -173,6 +173,9 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
+    var fetchSubPlayListUseCase: any FetchSubPlayListUseCase {
+        return appComponent.fetchSubPlayListUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -445,8 +448,8 @@ extension AppComponent: Registration {
         localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
-        localTable["fetchSubPlayList-any FetchSubPlayListUseCase"] = { self.fetchSubPlayList as Any }
-        localTable["fetchFavoriteSongs-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongs as Any }
+        localTable["fetchSubPlayListUseCase-any FetchSubPlayListUseCase"] = { self.fetchSubPlayListUseCase as Any }
+        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -513,6 +516,7 @@ extension StorageComponent: Registration {
 extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\MyPlayListDependency.fetchSubPlayListUseCase] = "fetchSubPlayListUseCase-any FetchSubPlayListUseCase"
     }
 }
 extension AfterLoginComponent: Registration {

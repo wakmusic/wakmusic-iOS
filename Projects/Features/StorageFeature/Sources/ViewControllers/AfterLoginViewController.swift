@@ -81,7 +81,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        vc1.viewModel.output.isEditinglist.accept(false)
+        vc1.output.isEditinglist.accept(false)
         vc2.viewModel.output.isEditinglist.accept(false)
         
         output.isEditing.accept(false)
@@ -197,7 +197,7 @@ extension AfterLoginViewController{
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+                    vc.output.isEditinglist.accept(res)
                 }
                 
                 else{

@@ -7,20 +7,19 @@
 //
 
 import Foundation
-
-import Foundation
 import RxSwift
 import RxRelay
 import BaseFeature
+import DomainModule
+import Utility
 
 public final class MyPlayListViewModel:ViewModelType {
     
     
 
-    let input = Input()
-    let output = Output()
     var disposeBag = DisposeBag()
-
+    var fetchSubPlayListUseCase:FetchSubPlayListUseCase!
+    
     public struct Input {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
@@ -29,11 +28,17 @@ public final class MyPlayListViewModel:ViewModelType {
 
     public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
     }
 
-    init() {
+    init(fetchSubPlayListUseCase:FetchSubPlayListUseCase) {
         
+        self.fetchSubPlayListUseCase = fetchSubPlayListUseCase
         print("✅ PlayListDetailViewModel 생성")
+        
+        self.fetchSubPlayListUseCase.execute()
+            .subscribe(onSuccess: {DEBUG_LOG($0)})
+            .disposed(by: disposeBag)
         
     }
     

@@ -9,16 +9,17 @@
 import Foundation
 import NeedleFoundation
 import CommonFeature
-
+import DomainModule
 
 public protocol MyPlayListDependency: Dependency {
     var  multiPurposePopComponent :  MultiPurposePopComponent {get}
+    var  fetchSubPlayListUseCase : any FetchSubPlayListUseCase {get}
    
 }
 
 public final class MyPlayListComponent: Component<MyPlayListDependency> {
     public func makeView() -> MyPlayListViewController{
         
-        return MyPlayListViewController.viewController(viewModel: .init(), multiPurposePopComponent: dependency.multiPurposePopComponent)
+        return MyPlayListViewController.viewController(viewModel: .init(fetchSubPlayListUseCase: dependency.fetchSubPlayListUseCase), multiPurposePopComponent: dependency.multiPurposePopComponent)
     }
 }

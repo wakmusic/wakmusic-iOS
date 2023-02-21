@@ -53,14 +53,14 @@ public extension AppComponent {
         }
     }
     
-    var fetchSubPlayList: any FetchSubPlayListUseCase {
+    var fetchSubPlayListUseCase: any FetchSubPlayListUseCase {
         shared {
             FetchSubPlayListUseCaseImpl(userRepository: userRepository)
         }
         
     }
     
-    var fetchFavoriteSongs: any FetchFavoriteSongsUseCase {
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         shared {
             FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
         }

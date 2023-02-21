@@ -28,6 +28,10 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     var multiPurposePopComponent:MultiPurposePopComponent!
     var viewModel:MyPlayListViewModel!
     
+    lazy var input = MyPlayListViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
+    
     var disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -66,8 +70,8 @@ extension MyPlayListViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began {
-            viewModel.output.isEditinglist.accept(true)
+        if  !output.isEditinglist.value && sender.state == .began {
+            output.isEditinglist.accept(true)
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
     }
@@ -103,14 +107,14 @@ extension MyPlayListViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model: model, isEditing: self.viewModel.output.isEditinglist.value)
+                cell.update(model: model, isEditing: self.output.isEditinglist.value)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-        self.viewModel.output.isEditinglist
+        self.output.isEditinglist
             .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
@@ -158,13 +162,13 @@ extension MyPlayListViewController:UITableViewDelegate{
       
 
         header.delegate = self
-        return dataSource.value.isEmpty ? nil :  self.viewModel.output.isEditinglist.value ? nil : header
+        return dataSource.value.isEmpty ? nil :  self.output.isEditinglist.value ? nil : header
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return dataSource.value.isEmpty ? 0 : self.viewModel.output.isEditinglist.value ? 0 : 140
+        return dataSource.value.isEmpty ? 0 : self.output.isEditinglist.value ? 0 : 140
         
         
     }
@@ -194,7 +198,7 @@ extension  MyPlayListViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        self.viewModel.input.sourceIndexPath.accept(indexPath)
+       input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -225,14 +229,14 @@ extension  MyPlayListViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+        input.destIndexPath.accept(destinationIndexPath)
         
         
         
         var curr = dataSource.value
-        var tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
-        curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
-        curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
+        var tmp = curr[input.sourceIndexPath.value.row]
+        curr.remove(at: input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: input.destIndexPath.value.row)
         
         dataSource.accept(curr)
         
