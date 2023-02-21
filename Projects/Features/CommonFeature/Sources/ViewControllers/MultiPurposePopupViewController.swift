@@ -110,8 +110,8 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         
         if viewModel.type == .share
         {
-            UIPasteboard.general.string = input.textString.value
-            completion?() //토스트 팝업을 위한 컴플리션
+            UIPasteboard.general.string = input.textString.value //클립보드 복사
+            //completion?() //토스트 팝업을 위한 컴플리션
             
         }
         else
@@ -128,15 +128,14 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         
     
         //네트워크 작업
-        completion?()
+        //completion?()
+        output.pressConfirm.onNext(())
         dismiss(animated: true)
         self.view.endEditing(true)
     }
     
     var viewModel:MultiPurposePopupViewModel!
     var limitCount:Int = 12
-    var completion: (() -> Void)?
-    var shareCode:String?
     lazy var input = MultiPurposePopupViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
@@ -198,8 +197,8 @@ extension MultiPurposePopupViewController{
         
         if viewModel.type == .share { //공유는 오직 읽기 전용
             self.textField.isEnabled = false
-            self.viewModel.input.textString.accept(shareCode!)
-            self.textField.text = shareCode!
+            self.input.textString.accept("shareCode")
+            self.textField.text = "shareCode"
         }
         
        
@@ -258,9 +257,10 @@ extension MultiPurposePopupViewController{
             bindRxLoadOrShare()
         }
         
+        bindRxEvent()
         
         
-       
+        
         
         
         saveButton.layer.cornerRadius = 12
@@ -282,14 +282,9 @@ extension MultiPurposePopupViewController{
         limitCount = viewModel.type == .nickname ? 8 : 12
         limitLabel.text = "/\(limitCount)"
         
-        textField.rx.text.orEmpty
-            .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
-            .bind(to: self.viewModel.input.textString)
-            .disposed(by: self.disposeBag)
         
         
-        
-        self.viewModel.input.textString.subscribe { [weak self] (str:String) in
+        self.input.textString.subscribe { [weak self] (str:String) in
             
             guard let self = self else{
                 return
@@ -353,13 +348,7 @@ extension MultiPurposePopupViewController{
     
     private func bindRxLoadOrShare() {
         
-        textField.rx.text.orEmpty
-            .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
-            .bind(to: self.viewModel.input.textString)
-            .disposed(by: self.disposeBag)
-        
-        
-        self.viewModel.input.textString.subscribe { [weak self] (str:String) in
+        self.input.textString.subscribe { [weak self] (str:String) in
             
             guard let self = self else{
                 return
@@ -397,6 +386,14 @@ extension MultiPurposePopupViewController{
         
         
         keyboardBinding()
+    }
+    
+    private func bindRxEvent(){
+        textField.rx.text.orEmpty
+            .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
+            .bind(to: input.textString)
+            .disposed(by: self.disposeBag)
+        
     }
     
     private func keyboardBinding()

@@ -20,14 +20,16 @@ import Utility
 public final class MultiPurposePopupViewModel:ViewModelType {
    
     
-    let input = Input()
-    let output = Output()
+    let disposeBag = DisposeBag()
     
-    var type:PurposeType!
- 
+    var type:PurposeType
+    var shareCode:String?
+    var playListKey:String?
+    
     var createPlayListUseCase:CreatePlayListUseCase!
     var loadPlayListUseCase:LoadPlayListUseCase!
-    var setUserNameUseCase:SetUserNameUseCase
+    var setUserNameUseCase:SetUserNameUseCase!
+    
 
     public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -36,6 +38,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let pressCancel:PublishSubject<Void> = PublishSubject()
+        let pressConfirm:PublishSubject<Void> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -63,6 +67,31 @@ public final class MultiPurposePopupViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         
         var output = Output()
+        
+        
+        output.pressConfirm.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            
+            switch self.type{
+                
+            case .creation:
+                self.createPlayListUseCase.execute(title: input.textString.value)
+                    .subscribe()
+                    .disposed(by: self.disposeBag)
+            
+
+            default :
+                DEBUG_LOG(input.textString.value)
+            }
+            
+            
+            
+        }).disposed(by: disposeBag)
+        
         
         return output
     }
