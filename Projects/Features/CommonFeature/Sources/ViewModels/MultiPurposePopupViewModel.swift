@@ -39,7 +39,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
         
-        var resultDescription: PublishSubject<String> = PublishSubject()
+        var result: PublishSubject<BaseEntity> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -80,26 +80,38 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             switch self.type{
                 
             case .creation:
-                self.createPlayListUseCase.execute(title:text )
-                    .subscribe(onError: { [weak self] (error) in
-                        guard let self = self else { return }
-                        output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
+                self.createPlayListUseCase.execute(title:text)
+                    .catch({ (error:Error) in
+                        return Single<PlayListBaseEntity>.create { single in
+                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
                     })
+                    .asObservable()
+                    .flatMap({ base -> Observable<BaseEntity> in
+                        
+                        return Observable.just(BaseEntity(status: 0,description: base.description))
+                    })
+                    .subscribe()
                     .disposed(by: self.disposeBag)
             
             case .nickname:
                 self.setUserNameUseCase.execute(name:text)
-                    .subscribe(onSuccess: { result in
+                    .catch{ (error) in
+                        return Single<BaseEntity>.create { single in
+                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    }.asObservable()
+                    .subscribe(onNext: { result in
                         
                         if result.status != 200 {
-                            return
+                            output.result.onNext(result)
+                            return 
                         }
                         
                         Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))
                         
-                    },onError: { [weak self] (error) in
-                        guard let self = self else { return }
-                        output.resultDescription.onNext(error.asWMError.errorDescription ?? "")
                     }).disposed(by: self.disposeBag)
             
             case .load:
