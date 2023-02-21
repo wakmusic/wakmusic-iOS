@@ -89,7 +89,7 @@ extension MyPlayListViewController{
             warningView.text = "내 리스트가 없습니다."
             
             
-            self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+            self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
             
             
             
@@ -160,13 +160,13 @@ extension MyPlayListViewController:UITableViewDelegate{
       
 
         header.delegate = self
-        return output.dataSource.value.isEmpty ? nil :  self.output.isEditinglist.value ? nil : header
+        return self.output.isEditinglist.value ? nil : header
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return output.dataSource.value.isEmpty ? 0 : self.output.isEditinglist.value ? 0 : 140
+        return self.output.isEditinglist.value ? 0 : 140
         
         
     }

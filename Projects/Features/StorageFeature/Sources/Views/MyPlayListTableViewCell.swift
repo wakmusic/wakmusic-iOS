@@ -60,7 +60,7 @@ extension MyPlayListTableViewCell {
         
 
         self.playListImageView.kf.setImage(
-            with: WMImageAPI.fetchPlayList(id: String(model.id)).toURL,
+            with: WMImageAPI.fetchPlayList(id: String(model.image)).toURL,
             placeholder: nil,
             options: [.transition(.fade(0.2))])
 
