@@ -28,7 +28,7 @@ public final class MyPlayListViewModel:ViewModelType {
 
     public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[SubPlayListEntity]> = BehaviorRelay(value: [])
     }
 
     init(fetchSubPlayListUseCase:FetchSubPlayListUseCase) {
@@ -36,15 +36,23 @@ public final class MyPlayListViewModel:ViewModelType {
         self.fetchSubPlayListUseCase = fetchSubPlayListUseCase
         print("✅ PlayListDetailViewModel 생성")
         
-        self.fetchSubPlayListUseCase.execute()
-            .subscribe(onSuccess: {DEBUG_LOG($0)})
-            .disposed(by: disposeBag)
+        
         
     }
     
     public func transform(from input: Input) -> Output {
         
-        return Output()
+        var output = Output()
+        
+        self.fetchSubPlayListUseCase.execute()
+            .asObservable()
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
+        
+        
+        
+        return output
         
     }
     

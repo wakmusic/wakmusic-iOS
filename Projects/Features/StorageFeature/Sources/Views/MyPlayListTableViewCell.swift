@@ -8,6 +8,9 @@
 
 import UIKit
 import DesignSystem
+import DomainModule
+import Kingfisher
+import Utility
 
 class MyPlayListTableViewCell: UITableViewCell {
     
@@ -52,15 +55,21 @@ class MyPlayListTableViewCell: UITableViewCell {
 
 extension MyPlayListTableViewCell {
     
-    func update(model:PlayListDTO,isEditing:Bool)
+    func update(model:SubPlayListEntity,isEditing:Bool)
     {
-        self.playListImageView.image = DesignSystemAsset.PlayListTheme.theme2.image
+        
+
+        self.playListImageView.kf.setImage(
+            with: WMImageAPI.fetchPlayList(id: String(model.id)).toURL,
+            placeholder: nil,
+            options: [.transition(.fade(0.2))])
+
         self.isEdit = isEditing
         self.listButton.setImage(isEdit ?  DesignSystemAsset.Storage.move.image  : DesignSystemAsset.Storage.play.image , for: .normal)
         
         
-        self.playListNameLabel.text = model.playListName
-        self.playListCountLabel.text = "\(model.numberOfSong)개"
+        self.playListNameLabel.text = model.title
+        self.playListCountLabel.text = "\(model.songs.count)개"
         
         
     }

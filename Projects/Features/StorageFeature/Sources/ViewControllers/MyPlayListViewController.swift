@@ -21,9 +21,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     @IBOutlet weak var tableView: UITableView!
 
     
-    var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트2", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트3", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트4", numberOfSong: 100)])
-    
-    //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
+
 
     var multiPurposePopComponent:MultiPurposePopComponent!
     var viewModel:MyPlayListViewModel!
@@ -80,7 +78,7 @@ extension MyPlayListViewController{
     {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        dataSource
+        output.dataSource
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -136,8 +134,8 @@ extension MyPlayListViewController{
                 
                 
             })
-            .withLatestFrom(dataSource)
-            .bind(to: dataSource)
+            .withLatestFrom(output.dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         
@@ -162,13 +160,13 @@ extension MyPlayListViewController:UITableViewDelegate{
       
 
         header.delegate = self
-        return dataSource.value.isEmpty ? nil :  self.output.isEditinglist.value ? nil : header
+        return output.dataSource.value.isEmpty ? nil :  self.output.isEditinglist.value ? nil : header
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return dataSource.value.isEmpty ? 0 : self.output.isEditinglist.value ? 0 : 140
+        return output.dataSource.value.isEmpty ? 0 : self.output.isEditinglist.value ? 0 : 140
         
         
     }
@@ -233,12 +231,12 @@ extension  MyPlayListViewController: UITableViewDropDelegate {
         
         
         
-        var curr = dataSource.value
+        var curr = output.dataSource.value
         var tmp = curr[input.sourceIndexPath.value.row]
         curr.remove(at: input.sourceIndexPath.value.row)
         curr.insert(tmp, at: input.destIndexPath.value.row)
         
-        dataSource.accept(curr)
+        output.dataSource.accept(curr)
         
         
         DEBUG_LOG(destinationIndexPath)
