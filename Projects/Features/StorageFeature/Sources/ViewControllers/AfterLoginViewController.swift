@@ -56,6 +56,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     var profilePopComponent: ProfilePopComponent!
     var myPlayListComponent: MyPlayListComponent!
     var multiPurposePopComponent : MultiPurposePopComponent!
+    var favoriteComponent:  FavoriteComponent!
     
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -82,8 +83,9 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
+        //skip(2) 원인
         vc1.output.isEditinglist.accept(false)
-        vc2.viewModel.output.isEditinglist.accept(false)
+        vc2.output.isEditinglist.accept(false)
         
         output.isEditing.accept(false)
     }
@@ -94,7 +96,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         requestComponent:RequestComponent,
         profilePopComponent: ProfilePopComponent,
         myPlayListComponent: MyPlayListComponent,
-        multiPurposePopComponent : MultiPurposePopComponent
+        multiPurposePopComponent : MultiPurposePopComponent,
+        favoriteComponent : FavoriteComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
@@ -103,9 +106,9 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.profilePopComponent = profilePopComponent
         viewController.myPlayListComponent = myPlayListComponent
         viewController.multiPurposePopComponent = multiPurposePopComponent
-
+        viewController.favoriteComponent = favoriteComponent
         
-        viewController.viewControllers = [myPlayListComponent.makeView(),FavoriteViewController.viewController()]
+        viewController.viewControllers = [myPlayListComponent.makeView(),favoriteComponent.makeView()]
         
         return viewController
     }
@@ -204,7 +207,7 @@ extension AfterLoginViewController{
                     guard let vc =  self.viewControllers[1] as? FavoriteViewController else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+                    vc.output.isEditinglist.accept(res)
                 }
             })
             .bind(to: output.isEditing)

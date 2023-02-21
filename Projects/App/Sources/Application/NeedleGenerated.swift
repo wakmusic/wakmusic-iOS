@@ -201,6 +201,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
+    var favoriteComponent: FavoriteComponent {
+        return appComponent.favoriteComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -209,6 +212,19 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
 /// ^->AppComponent->AfterLoginComponent
 private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
+        return appComponent.fetchFavoriteSongsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->FavoriteComponent
+private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FavoriteDependency8f7fd37aeb6f0e5d0e30Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class QnaDependencybc3f0a2d4f873ad1b160Provider: QnaDependency {
     var qnaContentComponent: QnaContentComponent {
@@ -446,6 +462,7 @@ extension AppComponent: Registration {
         localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
         localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
         localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
+        localTable["favoriteComponent-FavoriteComponent"] = { self.favoriteComponent as Any }
         localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
         localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
         localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
@@ -529,6 +546,12 @@ extension AfterLoginComponent: Registration {
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
         keyPathToName[\AfterLoginDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\AfterLoginDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
+    }
+}
+extension FavoriteComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
     }
 }
 extension QnaComponent: Registration {
@@ -631,6 +654,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)

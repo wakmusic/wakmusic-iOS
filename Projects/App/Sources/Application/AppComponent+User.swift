@@ -23,12 +23,16 @@ public extension AppComponent {
         ProfilePopComponent(parent: self)
     }
     
+    var favoriteComponent:  FavoriteComponent {
+        FavoriteComponent(parent: self)
+    }
+    
     var remoteUserDataSource: any RemoteUserDataSource {
         shared {
             RemoteUserDataSourceImpl(keychain: keychain)
         }
     }
-    
+      
     var userRepository: any UserRepository {
         shared {
             UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)

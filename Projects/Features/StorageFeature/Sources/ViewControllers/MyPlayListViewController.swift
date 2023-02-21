@@ -79,6 +79,7 @@ extension MyPlayListViewController{
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
+        .skip(1)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -113,6 +114,7 @@ extension MyPlayListViewController{
         
         
         self.output.isEditinglist
+            .skip(2) //상위 뷰컨 ,탭맨 함수에서 초기 입력으로 2번 스킵 , AfterLoginViewController 탭맨 이동 함수 확인 
             .do(onNext: { [weak self] (isEdit:Bool) in
                 
                 guard let self = self else{
@@ -127,11 +129,7 @@ extension MyPlayListViewController{
                 // 탭맨 쪽 편집 변경
                 parent.output.isEditing.accept(isEdit)
                 
-            
-                
-                
         
-                
                 
             })
             .withLatestFrom(output.dataSource)
