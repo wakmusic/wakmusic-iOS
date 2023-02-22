@@ -12,6 +12,7 @@ import RxSwift
 import Utility
 import BaseFeature
 import YoutubeKit
+import DomainModule
 
 final class PlayerViewModel: ViewModelType {
     struct Input {
@@ -48,13 +49,18 @@ final class PlayerViewModel: ViewModelType {
         var didNext = PublishRelay<Bool>()
     }
     
+    var fetchLyricsUseCase: FetchLyricsUseCase!
+    
     private let playState = PlayState.shared
-    private let useCase: PlayerUseCase
     private let disposeBag = DisposeBag()
 
-    init() {
-        self.useCase = DefaultPlayerUseCase()
+    init(fetchLyricsUseCase: FetchLyricsUseCase) {
+        self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
+        self.fetchLyricsUseCase.execute(id: "pl38om066m0").subscribe {
+            DEBUG_LOG($0)
+        }.disposed(by: disposeBag)
+
     }
     
     func transform(from input: Input) -> Output {

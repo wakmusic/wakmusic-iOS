@@ -16,13 +16,22 @@ import RxSwift
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    var viewModel = PlayerViewModel()
+    var viewModel: PlayerViewModel!
     let playState = PlayState.shared
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
     var youtubePlayerView = UIView().then {
         $0.isHidden = false
+    }
+    
+    init(viewModel: PlayerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("PlayerViewController init(coder:) has not been implemented")
     }
     
     public override func loadView() {
@@ -83,7 +92,7 @@ private extension PlayerViewController {
         output.didClose
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
-            .drive(onNext: { [weak self] _ in
+            .drive(onNext: { _ in
                 print("didClose")
             })
             .disposed(by: disposeBag)

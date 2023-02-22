@@ -34,15 +34,21 @@ public extension AppComponent {
             RemoteSearchDataSourceImpl(keychain: keychain)
         }
     }
-    var searchRepository: any SearchRepository {
+    var songsRepository: any SongsRepository {
         shared {
-            SearchRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
+            SongsRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
         }
     }
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
 
         shared {
-           FetchSearchSongUseCaseImpl(searchRepository: searchRepository)
+           FetchSearchSongUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+    var fetchLyricsUseCase: any FetchLyricsUseCase {
+        
+        shared {
+            FetchLyricsUseCaseImpl(songsRepository: songsRepository)
         }
     }
 }

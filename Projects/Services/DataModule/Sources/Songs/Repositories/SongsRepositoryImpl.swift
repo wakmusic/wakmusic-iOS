@@ -5,7 +5,7 @@ import NetworkModule
 import DatabaseModule
 import RxSwift
 
-public struct SearchRepositoryImpl: SearchRepository {
+public struct SongsRepositoryImpl: SongsRepository {
     private let remoteSearchDataSource: any RemoteSearchDataSource
     
     public init(
@@ -16,6 +16,10 @@ public struct SearchRepositoryImpl: SearchRepository {
     
     public func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SongEntity]> {
         remoteSearchDataSource.fetchSearchSong(type: type, keyword: keyword)
+    }
+    
+    public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
+        remoteSearchDataSource.fetchLyrics(id: id)
     }
 
 }
