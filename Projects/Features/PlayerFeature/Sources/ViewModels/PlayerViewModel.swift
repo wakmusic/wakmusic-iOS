@@ -34,7 +34,8 @@ final class PlayerViewModel: ViewModelType {
         var thumbnailImageURL = BehaviorRelay<String>(value: "")
         var lyricsArray = BehaviorRelay<[String]>(value: ["", "", "", "", ""])
         var playTimeValue = BehaviorRelay<Float>(value: 0.0)
-        var currentTimeText = BehaviorRelay<String>(value: "0:00")
+        var totalTimeValue = BehaviorRelay<Float>(value: 0.0)
+        var playTimeText = BehaviorRelay<String>(value: "0:00")
         var totalTimeText = BehaviorRelay<String>(value: "0:00")
         var likeCountText = BehaviorRelay<String>(value: "")
         var viewsCountText = BehaviorRelay<String>(value: "")
@@ -82,8 +83,10 @@ final class PlayerViewModel: ViewModelType {
         
         PlayState.shared.progress.bind { [weak self] progress in
             guard let self else { return }
-            output.currentTimeText.accept(self.timeString(from: progress.currentProgress))
+            output.playTimeText.accept(self.timeString(from: progress.currentProgress))
             output.totalTimeText.accept(self.timeString(from: progress.endProgress))
+            output.playTimeValue.accept(Float(progress.currentProgress))
+            output.totalTimeValue.accept(Float(progress.endProgress))
         }.disposed(by: disposeBag)
         
         

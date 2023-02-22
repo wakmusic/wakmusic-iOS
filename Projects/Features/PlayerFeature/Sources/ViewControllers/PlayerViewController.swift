@@ -124,11 +124,19 @@ private extension PlayerViewController {
     }
     
     private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
-        output.currentTimeText
+        output.playTimeText
             .asDriver()
             .drive(onNext: { [weak self] currentTimeText in
                 guard let self else { return }
                 self.playerView.currentPlayTimeLabel.text = currentTimeText
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.playTimeValue
+            .asDriver()
+            .drive(onNext: { [weak self] value in
+                guard let self else { return }
+                self.playerView.playTimeSlider.value = value
             })
             .disposed(by: self.disposeBag)
     }
@@ -139,6 +147,15 @@ private extension PlayerViewController {
             .drive(onNext: { [weak self] totalTimeText in
                 guard let self else { return }
                 self.playerView.totalPlayTimeLabel.text = totalTimeText
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.totalTimeValue
+            .asDriver()
+            .drive(onNext: { [weak self] value in
+                guard let self else { return }
+                self.playerView.playTimeSlider.minimumValue = 0
+                self.playerView.playTimeSlider.maximumValue = value
             })
             .disposed(by: self.disposeBag)
     }
