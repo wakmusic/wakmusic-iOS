@@ -44,6 +44,7 @@ final class PlayerViewModel: ViewModelType {
         var didNext = PublishRelay<Bool>()
     }
     
+    private let playState = PlayState.shared
     private let useCase: PlayerUseCase
     private let disposeBag = DisposeBag()
 
@@ -79,6 +80,20 @@ final class PlayerViewModel: ViewModelType {
             output.didNext.accept(true)
         }.disposed(by: disposeBag)
         
+        PlayState.shared.progress.bind { [weak self] progress in
+            guard let self else { return }
+            output.currentTimeText.accept(self.timeString(from: progress.currentProgress))
+            output.totalTimeText.accept(self.timeString(from: progress.endProgress))
+        }.disposed(by: disposeBag)
+        
+        
         return output
+    }
+    
+    func timeString(from second: Double) -> String {
+        let second = Int(floor(second))
+        let min = second / 60
+        let sec = String(format: "%02d", second % 60)
+        return "\(min):\(sec)"
     }
 }

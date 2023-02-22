@@ -15,15 +15,14 @@ final public class PlayState {
     
     internal var player: YTSwiftyPlayer
     internal var state: YTSwiftyPlayerState
+    internal var currentSong: String?
+    internal var progress: BehaviorSubject<PlayProgress>
+    internal var playList: PlayList
     
     private let disposeBag = DisposeBag()
-    private var currentSong: String?
-    private var progress: PlayProgress
-    private var playList: PlayList
-    
     init() {
         currentSong = "wSG93VZoMFg"
-        progress = PlayProgress()
+        progress = BehaviorSubject(value: PlayProgress.init(currentProgress: 0, endProgress: 0))
         playList = PlayList()
         playList.list = ["wSG93VZoMFg", "jzt_aR_PSGo", "Gce2fYnlw0w", "UMIP5k1QvW8", "tT-kuonVzfY"]
         state = .unstarted
@@ -176,7 +175,7 @@ extension PlayState: YTSwiftyPlayerDelegate {
     }
     
     public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
-        self.progress.currentProgress = currentTime
+        self.progress.onNext(PlayProgress(currentProgress: currentTime, endProgress: player.duration ?? 0))
     }
     
     public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {

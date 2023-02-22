@@ -45,7 +45,6 @@ public class PlayerViewController: UIViewController {
         super.viewDidLoad()
         print("viewDidLoad")
         bindViewModel()
-        bindUI()
     }
     
 }
@@ -75,7 +74,10 @@ private extension PlayerViewController {
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
         )
         let output = self.viewModel.transform(from: input)
-
+        
+        bindCurrentPlayTime(output: output)
+        bindTotalPlayTime(output: output)
+        
         output.didPlay
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
@@ -105,7 +107,7 @@ private extension PlayerViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.playState.backWard()
             })
             .disposed(by: disposeBag)
@@ -114,14 +116,30 @@ private extension PlayerViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.playState.forWard()
             })
             .disposed(by: disposeBag)
         
     }
     
-    private func bindUI() {
-
+    private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
+        output.currentTimeText
+            .asDriver()
+            .drive(onNext: { [weak self] currentTimeText in
+                guard let self else { return }
+                self.playerView.currentPlayTimeLabel.text = currentTimeText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindTotalPlayTime(output: PlayerViewModel.Output) {
+        output.totalTimeText
+            .asDriver()
+            .drive(onNext: { [weak self] totalTimeText in
+                guard let self else { return }
+                self.playerView.totalPlayTimeLabel.text = totalTimeText
+            })
+            .disposed(by: self.disposeBag)
     }
 }
