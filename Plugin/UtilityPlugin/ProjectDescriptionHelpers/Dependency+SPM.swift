@@ -5,6 +5,7 @@ public extension TargetDependency {
 }
 
 public extension TargetDependency.SPM {
+    // MARK: External
     static let Moya = TargetDependency.external(name: "Moya")
     static let RxMoya = TargetDependency.external(name: "RxMoya")
     static let YoutubeKit = TargetDependency.external(name: "YoutubeKit")
@@ -28,9 +29,20 @@ public extension TargetDependency.SPM {
     static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
-   // static let GoogoleLogin = TargetDependency.external(name: "GoogleSignIn")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
+
+// MARK: Native SPM
+    static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
+    static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
 }
 
 public extension Package {
+    static let YouTubePlayerKit = Package.remote(
+        url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
+        requirement: .upToNextMajor(from: "1.3.1")
+    )
+    static let GoogleSignIn = Package.remote(
+         url: "https://github.com/google/GoogleSignIn-iOS.git",
+         requirement: .upToNextMinor(from: "6.1.0")
+     )
 }
