@@ -88,9 +88,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .flatMap({ base -> Observable<BaseEntity> in
-                        
-                        return Observable.just(BaseEntity(status: 0,description: base.description))
+                    .map({
+                        BaseEntity(status: 0,description: $0.description)
                     })
                     .subscribe(onNext: { result in
                         
@@ -133,9 +132,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .flatMap({ base -> Observable<BaseEntity> in
-                        
-                        return Observable.just(BaseEntity(status: 0,description: base.description))
+                    .map({
+                        BaseEntity(status: 0,description: $0.description)
                     })
                     .subscribe(onNext: { result in
                         

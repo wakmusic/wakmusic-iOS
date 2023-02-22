@@ -398,7 +398,12 @@ extension MultiPurposePopupViewController{
             .disposed(by: self.disposeBag)
         
         
-        output.result.subscribe(onNext: {
+        output.result.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
             self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         }).disposed(by: disposeBag)
         
