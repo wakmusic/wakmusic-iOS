@@ -19,6 +19,7 @@ final class PlayerViewModel: ViewModelType {
         let playButtonDidTapEvent: Observable<Void>
         let prevButtonDidTapEvent: Observable<Void>
         let nextButtonDidTapEvent: Observable<Void>
+        let sliderValueChangedEvent: Observable<Float>
         let repeatButtonDidTapEvent: Observable<Void>
         let shuffleButtonDidTapEvent: Observable<Void>
         let likeButtonDidTapEvent: Observable<Void>
@@ -79,6 +80,11 @@ final class PlayerViewModel: ViewModelType {
         
         input.nextButtonDidTapEvent.subscribe { _ in
             output.didNext.accept(true)
+        }.disposed(by: disposeBag)
+        
+        input.sliderValueChangedEvent.subscribe { [weak self] value in
+            guard let self else { return }
+            self.playState.player.seek(to: Int(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
         
         PlayState.shared.progress.bind { [weak self] progress in

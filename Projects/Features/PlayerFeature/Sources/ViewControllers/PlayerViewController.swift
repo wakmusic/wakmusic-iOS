@@ -64,6 +64,7 @@ private extension PlayerViewController {
             playButtonDidTapEvent: self.playerView.playButton.rx.tap.asObservable(),
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
+            sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
             repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
             likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
