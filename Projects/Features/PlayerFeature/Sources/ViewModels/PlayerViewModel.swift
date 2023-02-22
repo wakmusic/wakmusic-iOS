@@ -11,6 +11,7 @@ import RxCocoa
 import RxSwift
 import Utility
 import BaseFeature
+import YoutubeKit
 
 final class PlayerViewModel: ViewModelType {
     struct Input {
@@ -30,6 +31,7 @@ final class PlayerViewModel: ViewModelType {
         let miniCloseButtonDidTapEvent: Observable<Void>
     }
     struct Output {
+        var playerState = BehaviorRelay<YTSwiftyPlayerState>(value: .unstarted)
         var titleText = BehaviorRelay<String>(value: "")
         var artistText = BehaviorRelay<String>(value: "")
         var thumbnailImageURL = BehaviorRelay<String>(value: "")
@@ -59,9 +61,10 @@ final class PlayerViewModel: ViewModelType {
         let output = Output()
         
         Observable.of(input.playButtonDidTapEvent, input.miniPlayButtonDidTapEvent).merge()
-            .subscribe(onNext: { _ in
-                print("플레이버튼 눌림")
-                output.didPlay.accept(true)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self else { return }
+                let state = try? self.playState.state.value()
+                state == .playing ? self.playState.pause() : self.playState.play()
             })
             .disposed(by: disposeBag)
         
@@ -74,17 +77,23 @@ final class PlayerViewModel: ViewModelType {
             output.didClose.accept(true)
         }.disposed(by: disposeBag)
         
-        input.prevButtonDidTapEvent.subscribe { _ in
-            output.didPrev.accept(true)
+        input.prevButtonDidTapEvent.subscribe { [weak self] _ in
+            guard let self else { return }
+            self.playState.backWard()
         }.disposed(by: disposeBag)
         
-        input.nextButtonDidTapEvent.subscribe { _ in
-            output.didNext.accept(true)
+        input.nextButtonDidTapEvent.subscribe { [weak self] _ in
+            guard let self else { return }
+            self.playState.forWard()
         }.disposed(by: disposeBag)
         
         input.sliderValueChangedEvent.subscribe { [weak self] value in
             guard let self else { return }
             self.playState.player.seek(to: Int(value), allowSeekAhead: true)
+        }.disposed(by: disposeBag)
+        
+        PlayState.shared.state.bind { state in
+            output.playerState.accept(state)
         }.disposed(by: disposeBag)
         
         PlayState.shared.progress.bind { [weak self] progress in

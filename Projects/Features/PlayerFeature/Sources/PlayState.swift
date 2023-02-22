@@ -14,7 +14,7 @@ final public class PlayState {
     public static let shared = PlayState()
     
     internal var player: YTSwiftyPlayer
-    internal var state: YTSwiftyPlayerState
+    internal var state: BehaviorSubject<YTSwiftyPlayerState>
     internal var currentSong: String?
     internal var progress: BehaviorSubject<PlayProgress>
     internal var playList: PlayList
@@ -25,7 +25,7 @@ final public class PlayState {
         progress = BehaviorSubject(value: PlayProgress.init(currentProgress: 0, endProgress: 0))
         playList = PlayList()
         playList.list = ["wSG93VZoMFg", "jzt_aR_PSGo", "Gce2fYnlw0w", "UMIP5k1QvW8", "tT-kuonVzfY"]
-        state = .unstarted
+        state = BehaviorSubject(value: .unstarted)
         
         player = YTSwiftyPlayer(
             frame: .init(x: 0, y: 0, width: 320, height: 180),
@@ -163,7 +163,7 @@ extension PlayState {
 extension PlayState: YTSwiftyPlayerDelegate {
     public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
         print("new state:", state)
-        self.state = state
+        self.state.onNext(state)
     }
     
     public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {

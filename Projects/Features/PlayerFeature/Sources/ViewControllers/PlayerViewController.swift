@@ -76,26 +76,10 @@ private extension PlayerViewController {
         )
         let output = self.viewModel.transform(from: input)
         
+        bindPlayerState(output: output)
         bindCurrentPlayTime(output: output)
         bindTotalPlayTime(output: output)
         
-        output.didPlay
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                if self.playState.state == .playing {
-                    self.playState.pause()
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
-                } else {
-                    self.playState.play()
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
-                }
-            })
-            .disposed(by: disposeBag)
-
         output.didClose
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
@@ -104,24 +88,27 @@ private extension PlayerViewController {
             })
             .disposed(by: disposeBag)
         
-        output.didPrev
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
+    }
+    
+    private func bindPlayerState(output: PlayerViewModel.Output) {
+        output.playerState
+            .asDriver()
+            .drive(onNext: { [weak self] state in
                 guard let self else { return }
-                self.playState.backWard()
+                switch state {
+                case .unstarted: break
+                case .ended: break
+                case .playing:
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
+                case .paused:
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
+                case .buffering: break
+                case .cued: break
+                }
             })
-            .disposed(by: disposeBag)
-        
-        output.didNext
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                guard let self else { return }
-                self.playState.forWard()
-            })
-            .disposed(by: disposeBag)
-        
+            .disposed(by: self.disposeBag)
     }
     
     private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
