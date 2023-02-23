@@ -36,7 +36,7 @@ public final class MyPlayListViewModel:ViewModelType {
     init(fetchSubPlayListUseCase:FetchSubPlayListUseCase) {
         
         self.fetchSubPlayListUseCase = fetchSubPlayListUseCase
-        print("✅ PlayListDetailViewModel 생성")
+        DEBUG_LOG("✅ MyPlayListViewModel 생성")
         
         
         

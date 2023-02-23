@@ -64,7 +64,15 @@ extension UserAPI: WMAPI {
     
         
     public var jwtTokenType: JwtTokenType {
-        return .accessToken
+        
+        switch self {
+        case .fetchProfileList:
+            return .none
+        
+        default :
+            return .accessToken
+        }
+        
     }
     
     public var errorMap: [Int: WMError] {

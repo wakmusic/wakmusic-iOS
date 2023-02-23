@@ -52,7 +52,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
        
-        print("✅ PlayListDetailViewModel 생성")
+        DEBUG_LOG("✅ PlayListDetailViewModel 생성")
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)

@@ -6,13 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-
-import Foundation
+import Foundation 
 import RxSwift
 import RxRelay
 import BaseFeature
 import DomainModule
+import Utility
 
 public final class FavoriteViewModel:ViewModelType {
     
@@ -35,7 +34,7 @@ public final class FavoriteViewModel:ViewModelType {
 
     init(fetchFavoriteSongsUseCase:FetchFavoriteSongsUseCase) {
         
-        print("✅ PlayListDetailViewModel 생성")
+        DEBUG_LOG("✅ FavoriteViewModel 생성")
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
         
         
