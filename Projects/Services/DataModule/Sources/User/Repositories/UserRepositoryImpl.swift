@@ -14,6 +14,8 @@ import DatabaseModule
 import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
+   
+    
     
     
     
@@ -45,6 +47,12 @@ public struct UserRepositoryImpl: UserRepository {
     public func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]> {
         remoteUserDataSource.fetchFavoriteSong()
     }
+    
+    public func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity> {
+        remoteUserDataSource.editFavoriteSongsOrder(ids: ids)
+    }
+    
+    
     
  
 }

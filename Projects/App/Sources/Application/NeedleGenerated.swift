@@ -217,6 +217,9 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
     }
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
+        return appComponent.editFavoriteSongsOrderUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -470,6 +473,7 @@ extension AppComponent: Registration {
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
         localTable["fetchSubPlayListUseCase-any FetchSubPlayListUseCase"] = { self.fetchSubPlayListUseCase as Any }
         localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
+        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -552,6 +556,7 @@ extension AfterLoginComponent: Registration {
 extension FavoriteComponent: Registration {
     public func registerItems() {
         keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
+        keyPathToName[\FavoriteDependency.editFavoriteSongsOrderUseCase] = "editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"
     }
 }
 extension QnaComponent: Registration {

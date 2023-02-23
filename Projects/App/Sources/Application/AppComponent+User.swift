@@ -69,4 +69,10 @@ public extension AppComponent {
             FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
         }
     }
+    
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
+        shared {
+            EditFavoriteSongsOrderUseCaseImpl(userRepository: userRepository)
+        }
+    }
 }
