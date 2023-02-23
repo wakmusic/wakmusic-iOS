@@ -29,7 +29,7 @@ public final class MyPlayListViewModel:ViewModelType {
     }
 
     public struct Output {
-        let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: false))
         let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
     }
 

@@ -32,7 +32,7 @@ public final class FavoriteViewModel:ViewModelType {
     }
 
     public struct Output {
-        let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: false))
         let dataSource: BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
     }

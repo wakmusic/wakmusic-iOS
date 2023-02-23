@@ -69,8 +69,9 @@ extension FavoriteViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !output.isEditinglist.value && sender.state == .began {
-            output.isEditinglist.accept(true)
+        
+        if  !output.state.value.isEditing && sender.state == .began {
+            output.state.accept(EditState(isEditing: true, force: true))
             UIImpactFeedbackGenerator(style: .light).impactOccurred() // 진동 코드
         }
     }
@@ -104,21 +105,21 @@ extension FavoriteViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model, self.output.isEditinglist.value)
+                cell.update(model, self.output.state.value.isEditing)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-            output.isEditinglist
-            .do(onNext: { [weak self] (isEdit:Bool) in
+            output.state
+            .do(onNext: { [weak self] state in
                 
                 guard let self = self else{
                     return
                 }
                 
-                if isEdit {
+                if state.isEditing {
                     
                 }
                 else {
@@ -128,7 +129,7 @@ extension FavoriteViewController{
                 }
                 
                 
-                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+                self.tableView.dragInteractionEnabled = state.isEditing // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 
     
@@ -138,7 +139,7 @@ extension FavoriteViewController{
                     return
                 }
                 // 탭맨 쪽 편집 변경
-                parent.output.isEditing.accept(isEdit)
+                parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
                 
                 
             })
