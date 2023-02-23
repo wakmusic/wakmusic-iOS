@@ -27,6 +27,7 @@ public final class FavoriteViewModel:ViewModelType {
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let confirmEdit:PublishSubject<Void> = PublishSubject()
         let cancelEdit:PublishSubject<Void> = PublishSubject()
+        let runEditing:PublishSubject<Void> = PublishSubject()
         
     }
 
@@ -57,46 +58,29 @@ public final class FavoriteViewModel:ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
+        
+        input.runEditing.withLatestFrom(output.dataSource)
+            .filter({!$0.isEmpty})
+            .map({$0.map({$0.song.id})})
+            .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
+                
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                return self.editFavoriteSongsOrderUseCase.execute(ids: ids)
+                    .asObservable()
+            }).subscribe(onNext: {
+                
+                if $0.status != 200 {
+                    // 에러 처리
+                }
+                
+                
+            }).disposed(by: disposeBag)
+        
     
-        input.confirmEdit.subscribe(onNext:{ 
-            
-            DEBUG_LOG(output.dataSource.value.map({$0.song.title}))
-            
-        })
-            
-//            .flatMap({ [weak self] () -> Observable<BaseEntity> in
-//
-//            guard let self = self else{
-//                return Observable.empty()
-//            }
-//
-//            return self.editFavoriteSongsOrderUseCase.execute(ids: output.dataSource.value.map({$0.song.id}))
-//                .catch{ (error) in
-//                    return Single<BaseEntity>.create { single in
-//                        single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-//                        return Disposables.create {}
-//                    }
-//                }
-//                .asObservable()
-//
-//
-//        })
-//        .subscribe(onNext: {
-//
-//            guard $0.status == 200 else { return }
-//
-//            DEBUG_LOG("좋아요 순서 변경 성공")
-//
-//        })
-        .disposed(by: disposeBag)
-        
-        
-        
-        input.cancelEdit.subscribe(onNext: {
-            
-            //되돌리기
-            
-        }).disposed(by: disposeBag)
+
         
         return output
     }
