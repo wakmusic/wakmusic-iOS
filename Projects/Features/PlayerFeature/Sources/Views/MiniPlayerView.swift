@@ -29,7 +29,7 @@ final class MiniPlayerView: UIView {
     
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
     }
@@ -120,7 +120,7 @@ private extension MiniPlayerView {
         }
         currentPlayTimeView.snp.makeConstraints {
             $0.top.left.bottom.equalToSuperview()
-            $0.width.equalTo(totalPlayTimeView.snp.width).multipliedBy(0.4)
+            $0.width.equalTo(totalPlayTimeView.snp.width).multipliedBy(0.1)
         }
     }
     

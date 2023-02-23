@@ -22,7 +22,7 @@ public final class PlayerView: UIView {
         $0.effect = UIBlurEffect(style: .regular)
     }
     
-    private lazy var backgroundImageView = UIImageView().then {
+    internal lazy var backgroundImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         $0.contentMode = .scaleToFill
         $0.layer.opacity = 0.6
@@ -61,7 +61,7 @@ public final class PlayerView: UIView {
     
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
