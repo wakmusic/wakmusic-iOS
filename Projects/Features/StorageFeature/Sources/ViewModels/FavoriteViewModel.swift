@@ -25,14 +25,13 @@ public final class FavoriteViewModel:ViewModelType {
     public struct Input {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        let confirmEdit:PublishSubject<Void> = PublishSubject()
         let cancelEdit:PublishSubject<Void> = PublishSubject()
         let runEditing:PublishSubject<Void> = PublishSubject()
         
     }
 
     public struct Output {
-        let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: false))
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
         let dataSource: BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
     }
@@ -53,9 +52,10 @@ public final class FavoriteViewModel:ViewModelType {
         var output = Output()
         
         fetchFavoriteSongsUseCase.execute()
+
             .catchAndReturn([])
             .asObservable()
-            .bind(to: output.dataSource)
+            .bind(to: output.dataSource,output.backUpdataSource)
             .disposed(by: disposeBag)
         
         
@@ -70,16 +70,28 @@ public final class FavoriteViewModel:ViewModelType {
                 
                 return self.editFavoriteSongsOrderUseCase.execute(ids: ids)
                     .asObservable()
-            }).subscribe(onNext: {
+            }).subscribe(onNext: { [weak self] in
+                
+                guard let self = self else{
+                    return
+                }
+                
                 
                 if $0.status != 200 {
                     // 에러 처리
+                    return
                 }
+                
+                output.backUpdataSource.accept(output.dataSource.value)
                 
                 
             }).disposed(by: disposeBag)
         
     
+        input.cancelEdit
+            .withLatestFrom(output.backUpdataSource)
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
 
         
         return output

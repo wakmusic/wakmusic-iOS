@@ -81,7 +81,6 @@ extension FavoriteViewController{
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
-        .skip(1)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -113,18 +112,30 @@ extension FavoriteViewController{
         
         
             output.state
+            .skip(1)
             .do(onNext: { [weak self] state in
-                
+               
+                DEBUG_LOG(state)
+               
                 guard let self = self else{
                     return
                 }
                 
-                if state.isEditing {
-                    
-                }
-                else {
-                    
+                if state.isEditing == false && state.force == false {
                     self.input.runEditing.onNext(())
+                }
+                else if state.isEditing == true && state.force == true {
+                    
+                    let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+
+                        self.input.runEditing.onNext(())
+                        
+                    },cancelCompletion: {
+                        
+                        self.input.cancelEdit.onNext(())
+                    })
+                 
+                    self.showPanModal(content: vc)
                     
                 }
                 
@@ -143,8 +154,8 @@ extension FavoriteViewController{
                 
                 
             })
-                .withLatestFrom(output.dataSource)
-                .bind(to: output.dataSource)
+            .withLatestFrom(output.dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         

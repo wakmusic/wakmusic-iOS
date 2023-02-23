@@ -114,7 +114,7 @@ extension MyPlayListViewController{
         
         
         self.output.state
-            .skip(2) //상위 뷰컨 ,탭맨 함수에서 초기 입력으로 2번 스킵 , AfterLoginViewController 탭맨 이동 함수 확인 
+            .skip(1) 
             .do(onNext: { [weak self] state in
                 
                 guard let self = self else{

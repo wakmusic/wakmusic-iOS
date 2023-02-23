@@ -91,12 +91,26 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        //skip(2) 원인
+        
+        
+    
+        
+        if output.state.value.isEditing {
+           
+        }
         
         let state = EditState(isEditing: false, force: true)
         
-        vc1.output.state.accept(state)
-        vc2.output.state.accept(state)
+        // 문제: 수정 상태에서 페이징 전환 시 isEditing에 true 어떻게 넣을지 ?
+        if index == 0 {
+           // if ouput.state.value.isEditing == true
+            vc2.output.state.accept(state)
+            
+        }
+        else {
+            vc1.output.state.accept(state)
+        }
+
         output.state.accept(state)
     }
     
@@ -205,6 +219,9 @@ extension AfterLoginViewController{
             .withLatestFrom(output.state)
             .map({EditState(isEditing: !$0.isEditing, force: $0.force)})
             .do(onNext: { [weak self] (state:EditState)  in
+                
+                DEBUG_LOG("ISED2 \(state)")
+                
                 guard let self = self else{
                     return
                 }

@@ -23,7 +23,7 @@ final public class AfterLoginViewModel:ViewModelType {
     }
 
     public struct Output {
-        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: true))
         let userInfo: BehaviorRelay<UserInfo?> = BehaviorRelay(value: nil)
     }
 
