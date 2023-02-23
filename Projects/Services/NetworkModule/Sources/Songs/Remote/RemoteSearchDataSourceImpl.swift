@@ -15,5 +15,10 @@ public final class RemoteSearchDataSourceImpl: BaseRemoteDataSource<SongsAPI>, R
             
     }
     
+    public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
+        request(.fetchLyrics(id: id))
+            .map([LyricsResponseDTO].self)
+            .map{$0.map{$0.toDomain()}}
+    }
  
 }

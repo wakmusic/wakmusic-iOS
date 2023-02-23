@@ -94,15 +94,17 @@ private func factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5(_ component: Needle
     return ArtistMusicDependencya0f5073287829dfbc260Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
-
-
-    init() {
-
+    var fetchLyricsUseCase: any FetchLyricsUseCase {
+        return appComponent.fetchLyricsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->PlayerComponent
-private func factorybc7f802f601dd5913533e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PlayerDependencyf8a3d594cc3b9254f8adProvider()
+private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var searchComponent: SearchComponent {
@@ -424,8 +426,9 @@ extension AppComponent: Registration {
         localTable["afterSearchComponent-AfterSearchComponent"] = { self.afterSearchComponent as Any }
         localTable["afterSearchContentComponent-AfterSearchContentComponent"] = { self.afterSearchContentComponent as Any }
         localTable["remoteSearchDataSource-any RemoteSearchDataSource"] = { self.remoteSearchDataSource as Any }
-        localTable["searchRepository-any SearchRepository"] = { self.searchRepository as Any }
+        localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
+        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
         localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
         localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { self.afterLoginComponent as Any }
@@ -505,7 +508,7 @@ extension ArtistMusicComponent: Registration {
 }
 extension PlayerComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\PlayerDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
     }
 }
 extension MainTabBarComponent: Registration {
@@ -647,7 +650,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ArtistDetailComponent", factory35314797fadaf164ece6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ArtistMusicContentComponent", factory8b6ffa46033e2529b5daf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)

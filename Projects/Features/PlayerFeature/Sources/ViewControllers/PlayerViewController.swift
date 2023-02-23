@@ -16,13 +16,22 @@ import RxSwift
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    var viewModel = PlayerViewModel()
+    var viewModel: PlayerViewModel!
     let playState = PlayState.shared
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
     var youtubePlayerView = UIView().then {
         $0.isHidden = false
+    }
+    
+    init(viewModel: PlayerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("PlayerViewController init(coder:) has not been implemented")
     }
     
     public override func loadView() {
@@ -45,7 +54,6 @@ public class PlayerViewController: UIViewController {
         super.viewDidLoad()
         print("viewDidLoad")
         bindViewModel()
-        bindUI()
     }
     
 }
@@ -65,6 +73,7 @@ private extension PlayerViewController {
             playButtonDidTapEvent: self.playerView.playButton.rx.tap.asObservable(),
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
+            sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
             repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
             likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
@@ -75,53 +84,123 @@ private extension PlayerViewController {
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
         )
         let output = self.viewModel.transform(from: input)
-
-        output.didPlay
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                if self.playState.state == .playing {
-                    self.playState.pause()
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
-                } else {
-                    self.playState.play()
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
-                }
-            })
-            .disposed(by: disposeBag)
-
+        
+        bindPlayerState(output: output)
+        bindTitle(output: output)
+        bindArtist(output: output)
+        bindCurrentPlayTime(output: output)
+        bindTotalPlayTime(output: output)
+        bindlikes(output: output)
+        bindViews(output: output)
+        
         output.didClose
             .asDriver(onErrorJustReturn: false)
             .filter { $0 }
-            .drive(onNext: { [weak self] _ in
+            .drive(onNext: { _ in
                 print("didClose")
-            })
-            .disposed(by: disposeBag)
-        
-        output.didPrev
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.playState.backWard()
-            })
-            .disposed(by: disposeBag)
-        
-        output.didNext
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.playState.forWard()
             })
             .disposed(by: disposeBag)
         
     }
     
-    private func bindUI() {
-
+    private func bindPlayerState(output: PlayerViewModel.Output) {
+        output.playerState
+            .asDriver()
+            .drive(onNext: { [weak self] state in
+                guard let self else { return }
+                switch state {
+                case .unstarted: break
+                case .ended:
+                    self.playState.forWard()
+                case .playing:
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
+                case .paused:
+                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
+                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
+                case .buffering: break
+                case .cued: break
+                }
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindTitle(output: PlayerViewModel.Output) {
+        output.titleText
+            .asDriver()
+            .drive(onNext: { [weak self] titleText in
+                guard let self else { return }
+                self.playerView.titleLabel.text = titleText
+                self.miniPlayerView.titleLabel.text = titleText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindArtist(output: PlayerViewModel.Output) {
+        output.artistText
+            .asDriver()
+            .drive(onNext: { [weak self] artistText in
+                guard let self else { return }
+                self.playerView.artistLabel.text = artistText
+                self.miniPlayerView.artistLabel.text = artistText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindlikes(output: PlayerViewModel.Output) {
+        output.likeCountText
+            .asDriver()
+            .drive(onNext: { [weak self] likeCountText in
+                guard let self else { return }
+                self.playerView.likeButton.setTitle(likeCountText, for: .normal)
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindViews(output: PlayerViewModel.Output) {
+        output.viewsCountText
+            .asDriver()
+            .drive(onNext: { [weak self] viewsCountText in
+                guard let self else { return }
+                self.playerView.viewsLabel.text = viewsCountText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
+        output.playTimeText
+            .asDriver()
+            .drive(onNext: { [weak self] currentTimeText in
+                guard let self else { return }
+                self.playerView.currentPlayTimeLabel.text = currentTimeText
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.playTimeValue
+            .asDriver()
+            .drive(onNext: { [weak self] value in
+                guard let self else { return }
+                self.playerView.playTimeSlider.value = value
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindTotalPlayTime(output: PlayerViewModel.Output) {
+        output.totalTimeText
+            .asDriver()
+            .drive(onNext: { [weak self] totalTimeText in
+                guard let self else { return }
+                self.playerView.totalPlayTimeLabel.text = totalTimeText
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.totalTimeValue
+            .asDriver()
+            .drive(onNext: { [weak self] value in
+                guard let self else { return }
+                self.playerView.playTimeSlider.minimumValue = 0
+                self.playerView.playTimeSlider.maximumValue = value
+            })
+            .disposed(by: self.disposeBag)
     }
 }
