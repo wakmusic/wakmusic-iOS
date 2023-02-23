@@ -120,6 +120,30 @@ extension FavoriteViewController{
                 
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
+                
+                if !isEdit  {
+                    
+                    let textVC = TextPopupViewController.viewController(text:"변경 내용을 저장할까요?",cancelButtonIsHidden: false,completion: { [weak self]  in
+                        
+                        guard let self = self else{
+                            return
+                        }
+                        
+                        self.input.confirmEdit.onNext(())
+                    },cancelCompletion: { [weak self]  in
+                        
+                        guard let self = self else{
+                            return
+                        }
+                        self.input.cancelEdit.onNext(())
+                    })
+                    
+                    self.showPanModal(content: textVC)
+                    
+                    
+                }
+                
+                
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
@@ -184,6 +208,8 @@ extension  FavoriteViewController: UITableViewDropDelegate {
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
         self.input.destIndexPath.accept(destinationIndexPath)
+        
+        
         
         
         

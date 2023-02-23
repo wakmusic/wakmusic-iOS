@@ -33,6 +33,7 @@ public final class FavoriteViewModel:ViewModelType {
     public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
         let dataSource: BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
     }
 
     init(fetchFavoriteSongsUseCase:FetchFavoriteSongsUseCase,editFavoriteSongsOrderUseCase:EditFavoriteSongsOrderUseCase) {
@@ -57,37 +58,43 @@ public final class FavoriteViewModel:ViewModelType {
             .disposed(by: disposeBag)
         
     
-        input.confirmEdit.flatMap({ [weak self] () -> Observable<BaseEntity> in
+        input.confirmEdit.subscribe(onNext:{ 
             
-            guard let self = self else{
-                return Observable.empty()
-            }
-            
-            return self.editFavoriteSongsOrderUseCase.execute(ids: output.dataSource.value.map({$0.song.id}))
-                .catch{ (error) in
-                    return Single<BaseEntity>.create { single in
-                        single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-                        return Disposables.create {}
-                    }
-                }
-                .asObservable()
-            
+            DEBUG_LOG(output.dataSource.value.map({$0.song.title}))
             
         })
-        .subscribe(onNext: {
             
-            guard $0.status == 200 else { return }
-            
-            DEBUG_LOG("좋아요 순서 변경 성공")
-            
-        })
+//            .flatMap({ [weak self] () -> Observable<BaseEntity> in
+//
+//            guard let self = self else{
+//                return Observable.empty()
+//            }
+//
+//            return self.editFavoriteSongsOrderUseCase.execute(ids: output.dataSource.value.map({$0.song.id}))
+//                .catch{ (error) in
+//                    return Single<BaseEntity>.create { single in
+//                        single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+//                        return Disposables.create {}
+//                    }
+//                }
+//                .asObservable()
+//
+//
+//        })
+//        .subscribe(onNext: {
+//
+//            guard $0.status == 200 else { return }
+//
+//            DEBUG_LOG("좋아요 순서 변경 성공")
+//
+//        })
         .disposed(by: disposeBag)
         
         
         
         input.cancelEdit.subscribe(onNext: {
             
-            //되돌리기 
+            //되돌리기
             
         }).disposed(by: disposeBag)
         
