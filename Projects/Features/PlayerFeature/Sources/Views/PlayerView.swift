@@ -70,6 +70,7 @@ public final class PlayerView: UIView {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
+        $0.rowHeight = 24
         $0.estimatedRowHeight = 24
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
@@ -192,11 +193,6 @@ public final class PlayerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        lyricsTableView.delegate = self
-        lyricsTableView.dataSource = self
-        lyricsTableView.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
-        lyricsTableView.rowHeight = 24
-        lyricsTableView.estimatedRowHeight = 24
         configureUI()
     }
     
@@ -204,21 +200,6 @@ public final class PlayerView: UIView {
         super.init(coder: coder)
     }
     
-}
-
-extension PlayerView: UITableViewDelegate, UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
-    }
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LyricsTableViewCell.identifier, for: indexPath)
-        return cell
-    }
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
 }
 
 private extension PlayerView {

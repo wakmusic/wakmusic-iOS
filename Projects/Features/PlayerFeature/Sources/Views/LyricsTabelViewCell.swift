@@ -31,10 +31,15 @@ internal class LyricsTableViewCell: UITableViewCell {
     }
     
     private func configureContents() {
+        self.backgroundColor = .clear
         self.contentView.addSubview(self.lyricsLabel)
         lyricsLabel.snp.makeConstraints {
             $0.centerX.equalTo(contentView.snp.centerX)
             $0.centerY.equalTo(contentView.snp.centerY)
         }
+    }
+    
+    internal func setLyrics(text: String) {
+        self.lyricsLabel.text = text
     }
 }

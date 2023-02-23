@@ -56,6 +56,8 @@ public class PlayerViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
+        playerView.lyricsTableView.delegate = self
+        playerView.lyricsTableView.dataSource = self
         bindViewModel()
     }
     
@@ -96,6 +98,7 @@ private extension PlayerViewController {
         bindTotalPlayTime(output: output)
         bindlikes(output: output)
         bindViews(output: output)
+        bindLyricsDidChangedEvent(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -198,4 +201,27 @@ private extension PlayerViewController {
         }
         .store(in: &subsciption)
     }
+    
+    private func bindLyricsDidChangedEvent(output: PlayerViewModel.Output) {
+        output.lyricsDidChangedEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playerView.lyricsTableView.reloadData()
+        }
+        .store(in: &subsciption)
+    }
+}
+
+extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.sortedLyrics.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LyricsTableViewCell.identifier, for: indexPath) as? LyricsTableViewCell
+        else { return UITableViewCell() }
+        cell.setLyrics(text: viewModel.sortedLyrics[indexPath.row])
+        return cell
+    }
+    
 }

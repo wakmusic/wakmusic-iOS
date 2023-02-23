@@ -49,6 +49,7 @@ final class PlayerViewModel: ViewModelType {
         var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
         var didNext = PublishRelay<Bool>()
+        var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -56,13 +57,14 @@ final class PlayerViewModel: ViewModelType {
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
+    internal var lyricsDict = Dictionary<Double, String>()
+    internal var sortedLyrics = [String]()
     
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
-        self.fetchLyricsUseCase.execute(id: "pl38om066m0").subscribe {
-            DEBUG_LOG($0)
-        }.disposed(by: disposeBag)
+        
+        
 
     }
     
@@ -117,6 +119,26 @@ final class PlayerViewModel: ViewModelType {
             output.artistText.send(song.artist)
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
+            
+            self.fetchLyricsUseCase.execute(id: song.id) // 가사 불러오기
+                .retry(3)
+                .subscribe { [weak self] lyricsEntityArray in
+                    guard let self else { return }
+                    self.lyricsDict.removeAll()
+                    self.sortedLyrics.removeAll()
+                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: $0.start) }
+                    self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
+            } onFailure: { [weak self] error in
+                guard let self else { return }
+                self.lyricsDict.removeAll()
+                self.sortedLyrics.removeAll()
+                self.sortedLyrics.append("가사가 없습니다.")
+                print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
+            } onDisposed: {
+                output.lyricsDidChangedEvent.send(true)
+            }.disposed(by: self.disposeBag)
+
+            
         }.store(in: &subscription)
         
         playState.$progress.sink { [weak self] progress in
