@@ -102,10 +102,22 @@ final class PlayerViewModel: ViewModelType {
             output.playerState.accept(state)
         }.disposed(by: disposeBag)
         
+        PlayState.shared.currentSong.bind { song in
+            output.titleText.accept(song?.title ?? "")
+        }
+        
+        playState.currentSong.bind { [weak self] song in
+            guard let self else { return }
+            output.titleText.accept(song?.title ?? "")
+            output.artistText.accept(song?.artist ?? "")
+            output.viewsCountText.accept(self.formatNumber(song?.views ?? 0))
+            output.likeCountText.accept("준비중")
+        }.disposed(by: disposeBag)
+        
         PlayState.shared.progress.bind { [weak self] progress in
             guard let self else { return }
-            output.playTimeText.accept(self.timeString(from: progress.currentProgress))
-            output.totalTimeText.accept(self.timeString(from: progress.endProgress))
+            output.playTimeText.accept(self.formatTime(progress.currentProgress))
+            output.totalTimeText.accept(self.formatTime(progress.endProgress))
             output.playTimeValue.accept(Float(progress.currentProgress))
             output.totalTimeValue.accept(Float(progress.endProgress))
         }.disposed(by: disposeBag)
@@ -114,10 +126,31 @@ final class PlayerViewModel: ViewModelType {
         return output
     }
     
-    func timeString(from second: Double) -> String {
+    func formatTime(_ second: Double) -> String {
         let second = Int(floor(second))
         let min = second / 60
         let sec = String(format: "%02d", second % 60)
         return "\(min):\(sec)"
+    }
+    
+    func formatNumber(_ number: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ""
+        formatter.decimalSeparator = "."
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 0
+        
+        switch number {
+        case 1000..<10_000:
+            let thousands = Double(number) / 1000.0
+            return formatter.string(from: NSNumber(value: thousands))! + "천"
+        case 10_000..<100_000_000:
+            let tenThousands = Double(number) / 10000.0
+            return formatter.string(from: NSNumber(value: tenThousands))! + "만"
+        default:
+            let millions = Double(number) / 100000000.0
+            return formatter.string(from: NSNumber(value: millions))! + "억"
+        }
     }
 }

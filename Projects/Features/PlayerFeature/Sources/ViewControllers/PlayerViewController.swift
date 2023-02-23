@@ -86,8 +86,12 @@ private extension PlayerViewController {
         let output = self.viewModel.transform(from: input)
         
         bindPlayerState(output: output)
+        bindTitle(output: output)
+        bindArtist(output: output)
         bindCurrentPlayTime(output: output)
         bindTotalPlayTime(output: output)
+        bindlikes(output: output)
+        bindViews(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -106,7 +110,8 @@ private extension PlayerViewController {
                 guard let self else { return }
                 switch state {
                 case .unstarted: break
-                case .ended: break
+                case .ended:
+                    self.playState.forWard()
                 case .playing:
                     self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
                     self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
@@ -116,6 +121,48 @@ private extension PlayerViewController {
                 case .buffering: break
                 case .cued: break
                 }
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindTitle(output: PlayerViewModel.Output) {
+        output.titleText
+            .asDriver()
+            .drive(onNext: { [weak self] titleText in
+                guard let self else { return }
+                self.playerView.titleLabel.text = titleText
+                self.miniPlayerView.titleLabel.text = titleText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindArtist(output: PlayerViewModel.Output) {
+        output.artistText
+            .asDriver()
+            .drive(onNext: { [weak self] artistText in
+                guard let self else { return }
+                self.playerView.artistLabel.text = artistText
+                self.miniPlayerView.artistLabel.text = artistText
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindlikes(output: PlayerViewModel.Output) {
+        output.likeCountText
+            .asDriver()
+            .drive(onNext: { [weak self] likeCountText in
+                guard let self else { return }
+                self.playerView.likeButton.setTitle(likeCountText, for: .normal)
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindViews(output: PlayerViewModel.Output) {
+        output.viewsCountText
+            .asDriver()
+            .drive(onNext: { [weak self] viewsCountText in
+                guard let self else { return }
+                self.playerView.viewsLabel.text = viewsCountText
             })
             .disposed(by: self.disposeBag)
     }

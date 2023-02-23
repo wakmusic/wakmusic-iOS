@@ -9,36 +9,46 @@
 import Foundation
 import RxSwift
 import YoutubeKit
+import DomainModule
 
 final public class PlayState {
     public static let shared = PlayState()
     
     internal var player: YTSwiftyPlayer
     internal var state: BehaviorSubject<YTSwiftyPlayerState>
-    internal var currentSong: String?
+    internal var currentSong: BehaviorSubject<SongEntity?>
     internal var progress: BehaviorSubject<PlayProgress>
     internal var playList: PlayList
     
     private let disposeBag = DisposeBag()
+    
+    private let dummyPlayList = [
+        SongEntity(id: "wSG93VZoMFg", title: "[메타시그널 OST] In Romantic", artist: "해루석", remix: "", reaction: "", views: 320864, last: 0, date: "221216"),
+        SongEntity(id: "N2Tj_FMqlX8", title: "왁타버스 디즈니 메들리", artist: "비챤 X 고정멤버", remix: "", reaction: "", views: 864251, last: 0, date: "220722"),
+        SongEntity(id: "tT-kuonVzfY", title: "STAY", artist: "징버거", remix: "", reaction: "", views: 1487185, last: 0, date: "230120"),
+        SongEntity(id: "Gce2fYnlw0w", title: "Re: Dial", artist: "HAKU0089", remix: "", reaction: "", views: 560999, last: 0, date: "230130"),
+        SongEntity(id: "l8e1Byk1Dx0", title: "TRUE LOVER (트루러버)", artist: "해루석, 히키킹, 권민(ft.행주)", remix: "", reaction: "", views: 7075068, last: 0, date: "220918")
+    ]
+    
     init() {
-        currentSong = "wSG93VZoMFg"
+        currentSong = BehaviorSubject(value: SongEntity(id: "wSG93VZoMFg", title: "[메타시그널 OST] In Romantic", artist: "해루석", remix: "", reaction: "", views: 320864, last: 0, date: "221216"))
         progress = BehaviorSubject(value: PlayProgress.init(currentProgress: 0, endProgress: 0))
         playList = PlayList()
-        playList.list = ["wSG93VZoMFg", "jzt_aR_PSGo", "Gce2fYnlw0w", "UMIP5k1QvW8", "tT-kuonVzfY"]
+        playList.list = dummyPlayList
         state = BehaviorSubject(value: .unstarted)
         
         player = YTSwiftyPlayer(
             frame: .init(x: 0, y: 0, width: 320, height: 180),
             playerVars: [
                 .playsInline(true),
-                .videoID(currentSong ?? ""),
+                .videoID("wSG93VZoMFg"),
                 .loopVideo(true),
                 .showRelatedVideo(false),
                 .autoplay(false)
             ])
         
         player.delegate = self
-        let playerPath = PlayerFeatureResources.bundle.path(forResource: "YoutubePlayer", ofType: "html")!
+        let playerPath = PlayerFeatureResources.bundle.path(forResource: "YoutubePlayer", ofType: "html")! 
         let htmlString = (try? String(contentsOfFile: playerPath, encoding: .utf8)) ?? ""
         player.loadPlayerHTML(htmlString)
         
@@ -52,15 +62,16 @@ extension PlayState {
     
     /// ⏯️ 현재 곡 재생
     func play() {
-        guard currentSong != nil else { return }
+        let currentSong = try? currentSong.value()
         self.player.playVideo()
     }
     
     /// ▶️ 해당 곡 새로 재생
-    func load(at song: String) {
-        currentSong = song
-        guard let currentSong = currentSong else { return }
-        self.player.loadVideo(videoID: currentSong)
+    func load(at song: SongEntity) {
+        self.currentSong.onNext(song)
+        let currentSong = try? currentSong.value()
+        guard let currentSong else { return }
+        self.player.loadVideo(videoID: currentSong.id)
     }
     
     /// ⏸️ 일시정지
@@ -71,24 +82,27 @@ extension PlayState {
     /// ⏩ 다음 곡으로 변경 후 재생
     func forWard() {
         self.playList.next()
-        self.currentSong = playList.current
-        guard let currentSong = currentSong else { return }
+        self.currentSong.onNext(playList.current)
+        let currentSong = try? currentSong.value()
+        guard let currentSong else { return }
         load(at: currentSong)
     }
 
     /// ⏪ 이전 곡으로 변경 후 재생
     func backWard() {
         self.playList.back()
-        self.currentSong = playList.current
-        guard let currentSong = currentSong else { return }
+        self.currentSong.onNext(playList.current)
+        let currentSong = try? currentSong.value()
+        guard let currentSong else { return }
         load(at: currentSong)
     }
 
     /// ♻️ 첫번째 곡으로 변경 후 재생
     func playAgain() {
         self.playList.currentPlayIndex = 0
-        self.currentSong = playList.first
-        guard let currentSong = currentSong else { return }
+        self.currentSong.onNext(playList.first)
+        let currentSong = try? currentSong.value()
+        guard let currentSong else { return }
         load(at: currentSong)
     }
 
@@ -97,23 +111,23 @@ extension PlayState {
 // MARK: 커스텀 타입들을 모아놓은 익스텐션입니다.
 extension PlayState {
     public class PlayList {
-        var list: [String]
+        var list: [SongEntity]
         var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
 
         init() {
-            list = [String]()
+            list = [SongEntity]()
             currentPlayIndex = 0
         }
 
-        var first: String? { return list.first }
-        var last: String? { return list.last }
-        var current: String? { return list[currentPlayIndex] }
+        var first: SongEntity? { return list.first }
+        var last: SongEntity? { return list.last }
+        var current: SongEntity? { return list[currentPlayIndex] }
         var count: Int { return list.count }
         var lastIndex: Int { return list.count - 1 }
         var isEmpty: Bool { return list.isEmpty }
         var isLast: Bool { return currentPlayIndex == lastIndex }
 
-        func append(_ item: String) {
+        func append(_ item: SongEntity) {
             list.append(item)
         }
 
@@ -121,7 +135,7 @@ extension PlayState {
             list.removeAll()
         }
 
-        func contains(_ item: String) -> Bool {
+        func contains(_ item: SongEntity) -> Bool {
             return list.contains(item)
         }
 
@@ -135,7 +149,7 @@ extension PlayState {
             currentPlayIndex += 1
         }
 
-        func uniqueAppend(item: String) {
+        func uniqueAppend(item: SongEntity) {
             let uniqueIndex = uniqueIndex(of: item)
 
             if let uniqueIndex = uniqueIndex {
@@ -146,7 +160,7 @@ extension PlayState {
             }
         }
 
-        private func uniqueIndex(of item: String) -> Int? {
+        private func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             let index = list.enumerated().compactMap { $0.element == item ? $0.offset : nil }.first
             return index
