@@ -11,8 +11,10 @@ import RxCocoa
 import RxSwift
 import Utility
 import BaseFeature
-import YoutubeKit
+//import YoutubeKit
 import DomainModule
+import Combine
+import YouTubePlayerKit
 
 final class PlayerViewModel: ViewModelType {
     struct Input {
@@ -32,17 +34,17 @@ final class PlayerViewModel: ViewModelType {
         let miniCloseButtonDidTapEvent: Observable<Void>
     }
     struct Output {
-        var playerState = BehaviorRelay<YTSwiftyPlayerState>(value: .unstarted)
-        var titleText = BehaviorRelay<String>(value: "")
-        var artistText = BehaviorRelay<String>(value: "")
-        var thumbnailImageURL = BehaviorRelay<String>(value: "")
-        var lyricsArray = BehaviorRelay<[String]>(value: ["", "", "", "", ""])
-        var playTimeValue = BehaviorRelay<Float>(value: 0.0)
-        var totalTimeValue = BehaviorRelay<Float>(value: 0.0)
-        var playTimeText = BehaviorRelay<String>(value: "0:00")
-        var totalTimeText = BehaviorRelay<String>(value: "0:00")
-        var likeCountText = BehaviorRelay<String>(value: "")
-        var viewsCountText = BehaviorRelay<String>(value: "")
+        var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
+        var titleText = CurrentValueSubject<String, Never>("")
+        var artistText = CurrentValueSubject<String, Never>("")
+        var thumbnailImageURL = CurrentValueSubject<String, Never>("")
+        var lyricsArray = CurrentValueSubject<[String], Never>(["", "", "", "", ""])
+        var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
+        var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
+        var playTimeText = CurrentValueSubject<String, Never>("0:00")
+        var totalTimeText = CurrentValueSubject<String, Never>("0:00")
+        var likeCountText = CurrentValueSubject<String, Never>("")
+        var viewsCountText = CurrentValueSubject<String, Never>("")
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
@@ -53,7 +55,8 @@ final class PlayerViewModel: ViewModelType {
     
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
-
+    private var subscription = Set<AnyCancellable>()
+    
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
@@ -69,7 +72,7 @@ final class PlayerViewModel: ViewModelType {
         Observable.of(input.playButtonDidTapEvent, input.miniPlayButtonDidTapEvent).merge()
             .subscribe(onNext: { [weak self] _ in
                 guard let self else { return }
-                let state = try? self.playState.state.value()
+                let state = self.playState.state
                 state == .playing ? self.playState.pause() : self.playState.play()
             })
             .disposed(by: disposeBag)
@@ -95,33 +98,34 @@ final class PlayerViewModel: ViewModelType {
         
         input.sliderValueChangedEvent.subscribe { [weak self] value in
             guard let self else { return }
-            self.playState.player.seek(to: Int(value), allowSeekAhead: true)
+            self.playState.player.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
         
-        PlayState.shared.state.bind { state in
-            output.playerState.accept(state)
-        }.disposed(by: disposeBag)
-        
-        PlayState.shared.currentSong.bind { song in
-            output.titleText.accept(song?.title ?? "")
-        }
-        
-        playState.currentSong.bind { [weak self] song in
+        playState.$state.sink { [weak self] state in
             guard let self else { return }
-            output.titleText.accept(song?.title ?? "")
-            output.artistText.accept(song?.artist ?? "")
-            output.viewsCountText.accept(self.formatNumber(song?.views ?? 0))
-            output.likeCountText.accept("준비중")
-        }.disposed(by: disposeBag)
+            output.playerState.send(state)
+            if state == .ended {
+                self.playState.forWard()
+            }
+        }.store(in: &subscription)
         
-        PlayState.shared.progress.bind { [weak self] progress in
+        playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
-            output.playTimeText.accept(self.formatTime(progress.currentProgress))
-            output.totalTimeText.accept(self.formatTime(progress.endProgress))
-            output.playTimeValue.accept(Float(progress.currentProgress))
-            output.totalTimeValue.accept(Float(progress.endProgress))
-        }.disposed(by: disposeBag)
+            guard let song = song else { return }
+            output.thumbnailImageURL.send(self.thumbnailURL(from: song.id))
+            output.titleText.send(song.title)
+            output.artistText.send(song.artist)
+            output.viewsCountText.send(self.formatNumber(song.views))
+            output.likeCountText.send("준비중")
+        }.store(in: &subscription)
         
+        playState.$progress.sink { [weak self] progress in
+            guard let self else { return }
+            output.playTimeText.send(self.formatTime(progress.currentProgress))
+            output.totalTimeText.send(self.formatTime(progress.endProgress))
+            output.playTimeValue.send(Float(progress.currentProgress))
+            output.totalTimeValue.send(Float(progress.endProgress))
+        }.store(in: &subscription)
         
         return output
     }
@@ -152,5 +156,9 @@ final class PlayerViewModel: ViewModelType {
             let millions = Double(number) / 100000000.0
             return formatter.string(from: NSNumber(value: millions))! + "억"
         }
+    }
+    
+    func thumbnailURL(from id: String) -> String {
+        return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
 }
