@@ -335,6 +335,9 @@
                                                                                 </connections>
                                                                             </button>
                                                                         </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstItem="5jz-Br-4MY" firstAttribute="width" secondItem="jaO-B6-A4K" secondAttribute="width" multiplier="1.00193" id="H1n-N0-LzQ"/>
+                                                                        </constraints>
                                                                     </stackView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="222222222222" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hi-iv-sF0">
                                                                         <rect key="frame" x="117.66666666666666" y="64" width="118" height="18"/>
