@@ -1,14 +1,13 @@
 import Foundation
-import DomainModule
 
-public struct SubPlayListEntity: Equatable {
+public struct PlayListEntity: Equatable {
     public init(
         id: Int,
         key:String,
         title:String,
         creator_id:String,
         image:String,
-        songs:[SongEntity]
+        songlist:[String]
      
     ) {
         self.id = id
@@ -16,12 +15,12 @@ public struct SubPlayListEntity: Equatable {
         self.title = title
         self.creator_id = creator_id
         self.image = image
-        self.songs = songs
+        self.songlist = songlist
         
     }
     
     public let id: Int
     public let key,title,creator_id,image:String
-    public let songs:[SongEntity]
+    public let songlist:[String]
     
 }

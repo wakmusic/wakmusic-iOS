@@ -173,8 +173,8 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
-    var fetchSubPlayListUseCase: any FetchSubPlayListUseCase {
-        return appComponent.fetchSubPlayListUseCase
+    var fetchPlayListUseCase: any FetchPlayListUseCase {
+        return appComponent.fetchPlayListUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -471,7 +471,7 @@ extension AppComponent: Registration {
         localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
-        localTable["fetchSubPlayListUseCase-any FetchSubPlayListUseCase"] = { self.fetchSubPlayListUseCase as Any }
+        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { self.fetchPlayListUseCase as Any }
         localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
         localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
@@ -540,7 +540,7 @@ extension StorageComponent: Registration {
 extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
-        keyPathToName[\MyPlayListDependency.fetchSubPlayListUseCase] = "fetchSubPlayListUseCase-any FetchSubPlayListUseCase"
+        keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
     }
 }
 extension AfterLoginComponent: Registration {

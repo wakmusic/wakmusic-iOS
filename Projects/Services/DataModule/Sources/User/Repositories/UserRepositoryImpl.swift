@@ -40,8 +40,8 @@ public struct UserRepositoryImpl: UserRepository {
         remoteUserDataSource.setUserName(name: name)
     }
     
-    public func fetchSubPlayList() -> Single<[SubPlayListEntity]> {
-        remoteUserDataSource.fetchSubPlayList()
+    public func fetchPlayList() -> Single<[PlayListEntity]> {
+        remoteUserDataSource.fetchPlayList()
     }
     
     public func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]> {

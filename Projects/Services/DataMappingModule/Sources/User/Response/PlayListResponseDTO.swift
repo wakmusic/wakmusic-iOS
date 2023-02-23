@@ -8,11 +8,11 @@
 
 import Foundation
 
-public struct SubPlayListResponseDTO: Decodable, Equatable {
+public struct PlayListResponseDTO: Decodable, Equatable {
     public let id:Int
     public let title:String
     public let key,creator_id,image: String?
-    public let songs:[SingleSongResponseDTO]?
+    public let songlist:[String]
     
 
     public static func == (lhs: Self, rhs: Self) -> Bool {

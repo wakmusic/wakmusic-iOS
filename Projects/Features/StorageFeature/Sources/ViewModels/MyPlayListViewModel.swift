@@ -18,7 +18,7 @@ public final class MyPlayListViewModel:ViewModelType {
     
 
     var disposeBag = DisposeBag()
-    var fetchSubPlayListUseCase:FetchSubPlayListUseCase!
+    var fetchPlayListUseCase:FetchPlayListUseCase!
     
     public struct Input {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
@@ -30,12 +30,12 @@ public final class MyPlayListViewModel:ViewModelType {
 
     public struct Output {
         let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let dataSource: BehaviorRelay<[SubPlayListEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
     }
 
-    init(fetchSubPlayListUseCase:FetchSubPlayListUseCase) {
+    init(fetchPlayListUseCase:FetchPlayListUseCase) {
         
-        self.fetchSubPlayListUseCase = fetchSubPlayListUseCase
+        self.fetchPlayListUseCase = fetchPlayListUseCase
         DEBUG_LOG("✅ MyPlayListViewModel 생성")
         
         
@@ -47,13 +47,13 @@ public final class MyPlayListViewModel:ViewModelType {
         var output = Output()
         
         input.playListLoad
-            .flatMap({ [weak self] () -> Observable<[SubPlayListEntity]> in
+            .flatMap({ [weak self] () -> Observable<[PlayListEntity]> in
                 
                 guard let self = self else{
                     return Observable.empty()
                 }
                 
-                return self.fetchSubPlayListUseCase.execute()
+                return self.fetchPlayListUseCase.execute()
                     .asObservable()
             })
             .bind(to: output.dataSource)

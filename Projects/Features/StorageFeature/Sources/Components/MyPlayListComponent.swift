@@ -13,13 +13,13 @@ import DomainModule
 
 public protocol MyPlayListDependency: Dependency {
     var  multiPurposePopComponent :  MultiPurposePopComponent {get}
-    var  fetchSubPlayListUseCase : any FetchSubPlayListUseCase {get}
+    var  fetchPlayListUseCase : any FetchPlayListUseCase {get}
    
 }
 
 public final class MyPlayListComponent: Component<MyPlayListDependency> {
     public func makeView() -> MyPlayListViewController{
         
-        return MyPlayListViewController.viewController(viewModel: .init(fetchSubPlayListUseCase: dependency.fetchSubPlayListUseCase), multiPurposePopComponent: dependency.multiPurposePopComponent)
+        return MyPlayListViewController.viewController(viewModel: .init(fetchPlayListUseCase: dependency.fetchPlayListUseCase), multiPurposePopComponent: dependency.multiPurposePopComponent)
     }
 }

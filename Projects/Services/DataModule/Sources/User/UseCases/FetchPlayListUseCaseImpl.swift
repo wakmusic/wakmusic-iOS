@@ -12,7 +12,7 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchSubPlayListUseCaseImpl: FetchSubPlayListUseCase {
+public struct FetchPlayListUseCaseImpl: FetchPlayListUseCase {
     
     
   
@@ -25,8 +25,8 @@ public struct FetchSubPlayListUseCaseImpl: FetchSubPlayListUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute() -> Single<[SubPlayListEntity]> {
-        userRepository.fetchSubPlayList()
+    public func execute() -> Single<[PlayListEntity]> {
+        userRepository.fetchPlayList()
     }
     
 

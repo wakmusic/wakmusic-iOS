@@ -15,7 +15,7 @@ public protocol UserRepository {
     func fetchProfileList() -> Single<[ProfileListEntity]>
     func setProfile(image:String) -> Single<BaseEntity>
     func setUserName(name:String) -> Single<BaseEntity>
-    func fetchSubPlayList() -> Single<[SubPlayListEntity]>
+    func fetchPlayList() -> Single<[PlayListEntity]>
     func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]>
     func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
 
