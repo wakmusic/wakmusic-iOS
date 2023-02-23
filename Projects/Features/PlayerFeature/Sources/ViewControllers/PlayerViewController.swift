@@ -13,16 +13,20 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
+import YouTubePlayerKit
+import Combine
+import Kingfisher
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    private var subsciption = Set<AnyCancellable>()
     var viewModel: PlayerViewModel!
     let playState = PlayState.shared
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
-    var youtubePlayerView = UIView().then {
-        $0.isHidden = false
+    lazy var youtubePlayerView = YouTubePlayerHostingView(player: playState.player).then {
+        $0.isHidden = true
     }
     
     init(viewModel: PlayerViewModel) {
@@ -47,7 +51,6 @@ public class PlayerViewController: UIViewController {
             $0.width.equalTo(320)
             $0.height.equalTo(180)
         }
-        self.youtubePlayerView.addSubview(playState.player)
     }
     
     public override func viewDidLoad() {
@@ -85,7 +88,8 @@ private extension PlayerViewController {
         )
         let output = self.viewModel.transform(from: input)
         
-        bindPlayerState(output: output)
+        bindPlayButtonImages(output: output)
+        bindThumbnail(output: output)
         bindTitle(output: output)
         bindArtist(output: output)
         bindCurrentPlayTime(output: output)
@@ -102,105 +106,96 @@ private extension PlayerViewController {
             .disposed(by: disposeBag)
         
     }
+        
+    private func bindPlayButtonImages(output: PlayerViewModel.Output) {
+        output.playerState.sink { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case .playing:
+                self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
+                self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
+            default:
+                self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
+                self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
+            }
+        }.store(in: &subsciption)
+    }
     
-    private func bindPlayerState(output: PlayerViewModel.Output) {
-        output.playerState
-            .asDriver()
-            .drive(onNext: { [weak self] state in
-                guard let self else { return }
-                switch state {
-                case .unstarted: break
-                case .ended:
-                    self.playState.forWard()
-                case .playing:
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.pause.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
-                case .paused:
-                    self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
-                    self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
-                case .buffering: break
-                case .cued: break
-                }
-            })
-            .disposed(by: self.disposeBag)
+    private func bindThumbnail(output: PlayerViewModel.Output) {
+        output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
+            guard let self else { return }
+            self.playerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+            self.playerView.backgroundImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+            self.miniPlayerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+        }.store(in: &subsciption)
     }
     
     private func bindTitle(output: PlayerViewModel.Output) {
-        output.titleText
-            .asDriver()
-            .drive(onNext: { [weak self] titleText in
-                guard let self else { return }
-                self.playerView.titleLabel.text = titleText
-                self.miniPlayerView.titleLabel.text = titleText
-            })
-            .disposed(by: self.disposeBag)
+        output.titleText.sink { [weak self] titleText in
+            guard let self else { return }
+            self.playerView.titleLabel.text = titleText
+            self.miniPlayerView.titleLabel.text = titleText
+        }.store(in: &subsciption)
     }
     
     private func bindArtist(output: PlayerViewModel.Output) {
-        output.artistText
-            .asDriver()
-            .drive(onNext: { [weak self] artistText in
-                guard let self else { return }
-                self.playerView.artistLabel.text = artistText
-                self.miniPlayerView.artistLabel.text = artistText
-            })
-            .disposed(by: self.disposeBag)
+        output.artistText.sink { [weak self] artistText in
+            guard let self else { return }
+            self.playerView.artistLabel.text = artistText
+            self.miniPlayerView.artistLabel.text = artistText
+        }
+        .store(in: &subsciption)
     }
     
     private func bindlikes(output: PlayerViewModel.Output) {
-        output.likeCountText
-            .asDriver()
-            .drive(onNext: { [weak self] likeCountText in
-                guard let self else { return }
-                self.playerView.likeButton.setTitle(likeCountText, for: .normal)
-            })
-            .disposed(by: self.disposeBag)
+        output.likeCountText.sink { [weak self] likeCountText in
+            guard let self else { return }
+            self.playerView.likeButton.setTitle(likeCountText, for: .normal)
+        }
+        .store(in: &subsciption)
     }
     
     private func bindViews(output: PlayerViewModel.Output) {
-        output.viewsCountText
-            .asDriver()
-            .drive(onNext: { [weak self] viewsCountText in
-                guard let self else { return }
-                self.playerView.viewsLabel.text = viewsCountText
-            })
-            .disposed(by: self.disposeBag)
+        output.viewsCountText.sink { [weak self] viewsCountText in
+            guard let self else { return }
+            self.playerView.viewsLabel.text = viewsCountText
+        }
+        .store(in: &subsciption)
     }
     
     private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
-        output.playTimeText
-            .asDriver()
-            .drive(onNext: { [weak self] currentTimeText in
-                guard let self else { return }
-                self.playerView.currentPlayTimeLabel.text = currentTimeText
-            })
-            .disposed(by: self.disposeBag)
+        output.playTimeText.sink { [weak self] currentTimeText in
+            guard let self else { return }
+            self.playerView.currentPlayTimeLabel.text = currentTimeText
+            self.miniPlayerView.currentPlayTimeView.snp.remakeConstraints {
+                let playTimeValue = output.playTimeValue.value
+                let totalTimeValue = output.totalTimeValue.value
+                let newValue = totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
+                $0.top.left.bottom.equalToSuperview()
+                $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
+            }
+        }
+        .store(in: &subsciption)
         
-        output.playTimeValue
-            .asDriver()
-            .drive(onNext: { [weak self] value in
-                guard let self else { return }
-                self.playerView.playTimeSlider.value = value
-            })
-            .disposed(by: self.disposeBag)
+        output.playTimeValue.sink { [weak self] value in
+            guard let self else { return }
+            self.playerView.playTimeSlider.value = value
+        }
+        .store(in: &subsciption)
     }
     
     private func bindTotalPlayTime(output: PlayerViewModel.Output) {
-        output.totalTimeText
-            .asDriver()
-            .drive(onNext: { [weak self] totalTimeText in
-                guard let self else { return }
-                self.playerView.totalPlayTimeLabel.text = totalTimeText
-            })
-            .disposed(by: self.disposeBag)
+        output.totalTimeText.sink { [weak self] totalTimeText in
+            guard let self else { return }
+            self.playerView.totalPlayTimeLabel.text = totalTimeText
+        }
+        .store(in: &subsciption)
         
-        output.totalTimeValue
-            .asDriver()
-            .drive(onNext: { [weak self] value in
-                guard let self else { return }
-                self.playerView.playTimeSlider.minimumValue = 0
-                self.playerView.playTimeSlider.maximumValue = value
-            })
-            .disposed(by: self.disposeBag)
+        output.totalTimeValue.sink { [weak self] value in
+            guard let self else { return }
+            self.playerView.playTimeSlider.minimumValue = 0
+            self.playerView.playTimeSlider.maximumValue = value
+        }
+        .store(in: &subsciption)
     }
 }

@@ -7,50 +7,54 @@
 //
 
 import Foundation
-import RxSwift
-import YoutubeKit
 import DomainModule
+import YouTubePlayerKit
+import Combine
 
 final public class PlayState {
     public static let shared = PlayState()
     
-    internal var player: YTSwiftyPlayer
-    internal var state: BehaviorSubject<YTSwiftyPlayerState>
-    internal var currentSong: BehaviorSubject<SongEntity?>
-    internal var progress: BehaviorSubject<PlayProgress>
-    internal var playList: PlayList
+    @Published internal var player: YouTubePlayer
+    @Published internal var state: YouTubePlayer.PlaybackState
+    @Published internal var currentSong: SongEntity?
+    @Published internal var progress: PlayProgress
+    @Published internal var playList: PlayList
     
-    private let disposeBag = DisposeBag()
+    private var subscription = Set<AnyCancellable>()
     
     private let dummyPlayList = [
+        SongEntity(id: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌", remix: "", reaction: "", views: 13442558, last: 0, date: "211222"),
         SongEntity(id: "wSG93VZoMFg", title: "[메타시그널 OST] In Romantic", artist: "해루석", remix: "", reaction: "", views: 320864, last: 0, date: "221216"),
+        SongEntity(id: "kHpvUymXXEg", title: "KICK BACK #Shrots", artist: "왁컬로이두", remix: "", reaction: "", views: 887629, last: 0, date: "220216"),
+        SongEntity(id: "rhOF0nwhEmU", title: "ANTIFRAGILE Challenge Vtuber Cover #Shorts", artist: "징버거", remix: "", reaction: "", views: 423708, last: 0, date: "221209"),
         SongEntity(id: "N2Tj_FMqlX8", title: "왁타버스 디즈니 메들리", artist: "비챤 X 고정멤버", remix: "", reaction: "", views: 864251, last: 0, date: "220722"),
         SongEntity(id: "tT-kuonVzfY", title: "STAY", artist: "징버거", remix: "", reaction: "", views: 1487185, last: 0, date: "230120"),
-        SongEntity(id: "Gce2fYnlw0w", title: "Re: Dial", artist: "HAKU0089", remix: "", reaction: "", views: 560999, last: 0, date: "230130"),
         SongEntity(id: "l8e1Byk1Dx0", title: "TRUE LOVER (트루러버)", artist: "해루석, 히키킹, 권민(ft.행주)", remix: "", reaction: "", views: 7075068, last: 0, date: "220918")
     ]
     
     init() {
-        currentSong = BehaviorSubject(value: SongEntity(id: "wSG93VZoMFg", title: "[메타시그널 OST] In Romantic", artist: "해루석", remix: "", reaction: "", views: 320864, last: 0, date: "221216"))
-        progress = BehaviorSubject(value: PlayProgress.init(currentProgress: 0, endProgress: 0))
-        playList = PlayList()
-        playList.list = dummyPlayList
-        state = BehaviorSubject(value: .unstarted)
+        //playList = PlayList()
+        playList = PlayList(list: dummyPlayList)
+        currentSong = SongEntity(id: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌", remix: "", reaction: "", views: 13442558, last: 0, date: "211222")
+        progress = PlayProgress()
+        state = .unstarted
         
-        player = YTSwiftyPlayer(
-            frame: .init(x: 0, y: 0, width: 320, height: 180),
-            playerVars: [
-                .playsInline(true),
-                .videoID("wSG93VZoMFg"),
-                .loopVideo(true),
-                .showRelatedVideo(false),
-                .autoplay(false)
-            ])
+        player = YouTubePlayer(source: .video(id: "fgSXAKsq-Vo"), configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         
-        player.delegate = self
-        let playerPath = PlayerFeatureResources.bundle.path(forResource: "YoutubePlayer", ofType: "html")! 
-        let htmlString = (try? String(contentsOfFile: playerPath, encoding: .utf8)) ?? ""
-        player.loadPlayerHTML(htmlString)
+        player.playbackStatePublisher.sink { [weak self] state in
+            guard let self = self else { return }
+            self.state = state
+        }.store(in: &subscription)
+        
+        player.currentTimePublisher().sink { [weak self] currentTime in
+            guard let self = self else { return }
+            self.progress.currentProgress = currentTime
+        }.store(in: &subscription)
+
+        player.durationPublisher.sink { [weak self] duration in
+            guard let self = self else { return }
+            self.progress.endProgress = duration
+        }.store(in: &subscription)
         
         
     }
@@ -62,47 +66,42 @@ extension PlayState {
     
     /// ⏯️ 현재 곡 재생
     func play() {
-        let currentSong = try? currentSong.value()
-        self.player.playVideo()
+        self.player.play()
     }
     
     /// ▶️ 해당 곡 새로 재생
     func load(at song: SongEntity) {
-        self.currentSong.onNext(song)
-        let currentSong = try? currentSong.value()
-        guard let currentSong else { return }
-        self.player.loadVideo(videoID: currentSong.id)
+        self.currentSong = song
+        guard let currentSong = currentSong else { return }
+        self.player.load(source: .video(id: currentSong.id))
     }
     
     /// ⏸️ 일시정지
     func pause() {
-        self.player.pauseVideo()
+        self.player.pause()
     }
 
     /// ⏩ 다음 곡으로 변경 후 재생
     func forWard() {
         self.playList.next()
-        self.currentSong.onNext(playList.current)
-        let currentSong = try? currentSong.value()
-        guard let currentSong else { return }
+        self.currentSong = playList.current
+        guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
 
     /// ⏪ 이전 곡으로 변경 후 재생
     func backWard() {
         self.playList.back()
-        self.currentSong.onNext(playList.current)
-        let currentSong = try? currentSong.value()
-        guard let currentSong else { return }
+        self.currentSong = playList.current
+        guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
 
     /// ♻️ 첫번째 곡으로 변경 후 재생
     func playAgain() {
         self.playList.currentPlayIndex = 0
-        self.currentSong.onNext(playList.first)
-        let currentSong = try? currentSong.value()
-        guard let currentSong else { return }
+        self.currentSong = playList.first
+        guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
 
@@ -114,8 +113,8 @@ extension PlayState {
         var list: [SongEntity]
         var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
 
-        init() {
-            list = [SongEntity]()
+        init(list: [SongEntity] = []) {
+            self.list = list
             currentPlayIndex = 0
         }
 
@@ -171,44 +170,5 @@ extension PlayState {
     public struct PlayProgress {
         var currentProgress: Double = 0
         var endProgress: Double = 0
-    }
-}
-
-extension PlayState: YTSwiftyPlayerDelegate {
-    public func player(_ player: YTSwiftyPlayer, didChangeState state: YTSwiftyPlayerState) {
-        print("new state:", state)
-        self.state.onNext(state)
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangeQuality quality: YTSwiftyVideoQuality) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didReceiveError error: YTSwiftyPlayerError) {
-        
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didUpdateCurrentTime currentTime: Double) {
-        self.progress.onNext(PlayProgress(currentProgress: currentTime, endProgress: player.duration ?? 0))
-    }
-    
-    public func player(_ player: YTSwiftyPlayer, didChangePlaybackRate playbackRate: Double) {
-        
-    }
-    
-    public func playerReady(_ player: YTSwiftyPlayer) {
-        
-    }
-    
-    public func apiDidChange(_ player: YTSwiftyPlayer) {
-        print("apiDidChange")
-    }
-    
-    public func youtubeIframeAPIReady(_ player: YTSwiftyPlayer) {
-        
-    }
-    
-    public func youtubeIframeAPIFailedToLoad(_ player: YTSwiftyPlayer) {
-        
     }
 }
