@@ -8,7 +8,7 @@ public enum UserAPI {
     case fetchProfileList
     case setProfile(image: String)
     case setUserName(name: String)
-    case fetchSubPlayList
+    case fetchPlayList
     case fetchFavoriteSongs
     case editFavoriteSongsOrder(ids:[String])
 }
@@ -39,7 +39,7 @@ extension UserAPI: WMAPI {
             return "/profile/set"
         case .setUserName:
             return "/username"
-        case .fetchSubPlayList:
+        case .fetchPlayList:
             return "/playlists"
         case .fetchFavoriteSongs:
             return "/likes"
@@ -52,7 +52,7 @@ extension UserAPI: WMAPI {
         switch self {
         case .setProfile, .setUserName:
             return .post
-        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
             return .get
         case .editFavoriteSongsOrder:
             return .patch
@@ -65,7 +65,7 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetProfileModel(image: image))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
-        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
             return .requestPlain
         case .editFavoriteSongsOrder(ids: let ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songs: ids))

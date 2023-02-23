@@ -32,7 +32,7 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
     
     public func fetchPlayList() -> Single<[PlayListEntity]> {
         
-        return request(.fetchSubPlayList)
+        return request(.fetchPlayList)
             .map([PlayListResponseDTO].self)
             .map({$0.map{$0.toDomain()}})
         

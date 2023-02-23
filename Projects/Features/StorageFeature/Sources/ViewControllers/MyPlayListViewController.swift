@@ -160,7 +160,7 @@ extension MyPlayListViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
-        let header = MyPlayListHeaderView()
+        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
       
 
         header.delegate = self

@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_thumbnail_large" translatesAutoresizingMaskIntoConstraints="NO" id="uuH-Da-aO8">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uuH-Da-aO8">
                         <rect key="frame" x="20" y="2" width="72" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="kES-oJ-Dhl"/>
@@ -66,7 +66,4 @@
             <point key="canvasLocation" x="185" y="-163"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="dummy_thumbnail_large" width="324" height="182"/>
-    </resources>
 </document>
