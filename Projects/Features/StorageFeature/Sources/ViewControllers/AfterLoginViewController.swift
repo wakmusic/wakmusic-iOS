@@ -93,17 +93,14 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         }
         
         
-    
-        
-        if output.state.value.isEditing {
-           
-        }
-        
         let state = EditState(isEditing: false, force: true)
         
-        // 문제: 수정 상태에서 페이징 전환 시 isEditing에 true 어떻게 넣을지 ?
+        
         if index == 0 {
-           // if ouput.state.value.isEditing == true
+            if output.state.value.isEditing == true
+            {
+                vc2.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
+            }
             vc2.output.state.accept(state)
             
         }

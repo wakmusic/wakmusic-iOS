@@ -27,6 +27,7 @@ public final class FavoriteViewModel:ViewModelType {
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let cancelEdit:PublishSubject<Void> = PublishSubject()
         let runEditing:PublishSubject<Void> = PublishSubject()
+        let showConfirmModal:PublishSubject<Void> = PublishSubject()
         
     }
 
@@ -92,6 +93,8 @@ public final class FavoriteViewModel:ViewModelType {
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+        
+        
 
         
         return output
