@@ -223,7 +223,7 @@ extension PlayListDetailViewController{
                 warningView.text = "플레이리스트에 곡이 없습니다."
                 
                 
-                self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+                self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
             })
             .bind(to: tableView.rx.items){[weak self] (tableView, index, model) -> UITableViewCell in
        

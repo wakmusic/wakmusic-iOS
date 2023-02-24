@@ -178,6 +178,28 @@ extension MyPlayListViewController{
             }).disposed(by: disposeBag)
         
                 
+            tableView.rx.itemSelected
+                .withLatestFrom(output.dataSource){ ($0,$1) }
+                .subscribe(onNext: { [weak self] (indexPath, models) in
+                    
+                    guard let self  = self else{
+                        return
+                    }
+                    
+                    
+                    let model = models[indexPath.row]
+                    
+                    let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                    
+                    
+                })
+                .disposed(by: disposeBag)
+        
+                
+                
             NotificationCenter.default.rx.notification(.playListRefresh)
                 .map({_ in () })
                 .bind(to: input.playListLoad)
