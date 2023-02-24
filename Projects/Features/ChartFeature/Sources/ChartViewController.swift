@@ -8,7 +8,7 @@ import DomainModule
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
     private lazy var viewControllers: [UIViewController] = {
         let viewControllers = [
-            UIViewController(),
+            ChartContentViewController.viewController(),
             UIViewController(),
             UIViewController(),
             UIViewController(),
@@ -61,7 +61,7 @@ extension ChartViewController {
         view.addSubview(tabBarContentView)
         tabBarContentView.snp.makeConstraints {
             $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(36)
+            $0.height.equalTo(40)
         }
         
         addBar(bar, dataSource: self, at: .custom(view: self.tabBarContentView, layout: nil))
