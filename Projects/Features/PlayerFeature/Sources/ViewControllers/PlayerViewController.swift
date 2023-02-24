@@ -99,6 +99,7 @@ private extension PlayerViewController {
         bindlikes(output: output)
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
+        bindLyricsTracking(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -209,6 +210,18 @@ private extension PlayerViewController {
         }
         .store(in: &subsciption)
     }
+    
+    private func bindLyricsTracking(output: PlayerViewModel.Output) {
+        output.playTimeValue.sink { [weak self] value in
+            guard let self else { return }
+            let index = self.viewModel.getCurrentLyricsIndex(Int(value))
+            guard self.viewModel.prevIndex != index else { return }
+            self.updateLyricsTableViewCell(prev: self.viewModel.prevIndex, index: index)
+            self.viewModel.prevIndex = index
+        }
+        .store(in: &subsciption)
+    }
+    
 }
 
 extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
@@ -222,6 +235,30 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         else { return UITableViewCell() }
         cell.setLyrics(text: viewModel.sortedLyrics[indexPath.row])
         return cell
+    }
+    
+    public func updateLyricsTableViewCell(prev: Int, index: Int) {
+        if index < 0 { return }
+        
+        playerView.lyricsTableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: true)
+            
+        let indexPath = IndexPath(row: index, section: 0)
+        if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
+            
+            (0..<viewModel.sortedLyrics.count).forEach {
+                let idxPath = IndexPath(row: $0, section: 0)
+                if let cell = playerView.lyricsTableView.cellForRow(at: idxPath) as? LyricsTableViewCell {
+                    cell.highlight(false)
+                }
+            }
+            cell.highlight(true)
+        }
+        
+        guard prev >= 0 else { return }
+        let prevIndexPath = IndexPath(row: prev, section: 0)
+        if let prevCell = playerView.lyricsTableView.cellForRow(at: prevIndexPath) as? LyricsTableViewCell {
+            prevCell.highlight(false)
+        }
     }
     
 }

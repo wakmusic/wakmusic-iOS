@@ -57,8 +57,9 @@ final class PlayerViewModel: ViewModelType {
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
-    internal var lyricsDict = Dictionary<Double, String>()
+    internal var lyricsDict = Dictionary<Int, String>()
     internal var sortedLyrics = [String]()
+    internal var prevIndex = 0
     
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
@@ -126,7 +127,7 @@ final class PlayerViewModel: ViewModelType {
                     guard let self else { return }
                     self.lyricsDict.removeAll()
                     self.sortedLyrics.removeAll()
-                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: $0.start) }
+                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Int($0.start)) }
                     self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
             } onFailure: { [weak self] error in
                 guard let self else { return }
@@ -182,5 +183,26 @@ final class PlayerViewModel: ViewModelType {
     
     func thumbnailURL(from id: String) -> String {
         return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
+    }
+    
+    func getCurrentLyricsIndex(_ currentTime: Int) -> Int {
+        //let currentTime = Int(player.currentValue)
+        let times = lyricsDict.keys.sorted()
+        let index = bisectRight(times, currentTime) - 1
+        return index
+    }
+    
+    func bisectRight(_ array: [Int], _ target: Int) -> Int {
+        var start = 0
+        var end = array.count - 1
+        while start < end {
+            let mid = (start + end) / 2
+            if target < array[mid] {
+                end = mid
+            } else {
+                start = mid + 1
+            }
+        }
+        return start
     }
 }

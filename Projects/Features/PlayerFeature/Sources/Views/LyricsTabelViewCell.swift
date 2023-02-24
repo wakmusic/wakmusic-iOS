@@ -18,7 +18,7 @@ internal class LyricsTableViewCell: UITableViewCell {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray500.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
-        $0.text = "기억나 우리 처음 만난 날"
+        $0.text = ""
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -41,5 +41,9 @@ internal class LyricsTableViewCell: UITableViewCell {
     
     internal func setLyrics(text: String) {
         self.lyricsLabel.text = text
+    }
+    
+    internal func highlight(_ isCurrent: Bool) {
+        lyricsLabel.textColor = isCurrent ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray500.color
     }
 }
