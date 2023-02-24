@@ -79,7 +79,8 @@ public final class PlayerView: UIView {
         let circleSize: CGFloat = 8.0
         let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
                                                                 height: circleSize),
-                                                   color: colorFromRGB(0x08DEF7))
+                                                   color: colorFromRGB(0x08DEF7),
+                                                   padding: 20)
         $0.layer.cornerRadius = 1
         $0.setThumbImage(circleImage, for: .normal)
         $0.setThumbImage(circleImage, for: .highlighted)
@@ -326,7 +327,7 @@ private extension PlayerView {
     }
     private func configurePlayTime() {
         playTimeView.snp.makeConstraints {
-            $0.top.equalTo(playTimeSlider.snp.bottom).offset(4)
+            $0.top.equalTo(playTimeSlider.snp.bottom).offset(-16)
             $0.horizontalEdges.equalTo(playTimeSlider.snp.horizontalEdges)
             $0.height.equalTo(18)
         }
@@ -413,16 +414,29 @@ private extension PlayerView {
         return CGFloat(floorf(Float(x)))
     }
     
-    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(color.cgColor)
-        context?.setStrokeColor(UIColor.clear.cgColor)
-        let bounds = CGRect(origin: .zero, size: size)
-        context?.addEllipse(in: bounds)
-        context?.drawPath(using: .fill)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+//    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
+//        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+//        let context = UIGraphicsGetCurrentContext()
+//        context?.setFillColor(color.cgColor)
+//        context?.setStrokeColor(UIColor.clear.cgColor)
+//        let bounds = CGRect(origin: .zero, size: size)
+//        context?.addEllipse(in: bounds)
+//        context?.drawPath(using: .fill)
+//        let image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return image
+//    }
+    
+    private func makeCircleWith(size: CGSize, color: UIColor, padding: CGFloat = 0.0) -> UIImage? {
+        let rendererSize = CGSize(width: size.width, height: size.height + padding * 2)
+        let renderer = UIGraphicsImageRenderer(size: rendererSize)
+        let image = renderer.image { (context) in
+            let circleRect = CGRect(x: 0, y: padding, width: size.width, height: size.height)
+            let path = UIBezierPath(ovalIn: circleRect)
+            context.cgContext.setFillColor(color.cgColor)
+            context.cgContext.addPath(path.cgPath)
+            context.cgContext.fillPath()
+        }
+        return image.resizableImage(withCapInsets: UIEdgeInsets(top: padding, left: 0, bottom: padding, right: 0))
     }
 }
