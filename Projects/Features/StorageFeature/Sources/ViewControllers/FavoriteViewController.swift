@@ -175,7 +175,7 @@ extension FavoriteViewController{
                     self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                     
                     
-                })
+                }).disposed(by: disposeBag)
       
         
     }
