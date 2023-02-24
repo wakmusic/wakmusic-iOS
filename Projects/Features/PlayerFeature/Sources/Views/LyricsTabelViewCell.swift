@@ -39,6 +39,10 @@ internal class LyricsTableViewCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        highlight(false)
+    }
+    
     internal func setLyrics(text: String) {
         self.lyricsLabel.text = text
     }

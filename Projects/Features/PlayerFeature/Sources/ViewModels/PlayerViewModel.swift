@@ -57,16 +57,12 @@ final class PlayerViewModel: ViewModelType {
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
-    internal var lyricsDict = Dictionary<Int, String>()
+    internal var lyricsDict = [Float : String]()
     internal var sortedLyrics = [String]()
-    internal var prevIndex = 0
     
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
-        
-        
-
     }
     
     func transform(from input: Input) -> Output {
@@ -121,13 +117,14 @@ final class PlayerViewModel: ViewModelType {
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
             
-            self.fetchLyricsUseCase.execute(id: song.id) // 가사 불러오기
+            // 곡이 변경되면 가사 불러오기
+            self.fetchLyricsUseCase.execute(id: song.id)
                 .retry(3)
                 .subscribe { [weak self] lyricsEntityArray in
                     guard let self else { return }
                     self.lyricsDict.removeAll()
                     self.sortedLyrics.removeAll()
-                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Int($0.start)) }
+                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
                     self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
             } onFailure: { [weak self] error in
                 guard let self else { return }
@@ -185,24 +182,26 @@ final class PlayerViewModel: ViewModelType {
         return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
     
-    func getCurrentLyricsIndex(_ currentTime: Int) -> Int {
-        //let currentTime = Int(player.currentValue)
+    func getCurrentLyricsIndex(_ currentTime: Float) -> Int {
         let times = lyricsDict.keys.sorted()
-        let index = bisectRight(times, currentTime) - 1
+        let index = binarySearch(at: times, target: currentTime)
         return index
     }
     
-    func bisectRight(_ array: [Int], _ target: Int) -> Int {
-        var start = 0
-        var end = array.count - 1
-        while start < end {
-            let mid = (start + end) / 2
+    /// 이진탐색 O(log n)
+    func binarySearch(at array: [Float], target: Float) -> Int {
+        var left = 0
+        var right = array.count - 1
+
+        while left < right {
+            let mid = (left + right) / 2
             if target < array[mid] {
-                end = mid
+                right = mid
             } else {
-                start = mid + 1
+                left = mid + 1
             }
         }
-        return start
+        return max(left - 1, 0) // 0 이상 정수로만 반환
     }
+    
 }

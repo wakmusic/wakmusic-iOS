@@ -212,12 +212,12 @@ private extension PlayerViewController {
     }
     
     private func bindLyricsTracking(output: PlayerViewModel.Output) {
-        output.playTimeValue.sink { [weak self] value in
+        output.playTimeValue
+            .filter { $0 > 0 }
+            .sink { [weak self] value in
             guard let self else { return }
-            let index = self.viewModel.getCurrentLyricsIndex(Int(value))
-            guard self.viewModel.prevIndex != index else { return }
-            self.updateLyricsTableViewCell(prev: self.viewModel.prevIndex, index: index)
-            self.viewModel.prevIndex = index
+            let index = self.viewModel.getCurrentLyricsIndex(value)
+            self.updateLyricsTableViewCell(index: index)
         }
         .store(in: &subsciption)
     }
@@ -237,27 +237,16 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    public func updateLyricsTableViewCell(prev: Int, index: Int) {
-        if index < 0 { return }
-        
+    public func updateLyricsTableViewCell(index: Int) {
         playerView.lyricsTableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: true)
-            
-        let indexPath = IndexPath(row: index, section: 0)
-        if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
-            
-            (0..<viewModel.sortedLyrics.count).forEach {
-                let idxPath = IndexPath(row: $0, section: 0)
-                if let cell = playerView.lyricsTableView.cellForRow(at: idxPath) as? LyricsTableViewCell {
-                    cell.highlight(false)
-                }
-            }
-            cell.highlight(true)
-        }
         
-        guard prev >= 0 else { return }
-        let prevIndexPath = IndexPath(row: prev, section: 0)
-        if let prevCell = playerView.lyricsTableView.cellForRow(at: prevIndexPath) as? LyricsTableViewCell {
-            prevCell.highlight(false)
+        // 모든 셀에 대해서 강조 상태 업데이트
+        let rows = playerView.lyricsTableView.numberOfRows(inSection: 0)
+        for row in 0..<rows {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
+                cell.highlight(row == index)
+            }
         }
     }
     
