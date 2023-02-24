@@ -101,7 +101,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             {
                 vc2.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
             }
-            vc2.output.state.accept(state)
+            vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 왜 연관 됨
             
         }
         else {
@@ -109,7 +109,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             {
                 vc1.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
             }
-            vc1.output.state.accept(state)
+            
+            vc2.output.state.accept(state)
         }
 
         output.state.accept(state)
@@ -292,7 +293,11 @@ extension AfterLoginViewController{
         vc1.output.dataSource
                 .skip(1)
                 .filter({ [weak self] _  in
+                    
                     guard let self = self else { return false }
+                    
+               
+                    
                     return (self.currentIndex ?? 0) == 0
                 })
                 .map { $0.isEmpty }
@@ -303,8 +308,12 @@ extension AfterLoginViewController{
             .skip(1)
             .filter({ [weak self] _  in
                 guard let self = self else { return false }
+                
+                
+                
                 return (self.currentIndex ?? 0) == 1
             })
+          
             .map { $0.isEmpty }
             .bind(to: editButton.rx.isHidden)
             .disposed(by: disposeBag)
