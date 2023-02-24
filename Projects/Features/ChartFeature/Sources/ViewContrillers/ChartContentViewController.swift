@@ -1,11 +1,3 @@
-//
-//  ChartContentViewController.swift
-//  ChartFeature
-//
-//  Created by 김대희 on 2023/02/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import UIKit
 import Utility
 import DesignSystem
@@ -41,7 +33,7 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     public static func viewController(
 //        viewModel: ChartContentViewController
     ) -> ChartContentViewController {
-        let viewController = ChartContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
 //        viewController.viewModel = viewModel
         return viewController
     }
