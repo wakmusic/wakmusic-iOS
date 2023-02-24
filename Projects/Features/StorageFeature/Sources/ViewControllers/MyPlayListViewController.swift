@@ -24,6 +24,8 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
 
     var multiPurposePopComponent:MultiPurposePopComponent!
+    var playListDetailComponent :PlayListDetailComponent!
+    
     var viewModel:MyPlayListViewModel!
     
     lazy var input = MyPlayListViewModel.Input()
@@ -45,11 +47,12 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     }
     
 
-    public static func viewController(viewModel:MyPlayListViewModel,multiPurposePopComponent:MultiPurposePopComponent) -> MyPlayListViewController {
+    public static func viewController(viewModel:MyPlayListViewModel,multiPurposePopComponent:MultiPurposePopComponent,playListDetailComponent :PlayListDetailComponent) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.playListDetailComponent = playListDetailComponent
         
         return viewController
     }
