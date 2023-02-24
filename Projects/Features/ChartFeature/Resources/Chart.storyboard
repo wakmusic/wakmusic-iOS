@@ -43,76 +43,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jHb-wR-MvW">
                                 <rect key="frame" x="0.0" y="99" width="393" height="753"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.95294117649999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ArtistMusicCell" rowHeight="70" id="Tf6-2t-hYp" customClass="ArtistMusicCell" customModule="ArtistFeature">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="70"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tf6-2t-hYp" id="Mov-JX-BVd">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="70"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jQt-p5-5bi">
-                                                    <rect key="frame" x="20" y="15" width="72" height="40"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="72" id="Px2-n4-MRI"/>
-                                                        <constraint firstAttribute="height" constant="40" id="pgI-G2-2y0"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="OTg-zf-8kM">
-                                                    <rect key="frame" x="100" y="14" width="203" height="42"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="리와인드 (RE:WIND)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KE1-R2-ttC">
-                                                            <rect key="frame" x="0.0" y="0.0" width="203" height="24"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="24" id="xK1-VJ-gZr"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                            <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이세계아이돌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBV-Fx-Cwd">
-                                                            <rect key="frame" x="0.0" y="24" width="203" height="18"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="18" id="ryt-As-Tb9"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
-                                                            <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                </stackView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="2022.12.22" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xaF-tP-pWW">
-                                                    <rect key="frame" x="311" y="27.999999999999996" width="62" height="14.333333333333332"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
-                                                    <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="OTg-zf-8kM" firstAttribute="centerY" secondItem="jQt-p5-5bi" secondAttribute="centerY" id="0u2-rV-b74"/>
-                                                <constraint firstItem="xaF-tP-pWW" firstAttribute="leading" secondItem="OTg-zf-8kM" secondAttribute="trailing" constant="8" id="4yc-sx-2Ih"/>
-                                                <constraint firstItem="xaF-tP-pWW" firstAttribute="centerY" secondItem="Mov-JX-BVd" secondAttribute="centerY" id="HgJ-ON-6kf"/>
-                                                <constraint firstItem="OTg-zf-8kM" firstAttribute="leading" secondItem="jQt-p5-5bi" secondAttribute="trailing" constant="8" id="RwC-8v-oep"/>
-                                                <constraint firstAttribute="trailing" secondItem="xaF-tP-pWW" secondAttribute="trailing" constant="20" id="cdS-Gd-IAC"/>
-                                                <constraint firstItem="jQt-p5-5bi" firstAttribute="centerY" secondItem="Mov-JX-BVd" secondAttribute="centerY" id="lL5-Tt-KUs"/>
-                                                <constraint firstItem="jQt-p5-5bi" firstAttribute="leading" secondItem="Mov-JX-BVd" secondAttribute="leading" constant="20" id="uxT-QO-ocj"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="albumImageView" destination="jQt-p5-5bi" id="yfm-bf-R03"/>
-                                            <outlet property="groupStringLabel" destination="FBV-Fx-Cwd" id="d1B-Dt-obZ"/>
-                                            <outlet property="releaseDateLabel" destination="xaF-tP-pWW" id="wOn-gw-FnB"/>
-                                            <outlet property="titleStringLabel" destination="KE1-R2-ttC" id="fom-nE-cyl"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                             </tableView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="RFI-aE-GN3">
                                 <rect key="frame" x="186.66666666666666" y="465.66666666666669" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qWO-H0-FIr"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="RFI-aE-GN3" firstAttribute="centerX" secondItem="jHb-wR-MvW" secondAttribute="centerX" id="2fF-C6-MlA"/>
                             <constraint firstItem="jgG-Yb-HXY" firstAttribute="trailing" secondItem="qWO-H0-FIr" secondAttribute="trailing" id="DnF-g4-JI1"/>
