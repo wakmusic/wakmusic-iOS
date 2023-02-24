@@ -121,7 +121,7 @@ extension FavoriteViewController{
                     return
                 }
                 
-                if state.isEditing == false && state.force == false {
+                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
                 

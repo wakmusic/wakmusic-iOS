@@ -26,6 +26,10 @@ public struct RequsetEditFavoriteSongs:Encodable {
     var songs:[String]
 }
 
+public struct RequsetEditPlayList:Encodable {
+    var playlists:[String]
+}
+
 extension UserAPI: WMAPI {
 
     public var domain: WMDomain {
@@ -70,8 +74,12 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
         case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
             return .requestPlain
-        case .editFavoriteSongsOrder(ids: let ids),.editPlayListOrder(ids: let ids):
+        case .editFavoriteSongsOrder(ids: let ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songs: ids))
+            
+        case .editPlayListOrder(ids: let ids):
+            return .requestJSONEncodable(RequsetEditPlayList(playlists: ids))
+        
         }
         
     }

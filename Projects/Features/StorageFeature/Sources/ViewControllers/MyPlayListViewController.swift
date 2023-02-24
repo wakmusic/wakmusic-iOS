@@ -121,6 +121,12 @@ extension MyPlayListViewController{
                     return
                 }
                 
+                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
+                    self.input.runEditing.onNext(())
+                }
+                
+                
+                
                 self.tableView.dragInteractionEnabled = state.isEditing// true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
@@ -136,6 +142,25 @@ extension MyPlayListViewController{
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
+            input.showConfirmModal.subscribe(onNext: { [weak self] in
+                    
+                guard let self = self else{
+                    return
+                }
+                
+                
+                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+
+                    self.input.runEditing.onNext(())
+                    
+                },cancelCompletion: {
+                    
+                    self.input.cancelEdit.onNext(())
+                })
+             
+                self.showPanModal(content: vc)
+                
+            }).disposed(by: disposeBag)
         
                 
             NotificationCenter.default.rx.notification(.playListRefresh)

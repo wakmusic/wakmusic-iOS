@@ -52,7 +52,7 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
     }
     
     public func editPlayListOrder(ids: [String]) -> Single<BaseEntity> {
-        request(.editFavoriteSongsOrder(ids: ids))
+        request(.editPlayListOrder(ids: ids))
             .map(BaseResponseDTO.self)
             .map{$0.toDomain()}
     }

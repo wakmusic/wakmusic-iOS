@@ -76,7 +76,7 @@ public extension AppComponent {
         }
     }
     
-    var editPlayListOrderUseCase: any  EditPlayListOrderUseCase {
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
         shared {
             EditPlayListOrderUseCaseImpl(userRepository: userRepository)
         }

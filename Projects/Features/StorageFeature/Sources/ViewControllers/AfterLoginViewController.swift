@@ -105,6 +105,10 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             
         }
         else {
+            if output.state.value.isEditing == true
+            {
+                vc1.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
+            }
             vc1.output.state.accept(state)
         }
 
@@ -217,8 +221,6 @@ extension AfterLoginViewController{
             .map({EditState(isEditing: !$0.isEditing, force: $0.force)})
             .do(onNext: { [weak self] (state:EditState)  in
                 
-                DEBUG_LOG("ISED2 \(state)")
-                
                 guard let self = self else{
                     return
                 }
@@ -231,6 +233,7 @@ extension AfterLoginViewController{
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
+    
                     vc.output.state.accept(nextState)
                 }
                 

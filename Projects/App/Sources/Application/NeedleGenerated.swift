@@ -176,6 +176,9 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
     }
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
+        return appComponent.editPlayListOrderUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -474,7 +477,7 @@ extension AppComponent: Registration {
         localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { self.fetchPlayListUseCase as Any }
         localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
         localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
-        localTable["editPlayListOrderUseCase-any  EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
+        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -542,6 +545,7 @@ extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
+        keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
     }
 }
 extension AfterLoginComponent: Registration {
