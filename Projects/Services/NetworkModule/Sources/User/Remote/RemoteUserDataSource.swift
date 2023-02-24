@@ -11,4 +11,5 @@ public protocol RemoteUserDataSource {
     func fetchPlayList() -> Single<[PlayListEntity]>
     func fetchFavoriteSong() -> Single<[FavoriteSongEntity]>
     func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
+    func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
 }

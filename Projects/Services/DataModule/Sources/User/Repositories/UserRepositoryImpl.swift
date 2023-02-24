@@ -14,13 +14,9 @@ import DatabaseModule
 import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
+ 
    
-    
-    
-    
-    
-  
-    private let remoteUserDataSource: any RemoteUserDataSource
+   private let remoteUserDataSource: any RemoteUserDataSource
     
     public init(
         remoteUserDataSource: RemoteUserDataSource
@@ -52,6 +48,10 @@ public struct UserRepositoryImpl: UserRepository {
         remoteUserDataSource.editFavoriteSongsOrder(ids: ids)
     }
     
+    public func editPlayListOrder(ids: [String]) -> Single<BaseEntity> {
+        
+        remoteUserDataSource.editPlayListOrder(ids: ids)
+    }
     
     
  
