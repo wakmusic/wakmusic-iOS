@@ -113,9 +113,9 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         if viewModel.type == .share
         {
             UIPasteboard.general.string = input.textString.value //클립보드 복사
-            //completion?() //토스트 팝업을 위한 컴플리션
-            
+            self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         }
+        
         else
         {
             textField.rx.text.onNext("")

@@ -218,15 +218,7 @@ extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
     public func action(_ type: PurposeType) {
      
         let vc =  multiPurposePopComponent.makeView(type: type)
-        
-        
-//        if type == .share {
-//                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-//        }
-//
-//        if type == .load {
-//                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-//        }
+    
 
         
         self.showPanModal(content: vc)
