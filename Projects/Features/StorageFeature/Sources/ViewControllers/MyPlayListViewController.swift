@@ -161,6 +161,18 @@ extension MyPlayListViewController{
                 self.showPanModal(content: vc)
                 
             }).disposed(by: disposeBag)
+                
+                
+            input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                
+                
+            })
         
                 
             NotificationCenter.default.rx.notification(.playListRefresh)
@@ -209,11 +221,11 @@ extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
         
         
 //        if type == .share {
-//                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+//                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 //        }
 //
 //        if type == .load {
-//                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+//                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 //        }
 
         

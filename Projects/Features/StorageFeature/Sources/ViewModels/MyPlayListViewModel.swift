@@ -28,6 +28,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let cancelEdit:PublishSubject<Void> = PublishSubject()
         let runEditing:PublishSubject<Void> = PublishSubject()
         let showConfirmModal:PublishSubject<Void> = PublishSubject()
+        let showErrorToast:PublishRelay<String> = PublishRelay()
         
     }
 
@@ -88,7 +89,7 @@ public final class MyPlayListViewModel:ViewModelType {
                 
                 
                 if $0.status != 200 {
-                    // 에러 처리
+                    input.showErrorToast.accept($0.description)
                     return
                 }
                 

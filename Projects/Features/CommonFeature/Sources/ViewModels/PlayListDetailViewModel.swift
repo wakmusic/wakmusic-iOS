@@ -36,6 +36,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        let showErrorToast:PublishRelay<String> = PublishRelay()
         
         
     }
@@ -56,13 +57,13 @@ public final class PlayListDetailViewModel:ViewModelType {
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)
-            //TODO: 에러 처리
             .asObservable()
             .do(onNext: { [weak self] (model) in
                 
                 guard let self = self else{
                     return
                 }
+                
                 
                 self.output.headerInfo.onNext(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image ))
             })

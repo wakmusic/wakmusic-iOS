@@ -164,6 +164,18 @@ extension FavoriteViewController{
                 self.showPanModal(content: vc)
                 
             }).disposed(by: disposeBag)
+                
+                
+                input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+                    
+                    guard let self = self else{
+                        return
+                    }
+                    
+                    self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    
+                    
+                })
       
         
     }
