@@ -16,7 +16,7 @@ public protocol MultiPurposePopDependency: Dependency {
     var createPlayListUseCase : any CreatePlayListUseCase {get}
     var loadPlayListUseCase : any LoadPlayListUseCase {get}
     var setUserNameUseCase: any SetUserNameUseCase {get}
-    var editPlayListUseCase : any EditPlayListUseCase {get}
+    var editPlayListNameUseCase : any EditPlayListNameUseCase {get}
 }
 
 public final class MultiPurposePopComponent: Component<MultiPurposePopDependency> {
@@ -26,6 +26,6 @@ public final class MultiPurposePopComponent: Component<MultiPurposePopDependency
                                                             createPlayListUseCase: dependency.createPlayListUseCase,
                                                             loadPlayListUseCase: dependency.loadPlayListUseCase,
                                                             setUserNameUseCase: dependency.setUserNameUseCase,
-                                                            editPlayListUseCase: dependency.editPlayListUseCase))
+                                                            editPlayListNameUseCase:dependency.editPlayListNameUseCase))
     }
 }

@@ -382,8 +382,8 @@ private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurpos
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
-    var editPlayListUseCase: any EditPlayListUseCase {
-        return appComponent.editPlayListUseCase
+    var editPlayListNameUseCase: any EditPlayListNameUseCase {
+        return appComponent.editPlayListNameUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -463,6 +463,7 @@ extension AppComponent: Registration {
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
         localTable["editPlayListUseCase-any EditPlayListUseCase"] = { self.editPlayListUseCase as Any }
+        localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
@@ -629,7 +630,7 @@ extension MultiPurposePopComponent: Registration {
         keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
-        keyPathToName[\MultiPurposePopDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
+        keyPathToName[\MultiPurposePopDependency.editPlayListNameUseCase] = "editPlayListNameUseCase-any EditPlayListNameUseCase"
     }
 }
 extension PlayListDetailComponent: Registration {

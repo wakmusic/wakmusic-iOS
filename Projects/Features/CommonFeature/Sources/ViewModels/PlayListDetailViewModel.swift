@@ -38,7 +38,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let showErrorToast:PublishRelay<String> = PublishRelay()
-        
+        let playListLoad:BehaviorRelay<Void> = BehaviorRelay(value: ())
         
     }
 
@@ -46,6 +46,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let isEditing:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
         let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
     public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase) {
@@ -71,8 +72,35 @@ public final class PlayListDetailViewModel:ViewModelType {
                 self.key = model.key
             })
             .map({$0.songs})
-            .bind(to: output.dataSource)
+                .bind(to: output.dataSource,output.backUpdataSource)
             .disposed(by: disposeBag)
+                
+            
+            input.playListLoad
+                .flatMap({ [weak self] () -> Observable<[SongEntity]> in
+                    
+                    guard let self = self else{
+                        return Observable.empty()
+                    }
+                    
+                    return  fetchPlayListDetailUseCase.execute(id: id, type: type)
+                        .asObservable()
+                        .do(onNext: { [weak self] (model) in
+                            
+                            guard let self = self else{
+                                return
+                            }
+                            
+                            
+                            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+                            
+                            self.key = model.key
+                        })
+                        .map({$0.songs})
+                        .asObservable()
+                })
+                .bind(to: output.dataSource,output.backUpdataSource)
+                .disposed(by: disposeBag)
             
         
         

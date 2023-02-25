@@ -69,6 +69,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
             
             self.navigationController?.popViewController(animated: true)
         }*/
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
@@ -300,7 +301,12 @@ extension PlayListDetailViewController{
             
         }).disposed(by: disposeBag)
                 
-                
+        
+            NotificationCenter.default.rx.notification(.playListDetailRefresh)
+            .map({_ in () })
+                .bind(to: viewModel.input.playListLoad)
+            .disposed(by: disposeBag)
+                    
                 
       
     }
