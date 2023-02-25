@@ -12,7 +12,6 @@ public struct CreatePlayListRequset:Encodable {
 }
 
 public struct EditPlayListRequset:Encodable {
-    var title:String
     var songs:[String]
 }
 
@@ -21,7 +20,7 @@ public enum PlayListAPI {
     case fetchRecommendPlayList
     case fetchPlayListDetail(id:String,type:PlayListType)
     case createPlayList(title:String)
-    case editPlayList(key:String,title:String,songs:[String])
+    case editPlayList(key:String,songs:[String])
     case deletePlayList(key:String)
     case loadPlayList(key:String)
 }
@@ -93,8 +92,8 @@ extension PlayListAPI: WMAPI {
                 
                 
                 
-            case .editPlayList(_,title: let title, songs: let songs):
-                return .requestJSONEncodable(EditPlayListRequset(title: title, songs: songs))
+            case .editPlayList(_,songs: let songs):
+                return .requestJSONEncodable(EditPlayListRequset(songs: songs))
             }
         }
             
