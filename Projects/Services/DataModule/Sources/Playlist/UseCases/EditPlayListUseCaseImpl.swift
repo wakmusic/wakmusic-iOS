@@ -24,7 +24,9 @@ public struct EditPlayListUseCaseImpl: EditPlayListUseCase {
     }
     
     public func execute(key: String,songs: [String]) -> Single<BaseEntity> {
-        playListRepository.editPlayList(key: key,songs: songs)
+        
+     
+        return playListRepository.editPlayList(key: key,songs: songs)
     }
     
     

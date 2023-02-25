@@ -54,9 +54,10 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 //TODO: 저장 코드
+                self.viewModel.input.runEditing.onNext(())
                 
                // self.navigationController?.popViewController(animated: true)
-            self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+           // self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
             self.navigationController?.popViewController(animated: true)
                 
             },cancelCompletion: { [weak self] in

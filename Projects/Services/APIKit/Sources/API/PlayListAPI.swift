@@ -54,16 +54,18 @@ extension PlayListAPI: WMAPI {
         case .createPlayList:
             return "/create"
             
-        case .editPlayList(key: let key):
-            return "/\(key)/edit"
-            
         case .deletePlayList(key: let key):
             return "/\(key)/delete"
             
         case .loadPlayList(key: let key):
             return "/\(key)/addToMyPlaylist"
+            
+        case .editPlayList(key: let key,_):
+            return "/\(key)/edit"
+            
         case .editPlayListName(key: let key,_):
             return "/\(key)/edit/title"
+            
         }
     }
         

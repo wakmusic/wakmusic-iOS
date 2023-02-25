@@ -31,6 +31,7 @@ public final class PlayListDetailViewModel:ViewModelType {
     var id:String!
     var key:String?
     var fetchPlayListDetailUseCase:FetchPlayListDetailUseCase!
+    var editPlayListUseCase : EditPlayListUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -51,40 +52,79 @@ public final class PlayListDetailViewModel:ViewModelType {
         let backUpdataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
-    public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase) {
+    public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase,editPlayListUseCase:EditPlayListUseCase) {
         
         self.id = id
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
+        self.editPlayListUseCase = editPlayListUseCase
        
         DEBUG_LOG("✅ PlayListDetailViewModel 생성")
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)
-            .asObservable()
-            .do(onNext: { [weak self] (model) in
+        .asObservable()
+        .do(onNext: { [weak self] (model) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            
+            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+            
+            self.key = model.key
+            
+        })
+        .map({$0.songs})
+            .bind(to: output.dataSource,output.backUpdataSource)
+        .disposed(by: disposeBag)
+            
+        
+        input.playListNameLoad
+            .skip(1)
+            .withLatestFrom(output.headerInfo){($0,$1)}
+            .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)})
+            .bind(to: output.headerInfo)
+            .disposed(by: disposeBag)
+            
+        
+        input.runEditing
+            .withLatestFrom(output.dataSource)
+            .filter({!$0.isEmpty})
+            .map({$0.map{$0.id}})
+            .flatMap({[weak self] (songs:[String]) -> Observable<BaseEntity> in
+                
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                guard let key = self.key else {
+                    return Observable.empty()
+                }
+                
+                
+                
+                return self.editPlayListUseCase.execute(key: key, songs: songs)
+                    .asObservable()
+            }).subscribe(onNext: { [weak self] in
                 
                 guard let self = self else{
                     return
                 }
                 
                 
-                self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+                if $0.status != 200 {
+                    self.input.showErrorToast.accept($0.description)
+                    return
+                }
                 
-                self.key = model.key
-            })
-            .map({$0.songs})
-                .bind(to: output.dataSource,output.backUpdataSource)
-            .disposed(by: disposeBag)
+                self.output.backUpdataSource.accept(self.output.dataSource.value)
                 
-            
-            input.playListNameLoad
-                .skip(1)
-                .withLatestFrom(output.headerInfo){($0,$1)}
-                .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)})
-                .bind(to: output.headerInfo)
-                .disposed(by: disposeBag)
-            
+                
+            }).disposed(by: disposeBag)
+        
+        
         
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)

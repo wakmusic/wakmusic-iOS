@@ -72,8 +72,6 @@ public final class MyPlayListViewModel:ViewModelType {
             .map({$0.map{$0.key}})
             .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
                 
-                DEBUG_LOG("젭라젭라")
-                
                 guard let self = self else{
                     return Observable.empty()
                 }

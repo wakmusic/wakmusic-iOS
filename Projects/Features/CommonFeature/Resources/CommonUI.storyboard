@@ -353,7 +353,6 @@
                                                         <constraint firstAttribute="width" constant="32" id="YKP-dR-zpc"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="move"/>
                                                     <connections>
                                                         <action selector="playOrEditAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="fXu-sd-7Ja"/>
                                                     </connections>
@@ -686,7 +685,6 @@
         <image name="back" width="32" height="32"/>
         <image name="cross_close" width="32" height="32"/>
         <image name="more" width="32" height="32"/>
-        <image name="move" width="32" height="32"/>
         <image name="storage_edit" width="24" height="24"/>
         <namedColor name="INCREASE">
             <color red="0.98000001907348633" green="0.19200000166893005" blue="0.40799999237060547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -398,6 +398,9 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
         return appComponent.fetchPlayListDetailUseCase
     }
+    var editPlayListUseCase: any EditPlayListUseCase {
+        return appComponent.editPlayListUseCase
+    }
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
@@ -636,6 +639,7 @@ extension MultiPurposePopComponent: Registration {
 extension PlayListDetailComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
+        keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
     }
 }
