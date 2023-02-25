@@ -39,11 +39,13 @@ public final class PlayListDetailViewModel:ViewModelType {
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let showErrorToast:PublishRelay<String> = PublishRelay()
         let playListNameLoad:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let cancelEdit:PublishSubject<Void> = PublishSubject()
+        let runEditing:PublishSubject<Void> = PublishSubject()
         
     }
 
     public struct Output {
-        let isEditing:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
         let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
@@ -83,6 +85,11 @@ public final class PlayListDetailViewModel:ViewModelType {
                 .bind(to: output.headerInfo)
                 .disposed(by: disposeBag)
             
+        
+        input.cancelEdit
+            .withLatestFrom(output.backUpdataSource)
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
         
         
     }
