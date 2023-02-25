@@ -2,6 +2,9 @@ import UIKit
 import SnapKit
 import Then
 import DesignSystem
+import DomainModule
+import Kingfisher
+import Utility
 
 public final class ChartContentTableViewCell: UITableViewCell {
     private let increaseRateImageView = UIImageView().then {
@@ -33,6 +36,19 @@ public final class ChartContentTableViewCell: UITableViewCell {
         self.contentView.backgroundColor = .clear
         addView()
         setLayout()
+    }
+
+    public func update(model: ChartRankingEntity, index: Int) {
+        let lastRanking = model.last - (index + 1)
+        albumImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
+            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            options: [.transition(.fade(0.2))]
+        )
+        titleStringLabel.text = model.title
+        groupStringLabel.text = model.artist
+        hitsLabel.text = model.views.addCommaToNumber()
+        
     }
 }
 
