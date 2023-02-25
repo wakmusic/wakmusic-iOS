@@ -34,9 +34,9 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map({$0.toDomain()})
     }
     
-    public func editPlayListName(key: String,title:String) -> Single<BaseEntity> {
+    public func editPlayListName(key: String,title:String) -> Single<EditPlayListNameEntity> {
         request(.editPlayListName(key: key,title:title))
-            .map(BaseResponseDTO.self)
+            .map(EditPlayListNameResponseDTO.self)
             .map({$0.toDomain()})
     }
     

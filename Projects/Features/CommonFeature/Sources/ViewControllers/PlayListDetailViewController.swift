@@ -302,9 +302,13 @@ extension PlayListDetailViewController{
         }).disposed(by: disposeBag)
                 
         
-            NotificationCenter.default.rx.notification(.playListDetailRefresh)
-            .map({_ in () })
-                .bind(to: viewModel.input.playListLoad)
+            NotificationCenter.default.rx.notification(.playListNameRefresh)
+                .flatMap({ noti -> Observable<String> in
+                    
+                    return Observable<String>.just(noti.object as! String)
+                    
+                })
+                .bind(to: viewModel.input.playListNameLoad)
             .disposed(by: disposeBag)
                     
                 

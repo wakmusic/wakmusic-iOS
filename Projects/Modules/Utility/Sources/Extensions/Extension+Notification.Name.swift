@@ -11,7 +11,7 @@ import Foundation
 public extension Notification.Name {
     
     static let playListRefresh = Notification.Name("playListRefresh")
-    static let playListDetailRefresh = Notification.Name("playListDetailRefresh")
+    static let playListNameRefresh = Notification.Name("playListNameRefresh")
     
     
 }

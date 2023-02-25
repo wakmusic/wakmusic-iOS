@@ -156,22 +156,26 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         
             case .edit:
                 self.editPlayListNameUseCase.execute(key: self.key, title: text)
-                    .catch{ (error) in
-                        return Single<BaseEntity>.create { single in
-                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                    .catch({ (error:Error) in
+                        return Single<EditPlayListNameEntity>.create { single in
+                            single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
                         }
-                    }.asObservable()
+                    })
+                    .asObservable()
                     .subscribe(onNext: { result in
-                        
+                     
                         if result.status != 200 {
-                            output.result.onNext(result)
+                            output.result.onNext(BaseEntity(status: result.status,description: result.description))
                             return
                         }
-                        NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                        NotificationCenter.default.post(name: .playListDetailRefresh, object: nil)
                         
-                    }).disposed(by: self.disposeBag)
+                        NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                        NotificationCenter.default.post(name: .playListNameRefresh, object: result.title)
+                        
+                        
+                    })
+                    .disposed(by: self.disposeBag)
 
             
             

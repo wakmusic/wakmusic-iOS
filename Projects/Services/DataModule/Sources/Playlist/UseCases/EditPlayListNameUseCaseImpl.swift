@@ -23,7 +23,7 @@ public struct EditPlayListNameUseCaseImpl: EditPlayListNameUseCase {
         self.playListRepository = playListRepository
     }
     
-    public func execute(key: String,title:String) -> Single<BaseEntity> {
+    public func execute(key: String,title:String) -> Single<EditPlayListNameEntity> {
         playListRepository.editPlayListName(key: key, title: title)
     }
     

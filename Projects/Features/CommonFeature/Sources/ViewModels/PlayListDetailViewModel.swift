@@ -38,7 +38,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let showErrorToast:PublishRelay<String> = PublishRelay()
-        let playListLoad:BehaviorRelay<Void> = BehaviorRelay(value: ())
+        let playListNameLoad:BehaviorRelay<String> = BehaviorRelay(value: "")
         
     }
 
@@ -76,30 +76,11 @@ public final class PlayListDetailViewModel:ViewModelType {
             .disposed(by: disposeBag)
                 
             
-            input.playListLoad
-                .flatMap({ [weak self] () -> Observable<[SongEntity]> in
-                    
-                    guard let self = self else{
-                        return Observable.empty()
-                    }
-                    
-                    return  fetchPlayListDetailUseCase.execute(id: id, type: type)
-                        .asObservable()
-                        .do(onNext: { [weak self] (model) in
-                            
-                            guard let self = self else{
-                                return
-                            }
-                            
-                            
-                            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
-                            
-                            self.key = model.key
-                        })
-                        .map({$0.songs})
-                        .asObservable()
-                })
-                .bind(to: output.dataSource,output.backUpdataSource)
+            input.playListNameLoad
+                .skip(1)
+                .withLatestFrom(output.headerInfo){($0,$1)}
+                .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)})
+                .bind(to: output.headerInfo)
                 .disposed(by: disposeBag)
             
         
