@@ -14,6 +14,9 @@ public struct CreatePlayListRequset:Encodable {
 public struct EditPlayListRequset:Encodable {
     var songs:[String]
 }
+public struct EditPlayListNameRequset:Encodable {
+    var title:String
+}
 
 
 public enum PlayListAPI {
@@ -21,6 +24,7 @@ public enum PlayListAPI {
     case fetchPlayListDetail(id:String,type:PlayListType)
     case createPlayList(title:String)
     case editPlayList(key:String,songs:[String])
+    case editPlayListName(key:String,title:String)
     case deletePlayList(key:String)
     case loadPlayList(key:String)
 }
@@ -49,7 +53,7 @@ extension PlayListAPI: WMAPI {
             
         case .createPlayList:
             return "/create"
-       
+            
         case .editPlayList(key: let key):
             return "/\(key)/edit"
             
@@ -58,6 +62,8 @@ extension PlayListAPI: WMAPI {
             
         case .loadPlayList(key: let key):
             return "/\(key)/addToMyPlaylist"
+        case .editPlayListName(key: let key,_):
+            return "/\(key)/edit/title"
         }
     }
         
@@ -69,7 +75,7 @@ extension PlayListAPI: WMAPI {
                 return .get
             case .createPlayList,.loadPlayList:
                 return .post
-            case .editPlayList:
+            case .editPlayList,.editPlayListName:
                 return .patch
             case .deletePlayList:
                 return .delete
@@ -90,10 +96,11 @@ extension PlayListAPI: WMAPI {
             case .createPlayList(title: let title):
                 return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
                 
-                
-                
             case .editPlayList(_,songs: let songs):
+                
                 return .requestJSONEncodable(EditPlayListRequset(songs: songs))
+            case .editPlayListName(_, title: let title):
+                return .requestJSONEncodable(EditPlayListNameRequset(title: title))
             }
         }
             
@@ -103,7 +110,7 @@ extension PlayListAPI: WMAPI {
                 case .fetchRecommendPlayList,.fetchPlayListDetail:
                     return .none
                     
-                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList:
+                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName:
                     return .accessToken
                 }
             }
