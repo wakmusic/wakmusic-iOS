@@ -6,13 +6,15 @@ import Tabman
 import DomainModule
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
-    private lazy var viewControllers: [UIViewController] = {
+    private var chartContentComponent: ChartContentComponent?
+
+    private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
-            ChartContentViewController.viewController(),
-            UIViewController(),
-            UIViewController(),
-            UIViewController(),
-            UIViewController()
+            chartContentComponent?.makeView(type: .hourly),
+            chartContentComponent?.makeView(type: .daily),
+            chartContentComponent?.makeView(type: .weekly),
+            chartContentComponent?.makeView(type: .monthly),
+            chartContentComponent?.makeView(type: .total)
         ]
         return viewControllers
     }()
@@ -24,8 +26,11 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         configureUI()
     }
 
-    public static func viewController() -> ChartViewController {
+    public static func viewController(
+        chartContentComponent: ChartContentComponent
+    ) -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
+        viewController.chartContentComponent = chartContentComponent
         return viewController
     }
 }
