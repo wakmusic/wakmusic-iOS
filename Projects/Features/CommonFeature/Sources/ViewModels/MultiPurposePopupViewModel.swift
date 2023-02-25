@@ -23,12 +23,12 @@ public final class MultiPurposePopupViewModel:ViewModelType {
     let disposeBag = DisposeBag()
     
     var type:PurposeType
-    var shareCode:String?
-    var playListKey:String?
+    var key:String
     
     var createPlayListUseCase:CreatePlayListUseCase!
     var loadPlayListUseCase:LoadPlayListUseCase!
     var setUserNameUseCase:SetUserNameUseCase!
+    var editPlayListUseCase:EditPlayListUseCase!
     
 
     public struct Input {
@@ -43,17 +43,22 @@ public final class MultiPurposePopupViewModel:ViewModelType {
     }
 
     public init(type:PurposeType,
+                key:String,
                 createPlayListUseCase:CreatePlayListUseCase,
                 loadPlayListUseCase:LoadPlayListUseCase,
-                setUserNameUseCase:SetUserNameUseCase) {
+                setUserNameUseCase:SetUserNameUseCase,
+                editPlayListUseCase:EditPlayListUseCase
+    ) {
         
 
        
         print("✅ \(Self.self) 생성")
+        self.key = key
         self.type = type
         self.createPlayListUseCase = createPlayListUseCase
         self.loadPlayListUseCase = loadPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
+        self.editPlayListUseCase = editPlayListUseCase
         
         
         
@@ -149,6 +154,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     .disposed(by: self.disposeBag)
             
 
+            
+            
             default :
                 DEBUG_LOG(input.textString.value)
             }

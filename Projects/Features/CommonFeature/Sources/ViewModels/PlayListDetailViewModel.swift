@@ -29,6 +29,7 @@ public final class PlayListDetailViewModel:ViewModelType {
     
     var type:PlayListType!
     var id:String!
+    var key:String?
     var fetchPlayListDetailUseCase:FetchPlayListDetailUseCase!
     var disposeBag = DisposeBag()
 
@@ -42,8 +43,8 @@ public final class PlayListDetailViewModel:ViewModelType {
     }
 
     public struct Output {
-        let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let headerInfo:PublishSubject<PlayListHeaderInfo> = PublishSubject()
+        let isEditing:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+        let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
@@ -65,11 +66,14 @@ public final class PlayListDetailViewModel:ViewModelType {
                 }
                 
                 
-                self.output.headerInfo.onNext(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image ))
+                self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+                
+                self.key = model.key
             })
             .map({$0.songs})
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+            
         
         
     }

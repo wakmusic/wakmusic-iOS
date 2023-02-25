@@ -12,6 +12,7 @@ import RxSwift
 import RxRelay
 import DomainModule
 import BaseFeature
+import CommonFeature
 
 final public class AfterLoginViewModel:ViewModelType {
 

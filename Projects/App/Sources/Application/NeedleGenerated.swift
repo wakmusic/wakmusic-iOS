@@ -382,6 +382,9 @@ private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurpos
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
+    var editPlayListUseCase: any EditPlayListUseCase {
+        return appComponent.editPlayListUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -626,6 +629,7 @@ extension MultiPurposePopComponent: Registration {
         keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
+        keyPathToName[\MultiPurposePopDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
     }
 }
 extension PlayListDetailComponent: Registration {

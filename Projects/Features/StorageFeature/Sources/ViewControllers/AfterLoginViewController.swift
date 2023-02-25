@@ -16,12 +16,6 @@ import PanModal
 import CommonFeature
 import KeychainModule
 
-public struct EditState {
-    
-    var isEditing:Bool
-    var force:Bool
-    
-}
 
 
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
