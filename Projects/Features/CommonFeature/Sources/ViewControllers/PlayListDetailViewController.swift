@@ -278,6 +278,13 @@ extension PlayListDetailViewController{
             .do(onNext: { [weak self] state in
                 guard let self = self else { return }
                 
+                
+                if state.isEditing == false && state.force == false {
+                    
+                    self.viewModel.input.runEditing.onNext(())
+                }
+                
+                
                 let isEdit = state.isEditing
                 
                 self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
@@ -323,7 +330,19 @@ extension PlayListDetailViewController{
                 })
                 .bind(to: viewModel.input.playListNameLoad)
             .disposed(by: disposeBag)
+        
+        
+                viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
                     
+                    guard let self = self else {
+                        return
+                    }
+                    
+                    
+                    self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    
+                })
+                .disposed(by: disposeBag)
                 
       
     }
