@@ -258,6 +258,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LyricsTableViewCell.identifier, for: indexPath) as? LyricsTableViewCell
         else { return UITableViewCell() }
+        cell.selectionStyle = .none
         cell.setLyrics(text: viewModel.sortedLyrics[indexPath.row])
         return cell
     }
