@@ -33,39 +33,9 @@
                     <view key="view" contentMode="scaleToFill" id="eFL-RJ-VHX">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jgG-Yb-HXY">
-                                <rect key="frame" x="0.0" y="59" width="393" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="67p-OL-sNo"/>
-                                </constraints>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jHb-wR-MvW">
-                                <rect key="frame" x="0.0" y="99" width="393" height="753"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.95294117649999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="RFI-aE-GN3">
-                                <rect key="frame" x="186.66666666666666" y="465.66666666666669" width="20" height="20"/>
-                            </activityIndicatorView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="qWO-H0-FIr"/>
                         <color key="backgroundColor" name="gray100"/>
-                        <constraints>
-                            <constraint firstItem="RFI-aE-GN3" firstAttribute="centerX" secondItem="jHb-wR-MvW" secondAttribute="centerX" id="2fF-C6-MlA"/>
-                            <constraint firstItem="jgG-Yb-HXY" firstAttribute="trailing" secondItem="qWO-H0-FIr" secondAttribute="trailing" id="DnF-g4-JI1"/>
-                            <constraint firstAttribute="bottom" secondItem="jHb-wR-MvW" secondAttribute="bottom" id="IZA-VM-CIY"/>
-                            <constraint firstItem="RFI-aE-GN3" firstAttribute="centerY" secondItem="jHb-wR-MvW" secondAttribute="centerY" id="M99-sO-IeB"/>
-                            <constraint firstItem="jHb-wR-MvW" firstAttribute="leading" secondItem="qWO-H0-FIr" secondAttribute="leading" id="UOt-WH-ejR"/>
-                            <constraint firstItem="jgG-Yb-HXY" firstAttribute="top" secondItem="qWO-H0-FIr" secondAttribute="top" id="ZIB-vT-QsH"/>
-                            <constraint firstItem="jgG-Yb-HXY" firstAttribute="leading" secondItem="qWO-H0-FIr" secondAttribute="leading" id="dAy-eq-hXj"/>
-                            <constraint firstItem="jHb-wR-MvW" firstAttribute="top" secondItem="jgG-Yb-HXY" secondAttribute="bottom" id="fSc-bd-yxA"/>
-                            <constraint firstAttribute="trailing" secondItem="jHb-wR-MvW" secondAttribute="trailing" id="gGm-jG-ZzE"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="activityIncidator" destination="RFI-aE-GN3" id="vR6-HM-QqS"/>
-                        <outlet property="tableView" destination="jHb-wR-MvW" id="hMc-nz-H4t"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OS-JN-gYY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

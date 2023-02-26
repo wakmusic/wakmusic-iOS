@@ -20,7 +20,7 @@ public extension SingleChartRankingResponseDTO {
             reaction: reaction,
             views: views,
             last: last,
-            date: date.toWMDateString()
+            date: ""
         )
     }
 }

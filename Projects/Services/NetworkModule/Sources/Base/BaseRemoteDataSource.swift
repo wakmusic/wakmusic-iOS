@@ -19,7 +19,7 @@ public class BaseRemoteDataSource<API: WMAPI> {
     ) {
         self.keychain = keychain
 
-        #if DEV
+        #if DEBUG
         self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
         #else
         self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
