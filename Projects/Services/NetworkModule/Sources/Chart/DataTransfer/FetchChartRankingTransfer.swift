@@ -2,15 +2,7 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-public extension FetchChartRankingResponseDTO {
-    func toDomain() -> [ChartRankingEntity] {
-        list.map { $0.toDomain() }
-    }
-}
-
 public extension SingleChartRankingResponseDTO {
-    
-    
     func toDomain() -> ChartRankingEntity {
         ChartRankingEntity(
             id: id,
@@ -20,7 +12,7 @@ public extension SingleChartRankingResponseDTO {
             reaction: reaction,
             views: views,
             last: last,
-            date: ""
+            date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }
 }

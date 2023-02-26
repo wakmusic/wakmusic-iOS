@@ -5,13 +5,11 @@ import DomainModule
 import ErrorModule
 import Foundation
 
-
-
 public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, RemoteChartDataSource {
     public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[DomainModule.ChartRankingEntity]> {
         request(.fetchChartRanking(type: type, limit: limit))
-            .map(FetchChartRankingResponseDTO.self)
-            .map { $0.toDomain() }
+            .map([SingleChartRankingResponseDTO].self)
+            .map { $0.map { $0.toDomain() } }
     }
     
     public func fetchChartUpdateTime() -> Single<String> {
