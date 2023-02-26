@@ -280,6 +280,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             findCenterCellIndexPath { centerCellIndexPath in
+                if viewModel.lyricsDict.isEmpty { return }
                 let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
                 playState.player.seek(to: Double(start), allowSeekAhead: true)
                 viewModel.isLyricsScrolling = false
@@ -290,6 +291,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     /// 스크롤이 감속되고 멈춘 후에 작업을 처리
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         findCenterCellIndexPath { centerCellIndexPath in
+            if viewModel.lyricsDict.isEmpty { return }
             let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
             playState.player.seek(to: Double(start), allowSeekAhead: true)
             viewModel.isLyricsScrolling = false
