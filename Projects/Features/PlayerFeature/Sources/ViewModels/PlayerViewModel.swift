@@ -189,24 +189,34 @@ final class PlayerViewModel: ViewModelType {
     
     func getCurrentLyricsIndex(_ currentTime: Float) -> Int {
         let times = lyricsDict.keys.sorted()
-        let index = binarySearch(at: times, target: currentTime)
+        let index = closestIndex(to: currentTime, in: times)
         return index
     }
     
-    /// 이진탐색 O(log n)
-    func binarySearch(at array: [Float], target: Float) -> Int {
+    /// target보다 작거나 같은 값 중에서 가장 가까운 값을 찾습니다. O(log n)
+    func closestIndex(to target: Float, in arr: [Float]) -> Int {
         var left = 0
-        var right = array.count - 1
-
-        while left < right {
+        var right = arr.count - 1
+        var closestIndex = 0
+        var closestDistance = Float.greatestFiniteMagnitude
+        
+        while left <= right {
             let mid = (left + right) / 2
-            if target < array[mid] {
-                right = mid
-            } else {
+            let midValue = arr[mid]
+            
+            if midValue <= target {
+                let distance = target - midValue
+                if distance < closestDistance {
+                    closestDistance = distance
+                    closestIndex = mid
+                }
                 left = mid + 1
+            } else {
+                right = mid - 1
             }
         }
-        return max(left - 1, 0) // 0 이상 정수로만 반환
+        
+        return closestIndex
     }
     
 }
