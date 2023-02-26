@@ -294,38 +294,38 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     
     /// 스크롤뷰에서 드래그하기 시작할 때 한번만 호출
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("스크롤 시작")
+        //print("스크롤 시작")
         viewModel.isLyricsScrolling = true
-        //playState.pause()
     }
     
     /// 스크롤 중이면 계속 호출
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        findCenterCellIndexPath { centerCellIndexPath in
-            updateLyricsHighlight(index: centerCellIndexPath.row)
+        if viewModel.isLyricsScrolling {
+            findCenterCellIndexPath { centerCellIndexPath in
+                updateLyricsHighlight(index: centerCellIndexPath.row)
+            }
         }
     }
     
     /// 손을 땠을 때 한번 호출, 테이블 뷰의 스크롤 모션의 감속 여부를 알 수 있다.
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("스크롤 끝, 감속여부?: \(decelerate)")
-        findCenterCellIndexPath { centerCellIndexPath in
-            let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
-            playState.player.seek(to: Double(start), allowSeekAhead: true)
+        if !decelerate {
+            findCenterCellIndexPath { centerCellIndexPath in
+                let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
+                playState.player.seek(to: Double(start), allowSeekAhead: true)
+                viewModel.isLyricsScrolling = false
+            }
         }
-        viewModel.isLyricsScrolling = false
-        playState.play()
+        
     }
-
+    
     /// 스크롤이 감속되고 멈춘 후에 작업을 처리
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("감속도 끝남")
         findCenterCellIndexPath { centerCellIndexPath in
             let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
             playState.player.seek(to: Double(start), allowSeekAhead: true)
+            viewModel.isLyricsScrolling = false
         }
-        viewModel.isLyricsScrolling = false
-        playState.play()
     }
      
 }
