@@ -213,18 +213,73 @@ private extension PlayerViewController {
     
     private func bindLyricsTracking(output: PlayerViewModel.Output) {
         output.playTimeValue
-            .filter { $0 > 0 }
-            .sink { [weak self] value in
-            guard let self else { return }
-            let index = self.viewModel.getCurrentLyricsIndex(value)
-            self.updateLyricsTableViewCell(index: index)
+            .compactMap { [weak self] value -> Int? in
+                guard let self = self, value > 0, !self.viewModel.isLyricsScrolling else { return nil }
+                return self.viewModel.getCurrentLyricsIndex(value)
+            }
+            .sink { [weak self] index in
+                self?.updateLyricsHighlight(index: index)
+            }
+            .store(in: &subsciption)
+    }
+    
+    private func updateLyricsHighlight(index: Int) {
+        if !viewModel.isLyricsScrolling {
+            playerView.lyricsTableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: true)
         }
-        .store(in: &subsciption)
+
+        // 모든 셀에 대해서 강조 상태 업데이트
+        let rows = playerView.lyricsTableView.numberOfRows(inSection: 0)
+        for row in 0..<rows {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
+                cell.highlight(row == index)
+            }
+        }
+    }
+    
+    private func seekFromLyrics(from row: Int, isAhead: Bool) {
+        // 1. 현재 재생중인 가사의 다음 가사 또는 이전 가사 행을 구함
+        // 2. 뷰모델의 가사 딕셔너리에서 시작시간(해당 가사의 키값)을 구함
+        // 3. 다음 가사 하이라이팅
+        let indexPath = IndexPath(row: row, section: 0)
+        guard let targetIndexPath = isAhead ? nextIndexPath(from: indexPath, in: playerView.lyricsTableView) :
+                                                prevIndexPath(from: indexPath, in: playerView.lyricsTableView) else { return }
+        let start: Float = viewModel.lyricsDict.keys.sorted()[targetIndexPath.row]
+        playState.player.seek(to: Double(start), allowSeekAhead: true)
+        updateLyricsHighlight(index: targetIndexPath.row)
+    }
+    
+    private func nextIndexPath(from indexPath: IndexPath, in tableView: UITableView) -> IndexPath? {
+        // 현재 indexPath가 마지막 row에 위치한 경우, nil을 반환합니다.
+        guard indexPath.row < tableView.numberOfRows(inSection: indexPath.section) - 1 else {
+            return nil
+        }
+        // 다음 indexPath를 계산하고 반환합니다.
+        return IndexPath(row: indexPath.row + 1, section: indexPath.section)
+    }
+    
+    private func prevIndexPath(from indexPath: IndexPath, in tableView: UITableView) -> IndexPath? {
+        // 현재 indexPath가 첫번째 row에 위치한 경우, nil을 반환합니다.
+        guard indexPath.row <= 0 else {
+            return nil
+        }
+        // 다음 indexPath를 계산하고 반환합니다.
+        return IndexPath(row: indexPath.row - 1, section: indexPath.section)
+    }
+    
+    /// 화면에서 가장 중앙에 위치한 셀의 indexPath를 찾습니다.
+    private func findCenterCellIndexPath(completion: (_ centerCellIndexPath: IndexPath) -> Void) {
+        let centerPoint = CGPoint(x: playerView.lyricsTableView.center.x,
+                                  y: playerView.lyricsTableView.contentOffset.y + playerView.lyricsTableView.bounds.height / 2)
+        // 가운데 셀의 IndexPath를 반환합니다.
+        guard let centerCellIndexPath = playerView.lyricsTableView.indexPathForRow(at: centerPoint) else { return }
+        completion(centerCellIndexPath)
     }
     
 }
 
-extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
+extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.sortedLyrics.count
@@ -237,17 +292,40 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    public func updateLyricsTableViewCell(index: Int) {
-        playerView.lyricsTableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: true)
-        
-        // 모든 셀에 대해서 강조 상태 업데이트
-        let rows = playerView.lyricsTableView.numberOfRows(inSection: 0)
-        for row in 0..<rows {
-            let indexPath = IndexPath(row: row, section: 0)
-            if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
-                cell.highlight(row == index)
-            }
+    /// 스크롤뷰에서 드래그하기 시작할 때 한번만 호출
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print("스크롤 시작")
+        viewModel.isLyricsScrolling = true
+        //playState.pause()
+    }
+    
+    /// 스크롤 중이면 계속 호출
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        findCenterCellIndexPath { centerCellIndexPath in
+            updateLyricsHighlight(index: centerCellIndexPath.row)
         }
     }
     
+    /// 손을 땠을 때 한번 호출, 테이블 뷰의 스크롤 모션의 감속 여부를 알 수 있다.
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("스크롤 끝, 감속여부?: \(decelerate)")
+        findCenterCellIndexPath { centerCellIndexPath in
+            let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
+            playState.player.seek(to: Double(start), allowSeekAhead: true)
+        }
+        viewModel.isLyricsScrolling = false
+        playState.play()
+    }
+
+    /// 스크롤이 감속되고 멈춘 후에 작업을 처리
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("감속도 끝남")
+        findCenterCellIndexPath { centerCellIndexPath in
+            let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
+            playState.player.seek(to: Double(start), allowSeekAhead: true)
+        }
+        viewModel.isLyricsScrolling = false
+        playState.play()
+    }
+     
 }

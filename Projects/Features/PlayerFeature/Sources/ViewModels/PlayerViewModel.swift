@@ -59,6 +59,7 @@ final class PlayerViewModel: ViewModelType {
     private var subscription = Set<AnyCancellable>()
     internal var lyricsDict = [Float : String]()
     internal var sortedLyrics = [String]()
+    internal var isLyricsScrolling = false
     
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
@@ -133,6 +134,10 @@ final class PlayerViewModel: ViewModelType {
                 self.sortedLyrics.append("가사가 없습니다.")
                 print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
             } onDisposed: {
+//                self.sortedLyrics.insert("", at: 0)
+//                self.sortedLyrics.insert("", at: 0)
+//                self.sortedLyrics.append("")
+//                self.sortedLyrics.append("")
                 output.lyricsDidChangedEvent.send(true)
             }.disposed(by: self.disposeBag)
 
