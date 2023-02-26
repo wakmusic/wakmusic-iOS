@@ -2,6 +2,8 @@ import UIKit
 import DesignSystem
 import RxRelay
 import RxSwift
+import SnapKit
+import Then
 
 public enum PlayEvent {
     case allPlay
@@ -16,16 +18,27 @@ public final class PlayButtonForChartView: UIView {
     public weak var delegate:PlayButtonForChartViewDelegate?
     private let disposeBag = DisposeBag()
 
-    @IBOutlet weak var allPlayButton: UIButton!
-    @IBOutlet weak var shufflePlayButton: UIButton!
-    @IBOutlet weak var updateTimeLabel: UILabel!
-    
-    @IBAction func pressAllPlay(_ sender: UIButton) {
-        delegate?.pressPlay(.allPlay)
+    private let allPlayButton = UIButton().then {
+        $0.setTitle("전체재생", for: .normal)
+        $0.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
     }
-    @IBAction func pressSufflePlay(_ sender: UIButton) {
-        delegate?.pressPlay(.shufflePlay)
+    private let shufflePlayButton = UIButton().then {
+        $0.setTitle("랜덤재생", for: .normal)
+        $0.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
     }
+    private let updateTimeLabel = UILabel().then {
+        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        $0.textColor = DesignSystemAsset.GrayColor.gray600.color
+    }
+    private let updateTimeImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Chart.check.image
+    }
+//    @IBAction func pressAllPlay(_ sender: UIButton) {
+//        delegate?.pressPlay(.allPlay)
+//    }
+//    @IBAction func pressSufflePlay(_ sender: UIButton) {
+//        delegate?.pressPlay(.shufflePlay)
+//    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,43 +58,50 @@ public final class PlayButtonForChartView: UIView {
 }
 
 extension PlayButtonForChartView {
-    private func setupView(){
-        guard let view = Bundle.module.loadNibNamed("PlayButtonForChartView", owner: self, options: nil)?.first as? UIView else { return }
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        view.frame = self.bounds
-        view.layoutIfNeeded()
-        self.addSubview(view)
-
-        let allPlayAttributedString = NSMutableAttributedString.init(string: "전체재생")
+    private func setupView() {
+        self.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         
-        allPlayAttributedString.addAttributes(
-            [
-                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color
-            ],
-            range: NSRange(location: 0, length: allPlayAttributedString.string.count)
-        )
+        [
+            allPlayButton,
+            shufflePlayButton
+        ].forEach {
+            $0.backgroundColor = .white
+            $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+            $0.setTitleColor(DesignSystemAsset.GrayColor.gray900.color, for: .normal)
+            $0.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            self.addSubview($0)
+        }
 
-        allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        allPlayButton.layer.cornerRadius = 8
-        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        allPlayButton.layer.borderWidth = 1
-
-        updateTimeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        [
+            updateTimeImageView,
+            updateTimeLabel
+        ].forEach {
+            self.addSubview($0)
+        }
         
-        let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
-        
-        shufflePlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
-                                                  range: NSRange(location: 0, length: shufflePlayAttributedString.string.count))
-        
-        shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        shufflePlayButton.layer.cornerRadius = 8
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        shufflePlayButton.layer.borderWidth = 1
-
-        allPlayButton.setAttributedTitle(allPlayAttributedString, for: .normal)
-        shufflePlayButton.setAttributedTitle(shufflePlayAttributedString, for: .normal)
-        view.layoutIfNeeded()
+        allPlayButton.snp.makeConstraints {
+            $0.top.equalTo(16)
+            $0.leading.equalTo(20)
+            $0.height.equalTo(52)
+            $0.trailing.equalTo(self.snp.centerX).inset(4)
+        }
+        shufflePlayButton.snp.makeConstraints {
+            $0.top.equalTo(16)
+            $0.trailing.equalTo(-20)
+            $0.height.equalTo(52)
+            $0.leading.equalTo(self.snp.centerX).offset(4)
+        }
+        updateTimeImageView.snp.makeConstraints {
+            $0.top.equalTo(80)
+            $0.width.height.equalTo(18)
+            $0.leading.equalTo(20)
+        }
+        updateTimeLabel.snp.makeConstraints {
+            $0.top.equalTo(80)
+            $0.height.equalTo(18)
+            $0.leading.equalTo(38)
+        }
     }
 }
