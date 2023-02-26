@@ -194,7 +194,7 @@ extension PlayListDetailViewController{
         playListInfoView.layer.cornerRadius = 8
         
         
-        self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+        
         
         
         
@@ -314,6 +314,7 @@ extension PlayListDetailViewController{
             
             self.playListCountLabel.text = model.songCount
             self.playListNameLabel.text = model.title
+            self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
             
         }).disposed(by: disposeBag)
                 
