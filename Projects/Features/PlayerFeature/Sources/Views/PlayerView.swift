@@ -313,11 +313,14 @@ private extension PlayerView {
         thumbnailImageView.backgroundColor = .white
     }
     private func configureLyrics() {
+        let isNotch = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
+        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
+        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
             $0.width.equalTo(270)
-            $0.height.equalTo(Utility.APP_HEIGHT() >= 812 ? 120 : 72)
+            $0.height.equalTo(isNotch ? 120 : 72)
         }
     }
     private func configurePlayTimeSlider() {
