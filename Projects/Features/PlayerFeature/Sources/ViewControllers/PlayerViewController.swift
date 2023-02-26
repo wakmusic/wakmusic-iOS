@@ -238,36 +238,6 @@ private extension PlayerViewController {
         }
     }
     
-    private func seekFromLyrics(from row: Int, isAhead: Bool) {
-        // 1. 현재 재생중인 가사의 다음 가사 또는 이전 가사 행을 구함
-        // 2. 뷰모델의 가사 딕셔너리에서 시작시간(해당 가사의 키값)을 구함
-        // 3. 다음 가사 하이라이팅
-        let indexPath = IndexPath(row: row, section: 0)
-        guard let targetIndexPath = isAhead ? nextIndexPath(from: indexPath, in: playerView.lyricsTableView) :
-                                                prevIndexPath(from: indexPath, in: playerView.lyricsTableView) else { return }
-        let start: Float = viewModel.lyricsDict.keys.sorted()[targetIndexPath.row]
-        playState.player.seek(to: Double(start), allowSeekAhead: true)
-        updateLyricsHighlight(index: targetIndexPath.row)
-    }
-    
-    private func nextIndexPath(from indexPath: IndexPath, in tableView: UITableView) -> IndexPath? {
-        // 현재 indexPath가 마지막 row에 위치한 경우, nil을 반환합니다.
-        guard indexPath.row < tableView.numberOfRows(inSection: indexPath.section) - 1 else {
-            return nil
-        }
-        // 다음 indexPath를 계산하고 반환합니다.
-        return IndexPath(row: indexPath.row + 1, section: indexPath.section)
-    }
-    
-    private func prevIndexPath(from indexPath: IndexPath, in tableView: UITableView) -> IndexPath? {
-        // 현재 indexPath가 첫번째 row에 위치한 경우, nil을 반환합니다.
-        guard indexPath.row <= 0 else {
-            return nil
-        }
-        // 다음 indexPath를 계산하고 반환합니다.
-        return IndexPath(row: indexPath.row - 1, section: indexPath.section)
-    }
-    
     /// 화면에서 가장 중앙에 위치한 셀의 indexPath를 찾습니다.
     private func findCenterCellIndexPath(completion: (_ centerCellIndexPath: IndexPath) -> Void) {
         let centerPoint = CGPoint(x: playerView.lyricsTableView.center.x,
@@ -294,7 +264,6 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     
     /// 스크롤뷰에서 드래그하기 시작할 때 한번만 호출
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        //print("스크롤 시작")
         viewModel.isLyricsScrolling = true
     }
     
@@ -316,7 +285,6 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
                 viewModel.isLyricsScrolling = false
             }
         }
-        
     }
     
     /// 스크롤이 감속되고 멈춘 후에 작업을 처리
