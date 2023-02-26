@@ -73,6 +73,7 @@ public final class PlayerView: UIView {
         $0.rowHeight = 24
         $0.estimatedRowHeight = 24
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        $0.showsVerticalScrollIndicator = false
     }
     
     internal lazy var playTimeSlider = CustomSlider().then {
