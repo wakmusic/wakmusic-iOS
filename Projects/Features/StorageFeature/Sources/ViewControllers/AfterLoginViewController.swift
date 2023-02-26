@@ -27,6 +27,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var profileButton: UIButton!
+    @IBOutlet weak var headerFakeView: UIView!
+    
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
@@ -95,7 +97,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             {
                 vc2.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
             }
-            vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 왜 연관 됨
+            vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 에 연관 됨
             
         }
         else {
@@ -172,6 +174,7 @@ extension AfterLoginViewController{
             button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
+            
         }
         
         // indicator
@@ -210,6 +213,7 @@ extension AfterLoginViewController{
             self.editButton.setAttributedTitle(attr, for: .normal)
             
             self.isScrollEnabled = !state.isEditing //  편집 시 , 옆 탭으로 swipe를 막기 위함
+            self.headerFakeView.isHidden = !state.isEditing
             
         }.disposed(by: disposeBag)
                 

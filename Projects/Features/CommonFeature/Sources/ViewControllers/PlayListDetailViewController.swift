@@ -320,13 +320,13 @@ extension PlayListDetailViewController{
                 
         
             NotificationCenter.default.rx.notification(.playListNameRefresh)
-                .flatMap({ noti -> Observable<String> in
+                .map({noti -> String in
                     
                     guard let obj = noti.object as? String else {
-                        return Observable.empty()
+                        return ""
                     }
                     
-                    return Observable<String>.just(obj)
+                    return obj
                     
                 })
                 .bind(to: viewModel.input.playListNameLoad)
