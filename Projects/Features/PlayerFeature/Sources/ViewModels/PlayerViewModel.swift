@@ -163,15 +163,18 @@ final class PlayerViewModel: ViewModelType {
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ""
         formatter.decimalSeparator = "."
-        formatter.maximumFractionDigits = 1
+        formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
         
         switch number {
         case 1000..<10_000:
             let thousands = Double(number) / 1000.0
             return formatter.string(from: NSNumber(value: thousands))! + "천"
-        case 10_000..<100_000_000:
+        case 10_000..<100_000_0:
             let tenThousands = Double(number) / 10000.0
+            return formatter.string(from: NSNumber(value: tenThousands))! + "만"
+        case 100_000_0..<100_000_000:
+            let tenThousands = Int(number) / 10000
             return formatter.string(from: NSNumber(value: tenThousands))! + "만"
         default:
             let millions = Double(number) / 100000000.0
