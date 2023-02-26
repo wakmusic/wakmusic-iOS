@@ -12,13 +12,19 @@ public final class ChartContentTableViewCell: UITableViewCell {
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
     }
-    private let onlyincreaseRateImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
+    private let nonRateImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Chart.non.image
+    }
+    private let blowUpImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Chart.blowup.image
     }
     private let increaseRateImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.Chart.up.image
     }
-    private let increaseRateLabel = UILabel().then {
+    private let decreaseRateImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Chart.down.image
+    }
+    private let rateLabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 11)
     }
     private let albumImageView = UIImageView().then {
@@ -53,6 +59,11 @@ public final class ChartContentTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        rateLabel.isHidden = false
+    }
+
     public func update(model: ChartRankingEntity, index: Int) {
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
@@ -71,13 +82,13 @@ public final class ChartContentTableViewCell: UITableViewCell {
             return()
         }
         else if lastRanking == 0 {
-            higherThanBefore(ranking: lastRanking)
-            print("higherThanBefore 실행\n----------")
+            sameAsBefore()
+            print("sameAsBefore 실행\n----------")
             return()
         }
         else if lastRanking > 0 {
-            sameAsBefore()
-            print("sameAsBefore 실행\n----------")
+            higherThanBefore(ranking: lastRanking)
+            print("higherThanBefore 실행\n----------")
             return()
         }
         else if lastRanking < 0 {
@@ -92,9 +103,11 @@ extension ChartContentTableViewCell {
     private func addView() {
         [
             rankingLabel,
-//            onlyincreaseRateImageView,
-//            increaseRateImageView,
-//            increaseRateLabel,
+            blowUpImageView,
+            nonRateImageView,
+            increaseRateImageView,
+            decreaseRateImageView,
+            rateLabel,
             albumImageView,
             hitsLabel,
             titleStringLabel,
@@ -109,6 +122,26 @@ extension ChartContentTableViewCell {
             $0.left.equalTo(20)
             $0.width.equalTo(28)
             $0.height.equalTo(24)
+        }
+        [increaseRateImageView, decreaseRateImageView].forEach { view in
+            view.snp.makeConstraints {
+                $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
+                $0.width.height.equalTo(12)
+                $0.left.equalTo(21)
+            }
+        }
+        rateLabel.snp.makeConstraints {
+            $0.top.equalTo(rankingLabel.snp.bottom)
+            $0.height.equalTo(16)
+            $0.width.equalTo(14)
+            $0.left.equalTo(33)
+        }
+        [blowUpImageView, nonRateImageView].forEach { view in
+            view.snp.makeConstraints {
+                $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
+                $0.width.height.equalTo(12)
+                $0.left.equalTo(28)
+            }
         }
         albumImageView.snp.makeConstraints {
             $0.width.equalTo(72)
@@ -139,63 +172,34 @@ extension ChartContentTableViewCell {
 // MARK: - Chart 등락률 화살표
 extension ChartContentTableViewCell {
     private func higherThanBefore(ranking: Int) {
-        increaseRateImageView.image = DesignSystemAsset.Chart.down.image
-        increaseRateLabel.textColor = DesignSystemAsset.PrimaryColor.increase.color
-        increaseRateLabel.text = "\(ranking)"
-
-        contentView.addSubview(increaseRateImageView)
-        contentView.addSubview(increaseRateLabel)
-        increaseRateImageView.snp.remakeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
-            $0.width.height.equalTo(12)
-            $0.left.equalTo(21)
-        }
-        increaseRateLabel.snp.makeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom)
-            $0.height.equalTo(16)
-            $0.width.equalTo(14)
-            $0.left.equalTo(33)
-        }
-    }
-    private func sameAsBefore() {
-        increaseRateImageView.image = DesignSystemAsset.Chart.non.image
-
-        contentView.addSubview(increaseRateImageView)
-        increaseRateImageView.snp.remakeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
-            $0.width.height.equalTo(12)
-            $0.left.equalTo(28)
-        }
+        rateLabel.textColor = DesignSystemAsset.PrimaryColor.increase.color
+        rateLabel.text = "\(ranking)"
+        nonRateImageView.isHidden = true
+        blowUpImageView.isHidden = true
+        increaseRateImageView.isHidden = false
+        decreaseRateImageView.isHidden = true
     }
     private func lowerThanBefore(ranking: Int) {
         let minusBeforeRanking = "\(ranking)"
-        increaseRateImageView.image = DesignSystemAsset.Chart.down.image
-        increaseRateLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
-        increaseRateLabel.text = minusBeforeRanking.trimmingCharacters(in: ["-"])
-
-        contentView.addSubview(increaseRateImageView)
-        contentView.addSubview(increaseRateLabel)
-        increaseRateImageView.snp.remakeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
-            $0.width.height.equalTo(12)
-            $0.left.equalTo(21)
-        }
-        increaseRateLabel.snp.remakeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom)
-            $0.height.equalTo(16)
-            $0.width.equalTo(14)
-            $0.left.equalTo(33)
-        }
-
+        rateLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
+        rateLabel.text = minusBeforeRanking.trimmingCharacters(in: ["-"])
+        nonRateImageView.isHidden = true
+        blowUpImageView.isHidden = true
+        increaseRateImageView.isHidden = true
+        decreaseRateImageView.isHidden = false
+    }
+    private func sameAsBefore() {
+        nonRateImageView.isHidden = false
+        blowUpImageView.isHidden = true
+        rateLabel.isHidden = true
+        increaseRateImageView.isHidden = true
+        decreaseRateImageView.isHidden = true
     }
     private func blowThenBefore() {
-        increaseRateImageView.image = DesignSystemAsset.Chart.blowup.image
-
-        contentView.addSubview(increaseRateImageView)
-        increaseRateImageView.snp.remakeConstraints {
-            $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
-            $0.width.height.equalTo(12)
-            $0.left.equalTo(28)
-        }
+        nonRateImageView.isHidden = true
+        blowUpImageView.isHidden = false
+        rateLabel.isHidden = true
+        increaseRateImageView.isHidden = true
+        decreaseRateImageView.isHidden = true
     }
 }
