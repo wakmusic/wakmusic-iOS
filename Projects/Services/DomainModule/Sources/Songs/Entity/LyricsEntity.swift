@@ -11,8 +11,8 @@ import Foundation
 public struct LyricsEntity: Equatable {
     public init(
         identifier: String,
-        start: Int,
-        end: Int,
+        start: Double,
+        end: Double,
         text: String,
         styles: String
     ) {
@@ -22,7 +22,7 @@ public struct LyricsEntity: Equatable {
         self.text = text
         self.styles = styles
     }
-    
+
     public let identifier, text, styles: String
-    public let start, end: Int
+    public let start, end: Double
 }

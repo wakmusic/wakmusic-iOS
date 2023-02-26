@@ -56,6 +56,8 @@ public class PlayerViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
+        playerView.lyricsTableView.delegate = self
+        playerView.lyricsTableView.dataSource = self
         bindViewModel()
     }
     
@@ -96,6 +98,8 @@ private extension PlayerViewController {
         bindTotalPlayTime(output: output)
         bindlikes(output: output)
         bindViews(output: output)
+        bindLyricsDidChangedEvent(output: output)
+        bindLyricsTracking(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -198,4 +202,101 @@ private extension PlayerViewController {
         }
         .store(in: &subsciption)
     }
+    
+    private func bindLyricsDidChangedEvent(output: PlayerViewModel.Output) {
+        output.lyricsDidChangedEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playerView.lyricsTableView.reloadData()
+        }
+        .store(in: &subsciption)
+    }
+    
+    private func bindLyricsTracking(output: PlayerViewModel.Output) {
+        output.playTimeValue
+            .compactMap { [weak self] value -> Int? in
+                guard let self = self, value > 0, !self.viewModel.isLyricsScrolling else { return nil }
+                return self.viewModel.getCurrentLyricsIndex(value)
+            }
+            .sink { [weak self] index in
+                self?.updateLyricsHighlight(index: index)
+            }
+            .store(in: &subsciption)
+    }
+    
+    private func updateLyricsHighlight(index: Int) {
+        if !viewModel.isLyricsScrolling {
+            playerView.lyricsTableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: true)
+        }
+
+        // 모든 셀에 대해서 강조 상태 업데이트
+        let rows = playerView.lyricsTableView.numberOfRows(inSection: 0)
+        for row in 0..<rows {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = playerView.lyricsTableView.cellForRow(at: indexPath) as? LyricsTableViewCell {
+                cell.highlight(row == index)
+            }
+        }
+    }
+    
+    /// 화면에서 가장 중앙에 위치한 셀의 indexPath를 찾습니다.
+    private func findCenterCellIndexPath(completion: (_ centerCellIndexPath: IndexPath) -> Void) {
+        let centerPoint = CGPoint(x: playerView.lyricsTableView.center.x,
+                                  y: playerView.lyricsTableView.contentOffset.y + playerView.lyricsTableView.bounds.height / 2)
+        // 가운데 셀의 IndexPath를 반환합니다.
+        guard let centerCellIndexPath = playerView.lyricsTableView.indexPathForRow(at: centerPoint) else { return }
+        completion(centerCellIndexPath)
+    }
+    
+}
+
+extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.sortedLyrics.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LyricsTableViewCell.identifier, for: indexPath) as? LyricsTableViewCell
+        else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        cell.setLyrics(text: viewModel.sortedLyrics[indexPath.row])
+        return cell
+    }
+    
+    /// 스크롤뷰에서 드래그하기 시작할 때 한번만 호출
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        viewModel.isLyricsScrolling = true
+    }
+    
+    /// 스크롤 중이면 계속 호출
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if viewModel.isLyricsScrolling {
+            findCenterCellIndexPath { centerCellIndexPath in
+                updateLyricsHighlight(index: centerCellIndexPath.row)
+            }
+        }
+    }
+    
+    /// 손을 땠을 때 한번 호출, 테이블 뷰의 스크롤 모션의 감속 여부를 알 수 있다.
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            findCenterCellIndexPath { centerCellIndexPath in
+                if viewModel.lyricsDict.isEmpty { return }
+                let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
+                playState.player.seek(to: Double(start), allowSeekAhead: true)
+                viewModel.isLyricsScrolling = false
+            }
+        }
+    }
+    
+    /// 스크롤이 감속되고 멈춘 후에 작업을 처리
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        findCenterCellIndexPath { centerCellIndexPath in
+            if viewModel.lyricsDict.isEmpty { return }
+            let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
+            playState.player.seek(to: Double(start), allowSeekAhead: true)
+            viewModel.isLyricsScrolling = false
+        }
+    }
+     
 }

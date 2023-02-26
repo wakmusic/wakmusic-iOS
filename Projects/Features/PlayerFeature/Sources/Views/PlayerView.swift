@@ -70,15 +70,18 @@ public final class PlayerView: UIView {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
         $0.rowHeight = UITableView.automaticDimension
+        $0.rowHeight = 24
         $0.estimatedRowHeight = 24
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        $0.showsVerticalScrollIndicator = false
     }
     
     internal lazy var playTimeSlider = CustomSlider().then {
         let circleSize: CGFloat = 8.0
         let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
                                                                 height: circleSize),
-                                                   color: colorFromRGB(0x08DEF7))
+                                                   color: colorFromRGB(0x08DEF7),
+                                                   padding: 20)
         $0.layer.cornerRadius = 1
         $0.setThumbImage(circleImage, for: .normal)
         $0.setThumbImage(circleImage, for: .highlighted)
@@ -192,11 +195,6 @@ public final class PlayerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        lyricsTableView.delegate = self
-        lyricsTableView.dataSource = self
-        lyricsTableView.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
-        lyricsTableView.rowHeight = 24
-        lyricsTableView.estimatedRowHeight = 24
         configureUI()
     }
     
@@ -204,21 +202,6 @@ public final class PlayerView: UIView {
         super.init(coder: coder)
     }
     
-}
-
-extension PlayerView: UITableViewDelegate, UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
-    }
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LyricsTableViewCell.identifier, for: indexPath)
-        return cell
-    }
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
 }
 
 private extension PlayerView {
@@ -330,11 +313,14 @@ private extension PlayerView {
         thumbnailImageView.backgroundColor = .white
     }
     private func configureLyrics() {
+        let isNotch = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
+        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
+        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
             $0.width.equalTo(270)
-            $0.height.equalTo(Utility.APP_HEIGHT() >= 812 ? 120 : 72)
+            $0.height.equalTo(isNotch ? 120 : 72)
         }
     }
     private func configurePlayTimeSlider() {
@@ -345,7 +331,7 @@ private extension PlayerView {
     }
     private func configurePlayTime() {
         playTimeView.snp.makeConstraints {
-            $0.top.equalTo(playTimeSlider.snp.bottom).offset(4)
+            $0.top.equalTo(playTimeSlider.snp.bottom).offset(-16)
             $0.horizontalEdges.equalTo(playTimeSlider.snp.horizontalEdges)
             $0.height.equalTo(18)
         }
@@ -432,16 +418,29 @@ private extension PlayerView {
         return CGFloat(floorf(Float(x)))
     }
     
-    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(color.cgColor)
-        context?.setStrokeColor(UIColor.clear.cgColor)
-        let bounds = CGRect(origin: .zero, size: size)
-        context?.addEllipse(in: bounds)
-        context?.drawPath(using: .fill)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+//    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
+//        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+//        let context = UIGraphicsGetCurrentContext()
+//        context?.setFillColor(color.cgColor)
+//        context?.setStrokeColor(UIColor.clear.cgColor)
+//        let bounds = CGRect(origin: .zero, size: size)
+//        context?.addEllipse(in: bounds)
+//        context?.drawPath(using: .fill)
+//        let image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return image
+//    }
+    
+    private func makeCircleWith(size: CGSize, color: UIColor, padding: CGFloat = 0.0) -> UIImage? {
+        let rendererSize = CGSize(width: size.width, height: size.height + padding * 2)
+        let renderer = UIGraphicsImageRenderer(size: rendererSize)
+        let image = renderer.image { (context) in
+            let circleRect = CGRect(x: 0, y: padding, width: size.width, height: size.height)
+            let path = UIBezierPath(ovalIn: circleRect)
+            context.cgContext.setFillColor(color.cgColor)
+            context.cgContext.addPath(path.cgPath)
+            context.cgContext.fillPath()
+        }
+        return image.resizableImage(withCapInsets: UIEdgeInsets(top: padding, left: 0, bottom: padding, right: 0))
     }
 }

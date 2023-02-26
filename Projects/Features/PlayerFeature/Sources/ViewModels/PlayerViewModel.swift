@@ -49,6 +49,7 @@ final class PlayerViewModel: ViewModelType {
         var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
         var didNext = PublishRelay<Bool>()
+        var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -56,14 +57,13 @@ final class PlayerViewModel: ViewModelType {
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
+    internal var lyricsDict = [Float : String]()
+    internal var sortedLyrics = [String]()
+    internal var isLyricsScrolling = false
     
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
-        self.fetchLyricsUseCase.execute(id: "pl38om066m0").subscribe {
-            DEBUG_LOG($0)
-        }.disposed(by: disposeBag)
-
     }
     
     func transform(from input: Input) -> Output {
@@ -117,6 +117,27 @@ final class PlayerViewModel: ViewModelType {
             output.artistText.send(song.artist)
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
+            
+            // 곡이 변경되면 가사 불러오기
+            self.fetchLyricsUseCase.execute(id: song.id)
+                .retry(3)
+                .subscribe { [weak self] lyricsEntityArray in
+                    guard let self else { return }
+                    self.lyricsDict.removeAll()
+                    self.sortedLyrics.removeAll()
+                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
+                    self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
+            } onFailure: { [weak self] error in
+                guard let self else { return }
+                self.lyricsDict.removeAll()
+                self.sortedLyrics.removeAll()
+                self.sortedLyrics.append("가사가 없습니다.")
+                print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
+            } onDisposed: {
+                output.lyricsDidChangedEvent.send(true)
+            }.disposed(by: self.disposeBag)
+
+            
         }.store(in: &subscription)
         
         playState.$progress.sink { [weak self] progress in
@@ -142,15 +163,18 @@ final class PlayerViewModel: ViewModelType {
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ""
         formatter.decimalSeparator = "."
-        formatter.maximumFractionDigits = 1
+        formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
         
         switch number {
         case 1000..<10_000:
             let thousands = Double(number) / 1000.0
             return formatter.string(from: NSNumber(value: thousands))! + "천"
-        case 10_000..<100_000_000:
+        case 10_000..<100_000_0:
             let tenThousands = Double(number) / 10000.0
+            return formatter.string(from: NSNumber(value: tenThousands))! + "만"
+        case 100_000_0..<100_000_000:
+            let tenThousands = Int(number) / 10000
             return formatter.string(from: NSNumber(value: tenThousands))! + "만"
         default:
             let millions = Double(number) / 100000000.0
@@ -161,4 +185,37 @@ final class PlayerViewModel: ViewModelType {
     func thumbnailURL(from id: String) -> String {
         return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
+    
+    func getCurrentLyricsIndex(_ currentTime: Float) -> Int {
+        let times = lyricsDict.keys.sorted()
+        let index = closestIndex(to: currentTime, in: times)
+        return index
+    }
+    
+    /// target보다 작거나 같은 값 중에서 가장 가까운 값을 찾습니다. O(log n)
+    func closestIndex(to target: Float, in arr: [Float]) -> Int {
+        var left = 0
+        var right = arr.count - 1
+        var closestIndex = 0
+        var closestDistance = Float.greatestFiniteMagnitude
+        
+        while left <= right {
+            let mid = (left + right) / 2
+            let midValue = arr[mid]
+            
+            if midValue <= target {
+                let distance = target - midValue
+                if distance < closestDistance {
+                    closestDistance = distance
+                    closestIndex = mid
+                }
+                left = mid + 1
+            } else {
+                right = mid - 1
+            }
+        }
+        
+        return closestIndex
+    }
+    
 }
