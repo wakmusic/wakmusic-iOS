@@ -12,10 +12,10 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchSubPlayListUseCaseImpl: FetchSubPlayListUseCase {
+public struct EditPlayListOrderUseCaseImpl:EditPlayListOrderUseCase {
+   
     
     
-  
 
     private let userRepository: any UserRepository
 
@@ -25,9 +25,11 @@ public struct FetchSubPlayListUseCaseImpl: FetchSubPlayListUseCase {
         self.userRepository = userRepository
     }
     
-    public func execute() -> Single<[SubPlayListEntity]> {
-        userRepository.fetchSubPlayList()
+    public func execute(ids: [String]) -> Single<BaseEntity> {
+        userRepository.editPlayListOrder(ids: ids)
     }
+ 
+ 
     
 
    

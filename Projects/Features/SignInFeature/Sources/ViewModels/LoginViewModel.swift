@@ -152,6 +152,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
     public struct Input {
         let pressNaverLoginButton:PublishRelay<Void> = PublishRelay()
         let pressAppleLoginButton:PublishRelay<Void> = PublishRelay()
+        let showErrorToast:PublishRelay<String> = PublishRelay()
     }
 
     public struct Output {
@@ -199,7 +200,13 @@ extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
     }
     
     public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+        
+        
         DEBUG_LOG("에러 = \(error.localizedDescription)")
+        
+        input.showErrorToast
+            .accept(error.localizedDescription)
+        
     }
 }
 
@@ -222,5 +229,8 @@ extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationContro
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         DEBUG_LOG("Apple Login Fail")
+        
+        input.showErrorToast
+            .accept(error.localizedDescription)
     }
 }

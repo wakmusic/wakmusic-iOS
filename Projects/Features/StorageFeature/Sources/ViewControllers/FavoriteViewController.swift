@@ -69,8 +69,9 @@ extension FavoriteViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !output.isEditinglist.value && sender.state == .began {
-            output.isEditinglist.accept(true)
+        
+        if  !output.state.value.isEditing && sender.state == .began {
+            output.state.accept(EditState(isEditing: true, force: true))
             UIImpactFeedbackGenerator(style: .light).impactOccurred() // 진동 코드
         }
     }
@@ -80,7 +81,6 @@ extension FavoriteViewController{
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
-        .skip(1)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -104,35 +104,78 @@ extension FavoriteViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model, self.output.isEditinglist.value)
+                cell.update(model, self.output.state.value.isEditing)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-            output.isEditinglist
-            .do(onNext: { [weak self] (isEdit:Bool) in
-                
+            output.state
+            .skip(1)
+            .do(onNext: { [weak self] state in
+               
+                DEBUG_LOG(state)
+               
                 guard let self = self else{
                     return
                 }
                 
-                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
+                    self.input.runEditing.onNext(())
+                }
+                
+                
+                self.tableView.dragInteractionEnabled = state.isEditing // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+                
+                
+    
+                
                 
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
                 // 탭맨 쪽 편집 변경
-                parent.output.isEditing.accept(isEdit)
+                parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
                 
                 
             })
-                .withLatestFrom(output.dataSource)
-                .bind(to: output.dataSource)
+            .withLatestFrom(output.dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         
+            input.showConfirmModal.subscribe(onNext: { [weak self] in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                
+                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+
+                    self.input.runEditing.onNext(())
+                    
+                },cancelCompletion: {
+                    
+                    self.input.cancelEdit.onNext(())
+                })
+             
+                self.showPanModal(content: vc)
+                
+            }).disposed(by: disposeBag)
+                
+                
+                input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+                    
+                    guard let self = self else{
+                        return
+                    }
+                    
+                    self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    
+                    
+                }).disposed(by: disposeBag)
       
         
     }
@@ -184,6 +227,8 @@ extension  FavoriteViewController: UITableViewDropDelegate {
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
         self.input.destIndexPath.accept(destinationIndexPath)
+        
+        
         
         
         

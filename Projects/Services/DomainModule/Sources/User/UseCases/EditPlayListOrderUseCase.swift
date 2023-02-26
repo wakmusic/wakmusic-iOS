@@ -10,6 +10,6 @@ import Foundation
 import RxSwift
 import DataMappingModule
 
-public protocol FetchSubPlayListUseCase {
-    func execute() -> Single<[SubPlayListEntity]>
+public protocol EditPlayListOrderUseCase {
+    func execute(ids:[String]) -> Single<BaseEntity>
 }

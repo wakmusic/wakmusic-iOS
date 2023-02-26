@@ -9,6 +9,7 @@
 import UIKit
 import DesignSystem
 import DomainModule
+import Utility
 
 class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var button:UIButton!
@@ -59,7 +60,7 @@ extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool) {
 
        
-        albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
+        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
         titleLabel.text =  model.title
         artistLabel.text = model.artist
         isEdit = isEditing

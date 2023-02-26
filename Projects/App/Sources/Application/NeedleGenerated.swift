@@ -175,8 +175,14 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
-    var fetchSubPlayListUseCase: any FetchSubPlayListUseCase {
-        return appComponent.fetchSubPlayListUseCase
+    var playListDetailComponent: PlayListDetailComponent {
+        return appComponent.playListDetailComponent
+    }
+    var fetchPlayListUseCase: any FetchPlayListUseCase {
+        return appComponent.fetchPlayListUseCase
+    }
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
+        return appComponent.editPlayListOrderUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -218,6 +224,9 @@ private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: Needle
 private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
+    }
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
+        return appComponent.editFavoriteSongsOrderUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -375,6 +384,9 @@ private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurpos
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
+    var editPlayListNameUseCase: any EditPlayListNameUseCase {
+        return appComponent.editPlayListNameUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -387,6 +399,9 @@ private func factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5(_ component: Needle
 private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDetailDependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
         return appComponent.fetchPlayListDetailUseCase
+    }
+    var editPlayListUseCase: any EditPlayListUseCase {
+        return appComponent.editPlayListUseCase
     }
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
@@ -454,6 +469,7 @@ extension AppComponent: Registration {
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
         localTable["editPlayListUseCase-any EditPlayListUseCase"] = { self.editPlayListUseCase as Any }
+        localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
@@ -471,8 +487,10 @@ extension AppComponent: Registration {
         localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
         localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
         localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
-        localTable["fetchSubPlayListUseCase-any FetchSubPlayListUseCase"] = { self.fetchSubPlayListUseCase as Any }
+        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { self.fetchPlayListUseCase as Any }
         localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
+        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
+        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -539,7 +557,9 @@ extension StorageComponent: Registration {
 extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
-        keyPathToName[\MyPlayListDependency.fetchSubPlayListUseCase] = "fetchSubPlayListUseCase-any FetchSubPlayListUseCase"
+        keyPathToName[\MyPlayListDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
+        keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
     }
 }
 extension AfterLoginComponent: Registration {
@@ -555,6 +575,7 @@ extension AfterLoginComponent: Registration {
 extension FavoriteComponent: Registration {
     public func registerItems() {
         keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
+        keyPathToName[\FavoriteDependency.editFavoriteSongsOrderUseCase] = "editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"
     }
 }
 extension QnaComponent: Registration {
@@ -615,11 +636,13 @@ extension MultiPurposePopComponent: Registration {
         keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
+        keyPathToName[\MultiPurposePopDependency.editPlayListNameUseCase] = "editPlayListNameUseCase-any EditPlayListNameUseCase"
     }
 }
 extension PlayListDetailComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
+        keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
     }
 }

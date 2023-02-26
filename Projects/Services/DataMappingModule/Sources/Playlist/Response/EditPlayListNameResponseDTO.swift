@@ -9,9 +9,7 @@
 import Foundation
 
 
-public struct SinglePlayListDetailResponseDTO: Decodable {
+public struct EditPlayListNameResponseDTO: Decodable {
     public let title: String
-    public let songs: [SingleSongResponseDTO]?
-    public let `public`: Bool?
-    public let id,key,creator_id,image: String?
+    public let status: Int
 }

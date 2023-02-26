@@ -12,6 +12,7 @@ import RxSwift
 import RxRelay
 import DomainModule
 import BaseFeature
+import CommonFeature
 
 final public class AfterLoginViewModel:ViewModelType {
 
@@ -23,7 +24,7 @@ final public class AfterLoginViewModel:ViewModelType {
     }
 
     public struct Output {
-        let isEditing:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: true))
         let userInfo: BehaviorRelay<UserInfo?> = BehaviorRelay(value: nil)
     }
 

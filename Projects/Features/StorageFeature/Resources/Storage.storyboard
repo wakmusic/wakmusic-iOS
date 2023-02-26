@@ -103,7 +103,6 @@
                                             <constraint firstAttribute="height" constant="32" id="zjG-pR-9oz"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="request"/>
                                         <connections>
                                             <action selector="pressRequestAction:" destination="53i-Hq-sTM" eventType="touchUpInside" id="I25-KE-zSa"/>
                                         </connections>
@@ -115,7 +114,6 @@
                                             <constraint firstAttribute="height" constant="32" id="t6L-XK-xDJ"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="logout"/>
                                         <connections>
                                             <action selector="pressLogoutAction:" destination="53i-Hq-sTM" eventType="touchUpInside" id="OKB-8C-Szw"/>
                                         </connections>
@@ -335,6 +333,9 @@
                                                                                 </connections>
                                                                             </button>
                                                                         </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstItem="5jz-Br-4MY" firstAttribute="width" secondItem="jaO-B6-A4K" secondAttribute="width" multiplier="1.00193" id="H1n-N0-LzQ"/>
+                                                                        </constraints>
                                                                     </stackView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="222222222222" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hi-iv-sF0">
                                                                         <rect key="frame" x="117.66666666666666" y="64" width="118" height="18"/>
@@ -644,9 +645,8 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8O-jB-v6M">
-                                                    <rect key="frame" x="341" y="6" width="32" height="32"/>
+                                                    <rect key="frame" x="343" y="5" width="30" height="34"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="play"/>
                                                     <connections>
                                                         <action selector="buttonAction:" destination="e4v-he-MOf" eventType="touchUpInside" id="Ra4-r2-JLk"/>
                                                     </connections>
@@ -738,7 +738,6 @@
                                                         <constraint firstAttribute="width" constant="32" id="jif-Zg-2Yy"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="play"/>
                                                     <connections>
                                                         <action selector="playAxtion:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="fVJ-4U-58J"/>
                                                     </connections>
@@ -784,9 +783,6 @@
     </scenes>
     <resources>
         <image name="back" width="32" height="32"/>
-        <image name="logout" width="32" height="32"/>
-        <image name="play" width="32" height="32"/>
-        <image name="request" width="32" height="32"/>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

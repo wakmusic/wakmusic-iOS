@@ -55,7 +55,7 @@ class MyPlayListTableViewCell: UITableViewCell {
 
 extension MyPlayListTableViewCell {
     
-    func update(model:SubPlayListEntity,isEditing:Bool)
+    func update(model:PlayListEntity,isEditing:Bool)
     {
         
 
@@ -69,7 +69,7 @@ extension MyPlayListTableViewCell {
         
         
         self.playListNameLabel.text = model.title
-        self.playListCountLabel.text = "\(model.songs.count)개"
+        self.playListCountLabel.text = "\(model.songlist.count)개"
         
         
     }

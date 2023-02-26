@@ -6,7 +6,7 @@ import Utility
 public extension SinglePlayListDetailResponseDTO {
     func toDomain() -> PlayListDetailEntity {
         PlayListDetailEntity(
-            id: id,
+            id: id ?? "",
             title: title,
             songs: songs?.map({$0.toDomain()}) ?? [],
             public: `public` ?? false,

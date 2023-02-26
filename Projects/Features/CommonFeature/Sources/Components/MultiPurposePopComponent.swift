@@ -16,13 +16,16 @@ public protocol MultiPurposePopDependency: Dependency {
     var createPlayListUseCase : any CreatePlayListUseCase {get}
     var loadPlayListUseCase : any LoadPlayListUseCase {get}
     var setUserNameUseCase: any SetUserNameUseCase {get}
+    var editPlayListNameUseCase : any EditPlayListNameUseCase {get}
 }
 
 public final class MultiPurposePopComponent: Component<MultiPurposePopDependency> {
-    public func makeView(type:PurposeType) -> MultiPurposePopupViewController  {
+    public func makeView(type:PurposeType,key:String = "") -> MultiPurposePopupViewController  {
         return MultiPurposePopupViewController.viewController(viewModel: .init(type: type,
+                                                            key: key,
                                                             createPlayListUseCase: dependency.createPlayListUseCase,
                                                             loadPlayListUseCase: dependency.loadPlayListUseCase,
-                                                            setUserNameUseCase: dependency.setUserNameUseCase))
+                                                            setUserNameUseCase: dependency.setUserNameUseCase,
+                                                            editPlayListNameUseCase:dependency.editPlayListNameUseCase))
     }
 }

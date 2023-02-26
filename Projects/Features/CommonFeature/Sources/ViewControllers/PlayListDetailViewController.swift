@@ -43,7 +43,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     
     @IBAction func backButtonAction(_ sender: UIButton) {
-        let isEdit: Bool = viewModel.output.isEditinglist.value
+        
+        let isEdit: Bool = viewModel.output.state.value.isEditing
         
         if isEdit {
             
@@ -53,27 +54,35 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 //TODO: 저장 코드
+                self.viewModel.input.runEditing.onNext(())
                 
                // self.navigationController?.popViewController(animated: true)
-                self.viewModel.output.isEditinglist.accept(false)
+           // self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+            self.navigationController?.popViewController(animated: true)
                 
             },cancelCompletion: { [weak self] in
                 
                 guard let self =  self else {
                     return
                 }
-                self.viewModel.output.isEditinglist.accept(false)
+                
+                self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+                
+                self.viewModel.input.cancelEdit.onNext(())
+                
+                
             })
             self.showPanModal(content: vc)
         }else{
             
             self.navigationController?.popViewController(animated: true)
         }
+       
     }
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-        viewModel.output.isEditinglist.accept(true)
+        viewModel.output.state.accept(EditState(isEditing: true, force: false))
         
         
        
@@ -83,15 +92,15 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressCompleteAction(_ sender: UIButton) {
         
-        viewModel.output.isEditinglist.accept(false)
+        viewModel.output.state.accept(EditState(isEditing: false, force: false))
         
        
     }
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         
-        let createPlayListPopupViewController = multiPurposePopComponent.makeView(type: .creation)
-        self.showPanModal(content: createPlayListPopupViewController)
+        let multiPurposePopVc = multiPurposePopComponent.makeView(type: .edit,key: viewModel.key!)
+        self.showPanModal(content: multiPurposePopVc)
     }
     
     
@@ -223,7 +232,7 @@ extension PlayListDetailViewController{
                 warningView.text = "플레이리스트에 곡이 없습니다."
                 
                 
-                self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+                self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
             })
             .bind(to: tableView.rx.items){[weak self] (tableView, index, model) -> UITableViewCell in
        
@@ -241,7 +250,7 @@ extension PlayListDetailViewController{
                     }
                     
                     cell.selectedBackgroundView = bgView
-                    cell.update(model,self.viewModel.output.isEditinglist.value)
+                    cell.update(model,self.viewModel.output.state.value.isEditing)
                     
                     return cell
                 case .wmRecommend:
@@ -264,11 +273,19 @@ extension PlayListDetailViewController{
         
                
         
-        viewModel.output.isEditinglist
+        viewModel.output.state
             .skip(1)
-            .do(onNext: { [weak self] isEdit in
+            .do(onNext: { [weak self] state in
                 guard let self = self else { return }
                 
+                
+                if state.isEditing == false && state.force == false {
+                    
+                    self.viewModel.input.runEditing.onNext(())
+                }
+                
+                
+                let isEdit = state.isEditing
                 
                 self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
@@ -283,6 +300,7 @@ extension PlayListDetailViewController{
                 .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
                 //에딧 상태에 따른 cell 변화를 reload 해주기 위해
+                
         
                 
         viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
@@ -299,7 +317,32 @@ extension PlayListDetailViewController{
             
         }).disposed(by: disposeBag)
                 
-                
+        
+            NotificationCenter.default.rx.notification(.playListNameRefresh)
+                .flatMap({ noti -> Observable<String> in
+                    
+                    guard let obj = noti.object as? String else {
+                        return Observable.empty()
+                    }
+                    
+                    return Observable<String>.just(obj)
+                    
+                })
+                .bind(to: viewModel.input.playListNameLoad)
+            .disposed(by: disposeBag)
+        
+        
+                viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
+                    
+                    guard let self = self else {
+                        return
+                    }
+                    
+                    
+                    self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    
+                })
+                .disposed(by: disposeBag)
                 
       
     }
@@ -308,8 +351,8 @@ extension PlayListDetailViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began  {
-            viewModel.output.isEditinglist.accept(true)
+        if  !viewModel.output.state.value.isEditing && sender.state == .began  {
+            viewModel.output.state.accept(EditState(isEditing: true, force: true))
             UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
         }
     }
