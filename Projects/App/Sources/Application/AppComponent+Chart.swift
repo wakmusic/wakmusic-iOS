@@ -9,6 +9,10 @@ public extension AppComponent {
         ChartComponent(parent: self)
     }
 
+    var chartContentComponent: ChartContentComponent {
+        ChartContentComponent(parent: self)
+    }
+
     var remoteChartDataSource: any RemoteChartDataSource {
         shared {
             RemoteChartDataSourceImpl(keychain: keychain)
@@ -33,3 +37,4 @@ public extension AppComponent {
         }
     }
 }
+ 
