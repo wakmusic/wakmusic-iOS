@@ -29,6 +29,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var profileButton: UIButton!
     @IBOutlet weak var headerFakeView: UIView!
     
+    @IBOutlet weak var myPlayListFakeView: UIView!
+    @IBOutlet weak var favoriteFakeView: UIView!
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
@@ -93,19 +95,12 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         
         
         if index == 0 {
-            if output.state.value.isEditing == true
-            {
-                vc2.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
-            }
+           
             vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 에 연관 됨
             
         }
         else {
-            if output.state.value.isEditing == true
-            {
-                vc1.input.showConfirmModal.onNext(()) // 좋아요에서 나만의 플리 넘어갈 때 편집중이기 때문에 모달을 뛰운다
-            }
-            
+        
             vc2.output.state.accept(state)
         }
 
@@ -152,6 +147,9 @@ extension AfterLoginViewController{
         editButton.layer.borderWidth = 1
         editButton.backgroundColor = .clear
         editButton.isHidden = true
+        
+        myPlayListFakeView.isHidden = true
+        favoriteFakeView.isHidden = true
         
         //탭바 설정
         self.dataSource = self
@@ -214,6 +212,20 @@ extension AfterLoginViewController{
             
             self.isScrollEnabled = !state.isEditing //  편집 시 , 옆 탭으로 swipe를 막기 위함
             self.headerFakeView.isHidden = !state.isEditing
+            
+      
+            
+            if state.isEditing {
+                self.myPlayListFakeView.isHidden = self.currentIndex == 0
+                self.favoriteFakeView.isHidden =  self.currentIndex == 1
+            } else {
+                self.myPlayListFakeView.isHidden = true
+                self.favoriteFakeView.isHidden = true
+            }
+            
+            
+           
+            
             
         }.disposed(by: disposeBag)
                 

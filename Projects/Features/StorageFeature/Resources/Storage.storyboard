@@ -64,6 +64,22 @@
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             </button>
+                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5pT-od-cmR">
+                                <rect key="frame" x="20" y="114" width="61" height="36"/>
+                                <color key="backgroundColor" name="gray100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="DFi-0D-WSe"/>
+                                    <constraint firstAttribute="width" constant="61" id="qaO-zG-E5g"/>
+                                </constraints>
+                            </view>
+                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W6x-My-F0r">
+                                <rect key="frame" x="97" y="114" width="44" height="36"/>
+                                <color key="backgroundColor" name="gray100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="35R-hy-RWN"/>
+                                    <constraint firstAttribute="height" constant="36" id="3bI-MM-0kn"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y0G-j2-za7">
                                 <rect key="frame" x="0.0" y="59" width="393" height="48"/>
                                 <subviews>
@@ -149,9 +165,13 @@
                             <constraint firstItem="JA6-iz-jxx" firstAttribute="centerY" secondItem="2Hy-W4-acm" secondAttribute="centerY" id="Jtx-Jm-jer"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" id="PN3-pp-2A8"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="bottom" constant="12" id="R1Q-y6-6Rs"/>
+                            <constraint firstItem="5pT-od-cmR" firstAttribute="leading" secondItem="gpa-Bd-Phk" secondAttribute="leading" constant="20" id="SNK-IZ-RI5"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="JA6-iz-jxx" secondAttribute="trailing" constant="20" id="Usm-Hh-DGw"/>
+                            <constraint firstItem="W6x-My-F0r" firstAttribute="bottom" secondItem="2Hy-W4-acm" secondAttribute="bottom" constant="-5" id="WW1-2E-yXD"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="trailing" secondItem="gpa-Bd-Phk" secondAttribute="trailing" id="Xg5-sg-fpQ"/>
+                            <constraint firstItem="W6x-My-F0r" firstAttribute="leading" secondItem="5pT-od-cmR" secondAttribute="trailing" constant="16" id="cl6-58-bin"/>
                             <constraint firstItem="0Mf-5R-SwI" firstAttribute="trailing" secondItem="Y0G-j2-za7" secondAttribute="trailing" id="hhf-td-90d"/>
+                            <constraint firstItem="5pT-od-cmR" firstAttribute="bottom" secondItem="2Hy-W4-acm" secondAttribute="bottom" constant="-5" id="iXh-oi-bHC"/>
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="top" id="nlk-oo-Gwc"/>
                             <constraint firstItem="0Mf-5R-SwI" firstAttribute="top" secondItem="Y0G-j2-za7" secondAttribute="top" id="s4o-8i-TY2"/>
                             <constraint firstItem="0Mf-5R-SwI" firstAttribute="leading" secondItem="Y0G-j2-za7" secondAttribute="leading" id="vdw-T5-zgI"/>
@@ -159,8 +179,10 @@
                     </view>
                     <connections>
                         <outlet property="editButton" destination="JA6-iz-jxx" id="NHh-Cw-GDE"/>
+                        <outlet property="favoriteFakeView" destination="W6x-My-F0r" id="IRy-KQ-MvU"/>
                         <outlet property="headerFakeView" destination="0Mf-5R-SwI" id="cLm-Px-fVD"/>
                         <outlet property="logoutButton" destination="s9M-xg-Qqz" id="Shg-m7-zLl"/>
+                        <outlet property="myPlayListFakeView" destination="5pT-od-cmR" id="CJi-sa-kLY"/>
                         <outlet property="profileButton" destination="0P2-po-VGM" id="fFJ-UF-an6"/>
                         <outlet property="profileImageView" destination="5Q0-dM-fdz" id="LW6-GJ-YzU"/>
                         <outlet property="profileLabel" destination="FG5-zK-kAo" id="euk-q9-bRh"/>
