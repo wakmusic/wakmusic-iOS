@@ -97,6 +97,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var confireLabelGap: NSLayoutConstraint!
@@ -125,17 +126,6 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         
     }
     
-    
-    @IBAction func saveAction(_ sender: UIButton) {
-        
-    
-        //네트워크 작업
-        //completion?()
-        input.pressConfirm.onNext(())
-        
-        dismiss(animated: true)
-        self.view.endEditing(true)
-    }
     
     var viewModel:MultiPurposePopupViewModel!
     var limitCount:Int = 12
@@ -275,6 +265,8 @@ extension MultiPurposePopupViewController{
 
         saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         saveButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
+        self.indicator.color = .white
+        self.indicator.isHidden = true
         
     }
     
@@ -398,16 +390,62 @@ extension MultiPurposePopupViewController{
             .disposed(by: self.disposeBag)
         
         
-        output.result.subscribe(onNext: { [weak self] in
+        output.result.subscribe(onNext: { [weak self] res in
             
             guard let self = self else{
                 return
             }
             
-            self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
+            self.saveButton.setAttributedTitle(
+                NSMutableAttributedString(
+                    string:"완료",
+                    attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
+                ), for: .normal
+            )
+            
+            self.view.endEditing(true)
+            if res.status == 200 {
+                self.dismiss(animated: true)
+            } else {
+                self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            }
+            
+            
+            
+           
         }).disposed(by: disposeBag)
         
+        saveButton.rx.tap.subscribe(onNext: {[weak self] in
+           
+            guard let self = self else {
+                return
+            }
+            
+            if self.viewModel.type != .share {
+                self.indicator.isHidden = false
+                self.indicator.startAnimating()
+                self.saveButton.setAttributedTitle(
+                    NSMutableAttributedString(
+                        string:"",
+                        attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                     .foregroundColor: DesignSystemAsset.GrayColor.gray25.color]
+                    ), for: .normal
+                )
+            }
+           
+            self.input.pressConfirm.onNext(())
+            
+           
+            
+        })
+        .disposed(by: disposeBag)
         
+        
+      
     }
     
     private func keyboardBinding()

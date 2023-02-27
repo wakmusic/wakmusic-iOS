@@ -421,7 +421,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="08R-AE-bpr">
                                         <rect key="frame" x="20" y="230" width="353" height="56"/>
-                                        <color key="backgroundColor" name="INCREASE"/>
+                                        <color key="backgroundColor" name="POINT"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="zm0-2w-5jR"/>
                                         </constraints>
@@ -429,9 +429,6 @@
                                         <state key="normal">
                                             <color key="titleColor" name="gray25"/>
                                         </state>
-                                        <connections>
-                                            <action selector="saveAction:" destination="des-nG-2jQ" eventType="touchUpInside" id="DW9-en-ZNl"/>
-                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIf-kv-qe0">
                                         <rect key="frame" x="20" y="153" width="0.0" height="37"/>
@@ -439,6 +436,9 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="kRh-d3-Vj0">
+                                        <rect key="frame" x="186.66666666666666" y="248" width="20" height="20"/>
+                                    </activityIndicatorView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/18" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L4C-lz-s65">
                                         <rect key="frame" x="350.66666666666669" y="161" width="22.333333333333314" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -499,6 +499,7 @@
                                     <constraint firstAttribute="trailing" secondItem="42n-JF-5MI" secondAttribute="trailing" constant="20" id="BUq-Y8-b6K"/>
                                     <constraint firstItem="08R-AE-bpr" firstAttribute="leading" secondItem="Yxn-RK-R3n" secondAttribute="leading" constant="20" id="Fk7-Xd-Uur"/>
                                     <constraint firstItem="42n-JF-5MI" firstAttribute="top" secondItem="cy6-qI-QGx" secondAttribute="bottom" constant="11" id="GM6-EK-xAD"/>
+                                    <constraint firstItem="kRh-d3-Vj0" firstAttribute="centerX" secondItem="08R-AE-bpr" secondAttribute="centerX" id="Iks-NX-03r"/>
                                     <constraint firstItem="L4C-lz-s65" firstAttribute="leading" secondItem="MJU-v6-dX3" secondAttribute="trailing" id="KvE-if-Zeg"/>
                                     <constraint firstItem="wlD-JW-vxE" firstAttribute="leading" secondItem="Yxn-RK-R3n" secondAttribute="leading" constant="20" id="Liz-yW-iW8"/>
                                     <constraint firstAttribute="trailing" secondItem="cIa-RW-whk" secondAttribute="trailing" constant="20" id="N6S-0B-Qyw"/>
@@ -510,6 +511,7 @@
                                     <constraint firstItem="Lml-5o-yBH" firstAttribute="top" secondItem="Yxn-RK-R3n" secondAttribute="top" constant="24" id="fmZ-zD-OQp"/>
                                     <constraint firstItem="cy6-qI-QGx" firstAttribute="leading" secondItem="Yxn-RK-R3n" secondAttribute="leading" constant="20" id="goy-55-nvg"/>
                                     <constraint firstAttribute="height" constant="296" id="idQ-6J-gsx"/>
+                                    <constraint firstItem="kRh-d3-Vj0" firstAttribute="centerY" secondItem="08R-AE-bpr" secondAttribute="centerY" id="n2e-rP-8A2"/>
                                     <constraint firstItem="08R-AE-bpr" firstAttribute="top" secondItem="pIf-kv-qe0" secondAttribute="bottom" constant="40" id="pSv-zO-dJ8"/>
                                     <constraint firstItem="42n-JF-5MI" firstAttribute="leading" secondItem="Yxn-RK-R3n" secondAttribute="leading" constant="20" id="pb9-fe-Brl"/>
                                     <constraint firstItem="L4C-lz-s65" firstAttribute="top" secondItem="42n-JF-5MI" secondAttribute="bottom" constant="4" id="q8G-6V-1qJ"/>
@@ -546,6 +548,7 @@
                         <outlet property="countLabel" destination="MJU-v6-dX3" id="A97-vk-5cp"/>
                         <outlet property="dividerView" destination="42n-JF-5MI" id="6qq-yi-Rs1"/>
                         <outlet property="fakeViewHeight" destination="SPc-gh-6VT" id="ZNe-Yi-7TI"/>
+                        <outlet property="indicator" destination="kRh-d3-Vj0" id="iNK-Em-SXu"/>
                         <outlet property="limitLabel" destination="L4C-lz-s65" id="dvS-6o-qNm"/>
                         <outlet property="saveButton" destination="08R-AE-bpr" id="6CU-Zx-cmc"/>
                         <outlet property="subTitleLabel" destination="wlD-JW-vxE" id="1cF-gA-gwb"/>
@@ -682,9 +685,6 @@
     <resources>
         <image name="back" width="32" height="32"/>
         <image name="cross_close" width="32" height="32"/>
-        <namedColor name="INCREASE">
-            <color red="0.98000001907348633" green="0.19200000166893005" blue="0.40799999237060547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="POINT">
             <color red="0.030999999493360519" green="0.87099999189376831" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
