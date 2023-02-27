@@ -7,12 +7,13 @@ import Kingfisher
 import Utility
 
 public final class ChartContentTableViewCell: UITableViewCell {
+    // MARK: - UI
     private let rankingLabel = UILabel().then {
         $0.textAlignment = .center
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
     }
-    private let nonRateImageView = UIImageView().then {
+    private let nonImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.non.image
     }
     private let blowUpImageView = UIImageView().then {
@@ -24,7 +25,13 @@ public final class ChartContentTableViewCell: UITableViewCell {
     private let decreaseRateImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.down.image
     }
+    private let newRateLabel = UILabel().then {
+        $0.textColor = DesignSystemAsset.PrimaryColor.new.color
+        $0.text = "NEW"
+        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 11)
+    }
     private let rateLabel = UILabel().then {
+        $0.textAlignment = .center
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 11)
     }
     private let albumImageView = UIImageView().then {
@@ -46,11 +53,13 @@ public final class ChartContentTableViewCell: UITableViewCell {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
     }
 
+    // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         addView()
+        setRankingLayout()
         setLayout()
     }
 
@@ -62,51 +71,24 @@ public final class ChartContentTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         rateLabel.isHidden = false
-    }
-
-    public func update(model: ChartRankingEntity, index: Int) {
-        let lastRanking = model.last - (index + 1)
-        albumImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
-            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-            options: [.transition(.fade(0.2))]
-        )
-        titleStringLabel.text = model.title
-        groupStringLabel.text = model.artist
-        hitsLabel.text = model.views.addCommaToNumber() + "회"
-        rankingLabel.text = "\(index + 1)"
-        print("----------\nrankingLabel.text : \(index + 1)\nlastRanking : \(lastRanking)")
-        if lastRanking > 99 {
-            blowThenBefore()
-            print("blowThenBefore 실행\n----------")
-            return()
-        }
-        else if lastRanking == 0 {
-            sameAsBefore()
-            print("sameAsBefore 실행\n----------")
-            return()
-        }
-        else if lastRanking > 0 {
-            higherThanBefore(ranking: lastRanking)
-            print("higherThanBefore 실행\n----------")
-            return()
-        }
-        else if lastRanking < 0 {
-            lowerThanBefore(ranking: lastRanking)
-            print("lowerThanBefore 실행\n----------")
-            return()
-        }
+        newRateLabel.isHidden = false
+        nonImageView.isHidden = false
+        blowUpImageView.isHidden = false
+        increaseRateImageView.isHidden = false
+        decreaseRateImageView.isHidden = false
     }
 }
 
+// MARK: - Layout
 extension ChartContentTableViewCell {
     private func addView() {
         [
             rankingLabel,
             blowUpImageView,
-            nonRateImageView,
+            nonImageView,
             increaseRateImageView,
             decreaseRateImageView,
+            newRateLabel,
             rateLabel,
             albumImageView,
             hitsLabel,
@@ -116,7 +98,7 @@ extension ChartContentTableViewCell {
             contentView.addSubview($0)
         }
     }
-    private func setLayout() {
+    private func setRankingLayout() {
         rankingLabel.snp.makeConstraints {
             $0.top.equalTo(10)
             $0.left.equalTo(20)
@@ -136,7 +118,13 @@ extension ChartContentTableViewCell {
             $0.width.equalTo(14)
             $0.left.equalTo(33)
         }
-        [blowUpImageView, nonRateImageView].forEach { view in
+        newRateLabel.snp.makeConstraints {
+            $0.top.equalTo(rankingLabel.snp.bottom)
+            $0.height.equalTo(16)
+            $0.width.equalTo(26)
+            $0.left.equalTo(21)
+        }
+        [blowUpImageView, nonImageView].forEach { view in
             view.snp.makeConstraints {
                 $0.top.equalTo(rankingLabel.snp.bottom).offset(2)
                 $0.width.height.equalTo(12)
@@ -154,6 +142,8 @@ extension ChartContentTableViewCell {
             $0.centerY.equalTo(contentView)
             $0.right.equalTo(-20)
         }
+    }
+    private func setLayout() {
         titleStringLabel.snp.makeConstraints {
             $0.height.equalTo(24)
             $0.top.equalTo(9)
@@ -171,10 +161,20 @@ extension ChartContentTableViewCell {
 
 // MARK: - Chart 등락률 화살표
 extension ChartContentTableViewCell {
+    private func newThenBefore() {
+        newRateLabel.isHidden = false
+        nonImageView.isHidden = true
+        blowUpImageView.isHidden = true
+        increaseRateImageView.isHidden = true
+        decreaseRateImageView.isHidden = true
+        rateLabel.isHidden = true
+    }
     private func higherThanBefore(ranking: Int) {
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.increase.color
         rateLabel.text = "\(ranking)"
-        nonRateImageView.isHidden = true
+        rateLabel.isHidden = false
+        newRateLabel.isHidden = true
+        nonImageView.isHidden = true
         blowUpImageView.isHidden = true
         increaseRateImageView.isHidden = false
         decreaseRateImageView.isHidden = true
@@ -183,23 +183,62 @@ extension ChartContentTableViewCell {
         let minusBeforeRanking = "\(ranking)"
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
         rateLabel.text = minusBeforeRanking.trimmingCharacters(in: ["-"])
-        nonRateImageView.isHidden = true
+        rateLabel.isHidden = false
+        newRateLabel.isHidden = true
+        nonImageView.isHidden = true
         blowUpImageView.isHidden = true
         increaseRateImageView.isHidden = true
         decreaseRateImageView.isHidden = false
     }
     private func sameAsBefore() {
-        nonRateImageView.isHidden = false
+        rateLabel.isHidden = true
+        newRateLabel.isHidden = true
+        nonImageView.isHidden = false
         blowUpImageView.isHidden = true
         rateLabel.isHidden = true
         increaseRateImageView.isHidden = true
         decreaseRateImageView.isHidden = true
     }
     private func blowThenBefore() {
-        nonRateImageView.isHidden = true
+        rateLabel.isHidden = true
+        newRateLabel.isHidden = true
+        nonImageView.isHidden = true
         blowUpImageView.isHidden = false
         rateLabel.isHidden = true
         increaseRateImageView.isHidden = true
         decreaseRateImageView.isHidden = true
+    }
+}
+
+// MARK: - Update
+extension ChartContentTableViewCell {
+    public func update(model: ChartRankingEntity, index: Int) {
+        let lastRanking = model.last - (index + 1)
+        albumImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
+            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            options: [.transition(.fade(0.2))]
+        )
+        titleStringLabel.text = model.title
+        groupStringLabel.text = model.artist
+        hitsLabel.text = model.views.addCommaToNumber() + "회"
+        rankingLabel.text = "\(index + 1)"
+        
+        if model.last == 0 {
+            newThenBefore()
+            return()
+        } else if lastRanking > 99 {
+            blowThenBefore()
+            return()
+        } else if lastRanking == 0 {
+            sameAsBefore()
+            return()
+        } else if lastRanking > 0 {
+            higherThanBefore(ranking: lastRanking)
+            return()
+        } else if lastRanking < 0 {
+            lowerThanBefore(ranking: lastRanking)
+            return()
+        }
     }
 }
