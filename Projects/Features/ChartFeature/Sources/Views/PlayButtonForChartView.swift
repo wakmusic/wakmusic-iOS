@@ -33,16 +33,11 @@ public final class PlayButtonForChartView: UIView {
     private let updateTimeImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.check.image
     }
-//    @IBAction func pressAllPlay(_ sender: UIButton) {
-//        delegate?.pressPlay(.allPlay)
-//    }
-//    @IBAction func pressSufflePlay(_ sender: UIButton) {
-//        delegate?.pressPlay(.shufflePlay)
-//    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupView()
+        self.bind()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -103,5 +98,15 @@ extension PlayButtonForChartView {
             $0.height.equalTo(18)
             $0.leading.equalTo(38)
         }
+    }
+
+    private func bind() {
+        allPlayButton.rx.tap.bind {
+            self.delegate?.pressPlay(.allPlay)
+        }.disposed(by: disposeBag)
+
+        shufflePlayButton.rx.tap.bind {
+            self.delegate?.pressPlay(.shufflePlay)
+        }.disposed(by: disposeBag)
     }
 }
