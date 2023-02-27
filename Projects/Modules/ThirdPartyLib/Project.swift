@@ -5,8 +5,11 @@ import UtilityPlugin
 let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .framework,
+    packages: [
+        .GoogleSignIn
+    ],
     dependencies: [
-        //.SPM.GoogoleLogin,
+        .SPM.GoogleSignIn,
         .SPM.NaverLogin,
         .SPM.Firebase,
         .SPM.RxSwift,

@@ -5,6 +5,9 @@ import UtilityPlugin
 let project = Project.makeModule(
     name: "FeatureThirdPartyLib",
     product: .framework,
+    packages: [
+        .YouTubePlayerKit
+    ],
     dependencies: [
         .SPM.Needle,
         .SPM.FlexLayout,
@@ -17,10 +20,10 @@ let project = Project.makeModule(
         .SPM.Then,
         .SPM.Kingfisher,
         .SPM.Tabman,
-        .SPM.YoutubeKit,
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
         .SPM.SwiftEntryKit,
-        .SPM.CryptoSwift
+        .SPM.CryptoSwift,
+        .SPM.YouTubePlayerKit
     ]
 )

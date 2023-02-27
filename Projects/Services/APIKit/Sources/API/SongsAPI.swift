@@ -5,6 +5,7 @@ import Foundation
 
 public enum SongsAPI {
     case fetchSearchSong(type: SearchType,keyword: String)
+    case fetchLyrics(id: String)
 }
 
 extension SongsAPI: WMAPI {
@@ -17,6 +18,8 @@ extension SongsAPI: WMAPI {
         switch self {
         case .fetchSearchSong:
             return "/search"
+        case .fetchLyrics(id: let id):
+            return "/lyrics/\(id)"
         }
     }
         
@@ -34,6 +37,8 @@ extension SongsAPI: WMAPI {
                 ], encoding: URLEncoding.queryString)
                 
                 
+            case .fetchLyrics:
+                return .requestPlain
             }
             
         }

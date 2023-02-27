@@ -16,6 +16,8 @@ import PanModal
 import CommonFeature
 import KeychainModule
 
+
+
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var profileLabel: UILabel!
@@ -25,6 +27,10 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var profileButton: UIButton!
+    @IBOutlet weak var headerFakeView: UIView!
+    
+    @IBOutlet weak var myPlayListFakeView: UIView!
+    @IBOutlet weak var favoriteFakeView: UIView!
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
@@ -43,15 +49,21 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             let keychain = KeychainImpl()
             keychain.delete(type: .accessToken)
             Utility.PreferenceManager.userInfo = nil
+            
+            //TODO: 플랫품에 따른 로그아웃 구현 
         })
         self.showPanModal(content: vc)
     }
     
-    private var viewControllers: [UIViewController] = [MyPlayListViewController.viewController(),FavoriteViewController.viewController()]
+    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
     var viewModel:AfterLoginViewModel!
+    
     var requestComponent:RequestComponent!
     var profilePopComponent: ProfilePopComponent!
-
+    var myPlayListComponent: MyPlayListComponent!
+    var multiPurposePopComponent : MultiPurposePopComponent!
+    var favoriteComponent:  FavoriteComponent!
+    
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
@@ -77,23 +89,44 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        vc1.viewModel.output.isEditinglist.accept(false)
-        vc2.viewModel.output.isEditinglist.accept(false)
         
-        output.isEditing.accept(false)
+        
+        let state = EditState(isEditing: false, force: true)
+        
+        
+        if index == 0 {
+           
+            vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 에 연관 됨
+            
+        }
+        else {
+        
+            vc2.output.state.accept(state)
+        }
+
+        output.state.accept(state)
     }
     
     
     public static func viewController(
         viewModel:AfterLoginViewModel,
         requestComponent:RequestComponent,
-        profilePopComponent: ProfilePopComponent
+        profilePopComponent: ProfilePopComponent,
+        myPlayListComponent: MyPlayListComponent,
+        multiPurposePopComponent : MultiPurposePopComponent,
+        favoriteComponent : FavoriteComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.requestComponent = requestComponent
         viewController.profilePopComponent = profilePopComponent
+        viewController.myPlayListComponent = myPlayListComponent
+        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.favoriteComponent = favoriteComponent
+        
+        viewController.viewControllers = [myPlayListComponent.makeView(),favoriteComponent.makeView()]
+        
         return viewController
     }
 }
@@ -110,7 +143,13 @@ extension AfterLoginViewController{
         
         requestButton.setImage(DesignSystemAsset.Storage.request.image, for: .normal)
         
+        editButton.layer.cornerRadius = 4
+        editButton.layer.borderWidth = 1
+        editButton.backgroundColor = .clear
+        editButton.isHidden = true
         
+        myPlayListFakeView.isHidden = true
+        favoriteFakeView.isHidden = true
         
         //탭바 설정
         self.dataSource = self
@@ -133,6 +172,7 @@ extension AfterLoginViewController{
             button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
+            
         }
         
         // indicator
@@ -144,6 +184,7 @@ extension AfterLoginViewController{
 
     
         bindRx()
+        bindEditButtonVisable()
         
     
         
@@ -152,56 +193,79 @@ extension AfterLoginViewController{
     
     private func bindRx()
     {
-        output.isEditing.subscribe { [weak self] (res:Bool) in
+        
+    
+        
+        output.state.subscribe { [weak self]  state in
             guard let self = self else{
                 return
             }
             
-            let attr = NSMutableAttributedString(string: res ? "완료" : "편집",
+            let attr = NSMutableAttributedString(string: state.isEditing ? "완료" : "편집",
                                                  attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                                                              .foregroundColor: res ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
-            self.editButton.layer.cornerRadius = 4
-            self.editButton.layer.borderColor = res ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
-            self.editButton.layer.borderWidth = 1
-            self.editButton.backgroundColor = .clear
+                                                              .foregroundColor: state.isEditing ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
+            
+            self.editButton.layer.borderColor = state.isEditing ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
+         
+            
             self.editButton.setAttributedTitle(attr, for: .normal)
             
-            self.isScrollEnabled = !res //  편집 시 , 옆 탭으로 swipe를 막기 위함
+            self.isScrollEnabled = !state.isEditing //  편집 시 , 옆 탭으로 swipe를 막기 위함
+            self.headerFakeView.isHidden = !state.isEditing
+            
+      
+            
+            if state.isEditing {
+                self.myPlayListFakeView.isHidden = self.currentIndex == 0
+                self.favoriteFakeView.isHidden =  self.currentIndex == 1
+            } else {
+                self.myPlayListFakeView.isHidden = true
+                self.favoriteFakeView.isHidden = true
+            }
+            
+            
+           
+            
             
         }.disposed(by: disposeBag)
                 
         editButton.rx.tap
-            .withLatestFrom(output.isEditing)
-            .map({!$0})
-            .do(onNext: { [weak self] (res:Bool)  in
+            .withLatestFrom(output.state)
+            .map({EditState(isEditing: !$0.isEditing, force: $0.force)})
+            .do(onNext: { [weak self] (state:EditState)  in
+                
                 guard let self = self else{
                     return
                 }
+                
+                
+                let nextState = EditState(isEditing: state.isEditing, force: false)
                 
                 if self.currentIndex ?? 0  == 0 {
                     
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+    
+                    vc.output.state.accept(nextState)
                 }
                 
                 else{
                     guard let vc =  self.viewControllers[1] as? FavoriteViewController else{
                         return
                     }
-                    vc.viewModel.output.isEditinglist.accept(res)
+                    vc.output.state.accept(nextState)
                 }
             })
-            .bind(to: output.isEditing)
+            .bind(to: output.state)
             .disposed(by: disposeBag)
 
         profileButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else{
                 return
             }
-            let vc = self.profilePopComponent.makeView()
-            //MultiPurposePopupViewController.viewController(type: .nickname)
+            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
+            //self.profilePopComponent.makeView()
             self.showPanModal(content: vc)
             
         }).disposed(by: disposeBag)
@@ -221,7 +285,50 @@ extension AfterLoginViewController{
                 )
                 
             }).disposed(by: disposeBag)
+        
+       
+        
     }
+    
+    
+    func bindEditButtonVisable(){
+        guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
+                    return
+                }
+
+        guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
+                    return
+                }
+
+        vc1.output.dataSource
+                .skip(1)
+                .filter({ [weak self] _  in
+                    
+                    guard let self = self else { return false }
+                    
+               
+                    
+                    return (self.currentIndex ?? 0) == 0
+                })
+                .map { $0.isEmpty }
+                .bind(to: editButton.rx.isHidden)
+                .disposed(by: disposeBag)
+
+        vc2.output.dataSource
+            .skip(1)
+            .filter({ [weak self] _  in
+                guard let self = self else { return false }
+                
+                
+                
+                return (self.currentIndex ?? 0) == 1
+            })
+          
+            .map { $0.isEmpty }
+            .bind(to: editButton.rx.isHidden)
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSource {

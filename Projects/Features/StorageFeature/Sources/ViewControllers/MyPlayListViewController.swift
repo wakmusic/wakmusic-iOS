@@ -16,20 +16,25 @@ import PanModal
 import BaseFeature
 import CommonFeature
 
-class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
 
     
-    var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [PlayListDTO(playListName: "임시 플레이리스트", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트2", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트3", numberOfSong: 100),PlayListDTO(playListName: "임시 플레이리스트4", numberOfSong: 100)])
-    
-    //var dataSource: BehaviorRelay<[PlayListDTO]> = BehaviorRelay(value: [])
 
-    lazy var viewModel = MyPlayListViewModel()
+
+    var multiPurposePopComponent:MultiPurposePopComponent!
+    var playListDetailComponent :PlayListDetailComponent!
+    
+    var viewModel:MyPlayListViewModel!
+    
+    lazy var input = MyPlayListViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
     
     var disposeBag = DisposeBag()
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         
@@ -42,10 +47,12 @@ class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard
     }
     
 
-    public static func viewController() -> MyPlayListViewController {
+    public static func viewController(viewModel:MyPlayListViewModel,multiPurposePopComponent:MultiPurposePopComponent,playListDetailComponent :PlayListDetailComponent) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
-      
+        viewController.viewModel = viewModel
+        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.playListDetailComponent = playListDetailComponent
         
         return viewController
     }
@@ -64,8 +71,8 @@ extension MyPlayListViewController{
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         
         
-        if  !viewModel.output.isEditinglist.value && sender.state == .began {
-            viewModel.output.isEditinglist.accept(true)
+        if  !output.state.value.isEditing && sender.state == .began {
+            output.state.accept(EditState(isEditing: true, force: true))
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
     }
@@ -74,7 +81,8 @@ extension MyPlayListViewController{
     {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        dataSource
+        output.dataSource
+        .skip(1)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {
@@ -85,7 +93,7 @@ extension MyPlayListViewController{
             warningView.text = "내 리스트가 없습니다."
             
             
-            self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
+            self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
             
             
             
@@ -101,40 +109,102 @@ extension MyPlayListViewController{
                 else {return UITableViewCell()}
                  
                 cell.selectedBackgroundView = bgView
-                cell.update(model: model, isEditing: self.viewModel.output.isEditinglist.value)
+                cell.update(model: model, isEditing: self.output.state.value.isEditing)
               
                         
              return cell
             }.disposed(by: disposeBag)
         
         
-        self.viewModel.output.isEditinglist
-            .do(onNext: { [weak self] (isEdit:Bool) in
+        self.output.state
+            .skip(1) 
+            .do(onNext: { [weak self] state in
                 
                 guard let self = self else{
                     return
                 }
                 
-                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
+                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
+                    self.input.runEditing.onNext(())
+                }
+                
+                
+                
+                self.tableView.dragInteractionEnabled = state.isEditing// true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
                 // 탭맨 쪽 편집 변경
-                parent.output.isEditing.accept(isEdit)
-                
-            
-                
+                parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
                 
         
-                
                 
             })
-            .withLatestFrom(dataSource)
-            .bind(to: dataSource)
+            .withLatestFrom(output.dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
+            input.showConfirmModal.subscribe(onNext: { [weak self] in
+                    
+                guard let self = self else{
+                    return
+                }
+                
+                
+                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+
+                    self.input.runEditing.onNext(())
+                    
+                },cancelCompletion: {
+                    
+                    self.input.cancelEdit.onNext(())
+                })
+             
+                self.showPanModal(content: vc)
+                
+            }).disposed(by: disposeBag)
+                
+                
+            input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                
+                
+            }).disposed(by: disposeBag)
         
+                
+            tableView.rx.itemSelected
+                .withLatestFrom(output.dataSource){ ($0,$1) }
+                .subscribe(onNext: { [weak self] (indexPath, models) in
+                    
+                    guard let self  = self else{
+                        return
+                    }
+                    
+                    
+                    let model = models[indexPath.row]
+                    
+                    let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                    
+                    
+                })
+                .disposed(by: disposeBag)
+        
+                
+                
+            NotificationCenter.default.rx.notification(.playListRefresh)
+                .map({_ in () })
+                .bind(to: input.playListLoad)
+                .disposed(by: disposeBag)
+                
       
         
     }
@@ -145,24 +215,24 @@ extension MyPlayListViewController{
 
 extension MyPlayListViewController:UITableViewDelegate{
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
-        let header = MyPlayListHeaderView()
+        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
       
 
         header.delegate = self
-        return dataSource.value.isEmpty ? nil :  self.viewModel.output.isEditinglist.value ? nil : header
+        return self.output.state.value.isEditing ? nil : header
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         
-        return dataSource.value.isEmpty ? 0 : self.viewModel.output.isEditinglist.value ? 0 : 140
+        return self.output.state.value.isEditing ? 0 : 140
         
         
     }
@@ -170,19 +240,12 @@ extension MyPlayListViewController:UITableViewDelegate{
 }
 
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
-    func action(_ type: PurposeType) {
+    public func action(_ type: PurposeType) {
      
-        let vc =  MultiPurposePopupViewController.viewController(type: type) {
-            
-//            if type == .share {
-//                self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
-//            }
-            
-            if type == .load {
-                self.showToast(text: "잘못된 코드입니다.", font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
-            }
+        let vc =  multiPurposePopComponent.makeView(type: type)
+    
 
-        }
+        
         self.showPanModal(content: vc)
     }    
 }
@@ -191,7 +254,7 @@ extension  MyPlayListViewController: UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         
         
-        self.viewModel.input.sourceIndexPath.accept(indexPath)
+       input.sourceIndexPath.accept(indexPath)
         let itemProvider = NSItemProvider(object: "1" as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
@@ -222,16 +285,16 @@ extension  MyPlayListViewController: UITableViewDropDelegate {
                     let row = tableView.numberOfRows(inSection: section)
                     destinationIndexPath = IndexPath(row: row, section: section)
                 }
-        self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+        input.destIndexPath.accept(destinationIndexPath)
         
         
         
-        var curr = dataSource.value
-        var tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
-        curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
-        curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
+        var curr = output.dataSource.value
+        var tmp = curr[input.sourceIndexPath.value.row]
+        curr.remove(at: input.sourceIndexPath.value.row)
+        curr.insert(tmp, at: input.destIndexPath.value.row)
         
-        dataSource.accept(curr)
+        output.dataSource.accept(curr)
         
         
         DEBUG_LOG(destinationIndexPath)

@@ -249,7 +249,7 @@ public extension MainContainerViewController {
     //플레이어 열기
     func openPlayer() {
         
-        let vc = PlayerViewController()
+        let vc = playerComponent.makeView()
         self.addChild(vc)
         panelView.addSubview(vc.view)
         vc.didMove(toParent: self)

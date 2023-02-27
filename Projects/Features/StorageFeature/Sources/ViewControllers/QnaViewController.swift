@@ -11,20 +11,22 @@ import Utility
 import Tabman
 import Pageboy
 import DesignSystem
+import RxSwift
 
-class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
+public final class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabBarView: UIView!
     
+    
     @IBAction func pressBackAction(_ sender: UIButton) {
         
         self.navigationController?.popViewController(animated: true)
         
     }
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
@@ -38,14 +40,24 @@ class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     }
     
     
+    var disposeBag = DisposeBag()
+    var viewModel:QnaViewModel!
+    var qnaContentComponent:QnaContentComponent!
+    lazy var input = QnaViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     
     
-    let viewControllers:[UIViewController] = [QnaContentViewController.viewController([QnAModel.init(categoty: "플레이리스트", question: "플레이리스트는 어떻게 만드나요?", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false),QnAModel.init(categoty: "카테고리2", question: "자주 묻는 질문 제목", ansewr: "자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.\n자주 묻는 질문 답변이 나옵니다.\n위아래 여백에 맞춰 답변 길이가 유동적으로 바뀝니다.", isOpened: false),QnAModel.init(categoty: "플레이리시트", question: "자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄인 경우 자주 묻는 질문 제목 두줄", ansewr: "아 그거는 알잘딱 모시깽이하시면 됩니다.", isOpened: false)]),UIViewController(),UIViewController(),UIViewController()]
+    var viewControllers:[UIViewController] = []
     
     
 
-    public static func viewController() -> QnaViewController {
+    public static func viewController(viewModel:QnaViewModel,qnaContentComponent:QnaContentComponent) -> QnaViewController {
         let viewController = QnaViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        
+        viewController.viewModel = viewModel
+        viewController.qnaContentComponent = qnaContentComponent
+        
+        
         return viewController
     }
     
@@ -103,36 +115,83 @@ extension QnaViewController {
         //회색 구분선 추가
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
         
-       
+       bindRx()
         
+    }
+    
+    func bindRx(){
+        
+        output.dataSource.subscribe { [weak self] (categories, qna) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            guard let comp = self.qnaContentComponent else{
+                return
+            }
+            
+            
+
+            
+            self.viewControllers  = categories.enumerated().map { (i,c) in
+                
+                if i == 0 {
+                    return comp.makeView(dataSource: qna  )
+                }
+                
+                else {
+                    
+                    
+                    
+                    return comp.makeView(dataSource:  qna.filter({
+                        $0.category.replacingOccurrences(of: " ", with: "") == c.category.replacingOccurrences(of: " ", with: "")
+                        
+                    }))
+                }
+                
+                
+            }
+            
+            
+            self.reloadData()
+            
+            
+            
+        }.disposed(by: disposeBag)
+        
+        
+    
     }
     
 }
 
 
 extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
-    func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
-        self.viewControllers.count
+    public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
+        DEBUG_LOG(self.viewControllers.count)
+        
+        return self.viewControllers.count
+        
+        
     }
     
-    func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+    public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
+        
+        
         viewControllers[index]
     }
     
-    func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
+    public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController.Page? {
         nil
     }
     
-    func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
+    public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         
-        switch index{
-        case 0:
- 
-            return TMBarItem(title: "전체    ")
-        default:
-            let title = "카테고리\(index)  "
-           return TMBarItem(title: title)
-        }
+        return TMBarItem(title: output.dataSource.value.0[index].category)
+      
+        
+        
         
     }
  

@@ -54,6 +54,7 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     
     var viewModel:LoginViewModel!
     
+    
 
     
     
@@ -222,6 +223,18 @@ extension LoginViewController{
             
             self.present(vc, animated: true)
             
+            
+        }).disposed(by: disposeBag)
+        
+        
+        
+        viewModel.input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14) )
             
         }).disposed(by: disposeBag)
         

@@ -45,19 +45,16 @@ extension LikeAPI: WMAPI {
         
     }
 
-    public var headers: [String : String]? {
-        let token: String = KeychainImpl().load(type: .accessToken)
+  
+        
+    public var jwtTokenType: JwtTokenType {
         switch self {
             
         case .fetchLikeNumOfSong:
-            return ["Content-Type": "application/json"]
+            return .none
         case .addLikeSong,.cancelLikeSong:
-            return ["Authorization":"Bearer \(token)"]
+            return .accessToken
         }
-    }
-        
-    public var jwtTokenType: JwtTokenType {
-        return .none
     }
     
     public var errorMap: [Int: WMError] {

@@ -9,6 +9,8 @@
 import UIKit
 import DesignSystem
 import CommonFeature
+import DomainModule
+import Utility
 
 class FavoriteTableViewCell: UITableViewCell {
 
@@ -36,7 +38,7 @@ class FavoriteTableViewCell: UITableViewCell {
         // Initialization code
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 4
+        self.albumImageView.layer.cornerRadius = 4
 
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
@@ -54,11 +56,14 @@ class FavoriteTableViewCell: UITableViewCell {
 
 extension FavoriteTableViewCell {
     
-    public func update(_ model:SongInfoDTO,_ isEditing:Bool)
+    public func update(_ model:FavoriteSongEntity,_ isEditing:Bool)
     {
-        albumImageView.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-        titleLabel.text =  model.name
-        artistLabel.text = model.artist
+        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
+        
+
+        
+        titleLabel.text =  model.song.title
+        artistLabel.text = model.song.artist
         isEdit = isEditing
         
         button.setImage( isEditing ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)

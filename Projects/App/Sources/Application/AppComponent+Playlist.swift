@@ -11,6 +11,7 @@ import DataModule
 import NetworkModule
 import SearchFeature
 import CommonFeature
+import StorageFeature
 
 //MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
@@ -24,10 +25,20 @@ public extension AppComponent {
         
     }
     
-    var recommendPlayListDetailComponent: PlayListDetailComponent {
+    var playListDetailComponent: PlayListDetailComponent {
         
         PlayListDetailComponent(parent: self)
     }
+    
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        
+        MultiPurposePopComponent(parent: self)
+    }
+    
+    var myPlayListComponent: MyPlayListComponent {
+        MyPlayListComponent(parent:self)
+    }
+    
     
     var remotePlayListDataSource: any RemotePlayListDataSource {
         shared {
@@ -62,6 +73,12 @@ public extension AppComponent {
     var editPlayListUseCase: any EditPlayListUseCase {
         shared {
             EditPlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
+    var editPlayListNameUseCase: any EditPlayListNameUseCase {
+        shared {
+            EditPlayListNameUseCaseImpl(playListRepository: playListRepository)
         }
     }
     

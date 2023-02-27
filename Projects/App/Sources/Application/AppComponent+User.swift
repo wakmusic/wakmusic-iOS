@@ -23,12 +23,16 @@ public extension AppComponent {
         ProfilePopComponent(parent: self)
     }
     
+    var favoriteComponent:  FavoriteComponent {
+        FavoriteComponent(parent: self)
+    }
+    
     var remoteUserDataSource: any RemoteUserDataSource {
         shared {
             RemoteUserDataSourceImpl(keychain: keychain)
         }
     }
-    
+      
     var userRepository: any UserRepository {
         shared {
             UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)
@@ -53,16 +57,28 @@ public extension AppComponent {
         }
     }
     
-    var fetchSubPlayList: any FetchSubPlayListUseCase {
+    var fetchPlayListUseCase: any FetchPlayListUseCase {
         shared {
-            FetchSubPlayListUseCaseImpl(userRepository: userRepository)
+            FetchPlayListUseCaseImpl(userRepository: userRepository)
         }
         
     }
     
-    var fetchFavoriteSongs: any FetchFavoriteSongsUseCase {
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         shared {
             FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
+        }
+    }
+    
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
+        shared {
+            EditFavoriteSongsOrderUseCaseImpl(userRepository: userRepository)
+        }
+    }
+    
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
+        shared {
+            EditPlayListOrderUseCaseImpl(userRepository: userRepository)
         }
     }
 }

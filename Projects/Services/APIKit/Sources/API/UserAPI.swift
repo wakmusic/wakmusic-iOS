@@ -8,8 +8,10 @@ public enum UserAPI {
     case fetchProfileList
     case setProfile(image: String)
     case setUserName(name: String)
-    case fetchSubPlayList
+    case fetchPlayList
     case fetchFavoriteSongs
+    case editFavoriteSongsOrder(ids:[String])
+    case editPlayListOrder(ids:[String])
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -18,6 +20,14 @@ public struct RequsetProfileModel:Encodable {
 
 public struct RequsetUserNameModel:Encodable {
     var username:String
+}
+
+public struct RequsetEditFavoriteSongs:Encodable {
+    var songs:[String]
+}
+
+public struct RequsetEditPlayList:Encodable {
+    var playlists:[String]
 }
 
 extension UserAPI: WMAPI {
@@ -34,10 +44,14 @@ extension UserAPI: WMAPI {
             return "/profile/set"
         case .setUserName:
             return "/username"
-        case .fetchSubPlayList:
+        case .fetchPlayList:
             return "/playlists"
         case .fetchFavoriteSongs:
             return "/likes"
+        case .editFavoriteSongsOrder:
+            return "/likes/edit"
+        case .editPlayListOrder:
+            return "/playlists/edit"
         }
     }
         
@@ -45,8 +59,10 @@ extension UserAPI: WMAPI {
         switch self {
         case .setProfile, .setUserName:
             return .post
-        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
             return .get
+        case .editFavoriteSongsOrder,.editPlayListOrder:
+            return .patch
         }
     }
     
@@ -56,25 +72,30 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetProfileModel(image: image))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
-        case .fetchProfileList, .fetchSubPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
             return .requestPlain
+        case .editFavoriteSongsOrder(ids: let ids):
+            return .requestJSONEncodable(RequsetEditFavoriteSongs(songs: ids))
+            
+        case .editPlayListOrder(ids: let ids):
+            return .requestJSONEncodable(RequsetEditPlayList(playlists: ids))
+        
         }
+        
     }
 
-    public var headers: [String : String]? {
-        let token: String = KeychainImpl().load(type: .accessToken)
-        switch self {
-        case .fetchProfileList,
-             .setProfile,
-             .setUserName,
-             .fetchSubPlayList,
-             .fetchFavoriteSongs:
-            return ["Authorization":"Bearer \(token)"]
-        }
-    }
+    
         
     public var jwtTokenType: JwtTokenType {
-        return .none
+        
+        switch self {
+        case .fetchProfileList:
+            return .none
+        
+        default :
+            return .accessToken
+        }
+        
     }
     
     public var errorMap: [Int: WMError] {

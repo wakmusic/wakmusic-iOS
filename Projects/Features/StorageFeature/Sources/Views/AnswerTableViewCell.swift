@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import DomainModule
 
 class AnswerTableViewCell: UITableViewCell {
 
@@ -27,10 +28,10 @@ class AnswerTableViewCell: UITableViewCell {
 }
 
 extension AnswerTableViewCell{
-    public func update(model:QnAModel){
+    public func update(model:QnaEntity){
             
         
-        answerLabel.text = model.ansewr
+        answerLabel.text = model.description
       
 
     }

@@ -23,7 +23,7 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
         super.viewDidLoad()
     
         configureUI()
-        bindRx()
+        
     }
 
     public static func viewController(signInComponent:SignInComponent,afterLoginComponent:AfterLoginComponent) -> StorageViewController {
@@ -39,6 +39,8 @@ public final class StorageViewController: BaseViewController, ViewControllerFrom
 extension StorageViewController{
     
     private func configureUI() {
+        
+        bindRx()
     }
     
     private func bindRx() {
@@ -49,13 +51,23 @@ extension StorageViewController{
                 guard let self = self else{
                     return
                 }
+                
+                DEBUG_LOG(isLogin)
 
                 if isLogin{
-                    self.remove(asChildViewController: self.bfLoginView)
+                    
+                    if let _ = self.children.first as? LoginViewController {
+                        self.remove(asChildViewController: self.bfLoginView)
+                    }
+                    
                     self.add(asChildViewController: self.afLoginView)
                     
                 }else{
-                    self.remove(asChildViewController: self.afLoginView)
+                    
+                    if let _ = self.children.first as? AfterLoginViewController {
+                        self.remove(asChildViewController: self.afLoginView)
+                    }
+ 
                     self.add(asChildViewController:self.bfLoginView)
                 }
 
