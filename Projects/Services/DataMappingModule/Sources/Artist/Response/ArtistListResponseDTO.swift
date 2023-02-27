@@ -20,7 +20,8 @@ public struct ArtistListResponseDTO: Codable, Equatable {
 
     private enum CodingKeys: String, CodingKey {
         case ID = "id"
-        case name, short, group, title, description
+        case title = "app_title"
+        case name, short, group, description
         case color, youtube, twitch, instagram
     }
 }
