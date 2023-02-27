@@ -1,9 +1,14 @@
 import Foundation
 
 public extension Int {
-    func toWMDateString() -> String {
-        // TODO: API 협의 후 변경할 예정입니다.
-        return String(self)
+    
+    /// Int 값을 받으면 세번쨰 자리마다 ,를 삽입하여 반환합니다.
+    /// - Returns: 세 자리마다 ,가 들어간 String
+    func addCommaToNumber() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        
+        return numberFormatter.string(from: NSNumber(value: self))!
     }
     
     /// DateFormat의 형태를 변경합니다.

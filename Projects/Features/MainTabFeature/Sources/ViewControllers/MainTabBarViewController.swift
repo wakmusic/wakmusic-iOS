@@ -17,25 +17,27 @@ import ArtistFeature
 import ChartFeature
 import StorageFeature
 
-public class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
     @IBOutlet weak public var contentView: UIView!
 
     private lazy var viewControllers: [UIViewController] = {
-        return [HomeViewController.viewController().wrapNavigationController,
-                ChartViewController.viewController().wrapNavigationController,
-                searchComponent.makeView().wrapNavigationController,
-                artistComponent.makeView().wrapNavigationController,
-                storageComponent.makeView().wrapNavigationController
+        return [
+            HomeViewController.viewController().wrapNavigationController,
+            chartComponent.makeView(),
+            searchComponent.makeView().wrapNavigationController,
+            artistComponent.makeView().wrapNavigationController,
+            storageComponent.makeView().wrapNavigationController
         ]
     }()
 
-    var previousIndex: Int?
-    var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-    
-    var searchComponent: SearchComponent!
-    var artistComponent: ArtistComponent!
-    var storageComponent: StorageComponent!
+    private var previousIndex: Int?
+    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
+
+    private var chartComponent: ChartComponent!
+    private var searchComponent: SearchComponent!
+    private var artistComponent: ArtistComponent!
+    private var storageComponent: StorageComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,16 +56,16 @@ public class MainTabBarViewController: BaseViewController, ViewControllerFromSto
     }
 
     public static func viewController(
+        chartComponent: ChartComponent,
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         
+        viewController.chartComponent = chartComponent
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
-        
-        
         viewController.storageComponent = storageCompoent
 
         return viewController
