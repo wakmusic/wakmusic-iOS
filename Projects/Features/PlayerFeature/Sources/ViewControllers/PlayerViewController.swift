@@ -29,8 +29,11 @@ public class PlayerViewController: UIViewController {
         $0.isHidden = true
     }
     
-    init(viewModel: PlayerViewModel) {
+    var playlistComponent: PlaylistComponent!
+    
+    init(viewModel: PlayerViewModel, playlistComponent: PlaylistComponent) {
         self.viewModel = viewModel
+        self.playlistComponent = playlistComponent
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,6 +64,13 @@ public class PlayerViewController: UIViewController {
         bindViewModel()
     }
     
+    func showPlaylist() {
+        let playlistVC = playlistComponent.makeView()
+        playlistVC.modalPresentationStyle = .fullScreen
+        playlistVC.view.frame = self.view.frame
+        self.present(playlistVC, animated: true)
+    }
+    
 }
 
 public extension PlayerViewController {
@@ -83,7 +93,7 @@ private extension PlayerViewController {
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
             likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
-            playlistButtonDidTapEvent: self.playerView.playistButton.rx.tap.asObservable(),
+            playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher,
             miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
             miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
@@ -100,6 +110,7 @@ private extension PlayerViewController {
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
+        bindShowPlaylist(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -221,6 +232,12 @@ private extension PlayerViewController {
                 self?.updateLyricsHighlight(index: index)
             }
             .store(in: &subsciption)
+    }
+    
+    private func bindShowPlaylist(output: PlayerViewModel.Output) {
+        output.willShowPlaylist.sink { [weak self] _ in
+            self?.showPlaylist()
+        }.store(in: &subsciption)
     }
     
     private func updateLyricsHighlight(index: Int) {

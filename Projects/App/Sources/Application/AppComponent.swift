@@ -45,4 +45,8 @@ public extension AppComponent {
     var playerComponent: PlayerComponent {
         PlayerComponent(parent: self)
     }
+    
+    var playlistComponent: PlaylistComponent {
+        PlaylistComponent(parent: self)
+    }
 }
