@@ -528,18 +528,18 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
-        localTable["chartContentComponent-ChartContentComponent"] = { self.chartContentComponent as Any }
-        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
-        localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
-        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
-        localTable["fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"] = { self.fetchChartUpdateTimeUseCase as Any }
         localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
         localTable["qnaContentComponent-QnaContentComponent"] = { self.qnaContentComponent as Any }
         localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
         localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
         localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
         localTable["fetchQnaUseCase-any FetchQnaUseCase"] = { self.fetchQnaUseCase as Any }
+        localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
+        localTable["chartContentComponent-ChartContentComponent"] = { self.chartContentComponent as Any }
+        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
+        localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
+        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
+        localTable["fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"] = { self.fetchChartUpdateTimeUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
