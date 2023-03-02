@@ -59,7 +59,8 @@ private extension PlaylistViewController {
         
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
-
+        bindPlayButtonImages(output: output)
+        
         output.willClosePlaylist.sink { [weak self] _ in
             self?.dismiss(animated: true)
         }.store(in: &subscription)
@@ -90,6 +91,18 @@ private extension PlaylistViewController {
                 let newValue = totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
                 $0.top.left.bottom.equalToSuperview()
                 $0.width.equalTo(self.playlistView.totalPlayTimeView.snp.width).multipliedBy(newValue)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindPlayButtonImages(output: PlaylistViewModel.Output) {
+        output.playerState.sink { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case .playing:
+                self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
+            default:
+                self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
             }
         }.store(in: &subscription)
     }
