@@ -52,8 +52,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
     }
     
     internal lazy var playImageView = UIImageView().then {
-        $0.image = DesignSystemAsset.Player.playMedium.image
-        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.Player.playLarge.image
+        $0.layer.shadowColor = UIColor(red: 0.03, green: 0.06, blue: 0.2, alpha: 0.04).cgColor
+        $0.layer.shadowOpacity = 1.0
+        $0.layer.shadowOffset = CGSize(width: 0, height: 5.33)
+        $0.layer.shadowRadius = 5.33
     }
     
     internal lazy var waveStreamAnimationView =
