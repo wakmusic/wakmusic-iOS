@@ -72,6 +72,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     internal var isPlaying: Bool = false {
         didSet {
             updateHidden()
+            highlight()
         }
     }
     
@@ -93,6 +94,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
         playImageView.isHidden = isPlaying
         waveStreamAnimationView.isHidden = !isPlaying
         if !waveStreamAnimationView.isHidden { waveStreamAnimationView.play() }
+    }
+    
+    private func highlight() {
+        titleLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
+        artistLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
     }
     
     internal func setContent(song: SongEntity) {
