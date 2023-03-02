@@ -12,6 +12,7 @@ import Combine
 import Kingfisher
 import SnapKit
 import DesignSystem
+import Utility
 
 public class PlaylistViewController: UIViewController {
     var viewModel: PlaylistViewModel!
@@ -135,6 +136,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         let movedData = songs[sourceIndexPath.row]
         playState.playList.remove(at: sourceIndexPath.row)
         playState.playList.insert(movedData, at: destinationIndexPath.row)
+        HapticManager.shared.impact(style: .light)
     }
     
     public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
