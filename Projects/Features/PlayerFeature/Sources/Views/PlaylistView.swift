@@ -38,7 +38,7 @@ public final class PlaylistView: UIView {
     
     internal lazy var editButton = RectangleButton(type: .custom).then {
         $0.setBackgroundColor(.clear, for: .normal)
-        $0.setColor(title: DesignSystemAsset.GrayColor.gray400.color, border: DesignSystemAsset.GrayColor.gray300.color)
+        $0.setColor(isHighlight: false)
         $0.setTitle("편집", for: .normal)
         $0.titleLabel?.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 12)
         $0.layer.borderWidth = 1

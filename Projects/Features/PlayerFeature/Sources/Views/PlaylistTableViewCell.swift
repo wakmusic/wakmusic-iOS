@@ -17,13 +17,6 @@ import Kingfisher
 internal class PlaylistTableViewCell: UITableViewCell {
     static let identifier = "PlaylistTableViewCell"
     
-    private lazy var lyricsLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray500.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
-        $0.text = ""
-    }
-    
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
         $0.contentMode = .scaleAspectFill
@@ -71,8 +64,13 @@ internal class PlaylistTableViewCell: UITableViewCell {
     
     internal var isPlaying: Bool = false {
         didSet {
-            updateHidden()
-            highlight()
+            updatePlayingState()
+        }
+    }
+    
+    override var isEditing: Bool {
+        didSet {
+            updatePlayingState()
         }
     }
     
@@ -90,10 +88,33 @@ internal class PlaylistTableViewCell: UITableViewCell {
         isPlaying = false
     }
     
-    private func updateHidden() {
-        playImageView.isHidden = isPlaying
-        waveStreamAnimationView.isHidden = !isPlaying
-        if !waveStreamAnimationView.isHidden { waveStreamAnimationView.play() }
+    private func updatePlayingState() {
+        if isEditing {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+                guard let self else { return }
+                self.playImageView.alpha = 0
+                self.playImageView.transform = CGAffineTransform(translationX: 100, y: 0)
+                self.waveStreamAnimationView.alpha = 0
+                self.waveStreamAnimationView.transform = CGAffineTransform(translationX: 100, y: 0)
+            } completion: { [weak self] _ in
+                guard let self else { return }
+                self.playImageView.isHidden = true
+                self.waveStreamAnimationView.isHidden = true
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+                guard let self else { return }
+                self.playImageView.alpha = 1
+                self.playImageView.transform = .identity
+                self.waveStreamAnimationView.alpha = 1
+                self.waveStreamAnimationView.transform = .identity
+            }
+            self.playImageView.isHidden = isPlaying
+            self.waveStreamAnimationView.isHidden = !isPlaying
+            if !waveStreamAnimationView.isHidden {
+                self.waveStreamAnimationView.play()
+            }
+        }
     }
     
     private func highlight() {

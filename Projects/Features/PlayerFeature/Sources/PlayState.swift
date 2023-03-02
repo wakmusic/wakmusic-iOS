@@ -130,6 +130,14 @@ extension PlayState {
             list.append(item)
         }
 
+        func insert(_ newElement: SongEntity, at: Int) {
+            list.insert(newElement, at: at)
+        }
+        
+        func remove(at: Int) {
+            list.remove(at: at)
+        }
+        
         func removeAll() {
             list.removeAll()
         }
