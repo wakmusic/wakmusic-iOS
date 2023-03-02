@@ -65,6 +65,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     internal var isPlaying: Bool = false {
         didSet {
             updatePlayingState()
+            highlight()
         }
     }
     

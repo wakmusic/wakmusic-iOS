@@ -29,6 +29,7 @@ final class PlaylistViewModel: ViewModelType {
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
+        var currentSongIndex = CurrentValueSubject<Int, Never>(0)
     }
     
     private let playState = PlayState.shared
@@ -88,6 +89,8 @@ final class PlaylistViewModel: ViewModelType {
             guard let self else { return }
             guard let song = song else { return }
             output.thumbnailImageURL.send(self.thumbnailURL(from: song.id))
+            guard let currentSongIndex = self.playState.playList.uniqueIndex(of: song) else { return }
+            output.currentSongIndex.send(currentSongIndex)
         }.store(in: &subscription)
         
         playState.$progress.sink { progress in

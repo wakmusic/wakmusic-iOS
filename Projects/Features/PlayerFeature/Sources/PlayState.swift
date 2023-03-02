@@ -167,7 +167,7 @@ extension PlayState {
             }
         }
 
-        private func uniqueIndex(of item: SongEntity) -> Int? {
+        func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             let index = list.enumerated().compactMap { $0.element == item ? $0.offset : nil }.first
             return index

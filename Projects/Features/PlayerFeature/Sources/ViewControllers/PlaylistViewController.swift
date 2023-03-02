@@ -74,6 +74,10 @@ private extension PlaylistViewController {
             self.playlistView.playlistTableView.visibleCells.forEach { $0.isEditing = isEditing }
             
         }.store(in: &subscription)
+        
+        output.currentSongIndex.sink { [weak self] currentSongIndex in
+            self?.updatePlayingStatus(currentSongIndex: currentSongIndex)
+        }.store(in: &subscription)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
@@ -105,6 +109,17 @@ private extension PlaylistViewController {
                 self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
             }
         }.store(in: &subscription)
+    }
+    
+    private func updatePlayingStatus(currentSongIndex: Int) {
+        // 모든 셀에 대해서 재생상태 업데이트
+        let rows = playlistView.playlistTableView.numberOfRows(inSection: 0)
+        for row in 0..<rows {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = playlistView.playlistTableView.cellForRow(at: indexPath) as? PlaylistTableViewCell {
+                cell.isPlaying = (row == currentSongIndex)
+            }
+        }
     }
     
 }
