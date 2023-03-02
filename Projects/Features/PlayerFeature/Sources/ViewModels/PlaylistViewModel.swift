@@ -38,4 +38,8 @@ final class PlaylistViewModel: ViewModelType {
         
         return output
     }
+    
+    func thumbnailURL(from id: String) -> String {
+        return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
+    }
 }

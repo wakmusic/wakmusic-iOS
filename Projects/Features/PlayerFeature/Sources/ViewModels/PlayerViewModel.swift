@@ -67,6 +67,10 @@ final class PlayerViewModel: ViewModelType {
         print("✅ PlayerViewModel 생성")
     }
     
+    deinit {
+        print("❌ PlayerViewModel deinit")
+    }
+    
     func transform(from input: Input) -> Output {
         let output = Output()
         

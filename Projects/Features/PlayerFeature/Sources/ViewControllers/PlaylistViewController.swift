@@ -34,13 +34,15 @@ public class PlaylistViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        playlistView.playlistTableView.delegate = self
+        playlistView.playlistTableView.dataSource = self
         bindViewModel()
     }
 }
 
 private extension PlaylistViewController {
     private func bindViewModel() {
-        let input = PlaylistViewModel.Input(closeButtonDidTapEvent: self.playlistView.dismissButton.tapPublisher)
+        let input = PlaylistViewModel.Input(closeButtonDidTapEvent: self.playlistView.closeButton.tapPublisher)
         let output = self.viewModel.transform(from: input)
         
         output.willClosePlaylist.sink { [weak self] _ in
@@ -48,3 +50,22 @@ private extension PlaylistViewController {
         }.store(in: &subscription)
     }
 }
+
+extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return playState.playList.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell
+        else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        let songs = playState.playList.list
+        cell.setContent(song: songs[indexPath.row])
+        if indexPath.row == 0 { cell.isPlaying = true } // 임시로
+        return cell
+    }
+    
+    
+}
+    
