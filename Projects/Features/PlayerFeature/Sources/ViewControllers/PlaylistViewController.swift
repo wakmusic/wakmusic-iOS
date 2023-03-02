@@ -62,7 +62,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         let songs = playState.playList.list
         cell.setContent(song: songs[indexPath.row])
-        if indexPath.row == 0 { cell.isPlaying = true } // 임시로
+        cell.isPlaying = indexPath.row == 0 ? true : false // 임시로
         return cell
     }
     

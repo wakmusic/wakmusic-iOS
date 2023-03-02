@@ -57,7 +57,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     }
     
     internal lazy var waveStreamAnimationView =
-    LottieAnimationView(name: "WaveSteam", bundle: DesignSystemResources.bundle).then {
+    LottieAnimationView(name: "WaveStream", bundle: DesignSystemResources.bundle).then {
         $0.loopMode = .loop
         $0.contentMode = .scaleAspectFit
     }
@@ -89,6 +89,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     private func updateHidden() {
         playImageView.isHidden = isPlaying
         waveStreamAnimationView.isHidden = !isPlaying
+        if !waveStreamAnimationView.isHidden { waveStreamAnimationView.play() }
     }
     
     internal func setContent(song: SongEntity) {
