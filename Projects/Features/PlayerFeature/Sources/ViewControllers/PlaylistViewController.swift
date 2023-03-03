@@ -13,16 +13,24 @@ import Kingfisher
 import SnapKit
 import DesignSystem
 import Utility
+import YouTubePlayerKit
 
 public class PlaylistViewController: UIViewController {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
+    lazy var youtubePlayerView = YouTubePlayerHostingView(player: playState.player).then {
+        $0.isHidden = true
+    }
     
     init(viewModel: PlaylistViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    deinit {
+        print("playlistVC deinit")
     }
     
     required init?(coder: NSCoder) {
@@ -33,6 +41,12 @@ public class PlaylistViewController: UIViewController {
         super.loadView()
         playlistView = PlaylistView(frame: self.view.frame)
         self.view.addSubview(playlistView)
+        self.view.addSubview(youtubePlayerView)
+        self.youtubePlayerView.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(self.playlistView.thumbnailImageView)
+            $0.width.equalTo(self.playlistView.thumbnailImageView.snp.width)
+            $0.height.equalTo(self.playlistView.thumbnailImageView.snp.height)
+        }
         
     }
     
@@ -137,6 +151,10 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         cell.setContent(song: songs[indexPath.row])
         cell.isPlaying = indexPath.row == 0 ? true : false // 임시로
         return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        playState.loadInPlaylist(at: indexPath.row)
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
