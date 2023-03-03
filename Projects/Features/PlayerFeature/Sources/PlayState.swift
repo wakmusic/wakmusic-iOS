@@ -69,6 +69,11 @@ extension PlayState {
         self.player.play()
     }
     
+    /// ⏸️ 일시정지
+    func pause() {
+        self.player.pause()
+    }
+    
     /// ▶️ 해당 곡 새로 재생
     func load(at song: SongEntity) {
         self.currentSong = song
@@ -76,9 +81,12 @@ extension PlayState {
         self.player.load(source: .video(id: currentSong.id))
     }
     
-    /// ⏸️ 일시정지
-    func pause() {
-        self.player.pause()
+    /// ▶️ 플레이리스트의 해당 위치의  곡 재생
+    func loadInPlaylist(at index: Int) {
+        self.playList.move(at: index)
+        self.currentSong = self.playList.current
+        guard let currentSong = currentSong else { return }
+        load(at: currentSong)
     }
 
     /// ⏩ 다음 곡으로 변경 후 재생
@@ -147,13 +155,18 @@ extension PlayState {
         }
 
         func back() {
-            if currentPlayIndex == 0 { currentPlayIndex = lastIndex; return } // 현재 곡이 첫번째 곡이면 마지막 곡으로
-            currentPlayIndex -= 1
+            // 현재 곡이 첫번째 곡이면 마지막 곡으로
+            move(at: currentPlayIndex == 0 ? lastIndex : currentPlayIndex - 1)
         }
 
         func next() {
-            if isLast { currentPlayIndex = 0; return } // 현재 곡이 마지막이면 첫번째 곡으로
-            currentPlayIndex += 1
+            // 현재 곡이 마지막이면 첫번째 곡으로
+            move(at: isLast ? 0 : currentPlayIndex + 1)
+        }
+        
+        func move(at index: Int) {
+            if !(0..<list.count).contains(index) { return }
+            currentPlayIndex = index
         }
 
         func uniqueAppend(item: SongEntity) {
