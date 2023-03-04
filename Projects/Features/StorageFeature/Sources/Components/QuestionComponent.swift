@@ -18,6 +18,6 @@ public protocol QuestionDependency: Dependency {
 
 public final class QuestionComponent: Component<QuestionDependency> {
     public func makeView() -> QuestionViewController {
-        return QuestionViewController.viewController()
+        return QuestionViewController.viewController(viewModel: .init())
     }
 }
