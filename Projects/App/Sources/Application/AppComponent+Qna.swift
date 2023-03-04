@@ -30,6 +30,10 @@ public extension AppComponent {
         QnaContentComponent(parent: self)
     }
     
+    var questionComponent: QuestionComponent {
+        
+        QuestionComponent(parent: self)
+    }
     
 
     

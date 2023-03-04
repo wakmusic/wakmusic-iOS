@@ -41,9 +41,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let viewController = qnaComponent.makeView()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let vc = qnaComponent.makeView()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    @IBAction func moveQuestionAction(_ sender: Any) {
+        
+        let vc =  questionComponent.makeView()
+        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        self.present(vc, animated: true)
+        
+    }
+    
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
         
@@ -76,6 +85,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var output = viewModel.transform(from: input)
     
     var qnaComponent:QnaComponent!
+    var questionComponent:QuestionComponent!
     
     var disposeBag = DisposeBag()
     
@@ -93,11 +103,12 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
 
-    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent) -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent
+        viewController.questionComponent = questionComponent
         
         return viewController
     }
