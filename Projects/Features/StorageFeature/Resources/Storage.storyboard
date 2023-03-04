@@ -540,7 +540,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhU-pN-mac" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3216" y="5"/>
+            <point key="canvasLocation" x="3153" y="705"/>
         </scene>
         <!--Qna Content View Controller-->
         <scene sceneID="eI9-eD-3lf">
@@ -660,7 +660,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJE-VD-MSH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3214.5038167938928" y="695.77464788732402"/>
+            <point key="canvasLocation" x="3920" y="705"/>
         </scene>
         <!--My Play List View Controller-->
         <scene sceneID="Xx3-OI-gKt">
@@ -854,7 +854,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9tJ-eH-BZt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1933" y="-417"/>
+            <point key="canvasLocation" x="3152" y="34"/>
         </scene>
     </scenes>
     <resources>
