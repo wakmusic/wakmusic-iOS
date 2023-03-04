@@ -17,9 +17,16 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var reportBugButton: UIButton!
-    @IBOutlet weak var songRequestButton: UIButton!
+
+    @IBOutlet weak var questionImageview: UIImageView!
+    @IBOutlet weak var questionButton: UIButton!
+    @IBOutlet weak var questionSuperView: UIView!
+    
+    
+    @IBOutlet weak var qnaSuperView: UIView!
+    @IBOutlet weak var qnaSuperImageview: UIImageView!
     @IBOutlet weak var qnaButton: UIButton!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -106,18 +113,19 @@ extension RequestViewController{
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons:[UIButton] = [self.reportBugButton,self.songRequestButton,self.qnaButton]
-        
-        for i in 0...2 {
+        let buttons:[UIButton] = [self.questionButton,self.qnaButton]
+        let superViews:[UIView] = [self.questionSuperView,self.qnaSuperView]
+        let imageViews:[UIImageView] = [self.questionImageview,self.qnaSuperImageview]
+        for i in 0...1 {
             
             var title = ""
             switch i {
             case 0:
-                title = "버그 제보"
+                title = "문의하기"
+                imageViews[i].image = DesignSystemAsset.Storage.question.image
             case 1:
-                title = "노래 추가, 수정 요청"
-            case 2:
                 title = "자주 묻는 질문"
+                imageViews[i].image = DesignSystemAsset.Storage.qna.image
             default:
                 return
             }
@@ -128,9 +136,11 @@ extension RequestViewController{
             
             buttons[i].setAttributedTitle(attr, for: .normal)
             
-            buttons[i].layer.borderWidth = 1
-            buttons[i].layer.cornerRadius = 12
-            buttons[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+            superViews[i].layer.borderWidth = 1
+            superViews[i].layer.cornerRadius = 12
+            superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            
+            
             
 
         }
