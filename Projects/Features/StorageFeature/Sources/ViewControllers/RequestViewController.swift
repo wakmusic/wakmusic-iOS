@@ -233,7 +233,8 @@ extension RequestViewController{
         let versionLabelHeight:CGFloat = 18
         let mainTabBarHeight:CGFloat = 56
 
-        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
+        let res:CGFloat = 40
+        //(APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
         
         return res
     }
