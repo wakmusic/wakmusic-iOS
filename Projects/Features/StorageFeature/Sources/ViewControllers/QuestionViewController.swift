@@ -243,7 +243,7 @@ extension QuestionViewController {
                 
                 superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
                 
-                superViews[i].addShadow(location: .bottom,color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
+                superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
                 
             }
             
