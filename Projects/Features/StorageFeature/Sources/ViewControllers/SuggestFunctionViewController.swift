@@ -29,13 +29,15 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     @IBOutlet weak var webSiteCheckImageView: UIImageView!
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
     
-    let disposBag = DisposeBag()
+    let disposeBag = DisposeBag()
     
     var viewModel:SuggestFunctionViewModel!
     lazy var input = SuggestFunctionViewModel.Input()
@@ -154,17 +156,44 @@ extension SuggestFunctionViewController {
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
         bindRx()
+        bindbuttonEvent()
+        responseViewbyKeyboard()
     }
     
-    
-    private func bindRx(){
+    private func bindbuttonEvent(){
+        mobileAppButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+           
+            self.view.endEditing(true)
+            self.output.selectedIndex.accept(0)
+        }).disposed(by: disposeBag)
         
-        textField.rx.text.orEmpty
-      //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
-            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
-            .bind(to: input.textString)
-            .disposed(by: disposBag)
         
+        webSiteButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.view.endEditing(true)
+            self.output.selectedIndex.accept(1)
+        }).disposed(by: disposeBag)
+        
+        previousButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.view.endEditing(true)
+            self.navigationController?.popViewController(animated: true)
+            
+        })
+        .disposed(by: disposeBag)
         
         closeButton.rx.tap.subscribe(onNext: { [weak self] in
             
@@ -174,22 +203,34 @@ extension SuggestFunctionViewController {
             
             self.dismiss(animated: true)
            
-            
-            
-     
         })
-        .disposed(by: disposBag)
+        .disposed(by: disposeBag)
         
-        previousButton.rx.tap.subscribe(onNext: { [weak self] in
+        let resultObservable = Observable.combineLatest(input.textString, output.selectedIndex)
+        
+        completionButton.rx.tap
+            .withLatestFrom(resultObservable)
+            .subscribe(onNext: { [weak self] (text,index) in
+                
+                DEBUG_LOG("\(text) \(index)")
+            })
+            .disposed(by: disposeBag)
             
-            guard let self = self else{
-                return
-            }
-            
-            self.navigationController?.popViewController(animated: true)
-            
-        })
-        .disposed(by: disposBag)
+    }
+    
+    
+    private func bindRx(){
+        
+        textField.rx.text.orEmpty
+      //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
+            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
+            .bind(to: input.textString)
+            .disposed(by: disposeBag)
+        
+        
+     
+        
+    
         
         let editingDidBegin = textField.rx.controlEvent(.editingDidBegin)
         let editingDidEnd = textField.rx.controlEvent(.editingDidEnd)
@@ -217,29 +258,9 @@ extension SuggestFunctionViewController {
             
             
         })
-        .disposed(by: disposBag)
-        
-        mobileAppButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-           
-            self.view.endEditing(true)
-            self.output.selectedIndex.accept(0)
-        }).disposed(by: disposBag)
+        .disposed(by: disposeBag)
         
         
-        webSiteButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-            self.view.endEditing(true)
-            self.output.selectedIndex.accept(1)
-        }).disposed(by: disposBag)
         
         
         output.selectedIndex
@@ -292,34 +313,56 @@ extension SuggestFunctionViewController {
             }
             
         })
-        .disposed(by: disposBag)
+        .disposed(by: disposeBag)
         
-        input.textString
-            .withLatestFrom(output.selectedIndex){($0,$1)}
+
+        
+        Observable.combineLatest(input.textString, output.selectedIndex)
             .subscribe(onNext: { [weak self] (text,index) in
                 
                 guard let self = self else{
                     return
                 }
                 
-                DEBUG_LOG("\(text) \(index)")
-                
-             
-                
-                
-                
+ 
                 if !text.isWhiteSpace && index != -2 {
                     self.completionButton.isEnabled = true
+                }
+                else {
+                    self.completionButton.isEnabled = false
                 }
                 
                 
                 
                 
             })
-            .disposed(by: disposBag)
+            .disposed(by: disposeBag)
         
-        
+     
         
     }
     
+    
+    private func responseViewbyKeyboard(){
+        RxKeyboard.instance.visibleHeight //드라이브: 무조건 메인쓰레드에서 돌아감
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                
+                guard let self = self else {
+                    return
+                }
+                
+             
+                //키보드는 바텀 SafeArea부터 계산되므로 빼야함
+                let window: UIWindow? = UIApplication.shared.windows.first
+                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+                
+                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom + 10
+                
+                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 0
+                self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
+                
+                
+            }).disposed(by: disposeBag)
+        
+    }
 }

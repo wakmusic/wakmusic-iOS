@@ -1244,9 +1244,9 @@
                     </view>
                     <connections>
                         <outlet property="baseLineView" destination="u1g-ef-Pmr" id="IsC-Xt-Ye9"/>
-                        <outlet property="bottomConstraint" destination="qOd-LD-mg6" id="BbH-Em-EZD"/>
                         <outlet property="closeButton" destination="5VP-Od-u7p" id="RgL-oR-CME"/>
                         <outlet property="completionButton" destination="BpW-UH-qtY" id="2Yl-ag-RrS"/>
+                        <outlet property="contentViewBottomConstraint" destination="qOd-LD-mg6" id="BbH-Em-EZD"/>
                         <outlet property="descriptionLabel1" destination="9t4-iA-ALV" id="PNx-IN-1bD"/>
                         <outlet property="descriptionLabel2" destination="DbQ-YN-Mfx" id="FC3-L6-AnK"/>
                         <outlet property="mobileAppButton" destination="n5L-Zk-XvZ" id="brq-fd-lvv"/>
