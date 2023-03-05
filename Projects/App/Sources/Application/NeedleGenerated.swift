@@ -188,6 +188,17 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class SuggestFunctionDependency229560bbe33097b02547Provider: SuggestFunctionDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->SuggestFunctionComponent
+private func factory63287bff3999ed1787dde3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SuggestFunctionDependency229560bbe33097b02547Provider()
+}
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInComponent: SignInComponent {
         return appComponent.signInComponent
@@ -203,6 +214,19 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
 /// ^->AppComponent->StorageComponent
 private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
+    var suggestFunctionComponent: SuggestFunctionComponent {
+        return appComponent.suggestFunctionComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->QuestionComponent
+private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
     var multiPurposePopComponent: MultiPurposePopComponent {
@@ -295,6 +319,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     }
     var qnaComponent: QnaComponent {
         return appComponent.qnaComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -530,6 +557,8 @@ extension AppComponent: Registration {
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
         localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
         localTable["qnaContentComponent-QnaContentComponent"] = { self.qnaContentComponent as Any }
+        localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
+        localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { self.suggestFunctionComponent as Any }
         localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
         localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
         localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
@@ -599,10 +628,20 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
     }
 }
+extension SuggestFunctionComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension StorageComponent: Registration {
     public func registerItems() {
         keyPathToName[\StorageDependency.signInComponent] = "signInComponent-SignInComponent"
         keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
+    }
+}
+extension QuestionComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\QuestionDependency.suggestFunctionComponent] = "suggestFunctionComponent-SuggestFunctionComponent"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -640,6 +679,7 @@ extension RequestComponent: Registration {
     public func registerItems() {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
         keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
+        keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
     }
 }
 extension QnaContentComponent: Registration {
@@ -730,7 +770,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787dde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
