@@ -157,7 +157,7 @@ extension SuggestFunctionViewController {
         
         bindRx()
         bindbuttonEvent()
-        responseViewbyKeyboard()
+      //  responseViewbyKeyboard()
     }
     
     private func bindbuttonEvent(){
