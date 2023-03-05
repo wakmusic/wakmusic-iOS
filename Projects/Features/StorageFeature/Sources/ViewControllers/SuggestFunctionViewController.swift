@@ -307,6 +307,7 @@ extension SuggestFunctionViewController {
                 
                 superViews[i].layer.borderColor = i == index ? self.pointColor.cgColor : self.unPointColor.cgColor
                 
+                superViews[i].addShadow(location: .bottom,color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
                 
                 
                 

@@ -224,6 +224,11 @@ extension QuestionViewController {
 
                 }
                 
+               
+                
+                
+              
+                
                 
                 buttons[i].setAttributedTitle(
                     NSMutableAttributedString(string:title,
@@ -237,6 +242,8 @@ extension QuestionViewController {
                 imageViews[i].isHidden = i == index ? false : true
                 
                 superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
+                
+                superViews[i].addShadow(location: .bottom,color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
                 
             }
             
