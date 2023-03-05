@@ -9,6 +9,8 @@
 import UIKit
 import Utility
 import DesignSystem
+import RxSwift
+import RxKeyboard
 
 public final class SuggestFunctionViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -32,6 +34,8 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
+    
+    let disposBag = DisposeBag()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,5 +148,38 @@ extension SuggestFunctionViewController {
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
+        bindRx()
     }
+    
+    
+    private func bindRx(){
+        
+        closeButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.dismiss(animated: true)
+           
+            
+            
+     
+        })
+        .disposed(by: disposBag)
+        
+        previousButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.navigationController?.popViewController(animated: true)
+            
+        })
+        .disposed(by: disposBag)
+        
+        
+    }
+    
 }
