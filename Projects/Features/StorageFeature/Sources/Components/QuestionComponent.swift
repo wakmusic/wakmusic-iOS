@@ -12,12 +12,13 @@ import DomainModule
 
 public protocol QuestionDependency: Dependency {
     
+    var suggestFunctionComponent: SuggestFunctionComponent {get}
 
 
 }
 
 public final class QuestionComponent: Component<QuestionDependency> {
     public func makeView() -> QuestionViewController {
-        return QuestionViewController.viewController(viewModel: .init())
+        return QuestionViewController.viewController(viewModel: .init(),suggestFunctionComponent: dependency.suggestFunctionComponent)
     }
 }

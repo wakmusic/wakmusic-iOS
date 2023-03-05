@@ -35,6 +35,11 @@ public extension AppComponent {
         QuestionComponent(parent: self)
     }
     
+    var suggestFunctionComponent:SuggestFunctionComponent {
+        
+        SuggestFunctionComponent(parent: self)
+    }
+    
 
     
     var remoteQnaDataSource: any RemoteQnaDataSource {

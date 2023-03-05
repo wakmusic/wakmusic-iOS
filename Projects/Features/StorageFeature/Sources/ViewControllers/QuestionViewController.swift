@@ -10,8 +10,9 @@ import UIKit
 import DesignSystem
 import RxSwift
 import Utility
+import BaseFeature
 
-public final class QuestionViewController: UIViewController,ViewControllerFromStoryBoard {
+public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
@@ -42,16 +43,19 @@ public final class QuestionViewController: UIViewController,ViewControllerFromSt
     lazy var input = QuestionViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
+    var suggestFunctionComponent:SuggestFunctionComponent!
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
     }
     
-    public static func viewController(viewModel:QuestionViewModel) -> QuestionViewController {
+    public static func viewController(viewModel:QuestionViewModel,suggestFunctionComponent:SuggestFunctionComponent) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
+        viewController.suggestFunctionComponent = suggestFunctionComponent
 
         
         return viewController
@@ -226,6 +230,8 @@ extension QuestionViewController {
                                  .foregroundColor:
                                                             i == index ? self.selectedColor : self.unSelectedTextColor   ]), for: .normal)
                 
+               
+                
                 imageViews[i].isHidden = i == index ? false : true
                 
                 superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
@@ -247,6 +253,21 @@ extension QuestionViewController {
                 }
                 
                 DEBUG_LOG($0)
+                
+                switch $0 {
+                    
+                case 1:
+                    let vc = self.suggestFunctionComponent.makeView()
+                    
+                    
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                    
+                default:
+                    return
+                }
+                
                 
             })
             .disposed(by: disposeBag)

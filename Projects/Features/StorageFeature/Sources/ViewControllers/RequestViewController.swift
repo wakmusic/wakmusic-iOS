@@ -47,7 +47,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     @IBAction func moveQuestionAction(_ sender: Any) {
         
-        let vc =  questionComponent.makeView()
+        let vc =  questionComponent.makeView().wrapNavigationController
         vc.modalPresentationStyle = .fullScreen //꽉찬 모달
         self.present(vc, animated: true)
         

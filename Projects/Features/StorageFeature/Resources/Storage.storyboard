@@ -890,8 +890,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fIs-6C-Wpp">
                                         <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kBp-AV-2zO">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kBp-AV-2zO">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WEn-7Q-J1v">
@@ -915,8 +916,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VSC-0W-JnU">
                                         <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b0t-S1-Kb9">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b0t-S1-Kb9">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xUi-aB-foU">
@@ -948,8 +950,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G7e-vj-eCw">
                                         <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-qq-8na">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sfx-qq-8na">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SOt-6l-EcO">
@@ -973,8 +976,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TcM-EE-sHK">
                                         <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ATa-wF-riM">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ATa-wF-riM">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MN9-cB-NJ6">
@@ -1051,10 +1055,10 @@
             </objects>
             <point key="canvasLocation" x="3152" y="5"/>
         </scene>
-        <!--View Controller-->
+        <!--Suggest Function View Controller-->
         <scene sceneID="uCY-EP-mtY">
             <objects>
-                <viewController id="x8S-eF-Aye" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SuggestFunctionViewController" id="x8S-eF-Aye" customClass="SuggestFunctionViewController" customModule="StorageFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dGV-u5-c8T">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1093,10 +1097,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gu2-jh-hwg">
-                                <rect key="frame" x="20" y="173.33333333333334" width="353" height="56"/>
+                                <rect key="frame" x="20" y="147.33333333333334" width="353" height="56"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9QO-OB-lBW">
-                                        <rect key="frame" x="0.0" y="11" width="353" height="34"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9QO-OB-lBW">
+                                        <rect key="frame" x="0.0" y="18.666666666666657" width="353" height="18.666666666666671"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -1110,28 +1114,29 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u1g-ef-Pmr">
-                                <rect key="frame" x="36" y="229.33333333333334" width="321" height="1"/>
+                                <rect key="frame" x="20" y="203.33333333333334" width="353" height="1"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="jPM-GE-OiP"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DbQ-YN-Mfx">
-                                <rect key="frame" x="20" y="270.33333333333331" width="353" height="20.333333333333314"/>
+                                <rect key="frame" x="20" y="243.33333333333334" width="353" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="wDo-r0-ZPg">
-                                <rect key="frame" x="20" y="302.66666666666669" width="353" height="48"/>
+                                <rect key="frame" x="20" y="275.66666666666669" width="353" height="48"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xSe-cE-Mlh">
                                         <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5L-Zk-XvZ">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5L-Zk-XvZ">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DZr-jZ-Fcf">
                                                 <rect key="frame" x="136.66666666666666" y="12" width="24" height="24"/>
@@ -1155,10 +1160,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oca-pZ-kRT">
                                         <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="48"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w9s-5n-Kjt">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w9s-5n-Kjt">
                                                 <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                             </button>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KgQ-KV-h6h">
                                                 <rect key="frame" x="136.33333333333334" y="12" width="24" height="24"/>
@@ -1217,25 +1223,42 @@
                             <constraint firstItem="YWN-US-3pd" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" id="3Po-yz-ZDn"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="wDo-r0-ZPg" secondAttribute="trailing" constant="20" id="8aU-nc-dtK"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="yR7-x4-Zue" secondAttribute="trailing" constant="20" id="95G-lS-v1k"/>
-                            <constraint firstItem="Gu2-jh-hwg" firstAttribute="top" secondItem="9t4-iA-ALV" secondAttribute="bottom" constant="26" id="B3X-tb-LYH"/>
+                            <constraint firstItem="Gu2-jh-hwg" firstAttribute="top" secondItem="9t4-iA-ALV" secondAttribute="bottom" id="B3X-tb-LYH"/>
+                            <constraint firstItem="u1g-ef-Pmr" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="BBb-Kl-a3h"/>
                             <constraint firstItem="yR7-x4-Zue" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="BdO-Vi-W96"/>
                             <constraint firstItem="DbQ-YN-Mfx" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="C6K-nf-Cqe"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="DbQ-YN-Mfx" secondAttribute="trailing" constant="20" id="HWD-o6-8IP"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="YWN-US-3pd" secondAttribute="trailing" id="Kd9-4W-lHU"/>
-                            <constraint firstItem="u1g-ef-Pmr" firstAttribute="top" secondItem="Gu2-jh-hwg" secondAttribute="bottom" id="L3a-1V-h7K"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="9t4-iA-ALV" secondAttribute="trailing" constant="20" id="Li3-YR-w84"/>
+                            <constraint firstItem="DbQ-YN-Mfx" firstAttribute="top" secondItem="Gu2-jh-hwg" secondAttribute="bottom" constant="40" id="aFo-ko-hTC"/>
                             <constraint firstItem="9t4-iA-ALV" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="e8X-6D-wF8"/>
                             <constraint firstItem="wDo-r0-ZPg" firstAttribute="top" secondItem="DbQ-YN-Mfx" secondAttribute="bottom" constant="12" id="ePM-kP-XDO"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="u1g-ef-Pmr" secondAttribute="trailing" constant="20" id="gOS-zO-dCv"/>
                             <constraint firstItem="Gu2-jh-hwg" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="hly-F9-NC2"/>
-                            <constraint firstItem="u1g-ef-Pmr" firstAttribute="leading" secondItem="dGV-u5-c8T" secondAttribute="leadingMargin" constant="20" id="mtS-1S-MyT"/>
+                            <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="u1g-ef-Pmr" secondAttribute="trailing" constant="20" id="pxf-hP-kRT"/>
                             <constraint firstItem="YWN-US-3pd" firstAttribute="top" secondItem="Ulh-8q-v60" secondAttribute="top" id="q8i-ak-IaT"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="bottom" secondItem="yR7-x4-Zue" secondAttribute="bottom" id="qOd-LD-mg6"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="Gu2-jh-hwg" secondAttribute="trailing" constant="20" id="qw2-aI-Tnv"/>
                             <constraint firstItem="9t4-iA-ALV" firstAttribute="top" secondItem="YWN-US-3pd" secondAttribute="bottom" constant="20" id="ryg-kO-cFz"/>
-                            <constraint firstItem="DbQ-YN-Mfx" firstAttribute="top" secondItem="u1g-ef-Pmr" secondAttribute="bottom" constant="40" id="vsm-ft-k4X"/>
+                            <constraint firstItem="u1g-ef-Pmr" firstAttribute="top" secondItem="Gu2-jh-hwg" secondAttribute="bottom" id="tZw-1I-a6Z"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="baseLineView" destination="u1g-ef-Pmr" id="IsC-Xt-Ye9"/>
+                        <outlet property="bottomConstraint" destination="qOd-LD-mg6" id="BbH-Em-EZD"/>
+                        <outlet property="closeButton" destination="5VP-Od-u7p" id="RgL-oR-CME"/>
+                        <outlet property="completionButton" destination="BpW-UH-qtY" id="2Yl-ag-RrS"/>
+                        <outlet property="descriptionLabel1" destination="9t4-iA-ALV" id="PNx-IN-1bD"/>
+                        <outlet property="descriptionLabel2" destination="DbQ-YN-Mfx" id="FC3-L6-AnK"/>
+                        <outlet property="mobileAppButton" destination="n5L-Zk-XvZ" id="brq-fd-lvv"/>
+                        <outlet property="mobileAppCheckImageView" destination="DZr-jZ-Fcf" id="iXx-fk-iWv"/>
+                        <outlet property="mobileAppSuperView" destination="xSe-cE-Mlh" id="G7P-vE-Og4"/>
+                        <outlet property="previousButton" destination="avk-ob-nj2" id="7qM-Rp-VPa"/>
+                        <outlet property="textField" destination="9QO-OB-lBW" id="YTp-dH-q4c"/>
+                        <outlet property="titleLabel" destination="O4O-9E-64E" id="f8a-7S-C2i"/>
+                        <outlet property="webSiteButton" destination="w9s-5n-Kjt" id="B7Y-TZ-Gew"/>
+                        <outlet property="webSiteCheckImageView" destination="KgQ-KV-h6h" id="fdj-3A-sQS"/>
+                        <outlet property="webSiteSuperView" destination="oca-pZ-kRT" id="JAJ-iS-N7E"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FKG-Ed-yRw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
