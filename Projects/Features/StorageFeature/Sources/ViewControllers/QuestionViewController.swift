@@ -141,6 +141,8 @@ extension QuestionViewController {
     
     private func bindRx(){
         
+        
+        
         self.closeButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else{
                 return

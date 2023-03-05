@@ -37,6 +37,10 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     
     let disposBag = DisposeBag()
     
+    var viewModel:SuggestFunctionViewModel!
+    lazy var input = SuggestFunctionViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -46,9 +50,10 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     }
     
 
-    public static func viewController() -> SuggestFunctionViewController {
+    public static func viewController(viewModel:SuggestFunctionViewModel) -> SuggestFunctionViewController {
         let viewController = SuggestFunctionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
+        viewController.viewModel = viewModel
        
 
         
@@ -154,6 +159,13 @@ extension SuggestFunctionViewController {
     
     private func bindRx(){
         
+        textField.rx.text.orEmpty
+      //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
+            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
+            .bind(to: input.textString)
+            .disposed(by: disposBag)
+        
+        
         closeButton.rx.tap.subscribe(onNext: { [weak self] in
             
             guard let self = self else{
@@ -178,6 +190,134 @@ extension SuggestFunctionViewController {
             
         })
         .disposed(by: disposBag)
+        
+        let editingDidBegin = textField.rx.controlEvent(.editingDidBegin)
+        let editingDidEnd = textField.rx.controlEvent(.editingDidEnd)
+        
+
+        let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
+                                               editingDidEnd.map { UIControl.Event.editingDidEnd })
+        
+        
+        mergeObservable.subscribe(onNext: { [weak self]  event in
+            
+            guard let self = self else{
+                return
+            }
+            
+            if event == .editingDidBegin {
+                self.baseLineView.backgroundColor = self.pointColor
+            }
+            
+            else {
+                self.baseLineView.backgroundColor = self.unPointColor
+                
+                
+            }
+            
+            
+        })
+        .disposed(by: disposBag)
+        
+        mobileAppButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+           
+            self.view.endEditing(true)
+            self.output.selectedIndex.accept(0)
+        }).disposed(by: disposBag)
+        
+        
+        webSiteButton.rx.tap.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.view.endEditing(true)
+            self.output.selectedIndex.accept(1)
+        }).disposed(by: disposBag)
+        
+        
+        output.selectedIndex
+            .skip(1)
+            .subscribe(onNext: { [weak self] (index:Int) in
+            
+            guard let self = self else{
+                return
+            }
+            let superViews:[UIView] = [self.mobileAppSuperView,self.webSiteSuperView]
+            
+            let buttons:[UIButton] = [self.mobileAppButton,self.webSiteButton]
+            
+            let imageViews:[UIImageView] = [self.mobileAppCheckImageView,self.webSiteCheckImageView]
+            
+            
+            for i in 0...1 {
+                
+                var title:String = ""
+                
+                switch i {
+                case 0:
+                    title = "모바일 앱"
+                
+                case 1:
+                    title = "PC 웹"
+                
+                    
+                default:
+                    return
+
+                }
+                
+                buttons[i].setAttributedTitle(
+                    NSMutableAttributedString(string:title,
+                                              attributes: [.font:
+                                                            i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16)  : DesignSystemFontFamily.Pretendard.light.font(size: 16),
+                                 .foregroundColor:
+                                                            i == index ? self.pointColor : self.unSelectedTextColor   ]), for: .normal)
+                
+               
+                
+                imageViews[i].isHidden = i == index ? false : true
+                
+                superViews[i].layer.borderColor = i == index ? self.pointColor.cgColor : self.unPointColor.cgColor
+                
+                
+                
+                
+            }
+            
+        })
+        .disposed(by: disposBag)
+        
+        input.textString
+            .withLatestFrom(output.selectedIndex){($0,$1)}
+            .subscribe(onNext: { [weak self] (text,index) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                DEBUG_LOG("\(text) \(index)")
+                
+             
+                
+                
+                
+                if !text.isWhiteSpace && index != -2 {
+                    self.completionButton.isEnabled = true
+                }
+                
+                
+                
+                
+            })
+            .disposed(by: disposBag)
+        
         
         
     }

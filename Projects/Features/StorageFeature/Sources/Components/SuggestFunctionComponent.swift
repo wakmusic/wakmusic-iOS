@@ -18,6 +18,6 @@ public protocol SuggestFunctionDependency: Dependency {
 
 public final class SuggestFunctionComponent: Component<SuggestFunctionDependency> {
     public func makeView() -> SuggestFunctionViewController {
-        return SuggestFunctionViewController.viewController()
+        return SuggestFunctionViewController.viewController(viewModel: .init())
     }
 }
