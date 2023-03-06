@@ -83,7 +83,7 @@ extension PlayState {
     
     /// ▶️ 플레이리스트의 해당 위치의  곡 재생
     func loadInPlaylist(at index: Int) {
-        self.playList.move(at: index)
+        self.playList.currentPlayIndex = index
         self.currentSong = self.playList.current
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
@@ -153,20 +153,31 @@ extension PlayState {
         func contains(_ item: SongEntity) -> Bool {
             return list.contains(item)
         }
-
+        
         func back() {
             // 현재 곡이 첫번째 곡이면 마지막 곡으로
-            move(at: currentPlayIndex == 0 ? lastIndex : currentPlayIndex - 1)
+            if currentPlayIndex == 0 { currentPlayIndex = lastIndex; return }
+            currentPlayIndex -= 1
         }
 
         func next() {
             // 현재 곡이 마지막이면 첫번째 곡으로
-            move(at: isLast ? 0 : currentPlayIndex + 1)
+            if isLast { currentPlayIndex = 0; return }
+            currentPlayIndex += 1
         }
         
-        func move(at index: Int) {
-            if !(0..<list.count).contains(index) { return }
-            currentPlayIndex = index
+        func reorderPlaylist(from: Int, to: Int) {
+            let movedData = list[from]
+            list.remove(at: from)
+            list.insert(movedData, at: to)
+            
+            if currentPlayIndex == from {
+                currentPlayIndex = to
+            } else if currentPlayIndex > from && currentPlayIndex <= to {
+                currentPlayIndex -= 1
+            } else if currentPlayIndex < from && currentPlayIndex >= to {
+                currentPlayIndex += 1
+            }
         }
 
         func uniqueAppend(item: SongEntity) {

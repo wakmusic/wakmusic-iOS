@@ -41,6 +41,10 @@ public class PlayerViewController: UIViewController {
         fatalError("PlayerViewController init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("플레이어 뷰컨 deinit")
+    }
+    
     public override func loadView() {
         super.loadView()
         playerView = PlayerView(frame: self.view.frame)
@@ -51,8 +55,8 @@ public class PlayerViewController: UIViewController {
         self.view.addSubview(youtubePlayerView)
         self.youtubePlayerView.snp.makeConstraints {
             $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
-            $0.width.equalTo(320)
-            $0.height.equalTo(180)
+            $0.width.equalTo(self.playerView.thumbnailImageView.snp.width)
+            $0.height.equalTo(self.playerView.thumbnailImageView.snp.height)
         }
     }
     

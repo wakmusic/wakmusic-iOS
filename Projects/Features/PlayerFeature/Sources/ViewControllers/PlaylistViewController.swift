@@ -154,7 +154,9 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        playState.loadInPlaylist(at: indexPath.row)
+        if playState.playList.currentPlayIndex != indexPath.row {
+            playState.loadInPlaylist(at: indexPath.row) // 현재 재생중인 곡 이외의 Cell을 선택 시 해당 곡이 재생됩니다.
+        }
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -178,10 +180,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // 이동할 데이터를 가져와서 새로운 위치에 삽입합니다.
-        let songs = playState.playList.list
-        let movedData = songs[sourceIndexPath.row]
-        playState.playList.remove(at: sourceIndexPath.row)
-        playState.playList.insert(movedData, at: destinationIndexPath.row)
+        playState.playList.reorderPlaylist(from: sourceIndexPath.row, to: destinationIndexPath.row)
         HapticManager.shared.impact(style: .light)
     }
     
