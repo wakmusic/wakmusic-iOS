@@ -34,6 +34,7 @@ public extension TargetDependency.SPM {
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
+    static let HPParallaxHeader = TargetDependency.package(product: "HPParallaxHeader")
 }
 
 public extension Package {
@@ -44,5 +45,9 @@ public extension Package {
     static let GoogleSignIn = Package.remote(
          url: "https://github.com/google/GoogleSignIn-iOS.git",
          requirement: .upToNextMinor(from: "6.1.0")
+     )
+    static let HPParallaxHeader = Package.remote(
+         url: "https://github.com/ngochiencse/HPParallaxHeader",
+         requirement: .upToNextMinor(from: "1.1.8")
      )
 }
