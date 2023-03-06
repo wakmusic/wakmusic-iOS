@@ -149,41 +149,15 @@ extension QuestionViewController {
             }
             self.dismiss(animated: true)
         }).disposed(by: disposeBag)
-        
-        
-        self.bugReportButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else{
-                return
-            }
 
-           self.output.selectedIndex.accept(0)
-        }).disposed(by: disposeBag)
-        
-        self.suggestFunctionButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else{
-                return
-            }
-
-            
-            self.output.selectedIndex.accept(1)
-        }).disposed(by: disposeBag)
-        
-        self.addSongButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else{
-                return
-            }
-
-            self.output.selectedIndex.accept(2)
-        }).disposed(by: disposeBag)
-        
-        self.editSongButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else{
-                return
-            }
-
-            self.output.selectedIndex.accept(3)
-        }).disposed(by: disposeBag)
-        
+        Observable.merge(
+            bugReportButton.rx.tap.map { _ in 0 },
+            suggestFunctionButton.rx.tap.map { _ in 1 },
+            addSongButton.rx.tap.map { _ in 2 },
+            editSongButton.rx.tap.map { _ in 3 }
+        )
+        .bind(to: output.selectedIndex)
+        .disposed(by: disposeBag)
         
         self.output.selectedIndex.subscribe(onNext: { [weak self]  (index:Int) in
     

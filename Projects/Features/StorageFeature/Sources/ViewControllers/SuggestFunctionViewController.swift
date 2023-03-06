@@ -168,27 +168,13 @@ extension SuggestFunctionViewController {
     }
     
     private func bindbuttonEvent(){
-        mobileAppButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-           
-            
-            self.output.selectedIndex.accept(0)
-        }).disposed(by: disposeBag)
         
-        
-        webSiteButton.rx.tap.subscribe(onNext: { [weak self] in
-            
-            guard let self = self else{
-                return
-            }
-            
-           
-            self.output.selectedIndex.accept(1)
-        }).disposed(by: disposeBag)
+        Observable.merge(
+            mobileAppButton.rx.tap.map { _ in 0 },
+            webSiteButton.rx.tap.map { _ in 1 }
+        )
+        .bind(to: output.selectedIndex)
+        .disposed(by: disposeBag)
         
         previousButton.rx.tap.subscribe(onNext: { [weak self] in
             
