@@ -55,6 +55,9 @@ public class PlaylistViewController: UIViewController {
         playlistView.playlistTableView.delegate = self
         playlistView.playlistTableView.dataSource = self
         bindViewModel()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(touchThumbnailImageView))
+        playlistView.thumbnailImageView.isUserInteractionEnabled = true
+        playlistView.thumbnailImageView.addGestureRecognizer(tapGesture)
     }
 }
 
@@ -136,6 +139,12 @@ private extension PlaylistViewController {
         }
     }
     
+}
+
+private extension PlaylistViewController {
+    @objc private func touchThumbnailImageView() {
+        self.dismiss(animated: true)
+    }
 }
 
 extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
