@@ -29,44 +29,105 @@ public final class PlayListDetailViewModel:ViewModelType {
     
     var type:PlayListType!
     var id:String!
+    var key:String?
     var fetchPlayListDetailUseCase:FetchPlayListDetailUseCase!
+    var editPlayListUseCase : EditPlayListUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
         let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        
+        let showErrorToast:PublishRelay<String> = PublishRelay()
+        let playListNameLoad:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let cancelEdit:PublishSubject<Void> = PublishSubject()
+        let runEditing:PublishSubject<Void> = PublishSubject()
         
     }
 
     public struct Output {
-        let isEditinglist:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        let headerInfo:PublishSubject<PlayListHeaderInfo> = PublishSubject()
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+        let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
-    public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase) {
+    public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase,editPlayListUseCase:EditPlayListUseCase) {
         
         self.id = id
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
+        self.editPlayListUseCase = editPlayListUseCase
        
-        print("✅ PlayListDetailViewModel 생성")
+        DEBUG_LOG("✅ PlayListDetailViewModel 생성")
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)
-            //TODO: 에러 처리
-            .asObservable()
-            .do(onNext: { [weak self] (model) in
+        .asObservable()
+        .do(onNext: { [weak self] (model) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            
+            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+            
+            self.key = model.key
+            
+        })
+        .map({$0.songs})
+            .bind(to: output.dataSource,output.backUpdataSource)
+        .disposed(by: disposeBag)
+            
+        
+        input.playListNameLoad
+            .skip(1)
+            .withLatestFrom(output.headerInfo){($0,$1)}
+            .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)})
+            .bind(to: output.headerInfo)
+            .disposed(by: disposeBag)
+            
+        
+        input.runEditing
+            .withLatestFrom(output.dataSource)
+            .filter({!$0.isEmpty})
+            .map({$0.map{$0.id}})
+            .flatMap({[weak self] (songs:[String]) -> Observable<BaseEntity> in
+                
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                guard let key = self.key else {
+                    return Observable.empty()
+                }
+                
+                
+                
+                return self.editPlayListUseCase.execute(key: key, songs: songs)
+                    .asObservable()
+            }).subscribe(onNext: { [weak self] in
                 
                 guard let self = self else{
                     return
                 }
                 
-                self.output.headerInfo.onNext(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image ))
-            })
-            .map({$0.songs})
+                
+                if $0.status != 200 {
+                    self.input.showErrorToast.accept($0.description)
+                    return
+                }
+                
+                self.output.backUpdataSource.accept(self.output.dataSource.value)
+                
+                
+            }).disposed(by: disposeBag)
+        
+        
+        
+        input.cancelEdit
+            .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         

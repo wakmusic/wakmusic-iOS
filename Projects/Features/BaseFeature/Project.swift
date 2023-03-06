@@ -7,6 +7,7 @@ let project = Project.makeModule(
     dependencies: [
         .Project.Service.Domain,
         .Project.Module.FeatureThirdPartyLib,
-        .Project.UserInterfaces.DesignSystem
+        .Project.UserInterfaces.DesignSystem,
+        .Project.Module.Utility
     ]
 )

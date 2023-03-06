@@ -14,10 +14,12 @@ import DomainModule
 public protocol FavoriteDependency: Dependency {
    
     var fetchFavoriteSongsUseCase:any FetchFavoriteSongsUseCase {get}
+    var editFavoriteSongsOrderUseCase:any EditFavoriteSongsOrderUseCase {get}
+    
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
     public func makeView() -> FavoriteViewController {
-        return FavoriteViewController.viewController(viewModel: .init(fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase))
+        return FavoriteViewController.viewController(viewModel: .init(fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase))
     }
 }

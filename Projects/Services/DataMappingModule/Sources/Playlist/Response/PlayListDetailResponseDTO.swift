@@ -10,8 +10,8 @@ import Foundation
 
 
 public struct SinglePlayListDetailResponseDTO: Decodable {
-    public let id, title: String
+    public let title: String
     public let songs: [SingleSongResponseDTO]?
     public let `public`: Bool?
-    public let key,creator_id,image: String?
+    public let id,key,creator_id,image: String?
 }

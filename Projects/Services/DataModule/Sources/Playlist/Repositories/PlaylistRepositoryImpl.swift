@@ -38,8 +38,13 @@ public struct PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.createPlayList(title: title)
     }
     
-    public func editPlayList(key: String, title: String, songs: [String]) -> Single<BaseEntity> {
-        remotePlayListDataSource.editPlayList(key: key, title: title, songs: songs)
+    public func editPlayList(key: String,songs: [String]) -> Single<BaseEntity> {
+        
+        return remotePlayListDataSource.editPlayList(key: key,songs: songs)
+    }
+    
+    public func editPlayListName(key: String,title:String) -> Single<EditPlayListNameEntity> {
+        remotePlayListDataSource.editPlayListName(key: key, title: title)
     }
     
     public func deletePlayList(key: String) -> Single<BaseEntity> {

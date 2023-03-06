@@ -8,6 +8,8 @@ public protocol RemoteUserDataSource {
     func fetchProfileList() -> Single<[ProfileListEntity]>
     func setProfile(image:String) -> Single<BaseEntity>
     func setUserName(name:String) -> Single<BaseEntity>
-    func fetchSubPlayList() -> Single<[SubPlayListEntity]>
+    func fetchPlayList() -> Single<[PlayListEntity]>
     func fetchFavoriteSong() -> Single<[FavoriteSongEntity]>
+    func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
+    func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
 }

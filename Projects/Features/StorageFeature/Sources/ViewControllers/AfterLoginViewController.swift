@@ -15,6 +15,9 @@ import RxSwift
 import PanModal
 import CommonFeature
 import KeychainModule
+import DataMappingModule
+
+
 
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard {
 
@@ -25,6 +28,10 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var profileButton: UIButton!
+    @IBOutlet weak var headerFakeView: UIView!
+    
+    @IBOutlet weak var myPlayListFakeView: UIView!
+    @IBOutlet weak var favoriteFakeView: UIView!
     
     @IBAction func pressRequestAction(_ sender: UIButton) {
         
@@ -39,12 +46,14 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
         
-        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false, completion: {
-            let keychain = KeychainImpl()
-            keychain.delete(type: .accessToken)
-            Utility.PreferenceManager.userInfo = nil
+        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false, completion: { [weak self] in
             
-            //TODO: 플랫품에 따른 로그아웃 구현 
+            guard let self = self else{
+                return
+            }
+            
+            self.input.pressLogOut.accept(())
+
         })
         self.showPanModal(content: vc)
     }
@@ -83,13 +92,22 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
             return
         }
-        //skip(2) 원인
-    
         
-        vc1.output.isEditinglist.accept(false)
-        vc2.output.isEditinglist.accept(false)
         
-        output.isEditing.accept(false)
+        let state = EditState(isEditing: false, force: true)
+        
+        
+        if index == 0 {
+           
+            vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 에 연관 됨
+            
+        }
+        else {
+        
+            vc2.output.state.accept(state)
+        }
+
+        output.state.accept(state)
     }
     
     
@@ -133,6 +151,9 @@ extension AfterLoginViewController{
         editButton.backgroundColor = .clear
         editButton.isHidden = true
         
+        myPlayListFakeView.isHidden = true
+        favoriteFakeView.isHidden = true
+        
         //탭바 설정
         self.dataSource = self
         let bar = TMBar.ButtonBar()
@@ -154,6 +175,7 @@ extension AfterLoginViewController{
             button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
+            
         }
         
         // indicator
@@ -175,48 +197,70 @@ extension AfterLoginViewController{
     private func bindRx()
     {
         
-        output.isEditing.subscribe { [weak self] (res:Bool) in
+    
+        
+        output.state.subscribe { [weak self]  state in
             guard let self = self else{
                 return
             }
             
-            let attr = NSMutableAttributedString(string: res ? "완료" : "편집",
+            let attr = NSMutableAttributedString(string: state.isEditing ? "완료" : "편집",
                                                  attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                                                              .foregroundColor: res ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
+                                                              .foregroundColor: state.isEditing ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray400.color ])
             
-            self.editButton.layer.borderColor = res ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
+            self.editButton.layer.borderColor = state.isEditing ? DesignSystemAsset.PrimaryColor.point.color.cgColor : DesignSystemAsset.GrayColor.gray300.color.cgColor
          
             
             self.editButton.setAttributedTitle(attr, for: .normal)
             
-            self.isScrollEnabled = !res //  편집 시 , 옆 탭으로 swipe를 막기 위함
+            self.isScrollEnabled = !state.isEditing //  편집 시 , 옆 탭으로 swipe를 막기 위함
+            self.headerFakeView.isHidden = !state.isEditing
+            
+      
+            
+            if state.isEditing {
+                self.myPlayListFakeView.isHidden = self.currentIndex == 0
+                self.favoriteFakeView.isHidden =  self.currentIndex == 1
+            } else {
+                self.myPlayListFakeView.isHidden = true
+                self.favoriteFakeView.isHidden = true
+            }
+            
+            
+           
+            
             
         }.disposed(by: disposeBag)
                 
         editButton.rx.tap
-            .withLatestFrom(output.isEditing)
-            .map({!$0})
-            .do(onNext: { [weak self] (res:Bool)  in
+            .withLatestFrom(output.state)
+            .map({EditState(isEditing: !$0.isEditing, force: $0.force)})
+            .do(onNext: { [weak self] (state:EditState)  in
+                
                 guard let self = self else{
                     return
                 }
+                
+                
+                let nextState = EditState(isEditing: state.isEditing, force: false)
                 
                 if self.currentIndex ?? 0  == 0 {
                     
                     guard let vc = self.viewControllers[0] as? MyPlayListViewController  else{
                         return
                     }
-                    vc.output.isEditinglist.accept(res)
+    
+                    vc.output.state.accept(nextState)
                 }
                 
                 else{
                     guard let vc =  self.viewControllers[1] as? FavoriteViewController else{
                         return
                     }
-                    vc.output.isEditinglist.accept(res)
+                    vc.output.state.accept(nextState)
                 }
             })
-            .bind(to: output.isEditing)
+            .bind(to: output.state)
             .disposed(by: disposeBag)
 
         profileButton.rx.tap.subscribe(onNext: { [weak self] in
@@ -262,7 +306,11 @@ extension AfterLoginViewController{
         vc1.output.dataSource
                 .skip(1)
                 .filter({ [weak self] _  in
+                    
                     guard let self = self else { return false }
+                    
+               
+                    
                     return (self.currentIndex ?? 0) == 0
                 })
                 .map { $0.isEmpty }
@@ -273,8 +321,12 @@ extension AfterLoginViewController{
             .skip(1)
             .filter({ [weak self] _  in
                 guard let self = self else { return false }
+                
+                
+                
                 return (self.currentIndex ?? 0) == 1
             })
+          
             .map { $0.isEmpty }
             .bind(to: editButton.rx.isHidden)
             .disposed(by: disposeBag)

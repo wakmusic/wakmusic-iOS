@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="gray100"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="차트" id="FVW-eT-hiu"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -25,5 +26,55 @@
             </objects>
             <point key="canvasLocation" x="140" y="-2"/>
         </scene>
+        <!--Chart Content View Controller-->
+        <scene sceneID="ZVt-NK-unN">
+            <objects>
+                <viewController storyboardIdentifier="ChartContentViewController" id="lRA-Q0-fJ1" customClass="ChartContentViewController" customModule="ChartFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fJe-Lo-olP">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yoP-bw-WWh">
+                                <rect key="frame" x="0.0" y="59" width="393" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="7hQ-vR-KV8"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TTu-Bc-teJ">
+                                <rect key="frame" x="0.0" y="99" width="393" height="753"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.95294117649999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="VV6-VU-NB5">
+                                <rect key="frame" x="186.66666666666666" y="465.66666666666669" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="QPb-FV-zYU"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TTu-Bc-teJ" firstAttribute="top" secondItem="yoP-bw-WWh" secondAttribute="bottom" id="2tH-Ar-fig"/>
+                            <constraint firstItem="yoP-bw-WWh" firstAttribute="trailing" secondItem="QPb-FV-zYU" secondAttribute="trailing" id="NI0-Cp-YRw"/>
+                            <constraint firstItem="yoP-bw-WWh" firstAttribute="top" secondItem="QPb-FV-zYU" secondAttribute="top" id="QdO-SW-Iz4"/>
+                            <constraint firstItem="VV6-VU-NB5" firstAttribute="centerY" secondItem="TTu-Bc-teJ" secondAttribute="centerY" id="aLX-7B-BVC"/>
+                            <constraint firstItem="yoP-bw-WWh" firstAttribute="leading" secondItem="QPb-FV-zYU" secondAttribute="leading" id="b13-5G-Bzr"/>
+                            <constraint firstItem="TTu-Bc-teJ" firstAttribute="leading" secondItem="QPb-FV-zYU" secondAttribute="leading" id="cBY-xg-9yG"/>
+                            <constraint firstAttribute="trailing" secondItem="TTu-Bc-teJ" secondAttribute="trailing" id="d0B-oT-Pvp"/>
+                            <constraint firstAttribute="bottom" secondItem="TTu-Bc-teJ" secondAttribute="bottom" id="dVN-0P-aVL"/>
+                            <constraint firstItem="VV6-VU-NB5" firstAttribute="centerX" secondItem="TTu-Bc-teJ" secondAttribute="centerX" id="q5o-pQ-2Mm"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="activityIncidator" destination="VV6-VU-NB5" id="6pI-j1-PXQ"/>
+                        <outlet property="tableView" destination="TTu-Bc-teJ" id="cHl-T6-hT5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="asS-pX-AFT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1680" y="-2"/>
+        </scene>
     </scenes>
+    <resources>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -13,13 +13,15 @@ import DataMappingModule
 
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {get}
+    var editPlayListUseCase : any EditPlayListUseCase {get}
     var multiPurposePopComponent: MultiPurposePopComponent {get}
+
     
 }
 
 public final class PlayListDetailComponent: Component<PlayListDetailDependency> {
     public func makeView(id:String,type:PlayListType) -> PlayListDetailViewController {
-        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:type,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase),multiPurposePopComponent: dependency.multiPurposePopComponent)
+        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:type,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,editPlayListUseCase: dependency.editPlayListUseCase),multiPurposePopComponent: dependency.multiPurposePopComponent)
         
     }
 }

@@ -76,6 +76,12 @@ public extension AppComponent {
         }
     }
     
+    var editPlayListNameUseCase: any EditPlayListNameUseCase {
+        shared {
+            EditPlayListNameUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
     var deletePlayListUseCase: any DeletePlayListUseCase {
         shared {
             DeletePlayListUseCaseImpl(playListRepository: playListRepository)

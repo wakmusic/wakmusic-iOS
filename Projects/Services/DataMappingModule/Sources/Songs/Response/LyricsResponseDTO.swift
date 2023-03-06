@@ -10,5 +10,5 @@ import Foundation
 
 public struct LyricsResponseDTO: Decodable {
     public let identifier, text, styles: String
-    public let start, end: Int
+    public let start, end: Double
 }

@@ -64,4 +64,15 @@ public extension UIViewController {
         contentView.verticalOffset = 10
         SwiftEntryKit.display(entry: contentView, using: attributes)
     }
+    
+    func hideKeyboardWhenTappedAround() {
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }

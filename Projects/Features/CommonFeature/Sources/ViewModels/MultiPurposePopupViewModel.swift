@@ -23,12 +23,12 @@ public final class MultiPurposePopupViewModel:ViewModelType {
     let disposeBag = DisposeBag()
     
     var type:PurposeType
-    var shareCode:String?
-    var playListKey:String?
+    var key:String
     
     var createPlayListUseCase:CreatePlayListUseCase!
     var loadPlayListUseCase:LoadPlayListUseCase!
     var setUserNameUseCase:SetUserNameUseCase!
+    var editPlayListNameUseCase:EditPlayListNameUseCase!
     
 
     public struct Input {
@@ -38,22 +38,26 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        
         var result: PublishSubject<BaseEntity> = PublishSubject()
     }
 
     public init(type:PurposeType,
+                key:String,
                 createPlayListUseCase:CreatePlayListUseCase,
                 loadPlayListUseCase:LoadPlayListUseCase,
-                setUserNameUseCase:SetUserNameUseCase) {
+                setUserNameUseCase:SetUserNameUseCase,
+                editPlayListNameUseCase:EditPlayListNameUseCase
+    ) {
         
 
        
         print("✅ \(Self.self) 생성")
+        self.key = key
         self.type = type
         self.createPlayListUseCase = createPlayListUseCase
         self.loadPlayListUseCase = loadPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
+        self.editPlayListNameUseCase = editPlayListNameUseCase
         
         
         
@@ -93,13 +97,15 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { result in
                         
-                        if !result.description.isEmpty  {
+                        if  result.status != 200  {
                             output.result.onNext(result)
                             return
                         }
                         
                         //리프래쉬 작업
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
+                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                
 
                     })
                     .disposed(by: self.disposeBag)
@@ -120,6 +126,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         }
                         
                         Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))
+                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                     
                         
                     }).disposed(by: self.disposeBag)
             
@@ -137,18 +145,47 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { result in
                         
-                        if !result.description.isEmpty {
+                        if  result.status != 200 {
                             output.result.onNext(result)
                             return
                         }
                         
                         //리프래쉬 작업
+                        
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
+                        output.result.onNext(BaseEntity(status: 200,description: ""))
+               
                         
                     })
                     .disposed(by: self.disposeBag)
-            
+        
+            case .edit:
+                self.editPlayListNameUseCase.execute(key: self.key, title: text)
+                    .catch({ (error:Error) in
+                        return Single<EditPlayListNameEntity>.create { single in
+                            single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    })
+                    .asObservable()
+                    .subscribe(onNext: { result in
+                     
+                        if result.status != 200 {
+                            output.result.onNext(BaseEntity(status: result.status,description: result.description))
+                            return
+                        }
+                        
+                        NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                        NotificationCenter.default.post(name: .playListNameRefresh, object: result.title)
+                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                    
+                        
+                        
+                    })
+                    .disposed(by: self.disposeBag)
 
+            
+            
             default :
                 DEBUG_LOG(input.textString.value)
             }

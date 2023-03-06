@@ -13,11 +13,13 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import KeychainModule
+import NaverThirdPartyLogin
 
 final public class RequestViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
     var withDrawUserInfoUseCase: WithdrawUserInfoUseCase
+    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
         let pressWithdraw:PublishSubject<Void> = PublishSubject()
@@ -53,7 +55,21 @@ final public class RequestViewModel:ViewModelType {
                     }.asObservable()
             }
             .do(onNext: { (model) in
-                DEBUG_LOG("성공성공성공: \(model)")
+                
+                let platform = Utility.PreferenceManager.userInfo?.platform
+                
+                if platform == "naver" {
+                    
+                    self.naverLoginInstance?.requestDeleteToken()
+                }
+                else if platform == "apple" {
+                    
+                }
+                else{
+                    
+                }
+                
+                
                 let keychain = KeychainImpl()
                 keychain.delete(type: .accessToken)
                 Utility.PreferenceManager.userInfo = nil

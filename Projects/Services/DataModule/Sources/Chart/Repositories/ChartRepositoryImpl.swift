@@ -1,4 +1,5 @@
 import DataMappingModule
+import Foundation
 import DomainModule
 import ErrorModule
 import NetworkModule
@@ -23,5 +24,7 @@ public struct ChartRepositoryImpl: ChartRepository {
     
     public func fetchChartUpdateTime() -> Single<String> {
         remoteChartDataSource.fetchChartUpdateTime()
+            .map { TimeInterval($0) }
+            .map { Date(timeIntervalSince1970: $0 ?? 0).changeDateFormatForChart() + " 업데이트" }
     }
 }

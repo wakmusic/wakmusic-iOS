@@ -3,7 +3,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
     name: "Utility",
-    product: .framework,
+    product: .staticFramework,
     dependencies: [
         .Project.Module.ThirdPartyLib
     ]

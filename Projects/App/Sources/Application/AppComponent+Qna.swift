@@ -30,6 +30,15 @@ public extension AppComponent {
         QnaContentComponent(parent: self)
     }
     
+    var questionComponent: QuestionComponent {
+        
+        QuestionComponent(parent: self)
+    }
+    
+    var suggestFunctionComponent:SuggestFunctionComponent {
+        
+        SuggestFunctionComponent(parent: self)
+    }
     
 
     
