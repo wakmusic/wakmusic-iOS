@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxKeyboard
+import GrowingTextView
 
 public final class SuggestFunctionViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -18,7 +19,7 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var descriptionLabel1: UILabel!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var baseLineView: UIView!
     @IBOutlet weak var descriptionLabel2: UILabel!
     @IBOutlet weak var mobileAppSuperView: UIView!
@@ -36,6 +37,7 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
+    let textViewPlaceHolder:String = "내 대답"
     
     let disposeBag = DisposeBag()
     
@@ -79,15 +81,17 @@ extension SuggestFunctionViewController {
         descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
         
         
-        let placeHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
-            NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        ] //
+
         
-        textField.attributedPlaceholder =  NSAttributedString(string: "내 답변",
-                                                              attributes:placeHolderAttributes)
-        textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        textField.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textView.delegate = self
+        textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        
+        textView.placeholder = textViewPlaceHolder
+        textView.placeholderColor = DesignSystemAsset.GrayColor.gray400.color
+        textView.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textView.minHeight = 32.0
+        textView.maxHeight = spaceHeight()
+       
         
         
         baseLineView.backgroundColor = unPointColor
@@ -221,47 +225,16 @@ extension SuggestFunctionViewController {
     
     private func bindRx(){
         
-        textField.rx.text.orEmpty
+        textView.rx.text.orEmpty
       //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
             .bind(to: input.textString)
             .disposed(by: disposeBag)
         
         
-     
-        
-    
-        
-        let editingDidBegin = textField.rx.controlEvent(.editingDidBegin)
-        let editingDidEnd = textField.rx.controlEvent(.editingDidEnd)
+
         
 
-        let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
-                                               editingDidEnd.map { UIControl.Event.editingDidEnd })
-        
-        
-        mergeObservable.subscribe(onNext: { [weak self]  event in
-            
-            guard let self = self else{
-                return
-            }
-            
-            if event == .editingDidBegin {
-                self.baseLineView.backgroundColor = self.pointColor
-            }
-            
-            else {
-                self.baseLineView.backgroundColor = self.unPointColor
-                
-                
-            }
-            
-            
-        })
-        .disposed(by: disposeBag)
-        
-        
-        
         
         output.selectedIndex
             .skip(1)
@@ -366,4 +339,33 @@ extension SuggestFunctionViewController {
             }).disposed(by: disposeBag)
         
     }
+    
+    func spaceHeight() -> CGFloat {
+        
+        
+        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 36 + 28  + 12 + 48 + 86  )
+        
+    }
+    
+}
+
+extension SuggestFunctionViewController : UITextViewDelegate {
+    
+    
+  
+    
+    public func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        
+        self.baseLineView.backgroundColor = self.pointColor
+        
+        
+    }
+    
+    public func textViewDidEndEditing(_ textView: UITextView) {
+        
+        self.baseLineView.backgroundColor = self.unPointColor
+        
+    }
+    
 }

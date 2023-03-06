@@ -29,6 +29,7 @@ public extension TargetDependency.SPM {
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
+    static let GrowingTextView = TargetDependency.external(name: "GrowingTextView")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
