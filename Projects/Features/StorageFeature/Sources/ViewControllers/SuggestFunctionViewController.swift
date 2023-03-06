@@ -11,6 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxKeyboard
+import GrowingTextView
 
 public final class SuggestFunctionViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -18,7 +19,7 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var descriptionLabel1: UILabel!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var baseLineView: UIView!
     @IBOutlet weak var descriptionLabel2: UILabel!
     @IBOutlet weak var mobileAppSuperView: UIView!
@@ -36,6 +37,7 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
+    let textViewPlaceHolder:String = "내 대답"
     
     let disposeBag = DisposeBag()
     
@@ -69,6 +71,9 @@ extension SuggestFunctionViewController {
     
     private func configureUI(){
         
+        
+        hideKeyboardWhenTappedAround()
+        
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
@@ -79,15 +84,17 @@ extension SuggestFunctionViewController {
         descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
         
         
-        let placeHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
-            NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        ] //
+
         
-        textField.attributedPlaceholder =  NSAttributedString(string: "내 답변",
-                                                              attributes:placeHolderAttributes)
-        textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        textField.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textView.delegate = self
+        textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        
+        textView.placeholder = textViewPlaceHolder
+        textView.placeholderColor = DesignSystemAsset.GrayColor.gray400.color
+        textView.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textView.minHeight = 32.0
+        textView.maxHeight = spaceHeight()
+       
         
         
         baseLineView.backgroundColor = unPointColor
@@ -168,7 +175,7 @@ extension SuggestFunctionViewController {
             }
             
            
-            self.view.endEditing(true)
+            
             self.output.selectedIndex.accept(0)
         }).disposed(by: disposeBag)
         
@@ -179,7 +186,7 @@ extension SuggestFunctionViewController {
                 return
             }
             
-            self.view.endEditing(true)
+           
             self.output.selectedIndex.accept(1)
         }).disposed(by: disposeBag)
         
@@ -189,7 +196,7 @@ extension SuggestFunctionViewController {
                 return
             }
             
-            self.view.endEditing(true)
+            
             self.navigationController?.popViewController(animated: true)
             
         })
@@ -221,47 +228,16 @@ extension SuggestFunctionViewController {
     
     private func bindRx(){
         
-        textField.rx.text.orEmpty
+        textView.rx.text.orEmpty
       //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
             .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
             .bind(to: input.textString)
             .disposed(by: disposeBag)
         
         
-     
-        
-    
-        
-        let editingDidBegin = textField.rx.controlEvent(.editingDidBegin)
-        let editingDidEnd = textField.rx.controlEvent(.editingDidEnd)
+
         
 
-        let mergeObservable = Observable.merge(editingDidBegin.map { UIControl.Event.editingDidBegin },
-                                               editingDidEnd.map { UIControl.Event.editingDidEnd })
-        
-        
-        mergeObservable.subscribe(onNext: { [weak self]  event in
-            
-            guard let self = self else{
-                return
-            }
-            
-            if event == .editingDidBegin {
-                self.baseLineView.backgroundColor = self.pointColor
-            }
-            
-            else {
-                self.baseLineView.backgroundColor = self.unPointColor
-                
-                
-            }
-            
-            
-        })
-        .disposed(by: disposeBag)
-        
-        
-        
         
         output.selectedIndex
             .skip(1)
@@ -307,7 +283,7 @@ extension SuggestFunctionViewController {
                 
                 superViews[i].layer.borderColor = i == index ? self.pointColor.cgColor : self.unPointColor.cgColor
                 
-                superViews[i].addShadow(location: .bottom,color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
+                superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
                 
                 
                 
@@ -352,18 +328,46 @@ extension SuggestFunctionViewController {
                     return
                 }
                 
+                self.textView.maxHeight = keyboardVisibleHeight == .zero ?  self.spaceHeight() :
+                self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT() + 66
+               //키보드에서 바텀이 빼지면서 2번 빠짐
+                
+                DEBUG_LOG("\(self.spaceHeight()) \(SAFEAREA_BOTTOM_HEGHIT()) \(keyboardVisibleHeight)  \(self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT())   ")
              
-                //키보드는 바텀 SafeArea부터 계산되므로 빼야함
-                let window: UIWindow? = UIApplication.shared.windows.first
-                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-                
-                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom + 10
-                
-                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 0
+               
                 self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
                 
                 
             }).disposed(by: disposeBag)
         
     }
+    
+    func spaceHeight() -> CGFloat {
+        
+        
+        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 12 + 36 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
+        
+    }
+    
+}
+
+extension SuggestFunctionViewController : UITextViewDelegate {
+    
+    
+  
+    
+    public func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        
+        self.baseLineView.backgroundColor = self.pointColor
+        
+        
+    }
+    
+    public func textViewDidEndEditing(_ textView: UITextView) {
+        
+        self.baseLineView.backgroundColor = self.unPointColor
+        
+    }
+    
 }
