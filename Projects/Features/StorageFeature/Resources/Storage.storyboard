@@ -1009,7 +1009,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="571-dP-c42">
-                                <rect key="frame" x="20" y="762" width="353" height="56"/>
+                                <rect key="frame" x="20" y="752" width="353" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="4Dh-m9-oOg"/>
                                 </constraints>
@@ -1020,7 +1020,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="uYD-da-c7k" firstAttribute="trailing" secondItem="571-dP-c42" secondAttribute="trailing" constant="20" id="Arn-6Q-wWE"/>
-                            <constraint firstItem="uYD-da-c7k" firstAttribute="bottom" secondItem="571-dP-c42" secondAttribute="bottom" id="Efq-9P-NOJ"/>
+                            <constraint firstItem="uYD-da-c7k" firstAttribute="bottom" secondItem="571-dP-c42" secondAttribute="bottom" constant="10" id="Efq-9P-NOJ"/>
                             <constraint firstItem="lT6-wM-0bT" firstAttribute="leading" secondItem="uYD-da-c7k" secondAttribute="leading" constant="20" id="GFt-8S-oWt"/>
                             <constraint firstItem="eot-bo-CGK" firstAttribute="leading" secondItem="uYD-da-c7k" secondAttribute="leading" constant="20" id="GUr-6W-4OA"/>
                             <constraint firstItem="rds-hn-vdX" firstAttribute="leading" secondItem="uYD-da-c7k" secondAttribute="leading" constant="20" id="LjL-4e-AcC"/>
@@ -1111,7 +1111,7 @@
                                 </constraints>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u1g-ef-Pmr">
                                 <rect key="frame" x="20" y="210" width="353" height="1"/>

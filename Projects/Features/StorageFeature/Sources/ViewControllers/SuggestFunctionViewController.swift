@@ -71,6 +71,9 @@ extension SuggestFunctionViewController {
     
     private func configureUI(){
         
+        
+        hideKeyboardWhenTappedAround()
+        
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
@@ -161,7 +164,7 @@ extension SuggestFunctionViewController {
         
         bindRx()
         bindbuttonEvent()
-      //  responseViewbyKeyboard()
+        responseViewbyKeyboard()
     }
     
     private func bindbuttonEvent(){
@@ -172,7 +175,7 @@ extension SuggestFunctionViewController {
             }
             
            
-            self.view.endEditing(true)
+            
             self.output.selectedIndex.accept(0)
         }).disposed(by: disposeBag)
         
@@ -183,7 +186,7 @@ extension SuggestFunctionViewController {
                 return
             }
             
-            self.view.endEditing(true)
+           
             self.output.selectedIndex.accept(1)
         }).disposed(by: disposeBag)
         
@@ -193,7 +196,7 @@ extension SuggestFunctionViewController {
                 return
             }
             
-            self.view.endEditing(true)
+            
             self.navigationController?.popViewController(animated: true)
             
         })
@@ -325,14 +328,13 @@ extension SuggestFunctionViewController {
                     return
                 }
                 
+                self.textView.maxHeight = keyboardVisibleHeight == .zero ?  self.spaceHeight() :
+                self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT() + 66
+               //키보드에서 바텀이 빼지면서 2번 빠짐
+                
+                DEBUG_LOG("\(self.spaceHeight()) \(SAFEAREA_BOTTOM_HEGHIT()) \(keyboardVisibleHeight)  \(self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT())   ")
              
-                //키보드는 바텀 SafeArea부터 계산되므로 빼야함
-                let window: UIWindow? = UIApplication.shared.windows.first
-                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-                
-                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom + 10
-                
-                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 0
+               
                 self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
                 
                 
@@ -343,7 +345,7 @@ extension SuggestFunctionViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 36 + 28  + 12 + 48 + 86  )
+        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 12 + 36 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
         
     }
     
