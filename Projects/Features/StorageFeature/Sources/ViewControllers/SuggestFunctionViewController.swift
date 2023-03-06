@@ -11,7 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxKeyboard
-import GrowingTextView
+import CommonFeature
 
 public final class SuggestFunctionViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -345,10 +345,16 @@ extension SuggestFunctionViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 12 + 36 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
+        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 16 + 51 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
         
     }
     
+}
+
+extension SuggestFunctionViewController: GrowingTextViewDelegate {
+    public func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat){
+        DEBUG_LOG(height)
+    }
 }
 
 extension SuggestFunctionViewController : UITextViewDelegate {

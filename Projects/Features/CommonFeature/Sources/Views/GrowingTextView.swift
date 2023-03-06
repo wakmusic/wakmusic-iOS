@@ -7,6 +7,7 @@
 //
 import Foundation
 import UIKit
+import DesignSystem
 
 @objc public protocol GrowingTextViewDelegate: UITextViewDelegate {
     @objc optional func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat)
@@ -136,6 +137,16 @@ open class GrowingTextView: UITextView {
     // Show placeholder if needed
     override open func draw(_ rect: CGRect) {
         super.draw(rect)
+        
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 1.26
+
+        self.attributedText = NSMutableAttributedString(
+            string: self.text,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                         .paragraphStyle: style]
+        )
         
         if text.isEmpty {
             let xValue = textContainerInset.left + textContainer.lineFragmentPadding

@@ -62,6 +62,7 @@ public final class MyPlayListViewModel:ViewModelType {
                 
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
+                    .catchAndReturn([])
             })
             .bind(to: output.dataSource,output.backUpdataSource)
             .disposed(by: disposeBag)
