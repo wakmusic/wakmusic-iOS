@@ -139,7 +139,7 @@ open class GrowingTextView: UITextView {
         super.draw(rect)
         
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = 1.26
+        style.lineHeightMultiple = 1.35
 
         self.attributedText = NSMutableAttributedString(
             string: self.text,
