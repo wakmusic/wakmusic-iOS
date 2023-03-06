@@ -25,6 +25,5 @@ let project = Project.makeModule(
         .SPM.SwiftEntryKit,
         .SPM.CryptoSwift,
         .SPM.YouTubePlayerKit,
-        .SPM.GrowingTextView
     ]
 )
