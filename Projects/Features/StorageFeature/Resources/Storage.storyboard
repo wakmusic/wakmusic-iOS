@@ -1103,8 +1103,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YyT-Jv-t8M" customClass="GrowingTextView" customModule="GrowingTextView">
-                                <rect key="frame" x="20" y="167" width="353" height="32"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YyT-Jv-t8M" customClass="GrowingTextView" customModule="CommonFeature">
+                                <rect key="frame" x="16" y="171" width="361" height="32"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="8d2-03-l78"/>
@@ -1114,14 +1114,14 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u1g-ef-Pmr">
-                                <rect key="frame" x="20" y="210" width="353" height="1"/>
+                                <rect key="frame" x="20" y="214" width="353" height="1"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="jPM-GE-OiP"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DbQ-YN-Mfx">
-                                <rect key="frame" x="20" y="235" width="353" height="28"/>
+                                <rect key="frame" x="20" y="243" width="353" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="iKX-g7-wG6"/>
                                 </constraints>
@@ -1130,7 +1130,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="wDo-r0-ZPg">
-                                <rect key="frame" x="20" y="275" width="353" height="48"/>
+                                <rect key="frame" x="20" y="283" width="353" height="48"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xSe-cE-Mlh">
                                         <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="48"/>
@@ -1231,16 +1231,16 @@
                             <constraint firstItem="u1g-ef-Pmr" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="BBb-Kl-a3h"/>
                             <constraint firstItem="yR7-x4-Zue" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="BdO-Vi-W96"/>
                             <constraint firstItem="DbQ-YN-Mfx" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="C6K-nf-Cqe"/>
-                            <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="YyT-Jv-t8M" secondAttribute="trailing" constant="20" id="Ckn-Ve-PV3"/>
+                            <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="YyT-Jv-t8M" secondAttribute="trailing" constant="16" id="Ckn-Ve-PV3"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="DbQ-YN-Mfx" secondAttribute="trailing" constant="20" id="HWD-o6-8IP"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="YWN-US-3pd" secondAttribute="trailing" id="Kd9-4W-lHU"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="9t4-iA-ALV" secondAttribute="trailing" constant="20" id="Li3-YR-w84"/>
                             <constraint firstItem="9t4-iA-ALV" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="e8X-6D-wF8"/>
                             <constraint firstItem="wDo-r0-ZPg" firstAttribute="top" secondItem="DbQ-YN-Mfx" secondAttribute="bottom" constant="12" id="ePM-kP-XDO"/>
-                            <constraint firstItem="YyT-Jv-t8M" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="20" id="n6G-sj-yyD"/>
+                            <constraint firstItem="YyT-Jv-t8M" firstAttribute="leading" secondItem="Ulh-8q-v60" secondAttribute="leading" constant="16" id="n6G-sj-yyD"/>
                             <constraint firstItem="u1g-ef-Pmr" firstAttribute="top" secondItem="YyT-Jv-t8M" secondAttribute="bottom" constant="11" id="n8Q-kS-Lnh"/>
-                            <constraint firstItem="DbQ-YN-Mfx" firstAttribute="top" secondItem="YyT-Jv-t8M" secondAttribute="bottom" constant="36" id="oCT-kU-CKg"/>
-                            <constraint firstItem="YyT-Jv-t8M" firstAttribute="top" secondItem="9t4-iA-ALV" secondAttribute="bottom" constant="12" id="pp9-Sb-SXh"/>
+                            <constraint firstItem="DbQ-YN-Mfx" firstAttribute="top" secondItem="YyT-Jv-t8M" secondAttribute="bottom" constant="40" id="oCT-kU-CKg"/>
+                            <constraint firstItem="YyT-Jv-t8M" firstAttribute="top" secondItem="9t4-iA-ALV" secondAttribute="bottom" constant="16" id="pp9-Sb-SXh"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="trailing" secondItem="u1g-ef-Pmr" secondAttribute="trailing" constant="20" id="pxf-hP-kRT"/>
                             <constraint firstItem="YWN-US-3pd" firstAttribute="top" secondItem="Ulh-8q-v60" secondAttribute="top" id="q8i-ak-IaT"/>
                             <constraint firstItem="Ulh-8q-v60" firstAttribute="bottom" secondItem="yR7-x4-Zue" secondAttribute="bottom" id="qOd-LD-mg6"/>
