@@ -12,12 +12,14 @@ import DesignSystem
 import RxSwift
 import RxKeyboard
 import CommonFeature
+import SafariServices
 
 public final class AskSongViewController: UIViewController,ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var dotLabel1: UILabel!
     @IBOutlet weak var explainLabel1: UILabel!
@@ -26,8 +28,6 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var explainLabel2: UILabel!
     
     @IBOutlet weak var redirectWebButton: UIButton!
-    @IBOutlet weak var redirectWebLabel: UILabel!
-    @IBOutlet weak var redirectWebImageView: UIImageView!
     
     //  @IBOutlet weak var baseLineView: UIView!
     
@@ -90,11 +90,10 @@ extension AskSongViewController {
         explainLabel2.textColor = DesignSystemAsset.GrayColor.gray500.color
         explainLabel2.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         
-        redirectWebLabel.text = "왁뮤 노래 포함 기준"
-        redirectWebLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 12)
-        redirectWebLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
-        
-        redirectWebImageView.image = DesignSystemAsset.Storage.blueArrowRight.image
+        redirectWebButton.setTitle("왁뮤 노래 포함 기준", for: .normal)
+        redirectWebButton.setImage(DesignSystemAsset.Storage.blueArrowRight.image, for: .normal)
+        redirectWebButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 12)
+        redirectWebButton.titleLabel?.textColor = DesignSystemAsset.PrimaryColor.decrease.color
         
         
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -136,6 +135,8 @@ extension AskSongViewController {
         self.previousButton.setAttributedTitle(NSMutableAttributedString(string:"이전",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        
+        self.scrollView.delegate = self
         
         bindRx()
         bindbuttonEvent()
@@ -182,6 +183,16 @@ extension AskSongViewController {
                 
             })
             .disposed(by: disposeBag)
+        
+        redirectWebButton.rx.tap
+            .subscribe(onNext: { [weak self] () in
+                guard let URL = URL(string: "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS") else { return }
+                
+                let safari = SFSafariViewController(url: URL)
+                self?.present(safari, animated: true)
+            })
+            .disposed(by: disposeBag)
+
             
     }
     
@@ -234,6 +245,14 @@ extension AskSongViewController {
     
 }
 
+extension AskSongViewController: UIScrollViewDelegate {
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        DEBUG_LOG(scrollView.contentOffset.y)
+        scrollView.bounces = scrollView.contentOffset.y > 0
+    }
+}
 
 //extension WakMusicFeedbackViewController : UITextViewDelegate {
 //
