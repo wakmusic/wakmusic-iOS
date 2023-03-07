@@ -225,11 +225,14 @@ extension SearchViewController {
                 print("END DID Begin")
                 self.viewModel.output.isFoucused.accept(true)
                 self.bindSubView(false)
+                NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
+
             }
             else if event == .editingDidEnd {
                 print("END DID End")
 //                self.viewModel.output.isFoucused.accept(false)
                 //self.bindSubView(false)
+                NotificationCenter.default.post(name: .statusBarEnterLightBackground, object: nil)
             }
             else //검색 버튼 눌렀을 때
                 {

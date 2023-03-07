@@ -4,6 +4,7 @@ import DesignSystem
 import BaseFeature
 import PlayerFeature
 import SnapKit
+import RxSwift
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -30,12 +31,24 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         self.panelView.addGestureRecognizer(gesture)
         return gesture
     }()
-
+    
+    var isDarkContentBackground: Bool = false
+    var disposeBag = DisposeBag()
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
         configurePlayer()
+        bindNotification()
+    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        if isDarkContentBackground {
+            return .lightContent
+        } else {
+            return .default
+        }
     }
 
     public static func viewController(
@@ -293,5 +306,36 @@ public extension MainContainerViewController {
         playerViewController.willMove(toParent: nil)
         playerViewController.view.removeFromSuperview()
         playerViewController.removeFromParent()
+    }
+}
+
+extension MainContainerViewController {
+
+    private func bindNotification() {
+        NotificationCenter.default.rx
+            .notification(.statusBarEnterDarkBackground)
+            .subscribe(onNext: { [weak self] _ in
+                self?.statusBarEnterDarkBackground()
+            }).disposed(by: disposeBag)
+
+        NotificationCenter.default.rx
+            .notification(.statusBarEnterLightBackground)
+            .subscribe(onNext: { [weak self] _ in
+                self?.statusBarEnterLightBackground()
+            }).disposed(by: disposeBag)
+    }
+    
+    private func statusBarEnterLightBackground() {
+        isDarkContentBackground = false
+        UIView.animate(withDuration: 0.15) {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+
+    private func statusBarEnterDarkBackground() {
+        isDarkContentBackground = true
+        UIView.animate(withDuration: 0.15) {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
     }
 }
