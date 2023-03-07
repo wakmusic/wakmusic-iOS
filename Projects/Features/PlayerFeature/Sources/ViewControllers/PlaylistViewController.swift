@@ -80,8 +80,8 @@ private extension PlaylistViewController {
             
         }.store(in: &subscription)
         
-        output.currentSongIndex.sink { [weak self] currentSongIndex in
-            self?.updatePlayingStatus(currentSongIndex: currentSongIndex)
+        output.currentSongIndex.sink { [weak self] _ in
+            self?.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
     }
     
@@ -138,17 +138,6 @@ private extension PlaylistViewController {
             .store(in: &subscription)
     }
     
-    private func updatePlayingStatus(currentSongIndex: Int) {
-        // 모든 셀에 대해서 재생상태 업데이트
-        let rows = playlistView.playlistTableView.numberOfRows(inSection: 0)
-        for row in 0..<rows {
-            let indexPath = IndexPath(row: row, section: 0)
-            if let cell = playlistView.playlistTableView.cellForRow(at: indexPath) as? PlaylistTableViewCell {
-                cell.isPlaying = (row == currentSongIndex)
-            }
-        }
-    }
-    
 }
 
 private extension PlaylistViewController {
@@ -174,7 +163,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         let songs = playState.playList.list
         cell.setContent(song: songs[indexPath.row])
-        cell.isPlaying = indexPath.row == 0 ? true : false // 임시로
+        cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
         return cell
     }
     
