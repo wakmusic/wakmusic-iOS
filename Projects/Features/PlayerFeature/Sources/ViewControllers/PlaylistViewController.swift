@@ -44,9 +44,7 @@ public class PlaylistViewController: UIViewController {
         playlistView.playlistTableView.delegate = self
         playlistView.playlistTableView.dataSource = self
         bindViewModel()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(touchThumbnailImageView))
-        playlistView.thumbnailImageView.isUserInteractionEnabled = true
-        playlistView.thumbnailImageView.addGestureRecognizer(tapGesture)
+        bindActions()
     }
 }
 
@@ -94,16 +92,20 @@ private extension PlaylistViewController {
     }
     
     private func bindCurrentPlayTime(output: PlaylistViewModel.Output) {
-        output.playTimeValue.sink { [weak self] value in
-            guard let self else { return }
-            self.playlistView.currentPlayTimeView.snp.remakeConstraints {
-                let playTimeValue = output.playTimeValue.value
-                let totalTimeValue = output.totalTimeValue.value
-                let newValue = totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
-                $0.top.left.bottom.equalToSuperview()
-                $0.width.equalTo(self.playlistView.totalPlayTimeView.snp.width).multipliedBy(newValue)
+        output.playTimeValue.combineLatest(output.totalTimeValue)
+            .compactMap { (playTimeValue, totalTimeValue) -> Float? in
+                guard totalTimeValue > 0 else { return nil }
+                let newRatio = playTimeValue / totalTimeValue
+                return newRatio
             }
-        }.store(in: &subscription)
+            .sink { [weak self] newRatio in
+                guard let self else { return }
+                self.playlistView.currentPlayTimeView.snp.remakeConstraints {
+                    $0.top.left.bottom.equalToSuperview()
+                    $0.width.equalTo(self.playlistView.totalPlayTimeView.snp.width).multipliedBy(newRatio)
+                }
+            }
+            .store(in: &subscription)
     }
     
     private func bindPlayButtonImages(output: PlaylistViewModel.Output) {
@@ -119,18 +121,21 @@ private extension PlaylistViewController {
     }
     
     private func bindwaveStreamAnimationView(output: PlaylistViewModel.Output) {
-        output.playerState.sink { [weak self] state in
-            guard let self else { return }
-            let indexPath = IndexPath(row: self.playState.playList.currentPlayIndex, section: 0)
-            guard let currentPlayingCell = self.playlistView.playlistTableView.cellForRow(at: indexPath) as? PlaylistTableViewCell else { return }
-            // 노래를 일시정지하면 애니메이션도 일시정지
-            switch state {
-            case .playing:
-                currentPlayingCell.waveStreamAnimationView.play()
-            default:
-                currentPlayingCell.waveStreamAnimationView.pause()
+        output.playerState
+            .compactMap { [weak self] state -> (PlaylistTableViewCell, Bool)? in
+                guard let self else { return nil }
+                let index = self.playState.playList.currentPlayIndex
+                guard let cell = self.playlistView.playlistTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? PlaylistTableViewCell else { return nil }
+                return (cell, state == .playing)
             }
-        }.store(in: &subscription)
+            .sink { cell, isPlaying in
+                if isPlaying {
+                    cell.waveStreamAnimationView.play()
+                } else {
+                    cell.waveStreamAnimationView.pause()
+                }
+            }
+            .store(in: &subscription)
     }
     
     private func updatePlayingStatus(currentSongIndex: Int) {
@@ -147,6 +152,12 @@ private extension PlaylistViewController {
 }
 
 private extension PlaylistViewController {
+    private func bindActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(touchThumbnailImageView))
+        playlistView.thumbnailImageView.isUserInteractionEnabled = true
+        playlistView.thumbnailImageView.addGestureRecognizer(tapGesture)
+    }
+    
     @objc private func touchThumbnailImageView() {
         self.dismiss(animated: true)
     }
