@@ -200,7 +200,7 @@ private extension PlaylistView {
         
         currentPlayTimeView.snp.makeConstraints {
             $0.top.left.bottom.equalToSuperview()
-            $0.width.equalToSuperview().multipliedBy(0.3)
+            $0.width.equalToSuperview().multipliedBy(0)
         }
         
         let height = 40
