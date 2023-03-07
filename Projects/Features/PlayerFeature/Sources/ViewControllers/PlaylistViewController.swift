@@ -20,10 +20,7 @@ public class PlaylistViewController: UIViewController {
     var playlistView: PlaylistView!
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
-    lazy var youtubePlayerView = YouTubePlayerHostingView(player: playState.player).then {
-        $0.isHidden = true
-    }
-    
+
     init(viewModel: PlaylistViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -41,13 +38,6 @@ public class PlaylistViewController: UIViewController {
         super.loadView()
         playlistView = PlaylistView(frame: self.view.frame)
         self.view.addSubview(playlistView)
-        self.view.addSubview(youtubePlayerView)
-        self.youtubePlayerView.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(self.playlistView.thumbnailImageView)
-            $0.width.equalTo(self.playlistView.thumbnailImageView.snp.width)
-            $0.height.equalTo(self.playlistView.thumbnailImageView.snp.height)
-        }
-        
     }
     
     public override func viewDidLoad() {

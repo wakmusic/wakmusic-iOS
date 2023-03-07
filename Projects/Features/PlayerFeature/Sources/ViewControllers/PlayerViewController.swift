@@ -70,7 +70,7 @@ public class PlayerViewController: UIViewController {
     
     func showPlaylist() {
         let playlistVC = playlistComponent.makeView()
-        playlistVC.modalPresentationStyle = .fullScreen
+        playlistVC.modalPresentationStyle = .overFullScreen
         playlistVC.view.frame = self.view.frame
         self.present(playlistVC, animated: true)
     }
