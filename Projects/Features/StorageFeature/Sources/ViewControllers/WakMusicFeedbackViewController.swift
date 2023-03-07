@@ -13,7 +13,7 @@ import RxSwift
 import RxKeyboard
 import CommonFeature
 
-public final class SuggestFunctionViewController: UIViewController,ViewControllerFromStoryBoard {
+public final class WakMusicFeedbackViewController: UIViewController,ViewControllerFromStoryBoard {
     
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -21,13 +21,6 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     @IBOutlet weak var descriptionLabel1: UILabel!
     @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var baseLineView: UIView!
-    @IBOutlet weak var descriptionLabel2: UILabel!
-    @IBOutlet weak var mobileAppSuperView: UIView!
-    @IBOutlet weak var mobileAppButton: UIButton!
-    @IBOutlet weak var mobileAppCheckImageView: UIImageView!
-    @IBOutlet weak var webSiteSuperView: UIView!
-    @IBOutlet weak var webSiteButton: UIButton!
-    @IBOutlet weak var webSiteCheckImageView: UIImageView!
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
     
@@ -36,13 +29,12 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
     let textViewPlaceHolder:String = "내 대답"
     
     let disposeBag = DisposeBag()
     
-    var viewModel:SuggestFunctionViewModel!
-    lazy var input = SuggestFunctionViewModel.Input()
+    var viewModel:WakMusicFeedbackViewModel!
+    lazy var input = WakMusicFeedbackViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
     public override func viewDidLoad() {
@@ -54,10 +46,10 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
     }
     
 
-    public static func viewController(viewModel:SuggestFunctionViewModel) -> SuggestFunctionViewController {
-        let viewController = SuggestFunctionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+    public static func viewController(viewModel:WakMusicFeedbackViewModel) -> WakMusicFeedbackViewController {
+        let viewController = WakMusicFeedbackViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
-        viewController.viewModel = viewModel
+       viewController.viewModel = viewModel
        
 
         
@@ -67,7 +59,7 @@ public final class SuggestFunctionViewController: UIViewController,ViewControlle
 }
 
 
-extension SuggestFunctionViewController {
+extension WakMusicFeedbackViewController {
     
     private func configureUI(){
         
@@ -79,13 +71,11 @@ extension SuggestFunctionViewController {
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
-        descriptionLabel1.text = "제안해 주고 싶은 기능에 대해 설명해 주세요."
+        descriptionLabel1.text = "문의하실 내용을 적어주세요."
         descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
         
-        
-
-        
+    
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
@@ -99,53 +89,7 @@ extension SuggestFunctionViewController {
         
         baseLineView.backgroundColor = unPointColor
         
-        descriptionLabel2.text = "어떤 플랫폼과 관련된 기능인가요?"
-        descriptionLabel2.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        descriptionLabel2.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
-        let superViews:[UIView] = [self.mobileAppSuperView,self.webSiteSuperView]
-        
-        let buttons:[UIButton] = [self.mobileAppButton,self.webSiteButton]
-        
-        let imageViews:[UIImageView] = [self.mobileAppCheckImageView,self.webSiteCheckImageView]
-        
-        
-        for i in 0...1 {
-            
-            superViews[i].layer.cornerRadius = 12
-            superViews[i].layer.borderColor = unPointColor.cgColor
-            superViews[i].layer.borderWidth = 1
-            imageViews[i].image = DesignSystemAsset.Storage.checkBox.image
-            imageViews[i].isHidden = true
-            
-            var title:String = ""
-            
-            switch i {
-            case 0:
-                title = "모바일 앱"
-                
-            case 1:
-                title = "PC 웹"
-            default:
-                return
-                
-            }
-            
-            buttons[i].setAttributedTitle(NSMutableAttributedString(string:title,
-                    attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
-                                 .foregroundColor: unSelectedTextColor,
-                                 
-                    ]), for: .normal)
-            
-            
-            
-            
-            
-            
-        }
-        
-        
-        
+         
         self.completionButton.layer.cornerRadius = 12
         self.completionButton.clipsToBounds = true
         self.completionButton.isEnabled = false
@@ -169,12 +113,7 @@ extension SuggestFunctionViewController {
     
     private func bindbuttonEvent(){
         
-        Observable.merge(
-            mobileAppButton.rx.tap.map { _ in 0 },
-            webSiteButton.rx.tap.map { _ in 1 }
-        )
-        .bind(to: output.selectedIndex)
-        .disposed(by: disposeBag)
+
         
         previousButton.rx.tap.subscribe(onNext: { [weak self] in
             
@@ -199,13 +138,14 @@ extension SuggestFunctionViewController {
         })
         .disposed(by: disposeBag)
         
-        let resultObservable = Observable.combineLatest(input.textString, output.selectedIndex)
         
         completionButton.rx.tap
-            .withLatestFrom(resultObservable)
-            .subscribe(onNext: { [weak self] (text,index) in
+            .withLatestFrom(input.textString)
+            .subscribe(onNext: { [weak self] (text:String) in
                 
-                DEBUG_LOG("\(text) \(index)")
+                
+                
+                DEBUG_LOG("\(text)")
                 
                 //TODO: 텍스트 팝업
                 
@@ -225,86 +165,6 @@ extension SuggestFunctionViewController {
         
         
 
-        
-
-        
-        output.selectedIndex
-            .skip(1)
-            .subscribe(onNext: { [weak self] (index:Int) in
-            
-            guard let self = self else{
-                return
-            }
-            let superViews:[UIView] = [self.mobileAppSuperView,self.webSiteSuperView]
-            
-            let buttons:[UIButton] = [self.mobileAppButton,self.webSiteButton]
-            
-            let imageViews:[UIImageView] = [self.mobileAppCheckImageView,self.webSiteCheckImageView]
-            
-            
-            for i in 0...1 {
-                
-                var title:String = ""
-                
-                switch i {
-                case 0:
-                    title = "모바일 앱"
-                
-                case 1:
-                    title = "PC 웹"
-                
-                    
-                default:
-                    return
-
-                }
-                
-                buttons[i].setAttributedTitle(
-                    NSMutableAttributedString(string:title,
-                                              attributes: [.font:
-                                                            i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16)  : DesignSystemFontFamily.Pretendard.light.font(size: 16),
-                                 .foregroundColor:
-                                                            i == index ? self.pointColor : self.unSelectedTextColor   ]), for: .normal)
-                
-               
-                
-                imageViews[i].isHidden = i == index ? false : true
-                
-                superViews[i].layer.borderColor = i == index ? self.pointColor.cgColor : self.unPointColor.cgColor
-                
-                superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
-                
-                
-                
-            }
-            
-        })
-        .disposed(by: disposeBag)
-        
-
-        
-        Observable.combineLatest(input.textString, output.selectedIndex)
-            .subscribe(onNext: { [weak self] (text,index) in
-                
-                guard let self = self else{
-                    return
-                }
-                
- 
-                if !text.isWhiteSpace && index != -2 {
-                    self.completionButton.isEnabled = true
-                }
-                else {
-                    self.completionButton.isEnabled = false
-                }
-                
-                
-                
-                
-            })
-            .disposed(by: disposeBag)
-        
-     
         
     }
     
@@ -341,7 +201,7 @@ extension SuggestFunctionViewController {
 }
 
 
-extension SuggestFunctionViewController : UITextViewDelegate {
+extension WakMusicFeedbackViewController : UITextViewDelegate {
     
     
   

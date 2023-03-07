@@ -12,6 +12,7 @@ import DomainModule
 
 public protocol SuggestFunctionDependency: Dependency {
     
+    
 
 
 }

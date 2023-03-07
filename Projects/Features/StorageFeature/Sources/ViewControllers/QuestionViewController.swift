@@ -44,6 +44,7 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     lazy var output = viewModel.transform(from: input)
     
     var suggestFunctionComponent:SuggestFunctionComponent!
+    var wakMusicFeedbackComponent: WakMusicFeedbackComponent!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,11 +52,13 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
         configureUI()
     }
     
-    public static func viewController(viewModel:QuestionViewModel,suggestFunctionComponent:SuggestFunctionComponent) -> QuestionViewController {
+    public static func viewController(viewModel:QuestionViewModel,suggestFunctionComponent:SuggestFunctionComponent,wakMusicFeedbackComponent:WakMusicFeedbackComponent) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.suggestFunctionComponent = suggestFunctionComponent
+        
+        viewController.wakMusicFeedbackComponent = wakMusicFeedbackComponent
 
         
         return viewController
@@ -240,7 +243,7 @@ extension QuestionViewController {
                 switch $0 {
                     
                 case 1:
-                    let vc = self.suggestFunctionComponent.makeView()
+                    let vc = self.wakMusicFeedbackComponent.makeView()
                     
                     
                     

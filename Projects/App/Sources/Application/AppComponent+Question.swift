@@ -19,45 +19,34 @@ import StorageFeature
 
 public extension AppComponent {
 
-    
-    var qnaComponent:  QnaComponent {
-        
-        QnaComponent(parent: self)
-    }
-    
-    var qnaContentComponent:  QnaContentComponent {
-        
-        QnaContentComponent(parent: self)
-    }
-    
-  
 
     
-    var remoteQnaDataSource: any RemoteQnaDataSource {
+    var questionComponent: QuestionComponent {
+        
+        QuestionComponent(parent: self)
+    }
+    
+    var suggestFunctionComponent:SuggestFunctionComponent {
+        
+        SuggestFunctionComponent(parent: self)
+    }
+
+    var wakMusicFeedbackComponent: WakMusicFeedbackComponent {
+        
+        WakMusicFeedbackComponent(parent: self)
+    }
+    
+    var remoteQuestionDataSource: any RemoteQnaDataSource {
         shared {
             RemoteQnaDataSourceImpl(keychain: keychain)
         }
     }
     
-    var qnaRepository: any QnaRepository {
+    var questionRepository: any QnaRepository {
         shared {
             
             QnaRepositoryImpl(remoteQnaDataSource: remoteQnaDataSource)
         }
     }
-    
-    
-    var fetchQnaCategoriesUseCase: any FetchQnaCategoriesUseCase{
-        shared {
-            FetchQnaCategoriesUseCaseImpl(qnaRepository: qnaRepository)
-        }
-    }
-    
-    var fetchQnaUseCase: any FetchQnaUseCase {
-        shared {
-            FetchQnaUseCaseImpl(qnaRepository: qnaRepository)
-        }
-    }
-    
  
 }
