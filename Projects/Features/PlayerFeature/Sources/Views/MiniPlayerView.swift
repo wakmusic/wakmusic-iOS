@@ -30,7 +30,7 @@ final class MiniPlayerView: UIView {
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
         $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 5
+        $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
     

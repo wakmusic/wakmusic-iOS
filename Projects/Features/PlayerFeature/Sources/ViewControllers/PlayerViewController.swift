@@ -19,7 +19,7 @@ import Kingfisher
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    private var subsciption = Set<AnyCancellable>()
+    private var subscription = Set<AnyCancellable>()
     var viewModel: PlayerViewModel!
     let playState = PlayState.shared
     var playerView: PlayerView!
@@ -29,13 +29,20 @@ public class PlayerViewController: UIViewController {
         $0.isHidden = true
     }
     
-    init(viewModel: PlayerViewModel) {
+    var playlistComponent: PlaylistComponent!
+    
+    init(viewModel: PlayerViewModel, playlistComponent: PlaylistComponent) {
         self.viewModel = viewModel
+        self.playlistComponent = playlistComponent
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("PlayerViewController init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("플레이어 뷰컨 deinit")
     }
     
     public override func loadView() {
@@ -48,8 +55,8 @@ public class PlayerViewController: UIViewController {
         self.view.addSubview(youtubePlayerView)
         self.youtubePlayerView.snp.makeConstraints {
             $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
-            $0.width.equalTo(320)
-            $0.height.equalTo(180)
+            $0.width.equalTo(self.playerView.thumbnailImageView.snp.width)
+            $0.height.equalTo(self.playerView.thumbnailImageView.snp.height)
         }
     }
     
@@ -59,6 +66,13 @@ public class PlayerViewController: UIViewController {
         playerView.lyricsTableView.delegate = self
         playerView.lyricsTableView.dataSource = self
         bindViewModel()
+    }
+    
+    func showPlaylist() {
+        let playlistVC = playlistComponent.makeView()
+        playlistVC.modalPresentationStyle = .overFullScreen
+        playlistVC.view.frame = self.view.frame
+        self.present(playlistVC, animated: true)
     }
     
 }
@@ -83,7 +97,7 @@ private extension PlayerViewController {
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
             likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
-            playlistButtonDidTapEvent: self.playerView.playistButton.rx.tap.asObservable(),
+            playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher,
             miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
             miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
@@ -100,6 +114,7 @@ private extension PlayerViewController {
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
+        bindShowPlaylist(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -122,7 +137,7 @@ private extension PlayerViewController {
                 self.playerView.playButton.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
                 self.miniPlayerView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
             }
-        }.store(in: &subsciption)
+        }.store(in: &subscription)
     }
     
     private func bindThumbnail(output: PlayerViewModel.Output) {
@@ -131,7 +146,7 @@ private extension PlayerViewController {
             self.playerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
             self.playerView.backgroundImageView.kf.setImage(with: URL(string: thumbnailImageURL))
             self.miniPlayerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
-        }.store(in: &subsciption)
+        }.store(in: &subscription)
     }
     
     private func bindTitle(output: PlayerViewModel.Output) {
@@ -139,7 +154,7 @@ private extension PlayerViewController {
             guard let self else { return }
             self.playerView.titleLabel.text = titleText
             self.miniPlayerView.titleLabel.text = titleText
-        }.store(in: &subsciption)
+        }.store(in: &subscription)
     }
     
     private func bindArtist(output: PlayerViewModel.Output) {
@@ -148,7 +163,7 @@ private extension PlayerViewController {
             self.playerView.artistLabel.text = artistText
             self.miniPlayerView.artistLabel.text = artistText
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindlikes(output: PlayerViewModel.Output) {
@@ -156,7 +171,7 @@ private extension PlayerViewController {
             guard let self else { return }
             self.playerView.likeButton.setTitle(likeCountText, for: .normal)
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindViews(output: PlayerViewModel.Output) {
@@ -164,7 +179,7 @@ private extension PlayerViewController {
             guard let self else { return }
             self.playerView.viewsLabel.text = viewsCountText
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindCurrentPlayTime(output: PlayerViewModel.Output) {
@@ -179,13 +194,13 @@ private extension PlayerViewController {
                 $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
             }
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
         
         output.playTimeValue.sink { [weak self] value in
             guard let self else { return }
             self.playerView.playTimeSlider.value = value
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindTotalPlayTime(output: PlayerViewModel.Output) {
@@ -193,14 +208,14 @@ private extension PlayerViewController {
             guard let self else { return }
             self.playerView.totalPlayTimeLabel.text = totalTimeText
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
         
         output.totalTimeValue.sink { [weak self] value in
             guard let self else { return }
             self.playerView.playTimeSlider.minimumValue = 0
             self.playerView.playTimeSlider.maximumValue = value
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindLyricsDidChangedEvent(output: PlayerViewModel.Output) {
@@ -208,7 +223,7 @@ private extension PlayerViewController {
             guard let self else { return }
             self.playerView.lyricsTableView.reloadData()
         }
-        .store(in: &subsciption)
+        .store(in: &subscription)
     }
     
     private func bindLyricsTracking(output: PlayerViewModel.Output) {
@@ -220,7 +235,13 @@ private extension PlayerViewController {
             .sink { [weak self] index in
                 self?.updateLyricsHighlight(index: index)
             }
-            .store(in: &subsciption)
+            .store(in: &subscription)
+    }
+    
+    private func bindShowPlaylist(output: PlayerViewModel.Output) {
+        output.willShowPlaylist.sink { [weak self] _ in
+            self?.showPlaylist()
+        }.store(in: &subscription)
     }
     
     private func updateLyricsHighlight(index: Int) {

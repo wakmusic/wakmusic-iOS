@@ -69,6 +69,11 @@ extension PlayState {
         self.player.play()
     }
     
+    /// ⏸️ 일시정지
+    func pause() {
+        self.player.pause()
+    }
+    
     /// ▶️ 해당 곡 새로 재생
     func load(at song: SongEntity) {
         self.currentSong = song
@@ -76,9 +81,12 @@ extension PlayState {
         self.player.load(source: .video(id: currentSong.id))
     }
     
-    /// ⏸️ 일시정지
-    func pause() {
-        self.player.pause()
+    /// ▶️ 플레이리스트의 해당 위치의  곡 재생
+    func loadInPlaylist(at index: Int) {
+        self.playList.currentPlayIndex = index
+        self.currentSong = self.playList.current
+        guard let currentSong = currentSong else { return }
+        load(at: currentSong)
     }
 
     /// ⏩ 다음 곡으로 변경 후 재생
@@ -130,6 +138,14 @@ extension PlayState {
             list.append(item)
         }
 
+        func insert(_ newElement: SongEntity, at: Int) {
+            list.insert(newElement, at: at)
+        }
+        
+        func remove(at: Int) {
+            list.remove(at: at)
+        }
+        
         func removeAll() {
             list.removeAll()
         }
@@ -137,15 +153,31 @@ extension PlayState {
         func contains(_ item: SongEntity) -> Bool {
             return list.contains(item)
         }
-
+        
         func back() {
-            if currentPlayIndex == 0 { currentPlayIndex = lastIndex; return } // 현재 곡이 첫번째 곡이면 마지막 곡으로
+            // 현재 곡이 첫번째 곡이면 마지막 곡으로
+            if currentPlayIndex == 0 { currentPlayIndex = lastIndex; return }
             currentPlayIndex -= 1
         }
 
         func next() {
-            if isLast { currentPlayIndex = 0; return } // 현재 곡이 마지막이면 첫번째 곡으로
+            // 현재 곡이 마지막이면 첫번째 곡으로
+            if isLast { currentPlayIndex = 0; return }
             currentPlayIndex += 1
+        }
+        
+        func reorderPlaylist(from: Int, to: Int) {
+            let movedData = list[from]
+            list.remove(at: from)
+            list.insert(movedData, at: to)
+            
+            if currentPlayIndex == from {
+                currentPlayIndex = to
+            } else if currentPlayIndex > from && currentPlayIndex <= to {
+                currentPlayIndex -= 1
+            } else if currentPlayIndex < from && currentPlayIndex >= to {
+                currentPlayIndex += 1
+            }
         }
 
         func uniqueAppend(item: SongEntity) {
@@ -159,7 +191,7 @@ extension PlayState {
             }
         }
 
-        private func uniqueIndex(of item: SongEntity) -> Int? {
+        func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             let index = list.enumerated().compactMap { $0.element == item ? $0.offset : nil }.first
             return index

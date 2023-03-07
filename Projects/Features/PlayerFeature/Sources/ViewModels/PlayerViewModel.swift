@@ -28,7 +28,7 @@ final class PlayerViewModel: ViewModelType {
         let shuffleButtonDidTapEvent: Observable<Void>
         let likeButtonDidTapEvent: Observable<Void>
         let addPlaylistButtonDidTapEvent: Observable<Void>
-        let playlistButtonDidTapEvent: Observable<Void>
+        let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: Observable<Void>
         let miniPlayButtonDidTapEvent: Observable<Void>
         let miniCloseButtonDidTapEvent: Observable<Void>
@@ -50,6 +50,7 @@ final class PlayerViewModel: ViewModelType {
         var didPrev = PublishRelay<Bool>()
         var didNext = PublishRelay<Bool>()
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
+        var willShowPlaylist = PassthroughSubject<Bool, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -64,6 +65,10 @@ final class PlayerViewModel: ViewModelType {
     init(fetchLyricsUseCase: FetchLyricsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         print("✅ PlayerViewModel 생성")
+    }
+    
+    deinit {
+        print("❌ PlayerViewModel deinit")
     }
     
     func transform(from input: Input) -> Output {
@@ -100,6 +105,10 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             self.playState.player.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
+        
+        input.playlistButtonDidTapEvent.sink { _ in
+            output.willShowPlaylist.send(true)
+        }.store(in: &subscription)
         
         playState.$state.sink { [weak self] state in
             guard let self else { return }

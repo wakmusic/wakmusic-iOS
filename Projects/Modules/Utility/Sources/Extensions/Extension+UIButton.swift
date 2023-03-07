@@ -8,8 +8,15 @@
 
 import Foundation
 import UIKit
+import Combine
 
 public extension UIButton {
+    var tapPublisher: AnyPublisher<Void, Never> {
+        controlPublisher(for: .touchUpInside)
+            .map { _ in }
+            .eraseToAnyPublisher()
+    }
+    
     func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
         UIGraphicsBeginImageContext(CGSize(width: 1.0, height: 1.0))
         guard let context = UIGraphicsGetCurrentContext() else { return }
