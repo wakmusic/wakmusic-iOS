@@ -112,9 +112,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
             }
             self.playImageView.isHidden = isPlaying
             self.waveStreamAnimationView.isHidden = !isPlaying
-            if !waveStreamAnimationView.isHidden {
-                self.waveStreamAnimationView.play()
-            }
         }
     }
     

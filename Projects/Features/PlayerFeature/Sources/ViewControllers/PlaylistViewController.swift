@@ -67,6 +67,7 @@ private extension PlaylistViewController {
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
         bindPlayButtonImages(output: output)
+        bindwaveStreamAnimationView(output: output)
         
         output.willClosePlaylist.sink { [weak self] _ in
             self?.dismiss(animated: true)
@@ -114,6 +115,21 @@ private extension PlaylistViewController {
                 self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
             default:
                 self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindwaveStreamAnimationView(output: PlaylistViewModel.Output) {
+        output.playerState.sink { [weak self] state in
+            guard let self else { return }
+            let indexPath = IndexPath(row: self.playState.playList.currentPlayIndex, section: 0)
+            guard let currentPlayingCell = self.playlistView.playlistTableView.cellForRow(at: indexPath) as? PlaylistTableViewCell else { return }
+            // 노래를 일시정지하면 애니메이션도 일시정지
+            switch state {
+            case .playing:
+                currentPlayingCell.waveStreamAnimationView.play()
+            default:
+                currentPlayingCell.waveStreamAnimationView.pause()
             }
         }.store(in: &subscription)
     }
