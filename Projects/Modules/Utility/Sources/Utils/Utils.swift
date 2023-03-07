@@ -25,6 +25,10 @@ public func STATUS_BAR_HEGHIT() -> CGFloat {
     return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 }
 
+public func SAFEAREA_BOTTOM_HEGHIT() -> CGFloat {
+    return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+}
+
 public func APP_VERSION() -> String {
     return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
 }

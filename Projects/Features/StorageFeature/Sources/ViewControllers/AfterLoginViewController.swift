@@ -15,6 +15,7 @@ import RxSwift
 import PanModal
 import CommonFeature
 import KeychainModule
+import DataMappingModule
 
 
 
@@ -45,12 +46,14 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     @IBAction func pressLogoutAction(_ sender: UIButton) {
         
-        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false, completion: {
-            let keychain = KeychainImpl()
-            keychain.delete(type: .accessToken)
-            Utility.PreferenceManager.userInfo = nil
+        let vc = TextPopupViewController.viewController(text:"로그아웃 하시겠습니까?",cancelButtonIsHidden: false, completion: { [weak self] in
             
-            //TODO: 플랫품에 따른 로그아웃 구현 
+            guard let self = self else{
+                return
+            }
+            
+            self.input.pressLogOut.accept(())
+
         })
         self.showPanModal(content: vc)
     }

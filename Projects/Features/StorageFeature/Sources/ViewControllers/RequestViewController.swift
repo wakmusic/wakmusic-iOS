@@ -17,9 +17,16 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     
-    @IBOutlet weak var reportBugButton: UIButton!
-    @IBOutlet weak var songRequestButton: UIButton!
+
+    @IBOutlet weak var questionImageview: UIImageView!
+    @IBOutlet weak var questionButton: UIButton!
+    @IBOutlet weak var questionSuperView: UIView!
+    
+    
+    @IBOutlet weak var qnaSuperView: UIView!
+    @IBOutlet weak var qnaSuperImageview: UIImageView!
     @IBOutlet weak var qnaButton: UIButton!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -34,9 +41,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let viewController = qnaComponent.makeView()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let vc = qnaComponent.makeView()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    @IBAction func moveQuestionAction(_ sender: Any) {
+        
+        let vc =  questionComponent.makeView().wrapNavigationController
+        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        self.present(vc, animated: true)
+        
+    }
+    
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
         
@@ -69,6 +85,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var output = viewModel.transform(from: input)
     
     var qnaComponent:QnaComponent!
+    var questionComponent:QuestionComponent!
     
     var disposeBag = DisposeBag()
     
@@ -86,11 +103,12 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
 
-    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent) -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent
+        viewController.questionComponent = questionComponent
         
         return viewController
     }
@@ -106,18 +124,19 @@ extension RequestViewController{
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons:[UIButton] = [self.reportBugButton,self.songRequestButton,self.qnaButton]
-        
-        for i in 0...2 {
+        let buttons:[UIButton] = [self.questionButton,self.qnaButton]
+        let superViews:[UIView] = [self.questionSuperView,self.qnaSuperView]
+        let imageViews:[UIImageView] = [self.questionImageview,self.qnaSuperImageview]
+        for i in 0...1 {
             
             var title = ""
             switch i {
             case 0:
-                title = "버그 제보"
+                title = "문의하기"
+                imageViews[i].image = DesignSystemAsset.Storage.question.image
             case 1:
-                title = "노래 추가, 수정 요청"
-            case 2:
                 title = "자주 묻는 질문"
+                imageViews[i].image = DesignSystemAsset.Storage.qna.image
             default:
                 return
             }
@@ -128,9 +147,11 @@ extension RequestViewController{
             
             buttons[i].setAttributedTitle(attr, for: .normal)
             
-            buttons[i].layer.borderWidth = 1
-            buttons[i].layer.cornerRadius = 12
-            buttons[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+            superViews[i].layer.borderWidth = 1
+            superViews[i].layer.cornerRadius = 12
+            superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            
+            
             
 
         }
@@ -223,7 +244,8 @@ extension RequestViewController{
         let versionLabelHeight:CGFloat = 18
         let mainTabBarHeight:CGFloat = 56
 
-        let res = (APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
+        let res:CGFloat = 40
+        //(APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
         
         return res
     }

@@ -13,14 +13,18 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import CommonFeature
+import NaverThirdPartyLogin
+import KeychainModule
 
 final public class AfterLoginViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
+    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
         let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let pressLogOut:PublishRelay<Void> = PublishRelay()
     }
 
     public struct Output {
@@ -58,6 +62,35 @@ final public class AfterLoginViewModel:ViewModelType {
                     first: $0.first
                 )
             }).disposed(by: disposeBag)
+        
+        
+        input.pressLogOut.subscribe(onNext: { [weak self] in
+            
+            guard let self = self else{
+                return
+            }
+            
+            let platform = Utility.PreferenceManager.userInfo?.platform
+            
+            if platform == "naver" {
+                
+                self.naverLoginInstance?.resetToken()
+            }
+            else if platform == "apple" {
+                
+            }
+            else{
+                
+            }
+            
+            let keychain = KeychainImpl()
+            keychain.delete(type: .accessToken)
+            Utility.PreferenceManager.userInfo = nil
+            
+          
+            
+        }).disposed(by: disposeBag)
+        
         
         return output
     }

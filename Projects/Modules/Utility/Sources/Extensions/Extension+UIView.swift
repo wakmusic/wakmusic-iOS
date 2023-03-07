@@ -12,6 +12,41 @@ import SwiftEntryKit
 
 public extension UIView {
     
+    enum VerticalLocation {
+           case bottom
+           case top
+           case left
+           case right
+       }
+
+       func addShadow(location: VerticalLocation, color: UIColor = .black, opacity: Float = 0.8, radius: CGFloat = 5.0) {
+           switch location {
+           case .bottom:
+                addShadow(offset: CGSize(width: 0, height: 10), color: color, opacity: opacity, radius: radius)
+           case .top:
+               addShadow(offset: CGSize(width: 0, height: -10), color: color, opacity: opacity, radius: radius)
+           case .left:
+               addShadow(offset: CGSize(width: -10, height: 0), color: color, opacity: opacity, radius: radius)
+           case .right:
+               addShadow(offset: CGSize(width: 10, height: 0), color: color, opacity: opacity, radius: radius)
+           }
+       }
+
+       func addShadow(offset: CGSize, color: UIColor = .black, opacity: Float = 0.1, radius: CGFloat = 3.0) {
+           
+           /// 테두리 밖으로 contents가 있을 때, 마스킹(true)하여 표출안되게 할것인지 마스킹을 off(false  emptyView.layer.masksToBounds = false
+           /// shadow 색상
+           /// 현재 shadow는 view의 layer 테두리와 동일한 위치로 있는 상태이므로 offset을 통해 그림자를 이동시켜야 표출
+           /// shadow의 투명도 (0 ~ 1)
+           /// shadow의 corner radius
+           self.layer.masksToBounds = false
+           self.layer.shadowColor = color.cgColor
+           self.layer.shadowOffset = offset
+           self.layer.shadowOpacity = opacity
+           self.layer.shadowRadius = radius
+       }
+    
+    
     func animateSizeDownToUp(timeInterval: TimeInterval) {
         let propertyAnimator = UIViewPropertyAnimator(duration: timeInterval, dampingRatio: 0.5) {
             self.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)
