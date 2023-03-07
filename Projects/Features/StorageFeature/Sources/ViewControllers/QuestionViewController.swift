@@ -33,6 +33,12 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editSongButton: UIButton!
     @IBOutlet weak var editSongCheckImageView: UIImageView!
     
+    
+    @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
+    @IBOutlet weak var wakMusicFeedbackButton: UIButton!
+    @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
+    
+    
     @IBOutlet weak var nextButton: UIButton!
     
     let selectedColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -93,14 +99,14 @@ extension QuestionViewController {
         
         
             
-        let superViews:[UIView] = [self.bugReportSuperView,self.suggestFunctionSuperView,self.addSongSuperView,self.editSongSuperView]
+        let superViews:[UIView] = [self.bugReportSuperView,self.suggestFunctionSuperView,self.addSongSuperView,self.editSongSuperView,self.wakMusicFeedbackSuperView]
         
-        let buttons:[UIButton] = [self.bugReportButton,self.suggestFunctionButton,self.addSongButton,self.editSongButton]
+        let buttons:[UIButton] = [self.bugReportButton,self.suggestFunctionButton,self.addSongButton,self.editSongButton,self.wakMusicFeedbackButton]
         
-        let imageViews:[UIImageView] = [self.bugReportCheckImageView,self.suggestFunctionCheckImageView,self.addSongCheckImageView,self.editSongCheckImageView]
+        let imageViews:[UIImageView] = [self.bugReportCheckImageView,self.suggestFunctionCheckImageView,self.addSongCheckImageView,self.editSongCheckImageView,self.wakMusicFeedbackCheckImageView]
         
         
-        for i in 0...3 {
+        for i in 0...4 {
             
             superViews[i].layer.cornerRadius = 12
             superViews[i].layer.borderColor = unSelectedColor.cgColor
@@ -122,6 +128,9 @@ extension QuestionViewController {
                 
             case 3:
                 title = "노래 수정"
+            
+            case 4:
+                title = "주간차트 영상"
                 
             default:
                 return
@@ -157,7 +166,8 @@ extension QuestionViewController {
             bugReportButton.rx.tap.map { _ in 0 },
             suggestFunctionButton.rx.tap.map { _ in 1 },
             addSongButton.rx.tap.map { _ in 2 },
-            editSongButton.rx.tap.map { _ in 3 }
+            editSongButton.rx.tap.map { _ in 3 },
+            wakMusicFeedbackButton.rx.tap.map{_ in 4}
         )
         .bind(to: output.selectedIndex)
         .disposed(by: disposeBag)
@@ -172,13 +182,13 @@ extension QuestionViewController {
                 self.nextButton.isEnabled = true
             }
             
-            let superViews:[UIView] = [self.bugReportSuperView,self.suggestFunctionSuperView,self.addSongSuperView,self.editSongSuperView]
+            let superViews:[UIView] = [self.bugReportSuperView,self.suggestFunctionSuperView,self.addSongSuperView,self.editSongSuperView,self.wakMusicFeedbackSuperView]
             
-            let buttons:[UIButton] = [self.bugReportButton,self.suggestFunctionButton,self.addSongButton,self.editSongButton]
+            let buttons:[UIButton] = [self.bugReportButton,self.suggestFunctionButton,self.addSongButton,self.editSongButton,self.wakMusicFeedbackButton]
             
-            let imageViews:[UIImageView] = [self.bugReportCheckImageView,self.suggestFunctionCheckImageView,self.addSongCheckImageView,self.editSongCheckImageView]
+            let imageViews:[UIImageView] = [self.bugReportCheckImageView,self.suggestFunctionCheckImageView,self.addSongCheckImageView,self.editSongCheckImageView,self.wakMusicFeedbackCheckImageView]
             
-            for i in 0...3 {
+            for i in 0...4 {
                 
                 
                 var title:String = ""
@@ -195,6 +205,9 @@ extension QuestionViewController {
                     
                 case 3:
                     title = "노래 수정"
+                    
+                case 4:
+                    title = "주간차트 영상"
                     
                 default:
                     return
@@ -243,9 +256,12 @@ extension QuestionViewController {
                 switch $0 {
                     
                 case 1:
+                    let vc = self.suggestFunctionComponent.makeView()
+                
+                    self.navigationController?.pushViewController(vc, animated: true)
+                
+                case 4:
                     let vc = self.wakMusicFeedbackComponent.makeView()
-                    
-                    
                     
                     self.navigationController?.pushViewController(vc, animated: true)
                     
