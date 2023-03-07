@@ -260,6 +260,12 @@ extension QuestionViewController {
                 
                     self.navigationController?.pushViewController(vc, animated: true)
                 
+                
+                case 2:
+                    let vc =  AskSongViewController.viewController()
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
                 case 4:
                     let vc = self.wakMusicFeedbackComponent.makeView()
                     
