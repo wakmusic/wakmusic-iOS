@@ -13,12 +13,12 @@ import DomainModule
 public protocol QuestionDependency: Dependency {
     
     var suggestFunctionComponent: SuggestFunctionComponent {get}
-
+    var wakMusicFeedbackComponent: WakMusicFeedbackComponent {get}
 
 }
 
 public final class QuestionComponent: Component<QuestionDependency> {
     public func makeView() -> QuestionViewController {
-        return QuestionViewController.viewController(viewModel: .init(),suggestFunctionComponent: dependency.suggestFunctionComponent)
+        return QuestionViewController.viewController(viewModel: .init(),suggestFunctionComponent: dependency.suggestFunctionComponent,wakMusicFeedbackComponent: dependency.wakMusicFeedbackComponent)
     }
 }

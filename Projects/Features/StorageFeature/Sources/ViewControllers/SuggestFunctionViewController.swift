@@ -206,6 +206,9 @@ extension SuggestFunctionViewController {
             .subscribe(onNext: { [weak self] (text,index) in
                 
                 DEBUG_LOG("\(text) \(index)")
+                
+                //TODO: 텍스트 팝업
+                
             })
             .disposed(by: disposeBag)
             
@@ -337,11 +340,6 @@ extension SuggestFunctionViewController {
     
 }
 
-extension SuggestFunctionViewController: GrowingTextViewDelegate {
-    public func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat){
-        DEBUG_LOG(height)
-    }
-}
 
 extension SuggestFunctionViewController : UITextViewDelegate {
     

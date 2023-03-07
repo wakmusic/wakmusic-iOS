@@ -219,6 +219,9 @@ private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency
     var suggestFunctionComponent: SuggestFunctionComponent {
         return appComponent.suggestFunctionComponent
     }
+    var wakMusicFeedbackComponent: WakMusicFeedbackComponent {
+        return appComponent.wakMusicFeedbackComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -342,6 +345,17 @@ private class QnaContentDependency68ed55648233d525d265Provider: QnaContentDepend
 /// ^->AppComponent->QnaContentComponent
 private func factory1501f7005831c8411229e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return QnaContentDependency68ed55648233d525d265Provider()
+}
+private class WakMusicFeedbackDependency8d09739bdcd24807ec82Provider: WakMusicFeedbackDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->WakMusicFeedbackComponent
+private func factory32abe9db091bc43329a1e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return WakMusicFeedbackDependency8d09739bdcd24807ec82Provider()
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
@@ -555,10 +569,13 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
-        localTable["qnaContentComponent-QnaContentComponent"] = { self.qnaContentComponent as Any }
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { self.suggestFunctionComponent as Any }
+        localTable["wakMusicFeedbackComponent-WakMusicFeedbackComponent"] = { self.wakMusicFeedbackComponent as Any }
+        localTable["remoteQuestionDataSource-any RemoteQnaDataSource"] = { self.remoteQuestionDataSource as Any }
+        localTable["questionRepository-any QnaRepository"] = { self.questionRepository as Any }
+        localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
+        localTable["qnaContentComponent-QnaContentComponent"] = { self.qnaContentComponent as Any }
         localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { self.remoteQnaDataSource as Any }
         localTable["qnaRepository-any QnaRepository"] = { self.qnaRepository as Any }
         localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { self.fetchQnaCategoriesUseCase as Any }
@@ -642,6 +659,7 @@ extension StorageComponent: Registration {
 extension QuestionComponent: Registration {
     public func registerItems() {
         keyPathToName[\QuestionDependency.suggestFunctionComponent] = "suggestFunctionComponent-SuggestFunctionComponent"
+        keyPathToName[\QuestionDependency.wakMusicFeedbackComponent] = "wakMusicFeedbackComponent-WakMusicFeedbackComponent"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -683,6 +701,11 @@ extension RequestComponent: Registration {
     }
 }
 extension QnaContentComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension WakMusicFeedbackComponent: Registration {
     public func registerItems() {
 
     }
@@ -779,6 +802,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
