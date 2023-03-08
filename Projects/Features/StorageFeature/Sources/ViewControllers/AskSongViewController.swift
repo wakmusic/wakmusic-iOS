@@ -89,10 +89,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
 
 extension AskSongViewController {
     
-    private func configureUI(){
-        
-        
-        hideKeyboardWhenTappedAround()
+    private func configureHeaderUI() {
         
         dotLabel1.layer.cornerRadius = 2
         dotLabel1.clipsToBounds = true
@@ -101,14 +98,7 @@ extension AskSongViewController {
         dotLabel2.layer.cornerRadius = 2
         dotLabel2.clipsToBounds = true
         dotLabel2.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
-        
-        explainLabel1.text = "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다."
-        explainLabel1.textColor = DesignSystemAsset.GrayColor.gray500.color
-        explainLabel1.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        
-        explainLabel2.text = "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
-        explainLabel2.textColor = DesignSystemAsset.GrayColor.gray500.color
-        explainLabel2.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+    
         
         redirectWebButton.setTitle("왁뮤 노래 포함 기준", for: .normal)
         redirectWebButton.setImage(DesignSystemAsset.Storage.blueArrowRight.image, for: .normal)
@@ -118,6 +108,31 @@ extension AskSongViewController {
         
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        
+        let style = NSMutableParagraphStyle()
+        style.lineHeightMultiple = 1.35
+        
+        explainLabel1.attributedText = NSMutableAttributedString(
+            string: "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                         .paragraphStyle: style]
+        )
+        
+        explainLabel2.attributedText = NSMutableAttributedString(
+            string: "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                         .paragraphStyle: style]
+        )
+    }
+    
+    private func configureUI(){
+        
+        
+        hideKeyboardWhenTappedAround()
+        configureHeaderUI()
+       
         
         let descriptionLabels:[UILabel] = [descriptionLabel1,descriptionLabel2,descriptionLabel3,descriptionLabel4]
        
