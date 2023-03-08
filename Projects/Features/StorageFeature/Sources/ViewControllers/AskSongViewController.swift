@@ -330,7 +330,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine1.backgroundColor = self.pointColor
-                    self.scrollView.scrollToView(view: self.explainContentView1,position: .top)
+                    self.scrollView.scrollToView(view: UIView(frame: .zero))
                 }
                 
                 else {
@@ -350,7 +350,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine2.backgroundColor = self.pointColor
-                    self.scrollView.scrollToView(view: self.textField1,position: .top)
+                    self.scrollView.scrollToView(view: self.descriptionLabel1)
                     
                 }
                 
@@ -371,7 +371,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine3.backgroundColor = self.pointColor
-                    self.scrollView.scrollToView(view: self.textField2,position: .top)
+                    self.scrollView.scrollToView(view: self.textView)
                     
                 }
                 
@@ -430,7 +430,7 @@ extension AskSongViewController : UITextViewDelegate {
 
 
         self.baseLine4.backgroundColor = self.pointColor
-        self.scrollView.scrollToView(view: self.textView,position: .bottom)
+        self.scrollView.scrollToView(view: self.textView)
 
     }
     

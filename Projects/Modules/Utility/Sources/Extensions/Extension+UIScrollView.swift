@@ -9,42 +9,36 @@
 import Foundation
 import UIKit
 
-
 public extension UIScrollView {
-    func scrollToView(view: UIView,
-                          position: UITableView.ScrollPosition = .top,
-                          animated: Bool = true) {
+    
+    func scrollToView(view: UIView) {
+        if let origin = view.superview {
 
-            // Position 'None' should not scroll view to top if visible like in UITableView
-            if position == .none &&
-                bounds.intersects(view.frame) {
-                return
-            }
+            let childStartPoint = origin.convert(view.frame.origin, to: self)
+            let bottomOffset = scrollBottomOffset()
 
-            if let origin = view.superview {
-                // Get the subview's start point relative to the current UIScrollView
-                let childStartPoint = origin.convert(view.frame.origin,
-                                                     to: self)
-                var scrollPointY: CGFloat
-                switch position {
-                case .bottom:
-                    let childEndY = childStartPoint.y + view.frame.height
-                    scrollPointY = CGFloat.maximum(childEndY - frame.size.height, 0)
-                case .middle:
-                    let childCenterY = childStartPoint.y + view.frame.height / 2.0
-                    let scrollViewCenterY = frame.size.height / 2.0
-                    scrollPointY = CGFloat.maximum(childCenterY - scrollViewCenterY, 0)
-                default:
-                    // Scroll to top
-                    scrollPointY = childStartPoint.y
-                }
+            if (childStartPoint.y > bottomOffset.y) {
+                setContentOffset(bottomOffset, animated: true)
 
-                // Scroll to the calculated Y point
-                scrollRectToVisible(CGRect(x: 0,
-                                           y: scrollPointY,
-                                           width: 1,
-                                           height: frame.height),
-                                    animated: animated)
+            }else {
+                setContentOffset(CGPoint(x: 0, y: childStartPoint.y), animated: true)
             }
         }
+    }
+
+    func scrollToTop() {
+        let topOffset = CGPoint(x: 0, y: -contentInset.top)
+        setContentOffset(topOffset, animated: true)
+    }
+
+    func scrollToBottom() {
+        let bottomOffset = scrollBottomOffset()
+        if(bottomOffset.y > 0) {
+            setContentOffset(bottomOffset, animated: true)
+        }
+    }
+    
+    private func scrollBottomOffset() -> CGPoint {
+        return CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
+    }
 }
