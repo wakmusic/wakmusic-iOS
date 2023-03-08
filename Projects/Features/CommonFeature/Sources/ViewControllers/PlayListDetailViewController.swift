@@ -354,7 +354,7 @@ extension PlayListDetailViewController{
         
         if  !viewModel.output.state.value.isEditing && sender.state == .began  {
             viewModel.output.state.accept(EditState(isEditing: true, force: true))
-            UIImpactFeedbackGenerator(style: .light).impactOccurred() //진동 코드
+            HapticManager.shared.impact(style: .light)
         }
     }
  
