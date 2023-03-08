@@ -43,7 +43,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var baseLine3: UIView!
     
     
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var descriptionLabel4: UILabel!
     @IBOutlet weak var baseLine4: UIView!
     
@@ -53,7 +53,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let placeHolder:String = "내 대답"
+    let placeHolder:String = "내 답변"
     
     let placeHolderAttributes = [
         NSAttributedString.Key.foregroundColor:  DesignSystemAsset.GrayColor.gray400.color,
@@ -62,8 +62,8 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     
     let disposeBag = DisposeBag()
     
-    var viewModel:WakMusicFeedbackViewModel!
-    lazy var input = WakMusicFeedbackViewModel.Input()
+    var viewModel:AskSongViewModel!
+    lazy var input = AskSongViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
     public override func viewDidLoad() {
@@ -75,10 +75,11 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     }
     
 
-    public static func viewController() -> AskSongViewController {
+    public static func viewController(viewModel:AskSongViewModel) -> AskSongViewController {
         let viewController = AskSongViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
        
+        viewController.viewModel = viewModel
 
         
         return viewController
@@ -90,6 +91,10 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
 extension AskSongViewController {
     
     private func configureHeaderUI() {
+        
+        let explain1 = "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다."
+        let explain2 = "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
+        let explain3 = "조회수가 이상한 경우는 반응 영상이 포함되어 있을 수 있습니다."
         
         dotLabel1.layer.cornerRadius = 2
         dotLabel1.clipsToBounds = true
@@ -108,26 +113,33 @@ extension AskSongViewController {
         
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleLabel.text = viewModel.type == .add ? "노래 추가" : "노래 추가"
         
         let style = NSMutableParagraphStyle()
         style.lineHeightMultiple = 1.35
         
         explainLabel1.attributedText = NSMutableAttributedString(
-            string: "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.",
+            string: viewModel.type == .add ? explain1 : explain3,
             attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
                          .paragraphStyle: style]
         )
         
         explainLabel2.attributedText = NSMutableAttributedString(
-            string: "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.",
+            string: explain2,
             attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
                          .paragraphStyle: style]
         )
+        
+        dotLabel2.isHidden = viewModel.type == .edit
+        explainLabel2.isHidden = viewModel.type == .edit
+        redirectWebButton.isHidden = viewModel.type == .edit
+        
     }
     
     private func configureUI(){
+        
         
         
         hideKeyboardWhenTappedAround()
@@ -189,21 +201,15 @@ extension AskSongViewController {
         
         
         
-//
-//        textView.delegate = self
-//        textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-//
-//        textView.placeholder = textViewPlaceHolder
-//        textView.placeholderColor = DesignSystemAsset.GrayColor.gray400.color
-//        textView.textColor = DesignSystemAsset.GrayColor.gray600.color
-//        textView.minHeight = 32.0
-//        textView.maxHeight = spaceHeight()
+
+        textView.delegate = self
+        textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        textView.placeholder = placeHolder
+        textView.placeholderColor = DesignSystemAsset.GrayColor.gray400.color
+        textView.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textView.minHeight = 32.0
+        textView.maxHeight = spaceHeight()
        
-        
-        
-    //    baseLineView.backgroundColor = unPointColor
-        
-        
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         self.completionButton.layer.cornerRadius = 12
@@ -257,13 +263,14 @@ extension AskSongViewController {
         .disposed(by: disposeBag)
         
         
+        let resultObservable = Observable<String>.merge(input.artistString.asObservable(),input.songTitleString.asObservable(),input.youtubeString.asObservable(),input.contentString.asObservable())
+        
         completionButton.rx.tap
-            .withLatestFrom(input.textString)
-            .subscribe(onNext: { [weak self] (text:String) in
+            .withLatestFrom(resultObservable)
+            .subscribe(onNext: { [weak self] in
                 
                 
-                
-                DEBUG_LOG("\(text)")
+                DEBUG_LOG("\($0)")
                 
                 //TODO: 텍스트 팝업
                 
@@ -285,18 +292,125 @@ extension AskSongViewController {
     
     private func bindRx(){
         
-//        textView.rx.text.orEmpty
-//      //      .skip(1)  //바인드 할 때 발생하는 첫 이벤트를 무시
-//            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
-//            .bind(to: input.textString)
-//            .disposed(by: disposeBag)
-    
-        input.textString.subscribe(onNext: {
-            
-            self.completionButton.isEnabled = !$0.isWhiteSpace
-            
-        })
+        textField1.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: input.artistString)
+            .disposed(by: disposeBag)
         
+        textField2.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: input.songTitleString)
+            .disposed(by: disposeBag)
+        
+        textField3.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: input.youtubeString)
+            .disposed(by: disposeBag)
+        
+        textView.rx.text.orEmpty
+            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
+            .bind(to: input.contentString)
+            .disposed(by: disposeBag)
+    
+        let tfEditingDidBegin1 = textField1.rx.controlEvent(.editingDidBegin)
+        let tfEditingDidEnd1 = textField1.rx.controlEvent(.editingDidEnd)
+        
+        let mergeObservable1 = Observable.merge(tfEditingDidBegin1.map { UIControl.Event.editingDidBegin },
+                                               tfEditingDidEnd1.map { UIControl.Event.editingDidEnd })
+        
+        let tfEditingDidBegin2 = textField2.rx.controlEvent(.editingDidBegin)
+        let tfEditingDidEnd2 = textField2.rx.controlEvent(.editingDidEnd)
+        
+        let mergeObservable2 = Observable.merge(tfEditingDidBegin2.map { UIControl.Event.editingDidBegin },
+                                               tfEditingDidEnd2.map { UIControl.Event.editingDidEnd })
+        
+        let tfEditingDidBegin3 = textField3.rx.controlEvent(.editingDidBegin)
+        let tfEditingDidEnd3 = textField3.rx.controlEvent(.editingDidEnd)
+        
+        let mergeObservable3 = Observable.merge(tfEditingDidBegin3.map { UIControl.Event.editingDidBegin },
+                                               tfEditingDidEnd3.map { UIControl.Event.editingDidEnd })
+        
+
+        mergeObservable1
+            .asObservable()
+            .subscribe(onNext: { [weak self] (event) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                
+                if event ==  .editingDidBegin {
+                    self.baseLine1.backgroundColor = self.pointColor
+                    
+                }
+                
+                else {
+                    self.baseLine1.backgroundColor = self.unPointColor
+                }
+                
+            })
+            .disposed(by: disposeBag)
+        
+        mergeObservable2
+            .asObservable()
+            .subscribe(onNext: { [weak self] (event) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                if event ==  .editingDidBegin {
+                    self.baseLine2.backgroundColor = self.pointColor
+                    
+                }
+                
+                else {
+                    self.baseLine2.backgroundColor = self.unPointColor
+                }
+                
+            })
+            .disposed(by: disposeBag)
+        
+        mergeObservable3
+            .asObservable()
+            .subscribe(onNext: { [weak self] (event) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                if event ==  .editingDidBegin {
+                    self.baseLine3.backgroundColor = self.pointColor
+                    
+                }
+                
+                else {
+                    self.baseLine3.backgroundColor = self.unPointColor
+                }
+                
+            })
+            .disposed(by: disposeBag)
+        
+        
+        Observable.zip(input.artistString, input.songTitleString, input.youtubeString, input.contentString)
+            .subscribe(onNext: { [weak self] (artist,song,youtube,content) in
+                
+                guard let self = self else {
+                    return
+                }
+                
+                DEBUG_LOG("\(artist) \(song) \(youtube) \(content) ")
+                
+                if artist.isWhiteSpace || song.isWhiteSpace || youtube.isWhiteSpace || content.isWhiteSpace {
+                    self.completionButton.isEnabled = false
+                } else {
+                    self.completionButton.isEnabled = true
+                }
+                
+                
+            })
+            .disposed(by: disposeBag)
     }
     
     
@@ -335,29 +449,25 @@ extension AskSongViewController: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        DEBUG_LOG(scrollView.contentOffset.y)
         scrollView.bounces = scrollView.contentOffset.y > 0
     }
 }
 
-//extension WakMusicFeedbackViewController : UITextViewDelegate {
-//
-//
-//
-//
-//
-//    public func textViewDidBeginEditing(_ textView: UITextView) {
-//
-//
-//        self.baseLineView.backgroundColor = self.pointColor
-//
-//
-//    }
-//
-//    public func textViewDidEndEditing(_ textView: UITextView) {
-//
-//        self.baseLineView.backgroundColor = self.unPointColor
-//
-//    }
-//
-//}
+extension AskSongViewController : UITextViewDelegate {
+
+
+
+    public func textViewDidBeginEditing(_ textView: UITextView) {
+
+
+        self.baseLine4.backgroundColor = self.pointColor
+
+
+    }
+
+    public func textViewDidEndEditing(_ textView: UITextView) {
+
+        self.baseLine4.backgroundColor = self.unPointColor
+    }
+
+}
