@@ -29,8 +29,23 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     
     @IBOutlet weak var redirectWebButton: UIButton!
     
-    //  @IBOutlet weak var baseLineView: UIView!
+    @IBOutlet weak var descriptionLabel1: UILabel!
+    @IBOutlet weak var textField1: UITextField!
+    @IBOutlet weak var baseLine1: UIView!
     
+    
+    @IBOutlet weak var descriptionLabel2: UILabel!
+    @IBOutlet weak var textField2: UITextField!
+    @IBOutlet weak var baseLine2: UIView!
+    
+    @IBOutlet weak var textField3: UITextField!
+    @IBOutlet weak var descriptionLabel3: UILabel!
+    @IBOutlet weak var baseLine3: UIView!
+    
+    
+    @IBOutlet weak var textField4: UITextField!
+    @IBOutlet weak var descriptionLabel4: UILabel!
+    @IBOutlet weak var baseLine4: UIView!
     
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
@@ -38,7 +53,12 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let textViewPlaceHolder:String = "내 대답"
+    let placeHolder:String = "내 대답"
+    
+    let placeHolderAttributes = [
+        NSAttributedString.Key.foregroundColor:  DesignSystemAsset.GrayColor.gray400.color,
+        NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+    ] // 포커싱 플레이스홀더 폰트 및 color 설정
     
     let disposeBag = DisposeBag()
     
@@ -99,12 +119,61 @@ extension AskSongViewController {
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
-        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        let descriptionLabels:[UILabel] = [descriptionLabel1,descriptionLabel2,descriptionLabel3,descriptionLabel4]
+       
+        let textFields:[UITextField] = [textField1,textField2,textField3,textField4]
         
-//        descriptionLabel1.text = "문의하실 내용을 적어주세요."
-//        descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-//        descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
-//
+        let baseLines:[UIView] = [baseLine1,baseLine2,baseLine3,baseLine4]
+        
+        
+        for i in 0..<4 {
+            
+            var title:String = ""
+            
+            switch i {
+                
+            case 0 :
+                title = "아티스트"
+                
+            case 1 :
+                title = "노래 제목"
+                
+            case 2 :
+                title = "유튜브 링크"
+            
+            case 3 :
+                title = "내용"
+                
+            default :
+                return
+                
+                
+            }
+            
+            
+            
+            descriptionLabels[i].text = title
+            descriptionLabels[i].font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+            descriptionLabels[i].textColor = DesignSystemAsset.GrayColor.gray900.color
+            
+            if i < 3 {
+                
+                textFields[i].attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes) //플레이스 홀더 설정
+                
+                textFields[i].font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+                
+                textFields[i].textColor = DesignSystemAsset.GrayColor.gray600.color
+            }
+            
+            
+            baseLines[i].backgroundColor = unPointColor
+
+            
+            
+        }
+        
+        
+        
 //
 //        textView.delegate = self
 //        textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -119,7 +188,9 @@ extension AskSongViewController {
         
     //    baseLineView.backgroundColor = unPointColor
         
-         
+        
+        
+        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         self.completionButton.layer.cornerRadius = 12
         self.completionButton.clipsToBounds = true
         self.completionButton.isEnabled = false
