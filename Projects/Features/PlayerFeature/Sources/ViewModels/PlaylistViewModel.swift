@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import BaseFeature
 import YouTubePlayerKit
+import Utility
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
@@ -88,7 +89,8 @@ final class PlaylistViewModel: ViewModelType {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            output.thumbnailImageURL.send(self.thumbnailURL(from: song.id))
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).path
+            output.thumbnailImageURL.send(thumbnailURL)
             guard let currentSongIndex = self.playState.playList.uniqueIndex(of: song) else { return }
             output.currentSongIndex.send(currentSongIndex)
         }.store(in: &subscription)
@@ -99,9 +101,5 @@ final class PlaylistViewModel: ViewModelType {
         }.store(in: &subscription)
         
         return output
-    }
-    
-    func thumbnailURL(from id: String) -> String {
-        return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
 }

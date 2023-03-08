@@ -11,7 +11,6 @@ import RxCocoa
 import RxSwift
 import Utility
 import BaseFeature
-//import YoutubeKit
 import DomainModule
 import Combine
 import YouTubePlayerKit
@@ -121,7 +120,8 @@ final class PlayerViewModel: ViewModelType {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            output.thumbnailImageURL.send(self.thumbnailURL(from: song.id))
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).path
+            output.thumbnailImageURL.send(thumbnailURL)
             output.titleText.send(song.title)
             output.artistText.send(song.artist)
             output.viewsCountText.send(self.formatNumber(song.views))
@@ -189,10 +189,6 @@ final class PlayerViewModel: ViewModelType {
             let millions = Double(number) / 100000000.0
             return formatter.string(from: NSNumber(value: millions))! + "억"
         }
-    }
-    
-    func thumbnailURL(from id: String) -> String {
-        return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
     
     func getCurrentLyricsIndex(_ currentTime: Float) -> Int {
