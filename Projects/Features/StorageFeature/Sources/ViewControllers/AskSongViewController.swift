@@ -330,7 +330,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine1.backgroundColor = self.pointColor
-                    
+                    self.scrollView.scrollToView(view: self.explainContentView1,position: .top)
                 }
                 
                 else {
@@ -350,6 +350,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine2.backgroundColor = self.pointColor
+                    self.scrollView.scrollToView(view: self.textField1,position: .top)
                     
                 }
                 
@@ -370,6 +371,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine3.backgroundColor = self.pointColor
+                    self.scrollView.scrollToView(view: self.textField2,position: .top)
                     
                 }
                 
@@ -387,24 +389,19 @@ extension AskSongViewController {
     
     
     private func responseViewbyKeyboard(){
-//        RxKeyboard.instance.visibleHeight //드라이브: 무조건 메인쓰레드에서 돌아감
-//            .drive(onNext: { [weak self] keyboardVisibleHeight in
-//
-//                guard let self = self else {
-//                    return
-//                }
-//
-//                self.textView.maxHeight = keyboardVisibleHeight == .zero ?  self.spaceHeight() :
-//                self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT() + 56
-//               //키보드에서 바텀이 빼지면서 2번 빠짐
-//
-//                DEBUG_LOG("\(self.spaceHeight()) \(SAFEAREA_BOTTOM_HEGHIT()) \(keyboardVisibleHeight)  \(self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT())  ")
-//
-//
-//                self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
-//
-//
-//            }).disposed(by: disposeBag)
+        RxKeyboard.instance.visibleHeight
+                    .drive(onNext: { [weak self] keyboardVisibleHeight in
+                        guard let self = self else {return}
+                        let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+                        let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
+
+                        self.view.setNeedsLayout()
+                        UIView.animate(withDuration: 0, animations: {
+                            self.scrollView.contentInset.bottom = actualKeyboardHeight
+                            self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
+                            self.view.layoutIfNeeded()
+                        })
+                    }).disposed(by: disposeBag)
         
     }
     
@@ -433,8 +430,12 @@ extension AskSongViewController : UITextViewDelegate {
 
 
         self.baseLine4.backgroundColor = self.pointColor
+        self.scrollView.scrollToView(view: self.textView,position: .bottom)
 
-
+    }
+    
+    public func textViewDidChange(_ textView: UITextView) {
+        
     }
 
     public func textViewDidEndEditing(_ textView: UITextView) {
