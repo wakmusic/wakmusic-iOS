@@ -21,12 +21,15 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    @IBOutlet weak var explainContentView1: UIView!
     @IBOutlet weak var dotLabel1: UILabel!
     @IBOutlet weak var explainLabel1: UILabel!
     
+    @IBOutlet weak var explainContentView2: UIView!
     @IBOutlet weak var dotLabel2: UILabel!
     @IBOutlet weak var explainLabel2: UILabel!
     
+    @IBOutlet weak var redirectWebContentView: UIView!
     @IBOutlet weak var redirectWebButton: UIButton!
     
     @IBOutlet weak var descriptionLabel1: UILabel!
@@ -132,10 +135,8 @@ extension AskSongViewController {
                          .paragraphStyle: style]
         )
         
-        dotLabel2.isHidden = viewModel.type == .edit
-        explainLabel2.isHidden = viewModel.type == .edit
-        redirectWebButton.isHidden = viewModel.type == .edit
-        
+        explainContentView2.isHidden = viewModel.type == .edit
+        redirectWebContentView.isHidden = viewModel.type == .edit
     }
     
     private func configureUI(){
@@ -262,18 +263,11 @@ extension AskSongViewController {
         })
         .disposed(by: disposeBag)
         
-        
-        let resultObservable = Observable<String>.merge(input.artistString.asObservable(),input.songTitleString.asObservable(),input.youtubeString.asObservable(),input.contentString.asObservable())
-        
         completionButton.rx.tap
-            .withLatestFrom(resultObservable)
-            .subscribe(onNext: { [weak self] in
-                
-                
-                DEBUG_LOG("\($0)")
-                
+            .withLatestFrom(output.currentInputString)
+            .debug("completionButton.rx.tap")
+            .subscribe(onNext: { (artist, sontTitle, youtube, content) in
                 //TODO: 텍스트 팝업
-                
             })
             .disposed(by: disposeBag)
         
@@ -285,10 +279,8 @@ extension AskSongViewController {
                 self?.present(safari, animated: true)
             })
             .disposed(by: disposeBag)
-
             
     }
-    
     
     private func bindRx(){
         
@@ -392,24 +384,8 @@ extension AskSongViewController {
             })
             .disposed(by: disposeBag)
         
-        
-        Observable.zip(input.artistString, input.songTitleString, input.youtubeString, input.contentString)
-            .subscribe(onNext: { [weak self] (artist,song,youtube,content) in
-                
-                guard let self = self else {
-                    return
-                }
-                
-                DEBUG_LOG("\(artist) \(song) \(youtube) \(content) ")
-                
-                if artist.isWhiteSpace || song.isWhiteSpace || youtube.isWhiteSpace || content.isWhiteSpace {
-                    self.completionButton.isEnabled = false
-                } else {
-                    self.completionButton.isEnabled = true
-                }
-                
-                
-            })
+        output.enableCompleteButton
+            .bind(to: completionButton.rx.isEnabled)
             .disposed(by: disposeBag)
     }
     

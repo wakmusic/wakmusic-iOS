@@ -16,37 +16,30 @@ import KeychainModule
 
 
 public enum SongRequestType {
-    
     case add
     case edit
-    
 }
-
 
 public final class AskSongViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
-    var type:SongRequestType!
+    var type: SongRequestType!
     
-
     public struct Input {
-    
         var artistString:PublishRelay<String> = PublishRelay()
         var songTitleString:PublishRelay<String> = PublishRelay()
         var youtubeString:PublishRelay<String> = PublishRelay()
         var contentString:PublishRelay<String> = PublishRelay()
-    
     }
 
     public struct Output {
-        
+        var enableCompleteButton: BehaviorRelay<Bool>
+        var currentInputString: BehaviorRelay<(String, String, String, String)>
     }
 
-    public init(type:SongRequestType){
-        
+    public init(type: SongRequestType){
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.type = type
-     
     }
     
     deinit {
@@ -54,10 +47,32 @@ public final class AskSongViewModel:ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        let output = Output()
         
+        let enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+        let currentInputString: BehaviorRelay<(String, String, String, String)> = BehaviorRelay(value: ("", "", "", ""))
+
+        let combineObservable = Observable.combineLatest(
+            input.artistString,
+            input.songTitleString,
+            input.youtubeString,
+            input.contentString
+        ){
+            return ($0, $1, $2, $3)
+        }
+
+        combineObservable
+            .debug("askSong combine")
+            .map { return !($0.isWhiteSpace || $1.isWhiteSpace || $2.isWhiteSpace || $3.isWhiteSpace) }
+            .bind(to: enableCompleteButton)
+            .disposed(by: disposeBag)
         
+        combineObservable
+            .bind(to: currentInputString)
+            .disposed(by: disposeBag)
         
-        return output
+        return Output(
+            enableCompleteButton: enableCompleteButton,
+            currentInputString: currentInputString
+        )
     }
 }
