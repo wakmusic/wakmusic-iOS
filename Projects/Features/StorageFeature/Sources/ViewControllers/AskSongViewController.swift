@@ -264,11 +264,7 @@ extension AskSongViewController {
         .disposed(by: disposeBag)
         
         completionButton.rx.tap
-            .withLatestFrom(output.currentInputString)
-            .debug("completionButton.rx.tap")
-            .subscribe(onNext: { (artist, sontTitle, youtube, content) in
-                //TODO: 텍스트 팝업
-            })
+            .bind(to: input.completionButtonTapped)
             .disposed(by: disposeBag)
         
         redirectWebButton.rx.tap

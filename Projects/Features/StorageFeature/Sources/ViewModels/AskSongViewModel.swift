@@ -30,6 +30,7 @@ public final class AskSongViewModel:ViewModelType {
         var songTitleString:PublishRelay<String> = PublishRelay()
         var youtubeString:PublishRelay<String> = PublishRelay()
         var contentString:PublishRelay<String> = PublishRelay()
+        var completionButtonTapped: PublishRelay<Void> = PublishRelay()
     }
 
     public struct Output {
@@ -65,6 +66,13 @@ public final class AskSongViewModel:ViewModelType {
             .map { return !($0.isWhiteSpace || $1.isWhiteSpace || $2.isWhiteSpace || $3.isWhiteSpace) }
             .bind(to: enableCompleteButton)
             .disposed(by: disposeBag)
+        
+        input.completionButtonTapped
+            .withLatestFrom(combineObservable)
+            .debug("completionButtonTapped")
+            .subscribe(onNext: { (artist, song, youtube, content) in
+                //TO-DO: 여기를 고쳐서 api 연결하세요.
+            }).disposed(by: disposeBag)
         
         combineObservable
             .bind(to: currentInputString)
