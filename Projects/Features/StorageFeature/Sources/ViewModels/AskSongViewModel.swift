@@ -35,7 +35,6 @@ public final class AskSongViewModel:ViewModelType {
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool>
-        var currentInputString: BehaviorRelay<(String, String, String, String)>
     }
 
     public init(type: SongRequestType){
@@ -50,7 +49,6 @@ public final class AskSongViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         
         let enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        let currentInputString: BehaviorRelay<(String, String, String, String)> = BehaviorRelay(value: ("", "", "", ""))
 
         let combineObservable = Observable.combineLatest(
             input.artistString,
@@ -74,13 +72,9 @@ public final class AskSongViewModel:ViewModelType {
                 //TO-DO: 여기를 고쳐서 api 연결하세요.
             }).disposed(by: disposeBag)
         
-        combineObservable
-            .bind(to: currentInputString)
-            .disposed(by: disposeBag)
         
         return Output(
-            enableCompleteButton: enableCompleteButton,
-            currentInputString: currentInputString
+            enableCompleteButton: enableCompleteButton
         )
     }
 }
