@@ -172,6 +172,11 @@ private extension PlayerViewController {
             self.playerView.likeButton.setTitle(likeCountText, for: .normal)
         }
         .store(in: &subscription)
+        
+        output.likeState.sink { [weak self] isLiked in
+            guard let self else { return }
+            self.playerView.likeButton.isOn = isLiked
+        }.store(in: &subscription)
     }
     
     private func bindViews(output: PlayerViewModel.Output) {

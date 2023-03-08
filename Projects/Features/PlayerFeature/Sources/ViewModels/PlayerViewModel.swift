@@ -44,6 +44,7 @@ final class PlayerViewModel: ViewModelType {
         var totalTimeText = CurrentValueSubject<String, Never>("0:00")
         var likeCountText = CurrentValueSubject<String, Never>("")
         var viewsCountText = CurrentValueSubject<String, Never>("")
+        var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
@@ -53,6 +54,9 @@ final class PlayerViewModel: ViewModelType {
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
+    var addLikeSongUseCase: AddLikeSongUseCase!
+    var cancelLikeSongUseCase: CancelLikeSongUseCase!
+    var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
     
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
@@ -61,8 +65,11 @@ final class PlayerViewModel: ViewModelType {
     internal var sortedLyrics = [String]()
     internal var isLyricsScrolling = false
     
-    init(fetchLyricsUseCase: FetchLyricsUseCase) {
+    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
+        self.addLikeSongUseCase = addLikeSongUseCase
+        self.cancelLikeSongUseCase = cancelLikeSongUseCase
+        self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
         print("✅ PlayerViewModel 생성")
     }
     
@@ -145,7 +152,18 @@ final class PlayerViewModel: ViewModelType {
             } onDisposed: {
                 output.lyricsDidChangedEvent.send(true)
             }.disposed(by: self.disposeBag)
-
+            
+            // 좋아요 수 가져오기
+            self.fetchLikeNumOfSongUseCase.execute(id: song.id)
+                .retry(3)
+                .map { [weak self] song in
+                    self?.formatNumber(song.likes) ?? ""
+                }
+                .subscribe { likeCountText in
+                    output.likeCountText.send(likeCountText)
+                } onFailure: { _ in
+                    output.likeCountText.send("좋아요")
+                }.disposed(by: self.disposeBag)
             
         }.store(in: &subscription)
         
@@ -176,6 +194,8 @@ final class PlayerViewModel: ViewModelType {
         formatter.minimumFractionDigits = 0
         
         switch number {
+        case 0..<1000:
+            return String(number)
         case 1000..<10_000:
             let thousands = Double(number) / 1000.0
             return formatter.string(from: NSNumber(value: thousands))! + "천"
