@@ -43,7 +43,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var baseLine3: UIView!
     
     
-    @IBOutlet weak var textField4: UITextField!
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var descriptionLabel4: UILabel!
     @IBOutlet weak var baseLine4: UIView!
     
@@ -136,7 +136,7 @@ extension AskSongViewController {
         
         let descriptionLabels:[UILabel] = [descriptionLabel1,descriptionLabel2,descriptionLabel3,descriptionLabel4]
        
-        let textFields:[UITextField] = [textField1,textField2,textField3,textField4]
+        let textFields:[UITextField] = [textField1,textField2,textField3]
         
         let baseLines:[UIView] = [baseLine1,baseLine2,baseLine3,baseLine4]
         
