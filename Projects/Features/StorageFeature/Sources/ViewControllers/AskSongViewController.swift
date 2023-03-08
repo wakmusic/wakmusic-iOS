@@ -113,7 +113,7 @@ extension AskSongViewController {
         
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleLabel.text = viewModel.type == .add ? "노래 추가" : "노래 추가"
+        titleLabel.text = viewModel.type == .add ? "노래 추가" : "노래 수정"
         
         let style = NSMutableParagraphStyle()
         style.lineHeightMultiple = 1.35
