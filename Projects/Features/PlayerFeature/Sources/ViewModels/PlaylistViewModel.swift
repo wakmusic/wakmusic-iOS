@@ -89,7 +89,7 @@ final class PlaylistViewModel: ViewModelType {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).path
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
             output.thumbnailImageURL.send(thumbnailURL)
             guard let currentSongIndex = self.playState.playList.uniqueIndex(of: song) else { return }
             output.currentSongIndex.send(currentSongIndex)

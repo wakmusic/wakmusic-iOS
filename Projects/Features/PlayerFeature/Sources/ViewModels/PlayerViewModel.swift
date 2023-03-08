@@ -120,7 +120,7 @@ final class PlayerViewModel: ViewModelType {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).path
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
             output.thumbnailImageURL.send(thumbnailURL)
             output.titleText.send(song.title)
             output.artistText.send(song.artist)
