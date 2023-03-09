@@ -51,6 +51,7 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     
     var suggestFunctionComponent:SuggestFunctionComponent!
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent!
+    var askSongComponent: AskSongComponent!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,14 +59,16 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
         configureUI()
     }
     
-    public static func viewController(viewModel:QuestionViewModel,suggestFunctionComponent:SuggestFunctionComponent,wakMusicFeedbackComponent:WakMusicFeedbackComponent) -> QuestionViewController {
+    public static func viewController(viewModel:QuestionViewModel
+                                      ,suggestFunctionComponent:SuggestFunctionComponent
+                                      ,wakMusicFeedbackComponent:WakMusicFeedbackComponent
+                                      ,askSongComponent:AskSongComponent) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.suggestFunctionComponent = suggestFunctionComponent
-        
         viewController.wakMusicFeedbackComponent = wakMusicFeedbackComponent
-
+        viewController.askSongComponent = askSongComponent
         
         return viewController
     }
@@ -213,12 +216,7 @@ extension QuestionViewController {
                     return
 
                 }
-                
-               
-                
-                
-              
-                
+                        
                 
                 buttons[i].setAttributedTitle(
                     NSMutableAttributedString(string:title,
@@ -260,6 +258,17 @@ extension QuestionViewController {
                 
                     self.navigationController?.pushViewController(vc, animated: true)
                 
+                
+                case 2:
+                    let vc = self.askSongComponent.makeView(type: .add)
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                case 3:
+                    let vc = self.askSongComponent.makeView(type: .edit)
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
                 case 4:
                     let vc = self.wakMusicFeedbackComponent.makeView()
                     

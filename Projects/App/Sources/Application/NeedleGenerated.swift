@@ -202,6 +202,17 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class AskSongDependency02772625c56a0dda0140Provider: AskSongDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AskSongComponent
+private func factory37544fa026b309cd68d7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AskSongDependency02772625c56a0dda0140Provider()
+}
 private class SuggestFunctionDependency229560bbe33097b02547Provider: SuggestFunctionDependency {
 
 
@@ -235,6 +246,9 @@ private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency
     }
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent {
         return appComponent.wakMusicFeedbackComponent
+    }
+    var askSongComponent: AskSongComponent {
+        return appComponent.askSongComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -587,6 +601,7 @@ extension AppComponent: Registration {
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { self.suggestFunctionComponent as Any }
         localTable["wakMusicFeedbackComponent-WakMusicFeedbackComponent"] = { self.wakMusicFeedbackComponent as Any }
+        localTable["askSongComponent-AskSongComponent"] = { self.askSongComponent as Any }
         localTable["remoteQuestionDataSource-any RemoteQnaDataSource"] = { self.remoteQuestionDataSource as Any }
         localTable["questionRepository-any QnaRepository"] = { self.questionRepository as Any }
         localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
@@ -666,6 +681,11 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
     }
 }
+extension AskSongComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension SuggestFunctionComponent: Registration {
     public func registerItems() {
 
@@ -681,6 +701,7 @@ extension QuestionComponent: Registration {
     public func registerItems() {
         keyPathToName[\QuestionDependency.suggestFunctionComponent] = "suggestFunctionComponent-SuggestFunctionComponent"
         keyPathToName[\QuestionDependency.wakMusicFeedbackComponent] = "wakMusicFeedbackComponent-WakMusicFeedbackComponent"
+        keyPathToName[\QuestionDependency.askSongComponent] = "askSongComponent-AskSongComponent"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -815,6 +836,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AskSongComponent", factory37544fa026b309cd68d7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787dde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
