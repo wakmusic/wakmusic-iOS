@@ -53,6 +53,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
     
+    @IBOutlet weak var lastBaseLineBottomConstraint: NSLayoutConstraint!
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -68,6 +69,8 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     var viewModel:AskSongViewModel!
     lazy var input = AskSongViewModel.Input()
     lazy var output = viewModel.transform(from: input)
+    
+    var keyboardHeight:CGFloat = 267
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +97,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
 extension AskSongViewController {
     
     private func configureHeaderUI() {
+        
         
         let explain1 = "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다."
         let explain2 = "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
@@ -142,7 +146,7 @@ extension AskSongViewController {
     private func configureUI(){
         
         
-        
+        DEBUG_LOG("CONCON")
         hideKeyboardWhenTappedAround()
         configureHeaderUI()
        
@@ -202,7 +206,7 @@ extension AskSongViewController {
         
         
         
-
+        scrollView.delegate = self
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         textView.placeholder = placeHolder
@@ -229,7 +233,6 @@ extension AskSongViewController {
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
-        self.scrollView.delegate = self
         
         bindRx()
         bindbuttonEvent()
@@ -394,13 +397,17 @@ extension AskSongViewController {
                         guard let self = self else {return}
                         let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
                         let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
-
+                        
+                        
+                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : actualKeyboardHeight
+                        
                         self.view.setNeedsLayout()
                         UIView.animate(withDuration: 0, animations: {
                             self.scrollView.contentInset.bottom = actualKeyboardHeight
                             self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
                             self.view.layoutIfNeeded()
                         })
+                        
                     }).disposed(by: disposeBag)
         
     }
@@ -408,7 +415,7 @@ extension AskSongViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 16 +  66 + 10   ) // 마지막 10은 여유 공간
+        return 16 * 5  // 마지막 10은 여유 공간
         
     }
     
@@ -418,8 +425,17 @@ extension AskSongViewController: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+       // scrollView.bounces = scrollView.contentOffset.y > 0
+    }
+    
+    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        true
+    }
+    
+    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         scrollView.bounces = scrollView.contentOffset.y > 0
     }
+
 }
 
 extension AskSongViewController : UITextViewDelegate {
@@ -427,20 +443,22 @@ extension AskSongViewController : UITextViewDelegate {
 
 
     public func textViewDidBeginEditing(_ textView: UITextView) {
-
-
+        
+        self.lastBaseLineBottomConstraint.constant = keyboardHeight
         self.baseLine4.backgroundColor = self.pointColor
-        self.scrollView.scrollToView(view: self.textView)
-
-    }
-    
-    public func textViewDidChange(_ textView: UITextView) {
+        self.scrollView.scroll(to: .bottom)
+        self.view.layoutIfNeeded()
         
     }
-
+    
     public func textViewDidEndEditing(_ textView: UITextView) {
-
+        
+        self.lastBaseLineBottomConstraint.constant = 0
         self.baseLine4.backgroundColor = self.unPointColor
+        self.scrollView.scroll(to: .bottom)
+        self.view.layoutIfNeeded()
     }
 
 }
+
+

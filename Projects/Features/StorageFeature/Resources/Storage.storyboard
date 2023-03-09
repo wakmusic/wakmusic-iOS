@@ -1783,7 +1783,7 @@
                                                         </constraints>
                                                         <color key="textColor" systemColor="labelColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     </textView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nY2-UA-3NA">
                                                         <rect key="frame" x="20" y="70" width="353" height="1"/>
@@ -1850,6 +1850,7 @@
                         <outlet property="explainContentView2" destination="kPq-fG-67z" id="Nsh-qG-MuX"/>
                         <outlet property="explainLabel1" destination="pCI-9D-NXq" id="tlO-OC-HaM"/>
                         <outlet property="explainLabel2" destination="HUu-QR-MiG" id="VJK-P2-8sC"/>
+                        <outlet property="lastBaseLineBottomConstraint" destination="YzI-Y9-0dG" id="3XG-jN-8qc"/>
                         <outlet property="previousButton" destination="qTB-qV-QtR" id="4fF-07-gPN"/>
                         <outlet property="redirectWebButton" destination="diU-Fw-0jv" id="SfS-xB-3ex"/>
                         <outlet property="redirectWebContentView" destination="5nC-SD-qZa" id="jAt-Kk-Vjd"/>
