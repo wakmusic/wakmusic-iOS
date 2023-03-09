@@ -76,7 +76,8 @@ extension BugReportViewController {
         descriptionLabel1.text = "겪으신 버그에 대해 설명해 주세요."
         descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel1.textColor =  DesignSystemAsset.GrayColor.gray900.color
-      
+        
+        baseLine1.backgroundColor = unPointColor
         
         hideKeyboardWhenTappedAround()
    
@@ -219,7 +220,7 @@ extension BugReportViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return 16 * 5
+        return 16 * 10
         
     }
     
