@@ -1502,7 +1502,7 @@
                                 <rect key="frame" x="0.0" y="107" width="393" height="655"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="GiJ-AV-77y">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1603.3333333333333"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1853.3333333333333"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q1c-I4-Vkc">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1008.3333333333334"/>
@@ -1646,7 +1646,7 @@
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l2R-U7-eAC">
                                                         <rect key="frame" x="20" y="44" width="353" height="67"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NE9-wS-pOY">
                                                         <rect key="frame" x="20" y="127" width="353" height="1"/>
@@ -1690,7 +1690,7 @@
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sCy-7x-zVd">
                                                         <rect key="frame" x="20" y="44" width="353" height="67"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aMy-k7-tJK">
                                                         <rect key="frame" x="20" y="127" width="353" height="1"/>
@@ -1734,7 +1734,7 @@
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dyJ-zc-2iZ">
                                                         <rect key="frame" x="20" y="44" width="353" height="67"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IlR-fF-XXu">
                                                         <rect key="frame" x="20" y="127" width="353" height="1"/>
@@ -1806,6 +1806,12 @@
                                                     <constraint firstItem="LvJ-ZF-RLi" firstAttribute="top" secondItem="Iet-GG-gHW" secondAttribute="bottom" constant="5" id="iFs-NU-3Pv"/>
                                                 </constraints>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NVe-vn-zjQ">
+                                                <rect key="frame" x="0.0" y="1603.3333333333333" width="393" height="250"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="250" id="P5S-3i-onH"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -1850,6 +1856,7 @@
                         <outlet property="explainContentView2" destination="kPq-fG-67z" id="Nsh-qG-MuX"/>
                         <outlet property="explainLabel1" destination="pCI-9D-NXq" id="tlO-OC-HaM"/>
                         <outlet property="explainLabel2" destination="HUu-QR-MiG" id="VJK-P2-8sC"/>
+                        <outlet property="fakeView" destination="NVe-vn-zjQ" id="hgA-B0-6l5"/>
                         <outlet property="lastBaseLineBottomConstraint" destination="YzI-Y9-0dG" id="3XG-jN-8qc"/>
                         <outlet property="previousButton" destination="qTB-qV-QtR" id="4fF-07-gPN"/>
                         <outlet property="redirectWebButton" destination="diU-Fw-0jv" id="SfS-xB-3ex"/>

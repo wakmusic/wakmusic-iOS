@@ -49,6 +49,7 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var descriptionLabel4: UILabel!
     @IBOutlet weak var baseLine4: UIView!
+    @IBOutlet weak var fakeView: UIView!
     
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
@@ -145,8 +146,6 @@ extension AskSongViewController {
     
     private func configureUI(){
         
-        
-        DEBUG_LOG("CONCON")
         hideKeyboardWhenTappedAround()
         configureHeaderUI()
        
@@ -334,6 +333,7 @@ extension AskSongViewController {
                 if event ==  .editingDidBegin {
                     self.baseLine1.backgroundColor = self.pointColor
                     self.scrollView.scrollToView(view: UIView(frame: .zero))
+                    
                 }
                 
                 else {
@@ -354,6 +354,7 @@ extension AskSongViewController {
                 if event ==  .editingDidBegin {
                     self.baseLine2.backgroundColor = self.pointColor
                     self.scrollView.scrollToView(view: self.descriptionLabel1)
+                   
                     
                 }
                 
@@ -374,7 +375,7 @@ extension AskSongViewController {
                 
                 if event ==  .editingDidBegin {
                     self.baseLine3.backgroundColor = self.pointColor
-                    self.scrollView.scrollToView(view: self.textView)
+                    self.scrollView.scrollToView(view: self.descriptionLabel2)
                     
                 }
                 
@@ -399,7 +400,7 @@ extension AskSongViewController {
                         let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
                         
                         
-                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : actualKeyboardHeight
+                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
                         
                         self.view.setNeedsLayout()
                         UIView.animate(withDuration: 0, animations: {
@@ -415,7 +416,7 @@ extension AskSongViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return 16 * 5  // 마지막 10은 여유 공간
+        return 16 * 5
         
     }
     
@@ -424,17 +425,11 @@ extension AskSongViewController {
 extension AskSongViewController: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-       // scrollView.bounces = scrollView.contentOffset.y > 0
-    }
-    
-    public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        true
-    }
-    
-    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+
         scrollView.bounces = scrollView.contentOffset.y > 0
     }
+//
+
 
 }
 
@@ -443,19 +438,23 @@ extension AskSongViewController : UITextViewDelegate {
 
 
     public func textViewDidBeginEditing(_ textView: UITextView) {
-        
-        self.lastBaseLineBottomConstraint.constant = keyboardHeight
+    
+        if scrollView.contentOffset.y  == 0 {
+            self.scrollView.scroll(to: .bottom)
+        }
+
         self.baseLine4.backgroundColor = self.pointColor
-        self.scrollView.scroll(to: .bottom)
         self.view.layoutIfNeeded()
         
     }
     
     public func textViewDidEndEditing(_ textView: UITextView) {
         
-        self.lastBaseLineBottomConstraint.constant = 0
+        if scrollView.contentOffset.y  == 0 {
+            self.scrollView.scroll(to: .bottom)
+        }
+        
         self.baseLine4.backgroundColor = self.unPointColor
-        self.scrollView.scroll(to: .bottom)
         self.view.layoutIfNeeded()
     }
 
