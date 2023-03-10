@@ -33,15 +33,15 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     
     @IBOutlet weak var descriptionLabel3: UILabel!
     @IBOutlet weak var noticeCheckButton: UIButton!
-//
-//
-//
-//    @IBOutlet weak var textField: UITextField!
-//    @IBOutlet weak var baseLine2: UIView!
-//
-//    @IBOutlet weak var dotLabel: UILabel!
-//    @IBOutlet weak var infoLabel: UILabel!
-//
+
+
+
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var baseLine2: UIView!
+
+    @IBOutlet weak var dotLabel: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
+
     
     
     @IBOutlet weak var previousButton: UIButton!
@@ -108,9 +108,9 @@ extension BugReportViewController {
     
     private func configureUI(){
         
-//        dotLabel.layer.cornerRadius = 2
-//        dotLabel.clipsToBounds = true
-//        dotLabel.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
+        dotLabel.layer.cornerRadius = 2
+        dotLabel.clipsToBounds = true
+        dotLabel.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
@@ -119,7 +119,7 @@ extension BugReportViewController {
         descriptionLabel1.textColor =  DesignSystemAsset.GrayColor.gray900.color
         
         baseLine1.backgroundColor = unPointColor
-//        baseLine2.backgroundColor = unPointColor
+        baseLine2.backgroundColor = unPointColor
         
         descriptionLabel2.text = "버그와 관련된 사진이나 영상을 첨부 해주세요."
         descriptionLabel2.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
@@ -150,14 +150,14 @@ extension BugReportViewController {
         noticeCheckButton.layer.cornerRadius = 12
         noticeCheckButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         
-//        textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-//        
-//        textField.attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes)
-//        textField.textColor = DesignSystemAsset.GrayColor.gray600.color
+        textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-//        infoLabel.text = "닉네임을 알려주시면 피드백을 받으시는 데 도움이 됩니다."
-//        infoLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-//        infoLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        textField.attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes)
+        textField.textColor = DesignSystemAsset.GrayColor.gray600.color
+        
+        infoLabel.text = "닉네임을 알려주시면 피드백을 받으시는 데 도움이 됩니다."
+        infoLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        infoLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
         
         
         
