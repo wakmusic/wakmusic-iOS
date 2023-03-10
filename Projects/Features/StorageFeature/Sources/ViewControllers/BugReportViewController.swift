@@ -32,10 +32,12 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     @IBOutlet weak var cameraButton: UIButton!
     
     @IBOutlet weak var descriptionLabel3: UILabel!
+    
     @IBOutlet weak var noticeCheckButton: UIButton!
-
-
-
+    @IBOutlet weak var noticeSuperView: UIView!
+    @IBOutlet weak var noticeLabel: UILabel!
+    @IBOutlet weak var noticeImageView: UIImageView!
+    
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var baseLine2: UIView!
 
@@ -146,9 +148,16 @@ extension BugReportViewController {
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         
-        noticeCheckButton.layer.borderWidth = 1
-        noticeCheckButton.layer.cornerRadius = 12
-        noticeCheckButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        noticeSuperView.layer.borderWidth = 1
+        noticeSuperView.layer.cornerRadius = 12
+        noticeSuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        
+        noticeLabel.text = "알려주기"
+        noticeLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        noticeLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        
+        noticeImageView.image = DesignSystemAsset.Navigation.close.image
+        
         
         textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
