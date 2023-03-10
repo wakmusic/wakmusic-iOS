@@ -26,6 +26,11 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     @IBOutlet weak var descriptionLabel1: UILabel!
     @IBOutlet weak var baseLine1: UIView!
     
+    @IBOutlet weak var descriptionLabel2: UILabel!
+    @IBOutlet weak var cameraButton: UIButton!
+    
+    
+    
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
     
@@ -67,6 +72,27 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 
 extension BugReportViewController {
     
+    
+    private func configureCameraButtonUI(){
+        
+        let pointColor = DesignSystemAsset.PrimaryColor.decrease.color
+        
+        let cameraAttributedString = NSMutableAttributedString.init(string: "첨부하기")
+        
+        cameraAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                                               .foregroundColor: pointColor],
+                                              range: NSRange(location: 0, length: cameraAttributedString.string.count))
+        
+        cameraButton.setImage(DesignSystemAsset.Storage.camera.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        cameraButton.layer.cornerRadius = 12
+        cameraButton.layer.borderColor = pointColor.cgColor
+        cameraButton.layer.borderWidth = 1
+        
+        cameraButton.setAttributedTitle(cameraAttributedString, for: .normal)
+        
+        
+    }
+    
     private func configureUI(){
    
         
@@ -78,6 +104,10 @@ extension BugReportViewController {
         descriptionLabel1.textColor =  DesignSystemAsset.GrayColor.gray900.color
         
         baseLine1.backgroundColor = unPointColor
+        
+        descriptionLabel2.text = "버그와 관련된 사진이나 영상을 첨부 해주세요."
+        descriptionLabel2.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        descriptionLabel2.textColor =  DesignSystemAsset.GrayColor.gray900.color
         
         hideKeyboardWhenTappedAround()
    
@@ -111,6 +141,7 @@ extension BugReportViewController {
         
         bindRx()
         bindbuttonEvent()
+        configureCameraButtonUI()
         //responseViewbyKeyboard()
     }
     
