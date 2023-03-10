@@ -114,6 +114,9 @@ extension BugReportViewController {
     
     private func configureUI(){
         
+        
+        hideKeyboardWhenTappedAround()
+        
         dotLabel.layer.cornerRadius = 2
         dotLabel.clipsToBounds = true
         dotLabel.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
@@ -137,8 +140,7 @@ extension BugReportViewController {
         
         
         
-        hideKeyboardWhenTappedAround()
-   
+        
         scrollView.delegate = self
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -194,7 +196,7 @@ extension BugReportViewController {
         bindRx()
         bindbuttonEvent()
         configureCameraButtonUI()
-        //responseViewbyKeyboard()
+        responseViewbyKeyboard()
     }
     
     private func bindbuttonEvent(){
@@ -224,6 +226,11 @@ extension BugReportViewController {
         })
         .disposed(by: disposeBag)
         
+        noticeCheckButton.rx.tap.subscribe(onNext: {
+            
+        })
+        .disposed(by: disposeBag)
+        
 //        completionButton.rx.tap
 //            .bind(to: input.completionButtonTapped)
 //            .disposed(by: disposeBag)
@@ -246,6 +253,13 @@ extension BugReportViewController {
                                                tfEditingDidEnd.map { UIControl.Event.editingDidEnd })
 
 
+        textField.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: input.nickNameString)
+            .disposed(by: disposeBag)
+        
+        
+        
         mergeObservable
             .asObservable()
             .subscribe(onNext: { [weak self] (event) in
@@ -257,7 +271,7 @@ extension BugReportViewController {
 
                 if event ==  .editingDidBegin {
                     self.baseLine2.backgroundColor = self.pointColor
-                    self.scrollView.scroll(to: .bottom)
+                  //  self.scrollView.scroll(to: .bottom)
 
                 }
 
@@ -267,6 +281,12 @@ extension BugReportViewController {
 
             })
             .disposed(by: disposeBag)
+        
+        
+        output.showCollectionView
+            .bind(to: collectionView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
 //
 //
 //        output.enableCompleteButton
@@ -275,26 +295,26 @@ extension BugReportViewController {
     }
     
     
-//    private func responseViewbyKeyboard(){
-//        RxKeyboard.instance.visibleHeight
-//                    .drive(onNext: { [weak self] keyboardVisibleHeight in
-//                        guard let self = self else {return}
-//                        let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
-//                        let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
-//
-//
-//                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
-//
-//                        self.view.setNeedsLayout()
-//                        UIView.animate(withDuration: 0, animations: {
-//                            self.scrollView.contentInset.bottom = actualKeyboardHeight
-//                            self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
-//                            self.view.layoutIfNeeded()
-//                        })
-//
-//                    }).disposed(by: disposeBag)
-//
-//    }
+    private func responseViewbyKeyboard(){
+        RxKeyboard.instance.visibleHeight
+                    .drive(onNext: { [weak self] keyboardVisibleHeight in
+                        guard let self = self else {return}
+                        let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+                        let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
+
+
+                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
+
+                        self.view.setNeedsLayout()
+                        UIView.animate(withDuration: 0, animations: {
+                            self.scrollView.contentInset.bottom = actualKeyboardHeight
+                            self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
+                            self.view.layoutIfNeeded()
+                        })
+
+                    }).disposed(by: disposeBag)
+
+    }
     
     func spaceHeight() -> CGFloat {
         
@@ -327,5 +347,3 @@ extension BugReportViewController : UITextViewDelegate {
     }
 
 }
-
-
