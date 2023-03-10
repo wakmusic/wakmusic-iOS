@@ -2015,7 +2015,7 @@
                                 <rect key="frame" x="0.0" y="127" width="393" height="635"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-tP-B9H">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="811"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="723"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-xP-czF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
@@ -2316,7 +2316,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JxO-jg-i6c">
-                                                <rect key="frame" x="0.0" y="483" width="393" height="128"/>
+                                                <rect key="frame" x="0.0" y="483" width="393" height="40"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sqg-Qi-Hkk">
                                                         <rect key="frame" x="20" y="12" width="16" height="16"/>
@@ -2341,7 +2341,7 @@
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8O-TJ-DuM">
-                                                        <rect key="frame" x="36" y="9.9999999999999982" width="41.333333333333343" height="20.333333333333329"/>
+                                                        <rect key="frame" x="36" y="12" width="337" height="16"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -2349,13 +2349,16 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="O8O-TJ-DuM" firstAttribute="centerY" secondItem="Sqg-Qi-Hkk" secondAttribute="centerY" id="Ath-2m-iBk"/>
+                                                    <constraint firstAttribute="trailing" secondItem="O8O-TJ-DuM" secondAttribute="trailing" constant="20" id="CB3-tM-Jbn"/>
+                                                    <constraint firstItem="O8O-TJ-DuM" firstAttribute="top" secondItem="JxO-jg-i6c" secondAttribute="top" constant="12" id="G6d-17-wIr"/>
                                                     <constraint firstItem="Sqg-Qi-Hkk" firstAttribute="top" secondItem="JxO-jg-i6c" secondAttribute="top" constant="12" id="IfB-yb-1AQ"/>
+                                                    <constraint firstAttribute="bottom" secondItem="O8O-TJ-DuM" secondAttribute="bottom" constant="12" id="KMA-sh-mZ2"/>
                                                     <constraint firstItem="Sqg-Qi-Hkk" firstAttribute="leading" secondItem="JxO-jg-i6c" secondAttribute="leading" constant="20" id="okM-3h-g5Q"/>
                                                     <constraint firstItem="O8O-TJ-DuM" firstAttribute="leading" secondItem="Sqg-Qi-Hkk" secondAttribute="trailing" id="xkK-XX-Ex8"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEn-mO-Q7J">
-                                                <rect key="frame" x="0.0" y="611" width="393" height="200"/>
+                                                <rect key="frame" x="0.0" y="523" width="393" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="U5o-7g-Kyp"/>
@@ -2409,6 +2412,7 @@
                         <outlet property="descriptionLabel3" destination="jM3-MP-HJl" id="LY1-pn-hRv"/>
                         <outlet property="dotLabel" destination="m9r-i6-mqv" id="hmr-6V-2he"/>
                         <outlet property="infoLabel" destination="O8O-TJ-DuM" id="EqP-js-jm1"/>
+                        <outlet property="nickNameContentView" destination="xHh-gO-b9P" id="5K3-qx-9PI"/>
                         <outlet property="noticeCheckButton" destination="2RK-cD-6ry" id="fp5-nO-aqW"/>
                         <outlet property="noticeImageView" destination="Jv3-LY-6uH" id="AHV-yt-rnz"/>
                         <outlet property="noticeLabel" destination="bxP-yQ-k6T" id="xC0-Mm-avY"/>

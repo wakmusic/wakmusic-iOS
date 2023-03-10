@@ -10,16 +10,19 @@ import Foundation
 import UIKit
 import Utility
 import RxSwift
+import RxRelay
 import PanModal
 
 public final class NickNamePopupViewController: UIViewController,ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
     
-    lazy var viewModel = NickNamePopupViewModel()
+    var completion: ((String) -> Void)?
+    var dataSource:BehaviorRelay<[NickNameInfo]> = BehaviorRelay(value: [NickNameInfo(description: "알려주기", check: false),
+                                                                         NickNameInfo(description: "비공개", check: false),
+                                                                         NickNameInfo(description: "가입안함", check: false)])
     var disposeBag = DisposeBag()
-    
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,16 +31,18 @@ public final class NickNamePopupViewController: UIViewController,ViewControllerF
     }
     
 
-    public static func viewController() -> NickNamePopupViewController {
+    public static func viewController(current: String, completion: ((String) -> Void)? = nil) -> NickNamePopupViewController {
         let viewController = NickNamePopupViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        viewController.completion = completion
         
-
-       
+        var newModel = viewController.dataSource.value
+        if let index = viewController.dataSource.value.firstIndex(where: { $0.description == current }) {
+            newModel[index].check = true
+        }
+        viewController.dataSource.accept(newModel)
         
         return viewController
-    }
-    
-    
+    }    
 }
 
 extension NickNamePopupViewController {
@@ -48,7 +53,7 @@ extension NickNamePopupViewController {
         
         
         
-        viewModel.output.dataSource
+        dataSource
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 
@@ -69,29 +74,30 @@ extension NickNamePopupViewController {
     private func configureEvent() {
         
         tableView.rx.itemSelected
-            .withLatestFrom(viewModel.output.dataSource){($0,$1)}
-            .subscribe (onNext:{ [weak self]  (index,models) in
+            .withLatestFrom(dataSource){($0,$1)}
+            .map{ (indexPath, models) in
+                var nextModels:[NickNameInfo] = models
                 
-                guard let self = self else{
-                    return
-                }
+                guard let index = models.firstIndex(where: { $0.check }) else { return models }
+                nextModels[index].check = false
+                nextModels[indexPath.row].check = true
                 
-                var row:Int = index.row
-                
-                var nextModels:[NickNameInfo] = []
-                
-                for i in (0..<3) {
-                    nextModels.append(NickNameInfo(description: models[i].description, check: i == row))
-                    
-                }
-                
-                self.viewModel.output.dataSource.accept(nextModels)
-                
-                
-                
+                return nextModels
+            }
+            .do(onNext: { [weak self] (model) in
+                guard let index = model.firstIndex(where: { $0.check }) else { return }
+                self?.completion?(model[index].description)
+                self?.dismiss(animated: true)
             })
+            .bind(to: dataSource)
             .disposed(by: disposeBag)
+
     }
+}
+
+public struct NickNameInfo {
+    var description: String
+    var check: Bool
 }
 
 extension NickNamePopupViewController :UITableViewDelegate{

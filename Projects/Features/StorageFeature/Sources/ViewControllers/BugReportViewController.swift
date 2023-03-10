@@ -42,6 +42,7 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     @IBOutlet weak var noticeLabel: UILabel!
     @IBOutlet weak var noticeImageView: UIImageView!
     
+    @IBOutlet weak var nickNameContentView: UIView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var baseLine2: UIView!
 
@@ -230,13 +231,23 @@ extension BugReportViewController {
         })
         .disposed(by: disposeBag)
         
-        noticeCheckButton.rx.tap.subscribe(onNext: {
-            
-            let vc = NickNamePopupViewController.viewController()
-            self.showPanModal(content: vc)
-            
-        })
-        .disposed(by: disposeBag)
+        noticeCheckButton.rx.tap
+            .withLatestFrom(input.wakNickNameOption)
+            .subscribe(onNext: { [weak self] (current) in
+                guard let self = self else { return }
+
+                let vc = NickNamePopupViewController.viewController(current: current, completion: { (description) in
+                    self.input.wakNickNameOption.accept(description)
+                    self.nickNameContentView.isHidden = description != "알려주기"
+                    
+                    if description != "알려주기" {
+                        self.input.nickNameString.accept("")
+                        self.textField.rx.text.onNext("")
+                    }
+                })
+                self.showPanModal(content: vc)
+            })
+            .disposed(by: disposeBag)
         
 //        completionButton.rx.tap
 //            .bind(to: input.completionButtonTapped)
@@ -294,6 +305,10 @@ extension BugReportViewController {
             .bind(to: collectionContentView.rx.isHidden)
             .disposed(by: disposeBag)
         
+        input.wakNickNameOption
+            .bind(to: noticeLabel.rx.text)
+            .disposed(by: disposeBag)
+
 //
 //
 //        output.enableCompleteButton
