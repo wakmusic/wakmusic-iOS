@@ -232,6 +232,9 @@ extension BugReportViewController {
         
         noticeCheckButton.rx.tap.subscribe(onNext: {
             
+            let vc = NickNamePopupViewController.viewController()
+            self.showPanModal(content: vc)
+            
         })
         .disposed(by: disposeBag)
         

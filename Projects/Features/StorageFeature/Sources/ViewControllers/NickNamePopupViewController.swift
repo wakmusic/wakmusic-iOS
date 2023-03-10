@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Utility
 import RxSwift
+import PanModal
 
 public final class NickNamePopupViewController: UIViewController,ViewControllerFromStoryBoard {
 
@@ -61,9 +62,36 @@ extension NickNamePopupViewController {
             }
             .disposed(by: disposeBag)
         
+        configureEvent()
         
     }
     
+    private func configureEvent() {
+        
+        tableView.rx.itemSelected
+            .withLatestFrom(viewModel.output.dataSource){($0,$1)}
+            .subscribe (onNext:{ [weak self]  (index,models) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                var row:Int = index.row
+                
+                var nextModels:[NickNameInfo] = []
+                
+                for i in (0..<3) {
+                    nextModels.append(NickNameInfo(description: models[i].description, check: i == row))
+                    
+                }
+                
+                self.viewModel.output.dataSource.accept(nextModels)
+                
+                
+                
+            })
+            .disposed(by: disposeBag)
+    }
 }
 
 extension NickNamePopupViewController :UITableViewDelegate{
@@ -73,4 +101,37 @@ extension NickNamePopupViewController :UITableViewDelegate{
     }
     
 
+}
+
+extension NickNamePopupViewController: PanModalPresentable {
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
+    public var panModalBackgroundColor: UIColor {
+        return colorFromRGB(0x000000, alpha: 0.4)
+    }
+
+    public var panScrollable: UIScrollView? {
+      return nil
+    }
+
+    public var longFormHeight: PanModalHeight {
+    
+   
+        return PanModalHeight.contentHeight(228)
+     }
+
+    public var cornerRadius: CGFloat {
+        return 24.0
+    }
+
+    public var allowsExtendedPanScrolling: Bool {
+        return true
+    }
+
+    public var showDragIndicator: Bool {
+        return false
+    }
 }

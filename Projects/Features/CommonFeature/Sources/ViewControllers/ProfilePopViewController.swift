@@ -15,10 +15,6 @@ import RxSwift
 import DesignSystem
 import DomainModule
 
-public struct ProfileResponseDTO {
-    var type: FanType
-    var isSelected: Bool
-}
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {
     
