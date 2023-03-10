@@ -258,7 +258,6 @@ extension QuestionViewController {
                     
                 case 0:
                     let vc = self.bugReportComponent.makeView()
-                    
                     self.navigationController?.pushViewController(vc, animated: true)
                     
                 case 1:

@@ -80,6 +80,10 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         
     }
     
+    
+    override public func viewDidDisappear(_ animated: Bool) {
+        
+    }
 
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
         let viewController = BugReportViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
