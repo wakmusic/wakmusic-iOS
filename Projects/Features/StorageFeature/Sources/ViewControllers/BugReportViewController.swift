@@ -62,6 +62,9 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     let disposeBag = DisposeBag()
     
     
+    var viewModel:BugReportViewModel!
+    lazy var input = BugReportViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     var keyboardHeight:CGFloat = 267
     
     public override func viewDidLoad() {
@@ -73,9 +76,10 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     }
     
 
-    public static func viewController() -> BugReportViewController {
+    public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
         let viewController = BugReportViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
+        viewController.viewModel = viewModel
        
 
         
@@ -229,44 +233,40 @@ extension BugReportViewController {
     
     private func bindRx(){
         
-//        textField1.rx.text.orEmpty
-//            .distinctUntilChanged()
-//            .bind(to: input.artistString)
-//            .disposed(by: disposeBag)
-//
-//        textView.rx.text.orEmpty
-//            .distinctUntilChanged() // 연달아 같은 값이 이어질 때 중복된 값을 막아줍니다
-//            .bind(to: input.contentString)
-//            .disposed(by: disposeBag)
-//
-//        let tfEditingDidBegin1 = textField1.rx.controlEvent(.editingDidBegin)
-//        let tfEditingDidEnd1 = textField1.rx.controlEvent(.editingDidEnd)
-//
-//        let mergeObservable1 = Observable.merge(tfEditingDidBegin1.map { UIControl.Event.editingDidBegin },
-//                                               tfEditingDidEnd1.map { UIControl.Event.editingDidEnd })
-//
-//
-//        mergeObservable1
-//            .asObservable()
-//            .subscribe(onNext: { [weak self] (event) in
-//
-//                guard let self = self else{
-//                    return
-//                }
-//
-//
-//                if event ==  .editingDidBegin {
-//                    self.baseLine1.backgroundColor = self.pointColor
-//                    self.scrollView.scrollToView(view: UIView(frame: .zero))
-//
-//                }
-//
-//                else {
-//                    self.baseLine1.backgroundColor = self.unPointColor
-//                }
-//
-//            })
-//            .disposed(by: disposeBag)
+        textView.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind(to: input.bugContentString)
+            .disposed(by: disposeBag)
+
+        
+        let tfEditingDidBegin = textField.rx.controlEvent(.editingDidBegin)
+        let tfEditingDidEnd = textField.rx.controlEvent(.editingDidEnd)
+
+        let mergeObservable = Observable.merge(tfEditingDidBegin.map { UIControl.Event.editingDidBegin },
+                                               tfEditingDidEnd.map { UIControl.Event.editingDidEnd })
+
+
+        mergeObservable
+            .asObservable()
+            .subscribe(onNext: { [weak self] (event) in
+
+                guard let self = self else{
+                    return
+                }
+
+
+                if event ==  .editingDidBegin {
+                    self.baseLine2.backgroundColor = self.pointColor
+                    self.scrollView.scroll(to: .bottom)
+
+                }
+
+                else {
+                    self.baseLine2.backgroundColor = self.unPointColor
+                }
+
+            })
+            .disposed(by: disposeBag)
 //
 //
 //        output.enableCompleteButton

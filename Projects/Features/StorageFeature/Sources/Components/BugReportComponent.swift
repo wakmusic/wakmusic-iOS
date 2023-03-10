@@ -19,6 +19,6 @@ public protocol BugReportDependency: Dependency {
 
 public final class BugReportComponent: Component<BugReportDependency> {
     public func makeView() -> BugReportViewController {
-        return BugReportViewController.viewController()
+        return BugReportViewController.viewController(viewModel: .init())
     }
 }
