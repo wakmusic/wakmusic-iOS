@@ -1938,7 +1938,7 @@
                                 <rect key="frame" x="0.0" y="127" width="393" height="635"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-tP-B9H">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="643"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="843"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-xP-czF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
@@ -2004,10 +2004,7 @@
                                                     </label>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="012-aw-3TI">
                                                         <rect key="frame" x="20" y="40" width="373" height="112"/>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="112" id="pos-ED-mKX"/>
-                                                        </constraints>
+                                                        <color key="backgroundColor" name="AccentColor"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GeW-aD-fXy">
                                                             <size key="itemSize" width="128" height="128"/>
                                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -2118,7 +2115,7 @@
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OCO-YK-Ges">
                                                         <rect key="frame" x="20" y="18.666666666666629" width="353" height="18.666666666666671"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A7a-lS-6hg">
                                                         <rect key="frame" x="20" y="53.333333333333371" width="353" height="1"/>
@@ -2175,6 +2172,13 @@
                                                     <constraint firstItem="Sqg-Qi-Hkk" firstAttribute="top" secondItem="JxO-jg-i6c" secondAttribute="top" constant="12" id="IfB-yb-1AQ"/>
                                                     <constraint firstItem="Sqg-Qi-Hkk" firstAttribute="leading" secondItem="JxO-jg-i6c" secondAttribute="leading" constant="20" id="okM-3h-g5Q"/>
                                                     <constraint firstItem="O8O-TJ-DuM" firstAttribute="leading" secondItem="Sqg-Qi-Hkk" secondAttribute="trailing" id="xkK-XX-Ex8"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XEn-mO-Q7J">
+                                                <rect key="frame" x="0.0" y="643" width="393" height="200"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="200" id="U5o-7g-Kyp"/>
                                                 </constraints>
                                             </view>
                                         </subviews>

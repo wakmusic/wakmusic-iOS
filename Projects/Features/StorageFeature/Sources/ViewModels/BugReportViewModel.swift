@@ -29,6 +29,7 @@ public final class BugReportViewModel:ViewModelType {
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+        var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
     }
 
     public init(){
