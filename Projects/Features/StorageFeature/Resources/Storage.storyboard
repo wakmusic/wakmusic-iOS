@@ -1938,7 +1938,7 @@
                                 <rect key="frame" x="0.0" y="127" width="393" height="635"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-tP-B9H">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="327"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="395"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-xP-czF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
@@ -2030,10 +2030,13 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="52" id="KbX-iw-yat"/>
                                                         </constraints>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="-3" maxY="0.0"/>
+                                                        <inset key="imageEdgeInsets" minX="-3" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="첨부하기">
+                                                            <color key="titleColor" name="AccentColor"/>
+                                                        </state>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstItem="012-aw-3TI" firstAttribute="top" secondItem="211-xD-cI4" secondAttribute="bottom" constant="12" id="Fyi-iM-Jao"/>
                                                     <constraint firstItem="sew-86-0HV" firstAttribute="leading" secondItem="7Vl-To-DvS" secondAttribute="leading" constant="20" id="H2Y-Bo-xQB"/>
@@ -2047,7 +2050,44 @@
                                                     <constraint firstItem="sew-86-0HV" firstAttribute="top" secondItem="012-aw-3TI" secondAttribute="bottom" constant="12" id="rej-58-Xm9"/>
                                                 </constraints>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="huI-QI-Cee">
+                                                <rect key="frame" x="0.0" y="327" width="393" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="MpA-nE-eeT"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LWz-eh-TOe">
+                                                <rect key="frame" x="0.0" y="367" width="393" height="28"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jM3-MP-HJl">
+                                                        <rect key="frame" x="20" y="14" width="353" height="0.0"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dLg-M1-eFj">
+                                                        <rect key="frame" x="20" y="26" width="353" height="52"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="52" id="ngI-a0-cVD"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="dLg-M1-eFj" firstAttribute="top" secondItem="jM3-MP-HJl" secondAttribute="bottom" constant="12" id="Afy-9y-OYT"/>
+                                                    <constraint firstAttribute="trailing" secondItem="dLg-M1-eFj" secondAttribute="trailing" constant="20" id="Gce-7F-30I"/>
+                                                    <constraint firstAttribute="trailing" secondItem="jM3-MP-HJl" secondAttribute="trailing" constant="20" id="HKm-tx-QTC"/>
+                                                    <constraint firstAttribute="height" constant="28" id="XOY-nU-Eyb"/>
+                                                    <constraint firstItem="jM3-MP-HJl" firstAttribute="leading" secondItem="LWz-eh-TOe" secondAttribute="leading" constant="20" id="fYD-Go-hiw"/>
+                                                    <constraint firstItem="dLg-M1-eFj" firstAttribute="leading" secondItem="LWz-eh-TOe" secondAttribute="leading" constant="20" id="pGQ-WT-zMs"/>
+                                                    <constraint firstItem="jM3-MP-HJl" firstAttribute="centerY" secondItem="LWz-eh-TOe" secondAttribute="centerY" id="qFG-tc-LGe"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="LWz-eh-TOe" secondAttribute="trailing" id="8Z0-8L-nUf"/>
+                                            <constraint firstItem="LWz-eh-TOe" firstAttribute="leading" secondItem="O2c-tP-B9H" secondAttribute="leading" id="ynq-vJ-LOr"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>
@@ -2082,6 +2122,8 @@
                         <outlet property="completionButton" destination="XrJ-d7-nSQ" id="NpD-mv-Zob"/>
                         <outlet property="descriptionLabel1" destination="nlX-vF-gX5" id="5oP-5z-50P"/>
                         <outlet property="descriptionLabel2" destination="211-xD-cI4" id="tuB-rt-Zug"/>
+                        <outlet property="descriptionLabel3" destination="jM3-MP-HJl" id="LY1-pn-hRv"/>
+                        <outlet property="noticeCheckButton" destination="dLg-M1-eFj" id="fl4-st-pT5"/>
                         <outlet property="previousButton" destination="s3z-ay-Z6n" id="Tne-fN-vQw"/>
                         <outlet property="scrollView" destination="W5e-ai-avC" id="oPv-VO-NKG"/>
                         <outlet property="textView" destination="Hwb-PZ-THs" id="UPB-TL-6UT"/>
@@ -2096,6 +2138,9 @@
     <resources>
         <image name="back" width="32" height="32"/>
         <image name="blue_arrow_right" width="16" height="16"/>
+        <namedColor name="AccentColor">
+            <color red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
