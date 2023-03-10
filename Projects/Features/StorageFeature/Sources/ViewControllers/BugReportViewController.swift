@@ -27,8 +27,12 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     @IBOutlet weak var baseLine1: UIView!
     
     @IBOutlet weak var descriptionLabel2: UILabel!
+    @IBOutlet weak var collectionContentView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var attachContentView: UIView!
+    @IBOutlet weak var attachLabel: UILabel!
+    @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var cameraButton: UIButton!
     
     @IBOutlet weak var descriptionLabel3: UILabel!
@@ -101,15 +105,15 @@ extension BugReportViewController {
         cameraAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
                                                .foregroundColor: pointColor],
                                               range: NSRange(location: 0, length: cameraAttributedString.string.count))
+        attachLabel.attributedText = cameraAttributedString
+        cameraImageView.image = DesignSystemAsset.Storage.camera.image
         
-        cameraButton.setImage(DesignSystemAsset.Storage.camera.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        cameraButton.layer.cornerRadius = 12
-        cameraButton.layer.borderColor = pointColor.cgColor
-        cameraButton.layer.borderWidth = 1
+        attachContentView.layer.cornerRadius = 12
+        attachContentView.layer.borderColor = pointColor.cgColor
+        attachContentView.layer.borderWidth = 1
         
-        cameraButton.setAttributedTitle(cameraAttributedString, for: .normal)
-        
-        
+        //        cameraButton.setImage(DesignSystemAsset.Storage.camera.image.withRenderingMode(.alwaysOriginal), for: .normal)
+//        cameraButton.setAttributedTitle(cameraAttributedString, for: .normal)
     }
     
     private func configureUI(){
@@ -284,7 +288,7 @@ extension BugReportViewController {
         
         
         output.showCollectionView
-            .bind(to: collectionView.rx.isHidden)
+            .bind(to: collectionContentView.rx.isHidden)
             .disposed(by: disposeBag)
         
 //
