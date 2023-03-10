@@ -27,6 +27,9 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     @IBOutlet weak var baseLine1: UIView!
     
     @IBOutlet weak var descriptionLabel2: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    
     @IBOutlet weak var cameraButton: UIButton!
     
     

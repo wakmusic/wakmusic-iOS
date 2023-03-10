@@ -7,6 +7,7 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -1937,7 +1938,7 @@
                                 <rect key="frame" x="0.0" y="127" width="393" height="635"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-tP-B9H">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="239"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="327"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9m-xP-czF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
@@ -1990,7 +1991,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Vl-To-DvS">
-                                                <rect key="frame" x="0.0" y="111" width="393" height="128"/>
+                                                <rect key="frame" x="0.0" y="111" width="393" height="216"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="211-xD-cI4">
                                                         <rect key="frame" x="20" y="0.0" width="353" height="28"/>
@@ -2001,8 +2002,31 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="012-aw-3TI">
+                                                        <rect key="frame" x="20" y="40" width="373" height="112"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="112" id="pos-ED-mKX"/>
+                                                        </constraints>
+                                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GeW-aD-fXy">
+                                                            <size key="itemSize" width="128" height="128"/>
+                                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        </collectionViewFlowLayout>
+                                                        <cells>
+                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="OFN-OP-tc5">
+                                                                <rect key="frame" x="0.0" y="-8" width="128" height="128"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SDM-uf-sdP">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </collectionViewCellContentView>
+                                                            </collectionViewCell>
+                                                        </cells>
+                                                    </collectionView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sew-86-0HV">
-                                                        <rect key="frame" x="20" y="40" width="353" height="52"/>
+                                                        <rect key="frame" x="20" y="164" width="353" height="52"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="52" id="KbX-iw-yat"/>
                                                         </constraints>
@@ -2011,12 +2035,16 @@
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstItem="sew-86-0HV" firstAttribute="top" secondItem="211-xD-cI4" secondAttribute="bottom" constant="12" id="GHn-c4-696"/>
+                                                    <constraint firstItem="012-aw-3TI" firstAttribute="top" secondItem="211-xD-cI4" secondAttribute="bottom" constant="12" id="Fyi-iM-Jao"/>
                                                     <constraint firstItem="sew-86-0HV" firstAttribute="leading" secondItem="7Vl-To-DvS" secondAttribute="leading" constant="20" id="H2Y-Bo-xQB"/>
                                                     <constraint firstItem="211-xD-cI4" firstAttribute="leading" secondItem="7Vl-To-DvS" secondAttribute="leading" constant="20" id="NF7-5B-3Bd"/>
+                                                    <constraint firstAttribute="trailing" secondItem="012-aw-3TI" secondAttribute="trailing" id="OKH-n7-Si5"/>
                                                     <constraint firstItem="211-xD-cI4" firstAttribute="top" secondItem="7Vl-To-DvS" secondAttribute="top" id="VTs-TS-5o6"/>
+                                                    <constraint firstItem="012-aw-3TI" firstAttribute="leading" secondItem="7Vl-To-DvS" secondAttribute="leading" constant="20" id="fUu-gP-aWS"/>
                                                     <constraint firstAttribute="trailing" secondItem="211-xD-cI4" secondAttribute="trailing" constant="20" id="gd7-be-SUW"/>
                                                     <constraint firstAttribute="trailing" secondItem="sew-86-0HV" secondAttribute="trailing" constant="20" id="o4O-eM-YmK"/>
+                                                    <constraint firstAttribute="bottom" secondItem="sew-86-0HV" secondAttribute="bottom" id="qFW-Kw-fqY"/>
+                                                    <constraint firstItem="sew-86-0HV" firstAttribute="top" secondItem="012-aw-3TI" secondAttribute="bottom" constant="12" id="rej-58-Xm9"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -2050,6 +2078,7 @@
                         <outlet property="baseLine1" destination="kjg-BY-HQa" id="kDj-Et-Mxb"/>
                         <outlet property="cameraButton" destination="sew-86-0HV" id="cWx-hx-oJ9"/>
                         <outlet property="closeButton" destination="UMp-Jr-RIp" id="11v-1p-Dkk"/>
+                        <outlet property="collectionView" destination="012-aw-3TI" id="JOm-We-Y65"/>
                         <outlet property="completionButton" destination="XrJ-d7-nSQ" id="NpD-mv-Zob"/>
                         <outlet property="descriptionLabel1" destination="nlX-vF-gX5" id="5oP-5z-50P"/>
                         <outlet property="descriptionLabel2" destination="211-xD-cI4" id="tuB-rt-Zug"/>
