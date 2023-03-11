@@ -44,28 +44,26 @@ public final class BugReportViewModel:ViewModelType {
         
         let output = Output()
 
-//        let combineObservable = Observable.combineLatest(
-//            input.artistString,
-//            input.songTitleString,
-//            input.youtubeString,
-//            input.contentString
-//        ){
-//            return ($0, $1, $2, $3)
-//        }
-//
-//        combineObservable
-//            .debug("askSong combine")
-//            .map { return !($0.isWhiteSpace || $1.isWhiteSpace || $2.isWhiteSpace || $3.isWhiteSpace) }
-//            .bind(to: enableCompleteButton)
-//            .disposed(by: disposeBag)
-//
-//        input.completionButtonTapped
-//            .withLatestFrom(combineObservable)
-//            .debug("completionButtonTapped")
-//            .subscribe(onNext: { (artist, song, youtube, content) in
-//                //TO-DO: 여기를 고쳐서 api 연결하세요.
-//            }).disposed(by: disposeBag)
-//
+        let combineObservable = Observable.combineLatest(
+            input.wakNickNameOption,
+            input.nickNameString,
+            input.bugContentString
+
+        ){
+            return ($0, $1, $2)
+        }
+
+        combineObservable
+            .map { return $0.0.description == "알려주기" ? !$0.1.isWhiteSpace && !$0.2.isWhiteSpace : !$0.2.isWhiteSpace }
+            .bind(to: output.enableCompleteButton)
+            .disposed(by: disposeBag)
+
+        input.completionButtonTapped
+            .withLatestFrom(combineObservable)
+            .subscribe(onNext: { (option,nickName,content) in
+                //TO-DO: 여기를 고쳐서 api 연결하세요.
+            }).disposed(by: disposeBag)
+
         
         return output
     }

@@ -253,9 +253,9 @@ extension BugReportViewController {
             })
             .disposed(by: disposeBag)
         
-//        completionButton.rx.tap
-//            .bind(to: input.completionButtonTapped)
-//            .disposed(by: disposeBag)
+        completionButton.rx.tap
+            .bind(to: input.completionButtonTapped)
+            .disposed(by: disposeBag)
         
             
     }
@@ -313,11 +313,11 @@ extension BugReportViewController {
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 
-//
-//
-//        output.enableCompleteButton
-//            .bind(to: completionButton.rx.isEnabled)
-//            .disposed(by: disposeBag)
+
+
+        output.enableCompleteButton
+            .bind(to: completionButton.rx.isEnabled)
+            .disposed(by: disposeBag)
     }
     
     
