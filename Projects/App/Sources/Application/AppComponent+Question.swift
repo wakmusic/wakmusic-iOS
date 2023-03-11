@@ -41,6 +41,14 @@ public extension AppComponent {
         AskSongComponent(parent: self)
     }
     
+    var bugReportComponent: BugReportComponent {
+        
+        BugReportComponent(parent: self)
+    }
+    
+    
+    
+    
     var remoteQuestionDataSource: any RemoteQnaDataSource {
         shared {
             RemoteQnaDataSourceImpl(keychain: keychain)

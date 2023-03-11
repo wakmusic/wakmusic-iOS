@@ -48,7 +48,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBAction func moveQuestionAction(_ sender: Any) {
         
         let vc =  questionComponent.makeView().wrapNavigationController
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
         
     }
@@ -70,13 +70,13 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     @IBAction func pressServiceAction(_ sender: UIButton) {
         let vc = ContractViewController.viewController(type: .service)
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
     }
     
     @IBAction func pressPrivacyAction(_ sender: UIButton) {
         let vc = ContractViewController.viewController(type: .privacy)
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
     }
     

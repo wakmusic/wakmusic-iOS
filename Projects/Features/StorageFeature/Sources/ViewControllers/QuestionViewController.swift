@@ -52,6 +52,7 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     var suggestFunctionComponent:SuggestFunctionComponent!
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent!
     var askSongComponent: AskSongComponent!
+    var bugReportComponent: BugReportComponent!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,13 +63,15 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     public static func viewController(viewModel:QuestionViewModel
                                       ,suggestFunctionComponent:SuggestFunctionComponent
                                       ,wakMusicFeedbackComponent:WakMusicFeedbackComponent
-                                      ,askSongComponent:AskSongComponent) -> QuestionViewController {
+                                      ,askSongComponent:AskSongComponent
+                                      ,bugReportComponent:BugReportComponent) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.suggestFunctionComponent = suggestFunctionComponent
         viewController.wakMusicFeedbackComponent = wakMusicFeedbackComponent
         viewController.askSongComponent = askSongComponent
+        viewController.bugReportComponent = bugReportComponent
         
         return viewController
     }
@@ -252,6 +255,10 @@ extension QuestionViewController {
                 DEBUG_LOG($0)
                 
                 switch $0 {
+                    
+                case 0:
+                    let vc = self.bugReportComponent.makeView()
+                    self.navigationController?.pushViewController(vc, animated: true)
                     
                 case 1:
                     let vc = self.suggestFunctionComponent.makeView()
