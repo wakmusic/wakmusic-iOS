@@ -69,10 +69,8 @@ extension ContainSongsViewController {
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         
-        
-        tableView.delegate = self
-        
-      //  bindRx()
+    
+        bindRx()
         
         
     }
@@ -80,6 +78,14 @@ extension ContainSongsViewController {
     private func bindRx() {
         
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        
+        closeButton.rx.tap.subscribe(onNext: {
+            
+            self.dismiss(animated: true)
+            
+        })
+        .disposed(by: disposeBag)
         
         
         output.dataSource
@@ -108,13 +114,33 @@ extension ContainSongsViewController {
                 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? CurrentPlayListTableViewCell
                 else {return UITableViewCell()}
-                 
+            
+                cell.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
                 cell.selectedBackgroundView = bgView
                 cell.update(model: model)
               
                         
              return cell
             }.disposed(by: disposeBag)
+        
+        
+        
+    tableView.rx.itemSelected
+        .withLatestFrom(output.dataSource){ ($0,$1) }
+        .subscribe(onNext: { [weak self] (indexPath, models) in
+            
+            guard let self  = self else{
+                return
+            }
+            
+            
+            let model = models[indexPath.row]
+            
+            DEBUG_LOG(model)
+            
+            
+        })
+        .disposed(by: disposeBag)
         
         
     }

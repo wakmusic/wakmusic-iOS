@@ -12,12 +12,13 @@ import DomainModule
 
 public protocol ContainSongsDependency: Dependency {
     var  multiPurposePopComponent :  MultiPurposePopComponent {get}
+    var  fetchPlayListUseCase : any FetchPlayListUseCase {get}
     
     
 }
 
 public final class ContainSongsComponent: Component<ContainSongsDependency> {
     public func makeView() -> ContainSongsViewController  {
-        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init())
+        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init(fetchPlayListUseCase: dependency.fetchPlayListUseCase))
     }
 }

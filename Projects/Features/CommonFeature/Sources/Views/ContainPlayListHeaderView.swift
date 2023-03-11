@@ -18,6 +18,7 @@ public protocol ContainPlayListHeaderViewDelegate : AnyObject {
 
 class ContainPlayListHeaderView: UIView {
 
+    @IBOutlet weak var superView: UIView!
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var buttonImageView: UIImageView!
     
@@ -47,7 +48,6 @@ class ContainPlayListHeaderView: UIView {
         if let view = Bundle.module.loadNibNamed("ContainPlayListHeaderView", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
-            view.backgroundColor = .white
             self.addSubview(view)
         }
         
@@ -58,9 +58,9 @@ class ContainPlayListHeaderView: UIView {
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
  
         
-        button.layer.cornerRadius = 8
-        button.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        button.layer.borderWidth = 1
+        superView.layer.cornerRadius = 8
+        superView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        superView.layer.borderWidth = 1
         
         self.button.setAttributedTitle(attr, for: .normal)
         

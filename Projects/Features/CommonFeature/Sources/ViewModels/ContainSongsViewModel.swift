@@ -15,9 +15,15 @@ import RxSwift
 public final class ContainSongsViewModel:ViewModelType {
 
     
+    
+    var fetchPlayListUseCase:FetchPlayListUseCase!
+    
+    let disposeBag = DisposeBag()
+    
     public struct Input {
         
-        let newPlayTap:PublishSubject<Void> = PublishSubject()
+        let newPlayListTap:PublishSubject<Void> = PublishSubject()
+        let playListLoad:BehaviorRelay<Void> = BehaviorRelay(value: ())
         
     }
     
@@ -25,10 +31,30 @@ public final class ContainSongsViewModel:ViewModelType {
         let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
     }
     
+    init(fetchPlayListUseCase: FetchPlayListUseCase!) {
+        self.fetchPlayListUseCase = fetchPlayListUseCase
+        
+        
+    }
+    
     public func transform(from input: Input) -> Output {
         
         let output = Output()
         
+        
+        input.playListLoad
+            .flatMap({ [weak self] () -> Observable<[PlayListEntity]> in
+                
+                guard let self = self else{
+                    return Observable.empty()
+                }
+                
+                return self.fetchPlayListUseCase.execute()
+                    .asObservable()
+                    .catchAndReturn([])
+            })
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
         
         
         return output

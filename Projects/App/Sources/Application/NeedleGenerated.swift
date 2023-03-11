@@ -497,6 +497,9 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
+    var fetchPlayListUseCase: any FetchPlayListUseCase {
+        return appComponent.fetchPlayListUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -829,6 +832,7 @@ extension BeforeSearchComponent: Registration {
 extension ContainSongsComponent: Registration {
     public func registerItems() {
         keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
     }
 }
 extension MultiPurposePopComponent: Registration {
