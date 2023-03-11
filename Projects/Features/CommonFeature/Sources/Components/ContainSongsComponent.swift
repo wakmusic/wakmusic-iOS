@@ -11,13 +11,13 @@ import NeedleFoundation
 import DomainModule
 
 public protocol ContainSongsDependency: Dependency {
-
+    var  multiPurposePopComponent :  MultiPurposePopComponent {get}
     
     
 }
 
-public final class ContainSongsComponent: Component<ProfilePopDependency> {
+public final class ContainSongsComponent: Component<ContainSongsDependency> {
     public func makeView() -> ContainSongsViewController  {
-        return ContainSongsViewController.viewController(viewModel: .init())
+        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init())
     }
 }

@@ -21,6 +21,11 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
     
+    
+    var multiPurposePopComponent : MultiPurposePopComponent!
+    
+    
+    
     var disposeBag = DisposeBag()
     var viewModel:ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -35,9 +40,11 @@ public final class ContainSongsViewController: BaseViewController,ViewController
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(viewModel:ContainSongsViewModel) -> ContainSongsViewController {
+    public static func viewController(multiPurposePopComponent:MultiPurposePopComponent,viewModel:ContainSongsViewModel) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
+        
+        viewController.multiPurposePopComponent = multiPurposePopComponent
     
         viewController.viewModel = viewModel
     
@@ -142,6 +149,11 @@ extension ContainSongsViewController : UITableViewDelegate {
 extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         DEBUG_LOG("추가추가")
+        
+        let vc = multiPurposePopComponent.makeView(type: .creation)
+        self.showPanModal(content: vc)
+        
+        
     }
     
     
