@@ -145,10 +145,6 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         //bindRx()
         // Do any additional setup after loading the view.
     }
-    deinit {
-        DEBUG_LOG("\(Self.self) deinit")
-        
-    }
     
     public static func viewController(viewModel:MultiPurposePopupViewModel) -> MultiPurposePopupViewController {
         let viewController = MultiPurposePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
