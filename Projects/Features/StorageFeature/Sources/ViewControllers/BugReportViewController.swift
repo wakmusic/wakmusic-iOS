@@ -169,7 +169,7 @@ extension BugReportViewController {
         
         noticeLabel.text = "알려주기"
         noticeLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        noticeLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        noticeLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         
         noticeImageView.image = DesignSystemAsset.Navigation.close.image
         
@@ -240,7 +240,7 @@ extension BugReportViewController {
             .subscribe(onNext: { [weak self] (current) in
                 guard let self = self else { return }
 
-                let vc = NickNamePopupViewController.viewController(current: current, completion: { (description) in
+                let vc = NickNamePopupViewController.viewController(current: current == "선택" ? "알려주기" : current , completion: { (description) in
                     self.input.wakNickNameOption.accept(description)
                     self.nickNameContentView.isHidden = description != "알려주기"
                     
@@ -310,6 +310,16 @@ extension BugReportViewController {
             .disposed(by: disposeBag)
         
         input.wakNickNameOption
+            .do(onNext: { [weak self] (str:String) in
+                DEBUG_LOG(str)
+                
+                guard let self = self else {
+                    return
+                }
+                
+                self.noticeLabel.textColor = str == "선택" ? DesignSystemAsset.GrayColor.gray400.color  : DesignSystemAsset.GrayColor.gray900.color
+                
+            })
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 

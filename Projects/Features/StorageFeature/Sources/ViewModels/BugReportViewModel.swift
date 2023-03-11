@@ -20,7 +20,7 @@ public final class BugReportViewModel:ViewModelType {
     var disposeBag = DisposeBag()
     
     public struct Input {
-        var wakNickNameOption:BehaviorRelay<String> = BehaviorRelay(value: "알려주기")
+        var wakNickNameOption:BehaviorRelay<String> = BehaviorRelay(value: "선택")
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishRelay<Void> = PublishRelay()
@@ -54,7 +54,8 @@ public final class BugReportViewModel:ViewModelType {
         }
 
         combineObservable
-            .map { return $0.0.description == "알려주기" ? !$0.1.isWhiteSpace && !$0.2.isWhiteSpace : !$0.2.isWhiteSpace }
+            .map { return $0.0.description == "선택" ? false: $0.0.description == "알려주기" ?
+                !$0.1.isWhiteSpace && !$0.2.isWhiteSpace : !$0.2.isWhiteSpace }
             .bind(to: output.enableCompleteButton)
             .disposed(by: disposeBag)
 
