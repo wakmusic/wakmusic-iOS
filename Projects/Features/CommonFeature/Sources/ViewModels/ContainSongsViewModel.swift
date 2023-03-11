@@ -42,13 +42,17 @@ public final class ContainSongsViewModel:ViewModelType {
         let output = Output()
         
         
+        
+        
         input.playListLoad
             .flatMap({ [weak self] () -> Observable<[PlayListEntity]> in
-                
+
                 guard let self = self else{
                     return Observable.empty()
                 }
                 
+        
+
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
                     .catchAndReturn([])

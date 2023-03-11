@@ -96,7 +96,15 @@ extension ContainSongsViewController {
                 return
             }
             
-            let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
+            let window: UIWindow? = UIApplication.shared.windows.first
+            let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
+            let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
+            
+            let space = APP_HEIGHT() - 48 - 16 - 24 - 12 - 52 - 12 -  safeAreaInsetsTop - safeAreaInsetsBottom
+            
+            let height = space / 3  * 2
+            
+            let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
             warningView.text = "내 리스트가 없습니다."
             
             
