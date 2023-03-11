@@ -357,6 +357,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var questionComponent: QuestionComponent {
         return appComponent.questionComponent
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -490,6 +493,22 @@ private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDe
 private func factory9bb852337d5550979293f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return BeforeSearchDependencyebdecb1d478a4766488dProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class ProfilePopDependencydbd9ae8a072db3a22630Provider: ProfilePopDependency {
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
+        return appComponent.fetchProfileListUseCase
+    }
+    var setProfileUseCase: any SetProfileUseCase {
+        return appComponent.setProfileUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ContainSongsComponent
+private func factory6104e1b2f1dca6b37a1ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfilePopDependencydbd9ae8a072db3a22630Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurposePopDependency {
     var createPlayListUseCase: any CreatePlayListUseCase {
         return appComponent.createPlayListUseCase
@@ -579,6 +598,7 @@ extension AppComponent: Registration {
         localTable["playListDetailComponent-PlayListDetailComponent"] = { self.playListDetailComponent as Any }
         localTable["multiPurposePopComponent-MultiPurposePopComponent"] = { self.multiPurposePopComponent as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
+        localTable["containSongsComponent-ContainSongsComponent"] = { self.containSongsComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
@@ -756,6 +776,7 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
         keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension QnaContentComponent: Registration {
@@ -806,6 +827,12 @@ extension BeforeSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\BeforeSearchDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
+    }
+}
+extension ContainSongsComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
+        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
     }
 }
 extension MultiPurposePopComponent: Registration {
@@ -875,6 +902,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ContainSongsComponent", factory6104e1b2f1dca6b37a1ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)

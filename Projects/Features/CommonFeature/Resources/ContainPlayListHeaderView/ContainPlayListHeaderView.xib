@@ -6,11 +6,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContainPlayListHeaderView" customModule="CommonFeature" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContainPlayListHeaderView" customModule="CommonFeature_CommonFeature" customModuleProvider="target">
             <connections>
                 <outlet property="button" destination="Dt9-E6-4qq" id="opK-EX-mvT"/>
                 <outlet property="buttonImageView" destination="MVi-Gt-LWP" id="ov9-2c-7nb"/>
@@ -18,11 +17,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvf-2O-H40">
-                    <rect key="frame" x="0.0" y="59" width="375" height="52"/>
+                    <rect key="frame" x="20" y="59" width="353" height="52"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="player_music_add" translatesAutoresizingMaskIntoConstraints="NO" id="MVi-Gt-LWP">
                             <rect key="frame" x="32" y="10" width="32" height="32"/>
@@ -32,7 +31,7 @@
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dt9-E6-4qq">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                            <rect key="frame" x="0.0" y="0.0" width="353" height="52"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="플레이리스트 만들기">
                                 <color key="titleColor" name="gray900"/>
@@ -55,11 +54,11 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="gvf-2O-H40" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Az6-ZH-t5b"/>
-                <constraint firstAttribute="trailing" secondItem="gvf-2O-H40" secondAttribute="trailing" id="Fje-Ub-uMe"/>
-                <constraint firstItem="gvf-2O-H40" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WT2-Tf-VxQ"/>
+                <constraint firstAttribute="trailing" secondItem="gvf-2O-H40" secondAttribute="trailing" constant="20" id="Fje-Ub-uMe"/>
+                <constraint firstItem="gvf-2O-H40" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="WT2-Tf-VxQ"/>
             </constraints>
             <point key="canvasLocation" x="91" y="21"/>
         </view>
@@ -69,8 +68,5 @@
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

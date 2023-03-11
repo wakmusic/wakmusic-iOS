@@ -40,6 +40,11 @@ public extension AppComponent {
     }
     
     
+    var containSongsComponent: ContainSongsComponent {
+        ContainSongsComponent(parent: self)
+    }
+    
+    
     var remotePlayListDataSource: any RemotePlayListDataSource {
         shared {
             RemotePlayListDataSourceImpl(keychain: keychain)
@@ -93,5 +98,6 @@ public extension AppComponent {
             LoadPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
+    
     
 }

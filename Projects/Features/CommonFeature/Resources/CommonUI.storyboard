@@ -243,7 +243,7 @@
                     <connections>
                         <outlet property="closeButton" destination="4lb-JV-RW7" id="7wL-mm-k3H"/>
                         <outlet property="songCountLabel" destination="gYr-Kd-zN3" id="O9C-RF-1yx"/>
-                        <outlet property="subTitle" destination="6EP-hY-u7V" id="gUt-eH-xhe"/>
+                        <outlet property="subTitleLabel" destination="6EP-hY-u7V" id="gUt-eH-xhe"/>
                         <outlet property="tableView" destination="55y-I8-uJW" id="MPQ-gz-g4Z"/>
                         <outlet property="titleLabel" destination="9b1-Vu-kuJ" id="oau-9B-0PA"/>
                     </connections>
