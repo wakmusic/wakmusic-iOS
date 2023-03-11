@@ -178,6 +178,7 @@ extension BugReportViewController {
         
         textField.attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes)
         textField.textColor = DesignSystemAsset.GrayColor.gray600.color
+        self.nickNameContentView.isHidden = true
         
         infoLabel.text = "닉네임을 알려주시면 피드백을 받으시는 데 도움이 됩니다."
         infoLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
