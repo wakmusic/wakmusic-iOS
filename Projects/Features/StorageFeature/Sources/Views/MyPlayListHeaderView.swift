@@ -66,9 +66,10 @@ class MyPlayListHeaderView: UIView {
         if let view = Bundle.module.loadNibNamed("MyPlayListHeader", owner: self,options: nil)!.first as? UIView{
             view.frame = self.bounds
             view.layoutIfNeeded() //드로우 사이클을 호출할 때 쓰임
-            view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+          //  view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
             self.addSubview(view)
         }
+        
         
         self.createPlayListImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
         self.loadPlayListImageView.image = DesignSystemAsset.Storage.share.image
@@ -83,6 +84,7 @@ class MyPlayListHeaderView: UIView {
         
         for view in [self.createSuperView,self.loadSuperView] {
             
+            view?.backgroundColor = .white.withAlphaComponent(0.4)
             view?.layer.cornerRadius = 8
             view?.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
             view?.layer.borderWidth = 1

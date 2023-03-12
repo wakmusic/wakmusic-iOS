@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,7 +26,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gbw-Kj-GG6">
                     <rect key="frame" x="20" y="16" width="560" height="52"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="player_music_add" translatesAutoresizingMaskIntoConstraints="NO" id="l5U-p3-A5i">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l5U-p3-A5i">
                             <rect key="frame" x="32" y="10" width="32" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="YGU-yg-m3o"/>
@@ -44,7 +44,6 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="52" id="2IJ-Rz-JgI"/>
                         <constraint firstAttribute="bottom" secondItem="Odp-CO-2uu" secondAttribute="bottom" id="9wA-lY-bNW"/>
@@ -58,7 +57,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqR-h1-U6y">
                     <rect key="frame" x="20" y="76" width="560" height="52"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="share" translatesAutoresizingMaskIntoConstraints="NO" id="7XJ-cc-zkY">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7XJ-cc-zkY">
                             <rect key="frame" x="32" y="10" width="32" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="2oo-0R-YKD"/>
@@ -76,7 +75,6 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="HON-xU-WgO" firstAttribute="top" secondItem="mqR-h1-U6y" secondAttribute="top" id="678-6a-rF6"/>
                         <constraint firstAttribute="height" constant="52" id="A8V-b1-gDM"/>
@@ -88,7 +86,6 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="WAKTAVERSE"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="mqR-h1-U6y" secondAttribute="trailing" constant="20" id="4ab-qW-mpe"/>
                 <constraint firstItem="gbw-Kj-GG6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="9lI-NI-A3n"/>
@@ -102,11 +99,6 @@
         </view>
     </objects>
     <resources>
-        <image name="player_music_add" width="33" height="32"/>
-        <image name="share" width="32" height="32"/>
-        <namedColor name="WAKTAVERSE">
-            <color red="0.0" green="0.9570000171661377" blue="0.72899997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
