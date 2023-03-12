@@ -156,6 +156,7 @@ extension RequestViewController{
             
             buttons[i].setAttributedTitle(attr, for: .normal)
             
+            superViews[i].backgroundColor = .white.withAlphaComponent(0.4)
             superViews[i].layer.borderWidth = 1
             superViews[i].layer.cornerRadius = 12
             superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
