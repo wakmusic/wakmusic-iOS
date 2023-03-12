@@ -38,7 +38,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        var result: PublishSubject<BaseEntity> = PublishSubject()
+        let result: PublishSubject<BaseEntity> = PublishSubject()
+        let newPlayListKey: PublishSubject<String> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -87,24 +88,28 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 self.createPlayListUseCase.execute(title:text)
                     .catch({ (error:Error) in
                         return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
                         }
                     })
                     .asObservable()
                     .map({
-                        BaseEntity(status: 0,description: $0.description)
+                        (BaseEntity(status: $0.status ,description: $0.description),$0.key)
                     })
-                    .subscribe(onNext: { result in
+                    .subscribe(onNext: { (result:BaseEntity,key:String) in
                         
-                        if  result.status != 200  {
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
                         
+            
+                        
                         //리프래쉬 작업
+                        output.result.onNext(result)
+                        output.newPlayListKey.onNext(key)
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                       
                 
 
                     })
@@ -135,13 +140,13 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 self.loadPlayListUseCase.execute(key: text)
                     .catch({ (error:Error) in
                         return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            single(.success(PlayListBaseEntity(status: 0,key: "",description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
                         }
                     })
                     .asObservable()
                     .map({
-                        BaseEntity(status: 0,description: $0.description)
+                        BaseEntity(status: $0.status,description: $0.description)
                     })
                     .subscribe(onNext: { result in
                         
@@ -153,7 +158,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         //리프래쉬 작업
                         
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                        output.result.onNext(result)
                
                         
                     })

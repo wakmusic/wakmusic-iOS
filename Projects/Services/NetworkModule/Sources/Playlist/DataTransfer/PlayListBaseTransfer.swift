@@ -5,6 +5,6 @@ import Utility
 
 public extension PlayListBaseResponseDTO {
     func toDomain() -> PlayListBaseEntity {
-        PlayListBaseEntity(key: key)
+        PlayListBaseEntity(status: status,key: key)
     }
 }
