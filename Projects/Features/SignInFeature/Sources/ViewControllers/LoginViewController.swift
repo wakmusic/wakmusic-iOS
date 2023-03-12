@@ -139,6 +139,7 @@ extension LoginViewController{
         
         
         for sv in superViewArr {
+            sv.backgroundColor = .white.withAlphaComponent(0.4)
             sv.layer.cornerRadius = 12
             sv.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
             sv.layer.borderWidth = 1
