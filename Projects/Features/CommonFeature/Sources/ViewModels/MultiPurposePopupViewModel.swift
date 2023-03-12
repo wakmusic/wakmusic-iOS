@@ -88,18 +88,18 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 self.createPlayListUseCase.execute(title:text)
                     .catch({ (error:Error) in
                         return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
                         }
                     })
                     .asObservable()
                     .map({
-                        (BaseEntity(status: ,description: $0.description),$0.key)
+                        (BaseEntity(status: $0.status ,description: $0.description),$0.key)
                     })
                     .subscribe(onNext: { (result:BaseEntity,key:String) in
                         
                         DEBUG_LOG("아 뭔데 \(result)")
-                        if  result.status != 201  { //Created == 201
+                        if  result.status != 201 || result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -138,13 +138,13 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                 self.loadPlayListUseCase.execute(key: text)
                     .catch({ (error:Error) in
                         return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(key: "",description: error.asWMError.errorDescription ?? "")))
+                            single(.success(PlayListBaseEntity(status: 0,key: "",description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
                         }
                     })
                     .asObservable()
                     .map({
-                        BaseEntity(status: 0,description: $0.description)
+                        BaseEntity(status: $0.status,description: $0.description)
                     })
                     .subscribe(onNext: { result in
                         
