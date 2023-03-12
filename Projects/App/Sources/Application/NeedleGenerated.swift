@@ -202,6 +202,17 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class AskSongDependency02772625c56a0dda0140Provider: AskSongDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AskSongComponent
+private func factory37544fa026b309cd68d7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AskSongDependency02772625c56a0dda0140Provider()
+}
 private class SuggestFunctionDependency229560bbe33097b02547Provider: SuggestFunctionDependency {
 
 
@@ -235,6 +246,12 @@ private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency
     }
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent {
         return appComponent.wakMusicFeedbackComponent
+    }
+    var askSongComponent: AskSongComponent {
+        return appComponent.askSongComponent
+    }
+    var bugReportComponent: BugReportComponent {
+        return appComponent.bugReportComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -340,6 +357,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var questionComponent: QuestionComponent {
         return appComponent.questionComponent
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -359,6 +379,17 @@ private class QnaContentDependency68ed55648233d525d265Provider: QnaContentDepend
 /// ^->AppComponent->QnaContentComponent
 private func factory1501f7005831c8411229e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return QnaContentDependency68ed55648233d525d265Provider()
+}
+private class BugReportDependencyeea5818852f336c35729Provider: BugReportDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->BugReportComponent
+private func factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return BugReportDependencyeea5818852f336c35729Provider()
 }
 private class WakMusicFeedbackDependency8d09739bdcd24807ec82Provider: WakMusicFeedbackDependency {
 
@@ -462,6 +493,22 @@ private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDe
 private func factory9bb852337d5550979293f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return BeforeSearchDependencyebdecb1d478a4766488dProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDependency {
+    var multiPurposePopComponent: MultiPurposePopComponent {
+        return appComponent.multiPurposePopComponent
+    }
+    var fetchPlayListUseCase: any FetchPlayListUseCase {
+        return appComponent.fetchPlayListUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ContainSongsComponent
+private func factory4d4f4455414271fee232f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ContainSongsDependencydbd9ae8a072db3a22630Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurposePopDependency {
     var createPlayListUseCase: any CreatePlayListUseCase {
         return appComponent.createPlayListUseCase
@@ -551,6 +598,7 @@ extension AppComponent: Registration {
         localTable["playListDetailComponent-PlayListDetailComponent"] = { self.playListDetailComponent as Any }
         localTable["multiPurposePopComponent-MultiPurposePopComponent"] = { self.multiPurposePopComponent as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
+        localTable["containSongsComponent-ContainSongsComponent"] = { self.containSongsComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
@@ -587,6 +635,8 @@ extension AppComponent: Registration {
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { self.suggestFunctionComponent as Any }
         localTable["wakMusicFeedbackComponent-WakMusicFeedbackComponent"] = { self.wakMusicFeedbackComponent as Any }
+        localTable["askSongComponent-AskSongComponent"] = { self.askSongComponent as Any }
+        localTable["bugReportComponent-BugReportComponent"] = { self.bugReportComponent as Any }
         localTable["remoteQuestionDataSource-any RemoteQnaDataSource"] = { self.remoteQuestionDataSource as Any }
         localTable["questionRepository-any QnaRepository"] = { self.questionRepository as Any }
         localTable["qnaComponent-QnaComponent"] = { self.qnaComponent as Any }
@@ -666,6 +716,11 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
     }
 }
+extension AskSongComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension SuggestFunctionComponent: Registration {
     public func registerItems() {
 
@@ -681,6 +736,8 @@ extension QuestionComponent: Registration {
     public func registerItems() {
         keyPathToName[\QuestionDependency.suggestFunctionComponent] = "suggestFunctionComponent-SuggestFunctionComponent"
         keyPathToName[\QuestionDependency.wakMusicFeedbackComponent] = "wakMusicFeedbackComponent-WakMusicFeedbackComponent"
+        keyPathToName[\QuestionDependency.askSongComponent] = "askSongComponent-AskSongComponent"
+        keyPathToName[\QuestionDependency.bugReportComponent] = "bugReportComponent-BugReportComponent"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -719,9 +776,15 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
         keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension QnaContentComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension BugReportComponent: Registration {
     public func registerItems() {
 
     }
@@ -764,6 +827,12 @@ extension BeforeSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\BeforeSearchDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
+    }
+}
+extension ContainSongsComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
     }
 }
 extension MultiPurposePopComponent: Registration {
@@ -815,6 +884,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AskSongComponent", factory37544fa026b309cd68d7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787dde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
@@ -824,6 +894,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
@@ -831,6 +902,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)

@@ -41,14 +41,21 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = qnaComponent.makeView()
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = containSongsComponent.makeView()
+        
+        vc.modalPresentationStyle = .overFullScreen
+        
+        
+        self.present(vc, animated: true)
+        
+        //qnaComponent.makeView()
+        //self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func moveQuestionAction(_ sender: Any) {
         
         let vc =  questionComponent.makeView().wrapNavigationController
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
         
     }
@@ -70,13 +77,13 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     @IBAction func pressServiceAction(_ sender: UIButton) {
         let vc = ContractViewController.viewController(type: .service)
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
     }
     
     @IBAction func pressPrivacyAction(_ sender: UIButton) {
         let vc = ContractViewController.viewController(type: .privacy)
-        vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
     }
     
@@ -86,6 +93,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     var qnaComponent:QnaComponent!
     var questionComponent:QuestionComponent!
+    var containSongsComponent: ContainSongsComponent!
     
     var disposeBag = DisposeBag()
     
@@ -103,12 +111,13 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
 
-    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent) -> RequestViewController {
+    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent,containSongsComponent:ContainSongsComponent) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent
         viewController.questionComponent = questionComponent
+        viewController.containSongsComponent = containSongsComponent
         
         return viewController
     }
@@ -147,6 +156,7 @@ extension RequestViewController{
             
             buttons[i].setAttributedTitle(attr, for: .normal)
             
+            superViews[i].backgroundColor = .white.withAlphaComponent(0.4)
             superViews[i].layer.borderWidth = 1
             superViews[i].layer.cornerRadius = 12
             superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor

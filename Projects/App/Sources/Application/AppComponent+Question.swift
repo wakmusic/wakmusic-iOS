@@ -36,6 +36,19 @@ public extension AppComponent {
         WakMusicFeedbackComponent(parent: self)
     }
     
+    var askSongComponent: AskSongComponent {
+        
+        AskSongComponent(parent: self)
+    }
+    
+    var bugReportComponent: BugReportComponent {
+        
+        BugReportComponent(parent: self)
+    }
+    
+    
+    
+    
     var remoteQuestionDataSource: any RemoteQnaDataSource {
         shared {
             RemoteQnaDataSourceImpl(keychain: keychain)

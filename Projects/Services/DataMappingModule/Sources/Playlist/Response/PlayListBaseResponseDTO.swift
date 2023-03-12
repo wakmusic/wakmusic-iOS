@@ -11,4 +11,5 @@ import Foundation
 
 public struct PlayListBaseResponseDTO: Decodable {
     public let key: String
+    public let status: Int
 }

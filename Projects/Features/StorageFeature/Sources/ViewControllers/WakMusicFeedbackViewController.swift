@@ -25,11 +25,9 @@ public final class WakMusicFeedbackViewController: UIViewController,ViewControll
     @IBOutlet weak var completionButton: UIButton!
     
     
-    @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
-    
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let textViewPlaceHolder:String = "내 대답"
+    let textViewPlaceHolder:String = "내 답변"
     
     let disposeBag = DisposeBag()
     

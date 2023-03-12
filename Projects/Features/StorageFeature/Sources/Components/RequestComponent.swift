@@ -9,15 +9,17 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import CommonFeature
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {get}
     var qnaComponent: QnaComponent {get}
     var questionComponent: QuestionComponent {get}
+    var containSongsComponent: ContainSongsComponent {get}
 }
 
 public final class RequestComponent: Component<RequestDependency> {
     public func makeView() -> RequestViewController {
-        return RequestViewController.viewController(viewModel: .init(withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase),qnaComponent:dependency.qnaComponent,questionComponent: dependency.questionComponent)
+        return RequestViewController.viewController(viewModel: .init(withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase),qnaComponent:dependency.qnaComponent,questionComponent: dependency.questionComponent,containSongsComponent: dependency.containSongsComponent)
     }
 }
