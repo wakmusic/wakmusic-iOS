@@ -58,6 +58,7 @@ class ContainPlayListHeaderView: UIView {
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
  
         
+        superView.backgroundColor = .white.withAlphaComponent(0.4)
         superView.layer.cornerRadius = 8
         superView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         superView.layer.borderWidth = 1
