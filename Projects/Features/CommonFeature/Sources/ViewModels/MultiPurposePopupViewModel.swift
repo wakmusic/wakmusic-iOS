@@ -98,16 +98,18 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { (result:BaseEntity,key:String) in
                         
-                        DEBUG_LOG("아 뭔데 \(result)")
-                        if  result.status != 201 || result.status != 200 { //Created == 201
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
                         
+            
+                        
                         //리프래쉬 작업
-                        NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                        output.result.onNext(result)
                         output.newPlayListKey.onNext(key)
+                        NotificationCenter.default.post(name: .playListRefresh, object: nil)
+                       
                 
 
                     })
@@ -156,7 +158,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         //리프래쉬 작업
                         
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                        output.result.onNext(BaseEntity(status: 200,description: ""))
+                        output.result.onNext(result)
                
                         
                     })

@@ -341,6 +341,8 @@ extension MultiPurposePopupViewController{
             
             guard let self = self else{return}
             
+            DEBUG_LOG("키키키 \(str)")
+            
             self.creationCompletion?(str)
         })
         .disposed(by: disposeBag)
@@ -414,7 +416,6 @@ extension MultiPurposePopupViewController{
             
             self.view.endEditing(true)
             
-            DEBUG_LOG(res)
             
             if res.status == 200 {
                 self.dismiss(animated: true)

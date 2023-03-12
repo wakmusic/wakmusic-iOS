@@ -145,6 +145,7 @@ extension ContainSongsViewController {
             let model = models[indexPath.row]
             
             DEBUG_LOG(model)
+            //TODO: 곡 추가 API
             
             
         })
@@ -185,7 +186,8 @@ extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
         DEBUG_LOG("추가추가")
         
         let vc = multiPurposePopComponent.makeView(type: .creation) { key in
-            DEBUG_LOG("KK :\(key)")
+            
+            //TODO: 곡 추가 API
         }
         self.showPanModal(content: vc)
         
