@@ -20,9 +20,13 @@ public protocol PlayButtonGroupViewDelegate:AnyObject {
 }
 
 public class PlayButtonGroupView: UIView {
-
+    
+    @IBOutlet weak var allPlaySuperView: UIView!
     @IBOutlet weak var allPlayButton: UIButton!
+    
+    
     @IBOutlet weak var shufflePlayButton: UIButton!
+    @IBOutlet weak var shufflePlaySuperView: UIView!
     
     public weak var delegate:PlayButtonGroupViewDelegate?
     
@@ -63,11 +67,15 @@ extension PlayButtonGroupView {
                                                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
                                               range: NSRange(location: 0, length: allPlayAttributedString.string.count))
         
+        
+        allPlaySuperView.backgroundColor = .white.withAlphaComponent(0.4)
+        
+        
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        allPlayButton.layer.cornerRadius = 8
-        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        allPlayButton.layer.borderWidth = 1
-       
+        allPlaySuperView.layer.cornerRadius = 8
+        allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        allPlaySuperView.layer.borderWidth = 1
+        allPlayButton.titleLabel?.alpha = 1
         
         let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
         
@@ -75,10 +83,13 @@ extension PlayButtonGroupView {
                                                    .foregroundColor: DesignSystemAsset.GrayColor.gray900.color],
                                                   range: NSRange(location: 0, length: shufflePlayAttributedString.string.count))
         
+    
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        shufflePlayButton.layer.cornerRadius = 8
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-        shufflePlayButton.layer.borderWidth = 1
+        
+        shufflePlaySuperView.backgroundColor = .white.withAlphaComponent(0.4)
+        shufflePlaySuperView.layer.cornerRadius = 8
+        shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        shufflePlaySuperView.layer.borderWidth = 1
         
         
         
