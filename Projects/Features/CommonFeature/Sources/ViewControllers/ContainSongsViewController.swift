@@ -184,7 +184,9 @@ extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         DEBUG_LOG("추가추가")
         
-        let vc = multiPurposePopComponent.makeView(type: .creation)
+        let vc = multiPurposePopComponent.makeView(type: .creation) { key in
+            DEBUG_LOG("KK :\(key)")
+        }
         self.showPanModal(content: vc)
         
         

@@ -55,6 +55,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="gray100"/>
             <constraints>
                 <constraint firstItem="gvf-2O-H40" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Az6-ZH-t5b"/>
                 <constraint firstAttribute="trailing" secondItem="gvf-2O-H40" secondAttribute="trailing" constant="20" id="Fje-Ub-uMe"/>
@@ -65,6 +66,9 @@
     </objects>
     <resources>
         <image name="player_music_add" width="33" height="32"/>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -131,6 +131,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     var limitCount:Int = 12
     lazy var input = MultiPurposePopupViewModel.Input()
     lazy var output = viewModel.transform(from: input)
+    var creationCompletion: ((String) -> Void)?
     
     public var disposeBag = DisposeBag()
     
@@ -146,11 +147,11 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
         // Do any additional setup after loading the view.
     }
     
-    public static func viewController(viewModel:MultiPurposePopupViewModel) -> MultiPurposePopupViewController {
+    public static func viewController(viewModel:MultiPurposePopupViewModel,completion: ((String) -> Void)? = nil ) -> MultiPurposePopupViewController {
         let viewController = MultiPurposePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
-    
+        viewController.creationCompletion = completion
        
         return viewController
     }
@@ -335,6 +336,14 @@ extension MultiPurposePopupViewController{
         
         keyboardBinding()
         
+        
+        output.newPlayListKey.subscribe(onNext: { [weak self] (str:String) in
+            
+            guard let self = self else{return}
+            
+            self.creationCompletion?(str)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func bindRxLoadOrShare() {
@@ -404,6 +413,9 @@ extension MultiPurposePopupViewController{
             )
             
             self.view.endEditing(true)
+            
+            DEBUG_LOG(res)
+            
             if res.status == 200 {
                 self.dismiss(animated: true)
             } else {
@@ -464,7 +476,6 @@ extension MultiPurposePopupViewController{
                 self.fakeViewHeight.constant = keyboardVisibleHeight - safeAreaInsetsBottom
                 self.panModalSetNeedsLayoutUpdate()
                 self.panModalTransition(to: .longForm)
-                print("키보드 높이: \(self.fakeViewHeight.constant)")
                 self.view.layoutIfNeeded()
                 
                 

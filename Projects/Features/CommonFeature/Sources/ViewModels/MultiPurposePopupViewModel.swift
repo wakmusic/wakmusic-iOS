@@ -38,7 +38,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
 
     public struct Output {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
-        var result: PublishSubject<BaseEntity> = PublishSubject()
+        let result: PublishSubject<BaseEntity> = PublishSubject()
+        let newPlayListKey: PublishSubject<String> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -93,11 +94,12 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .asObservable()
                     .map({
-                        BaseEntity(status: 0,description: $0.description)
+                        (BaseEntity(status: ,description: $0.description),$0.key)
                     })
-                    .subscribe(onNext: { result in
+                    .subscribe(onNext: { (result:BaseEntity,key:String) in
                         
-                        if  result.status != 200  {
+                        DEBUG_LOG("아 뭔데 \(result)")
+                        if  result.status != 201  { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -105,6 +107,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         //리프래쉬 작업
                         NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         output.result.onNext(BaseEntity(status: 200,description: ""))
+                        output.newPlayListKey.onNext(key)
                 
 
                     })

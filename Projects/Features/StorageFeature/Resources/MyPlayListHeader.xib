@@ -86,6 +86,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <color key="backgroundColor" name="gray100"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="mqR-h1-U6y" secondAttribute="trailing" constant="20" id="4ab-qW-mpe"/>
                 <constraint firstItem="gbw-Kj-GG6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="9lI-NI-A3n"/>
@@ -99,6 +100,9 @@
         </view>
     </objects>
     <resources>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
