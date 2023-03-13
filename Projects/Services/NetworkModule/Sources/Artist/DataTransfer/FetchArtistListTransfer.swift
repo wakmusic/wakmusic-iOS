@@ -24,6 +24,8 @@ public extension ArtistListResponseDTO {
             youtube: youtube ?? "",
             twitch: twitch ?? "",
             instagram: instagram ?? "",
+            imageRoundVersion: imageRoundVersion ?? 0,
+            imageSquareVersion: imageSquareVersion ?? 0,
             isHiddenItem: false
         )
     }

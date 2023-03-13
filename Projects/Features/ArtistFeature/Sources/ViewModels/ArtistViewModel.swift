@@ -57,6 +57,8 @@ public final class ArtistViewModel: ViewModelType {
                         youtube: "",
                         twitch: "",
                         instagram: "",
+                        imageRoundVersion: 0,
+                        imageSquareVersion: 0,
                         isHiddenItem: true
                     )
                     newModel.append(hiddenItem)

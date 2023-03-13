@@ -78,10 +78,12 @@ extension NickNamePopupViewController {
             .map{ (indexPath, models) in
                 var nextModels:[NickNameInfo] = models
                 
-                guard let index = models.firstIndex(where: { $0.check }) else { return models }
+                guard let index = models.firstIndex(where: { $0.check }) else {
+                    nextModels[indexPath.row].check = true
+                    return nextModels
+                }
                 nextModels[index].check = false
                 nextModels[indexPath.row].check = true
-                
                 return nextModels
             }
             .do(onNext: { [weak self] (model) in

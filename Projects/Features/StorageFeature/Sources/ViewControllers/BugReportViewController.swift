@@ -241,7 +241,7 @@ extension BugReportViewController {
             .subscribe(onNext: { [weak self] (current) in
                 guard let self = self else { return }
 
-                let vc = NickNamePopupViewController.viewController(current: current == "선택" ? "알려주기" : current , completion: { (description) in
+                let vc = NickNamePopupViewController.viewController(current: current , completion: { (description) in
                     self.input.wakNickNameOption.accept(description)
                     self.nickNameContentView.isHidden = description != "알려주기"
                     
