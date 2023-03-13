@@ -13,11 +13,11 @@ import BaseFeature
 import DomainModule
 import Utility
 import NaverThirdPartyLogin
-import AuthenticationServices
 import KeychainModule
 import CryptoSwift
+import AuthenticationServices
 
-public  final class LoginViewModel:NSObject, ViewModelType {
+public final class LoginViewModel: NSObject, ViewModelType {
     // 네이버 델리게이트를 받기위한 NSObject 상속
    
     var input = Input()
@@ -30,6 +30,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
     
     var disposeBag = DisposeBag()
     var naverToken:PublishSubject<(String,String)> = PublishSubject()
+    var googleToken: PublishSubject<String> = PublishSubject()
     var appleToken:PublishSubject<String> = PublishSubject()
     var fetchedWMToken: PublishSubject<String> = PublishSubject()
     
@@ -87,14 +88,12 @@ public  final class LoginViewModel:NSObject, ViewModelType {
 
         //MARK: 애플로그인 및 이벤트
         input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
-            guard let self = self else{
-                return
-            }
+            guard let self = self else{ return }
             
             let appleIdProvider = ASAuthorizationAppleIDProvider()
             let request = appleIdProvider.createRequest()
             request.requestedScopes = [.fullName,.email]
-            
+
             let auth = ASAuthorizationController(authorizationRequests: [request])
             auth.delegate = self
             auth.presentationContextProvider = self
@@ -150,9 +149,9 @@ public  final class LoginViewModel:NSObject, ViewModelType {
     }
 
     public struct Input {
-        let pressNaverLoginButton:PublishRelay<Void> = PublishRelay()
-        let pressAppleLoginButton:PublishRelay<Void> = PublishRelay()
-        let showErrorToast:PublishRelay<String> = PublishRelay()
+        let pressNaverLoginButton: PublishRelay<Void> = PublishRelay()
+        let pressAppleLoginButton: PublishRelay<Void> = PublishRelay()
+        let showErrorToast: PublishRelay<String> = PublishRelay()
     }
 
     public struct Output {
@@ -162,75 +161,5 @@ public  final class LoginViewModel:NSObject, ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
         return output
-    }
-}
-
-extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
-        
-    public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-    
-        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-                
-        if !accessToken {
-          return
-        }
-                
-        guard let tokenType = naverLoginInstance?.tokenType else { return }
-        guard let accessToken = naverLoginInstance?.accessToken else { return }
-        
-        naverToken.onNext((tokenType, accessToken))
-    }
-    
-    public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        
-        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-                
-        if !accessToken {
-          return
-        }
-                
-        guard let tokenType = naverLoginInstance?.tokenType else { return }
-        guard let accessToken = naverLoginInstance?.accessToken else { return }
-        
-        naverToken.onNext((tokenType, accessToken))
-    }
-    
-    public func oauth20ConnectionDidFinishDeleteToken() {
-        DEBUG_LOG("네이버 로그아웃")
-    }
-    
-    public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-        
-        
-        DEBUG_LOG("에러 = \(error.localizedDescription)")
-        
-        input.showErrorToast
-            .accept(error.localizedDescription)
-        
-    }
-}
-
-extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
-
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return UIApplication.shared.windows.last!
-    }
-
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-
-            let userIdentifer = credential.user
-            let username = credential.fullName! // 무작위 유저네임
-            
-            DEBUG_LOG(userIdentifer)
-            appleToken.onNext(userIdentifer)
-        }
-    }
-
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        DEBUG_LOG("Apple Login Fail")
-        
-        input.showErrorToast
-            .accept(error.localizedDescription)
     }
 }
