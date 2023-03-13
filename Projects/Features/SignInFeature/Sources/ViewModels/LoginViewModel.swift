@@ -17,17 +17,28 @@ import KeychainModule
 import CryptoSwift
 import AuthenticationServices
 
+
+
 public final class LoginViewModel: NSObject, ViewModelType {
     // 네이버 델리게이트를 받기위한 NSObject 상속
    
     var input = Input()
     var output = Output()
-    
+    public struct Input {
+        let pressNaverLoginButton: PublishRelay<Void> = PublishRelay()
+        let pressAppleLoginButton: PublishRelay<Void> = PublishRelay()
+        let showErrorToast: PublishRelay<String> = PublishRelay()
+    }
+
+    public struct Output {
+     
+    }
+
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     var fetchTokenUseCase: FetchTokenUseCase!
     var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
     var fetchUserInfoUseCase: FetchUserInfoUseCase!
-    
+
     var disposeBag = DisposeBag()
     var naverToken:PublishSubject<(String,String)> = PublishSubject()
     var googleToken: PublishSubject<String> = PublishSubject()
@@ -86,7 +97,7 @@ public final class LoginViewModel: NSObject, ViewModelType {
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
 
-        //MARK: 애플로그인 및 이벤트
+        // MARK: 애플로그인 및 이벤트
         input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
             guard let self = self else{ return }
             
@@ -146,16 +157,6 @@ public final class LoginViewModel: NSObject, ViewModelType {
                 )
             })
             .disposed(by: disposeBag)
-    }
-
-    public struct Input {
-        let pressNaverLoginButton: PublishRelay<Void> = PublishRelay()
-        let pressAppleLoginButton: PublishRelay<Void> = PublishRelay()
-        let showErrorToast: PublishRelay<String> = PublishRelay()
-    }
-
-    public struct Output {
-     
     }
     
     public func transform(from input: Input) -> Output {
