@@ -42,8 +42,8 @@ public final class AES256 {
     }
  
     private static func getAESObject() -> AES? {
-        let keyDecodes : Array<UInt8> = Array(SECRET_KEY.utf8)
-        let ivDecodes : Array<UInt8> = Array(IV.utf8)
+        let keyDecodes: [UInt8] = Array(SECRET_KEY.utf8)
+        let ivDecodes: [UInt8] = Array(IV.utf8)
         let aesObject = try? AES(key: keyDecodes, blockMode: CBC(iv: ivDecodes), padding: .pkcs5)
  
         return aesObject

@@ -94,7 +94,7 @@ extension ArtistDetailHeaderViewController {
         self.introDescriptionLabel.text = model.description
         
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
+            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

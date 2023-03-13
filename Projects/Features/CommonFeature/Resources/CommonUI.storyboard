@@ -330,6 +330,98 @@
             </objects>
             <point key="canvasLocation" x="140" y="-2"/>
         </scene>
+        <!--Song Cart View Controller-->
+        <scene sceneID="CtA-Jo-dN2">
+            <objects>
+                <viewController storyboardIdentifier="SongCartViewController" id="3C3-Lw-sNu" customClass="SongCartViewController" customModule="CommonFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RD5-YP-to0">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eEp-8y-fGU">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKA-ab-jMh">
+                                        <rect key="frame" x="0.0" y="0.0" width="42" height="56"/>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="it2-mJ-HaU">
+                                        <rect key="frame" x="42" y="0.0" width="309" height="56"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ns-XU-Uku">
+                                                <rect key="frame" x="0.0" y="0.0" width="61.666666666666664" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="전체선택">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7f8-PC-uIS">
+                                                <rect key="frame" x="61.666666666666671" y="0.0" width="62" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="노래담기">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wa8-fC-4rN">
+                                                <rect key="frame" x="123.66666666666667" y="0.0" width="61.666666666666671" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="재생목록추가">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sYc-Kf-2fn">
+                                                <rect key="frame" x="185.33333333333334" y="0.0" width="62" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="재생">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAg-jI-F7T">
+                                                <rect key="frame" x="247.33333333333329" y="0.0" width="61.666666666666657" height="56"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="삭제">
+                                                    <color key="titleColor" name="gray25"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="31T-fJ-d9i">
+                                        <rect key="frame" x="351" y="0.0" width="42" height="56"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" name="POINT"/>
+                                <constraints>
+                                    <constraint firstItem="it2-mJ-HaU" firstAttribute="top" secondItem="eEp-8y-fGU" secondAttribute="top" id="2Bd-YU-j4W"/>
+                                    <constraint firstAttribute="bottom" secondItem="31T-fJ-d9i" secondAttribute="bottom" id="71Z-mr-ijq"/>
+                                    <constraint firstAttribute="bottom" secondItem="it2-mJ-HaU" secondAttribute="bottom" id="LaG-v5-j53"/>
+                                    <constraint firstItem="nKA-ab-jMh" firstAttribute="leading" secondItem="eEp-8y-fGU" secondAttribute="leading" id="Nnt-1I-Qkg"/>
+                                    <constraint firstItem="nKA-ab-jMh" firstAttribute="top" secondItem="eEp-8y-fGU" secondAttribute="top" id="XcG-do-iO9"/>
+                                    <constraint firstItem="it2-mJ-HaU" firstAttribute="leading" secondItem="nKA-ab-jMh" secondAttribute="trailing" id="ans-Hm-fUN"/>
+                                    <constraint firstAttribute="bottom" secondItem="nKA-ab-jMh" secondAttribute="bottom" id="enp-Gs-fdm"/>
+                                    <constraint firstItem="nKA-ab-jMh" firstAttribute="width" secondItem="31T-fJ-d9i" secondAttribute="width" id="kXI-fp-KiZ"/>
+                                    <constraint firstItem="31T-fJ-d9i" firstAttribute="top" secondItem="eEp-8y-fGU" secondAttribute="top" id="lsv-uc-bPH"/>
+                                    <constraint firstItem="31T-fJ-d9i" firstAttribute="leading" secondItem="it2-mJ-HaU" secondAttribute="trailing" id="miS-Sq-GN3"/>
+                                    <constraint firstAttribute="trailing" secondItem="31T-fJ-d9i" secondAttribute="trailing" id="niV-Xm-Ims"/>
+                                    <constraint firstAttribute="height" constant="56" id="tZg-qu-hwR"/>
+                                    <constraint firstItem="nKA-ab-jMh" firstAttribute="width" secondItem="eEp-8y-fGU" secondAttribute="width" multiplier="40:375" id="ykJ-cd-VWa"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="KzH-KC-OiQ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="eEp-8y-fGU" firstAttribute="bottom" secondItem="KzH-KC-OiQ" secondAttribute="bottom" id="IG4-hE-Eh5"/>
+                            <constraint firstItem="eEp-8y-fGU" firstAttribute="leading" secondItem="RD5-YP-to0" secondAttribute="leading" id="dam-wu-9bt"/>
+                            <constraint firstAttribute="trailing" secondItem="eEp-8y-fGU" secondAttribute="trailing" id="mPz-zB-Bk0"/>
+                            <constraint firstItem="eEp-8y-fGU" firstAttribute="top" secondItem="RD5-YP-to0" secondAttribute="top" id="rhE-3t-Rcr"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="393" height="56"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lSg-eA-TUb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-700" y="-680"/>
+        </scene>
         <!--Play List Detail View Controller-->
         <scene sceneID="Hgz-d6-FsJ">
             <objects>

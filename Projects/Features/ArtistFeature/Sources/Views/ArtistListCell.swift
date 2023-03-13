@@ -36,9 +36,8 @@ extension ArtistListCell {
         
         artistLabel.attributedText = artistNameAttributedString
         artistLabel.textAlignment = .center
-
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID).toString),
+            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID, version: model.imageRoundVersion).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

@@ -90,6 +90,10 @@ extension ArtistMusicContentViewController {
                 guard let `self` = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
 //                let model = model[indexPath.row]
+                let viewController = SongCartViewController.viewController()
+                viewController.modalPresentationStyle = .overCurrentContext
+                self.present(viewController, animated: true)
+
             }).disposed(by: disposeBag)
 
     }
