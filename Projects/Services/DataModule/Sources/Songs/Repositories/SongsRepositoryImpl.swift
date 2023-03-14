@@ -21,5 +21,7 @@ public struct SongsRepositoryImpl: SongsRepository {
     public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
         remoteSearchDataSource.fetchLyrics(id: id)
     }
-
+    public func fetchNewSong(type: NewSongGroupType) -> Single<[NewSongEntity]> {
+        remoteSongsDataSource.fetchNewSong(type: type)
+    }
 }
