@@ -72,7 +72,8 @@ public final class PlayListDetailViewModel:ViewModelType {
             }
             
             
-            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image,version: model.image_version))
+            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
+                                                             image: type == .wmRecommend ? model.id : model.image,version: type == .wmRecommend ? model.image_square_version : model.image_version))
             
             self.key = model.key
             

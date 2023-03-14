@@ -277,8 +277,6 @@ extension AfterLoginViewController{
             .debug("$userInfo")
             .filter { $0 != nil }
             .subscribe(onNext: { [weak self] (model) in
-                
-                
                 guard let self = self, let model = model else {
                     return
                 }

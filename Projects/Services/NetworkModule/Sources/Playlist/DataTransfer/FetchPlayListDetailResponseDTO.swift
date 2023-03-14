@@ -13,7 +13,7 @@ public extension SinglePlayListDetailResponseDTO {
             key: key ?? "",
             creator_id: creator_id ?? "",
             image: image ?? "",
-            image_square_version: image_version ?? 0,
+            image_square_version: image_square_version ?? 0,
             image_version: image_version ?? 0
         )
     }
