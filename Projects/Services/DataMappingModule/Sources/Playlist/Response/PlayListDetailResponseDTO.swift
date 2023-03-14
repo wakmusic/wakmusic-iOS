@@ -14,4 +14,5 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let songs: [SingleSongResponseDTO]?
     public let `public`: Bool?
     public let id,key,creator_id,image: String?
+    public let image_version,image_square_version: Int?
 }
