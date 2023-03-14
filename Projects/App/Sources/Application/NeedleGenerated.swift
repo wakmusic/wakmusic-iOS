@@ -500,6 +500,9 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
     }
+    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+        return appComponent.addSongIntoPlayListUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -608,6 +611,7 @@ extension AppComponent: Registration {
         localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
+        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
@@ -833,6 +837,7 @@ extension ContainSongsComponent: Registration {
     public func registerItems() {
         keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
+        keyPathToName[\ContainSongsDependency.addSongIntoPlayListUseCase] = "addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"
     }
 }
 extension MultiPurposePopComponent: Registration {

@@ -52,6 +52,12 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map({$0.toDomain()})
     }
     
+    public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
+        request(.addSongIntoPlayList(key: key, songs: songs))
+            .map(AddSongResponseDTO.self)
+            .map({$0.toDomain()})
+        
+    }
    
     
     

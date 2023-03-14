@@ -54,5 +54,9 @@ public struct PlayListRepositoryImpl: PlayListRepository {
     public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.loadPlayList(key: key)
     }
+    
+    public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
+        remotePlayListDataSource.addSongIntoPlayList(key: key, songs: songs)
+    }
    
 }

@@ -316,7 +316,6 @@ extension PlayListDetailViewController{
             
             self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL)
             
-            DEBUG_LOG("image: \(model.image) version: \(model.version) type: \(type)")
             self.playListCountLabel.text = model.songCount
             self.playListNameLabel.text = model.title
             self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
