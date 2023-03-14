@@ -92,7 +92,7 @@ extension ProfilePopViewController{
         saveButton.rx.tap
             .withLatestFrom(viewModel.output.dataSource)
             .map{ (model) in
-                let id: String = model.filter { $0.isSelected }.first?.id ?? "unknown"
+                let id: String = model.filter { $0.isSelected }.first?.type ?? "unknown"
                 return id
             }
             .filter{ [weak self] (id) in

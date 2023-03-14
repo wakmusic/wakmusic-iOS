@@ -12,7 +12,8 @@ public extension PlayListResponseDTO {
             title: title,
             creator_id: creator_id ??  "",
             image: image ?? "",
-            songlist: songlist
+            songlist: songlist,
+            image_version: image_version
         )
         
     }

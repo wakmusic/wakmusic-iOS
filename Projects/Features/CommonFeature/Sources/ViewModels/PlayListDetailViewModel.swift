@@ -18,6 +18,7 @@ struct PlayListHeaderInfo {
     var title:String
     var songCount:String
     var image:String
+    var version:Int
 }
 
 
@@ -71,7 +72,7 @@ public final class PlayListDetailViewModel:ViewModelType {
             }
             
             
-            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image))
+            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡", image: type == .wmRecommend ? model.id : model.image,version: model.image_version))
             
             self.key = model.key
             
@@ -84,7 +85,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         input.playListNameLoad
             .skip(1)
             .withLatestFrom(output.headerInfo){($0,$1)}
-            .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)})
+            .map({PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image,version: $0.1.version)})
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)
             
