@@ -76,7 +76,8 @@ public final class ContainSongsViewModel:ViewModelType {
                                 "rFxJjpSeXHI",
                                 "K8WC6uWyC9I",
                                 "08meo6qrhFc",
-                                "6hEvgKL0ClA"
+                                "6hEvgKL0ClA",
+                                "wSG93VZoMFg"
                 ]
                 
                 guard let self = self else {
@@ -85,6 +86,7 @@ public final class ContainSongsViewModel:ViewModelType {
                 
                 
                 return self.addSongIntoPlayListUseCase.execute(key: key, songs: tmpSongs)
+                        .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
                         .asObservable()
             })
             .flatMap({ (entity:AddSongEntity) -> Observable<String> in
