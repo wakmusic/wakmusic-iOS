@@ -99,5 +99,13 @@ public extension AppComponent {
         }
     }
     
+    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+        
+        shared {
+            AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
+        }
+        
+    }
+    
     
 }
