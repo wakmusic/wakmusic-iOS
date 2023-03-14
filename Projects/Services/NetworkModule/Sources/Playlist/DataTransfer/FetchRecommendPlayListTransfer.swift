@@ -8,7 +8,8 @@ public extension SingleRecommendPlayListResponseDTO {
         RecommendPlayListEntity(
             id: id,
             title: title,
-            public: `public`
+            public: `public`,
+            image_round_version: image_round_version ?? 0
         )
     }
 }
