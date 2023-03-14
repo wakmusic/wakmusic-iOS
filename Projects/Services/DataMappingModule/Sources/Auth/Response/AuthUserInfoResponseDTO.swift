@@ -10,7 +10,7 @@ import Foundation
 
 public struct AuthUserInfoResponseDTO: Codable, Equatable {
     public let id, platform, displayName,profile:String
-    public let first_login_time:Int
+    public let first_login_time,version:Int
     public let first:Bool
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
