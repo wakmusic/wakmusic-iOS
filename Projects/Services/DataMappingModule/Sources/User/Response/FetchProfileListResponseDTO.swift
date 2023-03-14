@@ -9,5 +9,6 @@
 import Foundation
 
 public struct FetchProfileListResponseDTO: Decodable, Equatable {
-    public let ID: String?
+    public let type: String?
+    public let version: Int
 }
