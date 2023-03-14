@@ -89,22 +89,22 @@ public final class ContainSongsViewModel:ViewModelType {
                         .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
                         .asObservable()
             })
-            .flatMap({ (entity:AddSongEntity) -> Observable<String> in
+            .map({ (entity:AddSongEntity) -> String in
                 
                 if entity.status == 200 {
                     
                     if entity.duplicated {
-                        return Observable.just("\(entity.added_songs_length)곡이 플레이리스트에 담겼습니다. 중복 곡은 제외됩니다.")
+                        return ("\(entity.added_songs_length)곡이 플레이리스트에 담겼습니다. 중복 곡은 제외됩니다.")
                     }
                     
                     else {
-                        return Observable.just("\(entity.added_songs_length)곡이 플레이리스트에 담겼습니다.")
+                        return ("\(entity.added_songs_length)곡이 플레이리스트에 담겼습니다.")
                     }
                     
                     
                 }
                 else {
-                    return Observable.just(" 이미 플레이리스트에 담긴 곡들입니다.")
+                    return (" 이미 플레이리스트에 담긴 곡들입니다.")
                 }
                 
             })
