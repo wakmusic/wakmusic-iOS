@@ -38,24 +38,12 @@ extension SongsAPI: WMAPI {
                 "sort": "popular", //기본 인기순으로
                 "keyword": keyword
             ], encoding: URLEncoding.queryString)
-        case .fetchNewSong:
+            
+        case .fetchLyrics, .fetchNewSong:
             return .requestPlain
         }
-        
-        public var task: Moya.Task {
-            switch self {
-            case let .fetchSearchSong(type,keyword):
-                return .requestParameters(parameters: [
-                    "type": type.rawValue,
-                    "sort": "popular", //기본 인기순으로
-                    "keyword": keyword
-                ], encoding: URLEncoding.queryString)
-                
-                
-            case .fetchLyrics, .fetchNewSong:
-                return .requestPlain
-            }
-            
+    }
+    
     public var jwtTokenType: JwtTokenType {
         return .none
     }

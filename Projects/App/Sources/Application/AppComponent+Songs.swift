@@ -37,7 +37,7 @@ public extension AppComponent {
     }
     var songsRepository: any SongsRepository {
         shared {
-            SongsRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
+            SongsRepositoryImpl(remoteSongsDataSource:remoteSongsDataSource)
         }
     }
     

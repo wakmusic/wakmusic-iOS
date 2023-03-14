@@ -595,9 +595,12 @@ extension AppComponent: Registration {
         localTable["searchComponent-SearchComponent"] = { self.searchComponent as Any }
         localTable["afterSearchComponent-AfterSearchComponent"] = { self.afterSearchComponent as Any }
         localTable["afterSearchContentComponent-AfterSearchContentComponent"] = { self.afterSearchContentComponent as Any }
-        localTable["remoteSearchDataSource-any RemoteSearchDataSource"] = { self.remoteSearchDataSource as Any }
-        localTable["searchRepository-any SearchRepository"] = { self.searchRepository as Any }
+        localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
+        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
+        localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
+        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
+        localTable["fetchNewSongUseCase-any FetchNewSongUseCase"] = { self.fetchNewSongUseCase as Any }
         localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
         localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { self.afterLoginComponent as Any }
@@ -707,6 +710,8 @@ extension PlayerComponent: Registration {
 }
 extension MainTabBarComponent: Registration {
     public func registerItems() {
+        keyPathToName[\MainTabBarDependency.homeComponent] = "homeComponent-HomeComponent"
+        keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"

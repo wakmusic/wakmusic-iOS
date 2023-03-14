@@ -267,7 +267,7 @@ extension AfterLoginViewController{
             guard let self = self else{
                 return
             }
-            //let vc = self.multiPurposePopComponent.makeView(type: .nickname)
+//            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
             let vc = self.profilePopComponent.makeView()
             self.showPanModal(content: vc)
             

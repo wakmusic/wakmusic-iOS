@@ -124,6 +124,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
                 
         //MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
         fetchedWMToken
+            .debug("test")
             .flatMap { _ -> Observable<AuthUserInfoEntity> in
                 return self.fetchUserInfoUseCase.execute()
                     .catchAndReturn(AuthUserInfoEntity(
@@ -134,7 +135,7 @@ public  final class LoginViewModel:NSObject, ViewModelType {
                         first: false,
                         profile: "panchi",
                         version: 1
-                    )
+                        )
                     )
                     .asObservable()
             }
