@@ -335,11 +335,11 @@
             <objects>
                 <viewController storyboardIdentifier="SongCartViewController" id="3C3-Lw-sNu" customClass="SongCartViewController" customModule="CommonFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RD5-YP-to0">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="72"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eEp-8y-fGU">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="16" width="393" height="56"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKA-ab-jMh">
                                         <rect key="frame" x="0.0" y="0.0" width="42" height="56"/>
@@ -405,18 +405,43 @@
                                     <constraint firstItem="nKA-ab-jMh" firstAttribute="width" secondItem="eEp-8y-fGU" secondAttribute="width" multiplier="40:375" id="ykJ-cd-VWa"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1CG-bd-8xC">
+                                <rect key="frame" x="20" y="0.0" width="32" height="32"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wSr-9p-vDB">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96g-9U-QUm">
+                                        <rect key="frame" x="11.666666666666668" y="5.3333333333333339" width="9" height="21.666666666666664"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" name="POINT"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="96g-9U-QUm" firstAttribute="centerX" secondItem="1CG-bd-8xC" secondAttribute="centerX" id="CVk-Se-1eB"/>
+                                    <constraint firstAttribute="trailing" secondItem="wSr-9p-vDB" secondAttribute="trailing" id="En9-UZ-Gss"/>
+                                    <constraint firstItem="96g-9U-QUm" firstAttribute="centerY" secondItem="1CG-bd-8xC" secondAttribute="centerY" id="SWQ-2l-YYd"/>
+                                    <constraint firstItem="wSr-9p-vDB" firstAttribute="leading" secondItem="1CG-bd-8xC" secondAttribute="leading" id="Tfu-dT-ayF"/>
+                                    <constraint firstItem="wSr-9p-vDB" firstAttribute="top" secondItem="1CG-bd-8xC" secondAttribute="top" id="YIG-fh-vSY"/>
+                                    <constraint firstAttribute="height" constant="32" id="bGp-iT-VJN"/>
+                                    <constraint firstAttribute="width" constant="32" id="giY-rE-fzw"/>
+                                    <constraint firstAttribute="bottom" secondItem="wSr-9p-vDB" secondAttribute="bottom" id="sVC-1T-msE"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KzH-KC-OiQ"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="POINT"/>
                         <constraints>
-                            <constraint firstItem="eEp-8y-fGU" firstAttribute="bottom" secondItem="KzH-KC-OiQ" secondAttribute="bottom" id="IG4-hE-Eh5"/>
+                            <constraint firstItem="1CG-bd-8xC" firstAttribute="leading" secondItem="RD5-YP-to0" secondAttribute="leading" constant="20" id="Pgv-Lq-XvT"/>
+                            <constraint firstItem="eEp-8y-fGU" firstAttribute="top" secondItem="1CG-bd-8xC" secondAttribute="bottom" constant="-16" id="Vdl-dI-W68"/>
                             <constraint firstItem="eEp-8y-fGU" firstAttribute="leading" secondItem="RD5-YP-to0" secondAttribute="leading" id="dam-wu-9bt"/>
                             <constraint firstAttribute="trailing" secondItem="eEp-8y-fGU" secondAttribute="trailing" id="mPz-zB-Bk0"/>
-                            <constraint firstItem="eEp-8y-fGU" firstAttribute="top" secondItem="RD5-YP-to0" secondAttribute="top" id="rhE-3t-Rcr"/>
+                            <constraint firstItem="1CG-bd-8xC" firstAttribute="top" secondItem="RD5-YP-to0" secondAttribute="top" id="tpV-bw-2WK"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="393" height="56"/>
+                    <size key="freeformSize" width="393" height="72"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lSg-eA-TUb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
