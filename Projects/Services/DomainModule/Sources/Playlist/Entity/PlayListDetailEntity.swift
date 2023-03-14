@@ -16,7 +16,9 @@ public struct PlayListDetailEntity: Equatable {
         `public`:Bool,
         key:String,
         creator_id:String,
-        image:String
+        image:String,
+        image_square_version:Int,
+        image_version:Int
         
         
     ) {
@@ -27,6 +29,8 @@ public struct PlayListDetailEntity: Equatable {
         self.key = key
         self.creator_id = creator_id
         self.image = image
+        self.image_version = image_version
+        self.image_square_version = image_square_version
    
     }
     
@@ -34,5 +38,6 @@ public struct PlayListDetailEntity: Equatable {
     public let songs: [SongEntity]
     public let `public` : Bool
     public let key,creator_id,image: String
+    public let image_version,image_square_version :Int
     
 }
