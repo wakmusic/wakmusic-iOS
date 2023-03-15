@@ -25,8 +25,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     public var bottomSheetView: BottomSheetView!
 
     private var viewModel: ArtistMusicContentViewModel!
-    fileprivate lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
-    fileprivate lazy var output = viewModel.transform(from: input)
+    lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
+    lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
     deinit {
@@ -113,12 +113,19 @@ extension ArtistMusicContentViewController {
                     self.hideSongCart()
                 }
             }).disposed(by: disposeBag)
+        
+        Utility.PreferenceManager.$startPage
+            .skip(1)
+            .map { _ in [] }
+            .bind(to: output.selectedSongs)
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
         self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        
         self.songCartView = SongCartView()
         self.songCartView.delegate = self
         self.bottomSheetView = BottomSheetView(
@@ -130,7 +137,6 @@ extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
-        DEBUG_LOG(type)
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
