@@ -21,7 +21,8 @@ public extension ArtistSongListResponseDTO {
             reaction: reaction,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
             views: views,
-            last: last
+            last: last,
+            isSelected: false
         )
     }
 }

@@ -33,11 +33,14 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     
     public struct Input {
         var pageID: BehaviorRelay<Int>
+        var songTapped: PublishSubject<Int> = PublishSubject()
+        var allSongSelected: PublishSubject<Bool> = PublishSubject()
     }
 
     public struct Output {
         var canLoadMore: BehaviorRelay<Bool>
         var dataSource: BehaviorRelay<[ArtistSongListEntity]>
+        let selectedSongs: BehaviorRelay<[Int]>
     }
     
     public func transform(from input: Input) -> Output {
@@ -47,6 +50,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         
         let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
         let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        let selectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
 
         let refresh = Observable.combineLatest(dataSource, input.pageID) { (dataSource, pageID) -> [ArtistSongListEntity] in
             return pageID == 1 ? [] : dataSource
@@ -70,10 +74,49 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             })
             .bind(to: dataSource)
             .disposed(by: disposeBag)
+                
+        input.songTapped
+            .withLatestFrom(selectedSongs, resultSelector: { (songIndex, selectedSongs) -> [Int] in
+                if selectedSongs.contains(songIndex) {
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == songIndex }) else { return selectedSongs }
+                    var newSelectedSongs = selectedSongs
+                    newSelectedSongs.remove(at: removeTargetIndex)
+                    return newSelectedSongs
+                    
+                }else{
+                    return selectedSongs + [songIndex]
+                }
+            })
+            .map { $0.sorted { $0 < $1 } }
+            .bind(to: selectedSongs)
+            .disposed(by: disposeBag)
+        
+        input.allSongSelected
+            .withLatestFrom(dataSource) { ($0, $1) }
+            .map { (flag, dataSource) -> [Int] in
+                return flag ? Array(0..<dataSource.count) : []
+            }
+            .bind(to: selectedSongs)
+            .disposed(by: disposeBag)
+        
+        selectedSongs
+            .withLatestFrom(dataSource) { ($0, $1) }
+            .map { (selectedSongs, dataSource) in
+                var newModel = dataSource
+                newModel.indices.forEach { newModel[$0].isSelected = false }
 
+                selectedSongs.forEach { i in
+                    newModel[i].isSelected = true
+                }
+                return newModel
+            }
+            .bind(to: dataSource)
+            .disposed(by: disposeBag)
+        
         return Output(
             canLoadMore: canLoadMore,
-            dataSource: dataSource
+            dataSource: dataSource,
+            selectedSongs: selectedSongs
         )
     }
 }

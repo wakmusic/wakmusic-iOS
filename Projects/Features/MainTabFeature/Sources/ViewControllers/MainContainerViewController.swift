@@ -323,6 +323,24 @@ extension MainContainerViewController {
             .subscribe(onNext: { [weak self] _ in
                 self?.statusBarEnterLightBackground()
             }).disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx
+            .notification(.showSongCart)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                UIView.animate(withDuration: 0.2) {
+                    self.panelView.alpha = 0
+                }
+            }).disposed(by: disposeBag)
+
+        NotificationCenter.default.rx
+            .notification(.hideSongCart)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                UIView.animate(withDuration: 0.1) {
+                    self.panelView.alpha = 1
+                }
+            }).disposed(by: disposeBag)
     }
     
     private func statusBarEnterLightBackground() {

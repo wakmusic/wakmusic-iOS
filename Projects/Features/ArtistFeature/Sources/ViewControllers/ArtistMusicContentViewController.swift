@@ -16,16 +16,18 @@ import CommonFeature
 import DataMappingModule
 import DomainModule
 
-public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
     
-    var disposeBag = DisposeBag()
-    
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
+
     private var viewModel: ArtistMusicContentViewModel!
     fileprivate lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
     fileprivate lazy var output = viewModel.transform(from: input)
+    var disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -35,7 +37,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
         super.viewDidLoad()
 
         configureUI()
-        bind()
+        inputBind()
+        outputBind()
     }
     
     public static func viewController(
@@ -49,10 +52,32 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 
 extension ArtistMusicContentViewController {
     
-    private func bind() {
+    private func inputBind() {
                 
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        tableView.rx.willDisplayCell
+            .map { $1 }
+            .withLatestFrom(output.dataSource, resultSelector: { (indexPath, datasource) -> (IndexPath, [ArtistSongListEntity]) in
+                return (indexPath, datasource)
+            })
+            .filter{ (indexPath, datasources) -> Bool in
+                return indexPath.item == datasources.count-1
+            }
+            .withLatestFrom(output.canLoadMore)
+            .filter{ $0 }
+            .map { _ in return () }
+            .bind(to: rx.loadMore)
+            .disposed(by: disposeBag)
 
+        tableView.rx.itemSelected
+            .map { $0.row }
+            .bind(to: input.songTapped)
+            .disposed(by: disposeBag)
+    }
+    
+    private func outputBind() {
+        
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] _ in
@@ -70,34 +95,54 @@ extension ArtistMusicContentViewController {
                 return cell
             }.disposed(by: disposeBag)
         
-        tableView.rx.willDisplayCell
-            .map { $1 }
-            .withLatestFrom(output.dataSource, resultSelector: { (indexPath, datasource) -> (IndexPath, [ArtistSongListEntity]) in
-                return (indexPath, datasource)
-            })
-            .filter{ (indexPath, datasources) -> Bool in
-                return indexPath.item == datasources.count-1
-            }
-            .withLatestFrom(output.canLoadMore)
-            .filter{ $0 }
-            .map { _ in return () }
-            .bind(to: rx.loadMore)
-            .disposed(by: disposeBag)
-
-        tableView.rx.itemSelected
+        output.selectedSongs
+            .skip(1)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (indexPath, _) in
-                guard let `self` = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-//                let model = model[indexPath.row]
+            .subscribe(onNext: { [weak self] (songs, dataSource) in
+                guard let self = self else { return }
+                DEBUG_LOG(songs)
+                if !songs.isEmpty {
+                    self.showSongCart(
+                        in: self.view,
+                        selectedSongCount: songs.count,
+                        dataSourceCount: dataSource.count
+                    )
+                    self.songCartView?.delegate = self
+                    
+                }else{
+                    self.hideSongCart()
+                }
             }).disposed(by: disposeBag)
-
     }
     
     private func configureUI() {
         self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.songCartView = SongCartView()
+        self.songCartView.delegate = self
+        self.bottomSheetView = BottomSheetView(
+            contentView: self.songCartView,
+            contentHeights: [52]
+        )
+    }
+}
+
+extension ArtistMusicContentViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        DEBUG_LOG(type)
+        switch type {
+        case let .allSelect(flag):
+            input.allSongSelected.onNext(flag)
+        case .songAdd:
+            return
+        case .playListAdd:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
     }
 }
 

@@ -43,6 +43,9 @@ extension ArtistMusicCell {
     }
     
     func update(model: ArtistSongListEntity) {
+        
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
         titleStringLabel.attributedText = getAttributedString(
             text: model.title,
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)

@@ -14,4 +14,6 @@ public extension Notification.Name {
     static let playListNameRefresh = Notification.Name("playListNameRefresh")
     static let statusBarEnterDarkBackground = Notification.Name("statusBarEnterDarkBackground")
     static let statusBarEnterLightBackground = Notification.Name("statusBarEnterLightBackground")
+    static let showSongCart = Notification.Name("showSongCart")
+    static let hideSongCart = Notification.Name("hideSongCart")
 }
