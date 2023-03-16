@@ -17,60 +17,55 @@ import KeychainModule
 import CryptoSwift
 import AuthenticationServices
 
+public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
+    private let disposeBag = DisposeBag()
 
+    private var fetchTokenUseCase: FetchTokenUseCase!
+    private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
+    private var fetchUserInfoUseCase: FetchUserInfoUseCase!
 
-public final class LoginViewModel: NSObject, ViewModelType {
-    // 네이버 델리게이트를 받기위한 NSObject 상속
-   
-    var input = Input()
-    var output = Output()
+    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
+    let naverToken: PublishRelay<(String,String)> = PublishRelay()
+    let googleToken: PublishRelay<String> = PublishRelay()
+    let appleToken: PublishRelay<String> = PublishRelay() // 각각의 토큰은 뷰모델에서만 처리, input, output에서 제거
+    let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
+
     public struct Input {
-        let pressNaverLoginButton: PublishRelay<Void> = PublishRelay()
-        let pressAppleLoginButton: PublishRelay<Void> = PublishRelay()
-        let showErrorToast: PublishRelay<String> = PublishRelay()
+        let pressNaverLoginButton: PublishRelay<Void>
+        let pressAppleLoginButton: PublishRelay<Void>
     }
 
     public struct Output {
-     
+        let fetchedWMToken: PublishRelay<String>
+        let showErrorToast: PublishRelay<String>
     }
 
-    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    var fetchTokenUseCase: FetchTokenUseCase!
-    var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
-    var fetchUserInfoUseCase: FetchUserInfoUseCase!
-
-    var disposeBag = DisposeBag()
-    var naverToken:PublishSubject<(String,String)> = PublishSubject()
-    var googleToken: PublishSubject<String> = PublishSubject()
-    var appleToken:PublishSubject<String> = PublishSubject()
-    var fetchedWMToken: PublishSubject<String> = PublishSubject()
-    
     public init(
         fetchTokenUseCase: FetchTokenUseCase,
         fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase,
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ){
         super.init()
-        
-        self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+    }
+    
+    public func transform(from input: Input) -> Output {
+
+        self.naverLoginInstance?.delegate = self
+        let fetchedWMToken = PublishRelay<String>()
+        let showErrorToast = PublishRelay<String>()
         
-        DEBUG_LOG("✅ \(Self.self) 생성")
-        
-        //MARK: 네이버 로그인 및 이벤트
         input.pressNaverLoginButton
             .subscribe(onNext: {
-                self.naverLoginInstance?.requestThirdPartyLogin()
-                //self.naverLoginInstance?.requestDeleteToken() //로그아웃
+                print("priint naverLoginInstance")
+                self.naverLoginInstance?.requestThirdPartyLogin() // requestDeleteToken() <- 로그아읏
         }).disposed(by: disposeBag)
       
         naverToken
             .flatMap{ [weak self] (tokenType:String,accessToken:String) -> Observable<NaverUserInfoEntity> in
-                guard let self = self else{
-                    return Observable.empty()
-                }
+                guard let self = self else { return Observable.empty() }
                 return self.fetchNaverUserInfoUseCase.execute(
                     tokenType: tokenType,
                     accessToken: accessToken
@@ -97,28 +92,23 @@ public final class LoginViewModel: NSObject, ViewModelType {
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
 
-        // MARK: 애플로그인 및 이벤트
+        //MARK: 애플로그인 및 이벤트
         input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
-            guard let self = self else{ return }
+            guard let self = self else { return }
             
             let appleIdProvider = ASAuthorizationAppleIDProvider()
             let request = appleIdProvider.createRequest()
             request.requestedScopes = [.fullName,.email]
-
             let auth = ASAuthorizationController(authorizationRequests: [request])
             auth.delegate = self
             auth.presentationContextProvider = self
             auth.performRequests()
-            
         }).disposed(by: disposeBag)
         
         appleToken
             .filter{ !$0.isEmpty }
             .flatMap { [weak self] (id:String) -> Observable<AuthLoginEntity> in
-                guard let self = self else{
-                    return Observable.empty()
-                }
-                
+                guard let self = self else { return Observable.empty() }
                 return self.fetchTokenUseCase.execute(id: id, type: .apple)
                         .catchAndReturn(AuthLoginEntity(token: ""))
                         .asObservable()
@@ -132,17 +122,20 @@ public final class LoginViewModel: NSObject, ViewModelType {
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
                 
-        //MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
+        // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
         fetchedWMToken
+            .debug("test")
             .flatMap { _ -> Observable<AuthUserInfoEntity> in
                 return self.fetchUserInfoUseCase.execute()
-                    .catchAndReturn(AuthUserInfoEntity(
-                        id: "",
-                        platform: "apple",
-                        displayName: "ifari",
-                        first_login_time: 0,
-                        first: false,
-                        profile: "panchi")
+                    .catchAndReturn(
+                        AuthUserInfoEntity(
+                            id: "",
+                            platform: "apple",
+                            displayName: "ifari",
+                            first_login_time: 0,
+                            first: false,
+                            profile: "panchi"
+                        )
                     )
                     .asObservable()
             }
@@ -157,10 +150,10 @@ public final class LoginViewModel: NSObject, ViewModelType {
                 )
             })
             .disposed(by: disposeBag)
-    }
-    
-    public func transform(from input: Input) -> Output {
-        let output = Output()
-        return output
+
+        return Output(
+            fetchedWMToken: fetchedWMToken,
+            showErrorToast: showErrorToast
+        )
     }
 }

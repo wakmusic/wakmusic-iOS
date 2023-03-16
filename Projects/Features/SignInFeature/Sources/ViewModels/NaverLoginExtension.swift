@@ -11,14 +11,14 @@ import NaverThirdPartyLogin
 import KeychainModule
 import Utility
 
-extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
+extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate{
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
         guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
         
-        naverToken.onNext((tokenType, accessToken))
+        naverToken.accept((tokenType, accessToken))
     }
     
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
@@ -27,7 +27,7 @@ extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
         guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
 
-        naverToken.onNext((tokenType, accessToken))
+        naverToken.accept((tokenType, accessToken))
     }
     
     public func oauth20ConnectionDidFinishDeleteToken() {
@@ -36,8 +36,6 @@ extension LoginViewModel :NaverThirdPartyLoginConnectionDelegate{
     
     public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         DEBUG_LOG("\(error.localizedDescription)")
-        input
-            .showErrorToast
-            .accept(error.localizedDescription)
+        isErrorString.accept(error.localizedDescription)
     }
 }

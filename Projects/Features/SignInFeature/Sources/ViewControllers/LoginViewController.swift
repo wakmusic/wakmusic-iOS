@@ -11,7 +11,7 @@ import Utility
 import DesignSystem
 import NaverThirdPartyLogin
 import RxSwift
-import Alamofire
+import RxRelay
 import AuthenticationServices
 import CommonFeature
 
@@ -41,6 +41,12 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
+
+    private lazy var input = LoginViewModel.Input(
+        pressNaverLoginButton: PublishRelay(),
+        pressAppleLoginButton: PublishRelay()
+    )
+    private lazy var output = viewModel.transform(from: input)
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,19 +79,21 @@ extension LoginViewController{
             self.present(vc, animated: true)
         }).disposed(by: disposeBag)
         
-        viewModel.input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+        output
+            .showErrorToast
+            .subscribe(onNext: { [weak self] (msg: String) in
             guard let self = self else { return }
-            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14) )
+            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         }).disposed(by: disposeBag)
     }
 
     private func configureLogin() {
         appleLoginButton.rx.tap
-            .bind(to: viewModel.input.pressAppleLoginButton)
+            .bind(to: input.pressAppleLoginButton)
             .disposed(by: disposeBag)
 
         naverLoginButton.rx.tap
-            .bind(to: viewModel.input.pressNaverLoginButton)
+            .bind(to: input.pressNaverLoginButton)
             .disposed(by: disposeBag)
 
         googleLoginButton.rx.tap.subscribe(onNext: { [weak self] in

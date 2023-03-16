@@ -11,7 +11,6 @@ import Foundation
 import Utility
 
 extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding{
-
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return UIApplication.shared.windows.last!
     }
@@ -20,14 +19,12 @@ extension LoginViewModel:ASAuthorizationControllerDelegate,ASAuthorizationContro
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifer = credential.user
             DEBUG_LOG(userIdentifer)
-            appleToken.onNext(userIdentifer)
+            appleToken.accept(userIdentifer)
         }
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         DEBUG_LOG("Apple Login Fail")
-
-        input.showErrorToast
-            .accept(error.localizedDescription)
+        isErrorString.accept(error.localizedDescription)
     }
 }
