@@ -15,6 +15,7 @@ import PanModal
 import DesignSystem
 import BaseFeature
 import Kingfisher
+import SkeletonView
 
 
 
@@ -141,6 +142,9 @@ extension PlayListDetailViewController{
     
     
        
+        playListImage.isSkeletonable = true
+        playListImage.isHiddenWhenSkeletonIsActive = true
+        playListImage.showAnimatedSkeleton()
         
         // Drag & Drop 기능을 위한 부분
         
@@ -315,6 +319,8 @@ extension PlayListDetailViewController{
        
             
             self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL)
+            
+            self.playListImage.stopSkeletonAnimation()
             
             self.playListCountLabel.text = model.songCount
             self.playListNameLabel.text = model.title

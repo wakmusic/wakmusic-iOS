@@ -7,7 +7,8 @@ let project = Project.makeModule(
     product: .framework,
     packages: [
         .YouTubePlayerKit,
-        .HPParallaxHeader
+        .HPParallaxHeader,
+        .SkeletonView
     ],
     dependencies: [
         .SPM.Needle,
