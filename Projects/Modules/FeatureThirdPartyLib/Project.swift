@@ -26,6 +26,7 @@ let project = Project.makeModule(
         .SPM.SwiftEntryKit,
         .SPM.CryptoSwift,
         .SPM.YouTubePlayerKit,
-        .SPM.HPParallaxHeader
+        .SPM.HPParallaxHeader,
+        .SPM.SkeletonView
     ]
 )
