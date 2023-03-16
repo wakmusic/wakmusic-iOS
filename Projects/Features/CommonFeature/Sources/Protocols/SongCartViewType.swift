@@ -45,7 +45,7 @@ public extension SongCartViewType where Self: UIViewController {
         backgroundColor: UIColor = UIColor.clear,
         selectedSongCount: Int,
         totalSongCount: Int,
-        useBottomSpace: Bool = false
+        useBottomSpace: Bool
     ) {
         if self.songCartView == nil || self.bottomSheetView == nil {
             self.songCartView = SongCartView(type: type)
@@ -87,7 +87,7 @@ public extension SongCartViewType where Self: UIViewController {
         else { return }
         bottomSheetView.dismiss()
         
-        // nil 할당으로 확실하게 메모리에서 제거
+        // nil 할당으로 메모리에서 제거
         self.songCartView = nil
         self.bottomSheetView = nil
         

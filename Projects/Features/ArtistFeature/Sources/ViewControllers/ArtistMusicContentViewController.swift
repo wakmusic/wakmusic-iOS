@@ -110,7 +110,8 @@ extension ArtistMusicContentViewController {
                         type: .artistSong,
                         contentHeight: 56,
                         selectedSongCount: songs.count,
-                        totalSongCount: dataSource.count
+                        totalSongCount: dataSource.count,
+                        useBottomSpace: false
                     )
                     self.songCartView?.delegate = self
                 }
