@@ -28,7 +28,10 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     let naverToken: PublishRelay<(String,String)> = PublishRelay()
     let googleToken: PublishRelay<String> = PublishRelay()
     let appleToken: PublishRelay<String> = PublishRelay() // 각각의 토큰은 뷰모델에서만 처리, input, output에서 제거
+    let fetchedWMToken: PublishRelay<String> = PublishRelay()
+
     let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
+    let keychain = KeychainImpl()
 
     public struct Input {
         let pressNaverLoginButton: PublishRelay<Void>
@@ -36,7 +39,6 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     }
 
     public struct Output {
-        let fetchedWMToken: PublishRelay<String>
         let showErrorToast: PublishRelay<String>
     }
 
@@ -46,78 +48,55 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ){
         super.init()
+        self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
     }
-    
-    public func transform(from input: Input) -> Output {
 
-        self.naverLoginInstance?.delegate = self
-        let fetchedWMToken = PublishRelay<String>()
+    public func transform(from input: Input) -> Output {
         let showErrorToast = PublishRelay<String>()
-        
-        input.pressNaverLoginButton
-            .subscribe(onNext: {
-                print("priint naverLoginInstance")
-                self.naverLoginInstance?.requestThirdPartyLogin() // requestDeleteToken() <- 로그아읏
-        }).disposed(by: disposeBag)
-      
+
+        inputTransfrom(input: input)
+
         naverToken
-            .flatMap{ [weak self] (tokenType:String,accessToken:String) -> Observable<NaverUserInfoEntity> in
+            .flatMap{ [weak self] (tokenType: String, accessToken: String) -> Observable<NaverUserInfoEntity> in
                 guard let self = self else { return Observable.empty() }
                 return self.fetchNaverUserInfoUseCase.execute(
                     tokenType: tokenType,
                     accessToken: accessToken
                 )
-                .asObservable()
                 .catchAndReturn(NaverUserInfoEntity(resultcode: "", message: "", id: "", nickname: ""))
+                .asObservable()
             }
             .filter{ !$0.id.isEmpty }
             .map{ $0.id }
-            .flatMap { [weak self] (id:String) -> Observable<AuthLoginEntity> in
-                guard let self = self else{
-                    return Observable.empty()
-                }
-                return self.fetchTokenUseCase.execute(id: id, type: .naver)
+            .withUnretained(self)
+            .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
+                return viewModel.fetchTokenUseCase.execute(id: id, type: .naver)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
             .map { $0.token }
             .filter { !$0.isEmpty }
             .do(onNext: {
-                let keychain = KeychainImpl()
-                keychain.save(type: .accessToken, value: $0)
+                self.keychain.save(type: .accessToken, value: $0)
             })
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
-
-        //MARK: 애플로그인 및 이벤트
-        input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
-            guard let self = self else { return }
-            
-            let appleIdProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName,.email]
-            let auth = ASAuthorizationController(authorizationRequests: [request])
-            auth.delegate = self
-            auth.presentationContextProvider = self
-            auth.performRequests()
-        }).disposed(by: disposeBag)
         
         appleToken
             .filter{ !$0.isEmpty }
-            .flatMap { [weak self] (id:String) -> Observable<AuthLoginEntity> in
-                guard let self = self else { return Observable.empty() }
-                return self.fetchTokenUseCase.execute(id: id, type: .apple)
+            .withUnretained(self)
+            .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
+                return viewModel.fetchTokenUseCase.execute(id: id, type: .apple)
                         .catchAndReturn(AuthLoginEntity(token: ""))
                         .asObservable()
             }
             .map { $0.token }
             .filter { !$0.isEmpty }
             .do(onNext: {
-                let keychain = KeychainImpl()
-                keychain.save(type: .accessToken, value: $0)
+                self.keychain.save(type: .accessToken, value: $0)
             })
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
@@ -151,9 +130,24 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             })
             .disposed(by: disposeBag)
 
-        return Output(
-            fetchedWMToken: fetchedWMToken,
-            showErrorToast: showErrorToast
-        )
+        return Output(showErrorToast: showErrorToast)
+    }
+    func inputTransfrom(input: Input) {
+        input.pressNaverLoginButton
+            .bind {
+                self.naverLoginInstance?.requestThirdPartyLogin() // requestDeleteToken() <- 로그아읏
+            }.disposed(by: disposeBag)
+
+        input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
+            guard let self = self else { return }
+            
+            let appleIdProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIdProvider.createRequest()
+            request.requestedScopes = [.fullName,.email]
+            let auth = ASAuthorizationController(authorizationRequests: [request])
+            auth.delegate = self
+            auth.presentationContextProvider = self
+            auth.performRequests()
+        }).disposed(by: disposeBag)
     }
 }
