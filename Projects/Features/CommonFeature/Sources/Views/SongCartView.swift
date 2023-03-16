@@ -16,20 +16,10 @@ public protocol SongCartViewDelegate: AnyObject{
 
 public enum SongCartSelectType {
     case allSelect(flag: Bool)   // 전체선택
-    case songAdd                 // 노래담기
-    case playListAdd             // 재생목록추가
+    case addSong                 // 노래담기
+    case addPlayList             // 재생목록추가
     case play                    // 재생
     case remove                  // 삭제
-}
-
-public enum SongCartType {
-    case playerToPlayList
-    case chartSong
-    case searchSong
-    case artistSong
-    case likeSong
-    case myPlayList
-    case playListDetail
 }
 
 public class SongCartView: UIView {
@@ -42,16 +32,24 @@ public class SongCartView: UIView {
     @IBOutlet weak var selectCountView: UIView!
     @IBOutlet weak var selectCountViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var selectCountLabel: UILabel!
-
+    @IBOutlet weak var bottomSpaceView: UIView!
+    @IBOutlet weak var bottomSpaceViewHeight: NSLayoutConstraint!
+    
     public weak var delegate: SongCartViewDelegate?
+    public var type: SongCartType = .playerToPlayList
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.setupView()
+    }
+    
+    convenience init(type: SongCartType) {
+        self.init()
+        self.type = type
         self.setupView()
     }
     
@@ -71,10 +69,10 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .allSelect(flag: allSelectButton.isSelected))
             
         }else if button == songAddButton {
-            delegate?.buttonTapped(type: .songAdd)
+            delegate?.buttonTapped(type: .addSong)
 
         }else if button == playListAddButton {
-            delegate?.buttonTapped(type: .playListAdd)
+            delegate?.buttonTapped(type: .addPlayList)
 
         }else if button == playButton {
             delegate?.buttonTapped(type: .play)
@@ -86,16 +84,45 @@ public class SongCartView: UIView {
 }
 
 public extension SongCartView {
-    
+
     private func setupView(){
         guard let view = Bundle.module.loadNibNamed("SongCartView", owner: self, options: nil)?.first as? UIView else { return }
         view.frame = self.bounds
         view.layoutIfNeeded()
         addSubview(view)
+        configureType()
         configureUI()
     }
     
+    private func configureType() {
+        
+        switch self.type {
+            
+        case .playerToPlayList:
+            allSelectButton.isHidden = false
+            songAddButton.isHidden = false
+            playListAddButton.isHidden = true
+            playButton.isHidden = true
+            removeButton.isHidden = false
+            
+        case .chartSong, .searchSong, .artistSong, .WMPlayList:
+            allSelectButton.isHidden = false
+            songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = false
+            removeButton.isHidden = true
+
+        case .likeSong, .myPlayList, .playList:
+            allSelectButton.isHidden = false
+            songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = true
+            removeButton.isHidden = false
+        }
+    }
+    
     private func configureUI() {
+        
         selectCountView.backgroundColor = .white
         selectCountView.layer.cornerRadius = selectCountView.frame.width / 2
         selectCountView.clipsToBounds = true
@@ -121,44 +148,42 @@ public extension SongCartView {
         guard titles.count == images.count,
               titles.count == buttons.count else { return }
         
-        for index in 0..<titles.count {
-            buttons[index].setImage(images[index], for: .normal)
+        for i in 0..<titles.count {
+            buttons[i].setImage(images[i], for: .normal)
             
-            if buttons[index] == allSelectButton {
-                buttons[index].setImage(DesignSystemAsset.PlayListEdit.checkOn.image, for: .selected)
+            if buttons[i] == allSelectButton {
+                buttons[i].setImage(DesignSystemAsset.PlayListEdit.checkOn.image, for: .selected)
                 
                 let attributedString = NSMutableAttributedString.init(string: "전체선택")
                 attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                 .kern: -0.5],
                                                 range: NSRange(location: 0, length: attributedString.string.count))
-                buttons[index].setAttributedTitle(attributedString, for: .normal)
+                buttons[i].setAttributedTitle(attributedString, for: .normal)
                 
                 let selectedAttributedString = NSMutableAttributedString.init(string: "전체선택해제")
                 selectedAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                                         .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                         .kern: -0.5],
                                                 range: NSRange(location: 0, length: selectedAttributedString.string.count))
-                buttons[index].setAttributedTitle(selectedAttributedString, for: .selected)
+                buttons[i].setAttributedTitle(selectedAttributedString, for: .selected)
 
             }else{
-                let attributedString = NSMutableAttributedString.init(string: titles[index])
+                let attributedString = NSMutableAttributedString.init(string: titles[i])
                 attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                 .kern: -0.5],
                                                 range: NSRange(location: 0, length: attributedString.string.count))
 
-                buttons[index].setAttributedTitle(attributedString, for: .normal)
+                buttons[i].setAttributedTitle(attributedString, for: .normal)
             }
             
-            buttons[index].alignTextBelow(spacing: -2)
+            buttons[i].alignTextBelow(spacing: -2)
         }
         
-        allSelectButton.isHidden = false
-        songAddButton.isHidden = false
-        playListAddButton.isHidden = false
-        playButton.isHidden = false
-        removeButton.isHidden = true
+        bottomSpaceView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+        bottomSpaceViewHeight.constant = SAFEAREA_BOTTOM_HEIGHT()
+        layoutIfNeeded()
     }
     
     func updateCount(value: Int) {
@@ -170,5 +195,9 @@ public extension SongCartView {
     
     func updateAllSelect(isAll: Bool) {
         self.allSelectButton.isSelected = isAll
+    }
+    
+    func updateBottomSpace(isUse: Bool) {
+        self.bottomSpaceView.isHidden = isUse ? false : true
     }
 }

@@ -99,6 +99,12 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .bind(to: selectedSongs)
             .disposed(by: disposeBag)
         
+        Utility.PreferenceManager.$startPage
+            .skip(1)
+            .map { _ in [] }
+            .bind(to: selectedSongs)
+            .disposed(by: disposeBag)
+
         selectedSongs
             .withLatestFrom(dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in

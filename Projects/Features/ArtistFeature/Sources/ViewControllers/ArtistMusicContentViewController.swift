@@ -97,41 +97,30 @@ extension ArtistMusicContentViewController {
         
         output.selectedSongs
             .skip(1)
+            .debug("selectedSongs")
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
-                DEBUG_LOG(songs)
-                if !songs.isEmpty {
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
                     self.showSongCart(
                         in: self.view,
+                        type: .artistSong,
+                        contentHeight: 56,
                         selectedSongCount: songs.count,
-                        dataSourceCount: dataSource.count
+                        totalSongCount: dataSource.count
                     )
                     self.songCartView?.delegate = self
-                    
-                }else{
-                    self.hideSongCart()
                 }
             }).disposed(by: disposeBag)
-        
-        Utility.PreferenceManager.$startPage
-            .skip(1)
-            .map { _ in [] }
-            .bind(to: output.selectedSongs)
-            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
         self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        
-        self.songCartView = SongCartView()
-        self.songCartView.delegate = self
-        self.bottomSheetView = BottomSheetView(
-            contentView: self.songCartView,
-            contentHeights: [52]
-        )
     }
 }
 
@@ -140,9 +129,9 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
-        case .songAdd:
+        case .addSong:
             return
-        case .playListAdd:
+        case .addPlayList:
             return
         case .play:
             return

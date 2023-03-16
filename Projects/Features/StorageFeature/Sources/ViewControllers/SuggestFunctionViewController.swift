@@ -316,10 +316,10 @@ extension SuggestFunctionViewController {
                 }
                 
                 self.textView.maxHeight = keyboardVisibleHeight == .zero ?  self.spaceHeight() :
-                self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT() + 66
+                self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEIGHT() + 66
                //키보드에서 바텀이 빼지면서 2번 빠짐
                 
-                DEBUG_LOG("\(self.spaceHeight()) \(SAFEAREA_BOTTOM_HEGHIT()) \(keyboardVisibleHeight)  \(self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEGHIT())   ")
+                DEBUG_LOG("\(self.spaceHeight()) \(SAFEAREA_BOTTOM_HEIGHT()) \(keyboardVisibleHeight)  \(self.spaceHeight() - keyboardVisibleHeight + SAFEAREA_BOTTOM_HEIGHT())   ")
              
                
                 self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
@@ -332,7 +332,7 @@ extension SuggestFunctionViewController {
     func spaceHeight() -> CGFloat {
         
         
-        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEGHIT()  + 48 +  20 + 28 + 16 + 51 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
+        return APP_HEIGHT() - ( STATUS_BAR_HEGHIT() + SAFEAREA_BOTTOM_HEIGHT()  + 48 +  20 + 28 + 16 + 51 + 28  + 12 + 48 + 66 + 10   ) // 마지막 10은 여유 공간
         
     }
     

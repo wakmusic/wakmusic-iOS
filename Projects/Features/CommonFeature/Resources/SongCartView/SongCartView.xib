@@ -12,6 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SongCartView" customModule="CommonFeature">
             <connections>
                 <outlet property="allSelectButton" destination="OyW-HI-2Ie" id="FVF-iO-aOU"/>
+                <outlet property="bottomSpaceView" destination="uSA-bl-8SI" id="B5o-bm-3Hv"/>
+                <outlet property="bottomSpaceViewHeight" destination="F1o-uG-JIM" id="xpL-jI-mYt"/>
                 <outlet property="playButton" destination="sT2-H1-Ex2" id="INi-U5-4cO"/>
                 <outlet property="playListAddButton" destination="QbG-nn-Q3h" id="Jdg-fi-aOm"/>
                 <outlet property="removeButton" destination="ghE-QZ-DSf" id="IOe-KC-6LP"/>
@@ -26,74 +28,86 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="72"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yth-61-Aze">
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Zdc-Gf-0n8">
                     <rect key="frame" x="0.0" y="16" width="600" height="56"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DTs-ft-o7n">
-                            <rect key="frame" x="40" y="0.0" width="520" height="56"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yth-61-Aze">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="56"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyW-HI-2Ie">
-                                    <rect key="frame" x="0.0" y="0.0" width="104" height="56"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="전체선택">
-                                        <color key="titleColor" name="gray25"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Zmo-9U-Cp7"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6p4-Ao-cyX">
-                                    <rect key="frame" x="104" y="0.0" width="104" height="56"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="노래담기">
-                                        <color key="titleColor" name="gray25"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="dTy-7e-zrL"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QbG-nn-Q3h">
-                                    <rect key="frame" x="208" y="0.0" width="104" height="56"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="재생목록추가">
-                                        <color key="titleColor" name="gray25"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="OLT-Fr-Frj"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sT2-H1-Ex2">
-                                    <rect key="frame" x="312" y="0.0" width="104" height="56"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="재생">
-                                        <color key="titleColor" name="gray25"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Do2-0I-9JI"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ghE-QZ-DSf">
-                                    <rect key="frame" x="416" y="0.0" width="104" height="56"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="삭제">
-                                        <color key="titleColor" name="gray25"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="xso-la-D7v"/>
-                                    </connections>
-                                </button>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DTs-ft-o7n">
+                                    <rect key="frame" x="40" y="0.0" width="520" height="56"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyW-HI-2Ie">
+                                            <rect key="frame" x="0.0" y="0.0" width="104" height="56"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="전체선택">
+                                                <color key="titleColor" name="gray25"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Zmo-9U-Cp7"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6p4-Ao-cyX">
+                                            <rect key="frame" x="104" y="0.0" width="104" height="56"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="노래담기">
+                                                <color key="titleColor" name="gray25"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="dTy-7e-zrL"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QbG-nn-Q3h">
+                                            <rect key="frame" x="208" y="0.0" width="104" height="56"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="재생목록추가">
+                                                <color key="titleColor" name="gray25"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="OLT-Fr-Frj"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sT2-H1-Ex2">
+                                            <rect key="frame" x="312" y="0.0" width="104" height="56"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="재생">
+                                                <color key="titleColor" name="gray25"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Do2-0I-9JI"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ghE-QZ-DSf">
+                                            <rect key="frame" x="416" y="0.0" width="104" height="56"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="삭제">
+                                                <color key="titleColor" name="gray25"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="xso-la-D7v"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
                             </subviews>
-                        </stackView>
+                            <color key="backgroundColor" name="POINT"/>
+                            <constraints>
+                                <constraint firstItem="DTs-ft-o7n" firstAttribute="top" secondItem="Yth-61-Aze" secondAttribute="top" id="I7I-JV-lV3"/>
+                                <constraint firstAttribute="height" constant="56" id="XhM-is-azG"/>
+                                <constraint firstAttribute="trailing" secondItem="DTs-ft-o7n" secondAttribute="trailing" constant="40" id="Zcc-MM-8lk"/>
+                                <constraint firstItem="DTs-ft-o7n" firstAttribute="leading" secondItem="Yth-61-Aze" secondAttribute="leading" constant="40" id="kr8-Lc-tmw"/>
+                                <constraint firstAttribute="bottom" secondItem="DTs-ft-o7n" secondAttribute="bottom" id="xm3-T8-cOO"/>
+                            </constraints>
+                        </view>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uSA-bl-8SI">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="34"/>
+                            <color key="backgroundColor" name="POINT"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="34" id="F1o-uG-JIM"/>
+                            </constraints>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" name="POINT"/>
-                    <constraints>
-                        <constraint firstItem="DTs-ft-o7n" firstAttribute="top" secondItem="Yth-61-Aze" secondAttribute="top" id="I7I-JV-lV3"/>
-                        <constraint firstAttribute="height" constant="56" id="XhM-is-azG"/>
-                        <constraint firstAttribute="trailing" secondItem="DTs-ft-o7n" secondAttribute="trailing" constant="40" id="Zcc-MM-8lk"/>
-                        <constraint firstItem="DTs-ft-o7n" firstAttribute="leading" secondItem="Yth-61-Aze" secondAttribute="leading" constant="40" id="kr8-Lc-tmw"/>
-                        <constraint firstAttribute="bottom" secondItem="DTs-ft-o7n" secondAttribute="bottom" id="xm3-T8-cOO"/>
-                    </constraints>
-                </view>
+                </stackView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hyL-bt-hk1">
                     <rect key="frame" x="20" y="0.0" width="32" height="32"/>
                     <subviews>
@@ -118,11 +132,11 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="DvV-qU-Ybi"/>
             <constraints>
-                <constraint firstItem="Yth-61-Aze" firstAttribute="leading" secondItem="DvV-qU-Ybi" secondAttribute="leading" id="Ipg-an-pG2"/>
-                <constraint firstItem="Yth-61-Aze" firstAttribute="trailing" secondItem="DvV-qU-Ybi" secondAttribute="trailing" id="Pav-da-kwm"/>
-                <constraint firstItem="hyL-bt-hk1" firstAttribute="top" secondItem="FfF-nI-wMD" secondAttribute="top" id="XAm-Co-CMu"/>
-                <constraint firstItem="Yth-61-Aze" firstAttribute="top" secondItem="hyL-bt-hk1" secondAttribute="bottom" constant="-16" id="ld7-jX-S3t"/>
+                <constraint firstItem="hyL-bt-hk1" firstAttribute="bottom" secondItem="Zdc-Gf-0n8" secondAttribute="top" constant="16" id="TAr-rc-HGG"/>
+                <constraint firstAttribute="bottom" secondItem="Zdc-Gf-0n8" secondAttribute="bottom" id="be9-Yk-4Zj"/>
+                <constraint firstItem="Zdc-Gf-0n8" firstAttribute="leading" secondItem="DvV-qU-Ybi" secondAttribute="leading" id="jmo-w5-K1R"/>
                 <constraint firstItem="hyL-bt-hk1" firstAttribute="leading" secondItem="FfF-nI-wMD" secondAttribute="leading" constant="20" id="mx6-sm-wqY"/>
+                <constraint firstItem="Zdc-Gf-0n8" firstAttribute="trailing" secondItem="DvV-qU-Ybi" secondAttribute="trailing" id="wm0-H1-6xc"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="140" y="21"/>

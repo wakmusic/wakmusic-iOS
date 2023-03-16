@@ -5,6 +5,12 @@
 import UIKit
 
 // MARK: - Public extensions
+extension Array {
+    // Returns an Optional that will be nil if index < count
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : .none
+    }
+}
 
 extension CGFloat {
     public static let bottomSheetAutomatic: CGFloat = -123456789
@@ -124,7 +130,6 @@ public final class BottomSheetView: UIView {
             self.superview != superview,
             let height = contentHeights[safe: targetIndex]
         else {
-            print("여기걸리나?")
             return
         }
 
@@ -284,7 +289,7 @@ public final class BottomSheetView: UIView {
         }.sorted(by: >)
 
         if let maxOffset = targetOffsets.max() {
-            let contentViewHeight = superview.frame.size.height - maxOffset - .handleHeight - bottomInset
+            let contentViewHeight = superview.frame.size.height - maxOffset - bottomInset
             contentViewHeightConstraint.constant = contentViewHeight
         }
 

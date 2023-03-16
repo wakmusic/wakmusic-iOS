@@ -5,10 +5,8 @@
 import UIKit
 
 extension CGFloat {
-    static let handleHeight: CGFloat = 20
-
     static var safeAreaBottomInset: CGFloat {
-        return UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
     }
 }
 
@@ -30,9 +28,9 @@ struct BottomSheetCalculator {
             in: superview,
             height: height,
             useSafeAreaInsets: useSafeAreaInsets
-        ) + .handleHeight
+        )
 
-        return max(superview.frame.height - targetHeight, .handleHeight)
+        return max(superview.frame.height - targetHeight, 0)
     }
 
     static func contentHeight(
@@ -50,7 +48,7 @@ struct BottomSheetCalculator {
             contentHeight = height
         }
 
-        return min(contentHeight + bottomInset, UIScreen.main.bounds.height - 64 - .handleHeight)
+        return min(contentHeight + bottomInset, UIScreen.main.bounds.height - 64)
     }
 
     /// Creates the translation targets of a BottomSheetView based on an array of target offsets and the current target offset
