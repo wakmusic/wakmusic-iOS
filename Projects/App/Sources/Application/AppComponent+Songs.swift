@@ -10,37 +10,38 @@ import DomainModule
 import DataModule
 import NetworkModule
 import SearchFeature
+import HomeFeature
 
 public extension AppComponent {
     
     var searchComponent: SearchComponent {
-         
-            SearchComponent(parent: self)
-        
+        SearchComponent(parent: self)
     }
     
     var afterSearchComponent: AfterSearchComponent {
-        
         AfterSearchComponent(parent: self)
     }
     
     var afterSearchContentComponent: AfterSearchContentComponent {
-        
         AfterSearchContentComponent(parent: self)
     }
     
-    var remoteSearchDataSource: any RemoteSearchDataSource {
+    var homeComponent: HomeComponent {
+        HomeComponent(parent: self)
+    }
+
+    var remoteSongsDataSource: any RemoteSongsDataSource {
         shared {
-            RemoteSearchDataSourceImpl(keychain: keychain)
+            RemoteSongsDataSourceImpl(keychain: keychain)
         }
     }
     var songsRepository: any SongsRepository {
         shared {
-            SongsRepositoryImpl(remoteSearchDataSource:remoteSearchDataSource)
+            SongsRepositoryImpl(remoteSongsDataSource:remoteSongsDataSource)
         }
     }
+    
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
-
         shared {
            FetchSearchSongUseCaseImpl(songsRepository: songsRepository)
         }
@@ -49,6 +50,12 @@ public extension AppComponent {
         
         shared {
             FetchLyricsUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+    
+    var fetchNewSongUseCase: any FetchNewSongUseCase {
+        shared {
+            FetchNewSongUseCaseImpl(songsRepository: songsRepository)
         }
     }
 }

@@ -305,12 +305,16 @@ extension PlayListDetailViewController{
                 
         viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
             
+        
+            
             guard let self = self else{
                 return
             }
             let type = self.viewModel.type
             
-            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image).toURL : WMImageAPI.fetchPlayList(id: model.image).toURL)
+       
+            
+            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL)
             
             self.playListCountLabel.text = model.songCount
             self.playListNameLabel.text = model.title

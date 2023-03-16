@@ -144,14 +144,28 @@ extension ContainSongsViewController {
             
             let model = models[indexPath.row]
             
-            DEBUG_LOG(model)
-            //TODO: 곡 추가 API
+            self.output.containSongWithKey.onNext(model.key)
+            
             
             
         })
         .disposed(by: disposeBag)
         
+     
         
+        output.showToastMessage
+            .debug("FFF")
+            .subscribe(onNext: { [weak self] (text:String) in
+            
+            guard let self = self else {return}
+            
+            
+            self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+            
+            
+        })
+        .disposed(by: disposeBag)
     }
     
 }
@@ -185,9 +199,12 @@ extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         DEBUG_LOG("추가추가")
         
-        let vc = multiPurposePopComponent.makeView(type: .creation) { key in
+        let vc = multiPurposePopComponent.makeView(type: .creation) {[weak self]  (key:String) in
             
-            //TODO: 곡 추가 API
+            guard let self = self else {return}
+            
+            self.output.containSongWithKey.onNext(key)
+            
         }
         self.showPanModal(content: vc)
         

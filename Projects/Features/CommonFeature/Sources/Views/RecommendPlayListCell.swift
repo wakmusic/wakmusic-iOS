@@ -40,7 +40,7 @@ extension RecommendPlayListCell {
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray600.color
         
         
-        logoImageView.kf.setImage(with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id).toURL
+        logoImageView.kf.setImage(with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id,version: model.image_round_version).toURL
                                   ,placeholder: nil,
                                   options: [.transition(.fade(0.2))])
     }

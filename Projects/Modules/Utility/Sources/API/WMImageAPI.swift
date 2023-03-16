@@ -12,10 +12,10 @@ public enum WMImageAPI {
     case fetchNewsThumbnail(time: String)
     case fetchArtistWithRound(id: String, version: Int)
     case fetchArtistWithSquare(id: String, version: Int)
-    case fetchProfile(name: String)
-    case fetchPlayList(id: String)
-    case fetchRecommendPlayListWithRound(id: String)
-    case fetchRecommendPlayListWithSquare(id: String)
+    case fetchProfile(name: String, version: Int)
+    case fetchPlayList(id: String, version: Int)
+    case fetchRecommendPlayListWithRound(id: String, version: Int)
+    case fetchRecommendPlayListWithSquare(id: String, version: Int)
     case fetchYoutubeThumbnail(id: String)
 }
 
@@ -39,17 +39,17 @@ extension WMImageAPI {
         case let .fetchArtistWithSquare(id, version):
             return "/static/artist/square/\(id).png?v=\(version)"
             
-        case let .fetchProfile(name):
-            return "/static/profile/\(name).png"
+        case let .fetchProfile(name,version):
+            return "/static/profile/\(name).png?v=\(version)"
             
-        case let .fetchPlayList(id):
-            return "/static/playlist/\(id).png"
+        case let .fetchPlayList(id,version):
+            return "/static/playlist/\(id).png?v=\(version)"
             
-        case let .fetchRecommendPlayListWithSquare(id):
-            return "/static/playlist/icon/square/\(id).png"
+        case let .fetchRecommendPlayListWithSquare(id,version):
+            return "/static/playlist/icon/square/\(id).png?v=\(version)"
             
-        case let .fetchRecommendPlayListWithRound(id):
-            return "/static/playlist/icon/round/\(id).png"
+        case let .fetchRecommendPlayListWithRound(id,version):
+            return "/static/playlist/icon/round/\(id).png?v=\(version)"
             
         case let .fetchYoutubeThumbnail(id):
             return "/vi/\(id)/hqdefault.jpg"

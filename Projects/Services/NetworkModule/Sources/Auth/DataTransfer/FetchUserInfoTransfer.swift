@@ -19,7 +19,8 @@ public extension AuthUserInfoResponseDTO {
             displayName: displayName,
             first_login_time: first_login_time,
             first: first,
-            profile: profile
+            profile: profile,
+            version: version
         )
     }
 }

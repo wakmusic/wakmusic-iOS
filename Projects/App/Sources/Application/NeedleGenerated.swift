@@ -9,6 +9,7 @@ import DataModule
 import DesignSystem
 import DomainModule
 import Foundation
+import HomeFeature
 import KeychainModule
 import MainTabFeature
 import NeedleFoundation
@@ -122,6 +123,9 @@ private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: Needle
     return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
+    var homeComponent: HomeComponent {
+        return appComponent.homeComponent
+    }
     var chartComponent: ChartComponent {
         return appComponent.chartComponent
     }
@@ -434,6 +438,19 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
 private func factoryda2925fd76da866a652af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SignInDependency5dda0dd015447272446cProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
+    var fetchNewSongUseCase: any FetchNewSongUseCase {
+        return appComponent.fetchNewSongUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->HomeComponent
+private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
     var afterSearchContentComponent: AfterSearchContentComponent {
         return appComponent.afterSearchContentComponent
@@ -499,6 +516,9 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
     }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
+    }
+    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+        return appComponent.addSongIntoPlayListUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -575,10 +595,12 @@ extension AppComponent: Registration {
         localTable["searchComponent-SearchComponent"] = { self.searchComponent as Any }
         localTable["afterSearchComponent-AfterSearchComponent"] = { self.afterSearchComponent as Any }
         localTable["afterSearchContentComponent-AfterSearchContentComponent"] = { self.afterSearchContentComponent as Any }
-        localTable["remoteSearchDataSource-any RemoteSearchDataSource"] = { self.remoteSearchDataSource as Any }
+        localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
+        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
+        localTable["fetchNewSongUseCase-any FetchNewSongUseCase"] = { self.fetchNewSongUseCase as Any }
         localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
         localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { self.afterLoginComponent as Any }
@@ -608,6 +630,7 @@ extension AppComponent: Registration {
         localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
+        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
@@ -687,6 +710,7 @@ extension PlayerComponent: Registration {
 }
 extension MainTabBarComponent: Registration {
     public func registerItems() {
+        keyPathToName[\MainTabBarDependency.homeComponent] = "homeComponent-HomeComponent"
         keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
@@ -806,6 +830,11 @@ extension SignInComponent: Registration {
         keyPathToName[\SignInDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
+extension HomeComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\HomeDependency.fetchNewSongUseCase] = "fetchNewSongUseCase-any FetchNewSongUseCase"
+    }
+}
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
@@ -833,6 +862,7 @@ extension ContainSongsComponent: Registration {
     public func registerItems() {
         keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
+        keyPathToName[\ContainSongsDependency.addSongIntoPlayListUseCase] = "addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"
     }
 }
 extension MultiPurposePopComponent: Registration {
@@ -898,6 +928,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)

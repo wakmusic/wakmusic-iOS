@@ -12,4 +12,5 @@ import Foundation
 public struct SingleRecommendPlayListResponseDTO: Decodable {
     public let id, title: String
     public let `public`: Bool
+    public let image_round_version: Int
 }

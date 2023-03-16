@@ -13,6 +13,7 @@ public struct PlayListResponseDTO: Decodable, Equatable {
     public let title:String
     public let key,creator_id,image: String?
     public let songlist:[String]
+    public let image_version: Int
     
 
     public static func == (lhs: Self, rhs: Self) -> Bool {

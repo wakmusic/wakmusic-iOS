@@ -53,7 +53,8 @@ public extension PreferenceManager {
         profile: String,
         displayName: String,
         firstLoginTime: Int,
-        first: Bool
+        first: Bool,
+        version: Int
     ) {
         let userInfo = UserInfo(
             ID: ID,
@@ -61,7 +62,8 @@ public extension PreferenceManager {
             profile: profile,
             displayName: displayName,
             firstLoginTime: firstLoginTime,
-            first: first
+            first: first,
+            version: version
         )
         Utility.PreferenceManager.userInfo = userInfo
     }

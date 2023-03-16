@@ -48,7 +48,7 @@ public final class ProfilePopViewModel {
                 let currentProfile = Utility.PreferenceManager.userInfo?.profile ?? "unknown"
                 
                 var newModel = model
-                newModel.indices.forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].id) }                
+                newModel.indices.forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].type) }                
                 return newModel
             })
             .bind(to: output.dataSource)
