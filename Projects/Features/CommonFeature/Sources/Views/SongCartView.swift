@@ -36,7 +36,7 @@ public class SongCartView: UIView {
     @IBOutlet weak var bottomSpaceViewHeight: NSLayoutConstraint!
     
     public weak var delegate: SongCartViewDelegate?
-    public var type: SongCartType = .playerToPlayList
+    public var type: SongCartType = .playList
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,8 +64,6 @@ public class SongCartView: UIView {
         
         if button == allSelectButton {
             allSelectButton.isSelected = !allSelectButton.isSelected
-            allSelectButton.titleLabel?.text = allSelectButton.isSelected ? "전체선택해제" : "전체선택"
-            allSelectButton.alignTextBelow(spacing: -2)
             delegate?.buttonTapped(type: .allSelect(flag: allSelectButton.isSelected))
             
         }else if button == songAddButton {
@@ -98,7 +96,7 @@ public extension SongCartView {
         
         switch self.type {
             
-        case .playerToPlayList:
+        case .playList:
             allSelectButton.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = true
@@ -112,7 +110,7 @@ public extension SongCartView {
             playButton.isHidden = false
             removeButton.isHidden = true
 
-        case .likeSong, .myPlayList, .playList:
+        case .likeSong, .myList, .myPlayList:
             allSelectButton.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false

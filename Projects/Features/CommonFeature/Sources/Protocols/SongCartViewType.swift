@@ -16,21 +16,23 @@ public protocol SongCartViewType: AnyObject {
     var bottomSheetView: BottomSheetView! { get set }
 }
 
+/// 각 (담당자)는 넣어서 호출 하세요.
 public enum SongCartType {
-    case playerToPlayList // 플레이어 > 재생목록
-    case chartSong        // 차트
-    case searchSong       // 검색
-    case artistSong       // 아티스트
-    case likeSong         // 보관함 > 좋아요
-    case myPlayList       // 보관함 > 내 리스트
-    case playList         // 플레이 리스트 (상세)
-    case WMPlayList       // 추천 플레이 리스트 (상세)
+    case playList         // 플레이어 > 재생목록 (케이)
+    case chartSong        // 차트 (대희)
+    case searchSong       // 검색 (함프)
+    case artistSong       // 아티스트 (구구)
+    case likeSong         // 보관함 > 좋아요 (함프)
+    case myList           // 보관함 > 내 리스트 (함프)
+    case myPlayList       // 보관함 > 플레이 리스트 상세 (함프)
+    case WMPlayList       // 추천 플레이 리스트 상세 (함프)
 }
 
 public extension SongCartViewType where Self: UIViewController {
     
     /// 노래 담기 팝업을 띄웁니다.
     /// - Parameter view: 팝업을 붙일 대상이 되는 뷰 (ex: 아티스트 노래 리스트, viewController.view)
+    /// - Parameter type: 위에 SongCartType 참조
     /// - Parameter contentHeight: (변경할 일 있으면 사용)
     /// - Parameter backgroundColor: 백그라운드 컬러 (변경할 일 있으면 사용)
     /// - Parameter selectedSongCount: 현재 선택된 노래 갯수
@@ -85,6 +87,7 @@ public extension SongCartViewType where Self: UIViewController {
         else { return }
         bottomSheetView.dismiss()
         
+        // nil 할당으로 확실하게 메모리에서 제거
         self.songCartView = nil
         self.bottomSheetView = nil
         
