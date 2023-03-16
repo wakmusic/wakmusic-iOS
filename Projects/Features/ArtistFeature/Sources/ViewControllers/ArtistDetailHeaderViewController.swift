@@ -143,7 +143,6 @@ extension ArtistDetailHeaderViewController {
     
     private func configureUI() {
         
-        artistImageView.image = DesignSystemAsset.Artist.guseguDetail.image
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         
