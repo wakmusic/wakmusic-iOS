@@ -94,7 +94,7 @@ extension ArtistDetailHeaderViewController {
         self.introDescriptionLabel.text = model.description
         
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID).toString),
+            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
@@ -143,7 +143,6 @@ extension ArtistDetailHeaderViewController {
     
     private func configureUI() {
         
-        artistImageView.image = DesignSystemAsset.Artist.guseguDetail.image
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         

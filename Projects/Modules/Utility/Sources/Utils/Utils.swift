@@ -25,7 +25,7 @@ public func STATUS_BAR_HEGHIT() -> CGFloat {
     return UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 }
 
-public func SAFEAREA_BOTTOM_HEGHIT() -> CGFloat {
+public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
     return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
 }
 

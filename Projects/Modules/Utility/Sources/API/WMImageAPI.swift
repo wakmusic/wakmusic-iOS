@@ -10,8 +10,8 @@ import Foundation
 
 public enum WMImageAPI {
     case fetchNewsThumbnail(time: String)
-    case fetchArtistWithRound(id: String)
-    case fetchArtistWithSquare(id: String)
+    case fetchArtistWithRound(id: String, version: Int)
+    case fetchArtistWithSquare(id: String, version: Int)
     case fetchProfile(name: String, version: Int)
     case fetchPlayList(id: String, version: Int)
     case fetchRecommendPlayListWithRound(id: String, version: Int)
@@ -33,11 +33,11 @@ extension WMImageAPI {
         case let .fetchNewsThumbnail(time):
             return "/static/news/\(time).png"
             
-        case let .fetchArtistWithRound(id):
-            return "/static/artist/round/\(id).png"
+        case let .fetchArtistWithRound(id, version):
+            return "/static/artist/round/\(id).png?v=\(version)"
             
-        case let .fetchArtistWithSquare(id):
-            return "/static/artist/square/\(id).png"
+        case let .fetchArtistWithSquare(id, version):
+            return "/static/artist/square/\(id).png?v=\(version)"
             
         case let .fetchProfile(name,version):
             return "/static/profile/\(name).png?v=\(version)"
