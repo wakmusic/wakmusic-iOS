@@ -116,8 +116,11 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FNn-dd-tDU">
                                                 <rect key="frame" x="0.0" y="0.0" width="198.33333333333334" height="188.66666666666666"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="고세구" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rb-8Q-BEe">
-                                                        <rect key="frame" x="16" y="16" width="137.33333333333334" height="28.666666666666671"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="징버거" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rb-8Q-BEe">
+                                                        <rect key="frame" x="16" y="12" width="142.33333333333334" height="36"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="zPQ-dD-b7K"/>
+                                                        </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -131,16 +134,16 @@
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이세계아이돌" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="he6-oI-bGB">
-                                                        <rect key="frame" x="16" y="52.666666666666664" width="166.33333333333334" height="19.999999999999993"/>
+                                                        <rect key="frame" x="16" y="56" width="166.33333333333334" height="24"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="20" id="6B8-5r-FG8"/>
+                                                            <constraint firstAttribute="height" constant="24" id="6B8-5r-FG8"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                         <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="세계 최초의 무7도록 킹받는 아이돌그 뒤에 숨겨진 귀여움이 '좀 더' 킹받는 그녀" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ne5-kV-2su">
-                                                        <rect key="frame" x="16" y="82.666666666666671" width="166.33333333333334" height="50.333333333333329"/>
+                                                        <rect key="frame" x="16" y="92" width="166.33333333333334" height="50.333333333333343"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                         <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -150,22 +153,22 @@
                                                     <constraint firstItem="7rb-8Q-BEe" firstAttribute="leading" secondItem="FNn-dd-tDU" secondAttribute="leading" constant="16" id="BAQ-lY-NvS"/>
                                                     <constraint firstAttribute="trailing" secondItem="4gB-Rq-DeW" secondAttribute="trailing" constant="16" id="Cya-rc-sKO"/>
                                                     <constraint firstAttribute="trailing" secondItem="he6-oI-bGB" secondAttribute="trailing" constant="16" id="DPc-F0-IuF"/>
-                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ne5-kV-2su" secondAttribute="bottom" constant="10" id="FNe-2r-Avv"/>
-                                                    <constraint firstItem="4gB-Rq-DeW" firstAttribute="leading" secondItem="7rb-8Q-BEe" secondAttribute="trailing" constant="5" id="Fet-VD-KLT"/>
+                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ne5-kV-2su" secondAttribute="bottom" constant="16" id="FNe-2r-Avv"/>
+                                                    <constraint firstItem="4gB-Rq-DeW" firstAttribute="leading" secondItem="7rb-8Q-BEe" secondAttribute="trailing" id="Fet-VD-KLT"/>
                                                     <constraint firstItem="he6-oI-bGB" firstAttribute="top" secondItem="7rb-8Q-BEe" secondAttribute="bottom" constant="8" id="I3h-yC-NzL"/>
-                                                    <constraint firstItem="7rb-8Q-BEe" firstAttribute="top" secondItem="FNn-dd-tDU" secondAttribute="top" constant="16" id="L67-RP-pYQ"/>
+                                                    <constraint firstItem="7rb-8Q-BEe" firstAttribute="top" secondItem="FNn-dd-tDU" secondAttribute="top" constant="12" id="L67-RP-pYQ"/>
                                                     <constraint firstItem="ne5-kV-2su" firstAttribute="trailing" secondItem="he6-oI-bGB" secondAttribute="trailing" id="bJU-E8-VQu"/>
                                                     <constraint firstItem="4gB-Rq-DeW" firstAttribute="top" secondItem="FNn-dd-tDU" secondAttribute="top" constant="16" id="mPR-QE-w15"/>
                                                     <constraint firstItem="he6-oI-bGB" firstAttribute="leading" secondItem="7rb-8Q-BEe" secondAttribute="leading" id="nFq-RK-3pt"/>
                                                     <constraint firstItem="ne5-kV-2su" firstAttribute="leading" secondItem="he6-oI-bGB" secondAttribute="leading" id="pwr-x8-lDS"/>
-                                                    <constraint firstItem="ne5-kV-2su" firstAttribute="top" secondItem="he6-oI-bGB" secondAttribute="bottom" constant="10" id="v8Q-Ea-Jh8"/>
+                                                    <constraint firstItem="ne5-kV-2su" firstAttribute="top" secondItem="he6-oI-bGB" secondAttribute="bottom" constant="12" id="v8Q-Ea-Jh8"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6eV-FK-IbB">
                                                 <rect key="frame" x="0.0" y="0.0" width="198.33333333333334" height="188.66666666666666"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="소개글" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYZ-24-Z5e">
-                                                        <rect key="frame" x="16" y="16" width="137.33333333333334" height="24"/>
+                                                        <rect key="frame" x="16" y="16" width="142.33333333333334" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="24" id="ZR1-lj-UTC"/>
                                                         </constraints>
@@ -219,7 +222,7 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="msH-8e-y5Q" firstAttribute="top" secondItem="cYZ-24-Z5e" secondAttribute="bottom" constant="8" id="2c1-R8-T4c"/>
-                                                    <constraint firstItem="oAc-YA-UoU" firstAttribute="leading" secondItem="cYZ-24-Z5e" secondAttribute="trailing" constant="5" id="3kU-zK-aq0"/>
+                                                    <constraint firstItem="oAc-YA-UoU" firstAttribute="leading" secondItem="cYZ-24-Z5e" secondAttribute="trailing" id="3kU-zK-aq0"/>
                                                     <constraint firstItem="oAc-YA-UoU" firstAttribute="top" secondItem="6eV-FK-IbB" secondAttribute="top" constant="16" id="9eg-8b-pqX"/>
                                                     <constraint firstAttribute="bottom" secondItem="msH-8e-y5Q" secondAttribute="bottom" constant="16" id="Dci-Jw-Es2"/>
                                                     <constraint firstItem="cYZ-24-Z5e" firstAttribute="top" secondItem="6eV-FK-IbB" secondAttribute="top" constant="16" id="HXJ-aa-JAz"/>
@@ -267,6 +270,7 @@
                         <outlet property="artistImageView" destination="meV-gF-5BZ" id="dUg-HZ-EFX"/>
                         <outlet property="artistIntroLabel" destination="ne5-kV-2su" id="I4d-LH-IDA"/>
                         <outlet property="artistNameLabel" destination="7rb-8Q-BEe" id="JdJ-eX-T81"/>
+                        <outlet property="artistNameLabelHeight" destination="zPQ-dD-b7K" id="Tv4-wl-ZF4"/>
                         <outlet property="descriptionBackButton" destination="oAc-YA-UoU" id="yYA-wc-8Gr"/>
                         <outlet property="descriptionBackView" destination="6eV-FK-IbB" id="oy1-Mp-Hy2"/>
                         <outlet property="descriptionFrontButton" destination="4gB-Rq-DeW" id="Dtw-9j-o0K"/>

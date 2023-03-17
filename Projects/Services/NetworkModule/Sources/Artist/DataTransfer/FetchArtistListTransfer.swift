@@ -26,6 +26,7 @@ public extension ArtistListResponseDTO {
             instagram: instagram ?? "",
             imageRoundVersion: imageRoundVersion ?? 0,
             imageSquareVersion: imageSquareVersion ?? 0,
+            graduated: graduated ?? false,
             isHiddenItem: false
         )
     }

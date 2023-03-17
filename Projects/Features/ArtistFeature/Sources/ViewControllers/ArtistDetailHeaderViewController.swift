@@ -22,6 +22,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var descriptionFrontView: UIView!
     @IBOutlet weak var descriptionFrontButton: UIButton!
     @IBOutlet weak var artistNameLabel: UILabel!
+    @IBOutlet weak var artistNameLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var artistGroupLabel: UILabel!
     @IBOutlet weak var artistIntroLabel: UILabel!
     
@@ -58,46 +59,81 @@ extension ArtistDetailHeaderViewController {
         
         let artistName: String = model.name
         let artistEngName: String = model.ID.capitalizingFirstLetter
+                
+//        var artistNameParagraphStyle = NSMutableParagraphStyle()
+//        artistNameParagraphStyle.lineHeightMultiple = 1.26
         
-        var artistNameAttributedString = NSMutableAttributedString(
+        let artistNameAttributedString = NSMutableAttributedString(
             string: artistName + " " + artistEngName,
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5]
         )
-        let artistNameRange = (artistNameAttributedString.string as NSString).range(of: artistName)
 
+        let artistNameRange = (artistNameAttributedString.string as NSString).range(of: artistName)
         let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
         
         artistNameAttributedString.addAttributes(
             [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-            .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
-            .kern: -0.5],
+             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+             .kern: -0.5],
             range: artistEngNameRange
         )
         
-        let availableWidth: CGFloat = APP_WIDTH() - (((140 * APP_WIDTH()) / 375.0) + 109.0)
-        let prepareWidth: CGFloat = artistNameAttributedString.width(containerHeight: 36)
+        let margin: CGFloat = 104.0
+        let availableWidth: CGFloat = APP_WIDTH() - (((140 * APP_WIDTH()) / 375.0) + margin)
+        let artistNameWidth: CGFloat = artistNameAttributedString.width(containerHeight: 36)
         
+        DEBUG_LOG("availableWidth: \(availableWidth)")
+        DEBUG_LOG("\(model.name): \(artistNameWidth)")
+                
         artistNameAttributedString.addAttributes(
-            [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= prepareWidth ? 24 : 20)],
+            [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= artistNameWidth ? 24 : 20)],
             range: artistNameRange
         )
+        
+        self.artistNameLabelHeight.constant =
+        (availableWidth >= artistNameWidth) ? 36 : ceil(artistNameAttributedString.height(containerWidth: availableWidth))
 
         self.artistNameLabel.attributedText = artistNameAttributedString
         
-        self.artistGroupLabel.text = model.group
-        self.artistIntroLabel.text = model.title
-        self.artistIntroLabel.lineBreakMode = .byCharWrapping
+        self.artistGroupLabel.text = model.group + (model.graduated ? " · 졸업" : "")
+        
+        let artistIntroParagraphStyle = NSMutableParagraphStyle()
+        artistIntroParagraphStyle.lineHeightMultiple = 1.44
+        
+        let artistIntroAttributedString = NSMutableAttributedString(
+            string: model.title,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .paragraphStyle: artistIntroParagraphStyle,
+                         .kern: -0.5]
+        )
+
+        self.artistIntroLabel.lineBreakMode = .byWordWrapping
+        self.artistIntroLabel.attributedText = artistIntroAttributedString
         
         self.introTitleLabel.text = "소개글"
-        self.introDescriptionLabel.text = model.description
+        
+        var artistIntroDescriptionParagraphStyle = NSMutableParagraphStyle()
+        artistIntroDescriptionParagraphStyle.lineHeightMultiple = 1.26
+
+        let artistIntroDescriptionAttributedString = NSMutableAttributedString(
+            string: model.description,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .paragraphStyle: artistIntroDescriptionParagraphStyle,
+                         .kern: -0.5]
+        )
+        self.introDescriptionLabel.attributedText = artistIntroDescriptionAttributedString
         
         artistImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
+        
+        self.view.layoutIfNeeded()
     }
     
     private func bind() {
@@ -167,6 +203,7 @@ extension ArtistDetailHeaderViewController {
         introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         introDescriptionLabel.textAlignment = .left
+        introDescriptionLabel.lineBreakMode = .byWordWrapping
 
         scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
     }
