@@ -143,12 +143,29 @@ extension PlayListDetailViewController{
         
         let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
         
+        let baseColor = DesignSystemAsset.PrimaryColor.baseskeleton.color
+        
+        let secondaryColor = DesignSystemAsset.PrimaryColor.secondaryskeleton.color
+        
         
         playListInfoSuperView.isSkeletonable = true
-        playListImage.isSkeletonable = true
-        playListImage.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: DesignSystemAsset.PrimaryColor.baseskeleton.color,secondaryColor: DesignSystemAsset.PrimaryColor.secondaryskeleton.color), animation: animation, transition: .crossDissolve(0.25))
+        playListInfoView.isSkeletonable = true
         
         // 디졸브 상황에서 두 장면이 서로 교차할 때, 앞 화면이 사라지고 뒤 화면이 뚜렷하게 나타나는 화면 전환 기법
+        playListImage.isSkeletonable = true
+        playListImage.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
+        
+        playListNameLabel.isSkeletonable = true
+        playListNameLabel.skeletonCornerRadius = 2
+        playListNameLabel.skeletonTextLineHeight = .relativeToFont
+        playListNameLabel.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
+        
+        playListCountLabel.isSkeletonable = true
+        playListCountLabel.skeletonCornerRadius = 2
+        playListCountLabel.skeletonTextLineHeight = .relativeToFont
+        playListCountLabel.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
+        
+        
        
     }
     
