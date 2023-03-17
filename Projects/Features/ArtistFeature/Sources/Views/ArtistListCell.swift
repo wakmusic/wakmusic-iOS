@@ -31,7 +31,7 @@ extension ArtistListCell {
             string: model.name,
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                         .kern: -1]
+                         .kern: -0.5]
         )
         
         artistLabel.attributedText = artistNameAttributedString

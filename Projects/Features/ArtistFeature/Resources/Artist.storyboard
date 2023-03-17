@@ -27,10 +27,10 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ArtistListCell" id="sKU-or-gHW" customClass="ArtistListCell" customModule="ArtistFeature">
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ArtistListCell" id="sKU-or-gHW" customClass="ArtistListCell" customModule="ArtistFeature">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="200"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="FEZ-2c-K8j">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="FEZ-2c-K8j">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="200"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
@@ -41,7 +41,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="우왁굳" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAd-zQ-aSa">
-                                                    <rect key="frame" x="0.0" y="176" width="128" height="24"/>
+                                                    <rect key="frame" x="46" y="176" width="36.333333333333343" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="24" id="Abz-yf-Hbq"/>
                                                     </constraints>
@@ -52,11 +52,10 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="bAd-zQ-aSa" secondAttribute="bottom" id="4B1-OL-40Z"/>
-                                                <constraint firstItem="bAd-zQ-aSa" firstAttribute="leading" secondItem="FEZ-2c-K8j" secondAttribute="leading" id="6BC-kS-hMr"/>
                                                 <constraint firstItem="vcv-2r-QvJ" firstAttribute="leading" secondItem="FEZ-2c-K8j" secondAttribute="leading" id="AsS-cu-oMS"/>
+                                                <constraint firstItem="bAd-zQ-aSa" firstAttribute="centerX" secondItem="FEZ-2c-K8j" secondAttribute="centerX" id="FLo-qr-dLC"/>
                                                 <constraint firstItem="bAd-zQ-aSa" firstAttribute="top" secondItem="vcv-2r-QvJ" secondAttribute="bottom" constant="4" id="G8b-WN-wTC"/>
                                                 <constraint firstAttribute="trailing" secondItem="vcv-2r-QvJ" secondAttribute="trailing" id="R16-ke-rdU"/>
-                                                <constraint firstAttribute="trailing" secondItem="bAd-zQ-aSa" secondAttribute="trailing" id="fqS-oX-F2o"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="128" height="200"/>

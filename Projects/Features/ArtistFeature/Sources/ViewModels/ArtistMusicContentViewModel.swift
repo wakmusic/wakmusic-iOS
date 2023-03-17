@@ -76,17 +76,17 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             })
             .bind(to: dataSource)
             .disposed(by: disposeBag)
-                
+        
         input.songTapped
-            .withLatestFrom(indexOfSelectedSongs, resultSelector: { (songIndex, selectedSongs) -> [Int] in
-                if selectedSongs.contains(songIndex) {
-                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == songIndex }) else { return selectedSongs }
+            .withLatestFrom(indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+                if selectedSongs.contains(index) {
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
                     var newSelectedSongs = selectedSongs
                     newSelectedSongs.remove(at: removeTargetIndex)
                     return newSelectedSongs
                     
                 }else{
-                    return selectedSongs + [songIndex]
+                    return selectedSongs + [index]
                 }
             })
             .map { $0.sorted { $0 < $1 } }

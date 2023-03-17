@@ -91,7 +91,7 @@ extension ArtistDetailHeaderViewController {
             [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= artistNameWidth ? 24 : 20)],
             range: artistNameRange
         )
-        
+
         self.artistNameLabelHeight.constant =
         (availableWidth >= artistNameWidth) ? 36 : ceil(artistNameAttributedString.height(containerWidth: availableWidth))
 
