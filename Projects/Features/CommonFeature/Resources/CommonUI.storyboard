@@ -536,6 +536,7 @@
                         <outlet property="moreButton" destination="MnJ-ee-PEf" id="rFo-cI-E9T"/>
                         <outlet property="playListCountLabel" destination="PUr-m6-kur" id="NzD-XL-Kfl"/>
                         <outlet property="playListImage" destination="kH8-q0-s8L" id="xfs-sl-Obf"/>
+                        <outlet property="playListInfoSuperView" destination="JO4-rB-rZg" id="Od8-AH-VvG"/>
                         <outlet property="playListInfoView" destination="fhw-eo-vZZ" id="Ilt-s6-tTl"/>
                         <outlet property="playListNameLabel" destination="yy1-4y-7iv" id="Vzg-qp-Yhz"/>
                         <outlet property="tableView" destination="R7P-Q4-mqC" id="FZ3-hE-gn2"/>

@@ -35,7 +35,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editStateLabel: UILabel!
     @IBOutlet weak var playListInfoView: UIView!
     
-
+    @IBOutlet weak var playListInfoSuperView: UIView!
+    
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
     var multiPurposePopComponent:MultiPurposePopComponent!
@@ -138,13 +139,26 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
 
 extension PlayListDetailViewController{
     
+    private func configureSkeleton(){
+        
+        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
+        
+        
+        playListInfoSuperView.isSkeletonable = true
+        playListImage.isSkeletonable = true
+        playListImage.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: DesignSystemAsset.PrimaryColor.baseskeleton.color,secondaryColor: DesignSystemAsset.PrimaryColor.secondaryskeleton.color), animation: animation, transition: .crossDissolve(0.25))
+        
+        // 디졸브 상황에서 두 장면이 서로 교차할 때, 앞 화면이 사라지고 뒤 화면이 뚜렷하게 나타나는 화면 전환 기법
+       
+    }
+    
+    
     private func configureUI(){
     
     
        
-        playListImage.isSkeletonable = true
-        playListImage.isHiddenWhenSkeletonIsActive = true
-        playListImage.showAnimatedSkeleton()
+        
+        
         
         // Drag & Drop 기능을 위한 부분
         
@@ -210,6 +224,7 @@ extension PlayListDetailViewController{
         self.editPlayListNameButton.isHidden = viewModel.type == .wmRecommend
         
         bindRx()
+        configureSkeleton()
         
         
     }
@@ -318,7 +333,7 @@ extension PlayListDetailViewController{
             
        
             
-            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL)
+            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil)
             
             self.playListImage.stopSkeletonAnimation()
             
