@@ -82,7 +82,7 @@ extension MyPlayListViewController{
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
-        .skip(1)
+        .skip(2)
         .do(onNext: { [weak self] model in
             
             guard let self = self else {

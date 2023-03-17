@@ -7,7 +7,8 @@ let project = Project.makeModule(
     product: .framework,
     packages: [
         .YouTubePlayerKit,
-        .HPParallaxHeader
+        .HPParallaxHeader,
+        .SkeletonView
     ],
     dependencies: [
         .SPM.Needle,
@@ -26,6 +27,7 @@ let project = Project.makeModule(
         .SPM.SwiftEntryKit,
         .SPM.CryptoSwift,
         .SPM.YouTubePlayerKit,
-        .SPM.HPParallaxHeader
+        .SPM.HPParallaxHeader,
+        .SPM.SkeletonView
     ]
 )
