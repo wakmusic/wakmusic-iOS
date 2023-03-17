@@ -95,9 +95,9 @@ extension ArtistMusicContentViewController {
                 return cell
             }.disposed(by: disposeBag)
         
-        output.selectedSongs
+        output.indexOfSelectedSongs
             .skip(1)
-            .debug("selectedSongs")
+            .debug("indexOfSelectedSongs")
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
@@ -116,6 +116,12 @@ extension ArtistMusicContentViewController {
                     self.songCartView?.delegate = self
                 }
             }).disposed(by: disposeBag)
+        
+        output.idOfSelectedSongs
+            .filter{ !$0.isEmpty }
+            .debug("idOfSelectedSongs")
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
