@@ -149,12 +149,12 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jLC-fz-G5h" customClass="SearchContentView">
-                                <rect key="frame" x="0.0" y="115" width="393" height="598"/>
+                                <rect key="frame" x="0.0" y="115" width="393" height="654"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="yLy-ME-gxl" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="2dP-Eo-Ia3"/>
                             <constraint firstItem="jLC-fz-G5h" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="GRs-Zk-gf4"/>
@@ -163,7 +163,7 @@
                             <constraint firstItem="nj5-Rh-R0O" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="NUt-iX-NXS"/>
                             <constraint firstItem="jLC-fz-G5h" firstAttribute="top" secondItem="nj5-Rh-R0O" secondAttribute="bottom" id="Pax-vD-9JE"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="nj5-Rh-R0O" secondAttribute="trailing" id="mgc-05-uhs"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jLC-fz-G5h" secondAttribute="bottom" constant="56" id="znF-Ya-K6h"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jLC-fz-G5h" secondAttribute="bottom" id="znF-Ya-K6h"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="검색" id="3UJ-E3-BYc"/>
