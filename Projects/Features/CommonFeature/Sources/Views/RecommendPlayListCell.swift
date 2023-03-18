@@ -25,7 +25,9 @@ public class RecommendPlayListCell: UICollectionViewCell {
         self.contentView.layer.borderWidth = 1
         self.contentView.backgroundColor = colorFromRGB(0xFCFCFD)
         
-        self.logoImageView.layer.cornerRadius = self.logoImageView.frame.width / 2
+        let itemWidth: CGFloat = (APP_WIDTH()-(20+8+20)) / 2.0
+        let itemHeight: CGFloat = (80.0 * itemWidth) / 164.0
+        self.logoImageView.layer.cornerRadius = ((48 * itemHeight) / 80.0) / 2.0
     }
 }
 
