@@ -132,7 +132,7 @@
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpc-GD-GMI">
                                                                                                     <rect key="frame" x="12" y="0.0" width="15" height="16"/>
                                                                                                     <constraints>
-                                                                                                        <constraint firstAttribute="width" constant="15" id="2x1-vE-4dz"/>
+                                                                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="15" id="2x1-vE-4dz"/>
                                                                                                         <constraint firstAttribute="height" constant="16" id="Inc-45-hdy"/>
                                                                                                     </constraints>
                                                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>

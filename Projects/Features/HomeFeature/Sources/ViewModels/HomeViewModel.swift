@@ -54,7 +54,7 @@ public final class HomeViewModel: ViewModelType {
         let idOfAllChart: PublishSubject<[String]> = PublishSubject()
 
         fetchChartRankingUseCase
-            .execute(type: .total, limit: 100)
+            .execute(type: .hourly, limit: 100)
             .catchAndReturn([])
             .asObservable()
             .bind(to: chartDataSource)
@@ -105,7 +105,7 @@ public final class HomeViewModel: ViewModelType {
                 
                 let chartAndNewSong = Observable.zip(
                     self.fetchChartRankingUseCase
-                        .execute(type: .total, limit: 100)
+                        .execute(type: .hourly, limit: 100)
                         .catchAndReturn([])
                         .asObservable(),
                     self.fetchNewSongUseCase
