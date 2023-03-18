@@ -127,7 +127,7 @@ extension SearchViewController {
         self.cancelButton.backgroundColor = .white
         self.viewModel.output.isFoucused.accept(false)
         
-        
+        self.view.backgroundColor = .clear//DesignSystemAsset.GrayColor.gray100.color
         rxBindTask()
         self.add(asChildViewController: beforeVc)
         beforeVc.delegate = self
@@ -297,7 +297,7 @@ extension SearchViewController {
         
         RxKeyboard.instance.visibleHeight //드라이브: 무조건 메인쓰레드에서 돌아감
             .drive(onNext: { [weak self] keyboardVisibleHeight in
-                
+                DEBUG_LOG("keyboardVisibleHeight: \(keyboardVisibleHeight)")
                 guard let self = self else {
                     return
                 }
@@ -307,11 +307,8 @@ extension SearchViewController {
                 let window: UIWindow? = UIApplication.shared.windows.first
                 let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
                 
-                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom  - 49 //탭바 높이 추가 
-                
-                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 56
-                self.view.layoutIfNeeded() //제약조건 바뀌었으므로 알려줌
-                
+                let tmp = keyboardVisibleHeight  - safeAreaInsetsBottom  - 56 //탭바 높이 추가
+                self.contentViewBottomConstraint.constant = tmp > 0 ? tmp  : 0
                 
             }).disposed(by: disposeBag)
             
