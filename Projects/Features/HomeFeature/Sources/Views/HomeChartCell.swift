@@ -65,11 +65,10 @@ extension HomeChartCell{
         )
         artistLabel.attributedText = artistAttributedString
 
-        let lastRanking = model.last - (index + 1)
-        rankImageView.isHidden = model.last == 0
+        let lastRanking: Int = model.last - (index + 1)
         rankChangedLabel.text = "\(model.last)"
-        
-        if model.last == 0 {
+
+        if model.last == 0 { //NEW
             let rankLabelAttributedString = NSMutableAttributedString(
                 string: "NEW",
                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 11),
@@ -77,22 +76,41 @@ extension HomeChartCell{
                              .kern: -0.5]
             )
             rankChangedLabel.attributedText = rankLabelAttributedString
-            rankChangedLabel.isHidden = true
+            rankChangedLabel.isHidden = false
+            rankImageView.isHidden = true
 
-        } else if lastRanking > 99 {
+        } else if lastRanking > 99 { // blowup
             rankImageView.image = DesignSystemAsset.Chart.blowup.image
-            rankChangedLabel.isHidden = true
-            
-        } else if lastRanking == 0 { //변동없음
-            rankImageView.image = DesignSystemAsset.Chart.non.image
+            rankImageView.isHidden = false
             rankChangedLabel.isHidden = true
 
-        } else if lastRanking > 0 {
+        } else if lastRanking == 0 { // 변동없음
+            rankImageView.image = DesignSystemAsset.Chart.non.image
+            rankImageView.isHidden = false
+            rankChangedLabel.isHidden = true
+
+        } else if lastRanking > 0 { //UP
+            let rankLabelAttributedString = NSMutableAttributedString(
+                string: "\(abs(lastRanking))",
+                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 11),
+                             .foregroundColor: DesignSystemAsset.PrimaryColor.increase.color,
+                             .kern: -0.5]
+            )
+            rankChangedLabel.attributedText = rankLabelAttributedString
             rankImageView.image = DesignSystemAsset.Chart.up.image
+            rankImageView.isHidden = false
             rankChangedLabel.isHidden = false
 
-        } else if lastRanking < 0 {
+        } else if lastRanking < 0 { //DOWN
+            let rankLabelAttributedString = NSMutableAttributedString(
+                string: "\(abs(lastRanking))",
+                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 11),
+                             .foregroundColor: DesignSystemAsset.PrimaryColor.decrease.color,
+                             .kern: -0.5]
+            )
+            rankChangedLabel.attributedText = rankLabelAttributedString
             rankImageView.image = DesignSystemAsset.Chart.down.image
+            rankImageView.isHidden = false
             rankChangedLabel.isHidden = false
         }
     }    
