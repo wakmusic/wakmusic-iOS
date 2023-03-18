@@ -112,7 +112,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                             displayName: "ifari",
                             first_login_time: 0,
                             first: false,
-                            profile: "panchi"
+                            profile: "panchi",
+                            version: 1
                         )
                     )
                     .asObservable()
