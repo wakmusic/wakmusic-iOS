@@ -17,6 +17,7 @@ public protocol RecommendPlayListViewDelegate: AnyObject {
 
 public class RecommendPlayListView: UIView {
 
+    @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
 
     public weak var delegate: RecommendPlayListViewDelegate?
@@ -51,6 +52,14 @@ public extension RecommendPlayListView {
                                 forCellWithReuseIdentifier: "RecommendPlayListCell")
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        let attributedString = NSMutableAttributedString(
+            string: "왁뮤팀이 추천하는 플레이리스트",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        titleStringLabel.attributedText = attributedString
     }
     
     static func getViewHeight(model: [RecommendPlayListEntity]) -> CGFloat {

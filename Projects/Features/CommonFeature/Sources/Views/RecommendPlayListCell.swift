@@ -32,14 +32,14 @@ public class RecommendPlayListCell: UICollectionViewCell {
 extension RecommendPlayListCell {
     
     func update(model: RecommendPlayListEntity) {
-        
-        
-        //MARK: 폰트설정
-        titleStringLabel.text = model.title
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray600.color
-        
-        
+        let attributedString = NSMutableAttributedString(
+            string: model.title,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                         .kern: -0.5]
+        )
+        titleStringLabel.attributedText = attributedString
+
         logoImageView.kf.setImage(with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id,version: model.image_round_version).toURL
                                   ,placeholder: nil,
                                   options: [.transition(.fade(0.2))])

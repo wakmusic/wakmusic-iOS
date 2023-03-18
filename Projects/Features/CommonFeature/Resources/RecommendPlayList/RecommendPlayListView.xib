@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RecommendPlayListView" customModule="CommonFeature">
             <connections>
                 <outlet property="collectionView" destination="LaC-EM-sWn" id="J7F-eI-0te"/>
+                <outlet property="titleStringLabel" destination="KgG-tE-guY" id="cSN-cA-LSW"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
