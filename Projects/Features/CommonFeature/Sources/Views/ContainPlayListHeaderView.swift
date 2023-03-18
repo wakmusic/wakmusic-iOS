@@ -53,7 +53,7 @@ class ContainPlayListHeaderView: UIView {
         
         self.buttonImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
        
-        let attr = NSMutableAttributedString(string: "새  플레이리스트에 담기",
+        let attr = NSMutableAttributedString(string: "새  플레이리스트 만들기",
                                              attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
  
