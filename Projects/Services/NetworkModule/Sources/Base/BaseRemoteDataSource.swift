@@ -43,7 +43,7 @@ public class BaseRemoteDataSource<API: WMAPI> {
 private extension BaseRemoteDataSource {
     func defaultRequest(_ api: API) -> Single<Response> {
         return provider.rx.request(api)
-            .timeout(.seconds(5), scheduler: MainScheduler.asyncInstance)
+            .timeout(.seconds(10), scheduler: MainScheduler.asyncInstance)
             .catch { error in
                 guard let errorCode = (error as? MoyaError)?.response?.statusCode else {
                     return Single.error(error)
