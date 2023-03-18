@@ -110,6 +110,15 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase {
         return appComponent.fetchLyricsUseCase
     }
+    var addLikeSongUseCase: any AddLikeSongUseCase {
+        return appComponent.addLikeSongUseCase
+    }
+    var cancelLikeSongUseCase: any CancelLikeSongUseCase {
+        return appComponent.cancelLikeSongUseCase
+    }
+    var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase {
+        return appComponent.fetchLikeNumOfSongUseCase
+    }
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
@@ -705,6 +714,9 @@ extension PlaylistComponent: Registration {
 extension PlayerComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayerDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
+        keyPathToName[\PlayerDependency.addLikeSongUseCase] = "addLikeSongUseCase-any AddLikeSongUseCase"
+        keyPathToName[\PlayerDependency.cancelLikeSongUseCase] = "cancelLikeSongUseCase-any CancelLikeSongUseCase"
+        keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
     }
 }

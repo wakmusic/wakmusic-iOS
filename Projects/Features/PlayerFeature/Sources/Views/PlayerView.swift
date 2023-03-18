@@ -146,13 +146,12 @@ public final class PlayerView: UIView {
         $0.distribution = .fillEqually
     }
     
-    internal lazy var likeButton = VerticalButton().then {
+    internal lazy var likeButton = LikeButton().then {
         $0.setImage(DesignSystemAsset.Player.likeOff.image, for: .normal)
         $0.setTitle("1.1만", for: .normal)
-        $0.tintColor = .systemGray
         $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.titleLabel?.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
-        $0.setTitleColor(DesignSystemAsset.GrayColor.gray400.color, for: .normal)
+        $0.isOn = false
         $0.alignToVertical()
     }
     

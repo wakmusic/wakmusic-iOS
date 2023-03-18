@@ -72,7 +72,7 @@ extension FavoriteViewController{
         
         if  !output.state.value.isEditing && sender.state == .began {
             output.state.accept(EditState(isEditing: true, force: true))
-            UIImpactFeedbackGenerator(style: .light).impactOccurred() // 진동 코드
+            HapticManager.shared.impact(style: .light)
         }
     }
     
