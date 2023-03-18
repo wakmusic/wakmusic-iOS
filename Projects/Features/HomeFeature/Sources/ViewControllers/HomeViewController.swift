@@ -128,7 +128,7 @@ extension HomeViewController {
         collectionView.rx.itemSelected
             .withLatestFrom(output.newSongDataSource) { ($0, $1) }
             .map { $0.1[$0.0.item].id }
-            .debug("✅ idOfAllChart")
+            .debug("✅ idOfNewSong")
             .subscribe()
             .disposed(by: disposeBag)
     }
@@ -263,7 +263,6 @@ extension HomeViewController {
         }
         
         latestSongAllButton.isSelected = true
-        
         scrollView.refreshControl = refreshControl
     }
 }
