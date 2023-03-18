@@ -17,12 +17,18 @@ import DataMappingModule
 public final class HomeViewModel: ViewModelType {
     
     var disposeBag = DisposeBag()
+    var fetchChartRankingUseCase: FetchChartRankingUseCase
     var fetchNewSongUseCase: FetchNewSongUseCase
+    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
     public init(
-        fetchNewSongUseCase: any FetchNewSongUseCase
+        fetchChartRankingUseCase: any FetchChartRankingUseCase,
+        fetchNewSongUseCase: any FetchNewSongUseCase,
+        fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
     ){
+        self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchNewSongUseCase = fetchNewSongUseCase
+        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
