@@ -23,7 +23,7 @@ public class RecommendPlayListCell: UICollectionViewCell {
         self.contentView.layer.cornerRadius = 8
         self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.borderWidth = 1
-        self.contentView.backgroundColor = colorFromRGB(0xFCFCFD)
+        self.contentView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color
         
         let itemWidth: CGFloat = (APP_WIDTH()-(20+8+20)) / 2.0
         let itemHeight: CGFloat = (80.0 * itemWidth) / 164.0
@@ -42,8 +42,10 @@ extension RecommendPlayListCell {
         )
         titleStringLabel.attributedText = attributedString
 
-        logoImageView.kf.setImage(with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id,version: model.image_round_version).toURL
-                                  ,placeholder: nil,
-                                  options: [.transition(.fade(0.2))])
+        logoImageView.kf.setImage(
+            with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id,version: model.image_round_version).toURL,
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
 }
