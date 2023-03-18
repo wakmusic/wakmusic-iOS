@@ -14,7 +14,7 @@ public enum NewSongGroupType: CaseIterable {
     case isedol
     case gomem
 
-    public var id: String {
+    public var apiKey: String {
         switch self {
         case .all:
             return "all"

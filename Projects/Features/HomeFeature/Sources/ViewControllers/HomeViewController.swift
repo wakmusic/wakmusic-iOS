@@ -76,15 +76,27 @@ extension HomeViewController {
             latestSongIseButton.rx.tap.map { _ -> NewSongGroupType in .isedol },
             latestSongGomButton.rx.tap.map { _ -> NewSongGroupType in .gomem }
         )
+        .withLatestFrom(input.newSongTypeTapped) { ($0, $1) }
+        .filter{ (currentSelectedType, previousType) in
+            guard currentSelectedType != previousType else { return false }
+            return true
+        }
         .throttle(RxTimeInterval.seconds(1), latest: false, scheduler: MainScheduler.instance)
-        .do(onNext: { [weak self] (type) in
+        .do(onNext: { [weak self] (currentSelectedType, previousType) in
             guard let `self` = self else { return }
-            self.latestSongAllButton.isSelected = false
-            self.latestSongWwgButton.isSelected = false
-            self.latestSongIseButton.isSelected = false
-            self.latestSongGomButton.isSelected = false
+            
+            switch previousType {
+            case .all:
+                self.latestSongAllButton.isSelected = false
+            case .woowakgood:
+                self.latestSongWwgButton.isSelected = false
+            case .isedol:
+                self.latestSongIseButton.isSelected = false
+            case .gomem:
+                self.latestSongGomButton.isSelected = false
+            }
 
-            switch type {
+            switch currentSelectedType {
             case .all:
                 self.latestSongAllButton.isSelected = true
             case .woowakgood:
@@ -95,6 +107,9 @@ extension HomeViewController {
                 self.latestSongGomButton.isSelected = true
             }
         })
+        .map { (currentSelectedType, _) -> NewSongGroupType in
+            return currentSelectedType
+        }
         .bind(to: input.newSongTypeTapped)
         .disposed(by: disposeBag)
         
@@ -106,17 +121,16 @@ extension HomeViewController {
         tableView.rx.itemSelected
             .withLatestFrom(output.chartDataSource) { ($0, $1) }
             .map { $0.1[$0.0.row].id }
-            .subscribe(onNext: { (ID) in
-                DEBUG_LOG("ID: \(ID)")
-            })
+            .debug("✅ idOfAllChart")
+            .subscribe()
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
             .withLatestFrom(output.newSongDataSource) { ($0, $1) }
             .map { $0.1[$0.0.item].id }
-            .subscribe(onNext: { (ID) in
-                DEBUG_LOG("ID: \(ID)")
-            }).disposed(by: disposeBag)
+            .debug("✅ idOfAllChart")
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func outputBind() {
@@ -187,7 +201,7 @@ extension HomeViewController {
             }).disposed(by: disposeBag)
         
         output.idOfAllChart
-            .debug()
+            .debug("✅ idOfAllChart")
             .subscribe()
             .disposed(by: disposeBag)
     }
