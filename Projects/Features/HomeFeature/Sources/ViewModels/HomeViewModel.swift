@@ -27,7 +27,7 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Input {
-        var newSongButtonTapped: PublishRelay<NewSongGroupType>
+        var newSongButtonTapped: PublishRelay<NewSongGroupType> = PublishRelay()
     }
 
     public struct Output {
@@ -43,7 +43,8 @@ public final class HomeViewModel: ViewModelType {
             .asObservable()
             .subscribe()
             .disposed(by: disposeBag)
-
+        
         return Output(dataSource: dataSource)
     }
+    
 }
