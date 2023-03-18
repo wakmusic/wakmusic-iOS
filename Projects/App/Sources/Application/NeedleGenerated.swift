@@ -73,6 +73,9 @@ private class ArtistMusicContentDependency1615ac8469e54ec51921Provider: ArtistMu
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase {
         return appComponent.fetchArtistSongListUseCase
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -699,6 +702,7 @@ extension ArtistDetailComponent: Registration {
 extension ArtistMusicContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ArtistMusicContentDependency.fetchArtistSongListUseCase] = "fetchArtistSongListUseCase-any FetchArtistSongListUseCase"
+        keyPathToName[\ArtistMusicContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension ArtistMusicComponent: Registration {

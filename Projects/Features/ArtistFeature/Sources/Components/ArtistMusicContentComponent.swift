@@ -11,9 +11,11 @@ import UIKit
 import NeedleFoundation
 import DomainModule
 import DataMappingModule
+import CommonFeature
 
 public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }
+    var containSongsComponent: ContainSongsComponent { get }
 }
 
 public final class ArtistMusicContentComponent: Component<ArtistMusicContentDependency> {
@@ -26,7 +28,8 @@ public final class ArtistMusicContentComponent: Component<ArtistMusicContentDepe
                 type: type,
                 model: model,
                 fetchArtistSongListUseCase: dependency.fetchArtistSongListUseCase
-            )
+            ),
+            containSongsComponent: dependency.containSongsComponent
         )
     }
 }

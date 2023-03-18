@@ -69,7 +69,7 @@ extension ContainSongsViewController {
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         
-        songCountLabel.text = "\(viewModel.songs)곡"
+        songCountLabel.text = "\(viewModel.songs.count)곡"
         
     
         bindRx()
@@ -164,7 +164,7 @@ extension ContainSongsViewController {
             self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
             
-            
+            self.dismiss(animated: true)
         })
         .disposed(by: disposeBag)
     }

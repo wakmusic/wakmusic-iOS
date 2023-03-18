@@ -23,7 +23,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-
+    var containSongsComponent: ContainSongsComponent!
+    
     private var viewModel: ArtistMusicContentViewModel!
     lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
     lazy var output = viewModel.transform(from: input)
@@ -42,10 +43,12 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     }
     
     public static func viewController(
-        viewModel: ArtistMusicContentViewModel
+        viewModel: ArtistMusicContentViewModel,
+        containSongsComponent: ContainSongsComponent
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.viewModel = viewModel
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
@@ -137,7 +140,12 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
         case .addSong:
-            return
+            let songs: [String] = output.idOfSelectedSongs.value
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.input.allSongSelected.onNext(false)
+            }
         case .addPlayList:
             return
         case .play:
