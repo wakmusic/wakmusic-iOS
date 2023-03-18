@@ -182,7 +182,7 @@
                                                                                     </subviews>
                                                                                 </stackView>
                                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PbW-Ze-OKB">
-                                                                                    <rect key="frame" x="289" y="17" width="24" height="24"/>
+                                                                                    <rect key="frame" x="289" y="21" width="24" height="24"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="24" id="B4G-J1-nEF"/>
                                                                                         <constraint firstAttribute="height" constant="24" id="PRu-ji-ZMy"/>
@@ -207,7 +207,7 @@
                                                                                 <constraint firstItem="WQR-zQ-Cmn" firstAttribute="leading" secondItem="c8b-mc-eGP" secondAttribute="leading" id="UU4-Cb-mgn"/>
                                                                                 <constraint firstItem="4wl-ZM-XNn" firstAttribute="centerX" secondItem="WQR-zQ-Cmn" secondAttribute="centerX" id="YUv-vL-3Um"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="Bjg-KU-WyW" secondAttribute="bottom" id="bFq-gB-QfZ"/>
-                                                                                <constraint firstItem="PbW-Ze-OKB" firstAttribute="centerY" secondItem="7cd-hu-qfI" secondAttribute="centerY" id="bTc-SE-fec"/>
+                                                                                <constraint firstItem="PbW-Ze-OKB" firstAttribute="centerY" secondItem="7cd-hu-qfI" secondAttribute="centerY" constant="4" id="bTc-SE-fec"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="Bjg-KU-WyW" secondAttribute="trailing" id="h9J-ke-5bB"/>
                                                                                 <constraint firstItem="bMX-QM-0aq" firstAttribute="leading" secondItem="7cd-hu-qfI" secondAttribute="trailing" constant="8" id="rWM-te-5zx"/>
                                                                                 <constraint firstItem="4wl-ZM-XNn" firstAttribute="top" secondItem="WQR-zQ-Cmn" secondAttribute="bottom" id="rcY-cq-vRI"/>
