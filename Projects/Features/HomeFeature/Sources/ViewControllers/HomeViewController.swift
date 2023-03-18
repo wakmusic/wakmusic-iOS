@@ -200,7 +200,7 @@ extension HomeViewController {
         chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
-        chartBorderView.layer.borderColor = UIColor.white.cgColor
+        chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         blurEffectView.layer.cornerRadius = 12
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(

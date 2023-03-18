@@ -104,14 +104,18 @@ public final class HomeViewModel: ViewModelType {
                 guard let self = self else{ return Observable.empty() }
                 
                 let chartAndNewSong = Observable.zip(
-                    self.fetchChartRankingUseCase.execute(type: .total, limit: 100)
+                    self.fetchChartRankingUseCase
+                        .execute(type: .total, limit: 100)
                         .asObservable(),
-                    self.fetchNewSongUseCase.execute(type: type)
+                    self.fetchNewSongUseCase
+                        .execute(type: type)
                         .asObservable()
                 )
                 let result = Observable.zip(
                     chartAndNewSong,
-                    self.fetchRecommendPlayListUseCase.execute().asObservable()
+                    self.fetchRecommendPlayListUseCase
+                        .execute()
+                        .asObservable()
                 )
                 return result
             }
