@@ -36,8 +36,8 @@
                                                             <constraint firstAttribute="height" constant="92" id="q8D-oj-b2N"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" WAKTAVERSE MUSIC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lmq-fd-OuF">
-                                                        <rect key="frame" x="112" y="171" width="169" height="32"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="왁타버스 뮤직" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lmq-fd-OuF">
+                                                        <rect key="frame" x="150.33333333333334" y="171" width="92.666666666666657" height="32"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="32" id="6aW-D5-BCE"/>
                                                         </constraints>
