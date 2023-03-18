@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import RxSwift
 import RxRelay
 import BaseFeature
@@ -149,5 +148,53 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             auth.presentationContextProvider = self
             auth.performRequests()
         }).disposed(by: disposeBag)
+    }
+}
+
+extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
+    public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
+        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
+        if !accessToken { return }
+        guard let tokenType = naverLoginInstance?.tokenType else { return }
+        guard let accessToken = naverLoginInstance?.accessToken else { return }
+        DEBUG_LOG(tokenType)
+        DEBUG_LOG(accessToken)
+        naverToken.accept((tokenType, accessToken))
+    }
+    
+    public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
+        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
+        if !accessToken { return }
+        guard let tokenType = naverLoginInstance?.tokenType else { return }
+        guard let accessToken = naverLoginInstance?.accessToken else { return }
+        DEBUG_LOG(tokenType)
+        DEBUG_LOG(accessToken)
+
+        naverToken.accept((tokenType, accessToken))
+    }
+    
+    public func oauth20ConnectionDidFinishDeleteToken() {
+        DEBUG_LOG("네이버 로그아웃")
+    }
+    
+    public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
+        isErrorString.accept(error.localizedDescription)
+    }
+}
+
+extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding {
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return UIApplication.shared.windows.last!
+    }
+
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userIdentifer = credential.user
+            appleToken.accept(userIdentifer)
+        }
+    }
+
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        isErrorString.accept(error.localizedDescription)
     }
 }
