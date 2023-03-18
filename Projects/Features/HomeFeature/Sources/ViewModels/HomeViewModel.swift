@@ -106,15 +106,18 @@ public final class HomeViewModel: ViewModelType {
                 let chartAndNewSong = Observable.zip(
                     self.fetchChartRankingUseCase
                         .execute(type: .total, limit: 100)
+                        .catchAndReturn([])
                         .asObservable(),
                     self.fetchNewSongUseCase
                         .execute(type: type)
+                        .catchAndReturn([])
                         .asObservable()
                 )
                 let result = Observable.zip(
                     chartAndNewSong,
                     self.fetchRecommendPlayListUseCase
                         .execute()
+                        .catchAndReturn([])
                         .asObservable()
                 )
                 return result
