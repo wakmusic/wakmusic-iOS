@@ -29,6 +29,8 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         super.viewDidLoad()
         
         initView()
+        inputBind()
+        outputBind()
     }
 
     func initView() {
@@ -36,6 +38,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         backgroundTopImageView.image = DesignSystemAsset.Home.gradationBg.image
         
         mainTitleView.backgroundColor = .white.withAlphaComponent(0.4)
+        mainTitleView.layer.cornerRadius = 12
         mainBlurView.layer.cornerRadius = 12
         mainBlurView.layer.borderWidth = 1
         mainBlurView.layer.borderColor = UIColor.white.cgColor
@@ -70,30 +73,30 @@ extension HomeViewController {
                 
         mainTableView.rx.setDelegate(self).disposed(by: disposeBag)
 
-//        mainTableView.rx.itemSelected
-//            .map { $0.row }
-//            .bind(to: input.songTapped)
-//            .disposed(by: disposeBag)
+        mainTableView.rx.itemSelected
+            .map { "\($0.row)" }
+            .bind(to: mainTitleLabel.rx.text)//input.newSongButtonTapped
+            .disposed(by: disposeBag)
     }
     
     private func outputBind() {
         
-//        output.dataSource
-//            .skip(1)
-//            .do(onNext: { [weak self] _ in
-//                guard let `self` = self else { return }
-//                DispatchQueue.main.async {
-////                    self.activityIncidator.stopAnimating()
-//                }
-//            })
-//            .bind(to: mainTableView.rx.items) { (tableView, index, model) -> UITableViewCell in
-//                let indexPath: IndexPath = IndexPath(row: index, section: 0)
-//                guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeMainTitleTableViewCell", for: indexPath) as? ArtistMusicCell else{
-//                    return UITableViewCell()
-//                }
-//                cell.update(model: model)
-//                return cell
-//            }.disposed(by: disposeBag)
+        output.chartRanking
+            .skip(1)
+            .do(onNext: { [weak self] _ in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+//                    self.activityIncidator.stopAnimating()
+                }
+            })
+            .bind(to: mainTableView.rx.items) { (tableView, index, model) -> UITableViewCell in
+                let indexPath: IndexPath = IndexPath(row: index, section: 0)
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeMainTitleTableViewCell", for: indexPath) as? HomeMainTitleTableViewCell else{
+                    return UITableViewCell()
+                }
+                cell.update(model: model, index: indexPath.row)
+                return cell
+            }.disposed(by: disposeBag)
     }
     
     private func configureUI() {

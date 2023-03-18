@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -83,7 +83,7 @@
                                                                     <constraint firstItem="yxF-fR-vLG" firstAttribute="leading" secondItem="Ha5-D0-Yv1" secondAttribute="trailing" constant="4" id="yoM-Ib-0gA"/>
                                                                 </constraints>
                                                             </view>
-                                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="58" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="o0Z-O4-HnV">
+                                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="58" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="o0Z-O4-HnV">
                                                                 <rect key="frame" x="20" y="61" width="313" height="318"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <prototypes>
@@ -96,7 +96,7 @@
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bjg-KU-WyW">
                                                                                     <rect key="frame" x="0.0" y="40" width="313" height="18"/>
-                                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="18" id="PAA-2S-lby"/>
                                                                                     </constraints>
@@ -186,6 +186,7 @@
                                                                                     </subviews>
                                                                                 </stackView>
                                                                             </subviews>
+                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <constraints>
                                                                                 <constraint firstItem="8TI-bR-13s" firstAttribute="centerY" secondItem="7cd-hu-qfI" secondAttribute="centerY" id="0Qb-JD-SKr"/>
                                                                                 <constraint firstItem="8TI-bR-13s" firstAttribute="leading" secondItem="bMX-QM-0aq" secondAttribute="trailing" constant="8" id="E1P-6N-XEO"/>
@@ -205,6 +206,7 @@
                                                                                 <constraint firstItem="7cd-hu-qfI" firstAttribute="top" secondItem="c8b-mc-eGP" secondAttribute="top" id="tJU-QK-h1q"/>
                                                                             </constraints>
                                                                         </tableViewCellContentView>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <connections>
                                                                             <outlet property="artistLabel" destination="wbQ-6W-Y9b" id="b79-WJ-vdm"/>
                                                                             <outlet property="countLabel" destination="WQR-zQ-Cmn" id="5AG-P7-AxG"/>
@@ -218,7 +220,7 @@
                                                                 </prototypes>
                                                             </tableView>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="bottom" secondItem="o0Z-O4-HnV" secondAttribute="bottom" constant="21" id="8x9-mJ-PkI"/>
                                                             <constraint firstItem="o0Z-O4-HnV" firstAttribute="top" secondItem="HJb-5L-vKL" secondAttribute="bottom" constant="21" id="Eme-Hn-UPR"/>

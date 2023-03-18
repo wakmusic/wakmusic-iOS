@@ -37,20 +37,49 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[NewSongEntity]>
+        var chartRanking: BehaviorRelay<[ChartRankingEntity]>
+        let newSong: BehaviorRelay<[NewSongEntity]>
+        var recommendPlayList: BehaviorRelay<[RecommendPlayListEntity]>
     }
     
     public func transform(from input: Input) -> Output {
      
-        let dataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
-        
-        self.fetchNewSongUseCase.execute(type: .all)
-            .debug("fetchNewSongUseCase")
+        let chartRanking: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        let newSong: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
+        let recommendPlayList: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+
+        self.fetchChartRankingUseCase.execute(type: .total, limit: 5)
+            .catchAndReturn([])
             .asObservable()
-            .subscribe()
+            .map({ (model) -> [ChartRankingEntity] in
+                return model
+            })
+            .bind(to: chartRanking)
+            .disposed(by: disposeBag)
+
+        self.fetchNewSongUseCase.execute(type: .all)
+            .catchAndReturn([])
+            .asObservable()
+            .map({ (model) -> [NewSongEntity] in
+                return model
+            })
+            .bind(to: newSong)
+            .disposed(by: disposeBag)
+
+        self.fetchRecommendPlayListUseCase.execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map({ (model) -> [RecommendPlayListEntity] in
+                return model
+            })
+            .bind(to: recommendPlayList)
             .disposed(by: disposeBag)
         
-        return Output(dataSource: dataSource)
+        return Output(
+            chartRanking: chartRanking,
+            newSong: newSong,
+            recommendPlayList: recommendPlayList
+        )
     }
     
 }
