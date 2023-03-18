@@ -68,7 +68,6 @@ extension HomeChartCell{
         let lastRanking = model.last - (index + 1)
         rankImageView.isHidden = model.last == 0
         rankChangedLabel.text = "\(model.last)"
-        rankChangedLabel.isHidden = lastRanking == 0
         
         if model.last == 0 {
             let rankLabelAttributedString = NSMutableAttributedString(
@@ -78,18 +77,23 @@ extension HomeChartCell{
                              .kern: -0.5]
             )
             rankChangedLabel.attributedText = rankLabelAttributedString
+            rankChangedLabel.isHidden = true
 
         } else if lastRanking > 99 {
             rankImageView.image = DesignSystemAsset.Chart.blowup.image
-
+            rankChangedLabel.isHidden = true
+            
         } else if lastRanking == 0 { //변동없음
             rankImageView.image = DesignSystemAsset.Chart.non.image
-            
+            rankChangedLabel.isHidden = true
+
         } else if lastRanking > 0 {
             rankImageView.image = DesignSystemAsset.Chart.up.image
+            rankChangedLabel.isHidden = false
 
         } else if lastRanking < 0 {
             rankImageView.image = DesignSystemAsset.Chart.down.image
+            rankChangedLabel.isHidden = false
         }
     }    
 }
