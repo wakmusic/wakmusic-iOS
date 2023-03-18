@@ -18,8 +18,12 @@ public protocol SignInDependency: Dependency {
 
 public final class SignInComponent: Component<SignInDependency> {
     public func makeView() -> LoginViewController {
-        return LoginViewController.viewController(viewModel: .init(fetchTokenUseCase: dependency.fetchTokenUseCase,
-                                                                   fetchNaverUserInfoUseCase: dependency.fetchNaverUserInfoUseCase,
-                                                                   fetchUserInfoUseCase: dependency.fetchUserInfoUseCase))
+        return LoginViewController.viewController(
+            viewModel: .init(
+                fetchTokenUseCase: dependency.fetchTokenUseCase,
+                fetchNaverUserInfoUseCase: dependency.fetchNaverUserInfoUseCase,
+                fetchUserInfoUseCase: dependency.fetchUserInfoUseCase
+            )
+        )
     }
 }

@@ -9,7 +9,6 @@ public enum AuthAPI {
     case fetchNaverUserInfo(tokenType:String,accessToken:String)
     case fetUserInfo
     case withdrawUserInfo
-    
 }
 
 public struct AuthRequset:Encodable {
@@ -66,31 +65,29 @@ extension AuthAPI: WMAPI {
     
     public var headers: [String : String]? {
         switch self {
-        case .fetchToken:
-            return ["Content-Type": "application/json"]
         case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
             return   ["Authorization": "\(tokenType) \(accessToken)"]
-        case .fetUserInfo, .withdrawUserInfo:
-            let token: String = KeychainImpl().load(type: .accessToken)
-            return   ["Authorization":"Bearer \(token)"]
+        default:
+            return ["Content-Type": "application/json"]
         }
     }
 
     public var task: Moya.Task {
-        
         switch self {
-            
         case .fetchToken(id: let id, type: let type):
             return .requestJSONEncodable(AuthRequset(id: id,provider: type.rawValue))
-            
         case .fetchNaverUserInfo,.fetUserInfo,.withdrawUserInfo:
             return .requestPlain
         }
-        
     }
 
     public var jwtTokenType: JwtTokenType {
-        return .none
+        switch self {
+        case .fetUserInfo, .withdrawUserInfo:
+            return .accessToken
+        default:
+            return .none
+        }
     }
 
     public var errorMap: [Int: WMError] {
@@ -103,7 +100,6 @@ extension AuthAPI: WMAPI {
                 429: .tooManyRequest,
                 500: .internalServerError
             ]
-
         }
     }
 }
