@@ -69,6 +69,8 @@ extension ContainSongsViewController {
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         
+        songCountLabel.text = "\(viewModel.songs)곡"
+        
     
         bindRx()
         
@@ -154,7 +156,6 @@ extension ContainSongsViewController {
      
         
         output.showToastMessage
-            .debug("FFF")
             .subscribe(onNext: { [weak self] (text:String) in
             
             guard let self = self else {return}

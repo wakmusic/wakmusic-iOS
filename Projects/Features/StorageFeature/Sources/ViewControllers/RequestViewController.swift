@@ -41,15 +41,17 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = containSongsComponent.makeView()
+        let vc = qnaComponent.makeView()
         
-        vc.modalPresentationStyle = .overFullScreen
+//        containSongsComponent.makeView(songs: <#T##[String]#>)
+//        
+//        vc.modalPresentationStyle = .overFullScreen
+//        
+//        
+//        self.present(vc, animated: true)
         
         
-        self.present(vc, animated: true)
-        
-        //qnaComponent.makeView()
-        //self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func moveQuestionAction(_ sender: Any) {

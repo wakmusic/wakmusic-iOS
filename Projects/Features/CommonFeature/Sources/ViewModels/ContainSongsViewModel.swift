@@ -18,6 +18,7 @@ public final class ContainSongsViewModel:ViewModelType {
     
     var fetchPlayListUseCase:FetchPlayListUseCase!
     var addSongIntoPlayListUseCase:AddSongIntoPlayListUseCase!
+    var songs:[String]!
     
     let disposeBag = DisposeBag()
     
@@ -34,10 +35,10 @@ public final class ContainSongsViewModel:ViewModelType {
         let showToastMessage: PublishSubject<String> = PublishSubject()
     }
     
-    init(fetchPlayListUseCase: FetchPlayListUseCase!,addSongIntoPlayListUseCase:AddSongIntoPlayListUseCase!) {
+    init(songs:[String],fetchPlayListUseCase: FetchPlayListUseCase!,addSongIntoPlayListUseCase:AddSongIntoPlayListUseCase!) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlayListUseCase = addSongIntoPlayListUseCase
-        
+        self.songs = songs
         
     }
     
@@ -67,25 +68,13 @@ public final class ContainSongsViewModel:ViewModelType {
         output.containSongWithKey
             .flatMap({ [weak self] (key:String) -> Observable<AddSongEntity> in
                 
-                let tmpSongs = ["1UbyyaDc8x0",
-                                "C1dSgetEBPM",
-                                "OTkFJyn4mvc",
-                                "fU8picIMbSk",
-                                "Empfi8q0aas",
-                                "l8e1Byk1Dx0",
-                                "rFxJjpSeXHI",
-                                "K8WC6uWyC9I",
-                                "08meo6qrhFc",
-                                "6hEvgKL0ClA",
-                                "wSG93VZoMFg"
-                ]
                 
                 guard let self = self else {
                     return Observable.empty()
                 }
                 
                 
-                return self.addSongIntoPlayListUseCase.execute(key: key, songs: tmpSongs)
+                return self.addSongIntoPlayListUseCase.execute(key: key, songs: self.songs)
                         .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
                         .asObservable()
             })

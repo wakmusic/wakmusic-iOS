@@ -18,7 +18,7 @@ public protocol ContainSongsDependency: Dependency {
 }
 
 public final class ContainSongsComponent: Component<ContainSongsDependency> {
-    public func makeView() -> ContainSongsViewController  {
-        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init(fetchPlayListUseCase: dependency.fetchPlayListUseCase,addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase ))
+    public func makeView(songs:[String]) -> ContainSongsViewController  {
+        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init(songs:songs,fetchPlayListUseCase: dependency.fetchPlayListUseCase,addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase ))
     }
 }
