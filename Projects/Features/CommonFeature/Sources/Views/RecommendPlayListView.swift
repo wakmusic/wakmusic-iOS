@@ -38,13 +38,9 @@ public class RecommendPlayListView: UIView {
     }
 }
 
-
-
 public extension RecommendPlayListView {
     
     private func setupView(){
-        
-        
         guard let view = Bundle.module.loadNibNamed("RecommendPlayListView", owner: self, options: nil)?.first as? UIView else { return }
         view.frame = self.bounds
         view.layoutIfNeeded()
@@ -62,7 +58,6 @@ public extension RecommendPlayListView {
         guard !model.isEmpty else {
             return 0 
         }
-        
         
         let base: CGFloat = 32 + 24 + 20 + 32
         let spacing: CGFloat = 8.0

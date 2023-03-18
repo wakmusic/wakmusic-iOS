@@ -33,53 +33,101 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Input {
-        var newSongButtonTapped: PublishRelay<NewSongGroupType> = PublishRelay()
+        var newSongTypeTapped: BehaviorSubject<NewSongGroupType> = BehaviorSubject(value: .all)
+        var chartMoreTapped: PublishSubject<Void> = PublishSubject()
+        var allListenTapped: PublishSubject<Void> = PublishSubject()
+        var refreshPulled: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var chartRanking: BehaviorRelay<[ChartRankingEntity]>
-        let newSong: BehaviorRelay<[NewSongEntity]>
-        var recommendPlayList: BehaviorRelay<[RecommendPlayListEntity]>
+        var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
+        let newSongDataSource: BehaviorRelay<[NewSongEntity]>
+        var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
+        var idOfAllChart: PublishSubject<[String]>
     }
     
     public func transform(from input: Input) -> Output {
      
-        let chartRanking: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
-        let newSong: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
-        let recommendPlayList: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
+        let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let idOfAllChart: PublishSubject<[String]> = PublishSubject()
 
-        self.fetchChartRankingUseCase.execute(type: .total, limit: 5)
+        fetchChartRankingUseCase
+            .execute(type: .total, limit: 100)
             .catchAndReturn([])
             .asObservable()
-            .map({ (model) -> [ChartRankingEntity] in
-                return model
-            })
-            .bind(to: chartRanking)
+            .bind(to: chartDataSource)
             .disposed(by: disposeBag)
 
-        self.fetchNewSongUseCase.execute(type: .all)
+        fetchNewSongUseCase
+            .execute(type: .all)
             .catchAndReturn([])
             .asObservable()
-            .map({ (model) -> [NewSongEntity] in
-                return model
-            })
-            .bind(to: newSong)
-            .disposed(by: disposeBag)
-
-        self.fetchRecommendPlayListUseCase.execute()
-            .catchAndReturn([])
-            .asObservable()
-            .map({ (model) -> [RecommendPlayListEntity] in
-                return model
-            })
-            .bind(to: recommendPlayList)
+            .bind(to: newSongDataSource)
             .disposed(by: disposeBag)
         
+        fetchRecommendPlayListUseCase
+            .execute()
+            .catchAndReturn([])
+            .asObservable()
+            .bind(to: playListDataSource)
+            .disposed(by: disposeBag)
+        
+        input.chartMoreTapped
+            .map { _ in 1 }
+            .subscribe(onNext: { (index) in
+                NotificationCenter.default.post(name: .movedTab, object: index)
+            }).disposed(by: disposeBag)
+        
+        input.allListenTapped
+            .withLatestFrom(chartDataSource)
+            .map { $0.map { $0.id }}
+            .bind(to: idOfAllChart)
+            .disposed(by: disposeBag)
+
+        input.newSongTypeTapped
+            .skip(1)
+            .debug("✅ newSongTypeTapped")
+            .flatMap { [weak self] (type) -> Observable<[NewSongEntity]> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.fetchNewSongUseCase.execute(type: type)
+                    .catchAndReturn([])
+                    .asObservable()
+            }
+            .bind(to: newSongDataSource)
+            .disposed(by: disposeBag)
+        
+        input.refreshPulled
+            .withLatestFrom(input.newSongTypeTapped)
+            .flatMap { [weak self] (type) -> Observable<(([ChartRankingEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
+                guard let self = self else{ return Observable.empty() }
+                
+                let chartAndNewSong = Observable.zip(
+                    self.fetchChartRankingUseCase.execute(type: .total, limit: 100)
+                        .asObservable(),
+                    self.fetchNewSongUseCase.execute(type: type)
+                        .asObservable()
+                )
+                let result = Observable.zip(
+                    chartAndNewSong,
+                    self.fetchRecommendPlayListUseCase.execute().asObservable()
+                )
+                return result
+            }
+            .debug("✅ Refresh Completed")
+            .subscribe(onNext: { (arg, recommendPlayListEntity) in
+                let (chartRankingEntity, newSongEntity) = arg
+                chartDataSource.accept(chartRankingEntity)
+                newSongDataSource.accept(newSongEntity)
+                playListDataSource.accept(recommendPlayListEntity)
+            }).disposed(by: disposeBag)
+
         return Output(
-            chartRanking: chartRanking,
-            newSong: newSong,
-            recommendPlayList: recommendPlayList
+            chartDataSource: chartDataSource,
+            newSongDataSource: newSongDataSource,
+            playListDataSource: playListDataSource,
+            idOfAllChart: idOfAllChart
         )
     }
-    
 }

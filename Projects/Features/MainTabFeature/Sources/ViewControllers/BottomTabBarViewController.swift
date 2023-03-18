@@ -9,6 +9,7 @@
 import UIKit
 import Utility
 import DesignSystem
+import RxSwift
 
 protocol BottomTabBarViewDelegate: AnyObject {
     func handleTapped(index previous: Int, current: Int)
@@ -53,11 +54,14 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
                     animateImage: "Storage_Tab")
         ]
     }()
+    
+    var disposeBag = DisposeBag()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
+        bindNotification()
     }
 
     public static func viewController() -> BottomTabBarViewController {
@@ -81,12 +85,25 @@ extension BottomTabBarViewController {
             self.stackView.addArrangedSubview(tabView)
         }
     }
+    
+    private func bindNotification() {
+        NotificationCenter.default.rx
+            .notification(.movedTab)
+            .subscribe(onNext: { [weak self] (notification) in
+                guard
+                    let `self` = self,
+                    let index = notification.object as? Int,
+                    self.tabs.count > index
+                else { return }
+                
+                self.handleTap(view: self.tabs[index])
+            }).disposed(by: disposeBag)
+    }
 }
 
 extension BottomTabBarViewController: TabItemViewDelegate {
     
     func handleTap(view: TabItemView) {
-        
         guard view.isSelected == false else {
             DEBUG_LOG("equal handleTap")
             return

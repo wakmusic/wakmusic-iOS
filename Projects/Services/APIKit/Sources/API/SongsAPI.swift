@@ -20,7 +20,7 @@ extension SongsAPI: WMAPI {
         case .fetchSearchSong:
             return "/search"
         case let .fetchNewSong(type):
-            return "/new/\(type.rawValue)"
+            return "/new/\(type.id)"
         case .fetchLyrics(id: let id):
             return "/lyrics/\(id)"
         }

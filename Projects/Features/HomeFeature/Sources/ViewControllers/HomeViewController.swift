@@ -6,42 +6,202 @@ import PanModal
 import BaseFeature
 import RxSwift
 import RxCocoa
+import DataMappingModule
+import DomainModule
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
+
+    @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var stackView: UIStackView!
+    
+    //왁뮤차트 TOP100
+    @IBOutlet weak var topCircleImageView: UIImageView!
+    @IBOutlet weak var chartContentView: UIView!
+    @IBOutlet weak var chartBorderView: UIView!
+    @IBOutlet weak var blurEffectView: UIVisualEffectView!
+    @IBOutlet weak var chartTitleLabel: UILabel!
+    @IBOutlet weak var chartArrowImageView: UIImageView!
+    @IBOutlet weak var chartAllListenButton: UIButton!
+    @IBOutlet weak var chartMoreButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
+    
+    //최신음악
+    @IBOutlet weak var latestSongLabel: UILabel!
+    @IBOutlet weak var latestSongAllButton: UIButton!
+    @IBOutlet weak var latestSongWwgButton: UIButton!
+    @IBOutlet weak var latestSongIseButton: UIButton!
+    @IBOutlet weak var latestSongGomButton: UIButton!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    private var refreshControl = UIRefreshControl()
+    var playListDetailComponent: PlayListDetailComponent!
+    var disposeBag = DisposeBag()
 
     var viewModel: HomeViewModel!
     private lazy var input = HomeViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
 
-    @IBOutlet weak var backgroundTopImageView: UIImageView!
-    
-    //mainTitle
-    @IBOutlet weak var mainTitleView: UIView!
-    @IBOutlet weak var mainTitleLabel: UILabel!
-    @IBOutlet weak var mainTitleImageView: UIImageView!
-    @IBOutlet weak var mainTitleAllButton: UIButton!//전체듣기
-    @IBOutlet weak var mainTableView: UITableView!
-    
-    @IBOutlet weak var mainBlurView: UIVisualEffectView!
-    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        initView()
+        configureUI()
         inputBind()
         outputBind()
     }
+    
+    public static func viewController(viewModel: HomeViewModel, playListDetailComponent :PlayListDetailComponent) -> HomeViewController {
+        let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
+        viewController.viewModel = viewModel
+        viewController.playListDetailComponent = playListDetailComponent
+        return viewController
+    }
+}
 
-    func initView() {
+extension HomeViewController {
+    
+    private func inputBind() {
         
-        backgroundTopImageView.image = DesignSystemAsset.Home.gradationBg.image
+        chartMoreButton.rx.tap
+            .bind(to: input.chartMoreTapped)
+            .disposed(by: disposeBag)
+
+        chartAllListenButton.rx.tap
+            .bind(to: input.allListenTapped)
+            .disposed(by: disposeBag)
+
+        Observable.merge(
+            latestSongAllButton.rx.tap.map { _ -> NewSongGroupType in .all },
+            latestSongWwgButton.rx.tap.map { _ -> NewSongGroupType in .woowakgood },
+            latestSongIseButton.rx.tap.map { _ -> NewSongGroupType in .isedol },
+            latestSongGomButton.rx.tap.map { _ -> NewSongGroupType in .gomem }
+        )
+        .throttle(RxTimeInterval.seconds(1), latest: false, scheduler: MainScheduler.instance)
+        .do(onNext: { [weak self] (type) in
+            guard let `self` = self else { return }
+            self.latestSongAllButton.isSelected = false
+            self.latestSongWwgButton.isSelected = false
+            self.latestSongIseButton.isSelected = false
+            self.latestSongGomButton.isSelected = false
+
+            switch type {
+            case .all:
+                self.latestSongAllButton.isSelected = true
+            case .woowakgood:
+                self.latestSongWwgButton.isSelected = true
+            case .isedol:
+                self.latestSongIseButton.isSelected = true
+            case .gomem:
+                self.latestSongGomButton.isSelected = true
+            }
+        })
+        .bind(to: input.newSongTypeTapped)
+        .disposed(by: disposeBag)
         
-        mainTitleView.backgroundColor = .white.withAlphaComponent(0.4)
-        mainTitleView.layer.cornerRadius = 12
-        mainBlurView.layer.cornerRadius = 12
-        mainBlurView.layer.borderWidth = 1
-        mainBlurView.layer.borderColor = UIColor.white.cgColor
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .bind(to: input.refreshPulled)
+            .disposed(by: disposeBag)
+
+        tableView.rx.itemSelected
+            .withLatestFrom(output.chartDataSource) { ($0, $1) }
+            .map { $0.1[$0.0.row].id }
+            .subscribe(onNext: { (ID) in
+                DEBUG_LOG("ID: \(ID)")
+            })
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .withLatestFrom(output.newSongDataSource) { ($0, $1) }
+            .map { $0.1[$0.0.item].id }
+            .subscribe(onNext: { (ID) in
+                DEBUG_LOG("ID: \(ID)")
+            }).disposed(by: disposeBag)
+    }
+    
+    private func outputBind() {
+        
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+        
+        collectionView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+
+        output.chartDataSource
+            .skip(1)
+            .filter { $0.count >= 5 }
+            .map{ Array($0[0..<5]) }
+            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
+                let indexPath: IndexPath = IndexPath(row: index, section: 0)
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeChartCell", for: indexPath) as? HomeChartCell else{
+                    return UITableViewCell()
+                }
+                cell.update(model: model, index: indexPath.row)
+                return cell
+            }.disposed(by: disposeBag)
+        
+        output.newSongDataSource
+            .skip(1)
+            .do(onNext: { [weak self] _ in
+                self?.collectionView.contentOffset = .zero
+                self?.refreshControl.endRefreshing()
+            })
+            .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
+                let indexPath = IndexPath(item: index, section: 0)
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeNewSongCell", for: indexPath) as? HomeNewSongCell else {
+                    return UICollectionViewCell()
+                }
+                cell.update(model: model)
+                return cell
+            }.disposed(by: disposeBag)
+        
+        output.playListDataSource
+            .skip(1)
+            .filter { !$0.isEmpty }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (model) in
+                guard let `self` = self else { return }
+                let subviews: [UIView] = self.stackView.arrangedSubviews.filter { $0 is RecommendPlayListView }.compactMap { $0 }
+                
+                if subviews.isEmpty {
+                    let height: CGFloat = RecommendPlayListView.getViewHeight(model: model)
+                    let recommendView = RecommendPlayListView(
+                        frame: CGRect(
+                            x: 0,
+                            y: 0,
+                            width: APP_WIDTH(),
+                            height: height
+                        )
+                    )
+                    recommendView.dataSource = model
+                    recommendView.delegate = self
+                    recommendView.heightAnchor.constraint(equalToConstant: height).isActive = true
+                    self.stackView.addArrangedSubview(recommendView)
+
+                }else{
+                    guard let recommendView = subviews.first as? RecommendPlayListView else { return }
+                    recommendView.dataSource = model
+                }
+            }).disposed(by: disposeBag)
+        
+        output.idOfAllChart
+            .debug()
+            .subscribe()
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureUI() {
+        
+        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
+        
+        chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        chartBorderView.layer.cornerRadius = 12
+        chartBorderView.layer.borderWidth = 1
+        chartBorderView.layer.borderColor = UIColor.white.cgColor
+        blurEffectView.layer.cornerRadius = 12
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
@@ -49,7 +209,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5]
         )
-        mainTitleLabel.attributedText = mainTitleLabelAttributedString
+        chartTitleLabel.attributedText = mainTitleLabelAttributedString
 
         let mainTitleAllButtonAttributedString = NSMutableAttributedString(
             string: "전체듣기",
@@ -57,72 +217,74 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
                          .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                          .kern: -0.5]
         )
-        mainTitleAllButton.setAttributedTitle(mainTitleAllButtonAttributedString, for: .normal)
-        mainTitleImageView.image = DesignSystemAsset.Search.searchArrowRight.image
-    }
-    
-    public static func viewController(viewModel: HomeViewModel) -> HomeViewController {
-        let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
-        viewController.viewModel = viewModel
-        return viewController
-    }
-}
-extension HomeViewController {
-    
-    private func inputBind() {
-                
-        mainTableView.rx.setDelegate(self).disposed(by: disposeBag)
-
-        mainTableView.rx.itemSelected
-            .map { "\($0.row)" }
-            .bind(to: mainTitleLabel.rx.text)//input.newSongButtonTapped
-            .disposed(by: disposeBag)
-    }
-    
-    private func outputBind() {
+        chartAllListenButton.setAttributedTitle(mainTitleAllButtonAttributedString, for: .normal)
+        chartArrowImageView.image = DesignSystemAsset.Home.homeArrowRight.image
         
-        output.chartRanking
-            .skip(1)
-            .do(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
-                DispatchQueue.main.async {
-//                    self.activityIncidator.stopAnimating()
-                }
-            })
-            .bind(to: mainTableView.rx.items) { (tableView, index, model) -> UITableViewCell in
-                let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeMainTitleTableViewCell", for: indexPath) as? HomeMainTitleTableViewCell else{
-                    return UITableViewCell()
-                }
-                cell.update(model: model, index: indexPath.row)
-                return cell
-            }.disposed(by: disposeBag)
-    }
-    
-    private func configureUI() {
-//        self.activityIncidator.startAnimating()
-//        self.mainTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-//        self.mainTableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        let latestSongAttributedString = NSMutableAttributedString(
+            string: "최신 음악",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        latestSongLabel.attributedText = latestSongAttributedString
+        
+        let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton]
+        
+        NewSongGroupType.allCases.enumerated().forEach{ (i, model) in
+            let attributedString = NSMutableAttributedString(
+                string: model.display,
+                attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                             .kern: -0.5]
+            )
+            buttons[i].setAttributedTitle(attributedString, for: .normal)
+            
+            let selectedAttributedString = NSMutableAttributedString(
+                string: model.display,
+                attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 14),
+                             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                             .kern: -0.5]
+            )
+            buttons[i].setAttributedTitle(selectedAttributedString, for: .selected)
+        }
+        
+        latestSongAllButton.isSelected = true
+        
+        scrollView.refreshControl = refreshControl
     }
 }
 
 extension HomeViewController: UITableViewDelegate {
-
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 58
     }
 }
 
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: 144.0, height: 131.0)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 20.0, bottom: 0, right: 20.0)
+    }
 
-//        let recommendView = RecommendPlayListView(frame: CGRect(x: 0,
-//                                                                y: 0,
-//                                                                width: APP_WIDTH(),
-//                                                                height: RecommendPlayListView.getViewHeight(model: dataSource)))
-//        recommendView.dataSource = dataSource
-//        recommendView.delegate = self
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 8.0
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 8.0
+    }
+}
 
-//extension HomeViewController: RecommendPlayListViewDelegate {
-//    public func itemSelected(model: RecommendPlayListDTO) {
-//        DEBUG_LOG(model)
-//    }
-//}
+extension HomeViewController: RecommendPlayListViewDelegate {
+    public func itemSelected(model: RecommendPlayListEntity) {
+        let playListDetailVc = playListDetailComponent.makeView(id: model.id, type: .wmRecommend)
+        self.navigationController?.pushViewController(playListDetailVc, animated: true)
+    }
+}

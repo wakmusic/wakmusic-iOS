@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 import NeedleFoundation
 import DomainModule
-
+import CommonFeature
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongUseCase: any FetchNewSongUseCase { get }
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {get}
+    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
+    var playListDetailComponent : PlayListDetailComponent {get}
 }
 
 public final class HomeComponent: Component<HomeDependency> {
@@ -24,7 +25,8 @@ public final class HomeComponent: Component<HomeDependency> {
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
                 fetchNewSongUseCase: dependency.fetchNewSongUseCase,
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
-            )
+            ),
+            playListDetailComponent: dependency.playListDetailComponent
         )
     }
 }
