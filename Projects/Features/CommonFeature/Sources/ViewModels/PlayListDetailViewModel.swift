@@ -64,6 +64,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)
+            .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: true, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
         .asObservable()
         .do(onNext: { [weak self] (model) in
             

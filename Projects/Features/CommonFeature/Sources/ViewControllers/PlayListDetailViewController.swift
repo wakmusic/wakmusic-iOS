@@ -160,6 +160,8 @@ extension PlayListDetailViewController{
         playListNameLabel.skeletonTextLineHeight = .relativeToFont
         playListNameLabel.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
         
+        
+        
         playListCountLabel.isSkeletonable = true
         playListCountLabel.skeletonCornerRadius = 2
         playListCountLabel.skeletonTextLineHeight = .relativeToFont
@@ -350,12 +352,44 @@ extension PlayListDetailViewController{
             
        
             
-            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil)
+            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: {[weak self]  _ in
+                
+                guard let self = self else{
+                    return
+                }
+                
+                self.playListImage.stopSkeletonAnimation()
+                self.playListImage.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                
+                
+               
+                
+                
+            })
+    
             
-            self.playListImage.stopSkeletonAnimation()
             
-            self.playListCountLabel.text = model.songCount
-            self.playListNameLabel.text = model.title
+            DEBUG_LOG(model)
+            
+                self.playListCountLabel.text = model.songCount
+                self.playListNameLabel.text = model.title
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
+                self.playListCountLabel.stopSkeletonAnimation()
+                self.playListCountLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
+
+
+                self.playListNameLabel.stopSkeletonAnimation()
+                self.playListNameLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
+
+                self.playListCountLabel.text = model.songCount
+                self.playListNameLabel.text = model.title
+            }
+            
+           
+            
+            
+            
             self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
             
         }).disposed(by: disposeBag)
@@ -416,12 +450,12 @@ extension PlayListDetailViewController:UITableViewDelegate{
         view.delegate = self
 
         
-        return view
+        return viewModel.output.dataSource.value.isEmpty ? nil : view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return 80
+        return viewModel.output.dataSource.value.isEmpty ? 0 : 80
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
