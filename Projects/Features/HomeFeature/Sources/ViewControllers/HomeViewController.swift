@@ -99,11 +99,24 @@ extension HomeViewController {
             switch currentSelectedType {
             case .all:
                 self.latestSongAllButton.isSelected = true
+                self.latestSongWwgButton.isEnabled = false
+                self.latestSongIseButton.isEnabled = false
+                self.latestSongGomButton.isEnabled = false
             case .woowakgood:
+                self.latestSongAllButton.isEnabled = false
                 self.latestSongWwgButton.isSelected = true
+                self.latestSongIseButton.isEnabled = false
+                self.latestSongGomButton.isEnabled = false
             case .isedol:
+                self.latestSongAllButton.isEnabled = false
+                self.latestSongWwgButton.isEnabled = false
                 self.latestSongIseButton.isSelected = true
+                self.latestSongGomButton.isEnabled = false
+
             case .gomem:
+                self.latestSongAllButton.isEnabled = false
+                self.latestSongWwgButton.isEnabled = false
+                self.latestSongIseButton.isEnabled = false
                 self.latestSongGomButton.isSelected = true
             }
         })
@@ -161,6 +174,10 @@ extension HomeViewController {
             .do(onNext: { [weak self] _ in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
+                self?.latestSongAllButton.isEnabled = true
+                self?.latestSongWwgButton.isEnabled = true
+                self?.latestSongIseButton.isEnabled = true
+                self?.latestSongGomButton.isEnabled = true
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
