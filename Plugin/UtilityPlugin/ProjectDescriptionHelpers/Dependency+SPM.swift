@@ -29,11 +29,13 @@ public extension TargetDependency.SPM {
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
+    
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
     static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
     static let HPParallaxHeader = TargetDependency.package(product: "HPParallaxHeader")
+    static let SkeletonView = TargetDependency.package(product: "SkeletonView")
 }
 
 public extension Package {
@@ -49,4 +51,10 @@ public extension Package {
          url: "https://github.com/ngochiencse/HPParallaxHeader",
          requirement: .upToNextMinor(from: "1.1.8")
      )
+    
+    static let SkeletonView = Package.remote(
+        url: "https://github.com/Juanpe/SkeletonView.git",
+        requirement: .upToNextMajor(from: "1.30.4"))
+    
+    
 }

@@ -19,7 +19,8 @@ public struct AuthUserInfoEntity: Equatable {
         displayName:String,
         first_login_time:Int,
         first:Bool,
-        profile:String
+        profile:String,
+        version:Int
 
     ) {
         self.id = id
@@ -28,10 +29,11 @@ public struct AuthUserInfoEntity: Equatable {
         self.first_login_time = first_login_time
         self.first = first
         self.profile = profile
+        self.version = version
     }
     
     public let id, platform, displayName,profile:String
-    public let first_login_time:Int
+    public let first_login_time,version:Int
     public let first:Bool
     
     

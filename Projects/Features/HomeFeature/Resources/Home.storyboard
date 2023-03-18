@@ -15,71 +15,15 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JKm-2m-3WL">
-                                <rect key="frame" x="0.0" y="0.0" width="180.33333333333334" height="242"/>
-                            </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradation_bg" translatesAutoresizingMaskIntoConstraints="NO" id="TWm-vm-MRN">
-                                <rect key="frame" x="180.33333333333337" y="0.0" width="242" height="242"/>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o27-Gb-2NX">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptx-Ka-m3v">
-                                        <rect key="frame" x="330" y="0.0" width="53" height="44"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="POPUP">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="buttonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="d75-DT-4iy"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="ptx-Ka-m3v" secondAttribute="trailing" constant="10" id="CqE-q8-JHH"/>
-                                    <constraint firstItem="ptx-Ka-m3v" firstAttribute="top" secondItem="o27-Gb-2NX" secondAttribute="top" id="DZd-9c-3WW"/>
-                                    <constraint firstAttribute="bottom" secondItem="ptx-Ka-m3v" secondAttribute="bottom" id="XHA-gR-9cZ"/>
-                                    <constraint firstAttribute="height" constant="44" id="nYY-Gm-ibt"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H7N-2m-tH8">
-                                <rect key="frame" x="0.0" y="242" width="393" height="527"/>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="o27-Gb-2NX" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="35F-wm-6TL"/>
-                            <constraint firstItem="JKm-2m-3WL" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="172:375" id="3ol-db-hpi"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="height" secondItem="JKm-2m-3WL" secondAttribute="height" id="3sT-lb-z5D"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="width" secondItem="TWm-vm-MRN" secondAttribute="height" multiplier="1:1" id="8Pd-y8-GOJ"/>
-                            <constraint firstItem="H7N-2m-tH8" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Q8j-1U-K8d"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H7N-2m-tH8" secondAttribute="bottom" id="S7A-KA-ula"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="leading" secondItem="JKm-2m-3WL" secondAttribute="trailing" id="Szf-tb-fju"/>
-                            <constraint firstItem="TWm-vm-MRN" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="bJv-54-8XI"/>
-                            <constraint firstItem="o27-Gb-2NX" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="kVe-av-M3F"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H7N-2m-tH8" secondAttribute="trailing" id="nNc-5p-dhM"/>
-                            <constraint firstItem="H7N-2m-tH8" firstAttribute="top" secondItem="TWm-vm-MRN" secondAttribute="bottom" id="poH-c9-3JD"/>
-                            <constraint firstItem="o27-Gb-2NX" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="sXr-X7-ION"/>
-                            <constraint firstItem="JKm-2m-3WL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="v8m-A2-APb"/>
-                            <constraint firstItem="JKm-2m-3WL" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="yTi-tT-gWM"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="홈" id="78J-gZ-QXi"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="gradationImageView" destination="TWm-vm-MRN" id="j61-7K-kMm"/>
-                        <outlet property="tempView" destination="H7N-2m-tH8" id="6Es-pK-jsC"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139" y="-2"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="gradation_bg" width="203" height="242"/>
-    </resources>
 </document>

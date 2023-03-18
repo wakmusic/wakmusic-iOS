@@ -20,6 +20,9 @@ public struct ArtistListEntity: Equatable {
         youtube: String,
         twitch: String,
         instagram: String,
+        imageRoundVersion: Int,
+        imageSquareVersion: Int,
+        graduated: Bool,
         isHiddenItem: Bool
     ) {
         self.ID = ID
@@ -32,6 +35,9 @@ public struct ArtistListEntity: Equatable {
         self.youtube = youtube
         self.twitch = twitch
         self.instagram = instagram
+        self.imageRoundVersion = imageRoundVersion
+        self.imageSquareVersion = imageSquareVersion
+        self.graduated = graduated
         self.isHiddenItem = isHiddenItem
     }
     
@@ -43,5 +49,7 @@ public struct ArtistListEntity: Equatable {
     public let title, description: String
     public let color: [[String]]
     public let youtube, twitch, instagram: String
+    public let imageRoundVersion, imageSquareVersion: Int
+    public let graduated: Bool
     public var isHiddenItem: Bool = false
 }

@@ -63,7 +63,6 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
 }
 
 extension LoginViewController{
-
     private func bindRx(){
         self.serviceButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }

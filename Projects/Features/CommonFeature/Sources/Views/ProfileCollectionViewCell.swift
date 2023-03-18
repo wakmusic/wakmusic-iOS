@@ -40,7 +40,7 @@ public extension ProfileCollectionViewCell{
         self.imageView.layer.borderWidth = 3
         
         self.imageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchProfile(name: model.id).toString),
+            with: URL(string: WMImageAPI.fetchProfile(name: model.type,version: model.version).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

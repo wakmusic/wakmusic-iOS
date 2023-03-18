@@ -31,14 +31,13 @@ extension ArtistListCell {
             string: model.name,
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                         .kern: -1]
+                         .kern: -0.5]
         )
         
         artistLabel.attributedText = artistNameAttributedString
         artistLabel.textAlignment = .center
-
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID).toString),
+            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID, version: model.imageRoundVersion).toString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

@@ -267,8 +267,8 @@ extension AfterLoginViewController{
             guard let self = self else{
                 return
             }
-            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
-            //self.profilePopComponent.makeView()
+//            let vc = self.multiPurposePopComponent.makeView(type: .nickname)
+            let vc = self.profilePopComponent.makeView()
             self.showPanModal(content: vc)
             
         }).disposed(by: disposeBag)
@@ -282,7 +282,7 @@ extension AfterLoginViewController{
                 }
                 self.profileLabel.text = AES256.decrypt(encoded: model.displayName).correctionNickName
                 self.profileImageView.kf.setImage(
-                    with: URL(string: WMImageAPI.fetchProfile(name: model.profile).toString),
+                    with: URL(string: WMImageAPI.fetchProfile(name: model.profile,version: model.version).toString),
                     placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )

@@ -16,12 +16,10 @@ import SafariServices
 
 public final class BugReportViewController: UIViewController,ViewControllerFromStoryBoard {
     
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
 
-    
     @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var descriptionLabel1: UILabel!
     @IBOutlet weak var baseLine1: UIView!
@@ -48,12 +46,9 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var infoLabel: UILabel!
-
-    
     
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
-    
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -66,7 +61,6 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     
     let disposeBag = DisposeBag()
     
-    
     var viewModel:BugReportViewModel!
     lazy var input = BugReportViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -74,32 +68,18 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
        
         configureUI()
-        
     }
     
-    
-    override public func viewDidDisappear(_ animated: Bool) {
-        
-    }
-
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
         let viewController = BugReportViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
         viewController.viewModel = viewModel
-       
-
-        
         return viewController
     }
-
 }
 
-
 extension BugReportViewController {
-    
     
     private func configureCameraButtonUI(){
         
@@ -116,14 +96,9 @@ extension BugReportViewController {
         attachContentView.layer.cornerRadius = 12
         attachContentView.layer.borderColor = pointColor.cgColor
         attachContentView.layer.borderWidth = 1
-        
-        //        cameraButton.setImage(DesignSystemAsset.Storage.camera.image.withRenderingMode(.alwaysOriginal), for: .normal)
-//        cameraButton.setAttributedTitle(cameraAttributedString, for: .normal)
     }
     
     private func configureUI(){
-        
-        
         hideKeyboardWhenTappedAround()
         
         dotLabel.layer.cornerRadius = 2
@@ -147,9 +122,6 @@ extension BugReportViewController {
         descriptionLabel3.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel3.textColor =  DesignSystemAsset.GrayColor.gray900.color
         
-        
-        
-        
         scrollView.delegate = self
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -158,10 +130,8 @@ extension BugReportViewController {
         textView.textColor = DesignSystemAsset.GrayColor.gray600.color
         textView.minHeight = 32.0
         textView.maxHeight = spaceHeight()
-       
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
-        
         
         noticeSuperView.layer.borderWidth = 1
         noticeSuperView.layer.cornerRadius = 12
@@ -170,12 +140,9 @@ extension BugReportViewController {
         noticeLabel.text = "알려주기"
         noticeLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         noticeLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
-        
         noticeImageView.image = DesignSystemAsset.Navigation.close.image
         
-        
         textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        
         textField.attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes)
         textField.textColor = DesignSystemAsset.GrayColor.gray600.color
         self.nickNameContentView.isHidden = true
@@ -183,9 +150,7 @@ extension BugReportViewController {
         infoLabel.text = "닉네임을 알려주시면 피드백을 받으시는 데 도움이 됩니다."
         infoLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         infoLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        
-        
-        
+                
         self.completionButton.layer.cornerRadius = 12
         self.completionButton.clipsToBounds = true
         self.completionButton.isEnabled = false
@@ -202,7 +167,6 @@ extension BugReportViewController {
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
-        
         bindRx()
         bindbuttonEvent()
         configureCameraButtonUI()
@@ -210,29 +174,20 @@ extension BugReportViewController {
     }
     
     private func bindbuttonEvent(){
-        
-
-        
+                
         previousButton.rx.tap.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }
-            
-            
             self.navigationController?.popViewController(animated: true)
-            
         })
         .disposed(by: disposeBag)
         
         closeButton.rx.tap.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }
-            
             self.dismiss(animated: true)
-           
         })
         .disposed(by: disposeBag)
         
@@ -241,7 +196,7 @@ extension BugReportViewController {
             .subscribe(onNext: { [weak self] (current) in
                 guard let self = self else { return }
 
-                let vc = NickNamePopupViewController.viewController(current: current == "선택" ? "알려주기" : current , completion: { (description) in
+                let vc = NickNamePopupViewController.viewController(current: current , completion: { (description) in
                     self.input.wakNickNameOption.accept(description)
                     self.nickNameContentView.isHidden = description != "알려주기"
                     
@@ -257,8 +212,6 @@ extension BugReportViewController {
         completionButton.rx.tap
             .bind(to: input.completionButtonTapped)
             .disposed(by: disposeBag)
-        
-            
     }
     
     private func bindRx(){
@@ -275,36 +228,19 @@ extension BugReportViewController {
         let mergeObservable = Observable.merge(tfEditingDidBegin.map { UIControl.Event.editingDidBegin },
                                                tfEditingDidEnd.map { UIControl.Event.editingDidEnd })
 
-
         textField.rx.text.orEmpty
             .distinctUntilChanged()
             .bind(to: input.nickNameString)
             .disposed(by: disposeBag)
-        
-        
-        
+                
         mergeObservable
             .asObservable()
-            .subscribe(onNext: { [weak self] (event) in
-
-                guard let self = self else{
-                    return
-                }
-
-
-                if event ==  .editingDidBegin {
-                    self.baseLine2.backgroundColor = self.pointColor
-                  //  self.scrollView.scroll(to: .bottom)
-
-                }
-
-                else {
-                    self.baseLine2.backgroundColor = self.unPointColor
-                }
-
-            })
+            .map{ [weak self] (event) -> UIColor in
+                guard let self = self else { return self?.unPointColor ?? DesignSystemAsset.GrayColor.gray200.color }
+                return (event == .editingDidBegin) ? self.pointColor : self.unPointColor
+            }
+            .bind(to: baseLine2.rx.backgroundColor)
             .disposed(by: disposeBag)
-        
         
         output.showCollectionView
             .bind(to: collectionContentView.rx.isHidden)
@@ -324,8 +260,6 @@ extension BugReportViewController {
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 
-
-
         output.enableCompleteButton
             .bind(to: completionButton.rx.isEnabled)
             .disposed(by: disposeBag)
@@ -333,54 +267,38 @@ extension BugReportViewController {
     
     
     private func responseViewbyKeyboard(){
+        
         RxKeyboard.instance.visibleHeight
-                    .drive(onNext: { [weak self] keyboardVisibleHeight in
-                        guard let self = self else {return}
-                        let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
-                        let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                guard let self = self else {return}
+                let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+                let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
 
 
-                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
+                self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
 
-                        self.view.setNeedsLayout()
-                        UIView.animate(withDuration: 0, animations: {
-                            self.scrollView.contentInset.bottom = actualKeyboardHeight
-                            self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
-                            self.view.layoutIfNeeded()
-                        })
+                self.view.setNeedsLayout()
+                UIView.animate(withDuration: 0, animations: {
+                    self.scrollView.contentInset.bottom = actualKeyboardHeight
+                    self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
+                    self.view.layoutIfNeeded()
+                })
 
-                    }).disposed(by: disposeBag)
-
+            }).disposed(by: disposeBag)
     }
     
     func spaceHeight() -> CGFloat {
-        
-        
         return 16 * 10
-        
     }
-    
 }
-
-
 
 extension BugReportViewController : UITextViewDelegate {
 
-
-
     public func textViewDidBeginEditing(_ textView: UITextView) {
-    
-    
-
         self.baseLine1.backgroundColor = self.pointColor
-        
-        
     }
     
     public func textViewDidEndEditing(_ textView: UITextView) {
-   
         self.baseLine1.backgroundColor = self.unPointColor
-        
     }
-
 }

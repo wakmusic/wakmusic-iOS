@@ -1,4 +1,5 @@
 import Foundation
+import HomeFeature
 import StorageFeature
 import SearchFeature
 import ArtistFeature
@@ -6,6 +7,7 @@ import ChartFeature
 import NeedleFoundation
 
 public protocol MainTabBarDependency: Dependency {
+    var homeComponent: HomeComponent { get }
     var chartComponent: ChartComponent { get }
     var searchComponent: SearchComponent { get }
     var artistComponent: ArtistComponent { get }
@@ -15,6 +17,7 @@ public protocol MainTabBarDependency: Dependency {
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
     public func makeView() -> MainTabBarViewController {
         return MainTabBarViewController.viewController(
+            homeComponent: self.dependency.homeComponent,
             chartComponent: self.dependency.chartComponent,
             searchComponent: self.dependency.searchComponent,
             artistComponent: self.dependency.artistComponent,

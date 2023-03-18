@@ -13,7 +13,10 @@ import Utility
 
 public extension FetchProfileListResponseDTO {
     func toDomain() -> ProfileListEntity {
-        ProfileListEntity(id: ID ?? "unknown",
-                          isSelected: false)
+        ProfileListEntity(type: type ?? "unknown",
+                          version:  version,
+                          isSelected: false
+                         
+        )
     }
 }

@@ -5,6 +5,9 @@ import ErrorModule
 import Foundation
 
 
+public struct AddSongRequest:Encodable {
+    var songs:[String]
+}
 
 public struct CreatePlayListRequset:Encodable {
     var title:String
@@ -27,6 +30,7 @@ public enum PlayListAPI {
     case editPlayListName(key:String,title:String)
     case deletePlayList(key:String)
     case loadPlayList(key:String)
+    case addSongIntoPlayList(key:String,songs:[String])
 }
 
 extension PlayListAPI: WMAPI {
@@ -65,8 +69,13 @@ extension PlayListAPI: WMAPI {
             
         case .editPlayListName(key: let key,_):
             return "/\(key)/edit/title"
+         
+            
+        case .addSongIntoPlayList(key: let key,_):
+            return "/\(key)/songs/add"
             
         }
+        
     }
         
         public var method: Moya.Method {
@@ -75,12 +84,13 @@ extension PlayListAPI: WMAPI {
                 
             case .fetchRecommendPlayList,.fetchPlayListDetail:
                 return .get
-            case .createPlayList,.loadPlayList:
+            case .createPlayList,.loadPlayList,.addSongIntoPlayList:
                 return .post
             case .editPlayList,.editPlayListName:
                 return .patch
             case .deletePlayList:
                 return .delete
+            
             }
             
         }
@@ -103,7 +113,14 @@ extension PlayListAPI: WMAPI {
                 return .requestJSONEncodable(EditPlayListRequset(songs: songs))
             case .editPlayListName(_, title: let title):
                 return .requestJSONEncodable(EditPlayListNameRequset(title: title))
+                
+            
+            case . addSongIntoPlayList(_, songs: let songs):
+
+                return .requestJSONEncodable(AddSongRequest(songs: songs))
+                
             }
+
         }
             
             public var jwtTokenType: JwtTokenType {
@@ -112,7 +129,7 @@ extension PlayListAPI: WMAPI {
                 case .fetchRecommendPlayList,.fetchPlayListDetail:
                     return .none
                     
-                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName:
+                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName,.addSongIntoPlayList:
                     return .accessToken
                 }
             }

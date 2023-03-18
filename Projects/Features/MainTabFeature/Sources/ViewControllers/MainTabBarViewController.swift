@@ -23,7 +23,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     private lazy var viewControllers: [UIViewController] = {
         return [
-            HomeViewController.viewController().wrapNavigationController,
+            homeComponent.makeView().wrapNavigationController,
             chartComponent.makeView(),
             searchComponent.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
@@ -33,7 +33,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     private var previousIndex: Int?
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-
+    
+    private var homeComponent: HomeComponent!
     private var chartComponent: ChartComponent!
     private var searchComponent: SearchComponent!
     private var artistComponent: ArtistComponent!
@@ -41,7 +42,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
     }
     
@@ -56,18 +56,18 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     }
 
     public static func viewController(
+        homeComponent: HomeComponent,
         chartComponent: ChartComponent,
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
-        
+        viewController.homeComponent = homeComponent
         viewController.chartComponent = chartComponent
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
         viewController.storageComponent = storageCompoent
-
         return viewController
     }
 }

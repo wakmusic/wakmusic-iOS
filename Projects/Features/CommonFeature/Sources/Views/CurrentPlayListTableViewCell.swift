@@ -38,7 +38,7 @@ class CurrentPlayListTableViewCell: UITableViewCell {
 extension CurrentPlayListTableViewCell {
     func update(model:PlayListEntity) {
         self.playListImageView.kf.setImage(
-            with: WMImageAPI.fetchPlayList(id: String(model.image)).toURL,
+            with: WMImageAPI.fetchPlayList(id: String(model.image),version: model.image_version).toURL,
             placeholder: nil,
             options: [.transition(.fade(0.2))])
 

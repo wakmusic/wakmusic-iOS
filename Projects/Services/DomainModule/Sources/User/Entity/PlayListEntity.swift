@@ -7,7 +7,8 @@ public struct PlayListEntity: Equatable {
         title:String,
         creator_id:String,
         image:String,
-        songlist:[String]
+        songlist:[String],
+        image_version:Int
      
     ) {
         self.id = id
@@ -16,10 +17,10 @@ public struct PlayListEntity: Equatable {
         self.creator_id = creator_id
         self.image = image
         self.songlist = songlist
-        
+        self.image_version = image_version
     }
     
-    public let id: Int
+    public let id,image_version: Int
     public let key,title,creator_id,image:String
     public let songlist:[String]
     
