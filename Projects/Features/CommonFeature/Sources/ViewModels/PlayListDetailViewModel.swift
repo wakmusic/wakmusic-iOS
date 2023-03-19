@@ -49,8 +49,8 @@ public final class PlayListDetailViewModel:ViewModelType {
     public struct Output {
         let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
         let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
-        let dataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let backUpdataSource:BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let dataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
     }
 
     public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase,editPlayListUseCase:EditPlayListUseCase) {
@@ -79,8 +79,8 @@ public final class PlayListDetailViewModel:ViewModelType {
             self.key = model.key
             
         })
-        .map({$0.songs})
-            .bind(to: output.dataSource,output.backUpdataSource)
+        .map { [PlayListDetailSectionModel(model: 0, items: $0.songs)] }
+        .bind(to: output.dataSource,output.backUpdataSource)
         .disposed(by: disposeBag)
             
         
@@ -91,11 +91,11 @@ public final class PlayListDetailViewModel:ViewModelType {
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)
             
-        
         input.runEditing
             .withLatestFrom(output.dataSource)
             .filter({!$0.isEmpty})
-            .map({$0.map{$0.id}})
+            .map { $0.first?.items.map { $0.id } ?? [] }
+            .debug("서버로 전송합니다.")
             .flatMap({[weak self] (songs:[String]) -> Observable<BaseEntity> in
                 
                 guard let self = self else{
@@ -105,36 +105,23 @@ public final class PlayListDetailViewModel:ViewModelType {
                 guard let key = self.key else {
                     return Observable.empty()
                 }
-                
-                
-                
                 return self.editPlayListUseCase.execute(key: key, songs: songs)
                     .asObservable()
             }).subscribe(onNext: { [weak self] in
-                
                 guard let self = self else{
                     return
                 }
-                
-                
                 if $0.status != 200 {
                     self.input.showErrorToast.accept($0.description)
                     return
                 }
-                
                 self.output.backUpdataSource.accept(self.output.dataSource.value)
-                
-                
             }).disposed(by: disposeBag)
-        
-        
-        
+                
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
-        
     }
     
     deinit{

@@ -16,7 +16,7 @@ import DesignSystem
 import BaseFeature
 import Kingfisher
 import SkeletonView
-
+import DomainModule
 
 
 
@@ -137,6 +137,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
 }
 
+public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
+
 extension PlayListDetailViewController{
     
     private func configureSkeleton(){
@@ -174,40 +176,19 @@ extension PlayListDetailViewController{
     
     private func configureUI(){
     
-    
-       
-        
-        
-        
-        // Drag & Drop 기능을 위한 부분
-        
-        self.tableView.dragInteractionEnabled = false //첫 화면 시  드래그 앤 드롭 방지
-        self.tableView.dragDelegate = viewModel.type == .wmRecommend ? nil : self
-        self.tableView.dropDelegate = viewModel.type == .wmRecommend ? nil : self
-        
         if viewModel.type != .wmRecommend {
             let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-            tableView.addGestureRecognizer(longPress)
+//            tableView.addGestureRecognizer(longPress)
         }
-        
-        
-        
         
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
-        
          
         self.completeButton.isHidden = true
         self.editStateLabel.isHidden = true
         
-        
-        
-        
-       
-        
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
-        
         
         self.completeButton.titleLabel?.text = "완료"
         self.completeButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
@@ -244,13 +225,48 @@ extension PlayListDetailViewController{
         
         bindRx()
         configureSkeleton()
-        
-        
     }
     
-    
-    private func bindRx()
-    {
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
+            guard let self = self else { return UITableViewCell() }
+
+            let bgView = UIView()
+            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+            switch self.viewModel.type {
+                
+            case .custom:
+                
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell", for: IndexPath(row: indexPath.row, section: 0)) as? PlayListTableViewCell else{
+                    return UITableViewCell()
+                }
+                
+                cell.selectedBackgroundView = bgView
+                cell.update(model,self.viewModel.output.state.value.isEditing)
+                
+                return cell
+            case .wmRecommend:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: IndexPath(row: indexPath.row, section: 0)) as? SongListCell else{
+                    return UITableViewCell()
+                }
+                
+                cell.selectedBackgroundView = bgView
+                cell.update(model)
+                
+                return cell
+            case .none:
+                return UITableViewCell()
+            }
+
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
+    }
+
+    private func bindRx() {
        
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         tableView.register(UINib(nibName:"SongListCell", bundle: CommonFeatureResources.bundle), forCellReuseIdentifier: "SongListCell")
@@ -261,84 +277,61 @@ extension PlayListDetailViewController{
         viewModel.output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
-                
                 guard let self = self else {
                     return
                 }
-                
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "플레이리스트에 곡이 없습니다."
                 
-                
                 self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
             })
-            .bind(to: tableView.rx.items){[weak self] (tableView, index, model) -> UITableViewCell in
-       
-                
-                guard let self = self else { return UITableViewCell() }
-
-                let bgView = UIView()
-                bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
-                switch self.viewModel.type {
-                    
-                case .custom:
-                    
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? PlayListTableViewCell else{
-                        return UITableViewCell()
-                    }
-                    
-                    cell.selectedBackgroundView = bgView
-                    cell.update(model,self.viewModel.output.state.value.isEditing)
-                    
-                    return cell
-                case .wmRecommend:
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell",for: IndexPath(row: index, section: 0)) as? SongListCell else{
-                        return UITableViewCell()
-                    }
-                    
-                    cell.selectedBackgroundView = bgView
-                    cell.update(model)
-                    
-                    return cell
-                case .none:
-                    return UITableViewCell()
-                }
-                
-                
-            }
+            .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
+                
+        tableView.rx.itemMoved.asObservable()
+            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
+                guard let `self` = self else { return }
 
-        
-               
+                DEBUG_LOG("sourceIndexPath: \(sourceIndexPath)")
+                DEBUG_LOG("sourceIndexPath: \(destinationIndexPath)")
+
+                self.viewModel.input.sourceIndexPath.accept(sourceIndexPath)
+                self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+                
+                var curr = self.viewModel.output.dataSource.value.first?.items ?? []
+                DEBUG_LOG("current: \(curr)")
+                
+                let tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
+                curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
+                curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
+
+                let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
+                self.viewModel.output.dataSource.accept(newModel)
+                
+            }).disposed(by: disposeBag)
         
         viewModel.output.state
             .skip(1)
             .do(onNext: { [weak self] state in
                 guard let self = self else { return }
                 
-                
                 if state.isEditing == false && state.force == false {
-                    
+                    DEBUG_LOG("서버로 전송합니다.")
                     self.viewModel.input.runEditing.onNext(())
                 }
                 
-                
                 let isEdit = state.isEditing
-                
                 self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
-                self.tableView.dragInteractionEnabled = isEdit // true/false로 전환해 드래그 드롭을 활성화하고 비활성화 할 것입니다.
                 
                 self.moreButton.isHidden = isEdit
                 self.completeButton.isHidden = !isEdit
                 self.editStateLabel.isHidden = !isEdit
                 
-                
+                self.tableView.setEditing(isEdit, animated: true)
             })
-                .withLatestFrom(viewModel.output.dataSource)
-                .bind(to: viewModel.output.dataSource)
+            .withLatestFrom(viewModel.output.dataSource)
+            .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
-                //에딧 상태에 따른 cell 변화를 reload 해주기 위해
-                
         
                 
         viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
@@ -463,106 +456,19 @@ extension PlayListDetailViewController:UITableViewDelegate{
         return 60
     }
     
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
+    }
     
-    
-//    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-//
-//        print("from \(sourceIndexPath) to \(proposedDestinationIndexPath)")
-//
-//        return IndexPath(item: 0, section: 0)
-//
-//    }
-    
-    
-
-
-    
-       
+    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
 }
-
-
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         DEBUG_LOG(event)
     }
-    
-    
-}
-
-extension PlayListDetailViewController: UITableViewDragDelegate {
-    public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        
-        
-        viewModel.input.sourceIndexPath.accept(indexPath)
-        let itemProvider = NSItemProvider(object: "1" as NSString)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        return [dragItem]
-        
-        
-        // 애플의 공식 문서에서는 사용자가 특정 행을 드래그하는 것을 원하지 않으면 빈 배열을 리턴하라고 했는데,
-        //빈 배열을 리턴했을 때도 드래그가 가능했습니다. 이 부분은 더 자세히 알아봐야 할 것 같습니다.
-    }
-    
-    
-    
-    
-}
-
-extension PlayListDetailViewController: UITableViewDropDelegate {
-    
-    
-    // 손가락을 화면에서 뗐을 때. 드롭한 데이터를 불러와서 data source를 업데이트 하고, 필요하면 새로운 행을 추가한다.
-    public func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
-        
-        let destinationIndexPath: IndexPath
-
-                if let indexPath = coordinator.destinationIndexPath {
-                    destinationIndexPath = indexPath
-                } else {
-                    // Get last index path of table view.
-                    let section = tableView.numberOfSections - 1
-                    let row = tableView.numberOfRows(inSection: section)
-                    destinationIndexPath = IndexPath(row: row, section: section)
-                }
-        viewModel.input.destIndexPath.accept(destinationIndexPath)
-        
-        
-        
-        var curr = viewModel.output.dataSource.value
-        var tmp = curr[viewModel.input.sourceIndexPath.value.row]
-        curr.remove(at: viewModel.input.sourceIndexPath.value.row)
-        curr.insert(tmp, at: viewModel.input.destIndexPath.value.row)
-
-        viewModel.output.dataSource.accept(curr)
-        
-        
-    }
-    
-    // 드래그할 떄 (손가락을 화면에 대고 있을 때)
-    public func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        var dropProposal = UITableViewDropProposal(operation: .cancel)
-        
-       
-        // Accept only one drag item.
-        guard session.items.count == 1 else { return dropProposal }
-        
-        // The .move drag operation is available only for dragging within this app and while in edit mode.
-        if tableView.hasActiveDrag {
-            //            if tableView.isEditing {
-            dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-            //            }
-        } else {
-            // Drag is coming from outside the app.
-            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
-        }
-        
-        
-        return dropProposal
-    }
-    
-    
-    
 }
 
 extension PlayListDetailViewController: UIGestureRecognizerDelegate {
@@ -571,4 +477,3 @@ extension PlayListDetailViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
-

@@ -11,7 +11,7 @@ import DomainModule
 import Utility
 
 class PlayListTableViewCell: UITableViewCell {
-    @IBOutlet weak var button:UIButton!
+    @IBOutlet weak var playButton:UIButton!
     
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -44,7 +44,7 @@ class PlayListTableViewCell: UITableViewCell {
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
 
-        
+        self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
 
        
     }
@@ -57,16 +57,11 @@ class PlayListTableViewCell: UITableViewCell {
 
 extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool) {
-
        
         albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
         titleLabel.text =  model.title
         artistLabel.text = model.artist
         isEdit = isEditing
-        
-        button.setImage( isEditing ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)
-        
-
-        
+        playButton.isHidden = isEditing
     }
 }
