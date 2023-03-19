@@ -8,11 +8,24 @@
 
 import Foundation
 
-public enum NewSongGroupType: String, Codable {
+public enum NewSongGroupType: CaseIterable {
     case all
     case woowakgood
     case isedol
     case gomem
+
+    public var apiKey: String {
+        switch self {
+        case .all:
+            return "all"
+        case .woowakgood:
+            return "woowakgood"
+        case .isedol:
+            return "isedol"
+        case .gomem:
+            return "gomem"
+        }
+    }
 
     public var display: String {
         switch self {

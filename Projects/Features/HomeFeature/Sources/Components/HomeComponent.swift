@@ -10,13 +10,23 @@ import Foundation
 import UIKit
 import NeedleFoundation
 import DomainModule
-
+import CommonFeature
 public protocol HomeDependency: Dependency {
+    var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongUseCase: any FetchNewSongUseCase { get }
+    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
+    var playListDetailComponent : PlayListDetailComponent {get}
 }
 
 public final class HomeComponent: Component<HomeDependency> {
     public func makeView() -> HomeViewController {
-        return HomeViewController.viewController(viewModel: .init(fetchNewSongUseCase: dependency.fetchNewSongUseCase))
+        return HomeViewController.viewController(
+            viewModel: .init(
+                fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
+                fetchNewSongUseCase: dependency.fetchNewSongUseCase,
+                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+            ),
+            playListDetailComponent: dependency.playListDetailComponent
+        )
     }
 }

@@ -451,8 +451,17 @@ private func factoryda2925fd76da866a652af47b58f8f304c97af4d5(_ component: Needle
     return SignInDependency5dda0dd015447272446cProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
+    var fetchChartRankingUseCase: any FetchChartRankingUseCase {
+        return appComponent.fetchChartRankingUseCase
+    }
     var fetchNewSongUseCase: any FetchNewSongUseCase {
         return appComponent.fetchNewSongUseCase
+    }
+    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
+        return appComponent.fetchRecommendPlayListUseCase
+    }
+    var playListDetailComponent: PlayListDetailComponent {
+        return appComponent.playListDetailComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -848,7 +857,10 @@ extension SignInComponent: Registration {
 }
 extension HomeComponent: Registration {
     public func registerItems() {
+        keyPathToName[\HomeDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\HomeDependency.fetchNewSongUseCase] = "fetchNewSongUseCase-any FetchNewSongUseCase"
+        keyPathToName[\HomeDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
+        keyPathToName[\HomeDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
     }
 }
 extension AfterSearchComponent: Registration {
