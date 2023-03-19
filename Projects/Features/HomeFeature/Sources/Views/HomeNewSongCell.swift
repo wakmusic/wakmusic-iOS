@@ -25,7 +25,7 @@ class HomeNewSongCell: UICollectionViewCell {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 7
+        albumImageView.layer.cornerRadius = 8
         albumImageView.clipsToBounds = true
         albumImageView.contentMode = .scaleAspectFill
         playImageView.image = DesignSystemAsset.Home.playSmall.image
