@@ -175,12 +175,6 @@ extension PlayListDetailViewController{
     
     
     private func configureUI(){
-    
-        if viewModel.type != .wmRecommend {
-            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-//            tableView.addGestureRecognizer(longPress)
-        }
-        
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         tableView.backgroundColor = .clear
          
@@ -412,21 +406,8 @@ extension PlayListDetailViewController{
                     self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                     
                 })
-                .disposed(by: disposeBag)
-                
-      
+                .disposed(by: disposeBag)      
     }
-    
-    
-    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
-        
-        
-        if  !viewModel.output.state.value.isEditing && sender.state == .began  {
-            viewModel.output.state.accept(EditState(isEditing: true, force: true))
-            HapticManager.shared.impact(style: .light)
-        }
-    }
- 
 }
    
     
