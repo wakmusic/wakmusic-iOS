@@ -113,9 +113,14 @@ extension TabItemView {
     
     private func configure(_ item: TabItem?) {
         guard let model = item else { return }
-        self.titleStringLabel.text = model.title
-        self.titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 12)
-        self.titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        
+        let attributedString = NSMutableAttributedString(
+            string: model.title,
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        self.titleStringLabel.attributedText = attributedString
         self.defaultTabImageView.image = model.offImage
         self.isSelected = model.isSelected
     }

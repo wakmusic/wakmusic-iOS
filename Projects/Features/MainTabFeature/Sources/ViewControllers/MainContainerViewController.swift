@@ -44,11 +44,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
-        if isDarkContentBackground {
-            return .lightContent
-        } else {
-            return .default
-        }
+        return isDarkContentBackground ? .lightContent : .default
     }
 
     public static func viewController(
@@ -221,9 +217,7 @@ extension MainContainerViewController {
 }
 
 extension MainContainerViewController: BottomTabBarViewDelegate {
-    
     func handleTapped(index previous: Int, current: Int) {
-
         guard let navigationController = self.children.first as? UINavigationController,
               let mainTabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController else { return }
         
@@ -233,9 +227,8 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 
 public extension MainContainerViewController {
     
-    //expanded: 플레이어 확장/축소 여부
+    // expanded: 플레이어 확장/축소
     func updatePlayerView(expanded: Bool) {
-        
         let window: UIWindow? = UIApplication.shared.windows.first
         let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
         let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
@@ -259,9 +252,8 @@ public extension MainContainerViewController {
         updatePlayerViewController(value: (expanded) ? Float(1) : Float(0))
     }
     
-    //플레이어 열기
-    func openPlayer() {
-        
+    // 플레이어 생성
+    func createPlayer(ids: [String]) {
         let vc = playerComponent.makeView()
         self.addChild(vc)
         panelView.addSubview(vc.view)
@@ -295,29 +287,40 @@ public extension MainContainerViewController {
         updatePlayerViewController(value: Float(1))
     }
     
-    //플레이어 닫기
+    // 플레이어가 이미 있는 상태에서 새로운 곡 로드
+    func loadPlayer(ids: [String]) {
+        guard let playerViewController = self.children.last as? PlayerViewController else {
+            DEBUG_LOG("❌ Player Load Failed")
+            return
+        }
+        //TO-Do
+        playerViewController.updateOpacity(value: Float(1))
+    }
+    
+    // 플레이어 닫기
     func closePlayer() {
-        
-        self.panelView.subviews.forEach { $0.removeFromSuperview() }
-        self.panelView.isHidden = true
-        
-        guard let playerViewController = self.children.last as? PlayerViewController else { return }
+        guard let playerViewController = self.children.last as? PlayerViewController else {
+            DEBUG_LOG("❌ Player Load Failed")
+            return
+        }
         
         playerViewController.willMove(toParent: nil)
         playerViewController.view.removeFromSuperview()
         playerViewController.removeFromParent()
+        
+        self.panelView.subviews.forEach { $0.removeFromSuperview() }
+        self.panelView.isHidden = true
     }
 }
 
 extension MainContainerViewController {
-
     private func bindNotification() {
         NotificationCenter.default.rx
             .notification(.statusBarEnterDarkBackground)
             .subscribe(onNext: { [weak self] _ in
                 self?.statusBarEnterDarkBackground()
             }).disposed(by: disposeBag)
-
+        
         NotificationCenter.default.rx
             .notification(.statusBarEnterLightBackground)
             .subscribe(onNext: { [weak self] _ in
@@ -332,7 +335,7 @@ extension MainContainerViewController {
                     self.panelView.alpha = 0
                 }
             }).disposed(by: disposeBag)
-
+        
         NotificationCenter.default.rx
             .notification(.hideSongCart)
             .subscribe(onNext: { [weak self] _ in
@@ -342,7 +345,9 @@ extension MainContainerViewController {
                 }
             }).disposed(by: disposeBag)
     }
-    
+}
+
+extension MainContainerViewController {
     private func statusBarEnterLightBackground() {
         isDarkContentBackground = false
         UIView.animate(withDuration: 0.15) {
