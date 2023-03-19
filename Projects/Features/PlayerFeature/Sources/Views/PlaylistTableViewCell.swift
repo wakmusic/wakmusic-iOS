@@ -66,6 +66,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         didSet {
             updatePlayingState()
             highlight()
+            isPlaying ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
         }
     }
     
