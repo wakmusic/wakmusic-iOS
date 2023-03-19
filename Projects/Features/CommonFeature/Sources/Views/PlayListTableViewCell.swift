@@ -62,6 +62,26 @@ extension PlayListTableViewCell {
         titleLabel.text =  model.title
         artistLabel.text = model.artist
         isEdit = isEditing
-        playButton.isHidden = isEditing
+        
+        updatePlayingState(isEditing: isEditing)
+        self.playButton.isHidden = isEdit
+    }
+    
+    private func updatePlayingState(isEditing:Bool) {
+        if isEditing {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+                guard let self else { return }
+                self.playButton.alpha = 0
+                self.playButton.transform = CGAffineTransform(translationX: 100, y: 0)
+                
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+                guard let self else { return }
+                self.playButton.alpha = 1
+                self.playButton.transform = .identity
+            }
+            
+        }
     }
 }
