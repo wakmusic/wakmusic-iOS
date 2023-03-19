@@ -21,10 +21,8 @@ struct PlayListHeaderInfo {
     var version:Int
 }
 
-
 public final class PlayListDetailViewModel:ViewModelType {
    
-    
     let input = Input()
     let output = Output()
     
@@ -43,7 +41,6 @@ public final class PlayListDetailViewModel:ViewModelType {
         let playListNameLoad:BehaviorRelay<String> = BehaviorRelay(value: "")
         let cancelEdit:PublishSubject<Void> = PublishSubject()
         let runEditing:PublishSubject<Void> = PublishSubject()
-        
     }
 
     public struct Output {

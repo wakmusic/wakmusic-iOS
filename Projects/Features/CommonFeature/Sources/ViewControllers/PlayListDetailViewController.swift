@@ -310,7 +310,6 @@ extension PlayListDetailViewController{
                 guard let self = self else { return }
                 
                 if state.isEditing == false && state.force == false {
-                    DEBUG_LOG("서버로 전송합니다.")
                     self.viewModel.input.runEditing.onNext(())
                 }
                 
@@ -329,15 +328,10 @@ extension PlayListDetailViewController{
         
                 
         viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
-            
-        
-            
             guard let self = self else{
                 return
             }
             let type = self.viewModel.type
-            
-       
             
             self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: {[weak self]  _ in
                 
@@ -347,19 +341,12 @@ extension PlayListDetailViewController{
                 
                 self.playListImage.stopSkeletonAnimation()
                 self.playListImage.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-                
-                
-               
-                
-                
             })
-    
-            
-            
+                
             DEBUG_LOG(model)
             
-                self.playListCountLabel.text = model.songCount
-                self.playListNameLabel.text = model.title
+            self.playListCountLabel.text = model.songCount
+            self.playListNameLabel.text = model.title
             
             DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
                 self.playListCountLabel.stopSkeletonAnimation()
@@ -372,68 +359,45 @@ extension PlayListDetailViewController{
                 self.playListCountLabel.text = model.songCount
                 self.playListNameLabel.text = model.title
             }
-            
-           
-            
-            
-            
+
             self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
             
         }).disposed(by: disposeBag)
                 
-        
-            NotificationCenter.default.rx.notification(.playListNameRefresh)
-                .map({noti -> String in
-                    
-                    guard let obj = noti.object as? String else {
-                        return ""
-                    }
-                    
-                    return obj
-                    
-                })
-                .bind(to: viewModel.input.playListNameLoad)
+        NotificationCenter.default.rx.notification(.playListNameRefresh)
+            .map({noti -> String in
+                guard let obj = noti.object as? String else {
+                    return ""
+                }
+                return obj
+                
+            })
+            .bind(to: viewModel.input.playListNameLoad)
             .disposed(by: disposeBag)
         
-        
-                viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
-                    
-                    guard let self = self else {
-                        return
-                    }
-                    
-                    
-                    self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                    
-                })
-                .disposed(by: disposeBag)      
+        viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+        })
+        .disposed(by: disposeBag)
     }
 }
-   
-    
-
-
 
 extension PlayListDetailViewController:UITableViewDelegate{
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-    
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
-        
         view.delegate = self
-
-        
         return viewModel.output.dataSource.value.isEmpty ? nil : view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
         return viewModel.output.dataSource.value.isEmpty ? 0 : 80
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         return 60
     }
     
@@ -453,7 +417,6 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
 }
 
 extension PlayListDetailViewController: UIGestureRecognizerDelegate {
-    
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
