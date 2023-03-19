@@ -90,7 +90,7 @@ public final class PlayListDetailViewModel:ViewModelType {
             
         input.runEditing
             .withLatestFrom(output.dataSource)
-            .filter({!$0.isEmpty})
+            .filter { !($0.first?.items ?? []).isEmpty }
             .map { $0.first?.items.map { $0.id } ?? [] }
             .debug("서버로 전송합니다.")
             .flatMap({[weak self] (songs:[String]) -> Observable<BaseEntity> in

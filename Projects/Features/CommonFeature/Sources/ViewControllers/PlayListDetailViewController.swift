@@ -277,7 +277,8 @@ extension PlayListDetailViewController{
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "플레이리스트에 곡이 없습니다."
                 
-                self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
+                let items = model.first?.items ?? []
+                self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
             })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
@@ -390,11 +391,13 @@ extension PlayListDetailViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        return viewModel.output.dataSource.value.isEmpty ? nil : view
+        let items = viewModel.output.dataSource.value.first?.items ?? []
+        return items.isEmpty ? nil : view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return viewModel.output.dataSource.value.isEmpty ? 0 : 80
+        let items = viewModel.output.dataSource.value.first?.items ?? []
+        return items.isEmpty ? 0 : 80
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
