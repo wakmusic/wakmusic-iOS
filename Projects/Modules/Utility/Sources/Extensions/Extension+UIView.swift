@@ -9,42 +9,57 @@
 import Foundation
 import UIKit
 import SwiftEntryKit
+import Combine
 
 public extension UIView {
     
     enum VerticalLocation {
-           case bottom
-           case top
-           case left
-           case right
-       }
-
-       func addShadow(location: VerticalLocation, color: UIColor = .black, opacity: Float = 0.8, radius: CGFloat = 5.0) {
-           switch location {
-           case .bottom:
-                addShadow(offset: CGSize(width: 0, height: 10), color: color, opacity: opacity, radius: radius)
-           case .top:
-               addShadow(offset: CGSize(width: 0, height: -10), color: color, opacity: opacity, radius: radius)
-           case .left:
-               addShadow(offset: CGSize(width: -10, height: 0), color: color, opacity: opacity, radius: radius)
-           case .right:
-               addShadow(offset: CGSize(width: 10, height: 0), color: color, opacity: opacity, radius: radius)
-           }
-       }
-
-       func addShadow(offset: CGSize, color: UIColor = .black, opacity: Float = 0.1, radius: CGFloat = 3.0) {
-           
-           /// 테두리 밖으로 contents가 있을 때, 마스킹(true)하여 표출안되게 할것인지 마스킹을 off(false  emptyView.layer.masksToBounds = false
-           /// shadow 색상
-           /// 현재 shadow는 view의 layer 테두리와 동일한 위치로 있는 상태이므로 offset을 통해 그림자를 이동시켜야 표출
-           /// shadow의 투명도 (0 ~ 1)
-           /// shadow의 corner radius
-           self.layer.masksToBounds = false
-           self.layer.shadowColor = color.cgColor
-           self.layer.shadowOffset = offset
-           self.layer.shadowOpacity = opacity
-           self.layer.shadowRadius = radius
-       }
+        case bottom
+        case top
+        case left
+        case right
+    }
+    
+    func tapPublisher() -> AnyPublisher<UITapGestureRecognizer, Never> {
+        return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self).eraseToAnyPublisher()
+    }
+    
+    /// 1초 이내 첫 이벤트를 제외한 나머지 이벤트는 무시하는 Publisher 입니다.
+    func throttleTapPublisher() -> Publishers.Throttle<UITapGestureRecognizer.GesturePublisher<UITapGestureRecognizer>, RunLoop> {
+        return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self)
+            .throttle(
+                for: .seconds(1),
+                scheduler: RunLoop.main,
+                latest: false
+            )
+    }
+    
+    func addShadow(location: VerticalLocation, color: UIColor = .black, opacity: Float = 0.8, radius: CGFloat = 5.0) {
+        switch location {
+        case .bottom:
+            addShadow(offset: CGSize(width: 0, height: 10), color: color, opacity: opacity, radius: radius)
+        case .top:
+            addShadow(offset: CGSize(width: 0, height: -10), color: color, opacity: opacity, radius: radius)
+        case .left:
+            addShadow(offset: CGSize(width: -10, height: 0), color: color, opacity: opacity, radius: radius)
+        case .right:
+            addShadow(offset: CGSize(width: 10, height: 0), color: color, opacity: opacity, radius: radius)
+        }
+    }
+    
+    func addShadow(offset: CGSize, color: UIColor = .black, opacity: Float = 0.1, radius: CGFloat = 3.0) {
+        
+        /// 테두리 밖으로 contents가 있을 때, 마스킹(true)하여 표출안되게 할것인지 마스킹을 off(false  emptyView.layer.masksToBounds = false
+        /// shadow 색상
+        /// 현재 shadow는 view의 layer 테두리와 동일한 위치로 있는 상태이므로 offset을 통해 그림자를 이동시켜야 표출
+        /// shadow의 투명도 (0 ~ 1)
+        /// shadow의 corner radius
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOffset = offset
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowRadius = radius
+    }
     
     
     func animateSizeDownToUp(timeInterval: TimeInterval) {
@@ -60,7 +75,7 @@ public extension UIView {
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
         attributes.roundCorners = .all(radius: 20)
-
+        
         let style = EKProperty.LabelStyle(
             font: .systemFont(ofSize: 14, weight: .light),
             color: EKColor(rgb: 0xFCFCFD),
@@ -70,7 +85,7 @@ public extension UIView {
             text: text,
             style: style
         )
-
+        
         let contentView = EKNoteMessageView(with: labelContent)
         contentView.verticalOffset = 10
         SwiftEntryKit.display(entry: contentView, using: attributes)
