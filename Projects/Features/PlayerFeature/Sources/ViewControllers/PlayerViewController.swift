@@ -182,7 +182,7 @@ private extension PlayerViewController {
     private func bindViews(output: PlayerViewModel.Output) {
         output.viewsCountText.sink { [weak self] viewsCountText in
             guard let self else { return }
-            self.playerView.viewsLabel.text = viewsCountText
+            self.playerView.viewsView.title = viewsCountText
         }
         .store(in: &subscription)
     }

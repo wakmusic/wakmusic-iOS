@@ -152,17 +152,11 @@ public final class PlayerView: UIView {
         $0.isLiked = false
     }
     
-    private lazy var viewsView: UIView = UIView()
-    
-    internal lazy var viewsImageView = UIImageView().then {
+    internal lazy var viewsView = VerticalImageButton().then {
         $0.image = DesignSystemAsset.Player.views.image
-    }
-    
-    internal lazy var viewsLabel = UILabel().then {
-        $0.text = "1.2만"
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
-        $0.textColor = DesignSystemAsset.GrayColor.gray400.color
+        $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
     internal lazy var addPlayistButton = VerticalImageButton().then {
@@ -247,8 +241,6 @@ private extension PlayerView {
         self.bottomBarStackView.addArrangedSubview(addPlayistButton)
         self.bottomBarStackView.addArrangedSubview(playistButton)
         
-        self.viewsView.addSubview(viewsImageView)
-        self.viewsView.addSubview(viewsLabel)
     }
     
     private func configureBackground() {
@@ -376,14 +368,6 @@ private extension PlayerView {
         bottomBarStackView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(22)
-        }
-        viewsImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(4)
-            $0.centerX.equalToSuperview()
-        }
-        viewsLabel.snp.makeConstraints {
-            $0.top.equalTo(viewsImageView.snp.bottom)
-            $0.centerX.equalToSuperview()
         }
     }
     
