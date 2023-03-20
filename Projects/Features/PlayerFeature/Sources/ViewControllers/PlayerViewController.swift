@@ -95,9 +95,9 @@ private extension PlayerViewController {
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
             repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
-            likeButtonDidTapEvent: self.playerView.likeButton.rx.tap.asObservable(),
-            addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.rx.tap.asObservable(),
-            playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher,
+            likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
+            addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
+            playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher(),
             miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
             miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
             miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
@@ -169,13 +169,13 @@ private extension PlayerViewController {
     private func bindlikes(output: PlayerViewModel.Output) {
         output.likeCountText.sink { [weak self] likeCountText in
             guard let self else { return }
-            self.playerView.likeButton.setTitle(likeCountText, for: .normal)
+            self.playerView.likeButton.title = likeCountText
         }
         .store(in: &subscription)
         
         output.likeState.sink { [weak self] isLiked in
             guard let self else { return }
-            self.playerView.likeButton.isOn = isLiked
+            self.playerView.likeButton.isLiked = isLiked
         }.store(in: &subscription)
     }
     

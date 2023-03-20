@@ -147,12 +147,9 @@ public final class PlayerView: UIView {
     }
     
     internal lazy var likeButton = LikeButton().then {
-        $0.setImage(DesignSystemAsset.Player.likeOff.image, for: .normal)
-        $0.setTitle("1.1만", for: .normal)
-        $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel?.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
-        $0.isOn = false
-        $0.alignToVertical()
+        $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.isLiked = false
     }
     
     private lazy var viewsView: UIView = UIView()
@@ -168,25 +165,22 @@ public final class PlayerView: UIView {
         $0.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
-    internal lazy var addPlayistButton = VerticalButton().then {
-        $0.setImage(DesignSystemAsset.Player.playerMusicAdd.image, for: .normal)
-        $0.setTitle("노래담기", for: .normal)
-        $0.tintColor = .systemGray
-        $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel?.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
-        $0.setTitleColor(DesignSystemAsset.GrayColor.gray400.color, for: .normal)
-        $0.alignToVertical()
+    internal lazy var addPlayistButton = VerticalImageButton().then {
+        $0.image = DesignSystemAsset.Player.playerMusicAdd.image
+        $0.title = "노래담기"
+        $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
-    internal lazy var playistButton = VerticalButton().then {
-        $0.setImage(DesignSystemAsset.Player.playList.image, for: .normal)
-        $0.setTitle("재생목록", for: .normal)
-        $0.tintColor = .systemGray
-        $0.titleLabel?.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel?.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
-        $0.setTitleColor(DesignSystemAsset.GrayColor.gray400.color, for: .normal)
-        $0.alignToVertical()
+    internal lazy var playistButton = VerticalImageButton().then {
+        $0.image = DesignSystemAsset.Player.playList.image
+        $0.title = "재생목록"
+        $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
+        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
+    
     
     private var firstSpacing: CGFloat = 0
     private var secondSpacing: CGFloat = 0
