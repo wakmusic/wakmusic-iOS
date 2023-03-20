@@ -48,6 +48,7 @@ class FavoriteTableViewCell: UITableViewCell {
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
+        button.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
         
     }
 
@@ -66,6 +67,27 @@ extension FavoriteTableViewCell {
         artistLabel.text = model.song.artist
         isEdit = isEditing
         
-        button.setImage( isEditing ? DesignSystemAsset.Storage.move.image :  DesignSystemAsset.Storage.play.image, for: .normal)
+        button.isHidden = isEditing
+        
+        updatePlayingState(isEditing: isEditing)
+        
+    }
+    
+    private func updatePlayingState(isEditing:Bool) {
+        if isEditing {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+                guard let self else { return }
+                self.button.alpha = 0
+                self.button.transform = CGAffineTransform(translationX: 100, y: 0)
+                
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+                guard let self else { return }
+                self.button.alpha = 1
+                self.button.transform = .identity
+            }
+            
+        }
     }
 }
