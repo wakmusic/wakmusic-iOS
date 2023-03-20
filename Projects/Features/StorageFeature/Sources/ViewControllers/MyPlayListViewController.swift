@@ -15,6 +15,10 @@ import DesignSystem
 import PanModal
 import BaseFeature
 import CommonFeature
+import DomainModule
+import RxDataSources
+
+public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
 public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -61,6 +65,32 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
 extension MyPlayListViewController{
     
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
+            guard let self = self else { return UITableViewCell() }
+
+            let bgView = UIView()
+            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
+            
+            let index = indexPath.row
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? MyPlayListTableViewCell
+            else {return UITableViewCell()}
+             
+            cell.selectedBackgroundView = bgView
+            cell.update(model: model, isEditing: self.output.state.value.isEditing)
+          
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
+    }
+    
+    
     private func configureUI()
     {
         self.tableView.dragDelegate = self
@@ -98,22 +128,8 @@ extension MyPlayListViewController{
             
             
         })
-            .bind(to: tableView.rx.items){[weak self] (tableView,index,model) -> UITableViewCell in
-                guard let self = self else{return UITableViewCell()}
-                
-                let bgView = UIView()
-                bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
-                
-                
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? MyPlayListTableViewCell
-                else {return UITableViewCell()}
-                 
-                cell.selectedBackgroundView = bgView
-                cell.update(model: model, isEditing: self.output.state.value.isEditing)
-              
-                        
-             return cell
-            }.disposed(by: disposeBag)
+            .bind(to: tableView.rx.items(dataSource: createDatasources()))
+            .disposed(by: disposeBag)
         
         
         self.output.state
@@ -187,7 +203,11 @@ extension MyPlayListViewController{
                     }
                     
                     
-                    let model = models[indexPath.row]
+                    guard let model =  models.first?.items[indexPath.row] else {
+                        return
+                    }
+                    
+                    
                     
                     let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
                     
