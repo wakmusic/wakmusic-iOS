@@ -111,6 +111,26 @@ extension FavoriteViewController{
             
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
+            
+            tableView.rx.itemMoved.asObservable()
+                .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
+                    guard let `self` = self else { return }
+
+
+
+                    self.input.sourceIndexPath.accept(sourceIndexPath)
+                    self.input.destIndexPath.accept(destinationIndexPath)
+                    
+                    var curr = self.output.dataSource.value.first?.items ?? []
+                    
+                    let tmp = curr[self.input.sourceIndexPath.value.row]
+                    curr.remove(at: self.input.sourceIndexPath.value.row)
+                    curr.insert(tmp, at: self.input.destIndexPath.value.row)
+
+                    let newModel = [FavoriteSectionModel(model: 0, items: curr)]
+                    self.output.dataSource.accept(newModel)
+                    
+                }).disposed(by: disposeBag)
         
         
             output.state

@@ -125,14 +125,11 @@ extension MyPlayListViewController{
             .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
                 guard let `self` = self else { return }
 
-                DEBUG_LOG("sourceIndexPath: \(sourceIndexPath)")
-                DEBUG_LOG("sourceIndexPath: \(destinationIndexPath)")
 
                 self.input.sourceIndexPath.accept(sourceIndexPath)
                 self.input.destIndexPath.accept(destinationIndexPath)
                 
                 var curr = self.output.dataSource.value.first?.items ?? []
-                DEBUG_LOG("current: \(curr)")
                 
                 let tmp = curr[self.input.sourceIndexPath.value.row]
                 curr.remove(at: self.input.sourceIndexPath.value.row)
