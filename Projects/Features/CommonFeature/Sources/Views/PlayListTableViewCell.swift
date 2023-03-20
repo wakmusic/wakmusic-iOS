@@ -12,76 +12,72 @@ import Utility
 
 class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var playButton:UIButton!
-    
+    @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     
-    @IBAction func playOrEditAction(_ sender: UIButton) {
+    @IBAction func playOrEditAction(_ sender: UIButton) { }
         
-        if isEdit == false
-        {
-            print("Play")
+    override var isEditing: Bool {
+        didSet {
+            updatePlayingState()
         }
-        
     }
-    var isEdit:Bool = false
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         self.backgroundColor = .clear
         
-        albumImageView.layer.cornerRadius = 4
-
+        self.albumImageView.layer.cornerRadius = 4
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-
         
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
 
         self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
-
-       
     }
-    
-    
-
-   
-
 }
 
 extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool) {
-       
-        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
+        albumImageView.kf.setImage(
+            with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
+            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            options: [.transition(.fade(0.2))]
+        )
         titleLabel.text =  model.title
         artistLabel.text = model.artist
-        isEdit = isEditing
-        
-        updatePlayingState(isEditing: isEditing)
-        self.playButton.isHidden = isEdit
     }
     
-    private func updatePlayingState(isEditing:Bool) {
-        if isEditing {
-            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+    private func updatePlayingState() {
+        if self.isEditing {
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 오른쪽으로 사라지는 애니메이션
                 guard let self else { return }
                 self.playButton.alpha = 0
                 self.playButton.transform = CGAffineTransform(translationX: 100, y: 0)
-                
-            }
+                self.playButtonTrailingConstraint.constant = -24
+                self.layoutIfNeeded()
+
+            }, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.playButton.isHidden = true
+            })
         } else {
-            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+            self.playButton.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이ㄴ
                 guard let self else { return }
                 self.playButton.alpha = 1
                 self.playButton.transform = .identity
-            }
-            
+                self.playButton.isHidden = false
+                self.playButtonTrailingConstraint.constant = 20
+                self.layoutIfNeeded()
+
+            }, completion: { _ in
+            })
         }
     }
 }

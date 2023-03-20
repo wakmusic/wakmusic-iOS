@@ -312,7 +312,7 @@ extension PlayListDetailViewController{
         
         viewModel.output.state
             .skip(1)
-            .do(onNext: { [weak self] state in
+            .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
                 
                 if state.isEditing == false && state.force == false {
@@ -327,11 +327,9 @@ extension PlayListDetailViewController{
                 self.editStateLabel.isHidden = !isEdit
                 
                 self.tableView.setEditing(isEdit, animated: true)
+                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
-            .withLatestFrom(viewModel.output.dataSource)
-            .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
-        
                 
         viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
             guard let self = self else{

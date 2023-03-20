@@ -96,35 +96,27 @@ extension MyPlayListViewController{
     }
     
     
-    private func bindRx()
-    {
+    private func bindRx() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
-        .skip(2)
-        .do(onNext: { [weak self] model in
-            
-            guard let self = self else {
-                return
-            }
-            
-            let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-            warningView.text = "내 리스트가 없습니다."
-            
-            let items = model.first?.items ?? []
-            
-            self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
-            
-            
-            
-        })
+            .skip(1)
+            .do(onNext: { [weak self] model in
+                guard let self = self else {
+                    return
+                }
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
+                warningView.text = "내 리스트가 없습니다."
+                
+                let items = model.first?.items ?? []
+                self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
+            })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
             
         tableView.rx.itemMoved.asObservable()
             .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
                 guard let `self` = self else { return }
-
 
                 self.input.sourceIndexPath.accept(sourceIndexPath)
                 self.input.destIndexPath.accept(destinationIndexPath)
@@ -139,104 +131,82 @@ extension MyPlayListViewController{
                 self.output.dataSource.accept(newModel)
                 
             }).disposed(by: disposeBag)
-            
         
-        
-        self.output.state
-            .skip(1) 
-            .do(onNext: { [weak self] state in
-                
+        output.state
+            .skip(1)
+            .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else{
                     return
                 }
-                
                 if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
-    
+                
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
+                
                 // 탭맨 쪽 편집 변경
-                parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
-                self.tableView.setEditing(state.isEditing, animated: true)
-            
+                let isEdit: Bool = state.isEditing
+                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+                self.tableView.setEditing(isEdit, animated: true)
+                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
-            .withLatestFrom(output.dataSource)
-            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
-            input.showConfirmModal.subscribe(onNext: { [weak self] in
-                    
-                guard let self = self else{
-                    return
-                }
+        input.showConfirmModal.subscribe(onNext: { [weak self] in
                 
-                
-                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
+            guard let self = self else{
+                return
+            }
+            
+            
+            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
 
-                    self.input.runEditing.onNext(())
-                    
-                },cancelCompletion: {
-                    
-                    self.input.cancelEdit.onNext(())
-                })
-             
-                self.showPanModal(content: vc)
+                self.input.runEditing.onNext(())
                 
-            }).disposed(by: disposeBag)
+            },cancelCompletion: {
                 
-                
-            input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
-                
-                guard let self = self else{
+                self.input.cancelEdit.onNext(())
+            })
+         
+            self.showPanModal(content: vc)
+            
+        }).disposed(by: disposeBag)
+            
+            
+        input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+            
+            guard let self = self else{
+                return
+            }
+            
+            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            
+            
+        }).disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .withLatestFrom(output.dataSource){ ($0,$1) }
+            .subscribe(onNext: { [weak self] (indexPath, models) in
+                guard let self  = self else{
                     return
                 }
                 
-                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                
-                
-            }).disposed(by: disposeBag)
-        
-                
-            tableView.rx.itemSelected
-                .withLatestFrom(output.dataSource){ ($0,$1) }
-                .subscribe(onNext: { [weak self] (indexPath, models) in
-                    
-                    guard let self  = self else{
-                        return
-                    }
-                    
-                    
-                    guard let model =  models.first?.items[indexPath.row] else {
-                        return
-                    }
-                    
-                    
-                    
-                    let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
-                    
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    
-                    
-                    
-                })
-                .disposed(by: disposeBag)
-        
-                
-                
-            NotificationCenter.default.rx.notification(.playListRefresh)
-                .map({_ in () })
-                .bind(to: input.playListLoad)
-                .disposed(by: disposeBag)
-                
-      
-        
+                guard let model =  models.first?.items[indexPath.row] else {
+                    return
+                }
+                let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+                        
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map({_ in () })
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
     }
-    
 }
-
-
 
 extension MyPlayListViewController:UITableViewDelegate{
     
@@ -245,21 +215,13 @@ extension MyPlayListViewController:UITableViewDelegate{
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        
         let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-      
-
         header.delegate = self
         return self.output.state.value.isEditing ? nil : header
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        
         return self.output.state.value.isEditing ? 0 : 140
-        
-        
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -269,90 +231,11 @@ extension MyPlayListViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-    
 }
 
 extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
     public func action(_ type: PurposeType) {
-     
         let vc =  multiPurposePopComponent.makeView(type: type)
-    
-
-        
         self.showPanModal(content: vc)
     }    
 }
-
-//extension  MyPlayListViewController: UITableViewDragDelegate {
-//    public func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//
-//
-//       input.sourceIndexPath.accept(indexPath)
-//        let itemProvider = NSItemProvider(object: "1" as NSString)
-//        let dragItem = UIDragItem(itemProvider: itemProvider)
-//        return [dragItem]
-//
-//
-//        // 애플의 공식 문서에서는 사용자가 특정 행을 드래그하는 것을 원하지 않으면 빈 배열을 리턴하라고 했는데,
-//        //빈 배열을 리턴했을 때도 드래그가 가능했습니다. 이 부분은 더 자세히 알아봐야 할 것 같습니다.
-//    }
-//
-//
-//
-//
-//}
-//
-//extension  MyPlayListViewController: UITableViewDropDelegate {
-//
-//
-//    // 손가락을 화면에서 뗐을 때. 드롭한 데이터를 불러와서 data source를 업데이트 하고, 필요하면 새로운 행을 추가한다.
-//    public func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
-//
-//        let destinationIndexPath: IndexPath
-//
-//                if let indexPath = coordinator.destinationIndexPath {
-//                    destinationIndexPath = indexPath
-//                } else {
-//                    // Get last index path of table view.
-//                    let section = tableView.numberOfSections - 1
-//                    let row = tableView.numberOfRows(inSection: section)
-//                    destinationIndexPath = IndexPath(row: row, section: section)
-//                }
-//        input.destIndexPath.accept(destinationIndexPath)
-//
-//
-//
-//        var curr = output.dataSource.value
-//        var tmp = curr[input.sourceIndexPath.value.row]
-//        curr.remove(at: input.sourceIndexPath.value.row)
-//        curr.insert(tmp, at: input.destIndexPath.value.row)
-//
-//        output.dataSource.accept(curr)
-//
-//
-//        DEBUG_LOG(destinationIndexPath)
-//    }
-//
-//    // 드래그할 떄 (손가락을 화면에 대고 있을 때)
-//    public func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-//        var dropProposal = UITableViewDropProposal(operation: .cancel)
-//
-//
-//        // Accept only one drag item.
-//        guard session.items.count == 1 else { return dropProposal }
-//
-//        // The .move drag operation is available only for dragging within this app and while in edit mode.
-//        if tableView.hasActiveDrag {
-//            //            if tableView.isEditing {
-//            dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-//            //            }
-//        } else {
-//            // Drag is coming from outside the app.
-//            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
-//        }
-//
-//
-//        return dropProposal
-//    }
-//
-//}
