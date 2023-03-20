@@ -95,14 +95,6 @@ extension MyPlayListViewController{
         bindRx()
     }
     
-    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
-        
-        
-        if  !output.state.value.isEditing && sender.state == .began {
-            output.state.accept(EditState(isEditing: true, force: true))
-            HapticManager.shared.impact(style: .light)
-        }
-    }
     
     private func bindRx()
     {

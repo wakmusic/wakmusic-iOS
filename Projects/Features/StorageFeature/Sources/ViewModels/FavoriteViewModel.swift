@@ -35,8 +35,8 @@ public final class FavoriteViewModel:ViewModelType {
 
     public struct Output {
         let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
-        let dataSource: BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
-        let backUpdataSource:BehaviorRelay<[FavoriteSongEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
     }
 
     init(fetchFavoriteSongsUseCase:FetchFavoriteSongsUseCase,editFavoriteSongsOrderUseCase:EditFavoriteSongsOrderUseCase) {
@@ -58,13 +58,14 @@ public final class FavoriteViewModel:ViewModelType {
 
             .catchAndReturn([])
             .asObservable()
+            .map { [FavoriteSectionModel(model: 0, items: $0)] }
             .bind(to: output.dataSource,output.backUpdataSource)
             .disposed(by: disposeBag)
         
         
         input.runEditing.withLatestFrom(output.dataSource)
+            .map { $0.first?.items.map { $0.song.id } ?? [] }
             .filter({!$0.isEmpty})
-            .map({$0.map({$0.song.id})})
             .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
                 
                 guard let self = self else{
@@ -87,11 +88,10 @@ public final class FavoriteViewModel:ViewModelType {
                     
                     return
                 }
-                
                 output.backUpdataSource.accept(output.dataSource.value)
-                
-                
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
+    
         
     
         input.cancelEdit

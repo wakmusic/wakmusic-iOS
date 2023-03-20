@@ -70,8 +70,8 @@ public final class MyPlayListViewModel:ViewModelType {
         
         
         input.runEditing.withLatestFrom(output.dataSource)
-            .filter({!$0.isEmpty})
             .map { $0.first?.items.map { $0.key } ?? [] }
+            .filter({!$0.isEmpty})
             .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
                 
                 guard let self = self else{
