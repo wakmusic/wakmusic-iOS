@@ -42,8 +42,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
         super.viewDidLoad()
         
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-        tableView.addGestureRecognizer(longPress)
+       
         
         configureUI()
 
