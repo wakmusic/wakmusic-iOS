@@ -20,18 +20,22 @@ public extension UIView {
         case right
     }
     
-    func tapPublisher() -> AnyPublisher<UITapGestureRecognizer, Never> {
-        return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self).eraseToAnyPublisher()
+    func tapPublisher() -> AnyPublisher<Void, Never> {
+        return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self)
+            .map { _ in }
+            .eraseToAnyPublisher()
     }
     
     /// 1초 이내 첫 이벤트를 제외한 나머지 이벤트는 무시하는 Publisher 입니다.
-    func throttleTapPublisher() -> Publishers.Throttle<UITapGestureRecognizer.GesturePublisher<UITapGestureRecognizer>, RunLoop> {
+    func throttleTapPublisher() -> AnyPublisher<Void, Never> {
         return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self)
             .throttle(
                 for: .seconds(1),
                 scheduler: RunLoop.main,
                 latest: false
             )
+            .map { _ in }
+            .eraseToAnyPublisher()
     }
     
     func addShadow(location: VerticalLocation, color: UIColor = .black, opacity: Float = 0.8, radius: CGFloat = 5.0) {
