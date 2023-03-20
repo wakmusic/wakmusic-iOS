@@ -121,6 +121,11 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         // Do any additional setup after loading the view.
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
     deinit {
         DEBUG_LOG("\(Self.self) deinit")
         
@@ -420,7 +425,12 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
 }
 
 extension PlayListDetailViewController: UIGestureRecognizerDelegate {
+    
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
 }
+
+
+
+
