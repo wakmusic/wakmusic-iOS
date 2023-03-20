@@ -768,16 +768,16 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Jhl-EH-Z0M">
-                                                    <rect key="frame" x="68" y="1.6666666666666679" width="41.333333333333343" height="40.666666666666657"/>
+                                                    <rect key="frame" x="68" y="1.6666666666666679" width="261" height="40.666666666666657"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHT-8H-NlU">
-                                                            <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="20.333333333333332"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="261" height="20.333333333333332"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2jM-cH-P2L">
-                                                            <rect key="frame" x="0.0" y="20.333333333333336" width="41.333333333333336" height="20.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="20.333333333333336" width="261" height="20.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -785,7 +785,11 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8O-jB-v6M">
-                                                    <rect key="frame" x="343" y="5" width="30" height="34"/>
+                                                    <rect key="frame" x="341" y="5" width="32" height="34"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="32" id="CVl-mW-mkZ"/>
+                                                        <constraint firstAttribute="height" constant="34" id="veg-75-zhS"/>
+                                                    </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
                                                         <action selector="buttonAction:" destination="e4v-he-MOf" eventType="touchUpInside" id="Ra4-r2-JLk"/>
@@ -796,6 +800,7 @@
                                                 <constraint firstItem="k48-ug-XH5" firstAttribute="centerY" secondItem="VoL-j0-uDR" secondAttribute="centerY" id="4lK-pU-xgO"/>
                                                 <constraint firstItem="Jhl-EH-Z0M" firstAttribute="leading" secondItem="k48-ug-XH5" secondAttribute="trailing" constant="8" id="6L2-Qw-7WU"/>
                                                 <constraint firstAttribute="trailing" secondItem="J8O-jB-v6M" secondAttribute="trailing" constant="20" id="Sob-E9-hUU"/>
+                                                <constraint firstItem="J8O-jB-v6M" firstAttribute="leading" secondItem="Jhl-EH-Z0M" secondAttribute="trailing" constant="12" id="Ubo-MS-iJC"/>
                                                 <constraint firstItem="k48-ug-XH5" firstAttribute="leading" secondItem="VoL-j0-uDR" secondAttribute="leading" constant="20" id="Y0b-av-soE"/>
                                                 <constraint firstItem="J8O-jB-v6M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="h7k-W5-hW9"/>
                                                 <constraint firstItem="Jhl-EH-Z0M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="wTx-OL-YFd"/>
@@ -803,6 +808,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="listButton" destination="J8O-jB-v6M" id="VqB-W0-MNp"/>
+                                            <outlet property="listButtonTrailingConstraint" destination="Sob-E9-hUU" id="SXl-KV-FLO"/>
                                             <outlet property="playListCountLabel" destination="2jM-cH-P2L" id="xA2-nL-NnZ"/>
                                             <outlet property="playListImageView" destination="k48-ug-XH5" id="WD3-CL-XW9"/>
                                             <outlet property="playListNameLabel" destination="MHT-8H-NlU" id="PDl-c5-m3R"/>
@@ -855,51 +861,54 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oib-Sk-wq8">
-                                                    <rect key="frame" x="100" y="6" width="273" height="32"/>
+                                                    <rect key="frame" x="100" y="1.6666666666666679" width="229" height="40.666666666666657"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m3R-Gf-lHv">
-                                                            <rect key="frame" x="0.0" y="0.0" width="241" height="32"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="229" height="40.666666666666664"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3l-Dj-kBl">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="241" height="20.333333333333332"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3l-Dj-kBl">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="229" height="20.333333333333332"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lH6-Dk-Z0S">
-                                                                    <rect key="frame" x="0.0" y="20.333333333333332" width="241" height="11.666666666666668"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lH6-Dk-Z0S">
+                                                                    <rect key="frame" x="0.0" y="20.333333333333336" width="229" height="20.333333333333336"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rps-qR-aPI">
-                                                            <rect key="frame" x="241" y="0.0" width="32" height="32"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="32" id="cbE-Xx-n4i"/>
-                                                                <constraint firstAttribute="width" constant="32" id="jif-Zg-2Yy"/>
-                                                            </constraints>
-                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            <connections>
-                                                                <action selector="playAxtion:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="fVJ-4U-58J"/>
-                                                            </connections>
-                                                        </button>
                                                     </subviews>
                                                 </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rps-qR-aPI">
+                                                    <rect key="frame" x="341" y="6" width="32" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="cbE-Xx-n4i"/>
+                                                        <constraint firstAttribute="width" constant="32" id="jif-Zg-2Yy"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <connections>
+                                                        <action selector="playAxtion:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="fVJ-4U-58J"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="rps-qR-aPI" firstAttribute="leading" secondItem="oib-Sk-wq8" secondAttribute="trailing" constant="12" id="5PK-MH-PDV"/>
                                                 <constraint firstItem="oib-Sk-wq8" firstAttribute="leading" secondItem="mcp-83-AcS" secondAttribute="trailing" constant="8" id="DGM-Fu-7w2"/>
                                                 <constraint firstItem="oib-Sk-wq8" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="EF6-1L-o8b"/>
+                                                <constraint firstItem="rps-qR-aPI" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="HQm-u2-aW5"/>
                                                 <constraint firstItem="mcp-83-AcS" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="LGr-gM-iyj"/>
                                                 <constraint firstItem="mcp-83-AcS" firstAttribute="leading" secondItem="R6I-vs-95P" secondAttribute="leading" constant="20" id="MVP-cG-UW7"/>
-                                                <constraint firstAttribute="trailing" secondItem="oib-Sk-wq8" secondAttribute="trailing" constant="20" id="Y4h-6P-cwq"/>
+                                                <constraint firstAttribute="trailing" secondItem="rps-qR-aPI" secondAttribute="trailing" constant="20" id="SrG-wy-8CT"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="albumImageView" destination="mcp-83-AcS" id="vtt-bD-3wl"/>
                                             <outlet property="artistLabel" destination="lH6-Dk-Z0S" id="DoM-Bg-zki"/>
-                                            <outlet property="button" destination="rps-qR-aPI" id="i7c-dD-Iaz"/>
+                                            <outlet property="playButton" destination="rps-qR-aPI" id="6Pe-kV-N5a"/>
+                                            <outlet property="playButtonTrailingConstraint" destination="SrG-wy-8CT" id="PyK-xQ-Nqn"/>
                                             <outlet property="titleLabel" destination="y3l-Dj-kBl" id="mTy-oo-8eo"/>
                                         </connections>
                                     </tableViewCell>
@@ -2435,7 +2444,7 @@
         <image name="back" width="32" height="32"/>
         <image name="blue_arrow_right" width="16" height="16"/>
         <namedColor name="AccentColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

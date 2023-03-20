@@ -19,20 +19,19 @@ class FavoriteTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     
-    var isEdit:Bool = false
-    
-    
-    
-
     @IBAction func playAxtion(_ sender: UIButton) {
         
-        if !isEdit{
-            print("Play")
-        }
-        
     }
+    
+    override var isEditing: Bool {
+        didSet {
+            updatePlayingState()
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -48,7 +47,7 @@ class FavoriteTableViewCell: UITableViewCell {
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         
-        button.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
         
     }
 
@@ -60,34 +59,35 @@ extension FavoriteTableViewCell {
     public func update(_ model:FavoriteSongEntity,_ isEditing:Bool)
     {
         albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
-        
-
-        
         titleLabel.text =  model.song.title
         artistLabel.text = model.song.artist
-        isEdit = isEditing
-        
-        button.isHidden = isEditing
-        
-        updatePlayingState(isEditing: isEditing)
-        
     }
     
-    private func updatePlayingState(isEditing:Bool) {
-        if isEditing {
-            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+    private func updatePlayingState() {
+        if self.isEditing {
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 오른쪽으로 사라지는 애니메이션
                 guard let self else { return }
-                self.button.alpha = 0
-                self.button.transform = CGAffineTransform(translationX: 100, y: 0)
-                
-            }
+                self.playButton.alpha = 0
+                self.playButton.transform = CGAffineTransform(translationX: 100, y: 0)
+                self.playButtonTrailingConstraint.constant = -24
+                self.layoutIfNeeded()
+
+            }, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.playButton.isHidden = true
+            })
         } else {
-            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+            self.playButton.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이ㄴ
                 guard let self else { return }
-                self.button.alpha = 1
-                self.button.transform = .identity
-            }
-            
+                self.playButton.alpha = 1
+                self.playButton.transform = .identity
+                self.playButton.isHidden = false
+                self.playButtonTrailingConstraint.constant = 20
+                self.layoutIfNeeded()
+
+            }, completion: { _ in
+            })
         }
     }
 }
