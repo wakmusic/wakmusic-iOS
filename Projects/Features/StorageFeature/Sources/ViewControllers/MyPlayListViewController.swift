@@ -127,6 +127,29 @@ extension MyPlayListViewController{
         })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
+            
+        tableView.rx.itemMoved.asObservable()
+            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
+                guard let `self` = self else { return }
+
+                DEBUG_LOG("sourceIndexPath: \(sourceIndexPath)")
+                DEBUG_LOG("sourceIndexPath: \(destinationIndexPath)")
+
+                self.input.sourceIndexPath.accept(sourceIndexPath)
+                self.input.destIndexPath.accept(destinationIndexPath)
+                
+                var curr = self.output.dataSource.value.first?.items ?? []
+                DEBUG_LOG("current: \(curr)")
+                
+                let tmp = curr[self.input.sourceIndexPath.value.row]
+                curr.remove(at: self.input.sourceIndexPath.value.row)
+                curr.insert(tmp, at: self.input.destIndexPath.value.row)
+
+                let newModel = [MyPlayListSectionModel(model: 0, items: curr)]
+                self.output.dataSource.accept(newModel)
+                
+            }).disposed(by: disposeBag)
+            
         
         
         self.output.state
@@ -147,9 +170,7 @@ extension MyPlayListViewController{
                 // 탭맨 쪽 편집 변경
                 parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
                 self.tableView.setEditing(state.isEditing, animated: true)
-                
-        
-                
+            
             })
             .withLatestFrom(output.dataSource)
             .bind(to: output.dataSource)
