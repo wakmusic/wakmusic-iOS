@@ -35,8 +35,8 @@ public final class MyPlayListViewModel:ViewModelType {
 
     public struct Output {
         let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
-        let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
-        let backUpdataSource:BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource:BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
     }
 
     init(fetchPlayListUseCase:FetchPlayListUseCase,editPlayListOrderUseCase:EditPlayListOrderUseCase) {
@@ -64,13 +64,14 @@ public final class MyPlayListViewModel:ViewModelType {
                     .asObservable()
                     .catchAndReturn([])
             })
+            .map { [MyPlayListSectionModel(model: 0, items: $0)] }
             .bind(to: output.dataSource,output.backUpdataSource)
             .disposed(by: disposeBag)
         
         
         input.runEditing.withLatestFrom(output.dataSource)
+            .map { $0.first?.items.map { $0.key } ?? [] }
             .filter({!$0.isEmpty})
-            .map({$0.map{$0.key}})
             .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
                 
                 guard let self = self else{

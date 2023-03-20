@@ -45,7 +45,7 @@ class MyPlayListTableViewCell: UITableViewCell {
         self.playListNameLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.playListCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.playListCountLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
+        self.listButton.setImage(DesignSystemAsset.Storage.play.image , for: .normal)
         
     }
     
@@ -65,13 +65,31 @@ extension MyPlayListTableViewCell {
             options: [.transition(.fade(0.2))])
 
         self.isEdit = isEditing
-        self.listButton.setImage(isEdit ?  DesignSystemAsset.Storage.move.image  : DesignSystemAsset.Storage.play.image , for: .normal)
-        
-        
+           
         self.playListNameLabel.text = model.title
         self.playListCountLabel.text = "\(model.songlist.count)개"
         
         
+        updatePlayingState(isEditing: isEditing)
+        self.listButton.isHidden = isEdit
+    }
+    
+    private func updatePlayingState(isEditing:Bool) {
+        if isEditing {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
+                guard let self else { return }
+                self.listButton.alpha = 0
+                self.listButton.transform = CGAffineTransform(translationX: 100, y: 0)
+                
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
+                guard let self else { return }
+                self.listButton.alpha = 1
+                self.listButton.transform = .identity
+            }
+            
+        }
     }
     
 }
