@@ -119,8 +119,9 @@ extension MyPlayListViewController{
             let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
             warningView.text = "내 리스트가 없습니다."
             
+            let items = model.first?.items ?? []
             
-            self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
+            self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
             
             
             

@@ -14,6 +14,9 @@ import RxSwift
 import BaseFeature
 import CommonFeature
 import DomainModule
+import RxDataSources
+
+public typealias FavoriteSectionModel = SectionModel<Int, PlayListEntity>
 
 public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
 
