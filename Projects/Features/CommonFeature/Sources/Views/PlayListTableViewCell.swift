@@ -73,6 +73,7 @@ extension PlayListTableViewCell {
       
         
         self.index = index
+        self.isEditing = isEditing
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         
@@ -84,6 +85,7 @@ extension PlayListTableViewCell {
         titleLabel.text =  model.title
         artistLabel.text = model.artist
         
+       
     }
     
     private func updatePlayingState() {
