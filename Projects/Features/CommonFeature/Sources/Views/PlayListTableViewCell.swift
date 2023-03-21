@@ -21,6 +21,11 @@ class PlayListTableViewCell: UITableViewCell {
     
     @IBAction func selectedAction(_ sender: Any) {
         
+        if isEditing {
+            print("Hello")
+        } else{
+            print("NO")
+        }
   
     }
     @IBAction func playOrEditAction(_ sender: UIButton) {
