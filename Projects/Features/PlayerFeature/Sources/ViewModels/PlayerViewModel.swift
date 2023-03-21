@@ -157,38 +157,8 @@ final class PlayerViewModel: ViewModelType {
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
             
-            // 곡이 변경되면 가사 불러오기
-            self.fetchLyricsUseCase.execute(id: song.id)
-                .retry(3)
-                .subscribe { [weak self] lyricsEntityArray in
-                    guard let self else { return }
-                    self.lyricsDict.removeAll()
-                    self.sortedLyrics.removeAll()
-                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
-                    self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
-            } onFailure: { [weak self] error in
-                guard let self else { return }
-                self.lyricsDict.removeAll()
-                self.sortedLyrics.removeAll()
-                self.sortedLyrics.append("가사가 없습니다.")
-                print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
-            } onDisposed: {
-                output.lyricsDidChangedEvent.send(true)
-            }.disposed(by: self.disposeBag)
-            
-            // 좋아요 수 가져오기
-            self.fetchLikeNumOfSongUseCase.execute(id: song.id)
-                .retry(3)
-                .map { [weak self] song in
-                    self?.formatNumber(song.likes) ?? ""
-                }
-                .subscribe { likeCountText in
-                    output.likeCountText.send(likeCountText)
-                } onFailure: { _ in
-                    output.likeCountText.send("좋아요")
-                }.disposed(by: self.disposeBag)
-            
-            // 내가 좋아요를 눌렀는지 확인
+            self.fetchLyrics(for: song, output: output)
+            self.fetchLikeCount(for: song, output: output)
             self.fetchLikeState(for: song, output: output)
             
         }.store(in: &subscription)
@@ -204,6 +174,42 @@ final class PlayerViewModel: ViewModelType {
         return output
     }
     
+    /// 가사 불러오기
+    func fetchLyrics(for song: SongEntity, output: Output) {
+        fetchLyricsUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe { [weak self] lyricsEntityArray in
+                guard let self else { return }
+                self.lyricsDict.removeAll()
+                self.sortedLyrics.removeAll()
+                lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
+                self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
+            } onFailure: { [weak self] error in
+                guard let self else { return }
+                self.lyricsDict.removeAll()
+                self.sortedLyrics.removeAll()
+                self.sortedLyrics.append("가사가 없습니다.")
+                print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
+            } onDisposed: {
+                output.lyricsDidChangedEvent.send(true)
+            }.disposed(by: self.disposeBag)
+    }
+    
+    /// 좋아요 수 가져오기
+    func fetchLikeCount(for song: SongEntity, output: Output) {
+        fetchLikeNumOfSongUseCase.execute(id: song.id)
+            .retry(3)
+            .map { [weak self] song in
+                self?.formatNumber(song.likes) ?? ""
+            }
+            .subscribe { likeCountText in
+                output.likeCountText.send(likeCountText)
+            } onFailure: { _ in
+                output.likeCountText.send("좋아요")
+            }.disposed(by: self.disposeBag)
+    }
+    
+    /// 좋아요를 누른 곡인지 여부 판별
     func fetchLikeState(for song: SongEntity, output: Output) {
         fetchFavoriteSongsUseCase.execute()
             .retry(3)
