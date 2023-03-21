@@ -17,7 +17,11 @@ class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     
-    @IBAction func playOrEditAction(_ sender: UIButton) { }
+    @IBAction func playOrEditAction(_ sender: UIButton) {
+        
+        //TODO : delegate를 통한 전달
+        
+    }
         
     override var isEditing: Bool {
         didSet {

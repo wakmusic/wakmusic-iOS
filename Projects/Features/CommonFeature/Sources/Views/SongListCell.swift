@@ -44,14 +44,16 @@ public extension SongListCell {
         return base + height
     }
     
-    func update(_ song:SongEntity) {
+    func update(_ model:SongEntity) {
         
-        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: song.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
+        albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
         
         
-        self.titleLabel.text = song.title
-        self.artistLabel.text = song.artist
-        self.releaseDateLabel.text = song.date
+        self.titleLabel.text = model.title
+        self.artistLabel.text = model.artist
+        self.releaseDateLabel.text = model.date
         
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)

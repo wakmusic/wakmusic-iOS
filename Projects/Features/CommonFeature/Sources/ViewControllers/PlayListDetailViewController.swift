@@ -394,10 +394,13 @@ extension PlayListDetailViewController{
         .disposed(by: disposeBag)
                 
         tableView.rx.itemSelected
-            .map { $0.row }
-           // .withLatestFrom(output.state) { ($0,$1)}
-           // .filter({$1.isEditing})
-           // .map{$0.0}
+            .withLatestFrom(output.state){($0,$1)}
+            .filter({ [weak self] in
+                
+
+                
+                $0.1.isEditing || self?.viewModel.type == .wmRecommend})
+            .map { $0.0.row }
             .bind(to: input.songTapped)
             .disposed(by: disposeBag)
     }
