@@ -17,6 +17,12 @@ class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     
+    @IBOutlet weak var superButton: UIButton!
+    
+    @IBAction func selectedAction(_ sender: Any) {
+        
+  
+    }
     @IBAction func playOrEditAction(_ sender: UIButton) {
         
         //TODO : delegate를 통한 전달
