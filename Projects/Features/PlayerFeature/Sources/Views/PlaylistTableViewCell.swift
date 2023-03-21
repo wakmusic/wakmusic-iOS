@@ -64,14 +64,15 @@ internal class PlaylistTableViewCell: UITableViewCell {
     
     internal var isPlaying: Bool = false {
         didSet {
-            updatePlayingState()
+            updateButtonHidden()
             highlight()
+            isPlaying ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
         }
     }
     
     override var isEditing: Bool {
         didSet {
-            updatePlayingState()
+            replaceAnimation()
         }
     }
     
@@ -89,29 +90,54 @@ internal class PlaylistTableViewCell: UITableViewCell {
         isPlaying = false
     }
     
-    private func updatePlayingState() {
+    private func updateButtonHidden() {
+        if isEditing {
+            playImageView.isHidden = true
+            waveStreamAnimationView.isHidden = true
+        } else {
+            playImageView.isHidden = isPlaying
+            waveStreamAnimationView.isHidden = !isPlaying
+        }
+    }
+    
+    private func replaceAnimation() {
         if isEditing {
             UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
                 guard let self else { return }
                 self.playImageView.alpha = 0
                 self.playImageView.transform = CGAffineTransform(translationX: 100, y: 0)
+                self.playImageView.snp.updateConstraints {
+                    $0.right.equalTo(self.contentView.snp.right).offset(24)
+                }
                 self.waveStreamAnimationView.alpha = 0
                 self.waveStreamAnimationView.transform = CGAffineTransform(translationX: 100, y: 0)
+                self.waveStreamAnimationView.snp.updateConstraints {
+                    $0.right.equalTo(self.contentView.snp.right).offset(24)
+                }
+                self.layoutIfNeeded()
             } completion: { [weak self] _ in
                 guard let self else { return }
                 self.playImageView.isHidden = true
                 self.waveStreamAnimationView.isHidden = true
             }
         } else {
+            self.playImageView.isHidden = isPlaying
+            self.waveStreamAnimationView.isHidden = !isPlaying
             UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
                 guard let self else { return }
                 self.playImageView.alpha = 1
                 self.playImageView.transform = .identity
+                self.playImageView.snp.updateConstraints {
+                    $0.right.equalTo(self.contentView.snp.right).offset(-20)
+                }
                 self.waveStreamAnimationView.alpha = 1
                 self.waveStreamAnimationView.transform = .identity
+                self.waveStreamAnimationView.snp.updateConstraints {
+                    $0.right.equalTo(self.contentView.snp.right).offset(-20)
+                }
+                self.layoutIfNeeded()
             }
-            self.playImageView.isHidden = isPlaying
-            self.waveStreamAnimationView.isHidden = !isPlaying
+            
         }
     }
     
@@ -162,13 +188,13 @@ internal class PlaylistTableViewCell: UITableViewCell {
         playImageView.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalTo(contentView.snp.centerY)
-            $0.right.equalTo(contentView.snp.right).offset(-14)
+            $0.right.equalTo(contentView.snp.right).offset(-20)
         }
         
         waveStreamAnimationView.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalTo(contentView.snp.centerY)
-            $0.right.equalTo(contentView.snp.right).offset(-14)
+            $0.right.equalTo(contentView.snp.right).offset(-20)
         }
     }
     

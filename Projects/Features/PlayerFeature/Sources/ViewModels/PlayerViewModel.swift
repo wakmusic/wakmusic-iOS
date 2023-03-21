@@ -25,8 +25,8 @@ final class PlayerViewModel: ViewModelType {
         let sliderValueChangedEvent: Observable<Float>
         let repeatButtonDidTapEvent: Observable<Void>
         let shuffleButtonDidTapEvent: Observable<Void>
-        let likeButtonDidTapEvent: Observable<Void>
-        let addPlaylistButtonDidTapEvent: Observable<Void>
+        let likeButtonDidTapEvent: AnyPublisher<Void, Never>
+        let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: Observable<Void>
         let miniPlayButtonDidTapEvent: Observable<Void>
