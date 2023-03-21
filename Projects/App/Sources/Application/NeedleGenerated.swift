@@ -122,6 +122,9 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase {
         return appComponent.fetchLikeNumOfSongUseCase
     }
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
+        return appComponent.fetchFavoriteSongsUseCase
+    }
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
@@ -730,6 +733,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.addLikeSongUseCase] = "addLikeSongUseCase-any AddLikeSongUseCase"
         keyPathToName[\PlayerDependency.cancelLikeSongUseCase] = "cancelLikeSongUseCase-any CancelLikeSongUseCase"
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
+        keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
     }
 }

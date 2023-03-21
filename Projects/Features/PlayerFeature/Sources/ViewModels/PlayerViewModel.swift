@@ -57,6 +57,7 @@ final class PlayerViewModel: ViewModelType {
     var addLikeSongUseCase: AddLikeSongUseCase!
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
+    var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
@@ -65,11 +66,12 @@ final class PlayerViewModel: ViewModelType {
     internal var sortedLyrics = [String]()
     internal var isLyricsScrolling = false
     
-    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase) {
+    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase, fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
+        self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
         print("✅ PlayerViewModel 생성")
     }
     
@@ -111,6 +113,27 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             self.playState.player.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
+        
+        input.likeButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            guard let currentSong = self.playState.currentSong else { return }
+            let alreadyLiked = output.likeState.value
+            
+            if alreadyLiked {
+                self.cancelLikeSongUseCase.execute(id: currentSong.id)
+                    .retry(3)
+                    .subscribe { _ in
+                        self.fetchLikeState(for: currentSong, output: output)
+                    }.disposed(by: self.disposeBag)
+            } else {
+                self.addLikeSongUseCase.execute(id: currentSong.id)
+                    .retry(3)
+                    .subscribe { _ in
+                        self.fetchLikeState(for: currentSong, output: output)
+                    }.disposed(by: self.disposeBag)
+            }
+
+        }.store(in: &subscription)
         
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
@@ -165,6 +188,9 @@ final class PlayerViewModel: ViewModelType {
                     output.likeCountText.send("좋아요")
                 }.disposed(by: self.disposeBag)
             
+            // 내가 좋아요를 눌렀는지 확인
+            self.fetchLikeState(for: song, output: output)
+            
         }.store(in: &subscription)
         
         playState.$progress.sink { [weak self] progress in
@@ -176,6 +202,17 @@ final class PlayerViewModel: ViewModelType {
         }.store(in: &subscription)
         
         return output
+    }
+    
+    func fetchLikeState(for song: SongEntity, output: Output) {
+        fetchFavoriteSongsUseCase.execute()
+            .retry(3)
+            .map { $0.contains { $0.song.id == song.id } }
+            .subscribe { isLiked in
+                output.likeState.send(isLiked)
+            } onFailure: { _ in
+                output.likeState.send(false)
+            }.disposed(by: self.disposeBag)
     }
     
     func formatTime(_ second: Double) -> String {
