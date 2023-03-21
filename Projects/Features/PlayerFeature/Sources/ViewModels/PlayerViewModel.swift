@@ -221,6 +221,10 @@ final class PlayerViewModel: ViewModelType {
             }.disposed(by: self.disposeBag)
     }
     
+}
+
+// MARK: - 뷰모델 내 유틸리티 함수들을 모아놓은 곳입니다.
+extension PlayerViewModel {
     func formatTime(_ second: Double) -> String {
         let second = Int(floor(second))
         let min = second / 60
@@ -285,5 +289,4 @@ final class PlayerViewModel: ViewModelType {
         
         return closestIndex
     }
-    
 }
