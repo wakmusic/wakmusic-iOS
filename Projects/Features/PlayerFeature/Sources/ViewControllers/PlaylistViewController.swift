@@ -77,7 +77,6 @@ private extension PlaylistViewController {
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
             self.playlistView.playlistTableView.visibleCells.forEach { $0.isEditing = isEditing }
-            
         }.store(in: &subscription)
         
         output.currentSongIndex.sink { [weak self] _ in
