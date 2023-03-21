@@ -62,6 +62,7 @@ class PlayListTableViewCell: UITableViewCell {
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
 
+        self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
         
     }
 }
@@ -69,7 +70,7 @@ class PlayListTableViewCell: UITableViewCell {
 extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool,index:Int) {
         
-        self.playButton.setImage(isEditing ? nil : DesignSystemAsset.Storage.play.image, for: .normal)
+      
         
         self.index = index
         
@@ -100,7 +101,7 @@ extension PlayListTableViewCell {
             })
         } else {
             self.playButton.isHidden = false
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이ㄴ
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이션
                 guard let self else { return }
                 self.playButton.alpha = 1
                 self.playButton.transform = .identity

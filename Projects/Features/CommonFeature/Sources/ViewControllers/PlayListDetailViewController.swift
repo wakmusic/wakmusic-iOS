@@ -305,14 +305,31 @@ extension PlayListDetailViewController{
                 self.input.sourceIndexPath.accept(sourceIndexPath)
                 self.input.destIndexPath.accept(destinationIndexPath)
                 
-                var curr = self.output.dataSource.value.first?.items ?? []
-                DEBUG_LOG("current: \(curr)")
                 
-                let tmp = curr[self.input.sourceIndexPath.value.row]
-                curr.remove(at: self.input.sourceIndexPath.value.row)
-                curr.insert(tmp, at: self.input.destIndexPath.value.row)
+                let source = self.input.sourceIndexPath.value.row
+                let dest =  self.input.destIndexPath.value.row
+                
+                var curr = self.output.dataSource.value.first?.items ?? []
+             
+                
+                let tmp = curr[source]
+                var indexs = self.output.indexOfSelectedSongs.value
+                
+                curr.remove(at:  source)
+                curr.insert(tmp, at: dest)
 
+                
                 let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
+                
+               
+                if indexs.contains(where: {$0 == source}) {
+                    
+                    let pos = indexs.firstIndex(where: {$0 == source})!
+                    indexs.remove(at: pos)
+                    indexs.append(dest)
+                    indexs.sort()
+                    self.output.indexOfSelectedSongs.accept(indexs)
+                }
                 self.output.dataSource.accept(newModel)
                 
             }).disposed(by: disposeBag)
