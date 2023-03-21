@@ -39,6 +39,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
+    lazy var input = PlayListDetailViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     var multiPurposePopComponent:MultiPurposePopComponent!
     
     
@@ -46,7 +48,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func backButtonAction(_ sender: UIButton) {
         
-        let isEdit: Bool = viewModel.output.state.value.isEditing
+        let isEdit: Bool = output.state.value.isEditing
         
         if isEdit {
             
@@ -56,10 +58,10 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 //TODO: 저장 코드
-                self.viewModel.input.runEditing.onNext(())
+                self.input.runEditing.onNext(())
                 
                // self.navigationController?.popViewController(animated: true)
-           // self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+           // self.output.state.accept(EditState(isEditing: false, force: true))
             self.navigationController?.popViewController(animated: true)
                 
             },cancelCompletion: { [weak self] in
@@ -68,9 +70,9 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 
-                self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+                self.output.state.accept(EditState(isEditing: false, force: true))
                 
-                self.viewModel.input.cancelEdit.onNext(())
+                self.input.cancelEdit.onNext(())
                 
                 
             })
@@ -84,7 +86,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-        viewModel.output.state.accept(EditState(isEditing: true, force: false))
+        output.state.accept(EditState(isEditing: true, force: false))
         
         
        
@@ -94,7 +96,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressCompleteAction(_ sender: UIButton) {
         
-        viewModel.output.state.accept(EditState(isEditing: false, force: false))
+        output.state.accept(EditState(isEditing: false, force: false))
         
        
     }
@@ -241,7 +243,7 @@ extension PlayListDetailViewController{
                 }
                 
                 cell.selectedBackgroundView = bgView
-                cell.update(model,self.viewModel.output.state.value.isEditing)
+                cell.update(model,self.output.state.value.isEditing)
                 
                 return cell
             case .wmRecommend:
@@ -273,7 +275,7 @@ extension PlayListDetailViewController{
         //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         
-        viewModel.output.dataSource
+        output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
                 guard let self = self else {
@@ -295,28 +297,28 @@ extension PlayListDetailViewController{
                 DEBUG_LOG("sourceIndexPath: \(sourceIndexPath)")
                 DEBUG_LOG("sourceIndexPath: \(destinationIndexPath)")
 
-                self.viewModel.input.sourceIndexPath.accept(sourceIndexPath)
-                self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+                self.input.sourceIndexPath.accept(sourceIndexPath)
+                self.input.destIndexPath.accept(destinationIndexPath)
                 
-                var curr = self.viewModel.output.dataSource.value.first?.items ?? []
+                var curr = self.output.dataSource.value.first?.items ?? []
                 DEBUG_LOG("current: \(curr)")
                 
-                let tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
-                curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
-                curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
+                let tmp = curr[self.input.sourceIndexPath.value.row]
+                curr.remove(at: self.input.sourceIndexPath.value.row)
+                curr.insert(tmp, at: self.input.destIndexPath.value.row)
 
                 let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
-                self.viewModel.output.dataSource.accept(newModel)
+                self.output.dataSource.accept(newModel)
                 
             }).disposed(by: disposeBag)
         
-        viewModel.output.state
+        output.state
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
                 
                 if state.isEditing == false && state.force == false {
-                    self.viewModel.input.runEditing.onNext(())
+                    self.input.runEditing.onNext(())
                 }
                 
                 let isEdit = state.isEditing
@@ -331,7 +333,7 @@ extension PlayListDetailViewController{
             })
             .disposed(by: disposeBag)
                 
-        viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
+        output.headerInfo.subscribe(onNext: { [weak self] (model) in
             guard let self = self else{
                 return
             }
@@ -376,10 +378,10 @@ extension PlayListDetailViewController{
                 return obj
                 
             })
-            .bind(to: viewModel.input.playListNameLoad)
+            .bind(to: input.playListNameLoad)
             .disposed(by: disposeBag)
         
-        viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
+        input.showErrorToast.subscribe(onNext: { [weak self] in
             guard let self = self else {
                 return
             }
@@ -394,12 +396,12 @@ extension PlayListDetailViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        let items = viewModel.output.dataSource.value.first?.items ?? []
+        let items = output.dataSource.value.first?.items ?? []
         return items.isEmpty ? nil : view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let items = viewModel.output.dataSource.value.first?.items ?? []
+        let items = output.dataSource.value.first?.items ?? []
         return items.isEmpty ? 0 : 80
     }
     

@@ -23,8 +23,6 @@ struct PlayListHeaderInfo {
 
 public final class PlayListDetailViewModel:ViewModelType {
    
-    let input = Input()
-    let output = Output()
     
     var type:PlayListType!
     var id:String!
@@ -68,6 +66,21 @@ public final class PlayListDetailViewModel:ViewModelType {
        
         
         
+       
+        
+        
+        
+        
+    }
+    
+    deinit{
+        DEBUG_LOG("❌ PlayListDetailViewModel 소멸")
+    }
+    
+    public func transform(from input: Input) -> Output {
+
+        let output = Output()
+        
         fetchPlayListDetailUseCase.execute(id: id, type: type)
             .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: true, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
         .asObservable()
@@ -78,8 +91,9 @@ public final class PlayListDetailViewModel:ViewModelType {
             }
             
             
-            self.output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
-                                                             image: type == .wmRecommend ? model.id : model.image,version: type == .wmRecommend ? model.image_square_version : model.image_version))
+            
+            output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
+                                                        image: self.type == .wmRecommend ? model.id : model.image,version: self.type == .wmRecommend ? model.image_square_version : model.image_version))
             
             self.key = model.key
             
@@ -117,29 +131,16 @@ public final class PlayListDetailViewModel:ViewModelType {
                     return
                 }
                 if $0.status != 200 {
-                    self.input.showErrorToast.accept($0.description)
+                    input.showErrorToast.accept($0.description)
                     return
                 }
-                self.output.backUpdataSource.accept(self.output.dataSource.value)
+                output.backUpdataSource.accept(output.dataSource.value)
             }).disposed(by: disposeBag)
                 
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
-        
-        
-        
-    }
-    
-    deinit{
-        DEBUG_LOG("❌ PlayListDetailViewModel 소멸")
-    }
-    
-    public func transform(from input: Input) -> Output {
-        
-        let output = Output()
         
       
         
