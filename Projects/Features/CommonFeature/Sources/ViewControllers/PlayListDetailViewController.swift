@@ -21,7 +21,7 @@ import DomainModule
 
 
 
-public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType {
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -44,6 +44,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     var multiPurposePopComponent:MultiPurposePopComponent!
     var containSongsComponent:ContainSongsComponent!
     
+    public var editSheetView: EditSheetView!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
@@ -90,8 +91,11 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-        output.state.accept(EditState(isEditing: true, force: false))
+       //  TODO : 바깥 클릭 시 hide... 
         
+        
+        self.showEditSheet(in: self.view, type: .playList)
+        self.editSheetView.delegate = self
         
        
         
@@ -444,10 +448,10 @@ extension PlayListDetailViewController{
                     case false:
                         self.showSongCart(
                             in: self.view,
-                            type: .artistSong,
+                            type: .myList,
                             selectedSongCount: songs.count,
                             totalSongCount: (dataSource.first?.items.count ?? 0),
-                            useBottomSpace: false
+                            useBottomSpace: true
                         )
                         self.songCartView?.delegate = self
                     }
@@ -514,6 +518,8 @@ extension PlayListDetailViewController: UIGestureRecognizerDelegate {
 extension PlayListDetailViewController:SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         
+       
+        
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
@@ -532,6 +538,33 @@ extension PlayListDetailViewController:SongCartViewDelegate {
         case .remove:
             return
         }
+    }
+    
+    
+}
+
+extension PlayListDetailViewController:EditSheetViewDelegate {
+    public func buttonTapped(type: EditSheetSelectType) {
+        
+       
+        
+        switch type {
+            
+        case .edit:
+            output.state.accept(EditState(isEditing: true, force: false))
+        case .share:
+            let vc = multiPurposePopComponent.makeView(type: .share,key: viewModel?.key ?? "")
+            
+            self.showPanModal(content: vc)
+            
+        case .profile:
+            return
+        case .nickname:
+            return
+        }
+        
+        self.hideEditSheet()
+        
     }
     
     
