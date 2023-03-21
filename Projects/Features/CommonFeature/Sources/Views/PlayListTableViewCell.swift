@@ -10,7 +10,18 @@ import DesignSystem
 import DomainModule
 import Utility
 
+public protocol PlayListCellDelegate:AnyObject {
+    
+    func pressCell(index:Int)
+}
+
 class PlayListTableViewCell: UITableViewCell {
+    
+    
+    
+    public weak var delegate:PlayListCellDelegate?
+    var index:Int!
+    
     @IBOutlet weak var playButton:UIButton!
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
@@ -22,9 +33,7 @@ class PlayListTableViewCell: UITableViewCell {
     @IBAction func selectedAction(_ sender: Any) {
         
         if isEditing {
-            print("Hello")
-        } else{
-            print("NO")
+            delegate?.pressCell(index: index)
         }
   
     }
@@ -58,9 +67,11 @@ class PlayListTableViewCell: UITableViewCell {
 }
 
 extension PlayListTableViewCell {
-    func update(_ model: SongEntity,_ isEditing:Bool) {
+    func update(_ model: SongEntity,_ isEditing:Bool,index:Int) {
         
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        self.index = index
+        
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         
         albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,

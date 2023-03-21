@@ -124,6 +124,11 @@ public final class PlayListDetailViewModel:ViewModelType {
                 guard let key = self.key else {
                     return Observable.empty()
                 }
+                
+                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+                
+                
                 return self.editPlayListUseCase.execute(key: key, songs: songs)
                     .asObservable()
             }).subscribe(onNext: { [weak self] in
@@ -135,6 +140,7 @@ public final class PlayListDetailViewModel:ViewModelType {
                     return
                 }
                 output.backUpdataSource.accept(output.dataSource.value)
+                
             }).disposed(by: disposeBag)
                 
         input.cancelEdit

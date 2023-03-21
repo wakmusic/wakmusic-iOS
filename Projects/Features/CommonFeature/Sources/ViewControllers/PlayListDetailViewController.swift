@@ -248,7 +248,8 @@ extension PlayListDetailViewController{
                     return UITableViewCell()
                 }
                 
-                cell.update(model,self.output.state.value.isEditing)
+                cell.update(model,self.output.state.value.isEditing,index: indexPath.row)
+                cell.delegate = self
                 
                 return cell
             case .wmRecommend:
@@ -418,9 +419,7 @@ extension PlayListDetailViewController{
                 guard let self = self else {return}
                 
                
-                
-        
-                    
+                DEBUG_LOG("SONGs \(songs)")
                     switch songs.isEmpty {
                     case true:
                         self.hideSongCart()
@@ -435,6 +434,10 @@ extension PlayListDetailViewController{
                         )
                         self.songCartView?.delegate = self
                     }
+                
+        
+                    
+                    
          
                 
             })
@@ -503,6 +506,7 @@ extension PlayListDetailViewController:SongCartViewDelegate {
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
+                self.output.state.accept(EditState(isEditing: false, force: true))
             }
         case .addPlayList:
             return
@@ -516,3 +520,12 @@ extension PlayListDetailViewController:SongCartViewDelegate {
     
 }
 
+extension PlayListDetailViewController:PlayListCellDelegate {
+    public func pressCell(index: Int) {
+        
+        input.songTapped.onNext(index)
+        
+    }
+    
+    
+}
