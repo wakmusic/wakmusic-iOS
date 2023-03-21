@@ -41,6 +41,10 @@ public final class PlayListDetailViewModel:ViewModelType {
         let playListNameLoad:BehaviorRelay<String> = BehaviorRelay(value: "")
         let cancelEdit:PublishSubject<Void> = PublishSubject()
         let runEditing:PublishSubject<Void> = PublishSubject()
+        let songTapped: PublishSubject<Int> = PublishSubject()
+        let allSongSelected: PublishSubject<Bool> = PublishSubject()
+    
+        
     }
 
     public struct Output {
@@ -48,6 +52,9 @@ public final class PlayListDetailViewModel:ViewModelType {
         let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
+        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        
     }
 
     public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase,editPlayListUseCase:EditPlayListUseCase) {
@@ -56,8 +63,9 @@ public final class PlayListDetailViewModel:ViewModelType {
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
         self.editPlayListUseCase = editPlayListUseCase
+        
        
-        DEBUG_LOG("✅ PlayListDetailViewModel 생성")
+       
         
         
         fetchPlayListDetailUseCase.execute(id: id, type: type)
@@ -119,6 +127,10 @@ public final class PlayListDetailViewModel:ViewModelType {
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+        
+        
+        
+        
     }
     
     deinit{
@@ -127,9 +139,93 @@ public final class PlayListDetailViewModel:ViewModelType {
     
     public func transform(from input: Input) -> Output {
         
-        var output = Output()
+        let output = Output()
+        
+      
+        
+        
+        input.songTapped
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+                if selectedSongs.contains(index) {
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+                    var newSelectedSongs = selectedSongs
+                    newSelectedSongs.remove(at: removeTargetIndex)
+                    return newSelectedSongs
+                    
+                }else{
+                    return selectedSongs + [index]
+                }
+            })
+            .map { $0.sorted { $0 < $1 } }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        input.allSongSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (flag, dataSource) -> [Int] in
+                return flag ? Array(0..<dataSource.count) : []
+            }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (selectedSongs, dataSource) in
+                var newModel = dataSource
+                
+                var realData = newModel.first?.items ?? []
+                
+                realData.indices.forEach({
+                
+                    realData[$0].isSelected = false
+                    
+                    selectedSongs.forEach { i in
+                        realData[i].isSelected = true
+                    }
+                })
+                
+                
+               
+                
+                return newModel
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
+        
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (indexOfSelectedSongs, dataSource) in
+                
+                
+                
+                
+                let song = dataSource.first?.items ?? []
+                
+                return indexOfSelectedSongs.map {
+                    
+                    
+                    
+                    SongEntity(
+                        id: song[$0].id,
+                        title: song[$0].title,
+                        artist: song[$0].artist,
+                        remix: song[$0].remix,
+                        reaction: song[$0].reaction,
+                        views: song[$0].views,
+                        last: song[$0].last,
+                        date: song[$0].date
+                    )
+                }
+            }
+            .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        
         
         return output
+        
     }
     
     
