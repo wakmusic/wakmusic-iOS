@@ -164,7 +164,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         input.allSongSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (flag, dataSource) -> [Int] in
-                return flag ? Array(0..<dataSource.count) : []
+                return flag ? Array(0..<dataSource.first!.items.count) : []
             }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
@@ -173,23 +173,24 @@ public final class PlayListDetailViewModel:ViewModelType {
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
-                var newModel = dataSource
+   
                 
-                var realData = newModel.first?.items ?? []
+                var realData = dataSource.first?.items ?? []
                 
                 realData.indices.forEach({
                 
                     realData[$0].isSelected = false
                     
-                    selectedSongs.forEach { i in
-                        realData[i].isSelected = true
-                    }
                 })
+                
+                selectedSongs.forEach { i in
+                    realData[i].isSelected = true
+                }
                 
                 
                
                 
-                return newModel
+                return [PlayListDetailSectionModel(model: 0, items: realData)]
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)

@@ -15,13 +15,13 @@ public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {get}
     var editPlayListUseCase : any EditPlayListUseCase {get}
     var multiPurposePopComponent: MultiPurposePopComponent {get}
-
+    var containSongsComponent : ContainSongsComponent {get}
     
 }
 
 public final class PlayListDetailComponent: Component<PlayListDetailDependency> {
     public func makeView(id:String,type:PlayListType) -> PlayListDetailViewController {
-        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:type,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,editPlayListUseCase: dependency.editPlayListUseCase),multiPurposePopComponent: dependency.multiPurposePopComponent)
+        return PlayListDetailViewController.viewController(viewModel: PlayListDetailViewModel(id:id,type:type,fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,editPlayListUseCase: dependency.editPlayListUseCase),multiPurposePopComponent: dependency.multiPurposePopComponent,containSongsComponent:dependency.containSongsComponent)
         
     }
 }

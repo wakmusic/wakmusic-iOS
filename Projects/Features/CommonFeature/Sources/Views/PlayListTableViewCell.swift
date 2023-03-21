@@ -44,6 +44,9 @@ class PlayListTableViewCell: UITableViewCell {
 
 extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool) {
+        
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
         albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -51,6 +54,7 @@ extension PlayListTableViewCell {
         )
         titleLabel.text =  model.title
         artistLabel.text = model.artist
+        
     }
     
     private func updatePlayingState() {

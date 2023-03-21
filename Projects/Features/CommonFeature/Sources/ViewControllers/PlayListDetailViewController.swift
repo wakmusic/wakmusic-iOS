@@ -21,7 +21,7 @@ import DomainModule
 
 
 
-public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard {
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -42,6 +42,10 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     lazy var input = PlayListDetailViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var multiPurposePopComponent:MultiPurposePopComponent!
+    var containSongsComponent:ContainSongsComponent!
+    
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
     
     
     
@@ -133,11 +137,13 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         
     }
     
-    public static func viewController(viewModel:PlayListDetailViewModel,multiPurposePopComponent:MultiPurposePopComponent) -> PlayListDetailViewController {
+    public static func viewController(viewModel:PlayListDetailViewModel,multiPurposePopComponent:MultiPurposePopComponent,containSongsComponent:ContainSongsComponent) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
+        
+        viewController.containSongsComponent = containSongsComponent
         
         return viewController
     }
@@ -226,14 +232,14 @@ extension PlayListDetailViewController{
         
         bindRx()
         configureSkeleton()
+        bindSelectedEvent()
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
             guard let self = self else { return UITableViewCell() }
 
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+
             switch self.viewModel.type {
                 
             case .custom:
@@ -242,7 +248,6 @@ extension PlayListDetailViewController{
                     return UITableViewCell()
                 }
                 
-                cell.selectedBackgroundView = bgView
                 cell.update(model,self.output.state.value.isEditing)
                 
                 return cell
@@ -251,7 +256,6 @@ extension PlayListDetailViewController{
                     return UITableViewCell()
                 }
                 
-                cell.selectedBackgroundView = bgView
                 cell.update(model)
                 
                 return cell
@@ -388,6 +392,57 @@ extension PlayListDetailViewController{
             self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         })
         .disposed(by: disposeBag)
+                
+        tableView.rx.itemSelected
+            .map { $0.row }
+           // .withLatestFrom(output.state) { ($0,$1)}
+           // .filter({$1.isEditing})
+           // .map{$0.0}
+            .bind(to: input.songTapped)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSelectedEvent() {
+        
+        output.indexOfSelectedSongs
+            .skip(1)
+            .withLatestFrom(output.dataSource) {($0,$1)}
+            .withLatestFrom(output.state) { ($0,$1)}
+            .subscribe(onNext: { [weak self] (arg0,state)   in
+                
+                
+                let (songs, dataSource) = arg0
+                guard let self = self else {return}
+                
+               
+                
+        
+                    
+                    switch songs.isEmpty {
+                    case true:
+                        self.hideSongCart()
+                        
+                    case false:
+                        self.showSongCart(
+                            in: self.view,
+                            type: .artistSong,
+                            selectedSongCount: songs.count,
+                            totalSongCount: (dataSource.first?.items.count ?? 0),
+                            useBottomSpace: false
+                        )
+                        self.songCartView?.delegate = self
+                    }
+         
+                
+            })
+            .disposed(by: disposeBag)
+        
+        output.songEntityOfSelectedSongs
+            .filter{ !$0.isEmpty }
+            .debug("songEntityOfSelectedSongs")
+            .subscribe()
+            .disposed(by: disposeBag)
+        
     }
 }
 
@@ -433,4 +488,28 @@ extension PlayListDetailViewController: UIGestureRecognizerDelegate {
 
 
 
+extension PlayListDetailViewController:SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        
+        switch type {
+        case let .allSelect(flag):
+            input.allSongSelected.onNext(flag)
+        case .addSong:
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.input.allSongSelected.onNext(false)
+            }
+        case .addPlayList:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
+    }
+    
+    
+}
 

@@ -450,7 +450,7 @@
                                 <rect key="frame" x="0.0" y="269.66666666666669" width="393" height="582.33333333333326"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="hzB-vL-DAK" customClass="PlayListTableViewCell" customModule="CommonFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="hzB-vL-DAK" customClass="PlayListTableViewCell" customModule="CommonFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hzB-vL-DAK" id="bhH-i1-NNC">
