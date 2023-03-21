@@ -19,6 +19,7 @@ import SkeletonView
 import DomainModule
 
 
+//  TODO : 바깥 클릭 시 hide... , 자꾸 플레이 버튼 튀어나옴...
 
 
 public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
@@ -77,6 +78,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                 
                 self.input.cancelEdit.onNext(())
                 
+                self.output.indexOfSelectedSongs.accept([])
+                self.output.songEntityOfSelectedSongs.accept([])
                 
             })
             self.showPanModal(content: vc)
@@ -89,7 +92,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-       //  TODO : 바깥 클릭 시 hide... 
+       
         
         
         self.showEditSheet(in: self.view, type: .playList)
