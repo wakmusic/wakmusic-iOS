@@ -62,12 +62,14 @@ class PlayListTableViewCell: UITableViewCell {
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
 
-        self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        
     }
 }
 
 extension PlayListTableViewCell {
     func update(_ model: SongEntity,_ isEditing:Bool,index:Int) {
+        
+        self.playButton.setImage(isEditing ? nil : DesignSystemAsset.Storage.play.image, for: .normal)
         
         self.index = index
         
