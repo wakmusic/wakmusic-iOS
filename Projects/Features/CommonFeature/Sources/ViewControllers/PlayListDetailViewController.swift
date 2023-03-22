@@ -74,12 +74,13 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 
+                
                 self.output.state.accept(EditState(isEditing: false, force: true))
                 
                 self.input.cancelEdit.onNext(())
+                self.input.runEditing.onNext(())
                 
-                self.output.indexOfSelectedSongs.accept([])
-                self.output.songEntityOfSelectedSongs.accept([])
+
                 
             })
             self.showPanModal(content: vc)

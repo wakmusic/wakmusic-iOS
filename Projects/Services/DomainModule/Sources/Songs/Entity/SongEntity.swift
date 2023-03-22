@@ -27,5 +27,9 @@ public struct SongEntity: Equatable {
     public let reaction: String
     public let views, last: Int
     public let date: String
-    public var isSelected: Bool 
+    public var isSelected: Bool
+    
+    public static func == (lhs: SongEntity, rhs:  SongEntity) -> Bool {
+        lhs.id == rhs.id
+    }
 }

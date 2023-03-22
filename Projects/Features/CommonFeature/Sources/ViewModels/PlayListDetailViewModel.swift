@@ -55,7 +55,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let backUpdataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let refreshPlayList:PublishSubject<Void> = PublishSubject()
+        let refreshPlayList:BehaviorRelay<Void> = BehaviorRelay(value: ())
         
     }
 
@@ -87,22 +87,30 @@ public final class PlayListDetailViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
 
         let output = Output()
+        output.refreshPlayList.flatMap({ [weak self] () -> Observable<PlayListDetailEntity> in
+          
+            guard let self = self else {return Observable.empty()}
+           
+            
+                
+            return self.fetchPlayListDetailUseCase.execute(id: self.id, type: self.type)
+                .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: true, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
+            .asObservable()
+            .do(onNext: { [weak self] (model) in
+                
+                guard let self = self else{
+                    return
+                }
+                
+            
+                output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
+                                                            image: self.type == .wmRecommend ? model.id : model.image,version: self.type == .wmRecommend ? model.image_square_version : model.image_version))
+                
+                self.key = model.key
+                
+            })
+            
         
-        fetchPlayListDetailUseCase.execute(id: id, type: type)
-            .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: true, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
-        .asObservable()
-        .do(onNext: { [weak self] (model) in
-            
-            guard let self = self else{
-                return
-            }
-            
-            
-            
-            output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
-                                                        image: self.type == .wmRecommend ? model.id : model.image,version: self.type == .wmRecommend ? model.image_square_version : model.image_version))
-            
-            self.key = model.key
             
         })
         .map { [PlayListDetailSectionModel(model: 0, items: $0.songs)] }
@@ -121,7 +129,6 @@ public final class PlayListDetailViewModel:ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !($0.first?.items ?? []).isEmpty }
             .map { $0.first?.items.map { $0.id } ?? [] }
-            .debug("서버로 전송합니다.")
             .flatMap({[weak self] (songs:[String]) -> Observable<BaseEntity> in
                 
                 guard let self = self else{
@@ -131,6 +138,8 @@ public final class PlayListDetailViewModel:ViewModelType {
                 guard let key = self.key else {
                     return Observable.empty()
                 }
+                
+                DEBUG_LOG(songs.count)
                 
                 output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
                 output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
@@ -146,8 +155,10 @@ public final class PlayListDetailViewModel:ViewModelType {
                     input.showErrorToast.accept($0.description)
                     return
                 }
-                output.backUpdataSource.accept(output.dataSource.value)
                 
+                output.refreshPlayList.accept(())
+                
+                NotificationCenter.default.post(name: .playListRefresh, object: nil) // 바깥 플리 업데이트
             }).disposed(by: disposeBag)
                 
         input.cancelEdit
@@ -242,61 +253,32 @@ public final class PlayListDetailViewModel:ViewModelType {
         
         
         
-        input.songTapped
-            .withLatestFrom(output.songEntityOfSelectedSongs)
-            .flatMap({ [weak self] (songs:[SongEntity]) -> Observable<BaseEntity> in
+        input.tapRemoveSongs
+            .withLatestFrom(output.songEntityOfSelectedSongs){ $1 }
+            .withLatestFrom(output.dataSource) { ($0,$1)}
+            .map({ [weak self] (ids:[SongEntity],dataSource:[PlayListDetailSectionModel])  -> [PlayListDetailSectionModel] in
                 
-                guard let self = self else{
-                    return Observable.empty()
-                }
                 
-                guard let key = self.key else {
-                    return Observable.empty()
-                }
+               
                 
-                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
-                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+                let remainDataSource = dataSource.first?.items.filter({ (song:SongEntity) in
+                    
+                    return !ids.contains(song)
+                    
+                })
+            
                 
-                return self.removeSongsUseCase.execute(key: key , songs: songs.map({$0.id}))
-                    .asObservable()
+                
+                output.songEntityOfSelectedSongs.accept([])
+                output.indexOfSelectedSongs.accept([])
+                
+                return [PlayListDetailSectionModel(model: 0, items: remainDataSource ?? [])]
             })
-            .subscribe(onNext: { [weak self] in
-                    guard let self = self else{
-                        return
-                    }
-                    if $0.status != 200 {
-                        input.showErrorToast.accept($0.description)
-                        return
-                    }
-                output.refreshPlayList.onNext(())
-            })
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
         
-//        output.refreshPlayList.flatMap({ [weak self]  () -> Observable<PlayListDetailEntity> in
-//            
-//            guard let self = self else {return}
-//            
-//            return self.fetchPlayListDetailUseCase.execute(id: id, type: type)
-//                .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: true, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
-//                .asObservable()
-//                .do(onNext: { [weak self] (model) in
-//                    
-//                    guard let self = self else{
-//                        return
-//                    }
-//                    
-//                    
-//                    
-//                    output.headerInfo.accept(PlayListHeaderInfo(title: model.title, songCount: "\(model.songs.count)곡",
-//                                                                image: self.type == .wmRecommend ? model.id : model.image,version: self.type == .wmRecommend ? model.image_square_version : model.image_version))
-//                
-//            })
-//            
-//        })
-//        .map { [PlayListDetailSectionModel(model: 0, items: $0.songs)] }
-//        .bind(to: output.dataSource,output.backUpdataSource)
-//        .disposed(by: disposeBag)
+
         
         
         
