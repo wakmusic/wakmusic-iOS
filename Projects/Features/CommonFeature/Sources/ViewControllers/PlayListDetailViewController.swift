@@ -607,7 +607,7 @@ extension PlayListDetailViewController:SongCartViewDelegate {
         case .play:
             return
         case .remove:
-            return
+            self.input.tapRemoveSongs.onNext(())
         }
     }
     
