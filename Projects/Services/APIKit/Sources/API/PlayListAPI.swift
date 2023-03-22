@@ -14,7 +14,7 @@ public struct CreatePlayListRequset:Encodable {
     var image:String
 }
 
-public struct EditPlayListRequset:Encodable {
+public struct SongsKeyBody:Encodable {
     var songs:[String]
 }
 public struct EditPlayListNameRequset:Encodable {
@@ -29,6 +29,7 @@ public enum PlayListAPI {
     case editPlayList(key:String,songs:[String])
     case editPlayListName(key:String,title:String)
     case deletePlayList(key:String)
+    case removeSongs(key:String,songs:[String])
     case loadPlayList(key:String)
     case addSongIntoPlayList(key:String,songs:[String])
 }
@@ -74,6 +75,8 @@ extension PlayListAPI: WMAPI {
         case .addSongIntoPlayList(key: let key,_):
             return "/\(key)/songs/add"
             
+        case .removeSongs(key: let key):
+            return "/\(key)/songs/remove"
         }
         
     }
@@ -86,7 +89,7 @@ extension PlayListAPI: WMAPI {
                 return .get
             case .createPlayList,.loadPlayList,.addSongIntoPlayList:
                 return .post
-            case .editPlayList,.editPlayListName:
+            case .editPlayList,.editPlayListName,.removeSongs:
                 return .patch
             case .deletePlayList:
                 return .delete
@@ -110,15 +113,17 @@ extension PlayListAPI: WMAPI {
                 
             case .editPlayList(_,songs: let songs):
                 
-                return .requestJSONEncodable(EditPlayListRequset(songs: songs))
+                return .requestJSONEncodable(SongsKeyBody(songs: songs))
             case .editPlayListName(_, title: let title):
                 return .requestJSONEncodable(EditPlayListNameRequset(title: title))
                 
-            
             case . addSongIntoPlayList(_, songs: let songs):
 
                 return .requestJSONEncodable(AddSongRequest(songs: songs))
                 
+            case .removeSongs(_, songs: let songs):
+                return .requestJSONEncodable(SongsKeyBody(songs: songs))
+            
             }
 
         }
@@ -129,7 +134,7 @@ extension PlayListAPI: WMAPI {
                 case .fetchRecommendPlayList,.fetchPlayListDetail:
                     return .none
                     
-                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName,.addSongIntoPlayList:
+                case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName,.addSongIntoPlayList,.removeSongs:
                     return .accessToken
                 }
             }
