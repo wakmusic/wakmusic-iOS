@@ -190,9 +190,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     .disposed(by: self.disposeBag)
 
             
-            
-            default :
-                DEBUG_LOG(input.textString.value)
+                case .share:
+                    output.result.onNext(BaseEntity(status: 200,description: ""))
             }
             
             
