@@ -346,6 +346,7 @@ extension PlayListDetailViewController{
                 
                 
                 
+                
                 indexs = indexs
                     .map({ i -> Int in
                         
@@ -403,7 +404,7 @@ extension PlayListDetailViewController{
                 
                 indexs.sort()
                 
-                
+                DEBUG_LOG(indexs)
                     
                 self.output.indexOfSelectedSongs.accept(indexs)
                 
@@ -524,7 +525,7 @@ extension PlayListDetailViewController{
                             type: .myList,
                             selectedSongCount: songs.count,
                             totalSongCount: (dataSource.first?.items.count ?? 0),
-                            useBottomSpace: true
+                            useBottomSpace: false
                         )
                         self.songCartView?.delegate = self
                     }
