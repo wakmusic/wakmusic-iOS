@@ -75,7 +75,7 @@ extension PlayListAPI: WMAPI {
         case .addSongIntoPlayList(key: let key,_):
             return "/\(key)/songs/add"
             
-        case .removeSongs(key: let key):
+        case .removeSongs(key: let key,_):
             return "/\(key)/songs/remove"
         }
         
