@@ -95,8 +95,8 @@ extension LoginViewController{
             .bind(to: input.pressNaverLoginButton)
             .disposed(by: disposeBag)
 
-        googleLoginButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard self != nil else { return }
-        }).disposed(by: disposeBag)
+        googleLoginButton.rx.tap.bind {
+            GoogleLoginManager.shared.googleLoginRequest()
+        }.disposed(by: disposeBag)
     }
 }

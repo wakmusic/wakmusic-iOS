@@ -2,10 +2,7 @@ import UIKit
 import RootFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
-    
-   
 
     func scene(
         _ scene: UIScene,
@@ -18,6 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let root = AppComponent()
         self.window?.rootViewController = root.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
+    }
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            print("URLContexts: \(url)")
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
