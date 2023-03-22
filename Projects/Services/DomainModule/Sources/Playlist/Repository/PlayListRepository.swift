@@ -12,4 +12,5 @@ public protocol PlayListRepository {
     func deletePlayList(key:String) -> Single<BaseEntity>
     func loadPlayList(key:String) -> Single<PlayListBaseEntity>
     func addSongIntoPlayList(key:String,songs:[String]) -> Single<AddSongEntity>
+    func removeSongs(key:String,songs:[String]) -> Single<BaseEntity>
 }
