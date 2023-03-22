@@ -320,14 +320,17 @@ extension PlayListDetailViewController{
                 curr.remove(at:  source)
                 curr.insert(tmp, at: dest)
                 
+                let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
+                self.output.dataSource.accept(newModel)
+                
+                //꼭 먼저 데이터 소스를 갱신 해야합니다
+                
+                
                 var indexs = self.output.indexOfSelectedSongs.value // 현재 선택된 인덱스 모음
                 let limit = curr.count - 1 // 마지막 인덱스
                 
                 var isSelctedIndexMoved:Bool = false // 선택된 것을 움직 였는지 ?
-                
-
-                let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
-                
+            
                
                 if indexs.contains(where: {$0 == source}) {
                     //선택된 인덱스 배열 안에 source(시작점)이 있다는 뜻은 선택된 것을 옮긴다는 뜻
@@ -403,7 +406,7 @@ extension PlayListDetailViewController{
                     
                 self.output.indexOfSelectedSongs.accept(indexs)
                 
-                self.output.dataSource.accept(newModel)
+                
                 
             }).disposed(by: disposeBag)
         
@@ -535,7 +538,6 @@ extension PlayListDetailViewController{
         
         output.songEntityOfSelectedSongs
             .filter{ !$0.isEmpty }
-            .debug("songEntityOfSelectedSongs")
             .subscribe()
             .disposed(by: disposeBag)
         

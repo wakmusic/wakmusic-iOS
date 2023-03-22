@@ -207,15 +207,16 @@ public final class PlayListDetailViewModel:ViewModelType {
             .map { (indexOfSelectedSongs, dataSource) in
                 
                 
-                
+               
                 
                 let song = dataSource.first?.items ?? []
+                
+               
                 
                 return indexOfSelectedSongs.map {
                     
                     
-                    
-                    SongEntity(
+                        SongEntity(
                         id: song[$0].id,
                         title: song[$0].title,
                         artist: song[$0].artist,
@@ -225,6 +226,8 @@ public final class PlayListDetailViewModel:ViewModelType {
                         last: song[$0].last,
                         date: song[$0].date
                     )
+                    
+                    
                 }
             }
             .bind(to: output.songEntityOfSelectedSongs)
