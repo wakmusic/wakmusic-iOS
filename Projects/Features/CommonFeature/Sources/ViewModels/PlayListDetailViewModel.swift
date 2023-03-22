@@ -44,12 +44,12 @@ public final class PlayListDetailViewModel:ViewModelType {
         let songTapped: PublishSubject<Int> = PublishSubject()
         let allSongSelected: PublishSubject<Bool> = PublishSubject()
         let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
-    
+        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
         
     }
 
     public struct Output {
-        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+       
         let headerInfo:PublishRelay<PlayListHeaderInfo> = PublishRelay()
         let dataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])

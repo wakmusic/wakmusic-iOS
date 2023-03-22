@@ -54,7 +54,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func backButtonAction(_ sender: UIButton) {
         
-        let isEdit: Bool = output.state.value.isEditing
+        let isEdit: Bool = input.state.value.isEditing
         
         if isEdit {
             
@@ -75,7 +75,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                 }
                 
                 
-                self.output.state.accept(EditState(isEditing: false, force: true))
+                self.input.state.accept(EditState(isEditing: false, force: true))
                 
                 self.input.cancelEdit.onNext(())
                 self.input.runEditing.onNext(())
@@ -106,7 +106,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressCompleteAction(_ sender: UIButton) {
         
-        output.state.accept(EditState(isEditing: false, force: false))
+        input.state.accept(EditState(isEditing: false, force: false))
         
        
     }
@@ -254,7 +254,7 @@ extension PlayListDetailViewController{
                     return UITableViewCell()
                 }
                 
-                cell.update(model,self.output.state.value.isEditing,index: indexPath.row)
+                cell.update(model,self.input.state.value.isEditing,index: indexPath.row)
                 cell.delegate = self
                 
                 return cell
@@ -412,7 +412,7 @@ extension PlayListDetailViewController{
                 
             }).disposed(by: disposeBag)
         
-        output.state
+        input.state
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
@@ -490,7 +490,7 @@ extension PlayListDetailViewController{
         .disposed(by: disposeBag)
                 
         tableView.rx.itemSelected
-            .withLatestFrom(output.state){($0,$1)}
+            .withLatestFrom(input.state){($0,$1)}
             .filter({ [weak self] in
                 
 
@@ -506,7 +506,7 @@ extension PlayListDetailViewController{
         output.indexOfSelectedSongs
             .skip(1)
             .withLatestFrom(output.dataSource) {($0,$1)}
-            .withLatestFrom(output.state) { ($0,$1)}
+            .withLatestFrom(input.state) { ($0,$1)}
             .subscribe(onNext: { [weak self] (arg0,state)   in
                 
                 
@@ -602,7 +602,7 @@ extension PlayListDetailViewController:SongCartViewDelegate {
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
-                self.output.state.accept(EditState(isEditing: false, force: true))
+                self.input.state.accept(EditState(isEditing: false, force: true))
             }
         case .addPlayList:
             return
@@ -624,7 +624,7 @@ extension PlayListDetailViewController:EditSheetViewDelegate {
         switch type {
             
         case .edit:
-            output.state.accept(EditState(isEditing: true, force: false))
+            input.state.accept(EditState(isEditing: true, force: false))
         case .share:
             let vc = multiPurposePopComponent.makeView(type: .share,key: viewModel?.key ?? "")
             
