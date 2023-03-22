@@ -27,7 +27,7 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
     var viewModel: FavoriteViewModel!
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
+    let refreshControl = UIRefreshControl()
     
     var disposeBag = DisposeBag()
     
@@ -38,6 +38,7 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
         configureUI()
 
         // Do any additional setup after loading the view.
+        self.tableView.refreshControl = refreshControl
     }
     
 
@@ -176,6 +177,16 @@ extension FavoriteViewController{
             self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             
         }).disposed(by: disposeBag)
+            
+        refreshControl.rx.controlEvent(.valueChanged)
+            .bind { [weak self] _ in
+                guard let self else { return }
+                self.input.refreshEvent.onNext(())
+            }.disposed(by: disposeBag)
+        
+        output.isRefreshing
+            .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
 
     }
 }
