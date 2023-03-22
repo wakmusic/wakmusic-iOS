@@ -29,6 +29,8 @@ public final class PlayListDetailViewModel:ViewModelType {
     var key:String?
     var fetchPlayListDetailUseCase:FetchPlayListDetailUseCase!
     var editPlayListUseCase : EditPlayListUseCase!
+    var removeSongsUseCase : RemoveSongsUseCase!
+    
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -55,13 +57,16 @@ public final class PlayListDetailViewModel:ViewModelType {
         
     }
 
-    public init(id:String,type:PlayListType,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase,editPlayListUseCase:EditPlayListUseCase) {
+    public init(id:String,type:PlayListType
+                ,fetchPlayListDetailUseCase:FetchPlayListDetailUseCase
+                ,editPlayListUseCase:EditPlayListUseCase
+                ,removeSongsUseCase:RemoveSongsUseCase) {
         
         self.id = id
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
         self.editPlayListUseCase = editPlayListUseCase
-        
+        self.removeSongsUseCase = removeSongsUseCase
        
        
         

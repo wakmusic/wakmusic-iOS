@@ -107,5 +107,12 @@ public extension AppComponent {
         
     }
     
+    var removeSongsUseCase: any RemoveSongsUseCase {
+        
+        shared {
+            RemoveSongsUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
+    
     
 }
