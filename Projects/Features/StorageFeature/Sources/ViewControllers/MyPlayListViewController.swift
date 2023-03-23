@@ -70,20 +70,20 @@ extension MyPlayListViewController{
             })
             self.showPanModal(content: vc)
         }).disposed(by: disposeBag)
-            
-        output.showErrorToast.subscribe(onNext: { [weak self] (message: String) in
-            guard let self = self else{
-                return
-            }
-            self.showToast(
-                text: message,
-                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-            )
-        }).disposed(by: disposeBag)
-                                
-        NotificationCenter.default.rx.notification(.playListRefresh)
-            .map({_ in () })
-            .bind(to: input.playListLoad)
+        
+        tableView.rx.itemSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (indexPath, models) in
+                guard let self  = self, let model = models.first?.items[indexPath.row] else {
+                    return
+                }
+                let vc = self.playListDetailComponent.makeView(id: String(model.key), type: .custom)
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        tableView.rx.itemMoved
+            .bind(to: input.itemMoved)
             .disposed(by: disposeBag)
     }
 
@@ -127,39 +127,22 @@ extension MyPlayListViewController{
             })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
-
-        tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource){ ($0,$1) }
-            .subscribe(onNext: { [weak self] (indexPath, models) in
-                guard let self  = self else{
+                
+        output.showErrorToast
+            .subscribe(onNext: { [weak self] (message: String) in
+                guard let self = self else{
                     return
                 }
-                guard let model =  models.first?.items[indexPath.row] else {
-                    return
-                }
-                let vc = self.playListDetailComponent.makeView(id: String(model.key) , type: .custom)
-                self.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-        tableView.rx.itemMoved
-            .asObservable()
-            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
-                guard let `self` = self else { return }
-
-                self.input.sourceIndexPath.accept(sourceIndexPath)
-                self.input.destinationIndexPath.accept(destinationIndexPath)
-                
-                var curr = self.output.dataSource.value.first?.items ?? []
-                
-                let tmp = curr[self.input.sourceIndexPath.value.row]
-                curr.remove(at: self.input.sourceIndexPath.value.row)
-                curr.insert(tmp, at: self.input.destinationIndexPath.value.row)
-
-                let newModel = [MyPlayListSectionModel(model: 0, items: curr)]
-                self.output.dataSource.accept(newModel)
-                
+                self.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
             }).disposed(by: disposeBag)
+                                
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map({_ in () })
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
@@ -174,6 +157,7 @@ extension MyPlayListViewController{
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
             return true
+            
         }, canMoveRowAtIndexPath: { (_, _) -> Bool in
             return true
         })

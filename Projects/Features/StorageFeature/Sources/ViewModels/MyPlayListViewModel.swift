@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import RxRelay
+import RxCocoa
 import BaseFeature
 import DomainModule
 import Utility
@@ -20,9 +21,8 @@ public final class MyPlayListViewModel:ViewModelType {
     var disposeBag = DisposeBag()
 
     public struct Input {
-        let sourceIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        let destinationIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
+        let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
         let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
         let showConfirmModal: PublishSubject<Void> = PublishSubject()
@@ -45,7 +45,7 @@ public final class MyPlayListViewModel:ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        var output = Output()
+        let output = Output()
         
         input.playListLoad
             .flatMap{ [weak self] () -> Observable<[PlayListEntity]> in
@@ -58,6 +58,21 @@ public final class MyPlayListViewModel:ViewModelType {
             }
             .map { [MyPlayListSectionModel(model: 0, items: $0)] }
             .bind(to: output.dataSource, output.backUpdataSource)
+            .disposed(by: disposeBag)
+        
+        input.itemMoved
+            .withLatestFrom(output.dataSource) { ($0.sourceIndex, $0.destinationIndex, $1) }
+            .map { (sourceIndexPath, destinationIndexPath, dataSource) -> [MyPlayListSectionModel] in
+                var newModel = dataSource.first?.items ?? []
+
+                let temp = newModel[sourceIndexPath.row]
+                newModel.remove(at: sourceIndexPath.row)
+                newModel.insert(temp, at: destinationIndexPath.row)
+
+                let sectionModel = [MyPlayListSectionModel(model: 0, items: newModel)]
+                return sectionModel
+            }
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
         input.runEditing.withLatestFrom(output.dataSource)
