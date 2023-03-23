@@ -15,102 +15,72 @@ import Utility
 import CommonFeature
 
 public final class MyPlayListViewModel:ViewModelType {
-    
-    
-
-    var disposeBag = DisposeBag()
     var fetchPlayListUseCase:FetchPlayListUseCase!
     var editPlayListOrderUseCase:EditPlayListOrderUseCase!
-    
+    var disposeBag = DisposeBag()
+
     public struct Input {
-        let sourceIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        let destIndexPath:BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        let playListLoad:BehaviorRelay<Void> = BehaviorRelay(value: ())
-        let cancelEdit:PublishSubject<Void> = PublishSubject()
-        let runEditing:PublishSubject<Void> = PublishSubject()
-        let showConfirmModal:PublishSubject<Void> = PublishSubject()
-        let showErrorToast:PublishRelay<String> = PublishRelay()
-        
+        let sourceIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        let destinationIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
+        let cancelEdit: PublishSubject<Void> = PublishSubject()
+        let runEditing: PublishSubject<Void> = PublishSubject()
+        let showConfirmModal: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
+        let state: BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
         let dataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
-        let backUpdataSource:BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
+        let showErrorToast: PublishRelay<String> = PublishRelay()
     }
 
-    init(fetchPlayListUseCase:FetchPlayListUseCase,editPlayListOrderUseCase:EditPlayListOrderUseCase) {
-        
+    init(
+        fetchPlayListUseCase: FetchPlayListUseCase,
+        editPlayListOrderUseCase: EditPlayListOrderUseCase
+    ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
-        DEBUG_LOG("✅ MyPlayListViewModel 생성")
-        
-        
-        
+        DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
     public func transform(from input: Input) -> Output {
-        
         var output = Output()
         
         input.playListLoad
-            .flatMap({ [weak self] () -> Observable<[PlayListEntity]> in
-                
+            .flatMap{ [weak self] () -> Observable<[PlayListEntity]> in
                 guard let self = self else{
                     return Observable.empty()
                 }
-                
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
                     .catchAndReturn([])
-            })
+            }
             .map { [MyPlayListSectionModel(model: 0, items: $0)] }
-            .debug("TESTTEST")
             .bind(to: output.dataSource, output.backUpdataSource)
             .disposed(by: disposeBag)
-        
         
         input.runEditing.withLatestFrom(output.dataSource)
             .map { $0.first?.items.map { $0.key } ?? [] }
             .filter({!$0.isEmpty})
             .flatMap({[weak self] (ids:[String]) -> Observable<BaseEntity> in
-                
                 guard let self = self else{
                     return Observable.empty()
                 }
-                
-                
-                
-                return self.editPlayListOrderUseCase.execute(ids: ids)
-                    .asObservable()
-            }).subscribe(onNext: { [weak self] in
-                
-                guard let self = self else{
+                return self.editPlayListOrderUseCase.execute(ids: ids).asObservable()
+            }).subscribe(onNext: { (model) in
+                if model.status != 200 {
+                    output.showErrorToast.accept(model.description)
                     return
                 }
-                
-                
-                if $0.status != 200 {
-                    input.showErrorToast.accept($0.description)
-                    return
-                }
-                
                 output.backUpdataSource.accept(output.dataSource.value)
-                
-                
             }).disposed(by: disposeBag)
         
-      
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
-        
-        
         return output
-        
     }
-    
-    
 }

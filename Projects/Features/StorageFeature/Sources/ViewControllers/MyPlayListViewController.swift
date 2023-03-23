@@ -24,113 +24,70 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     @IBOutlet weak var tableView: UITableView!
 
-    
-
-
     var multiPurposePopComponent:MultiPurposePopComponent!
     var playListDetailComponent :PlayListDetailComponent!
-    
     var viewModel:MyPlayListViewModel!
     
     lazy var input = MyPlayListViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
-    
     var disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-       
-        
-        configureUI()
-
-        // Do any additional setup after loading the view.
+        inputBindRx()
+        outputBindRx()
     }
     
-
-    public static func viewController(viewModel:MyPlayListViewModel,multiPurposePopComponent:MultiPurposePopComponent,playListDetailComponent :PlayListDetailComponent) -> MyPlayListViewController {
+    public static func viewController(
+        viewModel: MyPlayListViewModel,
+        multiPurposePopComponent: MultiPurposePopComponent,
+        playListDetailComponent: PlayListDetailComponent
+    ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
         viewController.playListDetailComponent = playListDetailComponent
-        
         return viewController
     }
-
 }
 
 extension MyPlayListViewController{
     
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
-            guard let self = self else { return UITableViewCell() }
-
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
-            
-            let index = indexPath.row
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? MyPlayListTableViewCell
-            else {return UITableViewCell()}
-             
-            cell.selectedBackgroundView = bgView
-            cell.update(model: model, isEditing: self.output.state.value.isEditing)
-          
-            return cell
-            
-        }, canEditRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        })
-        return datasource
-    }
-    
-    
-    private func configureUI()
-    {
-        bindRx()
-    }
-    
-    
-    private func bindRx() {
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+    private func inputBindRx() {
         
-        output.dataSource
-            .skip(1)
-            .do(onNext: { [weak self] model in
-                guard let self = self else {
-                    return
-                }
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-                warningView.text = "내 리스트가 없습니다."
-                
-                let items = model.first?.items ?? []
-                self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
+        input.showConfirmModal.subscribe(onNext: { [weak self] in
+            guard let self = self else{
+                return
+            }
+            let vc = TextPopupViewController.viewController(
+                text: "변경된 내용을 저장할까요?",
+                cancelButtonIsHidden: false,
+                completion: {
+                self.input.runEditing.onNext(())
+                                             
+            },cancelCompletion: {
+                self.input.cancelEdit.onNext(())
             })
-            .bind(to: tableView.rx.items(dataSource: createDatasources()))
-            .disposed(by: disposeBag)
+            self.showPanModal(content: vc)
+        }).disposed(by: disposeBag)
             
-        tableView.rx.itemMoved.asObservable()
-            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
-                guard let `self` = self else { return }
+        output.showErrorToast.subscribe(onNext: { [weak self] (message: String) in
+            guard let self = self else{
+                return
+            }
+            self.showToast(
+                text: message,
+                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+            )
+        }).disposed(by: disposeBag)
+                                
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map({_ in () })
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+    }
 
-                self.input.sourceIndexPath.accept(sourceIndexPath)
-                self.input.destIndexPath.accept(destinationIndexPath)
-                
-                var curr = self.output.dataSource.value.first?.items ?? []
-                
-                let tmp = curr[self.input.sourceIndexPath.value.row]
-                curr.remove(at: self.input.sourceIndexPath.value.row)
-                curr.insert(tmp, at: self.input.destIndexPath.value.row)
-
-                let newModel = [MyPlayListSectionModel(model: 0, items: curr)]
-                self.output.dataSource.accept(newModel)
-                
-            }).disposed(by: disposeBag)
+    private func outputBindRx() {
         
         output.state
             .skip(1)
@@ -153,46 +110,30 @@ extension MyPlayListViewController{
                 self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
             .disposed(by: disposeBag)
-    
-        input.showConfirmModal.subscribe(onNext: { [weak self] in
-                
-            guard let self = self else{
-                return
-            }
-            
-            
-            let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
 
-                self.input.runEditing.onNext(())
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+
+        output.dataSource
+            .skip(1)
+            .do(onNext: { [weak self] model in
+                guard let self = self else {
+                    return
+                }
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
+                warningView.text = "내 리스트가 없습니다."
                 
-            },cancelCompletion: {
-                
-                self.input.cancelEdit.onNext(())
+                let items = model.first?.items ?? []
+                self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
             })
-         
-            self.showPanModal(content: vc)
-            
-        }).disposed(by: disposeBag)
-            
-            
-        input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
-            
-            guard let self = self else{
-                return
-            }
-            
-            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            
-            
-        }).disposed(by: disposeBag)
-        
+            .bind(to: tableView.rx.items(dataSource: createDatasources()))
+            .disposed(by: disposeBag)
+
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource){ ($0,$1) }
             .subscribe(onNext: { [weak self] (indexPath, models) in
                 guard let self  = self else{
                     return
                 }
-                
                 guard let model =  models.first?.items[indexPath.row] else {
                     return
                 }
@@ -200,11 +141,43 @@ extension MyPlayListViewController{
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-                        
-        NotificationCenter.default.rx.notification(.playListRefresh)
-            .map({_ in () })
-            .bind(to: input.playListLoad)
-            .disposed(by: disposeBag)
+
+        tableView.rx.itemMoved
+            .asObservable()
+            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
+                guard let `self` = self else { return }
+
+                self.input.sourceIndexPath.accept(sourceIndexPath)
+                self.input.destinationIndexPath.accept(destinationIndexPath)
+                
+                var curr = self.output.dataSource.value.first?.items ?? []
+                
+                let tmp = curr[self.input.sourceIndexPath.value.row]
+                curr.remove(at: self.input.sourceIndexPath.value.row)
+                curr.insert(tmp, at: self.input.destinationIndexPath.value.row)
+
+                let newModel = [MyPlayListSectionModel(model: 0, items: curr)]
+                self.output.dataSource.accept(newModel)
+                
+            }).disposed(by: disposeBag)
+    }
+    
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
+            guard let self = self else { return UITableViewCell() }
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: indexPath.row, section: 0)) as? MyPlayListTableViewCell
+            else { return UITableViewCell() }
+            
+            cell.update(model: model, isEditing: self.output.state.value.isEditing)
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
     }
 }
 

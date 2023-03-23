@@ -15,11 +15,8 @@ import Utility
 class MyPlayListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var playListImageView: UIImageView!
-    
     @IBOutlet weak var playListNameLabel: UILabel!
-    
     @IBOutlet weak var playListCountLabel: UILabel!
-    
     @IBOutlet weak var listButton: UIButton!
     @IBOutlet weak var listButtonTrailingConstraint: NSLayoutConstraint!
         
@@ -35,11 +32,8 @@ class MyPlayListTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         
         self.backgroundColor = .clear
-        
-       
         self.playListImageView.layer.cornerRadius = 4
         self.playListNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.playListNameLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -51,7 +45,7 @@ class MyPlayListTableViewCell: UITableViewCell {
 
 extension MyPlayListTableViewCell {
     
-    func update(model:PlayListEntity,isEditing:Bool){
+    func update(model: PlayListEntity, isEditing: Bool){
         self.playListImageView.kf.setImage(
             with: WMImageAPI.fetchPlayList(id: String(model.image),version: model.image_version).toURL,
             placeholder: nil,
@@ -88,6 +82,5 @@ extension MyPlayListTableViewCell {
             })
         }
     }
-
 }
 
