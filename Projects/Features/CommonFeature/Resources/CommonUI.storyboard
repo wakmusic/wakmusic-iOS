@@ -450,7 +450,7 @@
                                 <rect key="frame" x="0.0" y="269.66666666666669" width="393" height="582.33333333333326"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="hzB-vL-DAK" customClass="PlayListTableViewCell" customModule="CommonFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="hzB-vL-DAK" customClass="PlayListTableViewCell" customModule="CommonFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hzB-vL-DAK" id="bhH-i1-NNC">
@@ -492,6 +492,13 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jnl-dT-OwE">
+                                                    <rect key="frame" x="20" y="2" width="309" height="40"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <connections>
+                                                        <action selector="selectedAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="eCJ-Ru-1ua"/>
+                                                    </connections>
+                                                </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uEg-GG-f0m">
                                                     <rect key="frame" x="341" y="5" width="32" height="34"/>
                                                     <constraints>
@@ -500,15 +507,20 @@
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
                                                         <action selector="playOrEditAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="fXu-sd-7Ja"/>
+                                                        <action selector="selectedAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="efM-j5-4ii"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="I2w-92-VDV" firstAttribute="centerY" secondItem="bhH-i1-NNC" secondAttribute="centerY" id="S1A-7m-74L"/>
                                                 <constraint firstItem="I2w-92-VDV" firstAttribute="leading" secondItem="wDO-ig-sRh" secondAttribute="trailing" constant="8" id="WV3-V1-f5f"/>
+                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="bottom" secondItem="wDO-ig-sRh" secondAttribute="bottom" id="alQ-ay-Bio"/>
+                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="top" secondItem="wDO-ig-sRh" secondAttribute="top" id="eb8-Yp-9Ab"/>
+                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="leading" secondItem="wDO-ig-sRh" secondAttribute="leading" id="o2C-Jp-r1X"/>
                                                 <constraint firstAttribute="trailing" secondItem="uEg-GG-f0m" secondAttribute="trailing" constant="20" id="oEr-Ek-qRL"/>
                                                 <constraint firstItem="uEg-GG-f0m" firstAttribute="leading" secondItem="I2w-92-VDV" secondAttribute="trailing" constant="12" id="rtl-Tm-iBz"/>
                                                 <constraint firstItem="wDO-ig-sRh" firstAttribute="leading" secondItem="bhH-i1-NNC" secondAttribute="leading" constant="20" id="uXb-hw-a5o"/>
+                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="trailing" secondItem="I2w-92-VDV" secondAttribute="trailing" id="wQv-ow-EzT"/>
                                                 <constraint firstItem="uEg-GG-f0m" firstAttribute="centerY" secondItem="bhH-i1-NNC" secondAttribute="centerY" id="yUc-cP-kdK"/>
                                                 <constraint firstItem="wDO-ig-sRh" firstAttribute="centerY" secondItem="bhH-i1-NNC" secondAttribute="centerY" id="zUV-dQ-JMA"/>
                                             </constraints>
@@ -518,6 +530,7 @@
                                             <outlet property="artistLabel" destination="6eY-d7-I45" id="obZ-tA-MN8"/>
                                             <outlet property="playButton" destination="uEg-GG-f0m" id="ghZ-2l-urZ"/>
                                             <outlet property="playButtonTrailingConstraint" destination="oEr-Ek-qRL" id="oJB-RA-XEP"/>
+                                            <outlet property="superButton" destination="Jnl-dT-OwE" id="xJ4-2H-P9o"/>
                                             <outlet property="titleLabel" destination="Dt6-CW-yVh" id="mcg-Aj-Z60"/>
                                         </connections>
                                     </tableViewCell>

@@ -10,14 +10,41 @@ import DesignSystem
 import DomainModule
 import Utility
 
+public protocol PlayListCellDelegate:AnyObject {
+    
+    func pressCell(index:Int)
+}
+
 class PlayListTableViewCell: UITableViewCell {
+    
+    
+    
+    public weak var cellDelegate:PlayListCellDelegate?
+    public weak var playDelegate:PlayButtonDelegate?
+    var index:Int!
+    var model:SongEntity!
     @IBOutlet weak var playButton:UIButton!
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     
-    @IBAction func playOrEditAction(_ sender: UIButton) { }
+    @IBOutlet weak var superButton: UIButton!
+    
+    @IBAction func selectedAction(_ sender: Any) {
+        
+        if isEditing {
+            cellDelegate?.pressCell(index: index)
+        }
+  
+    }
+    @IBAction func playOrEditAction(_ sender: UIButton) {
+        
+        //TODO : delegate를 통한 전달
+        
+        playDelegate?.play(model: model)
+        
+    }
         
     override var isEditing: Bool {
         didSet {
@@ -39,11 +66,21 @@ class PlayListTableViewCell: UITableViewCell {
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
 
         self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        
     }
 }
 
 extension PlayListTableViewCell {
-    func update(_ model: SongEntity,_ isEditing:Bool) {
+    func update(_ model: SongEntity,_ isEditing:Bool,index:Int) {
+        
+      
+        
+        self.index = index
+        self.isEditing = isEditing
+        self.model = model
+        
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
         albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -51,6 +88,8 @@ extension PlayListTableViewCell {
         )
         titleLabel.text =  model.title
         artistLabel.text = model.artist
+        
+       
     }
     
     private func updatePlayingState() {
@@ -68,7 +107,7 @@ extension PlayListTableViewCell {
             })
         } else {
             self.playButton.isHidden = false
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이ㄴ
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이션
                 guard let self else { return }
                 self.playButton.alpha = 1
                 self.playButton.transform = .identity

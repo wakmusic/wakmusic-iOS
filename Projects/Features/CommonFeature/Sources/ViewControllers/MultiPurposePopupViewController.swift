@@ -187,8 +187,8 @@ extension MultiPurposePopupViewController{
         
         if viewModel.type == .share { //공유는 오직 읽기 전용
             self.textField.isEnabled = false
-            self.input.textString.accept("shareCode")
-            self.textField.text = "shareCode"
+            self.input.textString.accept(viewModel.key)
+            self.textField.text = viewModel.key
         }
         
        
