@@ -304,17 +304,17 @@ public final class PlayListDetailViewModel:ViewModelType {
                 var indexs = output.indexOfSelectedSongs.value // 현재 선택된 인덱스 모음
                 let limit = curr.count - 1 // 마지막 인덱스
                 
-                var isSelctedIndexMoved:Bool = false // 선택된 것을 움직 였는지 ?
+                let sourceIsSelected:Bool = indexs.contains(where: {$0 == source}) // 선택된 것을 움직 였는지 ?
             
                
-                if indexs.contains(where: {$0 == source}) {
+                if   sourceIsSelected {
                     //선택된 인덱스 배열 안에 source(시작점)이 있다는 뜻은 선택된 것을 옮긴다는 뜻
 
                     let pos = indexs.firstIndex(where: {$0 == source})!
                     indexs.remove(at: pos)
                     
                     //그러므로 일단 지워준다.
-                    isSelctedIndexMoved = true // 이후 선택된 것을 움직였으므로 true
+                  
                    
                 }
                 
@@ -351,7 +351,7 @@ public final class PlayListDetailViewModel:ViewModelType {
                                 ** 단 옮겨질 위치가  배열의 끝일 경우는 그대로 있음
                              */
                             
-                            return i + 1 >= limit ? i : i + 1
+                            return i + 1
                         }
                         
                         if source > i && i < dest {
@@ -372,7 +372,7 @@ public final class PlayListDetailViewModel:ViewModelType {
                     })
                    
                 
-                if isSelctedIndexMoved { // 선택된 것을 건드렸으므로 dest 인덱스로 갱신하여 넣어준다
+                if sourceIsSelected { // 선택된 것을 건드렸으므로 dest 인덱스로 갱신하여 넣어준다
                     indexs.append(dest)
                 }
                 
