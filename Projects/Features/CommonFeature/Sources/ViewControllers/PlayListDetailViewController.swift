@@ -415,7 +415,16 @@ extension PlayListDetailViewController{
                 guard let self = self else {return}
                 
                
-                DEBUG_LOG("SONGs \(songs)")
+                //TODO : 왁뮤추천과 커스텀 플리 나누기
+                
+                guard let type = self.viewModel.type else {
+                    return
+                }
+                
+                
+                switch type {
+                    
+                case .custom:
                     switch songs.isEmpty {
                     case true:
                         self.hideSongCart()
@@ -430,6 +439,27 @@ extension PlayListDetailViewController{
                         )
                         self.songCartView?.delegate = self
                     }
+                case .wmRecommend:
+                    
+                    switch songs.isEmpty {
+                    case true:
+                        self.hideSongCart()
+                        
+                    case false:
+                        self.showSongCart(
+                            in: self.view,
+                            type: .WMPlayList,
+                            selectedSongCount: songs.count,
+                            totalSongCount: (dataSource.first?.items.count ?? 0),
+                            useBottomSpace: false
+                        )
+                        self.songCartView?.delegate = self
+                    }
+                }
+                    
+                
+                
+                    
                 
         
                     
@@ -508,7 +538,10 @@ extension PlayListDetailViewController:SongCartViewDelegate {
         case .addPlayList:
             return
         case .play:
-            return
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            
+            DEBUG_LOG("재생할 곡 목록 \(songs.map({$0.title}))")
+            
         case .remove:
             self.input.tapRemoveSongs.onNext(())
         }
