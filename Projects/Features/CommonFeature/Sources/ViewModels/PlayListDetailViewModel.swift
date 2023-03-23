@@ -280,6 +280,112 @@ public final class PlayListDetailViewModel:ViewModelType {
         
 
         
+        input.sourceIndexPath
+            .skip(1)
+            .withLatestFrom(input.destIndexPath){ ($0,$1)}
+            .subscribe(onNext: {
+                let source = $0.row
+                let dest =   $1.row
+                
+               
+                
+                var curr = output.dataSource.value.first?.items ?? []
+                let tmp = curr[source]
+                
+                curr.remove(at:  source)
+                curr.insert(tmp, at: dest)
+                
+                let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
+                output.dataSource.accept(newModel)
+                
+                //꼭 먼저 데이터 소스를 갱신 해야합니다
+                
+                
+                var indexs = output.indexOfSelectedSongs.value // 현재 선택된 인덱스 모음
+                let limit = curr.count - 1 // 마지막 인덱스
+                
+                var isSelctedIndexMoved:Bool = false // 선택된 것을 움직 였는지 ?
+            
+               
+                if indexs.contains(where: {$0 == source}) {
+                    //선택된 인덱스 배열 안에 source(시작점)이 있다는 뜻은 선택된 것을 옮긴다는 뜻
+
+                    let pos = indexs.firstIndex(where: {$0 == source})!
+                    indexs.remove(at: pos)
+                    
+                    //그러므로 일단 지워준다.
+                    isSelctedIndexMoved = true // 이후 선택된 것을 움직였으므로 true
+                   
+                }
+                
+                
+                
+                
+                indexs = indexs
+                    .map({ i -> Int in
+                        
+                        //i: 현재 저장된 인덱스들을 순회함
+                        
+                        if  source < i && i > dest {
+                            // 옮기기 시작한 위치와 도착한 위치가 i를 기준으로 앞일 때 아무 영향 없음
+                            
+                            return i
+                        }
+                        
+                        if source < i && i <= dest {
+                            
+                            /* 옮기기 시작한 위치는 i 앞
+                               도착한 위치가 i또는 i 뒤일 경우
+                                i는 앞으로 한 칸 가야함
+                             */
+                            
+                            return i - 1
+                        }
+                        
+                        if   i < source  &&   dest <= i {
+                            
+                            /* 옮기기 시작한 위치는 i 뒤
+                               도착한 위치가 i또는 i 앞일 경우
+                                i는 뒤로 한칸 가야함
+                             
+                                ** 단 옮겨질 위치가  배열의 끝일 경우는 그대로 있음
+                             */
+                            
+                            return i + 1 >= limit ? i : i + 1
+                        }
+                        
+                        if source > i && i < dest {
+                            
+                            /* 옮기기 시작한 위치는 i 뒤
+                               도착한 위치가 i 뒤 일경우
+                             
+                                아무 영향 없음
+                             */
+                            
+                            
+                            return i
+                        }
+                        
+                        return i
+                       
+   
+                    })
+                   
+                
+                if isSelctedIndexMoved { // 선택된 것을 건드렸으므로 dest 인덱스로 갱신하여 넣어준다
+                    indexs.append(dest)
+                }
+                
+                indexs.sort()
+                
+                DEBUG_LOG("sourceIndexPath: \(source)")
+                DEBUG_LOG("destIndexPath: \(dest)")
+                DEBUG_LOG("dataSource: \(curr.map({$0.title}))")
+                DEBUG_LOG("indexs: \(indexs)")
+                
+                output.indexOfSelectedSongs.accept(indexs)
+            })
+        
         
         
         return output
