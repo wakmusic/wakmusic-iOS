@@ -19,9 +19,10 @@ class PlayListTableViewCell: UITableViewCell {
     
     
     
-    public weak var delegate:PlayListCellDelegate?
+    public weak var cellDelegate:PlayListCellDelegate?
+    public weak var playDelegate:PlayButtonDelegate?
     var index:Int!
-    
+    var model:SongEntity!
     @IBOutlet weak var playButton:UIButton!
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
@@ -33,13 +34,15 @@ class PlayListTableViewCell: UITableViewCell {
     @IBAction func selectedAction(_ sender: Any) {
         
         if isEditing {
-            delegate?.pressCell(index: index)
+            cellDelegate?.pressCell(index: index)
         }
   
     }
     @IBAction func playOrEditAction(_ sender: UIButton) {
         
         //TODO : delegate를 통한 전달
+        
+        playDelegate?.play(model: model)
         
     }
         
@@ -74,6 +77,7 @@ extension PlayListTableViewCell {
         
         self.index = index
         self.isEditing = isEditing
+        self.model = model
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         

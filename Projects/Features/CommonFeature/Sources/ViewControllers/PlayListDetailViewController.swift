@@ -255,8 +255,8 @@ extension PlayListDetailViewController{
                 }
                 
                 cell.update(model,self.input.state.value.isEditing,index: indexPath.row)
-                cell.delegate = self
-                
+                cell.cellDelegate = self
+                cell.playDelegate = self
                 return cell
             case .wmRecommend:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: IndexPath(row: indexPath.row, section: 0)) as? SongListCell else{
@@ -550,6 +550,15 @@ extension PlayListDetailViewController:PlayListCellDelegate {
         input.songTapped.onNext(index)
         
     }
+    
+    
+}
+
+extension PlayListDetailViewController:PlayButtonDelegate {
+    public func play(model: SongEntity) {
+        DEBUG_LOG(model.title)
+    }
+    
     
     
 }
