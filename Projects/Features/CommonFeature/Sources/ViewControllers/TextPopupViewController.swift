@@ -12,6 +12,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var cancelButtonIsHidden: Bool = false
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
+    var allowsDragAndTapToDismiss: Bool = true
     
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -23,10 +24,17 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         configureUI()
     }
 
-    public static func viewController(text: String = "", cancelButtonIsHidden: Bool, completion: (() -> Void)? = nil, cancelCompletion: (() -> Void)? = nil) -> TextPopupViewController {
+    public static func viewController(
+        text: String = "",
+        cancelButtonIsHidden: Bool,
+        allowsDragAndTapToDismiss: Bool = true,
+        completion: (() -> Void)? = nil,
+        cancelCompletion: (() -> Void)? = nil
+    ) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
+        viewController.allowsDragAndTapToDismiss = allowsDragAndTapToDismiss
         viewController.completion = completion
         viewController.cancelCompletion = cancelCompletion
         return viewController
@@ -134,5 +142,13 @@ extension TextPopupViewController: PanModalPresentable {
 
     public var showDragIndicator: Bool {
         return false
+    }
+    
+    public var allowsDragToDismiss: Bool {
+        return allowsDragAndTapToDismiss
+    }
+
+    public var allowsTapToDismiss: Bool {
+        return allowsDragAndTapToDismiss
     }
 }

@@ -49,6 +49,7 @@ extension IntroViewController {
                     self.showPanModal(content: TextPopupViewController.viewController(
                         text: message,
                         cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: false,
                         completion: { [weak self] () in
                             guard let `self` = self else { return }
                             self.showTabBar()
