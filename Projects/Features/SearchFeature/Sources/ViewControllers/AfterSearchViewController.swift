@@ -13,6 +13,7 @@ import Pageboy
 import Tabman
 import RxSwift
 import DomainModule
+import CommonFeature
 
 
 
@@ -21,6 +22,8 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var tabBarView: UIView!
     
     @IBOutlet weak var fakeView: UIView!
+    
+
     
     
 
@@ -96,7 +99,7 @@ extension AfterSearchViewController {
 
     
         bindRx()
-        recieveNotification()
+
         
     }
     
@@ -150,23 +153,7 @@ extension AfterSearchViewController {
 
     }
     
-    private func recieveNotification()
-    {
-        
-        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
-            .map({ notification -> SongEntity in
-                guard let result = notification.object as? (TabPosition,SongEntity) else {
-                    return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
-                }
-                
-                return result.1
-                
-            })
-            .filter({$0.id != "_"})
-            .bind(to: input.notiResult)
-            .disposed(by: disposeBag)
-        
-    }
+
 }
 
 

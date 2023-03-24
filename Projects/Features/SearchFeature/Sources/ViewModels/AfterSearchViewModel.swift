@@ -133,6 +133,18 @@ public final class AfterSearchViewModel:ViewModelType {
             .disposed(by: disposeBag)
     
         
+        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
+            .map({ notification -> SongEntity in
+                guard let result = notification.object as? (TabPosition,SongEntity) else {
+                    return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result.1
+                
+            })
+            .filter({$0.id != "_"})
+            .bind(to: input.notiResult)
+            .disposed(by: disposeBag)
         
         input.notiResult
             .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
@@ -155,6 +167,7 @@ public final class AfterSearchViewModel:ViewModelType {
             })
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
+        
             
         
         
