@@ -39,7 +39,7 @@ final public class IntroViewModel: ViewModelType {
         fetchUserInfoUseCase.execute()
             .debug("✅ Intro > fetchUserInfoUseCase")
             .asObservable()
-            .subscribe(onNext: { (model) in
+            .subscribe(onNext: { _ in
                 output.showAlert.onNext("")
             }, onError: { (error) in
 //                let keychain = KeychainImpl()

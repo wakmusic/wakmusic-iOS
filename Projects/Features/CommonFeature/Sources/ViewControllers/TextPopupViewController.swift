@@ -47,17 +47,47 @@ extension TextPopupViewController {
 
     private func configureUI() {
 
+        // 취소
         cancelButton.layer.cornerRadius = 12
         cancelButton.clipsToBounds = true
         cancelButton.isHidden = cancelButtonIsHidden
-        cancelButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+
+        let cancelAttributedString = NSMutableAttributedString(
+            string: "취소",
+            attributes: [
+                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5]
+        )
+        cancelButton.setAttributedTitle(cancelAttributedString, for: .normal)
 
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
-        confirmButton.titleLabel?.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
 
-        contentLabel.font = DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        contentLabel.text = contentString
+        // 확인
+        let confirmAttributedString = NSMutableAttributedString(
+            string: "확인",
+            attributes: [
+                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5]
+        )
+        confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
+
+        // 내용
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.3
+        paragraphStyle.alignment = .center
+
+        let contentAttributedString = NSMutableAttributedString(
+            string: contentString,
+            attributes: [
+                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5,
+                .paragraphStyle: paragraphStyle]
+        )
+        contentLabel.attributedText = contentAttributedString
     }
 }
 
@@ -76,12 +106,22 @@ extension TextPopupViewController: PanModalPresentable {
     }
 
     public var longFormHeight: PanModalHeight {
-         let stringHeight: CGFloat = contentString.heightConstraintAt(
-            width: APP_WIDTH()-40,
-            font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18))
-        
-         let spacingHeight: CGFloat = 60 + 52 + 56 + 10
-         return .contentHeight(spacingHeight + stringHeight)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.3
+        paragraphStyle.alignment = .center
+
+        let contentAttributedString = NSMutableAttributedString(
+            string: contentString,
+            attributes: [
+                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5,
+                .paragraphStyle: paragraphStyle]
+        )
+
+        let contentHeight: CGFloat = contentAttributedString.height(containerWidth: APP_WIDTH()-40)
+        let spacingHeight: CGFloat = 60 + 52 + 56 + 10
+        return .contentHeight(spacingHeight + contentHeight)
      }
 
     public var cornerRadius: CGFloat {
