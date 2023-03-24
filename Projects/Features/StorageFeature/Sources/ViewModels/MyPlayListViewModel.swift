@@ -77,19 +77,23 @@ public final class MyPlayListViewModel:ViewModelType {
         
         input.runEditing.withLatestFrom(output.dataSource)
             .map { $0.first?.items.map { $0.key } ?? [] }
-            .filter({!$0.isEmpty})
-            .flatMap({[weak self] (ids:[String]) -> Observable<BaseEntity> in
+            .filter{ !$0.isEmpty }
+            .flatMap{ [weak self] (ids: [String]) -> Observable<BaseEntity> in
                 guard let self = self else{
                     return Observable.empty()
                 }
                 return self.editPlayListOrderUseCase.execute(ids: ids).asObservable()
-            }).subscribe(onNext: { (model) in
-                if model.status != 200 {
+            }
+            .filter{ (model) in
+                guard model.status == 200 else {
                     output.showErrorToast.accept(model.description)
-                    return
+                    return false
                 }
-                output.backUpdataSource.accept(output.dataSource.value)
-            }).disposed(by: disposeBag)
+                return true
+            }
+            .withLatestFrom(output.dataSource)
+            .bind(to: output.backUpdataSource)
+            .disposed(by: disposeBag)
         
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)

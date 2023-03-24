@@ -24,6 +24,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     @IBOutlet weak var tableView: UITableView!
 
+    private var refreshControl = UIRefreshControl()
     var multiPurposePopComponent:MultiPurposePopComponent!
     var playListDetailComponent :PlayListDetailComponent!
     var viewModel:MyPlayListViewModel!
@@ -34,6 +35,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
         inputBindRx()
         outputBindRx()
     }
@@ -55,6 +57,11 @@ extension MyPlayListViewController{
     
     private func inputBindRx() {
         
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+
         input.showConfirmModal.subscribe(onNext: { [weak self] in
             guard let self = self else{
                 return
@@ -119,6 +126,8 @@ extension MyPlayListViewController{
                 guard let self = self else {
                     return
                 }
+                self.refreshControl.endRefreshing()
+                
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "내 리스트가 없습니다."
                 
@@ -162,6 +171,10 @@ extension MyPlayListViewController{
             return true
         })
         return datasource
+    }
+    
+    private func configureUI() {
+        tableView.refreshControl = self.refreshControl
     }
 }
 
