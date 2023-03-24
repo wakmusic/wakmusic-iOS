@@ -101,7 +101,7 @@ extension AfterSearchViewController {
     
     private func bindRx(){
         
-        output.result
+        output.dataSource
             .skip(1)
             .subscribe(onNext: { [weak self] result in
             

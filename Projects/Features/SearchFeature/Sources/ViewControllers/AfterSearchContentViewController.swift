@@ -40,7 +40,7 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     
         
         configureUI()
-        bindRx()
+        
         
 
         // Do any additional setup after loading the view.
@@ -70,7 +70,8 @@ extension AfterSearchContentViewController{
     {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
+        bindRx()
+        bindRxEvent()
     }
     
     private func bindRx()
@@ -110,7 +111,12 @@ extension AfterSearchContentViewController{
     
     private func bindRxEvent()
     {
-        
+//        tableView.rx.itemSelected
+//            .subscribe(onNext: {
+//                DEBUG_LOG("\()")
+//            })
+//            .disposed(by: disposeBag)
+            
     }
     
 }

@@ -45,11 +45,11 @@ public final class AfterSearchViewModel:ViewModelType {
 
     public struct Output {
         
-        let result:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
+        let dataSource:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
         
         // 검색 후 재 검색 시 남아 있는 데이터 처리를 위한 변수
         let isFetchStart:PublishSubject<Void> = PublishSubject()
-
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         
         
     }
@@ -128,7 +128,7 @@ public final class AfterSearchViewModel:ViewModelType {
             
 
             return results
-        }.bind(to: output.result)
+        }.bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         
