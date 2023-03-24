@@ -73,9 +73,7 @@ extension EntireSectionHeader {
         
         moveTabButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
         
-              
-        
-        self.moveTabButton.setImage(DesignSystemAsset.Search.searchArrowRight.image, for: .normal)
+        self.moveTabButton.setImage(DesignSystemAsset.Home.homeArrowRight.image, for:.normal)
         
 
     }
