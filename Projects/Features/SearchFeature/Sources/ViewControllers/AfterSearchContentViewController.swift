@@ -40,7 +40,7 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     
         
         configureUI()
-        DEBUG_LOG("VIEW DID LOAD")
+        requestFromParent()
         
         
 
@@ -122,6 +122,8 @@ extension AfterSearchContentViewController{
     private func recieveNotification()
     {
         
+        
+
         NotificationCenter.default.rx.notification(.selectedSongOnSearch)
             .filter({ [weak self]  in
                 
@@ -139,6 +141,19 @@ extension AfterSearchContentViewController{
                 DEBUG_LOG($0.object)
             })
             .disposed(by: disposeBag)
+        
+    }
+    
+    
+    func requestFromParent()
+    {
+        
+        guard let parent = self.parent?.parent as? AfterSearchViewController else {
+            return
+        }
+        
+        //DEBUG_LOG(parent.output.songEntityOfSelectedSongs)
+
         
     }
     

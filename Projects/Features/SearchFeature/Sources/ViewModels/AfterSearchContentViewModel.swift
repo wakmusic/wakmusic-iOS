@@ -37,8 +37,6 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         self.dataSource = dataSource
       
         
-        
-        
     }
 
     public struct Input {
@@ -59,9 +57,9 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         
         input.indexPath
             .withLatestFrom(output.dataSource){($0,$1)}
-            .subscribe(onNext: {[weak self] (indexPath,dataSource)  in
+            .map({[weak self] (indexPath,dataSource) -> [SearchSectionModel]  in
                 
-                guard let self = self else{return}
+                guard let self = self else{return [] }
                 
                 let song = dataSource[indexPath.section].items[indexPath.row]
                 
@@ -69,8 +67,15 @@ public  final class AfterSearchContentViewModel:ViewModelType {
                 NotificationCenter.default.post(name: .selectedSongOnSearch, object: (self.sectionType,song))
                 
                 
+                var newModel = dataSource
                 
+               newModel[indexPath.section].items[indexPath.row].isSelected = !newModel[indexPath.section].items[indexPath.row].isSelected
+                
+                
+                
+                return newModel
             })
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
         

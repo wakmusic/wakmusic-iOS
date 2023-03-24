@@ -40,6 +40,7 @@ public final class AfterSearchViewModel:ViewModelType {
 
     public struct Input {
         let text:BehaviorRelay<String> = BehaviorRelay<String>(value: "")
+        let notiResult:PublishRelay<SongEntity> = PublishRelay()
         
     }
 
@@ -132,6 +133,18 @@ public final class AfterSearchViewModel:ViewModelType {
             .disposed(by: disposeBag)
     
         
+        
+//        input.notiResult
+//            .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
+//            .map({[weak self] (song,songs) -> [SongEntity]   in
+//                
+//                var nextSongs = songs
+//                
+//                nextSongs.append(song)
+//                    
+//                
+//            })
+            
         
         
         
