@@ -110,10 +110,7 @@ extension AfterSearchContentViewController{
     
     private func bindRxEvent()
     {
-        tableView.rx.itemSelected
-            .map { $0.row }
-            .bind(to: input.songTapped)
-            .disposed(by: disposeBag)
+        
     }
     
 }

@@ -99,6 +99,8 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
         self.bindSubView(false)
         self.view.endEditing(true)
         self.viewModel.output.isFoucused.accept(false)
+        NotificationCenter.default.post(name: .hideSearchBottomView, object: nil)
+        
      
     }
 }
@@ -159,7 +161,7 @@ extension SearchViewController {
         
         if  let nowChildVc  = children.first as? BeforeSearchContentViewController{
             
-            print("현재 :\(nowChildVc) 서치완료:  \(afterSearch)")
+           
             
             if(afterSearch == false)
             {
@@ -174,7 +176,7 @@ extension SearchViewController {
             
             
         }else if let nowChildVc = children.first as? AfterSearchViewController{
-            print("현재 :\(nowChildVc) 서치완료:  \(afterSearch)")
+           
             
             if afterSearch == true
             {
@@ -226,7 +228,7 @@ extension SearchViewController {
                 self.viewModel.output.isFoucused.accept(true)
                 self.bindSubView(false)
                 NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
-
+                NotificationCenter.default.post(name: .hideSearchBottomView, object: nil)
             }
             else if event == .editingDidEnd {
                 print("END DID End")
