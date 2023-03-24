@@ -75,4 +75,23 @@ public extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    
+   static func rootViewController() -> UIViewController? {
+
+            var root: UIViewController?
+
+            if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+
+                if rootViewController is UINavigationController {
+                    root = (rootViewController as! UINavigationController).visibleViewController!
+
+                }else{
+                    if let presentedViewController = rootViewController.presentedViewController {
+                        root  = presentedViewController
+                    }
+                }
+            }
+            return root
+        }
 }

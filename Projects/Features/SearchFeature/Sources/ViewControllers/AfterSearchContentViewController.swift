@@ -37,7 +37,7 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-    
+        DEBUG_LOG("VIEW DID LOAD")
         
         configureUI()
         requestFromParent()
@@ -122,8 +122,6 @@ extension AfterSearchContentViewController{
     private func recieveNotification()
     {
         
-        
-
         NotificationCenter.default.rx.notification(.selectedSongOnSearch)
             .filter({ [weak self]  in
                 
@@ -137,10 +135,45 @@ extension AfterSearchContentViewController{
                 
                 return self.viewModel.sectionType != result.0
             })
-            .subscribe(onNext: {
-                DEBUG_LOG($0.object)
+            .map({(res) -> SongEntity  in
+                
+            
+                
+                
+                guard let result = res.object as? (TabPosition,SongEntity) else {
+                    return SongEntity(id: "-", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result.1
+            })
+            .filter({$0.id != "-"})
+            .subscribe(onNext: { [weak self] (song:SongEntity) in
+                
+                guard let self = self else {return}
+                
+                var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
+                
+                var models = self.output.dataSource.value
+
+                
+                
+                models.enumerated().forEach { (section, model) in
+                    if let row = model.items.firstIndex(where: { $0 == song }){
+                        indexPath = IndexPath(row: row, section: section)
+                    }
+                }
+                
+                guard indexPath.row >= 0 else { // 비어있는 탭 예외 처리
+                    return
+                }
+                
+                models[indexPath.section].items[indexPath.row].isSelected = !models[indexPath.section].items[indexPath.row].isSelected
+                
+                self.output.dataSource.accept(models)
             })
             .disposed(by: disposeBag)
+        
+        
         
     }
     
@@ -152,8 +185,27 @@ extension AfterSearchContentViewController{
             return
         }
         
-        DEBUG_LOG(parent.output.songEntityOfSelectedSongs.value)
+        
+        
+       let entities = parent.output.songEntityOfSelectedSongs.value
+       let models = output.dataSource.value
+       let indexPaths = entities.map { entity -> IndexPath? in
+                    var indexPath: IndexPath?
 
+                    models.enumerated().forEach { (section, model) in
+                        if let row = model.items.firstIndex(where: { $0 == entity }){
+                            indexPath = IndexPath(row: row, section: section)
+                        }
+                    }
+                    return indexPath
+       }.compactMap({$0})
+        
+    input.mandatoryLoadIndexPath.accept(indexPaths)
+        
+        
+    
+       
+       
         
     }
     

@@ -42,6 +42,7 @@ public  final class AfterSearchContentViewModel:ViewModelType {
     public struct Input {
         
         let indexPath:PublishRelay<IndexPath> = PublishRelay()
+        let mandatoryLoadIndexPath:PublishRelay<[IndexPath]> = PublishRelay()
         
     }
 
@@ -54,6 +55,26 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         let output = Output()
         output.dataSource.accept(dataSource)
         
+        
+        
+        input.mandatoryLoadIndexPath
+            .withLatestFrom(output.dataSource) {($0,$1)}
+            .map({ (indexPathes,dataSource) -> [SearchSectionModel] in
+                
+                var newModel = dataSource
+                
+                
+                for indexPath in indexPathes {
+                    
+                    newModel[indexPath.section].items[indexPath.row].isSelected = true
+                    
+                }
+                
+                return newModel
+            })
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+     
         
         input.indexPath
             .withLatestFrom(output.dataSource){($0,$1)}
