@@ -61,22 +61,6 @@ extension MyPlayListViewController{
             .controlEvent(.valueChanged)
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
-
-        input.showConfirmModal.subscribe(onNext: { [weak self] in
-            guard let self = self else{
-                return
-            }
-            let vc = TextPopupViewController.viewController(
-                text: "변경된 내용을 저장할까요?",
-                cancelButtonIsHidden: false,
-                completion: {
-                self.input.runEditing.onNext(())
-                                             
-            },cancelCompletion: {
-                self.input.cancelEdit.onNext(())
-            })
-            self.showPanModal(content: vc)
-        }).disposed(by: disposeBag)
         
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }

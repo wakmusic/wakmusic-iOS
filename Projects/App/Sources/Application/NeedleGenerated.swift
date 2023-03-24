@@ -422,6 +422,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
         return appComponent.mainContainerComponent
     }
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
+        return appComponent.fetchUserInfoUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -853,6 +856,7 @@ extension WakMusicFeedbackComponent: Registration {
 extension RootComponent: Registration {
     public func registerItems() {
         keyPathToName[\RootDependency.mainContainerComponent] = "mainContainerComponent-MainContainerComponent"
+        keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
 extension SignInComponent: Registration {

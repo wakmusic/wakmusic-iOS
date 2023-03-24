@@ -25,7 +25,6 @@ public final class MyPlayListViewModel:ViewModelType {
         let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
         let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
-        let showConfirmModal: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -64,8 +63,8 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.dataSource) { ($0.sourceIndex, $0.destinationIndex, $1) }
             .map { (sourceIndexPath, destinationIndexPath, dataSource) -> [MyPlayListSectionModel] in
                 var newModel = dataSource.first?.items ?? []
-
                 let temp = newModel[sourceIndexPath.row]
+                
                 newModel.remove(at: sourceIndexPath.row)
                 newModel.insert(temp, at: destinationIndexPath.row)
 

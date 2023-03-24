@@ -296,38 +296,30 @@ extension AfterLoginViewController{
     
     func bindEditButtonVisable(){
         guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
-                    return
-                }
+            return
+        }
 
         guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
-                    return
-                }
+            return
+        }
 
         vc1.output.dataSource
-                .skip(1)
-                .filter({ [weak self] _  in
-                    
-                    guard let self = self else { return false }
-                    
-               
-                    
-                    return (self.currentIndex ?? 0) == 0
-                })
-                .map { $0.isEmpty }
-                .bind(to: editButton.rx.isHidden)
-                .disposed(by: disposeBag)
+            .skip(1)
+            .filter{ [weak self] _  in
+                guard let self = self else { return false }
+                return (self.currentIndex ?? 0) == 0
+            }
+            .map { ($0.first?.items ?? []).isEmpty }
+            .bind(to: editButton.rx.isHidden)
+            .disposed(by: disposeBag)
 
         vc2.output.dataSource
             .skip(1)
-            .filter({ [weak self] _  in
+            .filter{ [weak self] _  in
                 guard let self = self else { return false }
-                
-                
-                
                 return (self.currentIndex ?? 0) == 1
-            })
-          
-            .map { $0.isEmpty }
+            }
+            .map { ($0.first?.items ?? []).isEmpty }
             .bind(to: editButton.rx.isHidden)
             .disposed(by: disposeBag)
     }
