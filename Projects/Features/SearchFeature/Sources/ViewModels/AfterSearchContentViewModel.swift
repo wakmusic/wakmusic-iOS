@@ -100,6 +100,57 @@ public  final class AfterSearchContentViewModel:ViewModelType {
             .disposed(by: disposeBag)
         
         
+        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
+            .filter({ [weak self]  in
+                
+                guard let self = self else{return false}
+                
+                
+                guard let result = $0.object as? (TabPosition,SongEntity) else {
+                    return false
+                }
+                
+                
+                return self.sectionType != result.0
+            })
+            .map({(res) -> SongEntity  in
+                
+            
+                
+                
+                guard let result = res.object as? (TabPosition,SongEntity) else {
+                    return SongEntity(id: "-", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result.1
+            })
+            .filter({$0.id != "-"})
+            .withLatestFrom(output.dataSource){($0,$1)}
+            .map{ [weak self] (song:SongEntity,dataSource:[SearchSectionModel]) -> [SearchSectionModel] in
+                
+                guard let self = self else {return [] }
+                
+                var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
+        
+                var models = dataSource
+                
+                models.enumerated().forEach { (section, model) in
+                    if let row = model.items.firstIndex(where: { $0 == song }){
+                        indexPath = IndexPath(row: row, section: section)
+                    }
+                }
+                
+                guard indexPath.row >= 0 else { // 비어있는 탭 예외 처리
+                    return models
+                }
+                
+                models[indexPath.section].items[indexPath.row].isSelected = !models[indexPath.section].items[indexPath.row].isSelected
+                
+                return models
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
         
         
         

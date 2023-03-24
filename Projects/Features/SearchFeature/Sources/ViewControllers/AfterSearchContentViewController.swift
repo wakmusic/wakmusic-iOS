@@ -73,7 +73,6 @@ extension AfterSearchContentViewController{
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         bindRx()
         bindRxEvent()
-        recieveNotification()
     }
     
     private func bindRx()
@@ -118,65 +117,7 @@ extension AfterSearchContentViewController{
             .disposed(by: disposeBag)
             
     }
-    
-    private func recieveNotification()
-    {
         
-        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
-            .filter({ [weak self]  in
-                
-                guard let self = self else{return false}
-                
-                
-                guard let result = $0.object as? (TabPosition,SongEntity) else {
-                    return false
-                }
-                
-                
-                return self.viewModel.sectionType != result.0
-            })
-            .map({(res) -> SongEntity  in
-                
-            
-                
-                
-                guard let result = res.object as? (TabPosition,SongEntity) else {
-                    return SongEntity(id: "-", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
-                }
-                
-                return result.1
-            })
-            .filter({$0.id != "-"})
-            .subscribe(onNext: { [weak self] (song:SongEntity) in
-                
-                guard let self = self else {return}
-                
-                var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
-                
-                var models = self.output.dataSource.value
-
-                
-                
-                models.enumerated().forEach { (section, model) in
-                    if let row = model.items.firstIndex(where: { $0 == song }){
-                        indexPath = IndexPath(row: row, section: section)
-                    }
-                }
-                
-                guard indexPath.row >= 0 else { // 비어있는 탭 예외 처리
-                    return
-                }
-                
-                models[indexPath.section].items[indexPath.row].isSelected = !models[indexPath.section].items[indexPath.row].isSelected
-                
-                self.output.dataSource.accept(models)
-            })
-            .disposed(by: disposeBag)
-        
-        
-        
-    }
-    
     
     func requestFromParent()
     {
