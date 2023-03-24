@@ -134,16 +134,27 @@ public final class AfterSearchViewModel:ViewModelType {
     
         
         
-//        input.notiResult
-//            .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
-//            .map({[weak self] (song,songs) -> [SongEntity]   in
-//                
-//                var nextSongs = songs
-//                
-//                nextSongs.append(song)
-//                    
-//                
-//            })
+        input.notiResult
+            .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
+            .map({[weak self] (song,songs) -> [SongEntity]   in
+                
+                var nextSongs = songs
+                
+                if nextSongs.contains(where: {$0 == song}) {
+                    
+                    let index = nextSongs.firstIndex(of: song)!
+                    nextSongs.remove(at: index)
+                }
+                
+                else {
+                    nextSongs.append(song)
+                }
+                    
+            
+                return nextSongs
+            })
+            .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
             
         
         

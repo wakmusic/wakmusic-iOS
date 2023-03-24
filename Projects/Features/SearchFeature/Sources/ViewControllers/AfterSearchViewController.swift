@@ -96,7 +96,7 @@ extension AfterSearchViewController {
 
     
         bindRx()
-        
+        recieveNotification()
         
     }
     

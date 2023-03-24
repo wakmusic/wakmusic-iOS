@@ -152,7 +152,7 @@ extension AfterSearchContentViewController{
             return
         }
         
-        //DEBUG_LOG(parent.output.songEntityOfSelectedSongs)
+        DEBUG_LOG(parent.output.songEntityOfSelectedSongs.value)
 
         
     }
