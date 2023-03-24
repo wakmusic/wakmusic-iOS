@@ -40,6 +40,7 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     
         
         configureUI()
+        DEBUG_LOG("VIEW DID LOAD")
         
         
 
@@ -72,6 +73,7 @@ extension AfterSearchContentViewController{
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         bindRx()
         bindRxEvent()
+        recieveNotification()
     }
     
     private func bindRx()
@@ -111,12 +113,33 @@ extension AfterSearchContentViewController{
     
     private func bindRxEvent()
     {
-//        tableView.rx.itemSelected
-//            .subscribe(onNext: {
-//                DEBUG_LOG("\()")
-//            })
-//            .disposed(by: disposeBag)
+        tableView.rx.itemSelected
+            .bind(to: input.indexPath)
+            .disposed(by: disposeBag)
             
+    }
+    
+    private func recieveNotification()
+    {
+        
+        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
+            .filter({ [weak self]  in
+                
+                guard let self = self else{return false}
+                
+                
+                guard let result = $0.object as? (TabPosition,SongEntity) else {
+                    return false
+                }
+                
+                
+                return self.viewModel.sectionType != result.0
+            })
+            .subscribe(onNext: {
+                DEBUG_LOG($0.object)
+            })
+            .disposed(by: disposeBag)
+        
     }
     
 }

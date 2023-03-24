@@ -99,7 +99,6 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
         self.bindSubView(false)
         self.view.endEditing(true)
         self.viewModel.output.isFoucused.accept(false)
-        NotificationCenter.default.post(name: .hideSearchBottomView, object: nil)
         
      
     }
@@ -228,7 +227,6 @@ extension SearchViewController {
                 self.viewModel.output.isFoucused.accept(true)
                 self.bindSubView(false)
                 NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
-                NotificationCenter.default.post(name: .hideSearchBottomView, object: nil)
             }
             else if event == .editingDidEnd {
                 print("END DID End")

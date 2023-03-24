@@ -43,6 +43,7 @@ public  final class AfterSearchContentViewModel:ViewModelType {
 
     public struct Input {
         
+        let indexPath:PublishRelay<IndexPath> = PublishRelay()
         
     }
 
@@ -55,7 +56,22 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         let output = Output()
         output.dataSource.accept(dataSource)
         
-    
+        
+        input.indexPath
+            .withLatestFrom(output.dataSource){($0,$1)}
+            .subscribe(onNext: {[weak self] (indexPath,dataSource)  in
+                
+                guard let self = self else{return}
+                
+                let song = dataSource[indexPath.section].items[indexPath.row]
+                
+                
+                NotificationCenter.default.post(name: .selectedSongOnSearch, object: (self.sectionType,song))
+                
+                
+                
+            })
+            .disposed(by: disposeBag)
         
         
         
