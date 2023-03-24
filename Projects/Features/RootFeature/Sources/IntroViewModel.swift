@@ -39,13 +39,13 @@ final public class IntroViewModel: ViewModelType {
         fetchUserInfoUseCase.execute()
             .debug("✅ Intro > fetchUserInfoUseCase")
             .asObservable()
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { (model) in
                 output.showAlert.onNext("")
             }, onError: { (error) in
-                let keychain = KeychainImpl()
-                keychain.delete(type: .accessToken)
-                Utility.PreferenceManager.userInfo = nil
-                Utility.PreferenceManager.startPage = 4
+//                let keychain = KeychainImpl()
+//                keychain.delete(type: .accessToken)
+//                Utility.PreferenceManager.userInfo = nil
+//                Utility.PreferenceManager.startPage = 4
                 output.showAlert.onNext(error.localizedDescription)
             }).disposed(by: disposeBag)
         
