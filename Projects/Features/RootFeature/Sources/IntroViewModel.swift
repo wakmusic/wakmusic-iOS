@@ -13,6 +13,7 @@ import RxCocoa
 import DomainModule
 import BaseFeature
 import KeychainModule
+import ErrorModule
 
 final public class IntroViewModel: ViewModelType {
 
@@ -38,14 +39,17 @@ final public class IntroViewModel: ViewModelType {
         
         fetchUserInfoUseCase.execute()
             .debug("✅ Intro > fetchUserInfoUseCase")
-            .asObservable()
-            .subscribe(onNext: { _ in
+            .subscribe(onSuccess: { _ in
                 output.showAlert.onNext("")
-            }, onError: { (error) in
-//                let keychain = KeychainImpl()
-//                keychain.delete(type: .accessToken)
-//                Utility.PreferenceManager.userInfo = nil
-//                Utility.PreferenceManager.startPage = 4
+                
+            }, onFailure: { (error) in
+                let asWMError = error.asWMError
+                if asWMError == .tokenExpired {
+                    let keychain = KeychainImpl()
+                    keychain.delete(type: .accessToken)
+                    Utility.PreferenceManager.userInfo = nil
+                    Utility.PreferenceManager.startPage = 4
+                }
                 output.showAlert.onNext(error.localizedDescription)
             }).disposed(by: disposeBag)
         

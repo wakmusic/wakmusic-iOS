@@ -1,6 +1,6 @@
 import Foundation
 
-public enum WMError: Error {
+public enum WMError: Error, Equatable {
     case unknown
     case custom(message: String = "알 수 없는 오류가 발생하였습니다", code: Int = 500)
     case badRequest
