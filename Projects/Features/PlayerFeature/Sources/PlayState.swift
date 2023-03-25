@@ -11,6 +11,12 @@ import DomainModule
 import YouTubePlayerKit
 import Combine
 
+enum RepeatMode {
+    case none
+    case repeatAll
+    case repeatOnce
+}
+
 final public class PlayState {
     public static let shared = PlayState()
     
@@ -19,6 +25,7 @@ final public class PlayState {
     @Published internal var currentSong: SongEntity?
     @Published internal var progress: PlayProgress
     @Published internal var playList: PlayList
+    @Published internal var repeatMode: RepeatMode
     
     private var subscription = Set<AnyCancellable>()
     
@@ -38,6 +45,7 @@ final public class PlayState {
         currentSong = SongEntity(id: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌", remix: "", reaction: "", views: 13442558, last: 0, date: "211222")
         progress = PlayProgress()
         state = .unstarted
+        repeatMode = .none
         
         player = YouTubePlayer(source: .video(id: "fgSXAKsq-Vo"), configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         

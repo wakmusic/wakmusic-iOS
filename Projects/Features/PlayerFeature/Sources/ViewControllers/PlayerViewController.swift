@@ -93,7 +93,7 @@ private extension PlayerViewController {
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
-            repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
+            repeatButtonDidTapEvent: self.playerView.repeatButton.tapPublisher(),
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
             likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
@@ -114,6 +114,7 @@ private extension PlayerViewController {
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
+        bindRepeatMode(output: output)
         bindShowPlaylist(output: output)
         bindShowToastMessage(outpt: output)
         
@@ -247,6 +248,20 @@ private extension PlayerViewController {
     private func bindShowPlaylist(output: PlayerViewModel.Output) {
         output.willShowPlaylist.sink { [weak self] _ in
             self?.showPlaylist()
+        }.store(in: &subscription)
+    }
+    
+    private func bindRepeatMode(output: PlayerViewModel.Output) {
+        output.repeatMode.sink { [weak self] repeatMode in
+            guard let self else { return }
+            switch repeatMode {
+            case .none:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
+            case .repeatAll:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOnAll.image, for: .normal)
+            case .repeatOnce:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOn1.image, for: .normal)
+            }
         }.store(in: &subscription)
     }
     

@@ -23,7 +23,7 @@ final class PlayerViewModel: ViewModelType {
         let prevButtonDidTapEvent: Observable<Void>
         let nextButtonDidTapEvent: Observable<Void>
         let sliderValueChangedEvent: Observable<Float>
-        let repeatButtonDidTapEvent: Observable<Void>
+        let repeatButtonDidTapEvent: AnyPublisher<Void, Never>
         let shuffleButtonDidTapEvent: Observable<Void>
         let likeButtonDidTapEvent: AnyPublisher<Void, Never>
         let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
@@ -44,6 +44,7 @@ final class PlayerViewModel: ViewModelType {
         var totalTimeText = CurrentValueSubject<String, Never>("0:00")
         var likeCountText = CurrentValueSubject<String, Never>("")
         var viewsCountText = CurrentValueSubject<String, Never>("")
+        var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
         var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
@@ -99,6 +100,18 @@ final class PlayerViewModel: ViewModelType {
             print("미니플레이어 닫기버튼 눌림")
             output.didClose.accept(true)
         }.disposed(by: disposeBag)
+        
+        input.repeatButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            switch self.playState.repeatMode {
+            case .none:
+                self.playState.repeatMode = .repeatAll
+            case .repeatAll:
+                self.playState.repeatMode = .repeatOnce
+            case .repeatOnce:
+                self.playState.repeatMode = .none
+            }
+        }.store(in: &subscription)
         
         input.prevButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
@@ -162,6 +175,10 @@ final class PlayerViewModel: ViewModelType {
             output.totalTimeText.send(self.formatTime(progress.endProgress))
             output.playTimeValue.send(Float(progress.currentProgress))
             output.totalTimeValue.send(Float(progress.endProgress))
+        }.store(in: &subscription)
+        
+        playState.$repeatMode.sink { repeatMode in
+            output.repeatMode.send(repeatMode)
         }.store(in: &subscription)
         
         return output
