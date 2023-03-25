@@ -158,12 +158,7 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             output.playerState.send(state)
             if state == .ended {
-                switch self.playState.shuffleMode {
-                case .off:
-                    self.playState.forWard()
-                case .on:
-                    self.playState.shufflePlay()
-                }
+                self.handlePlaybackEnded()
             }
         }.store(in: &subscription)
         
@@ -200,6 +195,35 @@ final class PlayerViewModel: ViewModelType {
         }.store(in: &subscription)
         
         return output
+    }
+    
+    func handlePlaybackEnded() {
+        if playState.shuffleMode.isOn {
+            handleShuffleWithRepeatOnce()
+        } else {
+            switch playState.repeatMode {
+            case .none:
+                handleNoneRepeat()
+            case .repeatAll:
+                playState.forWard()
+            case .repeatOnce:
+                playState.play()
+            }
+        }
+    }
+    
+    func handleShuffleWithRepeatOnce() {
+        if playState.repeatMode == .repeatOnce {
+            playState.play()
+        } else {
+            playState.shufflePlay()
+        }
+    }
+    
+    func handleNoneRepeat() {
+        if !playState.playList.isLast {
+            playState.forWard()
+        }
     }
     
     /// 가사 불러오기

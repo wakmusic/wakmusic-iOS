@@ -9,9 +9,9 @@
 import Foundation
 
 enum RepeatMode {
-    case none
-    case repeatAll
-    case repeatOnce
+    case none // 반복 없음
+    case repeatAll // 전체 반복
+    case repeatOnce // 한곡 반복
     
     mutating func rotate() {
         switch self {
