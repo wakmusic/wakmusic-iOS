@@ -179,22 +179,23 @@ extension PlayState {
                 currentPlayIndex += 1
             }
         }
-
-        func uniqueAppend(item: SongEntity) {
-            let uniqueIndex = uniqueIndex(of: item)
-
-            if let uniqueIndex = uniqueIndex {
-                self.currentPlayIndex = uniqueIndex
-            } else { // 재생 목록에 없으면
+        
+        /// 해당 곡이 재생목록에 없을 경우에만 추가합니다.
+        func appendIfUnique(item: SongEntity) {
+            guard let uniqueIndex = uniqueIndex(of: item) else {
                 list.append(item) // 재생목록에 추가
-                self.currentPlayIndex = self.lastIndex // index를 가장 마지막으로 옮김
+                currentPlayIndex = lastIndex // index를 가장 마지막으로 옮김
+                return
             }
+            currentPlayIndex = uniqueIndex
         }
 
         func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
-            let index = list.enumerated().compactMap { $0.element == item ? $0.offset : nil }.first
-            return index
+            for (index, song) in list.enumerated() {
+                if song == item { return index }
+            }
+            return nil
         }
 
     }
