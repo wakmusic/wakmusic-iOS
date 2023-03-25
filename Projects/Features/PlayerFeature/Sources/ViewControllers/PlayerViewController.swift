@@ -115,6 +115,7 @@ private extension PlayerViewController {
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
         bindShowPlaylist(output: output)
+        bindShowToastMessage(outpt: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -246,6 +247,12 @@ private extension PlayerViewController {
     private func bindShowPlaylist(output: PlayerViewModel.Output) {
         output.willShowPlaylist.sink { [weak self] _ in
             self?.showPlaylist()
+        }.store(in: &subscription)
+    }
+    
+    private func bindShowToastMessage(outpt: PlayerViewModel.Output) {
+        outpt.showToastMessage.sink { [weak self] message in
+            self?.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         }.store(in: &subscription)
     }
     

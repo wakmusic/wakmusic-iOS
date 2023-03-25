@@ -51,6 +51,7 @@ final class PlayerViewModel: ViewModelType {
         var didNext = PublishRelay<Bool>()
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
         var willShowPlaylist = PassthroughSubject<Bool, Never>()
+        var showToastMessage = PassthroughSubject<String, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -221,7 +222,7 @@ final class PlayerViewModel: ViewModelType {
                     output.likeState.send(false)
                 },
                 onFailure: { error in
-                    print("좋아요 취소 실패: \(error.localizedDescription)")
+                    output.showToastMessage.send(error.localizedDescription)
                 }
             )
             .disposed(by: self.disposeBag)
@@ -235,7 +236,7 @@ final class PlayerViewModel: ViewModelType {
                     output.likeState.send(true)
                 },
                 onFailure: { error in
-                    print("좋아요 추가 실패: \(error.localizedDescription)")
+                    output.showToastMessage.send(error.localizedDescription)
                 }
             )
             .disposed(by: self.disposeBag)
