@@ -120,17 +120,9 @@ final class PlayerViewModel: ViewModelType {
             let alreadyLiked = output.likeState.value
             
             if alreadyLiked {
-                self.cancelLikeSongUseCase.execute(id: currentSong.id)
-                    .retry(3)
-                    .subscribe { _ in
-                        self.fetchLikeState(for: currentSong, output: output)
-                    }.disposed(by: self.disposeBag)
+                self.cancelLikeSong(for: currentSong, output: output)
             } else {
-                self.addLikeSongUseCase.execute(id: currentSong.id)
-                    .retry(3)
-                    .subscribe { _ in
-                        self.fetchLikeState(for: currentSong, output: output)
-                    }.disposed(by: self.disposeBag)
+                self.addLikeSong(for: currentSong, output: output)
             }
 
         }.store(in: &subscription)
@@ -219,6 +211,34 @@ final class PlayerViewModel: ViewModelType {
             } onFailure: { _ in
                 output.likeState.send(false)
             }.disposed(by: self.disposeBag)
+    }
+    
+    func cancelLikeSong(for song: SongEntity, output: Output) {
+        self.cancelLikeSongUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe(
+                onSuccess: { _ in
+                    output.likeState.send(false)
+                },
+                onFailure: { error in
+                    print("좋아요 취소 실패: \(error.localizedDescription)")
+                }
+            )
+            .disposed(by: self.disposeBag)
+    }
+    
+    func addLikeSong(for song: SongEntity, output: Output) {
+        self.addLikeSongUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe(
+                onSuccess: { _ in
+                    output.likeState.send(true)
+                },
+                onFailure: { error in
+                    print("좋아요 추가 실패: \(error.localizedDescription)")
+                }
+            )
+            .disposed(by: self.disposeBag)
     }
     
 }
