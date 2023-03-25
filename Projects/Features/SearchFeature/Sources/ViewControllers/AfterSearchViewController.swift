@@ -17,18 +17,22 @@ import CommonFeature
 
 
 
-public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard  {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
 
     @IBOutlet weak var tabBarView: UIView!
     
     @IBOutlet weak var fakeView: UIView!
     
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
 
     
     
 
     var viewModel:AfterSearchViewModel!
     var afterSearchContentComponent:AfterSearchContentComponent!
+    var containSongsComponent:ContainSongsComponent!
+    
     let disposeBag = DisposeBag()
     
     
@@ -46,17 +50,17 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.scrollToPage(.at(index: 0), animated: false)
+
     }
     
 
-    public static func viewController(afterSearchContentComponent:AfterSearchContentComponent,viewModel:AfterSearchViewModel) -> AfterSearchViewController {
+    public static func viewController(afterSearchContentComponent:AfterSearchContentComponent,containSongsComponent:ContainSongsComponent,viewModel:AfterSearchViewModel) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.afterSearchContentComponent = afterSearchContentComponent
-        
+        viewController.containSongsComponent = containSongsComponent
      
-        
         
         
         return viewController
@@ -150,6 +154,27 @@ extension AfterSearchViewController {
 
         })
         .disposed(by: disposeBag)
+        
+        
+        output.songEntityOfSelectedSongs
+            .subscribe(onNext: { [weak self] (songs:[SongEntity])  in
+                
+                guard let self = self else {return}
+                
+                if !songs.isEmpty  {
+                    self.showSongCart(in: self.view,
+                                      type: .searchSong,
+                                      selectedSongCount: songs.count,
+                                      totalSongCount: 100,
+                                      useBottomSpace: false)
+                    self.songCartView.delegate = self
+                } else {
+                    self.hideSongCart()
+                }
+                
+                
+            })
+            .disposed(by: disposeBag)
 
     }
     
@@ -184,6 +209,34 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
             let title = "Page \(index)"
            return TMBarItem(title: title)
         }
+    }
+    
+    
+}
+
+extension AfterSearchViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        
+        switch type {
+            
+        case .allSelect(flag: _):
+            return
+        case .addSong:
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true){
+                self.output.songEntityOfSelectedSongs.accept([])
+            }
+            
+        case .addPlayList:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
+
     }
     
     

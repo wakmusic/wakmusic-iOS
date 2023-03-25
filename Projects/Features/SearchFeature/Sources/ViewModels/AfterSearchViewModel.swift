@@ -162,7 +162,7 @@ public final class AfterSearchViewModel:ViewModelType {
                     nextSongs.append(song)
                 }
                     
-            
+                
                 return nextSongs
             })
             .bind(to: output.songEntityOfSelectedSongs)

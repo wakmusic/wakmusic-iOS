@@ -479,6 +479,9 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
         return appComponent.fetchSearchSongUseCase
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -874,6 +877,7 @@ extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
         keyPathToName[\AfterSearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
+        keyPathToName[\AfterSearchDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension AfterSearchContentComponent: Registration {
