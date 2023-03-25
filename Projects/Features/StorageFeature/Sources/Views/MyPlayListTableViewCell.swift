@@ -53,6 +53,7 @@ extension MyPlayListTableViewCell {
            
         self.playListNameLabel.text = model.title
         self.playListCountLabel.text = "\(model.songlist.count)개"
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
     }
     
     private func updatePlayingState() {

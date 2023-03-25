@@ -25,7 +25,7 @@ extension WMError: LocalizedError {
         case .notFound: //404
             return "요청한 것을 찾을 수 없습니다."
 
-        case .tokenExpired:
+        case .tokenExpired: //401
             return "인증이 만료되었습니다.\n다시 로그인해 주세요."
 
         case .tooManyRequest:

@@ -38,19 +38,24 @@ final public class IntroViewModel: ViewModelType {
         let output = Output()
         
         fetchUserInfoUseCase.execute()
+            .asObservable()
+            .take(1)
             .debug("✅ Intro > fetchUserInfoUseCase")
-            .subscribe(onSuccess: { _ in
+            .subscribe(onNext: { _ in
                 output.showAlert.onNext("")
                 
-            }, onFailure: { (error) in
+            }, onError: { (error) in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired {
                     let keychain = KeychainImpl()
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
                     Utility.PreferenceManager.startPage = 4
+                    output.showAlert.onNext(asWMError.errorDescription ?? "")
+                    
+                }else{
+                    output.showAlert.onNext(error.localizedDescription)
                 }
-                output.showAlert.onNext(error.localizedDescription)
             }).disposed(by: disposeBag)
         
         return output

@@ -9,16 +9,14 @@
 import Foundation
 
 public struct PlayListResponseDTO: Decodable, Equatable {
-    public let id:Int
-    public let title:String
+    public let id: Int
+    public let title: String
     public let key,creator_id,image: String?
-    public let songlist:[String]
+    public let songlist: [String]
     public let image_version: Int
-    
+    public var isSelected: Bool?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
-    }
-    
-  
+    }  
 }

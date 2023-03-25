@@ -38,13 +38,14 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 extension IntroViewController {
     
     private func bind() {
+        
         output.showAlert
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (message) in
                 guard let `self` = self else { return }
-                
                 if message.isEmpty {
                     self.showTabBar()
+                    
                 }else{
                     self.showPanModal(content: TextPopupViewController.viewController(
                         text: message,
