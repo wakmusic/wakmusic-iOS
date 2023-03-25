@@ -43,6 +43,7 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         
         let indexPath:PublishRelay<IndexPath> = PublishRelay()
         let mandatoryLoadIndexPath:PublishRelay<[IndexPath]> = PublishRelay()
+        let deSelectedAllSongs:PublishRelay<Void> = PublishRelay()
         
     }
 
@@ -151,6 +152,19 @@ public  final class AfterSearchContentViewModel:ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
+        
+        input.deSelectedAllSongs
+            .withLatestFrom(output.dataSource)
+            .map({(dataSource) -> [SearchSectionModel] in
+        
+               return dataSource.map { sectionModel -> SearchSectionModel in
+                            var newItems = sectionModel.items
+                            newItems.indices.forEach { newItems[$0].isSelected = false }
+                   return SearchSectionModel(model: sectionModel.model, items: newItems)
+                }
+            })
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
         
         
         

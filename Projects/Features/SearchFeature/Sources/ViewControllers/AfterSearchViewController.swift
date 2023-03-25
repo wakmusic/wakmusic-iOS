@@ -225,8 +225,23 @@ extension AfterSearchViewController: SongCartViewDelegate {
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
-            self.present(viewController, animated: true){
+            self.present(viewController, animated: true){ [weak self] in
+                
+                guard let self = self else{return}
+                
                 self.output.songEntityOfSelectedSongs.accept([])
+                
+                self.viewControllers.forEach({ vc in
+                    
+                    guard let afterContentVc = vc as? AfterSearchContentViewController else {
+                        
+                       
+                        return
+                    }
+                    
+                    afterContentVc.input.deSelectedAllSongs.accept(())
+                    
+                })
             }
             
         case .addPlayList:
