@@ -114,12 +114,22 @@ final class PlayerViewModel: ViewModelType {
         
         input.prevButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
-            self.playState.backWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.backWard()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.disposed(by: disposeBag)
         
         input.nextButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
-            self.playState.forWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.forWard()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.disposed(by: disposeBag)
         
         input.sliderValueChangedEvent.subscribe { [weak self] value in
@@ -148,7 +158,12 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             output.playerState.send(state)
             if state == .ended {
-                self.playState.forWard()
+                switch self.playState.shuffleMode {
+                case .off:
+                    self.playState.forWard()
+                case .on:
+                    self.playState.shufflePlay()
+                }
             }
         }.store(in: &subscription)
         

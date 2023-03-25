@@ -108,6 +108,16 @@ extension PlayState {
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
+    
+    /// 🔀 플레이리스트 내 랜덤 재생
+    func shufflePlay() {
+        let shuffledIndices = self.playList.list.indices.shuffled()
+        if let index = shuffledIndices.first(where: { $0 != self.playList.currentPlayIndex }) {
+            self.loadInPlaylist(at: index)
+        } else {
+            self.forWard()
+        }
+    }
 
     /// ♻️ 첫번째 곡으로 변경 후 재생
     func playAgain() {
