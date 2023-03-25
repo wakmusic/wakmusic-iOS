@@ -193,6 +193,9 @@ private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
     var chartContentComponent: ChartContentComponent {
         return appComponent.chartContentComponent
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -767,6 +770,7 @@ extension MainContainerComponent: Registration {
 extension ChartComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartDependency.chartContentComponent] = "chartContentComponent-ChartContentComponent"
+        keyPathToName[\ChartDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension ChartContentComponent: Registration {

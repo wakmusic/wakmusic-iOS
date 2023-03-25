@@ -1,4 +1,5 @@
 import UIKit
+import CommonFeature
 import Utility
 import DesignSystem
 import Pageboy
@@ -6,7 +7,8 @@ import Tabman
 import DomainModule
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
-    private var chartContentComponent: ChartContentComponent?
+    private var chartContentComponent: ChartContentComponent? 
+    private var containSongsComponent: ContainSongsComponent!
 
     private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
@@ -27,10 +29,12 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
     }
 
     public static func viewController(
-        chartContentComponent: ChartContentComponent
+        chartContentComponent: ChartContentComponent,
+        containSongsComponent: ContainSongsComponent
     ) -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.chartContentComponent = chartContentComponent
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
