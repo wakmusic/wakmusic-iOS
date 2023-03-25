@@ -94,7 +94,7 @@ private extension PlayerViewController {
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
             repeatButtonDidTapEvent: self.playerView.repeatButton.tapPublisher(),
-            shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
+            shuffleButtonDidTapEvent: self.playerView.shuffleButton.tapPublisher(),
             likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
             playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher(),
@@ -115,6 +115,7 @@ private extension PlayerViewController {
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
         bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
         bindShowPlaylist(output: output)
         bindShowToastMessage(outpt: output)
         
@@ -261,6 +262,18 @@ private extension PlayerViewController {
                 self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOnAll.image, for: .normal)
             case .repeatOnce:
                 self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOn1.image, for: .normal)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindShuffleMode(output: PlayerViewModel.Output) {
+        output.shuffleMode.sink { [weak self] shuffleMode in
+            guard let self else { return }
+            switch shuffleMode {
+            case .off:
+                self.playerView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
+            case .on:
+                self.playerView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOn.image, for: .normal)
             }
         }.store(in: &subscription)
     }

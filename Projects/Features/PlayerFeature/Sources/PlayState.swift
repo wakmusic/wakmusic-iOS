@@ -11,12 +11,6 @@ import DomainModule
 import YouTubePlayerKit
 import Combine
 
-enum RepeatMode {
-    case none
-    case repeatAll
-    case repeatOnce
-}
-
 final public class PlayState {
     public static let shared = PlayState()
     
@@ -26,6 +20,7 @@ final public class PlayState {
     @Published internal var progress: PlayProgress
     @Published internal var playList: PlayList
     @Published internal var repeatMode: RepeatMode
+    @Published internal var shuffleMode: ShuffleMode
     
     private var subscription = Set<AnyCancellable>()
     
@@ -46,6 +41,7 @@ final public class PlayState {
         progress = PlayProgress()
         state = .unstarted
         repeatMode = .none
+        shuffleMode = .off
         
         player = YouTubePlayer(source: .video(id: "fgSXAKsq-Vo"), configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         

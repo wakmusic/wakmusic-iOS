@@ -24,7 +24,7 @@ final class PlayerViewModel: ViewModelType {
         let nextButtonDidTapEvent: Observable<Void>
         let sliderValueChangedEvent: Observable<Float>
         let repeatButtonDidTapEvent: AnyPublisher<Void, Never>
-        let shuffleButtonDidTapEvent: Observable<Void>
+        let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
         let likeButtonDidTapEvent: AnyPublisher<Void, Never>
         let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
@@ -45,6 +45,7 @@ final class PlayerViewModel: ViewModelType {
         var likeCountText = CurrentValueSubject<String, Never>("")
         var viewsCountText = CurrentValueSubject<String, Never>("")
         var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
+        var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
@@ -103,14 +104,12 @@ final class PlayerViewModel: ViewModelType {
         
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
-            switch self.playState.repeatMode {
-            case .none:
-                self.playState.repeatMode = .repeatAll
-            case .repeatAll:
-                self.playState.repeatMode = .repeatOnce
-            case .repeatOnce:
-                self.playState.repeatMode = .none
-            }
+            self.playState.repeatMode.rotate()
+        }.store(in: &subscription)
+        
+        input.shuffleButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playState.shuffleMode.toggle()
         }.store(in: &subscription)
         
         input.prevButtonDidTapEvent.subscribe { [weak self] _ in
@@ -179,6 +178,10 @@ final class PlayerViewModel: ViewModelType {
         
         playState.$repeatMode.sink { repeatMode in
             output.repeatMode.send(repeatMode)
+        }.store(in: &subscription)
+        
+        playState.$shuffleMode.sink { shuffleMode in
+            output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
         
         return output
