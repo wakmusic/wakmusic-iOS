@@ -99,6 +99,10 @@ extension MyPlayListViewController{
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
                 self.tableView.setEditing(isEdit, animated: true)
                 self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
+                
+                let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+                header.delegate = self
+                self.tableView.tableHeaderView = isEdit ? nil : header
             })
             .disposed(by: disposeBag)
 
@@ -158,7 +162,10 @@ extension MyPlayListViewController{
     }
     
     private func configureUI() {
-        tableView.refreshControl = self.refreshControl
+        self.tableView.refreshControl = self.refreshControl
+        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+        header.delegate = self
+        self.tableView.tableHeaderView = header
     }
 }
 
@@ -168,15 +175,15 @@ extension MyPlayListViewController:UITableViewDelegate{
         return 60
     }
     
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-        header.delegate = self
-        return self.output.state.value.isEditing ? nil : header
-    }
-    
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.output.state.value.isEditing ? 0 : 140
-    }
+//    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+//        header.delegate = self
+//        return self.output.state.value.isEditing ? nil : header
+//    }
+//
+//    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return self.output.state.value.isEditing ? 0 : 140
+//    }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
