@@ -178,6 +178,24 @@ extension AfterSearchViewController {
 
     }
     
+    
+    func clearSongCart()
+    {
+        self.output.songEntityOfSelectedSongs.accept([])
+        
+        self.viewControllers.forEach({ vc in
+            
+            guard let afterContentVc = vc as? AfterSearchContentViewController else {
+                
+               
+                return
+            }
+            
+            afterContentVc.input.deSelectedAllSongs.accept(())
+            
+        })
+    }
+    
 
 }
 
@@ -229,19 +247,8 @@ extension AfterSearchViewController: SongCartViewDelegate {
                 
                 guard let self = self else{return}
                 
-                self.output.songEntityOfSelectedSongs.accept([])
+                self.clearSongCart()
                 
-                self.viewControllers.forEach({ vc in
-                    
-                    guard let afterContentVc = vc as? AfterSearchContentViewController else {
-                        
-                       
-                        return
-                    }
-                    
-                    afterContentVc.input.deSelectedAllSongs.accept(())
-                    
-                })
             }
             
         case .addPlayList:

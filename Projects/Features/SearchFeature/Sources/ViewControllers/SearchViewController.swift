@@ -96,9 +96,17 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.searchTextFiled.rx.text.onNext("")
         self.viewModel.input.textString.accept("")
+        
+        if let nowChildVc = self.children.first as? AfterSearchViewController{
+            
+            nowChildVc.clearSongCart()
+            
+        }
+        
         self.bindSubView(false)
         self.view.endEditing(true)
         self.viewModel.output.isFoucused.accept(false)
+        
         
      
     }
@@ -223,13 +231,24 @@ extension SearchViewController {
             }
                         
             if event == .editingDidBegin {
-                print("END DID Begin")
                 self.viewModel.output.isFoucused.accept(true)
+                
+                if let nowChildVc = self.children.first as? AfterSearchViewController{
+                
+                    nowChildVc.clearSongCart()
+                    
+                }
+                
                 self.bindSubView(false)
                 NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
+                
+                
+
+                
+                
+                
             }
             else if event == .editingDidEnd {
-                print("END DID End")
 //                self.viewModel.output.isFoucused.accept(false)
                 //self.bindSubView(false)
                 NotificationCenter.default.post(name: .statusBarEnterLightBackground, object: nil)
