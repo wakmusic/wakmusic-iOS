@@ -30,7 +30,6 @@ public final class FavoriteViewModel:ViewModelType {
         let runEditing:PublishSubject<Void> = PublishSubject()
         let showConfirmModal:PublishSubject<Void> = PublishSubject()
         let showErrorToast:PublishRelay<String> = PublishRelay()
-        let refreshEvent: PublishSubject<Void> = PublishSubject()
         
     }
 
@@ -38,7 +37,6 @@ public final class FavoriteViewModel:ViewModelType {
         let state:BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
         let dataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource:BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
-        let isRefreshing: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     }
 
     init(fetchFavoriteSongsUseCase:FetchFavoriteSongsUseCase,editFavoriteSongsOrderUseCase:EditFavoriteSongsOrderUseCase) {
@@ -56,7 +54,13 @@ public final class FavoriteViewModel:ViewModelType {
         
         var output = Output()
         
-        self.fetchFavoriteSongs(output: output)
+        fetchFavoriteSongsUseCase.execute()
+
+            .catchAndReturn([])
+            .asObservable()
+            .map { [FavoriteSectionModel(model: 0, items: $0)] }
+            .bind(to: output.dataSource,output.backUpdataSource)
+            .disposed(by: disposeBag)
         
         
         input.runEditing.withLatestFrom(output.dataSource)
@@ -95,26 +99,10 @@ public final class FavoriteViewModel:ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
-        input.refreshEvent.subscribe { [weak self] _ in
-            self?.fetchFavoriteSongs(output: output)
-        }.disposed(by: disposeBag)
+        
 
         
         return output
-    }
-    
-    func fetchFavoriteSongs(output: Output) {
-        fetchFavoriteSongsUseCase.execute()
-            .catchAndReturn([])
-            .asObservable()
-            .map { [FavoriteSectionModel(model: 0, items: $0)] }
-            .subscribe(onNext: { model in
-                output.dataSource.accept(model)
-                output.backUpdataSource.accept(model)
-            }, onCompleted: {
-                output.isRefreshing.accept(false)
-            })
-            .disposed(by: disposeBag)
     }
     
     
