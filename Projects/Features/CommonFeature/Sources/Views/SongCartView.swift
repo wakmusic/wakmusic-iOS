@@ -103,7 +103,7 @@ public extension SongCartView {
             playButton.isHidden = true
             removeButton.isHidden = false
             
-        case .chartSong, .searchSong, .artistSong, .WMPlayList:
+        case .chartSong, .artistSong, .WMPlayList:
             allSelectButton.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
@@ -116,6 +116,13 @@ public extension SongCartView {
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
+            
+        case .searchSong:
+            allSelectButton.isHidden = true
+            songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = false
+            removeButton.isHidden = true
         }
     }
     

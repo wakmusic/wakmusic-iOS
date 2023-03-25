@@ -40,8 +40,6 @@ class PlayListTableViewCell: UITableViewCell {
     }
     @IBAction func playOrEditAction(_ sender: UIButton) {
         
-        //TODO : delegate를 통한 전달
-        
         playDelegate?.play(model: model)
         
     }

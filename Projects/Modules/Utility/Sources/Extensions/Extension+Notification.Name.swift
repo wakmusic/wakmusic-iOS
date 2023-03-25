@@ -17,4 +17,7 @@ public extension Notification.Name {
     static let showSongCart = Notification.Name("showSongCart")
     static let hideSongCart = Notification.Name("hideSongCart")
     static let movedTab = Notification.Name("movedTab")
+    
+    static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
+    
 }

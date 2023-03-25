@@ -19,7 +19,7 @@ import SkeletonView
 import DomainModule
 
 
-//  TODO : 바깥 클릭 시 hide... , 자꾸 플레이 버튼 튀어나옴...
+
 
 
 public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
@@ -415,7 +415,6 @@ extension PlayListDetailViewController{
                 guard let self = self else {return}
                 
                
-                //TODO : 왁뮤추천과 커스텀 플리 나누기
                 
                 guard let type = self.viewModel.type else {
                     return
