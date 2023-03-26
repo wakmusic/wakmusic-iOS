@@ -15,13 +15,16 @@ import DesignSystem
 import Utility
 import CommonFeature
 
-public class PlaylistViewController: UIViewController {
+public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
 
     private var containSongsComponent: ContainSongsComponent!
+    
+    public var songCartView: CommonFeature.SongCartView!
+    public var bottomSheetView: CommonFeature.BottomSheetView!
     
     init(viewModel: PlaylistViewModel, containSongsComponent: ContainSongsComponent) {
         self.viewModel = viewModel
