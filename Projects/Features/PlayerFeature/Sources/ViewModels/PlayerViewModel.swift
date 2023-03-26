@@ -159,6 +159,17 @@ final class PlayerViewModel: ViewModelType {
 
         }.store(in: &subscription)
         
+        input.addPlaylistButtonDidTapEvent
+            .map {
+                Utility.PreferenceManager.userInfo != nil
+            }
+            .sink { isLoggedIn in
+                if !isLoggedIn {
+                    output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
+                    return
+                }
+            }.store(in: &subscription)
+        
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
         }.store(in: &subscription)
@@ -174,13 +185,7 @@ final class PlayerViewModel: ViewModelType {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-            output.thumbnailImageURL.send(thumbnailURL)
-            output.titleText.send(song.title)
-            output.artistText.send(song.artist)
-            output.viewsCountText.send(self.formatNumber(song.views))
-            output.likeCountText.send("준비중")
-            
+            self.handleCurrentSongChanged(song: song, output: output)
             self.fetchLyrics(for: song, output: output)
             self.fetchLikeCount(for: song, output: output)
             self.fetchLikeState(for: song, output: output)
@@ -189,10 +194,7 @@ final class PlayerViewModel: ViewModelType {
         
         playState.$progress.sink { [weak self] progress in
             guard let self else { return }
-            output.playTimeText.send(self.formatTime(progress.currentProgress))
-            output.totalTimeText.send(self.formatTime(progress.endProgress))
-            output.playTimeValue.send(Float(progress.currentProgress))
-            output.totalTimeValue.send(Float(progress.endProgress))
+            self.handleProgress(progress: progress, output: output)
         }.store(in: &subscription)
         
         playState.$repeatMode.sink { repeatMode in
@@ -233,6 +235,22 @@ final class PlayerViewModel: ViewModelType {
         if !playState.playList.isLast {
             playState.forward()
         }
+    }
+    
+    func handleCurrentSongChanged(song: SongEntity, output: Output) {
+        let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+        output.thumbnailImageURL.send(thumbnailURL)
+        output.titleText.send(song.title)
+        output.artistText.send(song.artist)
+        output.viewsCountText.send(self.formatNumber(song.views))
+        output.likeCountText.send("준비중")
+    }
+    
+    func handleProgress(progress: PlayState.PlayProgress, output: Output) {
+        output.playTimeText.send(self.formatTime(progress.currentProgress))
+        output.totalTimeText.send(self.formatTime(progress.endProgress))
+        output.playTimeValue.send(Float(progress.currentProgress))
+        output.totalTimeValue.send(Float(progress.endProgress))
     }
     
     /// 가사 불러오기
