@@ -19,6 +19,8 @@ final public class PlayState {
     @Published internal var currentSong: SongEntity?
     @Published internal var progress: PlayProgress
     @Published internal var playList: PlayList
+    @Published internal var repeatMode: RepeatMode
+    @Published internal var shuffleMode: ShuffleMode
     
     private var subscription = Set<AnyCancellable>()
     
@@ -38,6 +40,8 @@ final public class PlayState {
         currentSong = SongEntity(id: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌", remix: "", reaction: "", views: 13442558, last: 0, date: "211222")
         progress = PlayProgress()
         state = .unstarted
+        repeatMode = .none
+        shuffleMode = .off
         
         player = YouTubePlayer(source: .video(id: "fgSXAKsq-Vo"), configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         
@@ -90,7 +94,7 @@ extension PlayState {
     }
 
     /// ⏩ 다음 곡으로 변경 후 재생
-    func forWard() {
+    func forward() {
         self.playList.next()
         self.currentSong = playList.current
         guard let currentSong = currentSong else { return }
@@ -98,11 +102,21 @@ extension PlayState {
     }
 
     /// ⏪ 이전 곡으로 변경 후 재생
-    func backWard() {
+    func backward() {
         self.playList.back()
         self.currentSong = playList.current
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
+    }
+    
+    /// 🔀 플레이리스트 내 랜덤 재생
+    func shufflePlay() {
+        let shuffledIndices = self.playList.list.indices.shuffled()
+        if let index = shuffledIndices.first(where: { $0 != self.playList.currentPlayIndex }) {
+            self.loadInPlaylist(at: index)
+        } else {
+            self.forward()
+        }
     }
 
     /// ♻️ 첫번째 곡으로 변경 후 재생
@@ -179,22 +193,23 @@ extension PlayState {
                 currentPlayIndex += 1
             }
         }
-
-        func uniqueAppend(item: SongEntity) {
-            let uniqueIndex = uniqueIndex(of: item)
-
-            if let uniqueIndex = uniqueIndex {
-                self.currentPlayIndex = uniqueIndex
-            } else { // 재생 목록에 없으면
+        
+        /// 해당 곡이 재생목록에 없을 경우에만 추가합니다.
+        func appendIfUnique(item: SongEntity) {
+            guard let uniqueIndex = uniqueIndex(of: item) else {
                 list.append(item) // 재생목록에 추가
-                self.currentPlayIndex = self.lastIndex // index를 가장 마지막으로 옮김
+                currentPlayIndex = lastIndex // index를 가장 마지막으로 옮김
+                return
             }
+            currentPlayIndex = uniqueIndex
         }
 
         func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
-            let index = list.enumerated().compactMap { $0.element == item ? $0.offset : nil }.first
-            return index
+            for (index, song) in list.enumerated() {
+                if song == item { return index }
+            }
+            return nil
         }
 
     }

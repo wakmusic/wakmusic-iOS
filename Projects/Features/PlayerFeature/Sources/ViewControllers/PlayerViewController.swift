@@ -16,6 +16,8 @@ import RxSwift
 import YouTubePlayerKit
 import Combine
 import Kingfisher
+import PanModal
+import CommonFeature
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -93,8 +95,8 @@ private extension PlayerViewController {
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
-            repeatButtonDidTapEvent: self.playerView.repeatButton.rx.tap.asObservable(),
-            shuffleButtonDidTapEvent: self.playerView.shuffleButton.rx.tap.asObservable(),
+            repeatButtonDidTapEvent: self.playerView.repeatButton.tapPublisher(),
+            shuffleButtonDidTapEvent: self.playerView.shuffleButton.tapPublisher(),
             likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
             playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher(),
@@ -114,7 +116,11 @@ private extension PlayerViewController {
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
         bindLyricsTracking(output: output)
+        bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
         bindShowPlaylist(output: output)
+        bindShowToastMessage(output: output)
+        bindShowConfirmModal(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -246,6 +252,47 @@ private extension PlayerViewController {
     private func bindShowPlaylist(output: PlayerViewModel.Output) {
         output.willShowPlaylist.sink { [weak self] _ in
             self?.showPlaylist()
+        }.store(in: &subscription)
+    }
+    
+    private func bindRepeatMode(output: PlayerViewModel.Output) {
+        output.repeatMode.sink { [weak self] repeatMode in
+            guard let self else { return }
+            switch repeatMode {
+            case .none:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
+            case .repeatAll:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOnAll.image, for: .normal)
+            case .repeatOnce:
+                self.playerView.repeatButton.setImage(DesignSystemAsset.Player.repeatOn1.image, for: .normal)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindShuffleMode(output: PlayerViewModel.Output) {
+        output.shuffleMode.sink { [weak self] shuffleMode in
+            guard let self else { return }
+            switch shuffleMode {
+            case .off:
+                self.playerView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
+            case .on:
+                self.playerView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOn.image, for: .normal)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindShowToastMessage(output: PlayerViewModel.Output) {
+        output.showToastMessage.sink { [weak self] message in
+            self?.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+        }.store(in: &subscription)
+    }
+    
+    private func bindShowConfirmModal(output: PlayerViewModel.Output) {
+        output.showConfirmModal.sink { [weak self] message in
+            self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: false, completion: {
+                print("자 로그인하러가자~🔫 자 로그인하러가자~🔫 자 로그인하러가자~🔫")
+            }, cancelCompletion: {
+            }))
         }.store(in: &subscription)
     }
     
