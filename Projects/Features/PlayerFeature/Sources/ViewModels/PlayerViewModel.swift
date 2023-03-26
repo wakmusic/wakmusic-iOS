@@ -54,6 +54,7 @@ final class PlayerViewModel: ViewModelType {
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
         var willShowPlaylist = PassthroughSubject<Bool, Never>()
         var showToastMessage = PassthroughSubject<String, Never>()
+        var showConfirmModal = PassthroughSubject<String, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -137,16 +138,24 @@ final class PlayerViewModel: ViewModelType {
             self.playState.player.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
         
-        input.likeButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            guard let currentSong = self.playState.currentSong else { return }
-            let alreadyLiked = output.likeState.value
-            
-            if alreadyLiked {
-                self.cancelLikeSong(for: currentSong, output: output)
-            } else {
-                self.addLikeSong(for: currentSong, output: output)
+        input.likeButtonDidTapEvent
+            .map {
+                Utility.PreferenceManager.userInfo != nil
             }
+            .sink { [weak self] isLoggedIn in
+                guard let self else { return }
+                guard let currentSong = self.playState.currentSong else { return }
+                let alreadyLiked = output.likeState.value
+                
+                if !isLoggedIn {
+                    output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
+                    return
+                }
+                if alreadyLiked {
+                    self.cancelLikeSong(for: currentSong, output: output)
+                } else {
+                    self.addLikeSong(for: currentSong, output: output)
+                }
 
         }.store(in: &subscription)
         

@@ -16,6 +16,8 @@ import RxSwift
 import YouTubePlayerKit
 import Combine
 import Kingfisher
+import PanModal
+import CommonFeature
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -117,7 +119,8 @@ private extension PlayerViewController {
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
         bindShowPlaylist(output: output)
-        bindShowToastMessage(outpt: output)
+        bindShowToastMessage(output: output)
+        bindShowConfirmModal(output: output)
         
         output.didClose
             .asDriver(onErrorJustReturn: false)
@@ -278,9 +281,18 @@ private extension PlayerViewController {
         }.store(in: &subscription)
     }
     
-    private func bindShowToastMessage(outpt: PlayerViewModel.Output) {
-        outpt.showToastMessage.sink { [weak self] message in
+    private func bindShowToastMessage(output: PlayerViewModel.Output) {
+        output.showToastMessage.sink { [weak self] message in
             self?.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+        }.store(in: &subscription)
+    }
+    
+    private func bindShowConfirmModal(output: PlayerViewModel.Output) {
+        output.showConfirmModal.sink { [weak self] message in
+            self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: false, completion: {
+                print("자 로그인하러가자~🔫 자 로그인하러가자~🔫 자 로그인하러가자~🔫")
+            }, cancelCompletion: {
+            }))
         }.store(in: &subscription)
     }
     
