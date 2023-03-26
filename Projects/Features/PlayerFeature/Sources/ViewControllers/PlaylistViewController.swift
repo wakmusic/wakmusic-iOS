@@ -13,6 +13,7 @@ import Kingfisher
 import SnapKit
 import DesignSystem
 import Utility
+import CommonFeature
 
 public class PlaylistViewController: UIViewController {
     var viewModel: PlaylistViewModel!
@@ -20,8 +21,11 @@ public class PlaylistViewController: UIViewController {
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
 
-    init(viewModel: PlaylistViewModel) {
+    private var containSongsComponent: ContainSongsComponent!
+    
+    init(viewModel: PlaylistViewModel, containSongsComponent: ContainSongsComponent) {
         self.viewModel = viewModel
+        self.containSongsComponent = containSongsComponent
         super.init(nibName: nil, bundle: nil)
     }
     
