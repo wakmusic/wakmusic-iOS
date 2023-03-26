@@ -69,7 +69,7 @@ final class PlaylistViewModel: ViewModelType {
             guard let self else { return }
             switch self.playState.shuffleMode {
             case .off:
-                self.playState.backWard()
+                self.playState.backward()
             case .on:
                 self.playState.shufflePlay()
             }
@@ -85,7 +85,7 @@ final class PlaylistViewModel: ViewModelType {
             guard let self else { return }
             switch self.playState.shuffleMode {
             case .off:
-                self.playState.forWard()
+                self.playState.forward()
             case .on:
                 self.playState.shufflePlay()
             }

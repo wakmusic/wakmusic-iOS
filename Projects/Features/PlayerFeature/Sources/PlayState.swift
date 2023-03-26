@@ -94,7 +94,7 @@ extension PlayState {
     }
 
     /// ⏩ 다음 곡으로 변경 후 재생
-    func forWard() {
+    func forward() {
         self.playList.next()
         self.currentSong = playList.current
         guard let currentSong = currentSong else { return }
@@ -102,7 +102,7 @@ extension PlayState {
     }
 
     /// ⏪ 이전 곡으로 변경 후 재생
-    func backWard() {
+    func backward() {
         self.playList.back()
         self.currentSong = playList.current
         guard let currentSong = currentSong else { return }
@@ -115,7 +115,7 @@ extension PlayState {
         if let index = shuffledIndices.first(where: { $0 != self.playList.currentPlayIndex }) {
             self.loadInPlaylist(at: index)
         } else {
-            self.forWard()
+            self.forward()
         }
     }
 

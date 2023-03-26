@@ -117,7 +117,7 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             switch self.playState.shuffleMode {
             case .off:
-                self.playState.backWard()
+                self.playState.backward()
             case .on:
                 self.playState.shufflePlay()
             }
@@ -127,7 +127,7 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             switch self.playState.shuffleMode {
             case .off:
-                self.playState.forWard()
+                self.playState.forward()
             case .on:
                 self.playState.shufflePlay()
             }
@@ -214,7 +214,7 @@ final class PlayerViewModel: ViewModelType {
             case .none:
                 handleNoneRepeat()
             case .repeatAll:
-                playState.forWard()
+                playState.forward()
             case .repeatOnce:
                 playState.play()
             }
@@ -231,7 +231,7 @@ final class PlayerViewModel: ViewModelType {
     
     func handleNoneRepeat() {
         if !playState.playList.isLast {
-            playState.forWard()
+            playState.forward()
         }
     }
     
