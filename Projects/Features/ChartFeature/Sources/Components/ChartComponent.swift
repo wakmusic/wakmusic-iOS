@@ -7,7 +7,6 @@ import DomainModule
 public protocol ChartDependency: Dependency {
     var chartContentComponent: ChartContentComponent { get }
     var containSongsComponent: ContainSongsComponent {get}
-    var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
 }
 
 public final class ChartComponent: Component<ChartDependency> {
@@ -15,7 +14,7 @@ public final class ChartComponent: Component<ChartDependency> {
         return ChartViewController.viewController(
             chartContentComponent: dependency.chartContentComponent,
             containSongsComponent: dependency.containSongsComponent,
-            viewModel: .init(fetchChartRankingUseCase: dependency.fetchChartRankingUseCase)
+            viewModel: .init()
         )
     }
 }

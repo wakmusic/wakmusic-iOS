@@ -9,7 +9,7 @@ import DataMappingModule
 public final class ChartViewModel:ViewModelType {
    
     private let disposeBag = DisposeBag()
-    private let fetchChartRankingUseCase: FetchChartRankingUseCase
+
     
     public  struct Input {
         
@@ -19,9 +19,7 @@ public final class ChartViewModel:ViewModelType {
         
     }
     
-    init(fetchChartRankingUseCase:FetchChartRankingUseCase){
-        self.fetchChartRankingUseCase = fetchChartRankingUseCase
-    }
+  
     
   
     public func transform(from input: Input) -> Output {

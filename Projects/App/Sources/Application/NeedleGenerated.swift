@@ -196,9 +196,6 @@ private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
     var containSongsComponent: ContainSongsComponent {
         return appComponent.containSongsComponent
     }
-    var fetchChartRankingUseCase: any FetchChartRankingUseCase {
-        return appComponent.fetchChartRankingUseCase
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -774,7 +771,6 @@ extension ChartComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartDependency.chartContentComponent] = "chartContentComponent-ChartContentComponent"
         keyPathToName[\ChartDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
-        keyPathToName[\ChartDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
     }
 }
 extension ChartContentComponent: Registration {
