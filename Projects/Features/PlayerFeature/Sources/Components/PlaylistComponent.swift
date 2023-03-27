@@ -7,15 +7,19 @@
 //
 
 import Foundation
+import CommonFeature
 import DomainModule
 import NeedleFoundation
 
 public protocol PlaylistDependency: Dependency {
-    
+    var containSongsComponent: ContainSongsComponent { get }
 }
 
 public final class PlaylistComponent: Component<PlaylistDependency> {
     public func makeView() -> PlaylistViewController {
-        return PlaylistViewController(viewModel: .init())
+        return PlaylistViewController(
+            viewModel: .init(),
+            containSongsComponent: dependency.containSongsComponent
+        )
     }
 }

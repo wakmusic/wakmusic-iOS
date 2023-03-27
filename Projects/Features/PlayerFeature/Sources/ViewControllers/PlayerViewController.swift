@@ -290,7 +290,7 @@ private extension PlayerViewController {
     private func bindShowConfirmModal(output: PlayerViewModel.Output) {
         output.showConfirmModal.sink { [weak self] message in
             self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: false, completion: {
-                print("자 로그인하러가자~🔫 자 로그인하러가자~🔫 자 로그인하러가자~🔫")
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
             }, cancelCompletion: {
             }))
         }.store(in: &subscription)
