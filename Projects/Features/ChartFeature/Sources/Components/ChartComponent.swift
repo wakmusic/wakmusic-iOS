@@ -1,17 +1,21 @@
 import Foundation
 import CommonFeature
 import NeedleFoundation
+import DomainModule
+
 
 public protocol ChartDependency: Dependency {
     var chartContentComponent: ChartContentComponent { get }
     var containSongsComponent: ContainSongsComponent {get}
+    var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
 }
 
 public final class ChartComponent: Component<ChartDependency> {
     public func makeView() -> ChartViewController {
         return ChartViewController.viewController(
             chartContentComponent: dependency.chartContentComponent,
-            containSongsComponent: dependency.containSongsComponent
+            containSongsComponent: dependency.containSongsComponent,
+            viewModel: .init(fetchChartRankingUseCase: dependency.fetchChartRankingUseCase)
         )
     }
 }
