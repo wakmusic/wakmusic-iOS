@@ -23,7 +23,7 @@ public extension PlayState {
             self.playList.appendIfUnique(item: firstSong)
             self.load(at: firstSong)
         }
-        songs.dropFirst().map { song in
+        songs.dropFirst().forEach { song in
             self.playList.appendIfUnique(item: song)
             self.load(at: song)
         }
