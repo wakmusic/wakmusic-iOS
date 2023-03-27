@@ -248,10 +248,11 @@ extension HomeViewController {
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         
-        chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
+        
+        blurEffectView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color.withAlphaComponent(0.4)
         blurEffectView.layer.cornerRadius = 12
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(

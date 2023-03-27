@@ -20,7 +20,7 @@ import RxDataSources
 
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -33,6 +33,9 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
     
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -63,17 +66,28 @@ extension MyPlayListViewController{
             .disposed(by: disposeBag)
         
         tableView.rx.itemSelected
+            .debug()
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (indexPath, models) in
-                guard let self  = self, let model = models.first?.items[indexPath.row] else {
-                    return
+            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
+            .debug()
+            .subscribe(onNext: { [weak self] (indexPath, dataSource, state) in
+                guard let self  = self else { return }
+                
+                let isEditing: Bool = state.isEditing
+                
+                if isEditing {
+                    self.input.itemSelected.onNext(indexPath)
+                    
+                }else{
+                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
+                    let vc = self.playListDetailComponent.makeView(id: id, type: .custom)
+                    self.navigationController?.pushViewController(vc, animated: true)
                 }
-                let vc = self.playListDetailComponent.makeView(id: String(model.key), type: .custom)
-                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
+            .debug("itemMoved")
             .bind(to: input.itemMoved)
             .disposed(by: disposeBag)
     }
@@ -125,6 +139,29 @@ extension MyPlayListViewController{
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
                 
+        output.indexPathOfSelectedPlayLists
+            .skip(1)
+            .debug("indexOfSelectedSongs")
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (songs, dataSource) in
+                guard let self = self else { return }
+                let items = dataSource.first?.items ?? []
+                
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: self.view,
+                        type: .myPlayList,
+                        selectedSongCount: songs.count,
+                        totalSongCount: items.count,
+                        useBottomSpace: false
+                    )
+                    self.songCartView?.delegate = self
+                }
+            }).disposed(by: disposeBag)
+                
         output.showErrorToast
             .subscribe(onNext: { [weak self] (message: String) in
                 guard let self = self else{
@@ -149,7 +186,12 @@ extension MyPlayListViewController{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: indexPath.row, section: 0)) as? MyPlayListTableViewCell
             else { return UITableViewCell() }
             
-            cell.update(model: model, isEditing: self.output.state.value.isEditing)
+            cell.update(
+                model: model,
+                isEditing: self.output.state.value.isEditing,
+                indexPath: indexPath
+            )
+            cell.delegate = self
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
@@ -169,21 +211,40 @@ extension MyPlayListViewController{
     }
 }
 
-extension MyPlayListViewController:UITableViewDelegate{
+extension MyPlayListViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        switch type {
+        case let .allSelect(flag):
+            input.allPlayListSelected.onNext(flag)
+        case .addSong:
+            return
+//            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+//            let viewController = containSongsComponent.makeView(songs: songs)
+//            viewController.modalPresentationStyle = .overFullScreen
+//            self.present(viewController, animated: true) {
+//                self.input.allSongSelected.onNext(false)
+//            }
+        case .addPlayList:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
+    }
+}
+
+extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
+    public func listTapped(indexPath: IndexPath) {
+        self.input.itemSelected.onNext(indexPath)
+    }
+}
+
+extension MyPlayListViewController: UITableViewDelegate{
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
-//    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-//        header.delegate = self
-//        return self.output.state.value.isEditing ? nil : header
-//    }
-//
-//    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return self.output.state.value.isEditing ? 0 : 140
-//    }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
@@ -194,7 +255,7 @@ extension MyPlayListViewController:UITableViewDelegate{
     }
 }
 
-extension MyPlayListViewController:MyPlayListHeaderViewDelegate{
+extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
     public func action(_ type: PurposeType) {
         let vc =  multiPurposePopComponent.makeView(type: type)
         self.showPanModal(content: vc)

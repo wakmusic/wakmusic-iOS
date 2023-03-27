@@ -18,4 +18,5 @@ disabled_rules:
   - statement_position # if는 반드시 else로 끝나야한다.
   - identifier_name #변수명 글자 수 제한
   - large_tuple #3개 이상의 튜플 인자
+  - function_body_length # 함수 바디 50라인 이상
 
