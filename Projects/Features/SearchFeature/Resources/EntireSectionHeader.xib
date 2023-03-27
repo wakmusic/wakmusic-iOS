@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,11 +33,10 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleAspectFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-8C-bYa">
-                    <rect key="frame" x="276.66666666666669" y="138.66666666666666" width="99.333333333333314" height="22"/>
-                    <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" title="ㅁㄴㅇㅁㄴㅇ" image="search_arrow_right">
-                        <preferredSymbolConfiguration key="preferredSymbolConfiguration"/>
-                    </state>
+                    <rect key="frame" x="282" y="132.66666666666666" width="94" height="34"/>
+                    <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="18"/>
+                    <inset key="imageEdgeInsets" minX="3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="ㅁㄴㅇㅁㄴㅇ"/>
                     <connections>
                         <action selector="switchTabAction:" destination="-1" eventType="touchUpInside" id="FUG-Tv-cYl"/>
                     </connections>
@@ -56,7 +55,4 @@
             <point key="canvasLocation" x="27.69230769230769" y="20.616113744075829"/>
         </view>
     </objects>
-    <resources>
-        <image name="search_arrow_right" width="5.3333334922790527" height="10"/>
-    </resources>
 </document>

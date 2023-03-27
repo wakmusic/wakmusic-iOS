@@ -9,12 +9,12 @@
 import UIKit
 import DesignSystem
 
-protocol Toggleable {
-    var isOn: Bool { get set }
+protocol Likeable {
+    var isLiked: Bool { get set }
 }
 
-internal class LikeButton: VerticalButton, Toggleable {
-    var isOn: Bool = false {
+class LikeButton: VerticalImageButton, Likeable {
+    var isLiked: Bool = false {
         didSet {
             setColor()
             setImage()
@@ -22,12 +22,14 @@ internal class LikeButton: VerticalButton, Toggleable {
     }
     
     private func setColor() {
-        let color = isOn ? DesignSystemAsset.PrimaryColor.increase.color : DesignSystemAsset.GrayColor.gray400.color
-        self.setTitleColor(color, for: .normal)
+        let color = isLiked ? DesignSystemAsset.PrimaryColor.increase.color : DesignSystemAsset.GrayColor.gray400.color
+        self.titleLabel.textColor = color
     }
     
     private func setImage() {
-        let image = isOn ? DesignSystemAsset.Player.likeOn.image : DesignSystemAsset.Player.likeOff.image
-        self.setImage(image, for: .normal)
+        let image = isLiked ? DesignSystemAsset.Player.likeOn.image : DesignSystemAsset.Player.likeOff.image
+        self.image = image
     }
+
+    
 }

@@ -111,7 +111,6 @@ extension ArtistMusicContentViewController {
                     self.showSongCart(
                         in: self.view,
                         type: .artistSong,
-                        contentHeight: 56,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSource.count,
                         useBottomSpace: false
@@ -120,9 +119,9 @@ extension ArtistMusicContentViewController {
                 }
             }).disposed(by: disposeBag)
         
-        output.idOfSelectedSongs
+        output.songEntityOfSelectedSongs
             .filter{ !$0.isEmpty }
-            .debug("idOfSelectedSongs")
+            .debug("songEntityOfSelectedSongs")
             .subscribe()
             .disposed(by: disposeBag)
     }
@@ -140,7 +139,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
         case .addSong:
-            let songs: [String] = output.idOfSelectedSongs.value
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {

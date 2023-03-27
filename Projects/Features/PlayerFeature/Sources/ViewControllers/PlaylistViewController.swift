@@ -63,6 +63,8 @@ private extension PlaylistViewController {
         
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
+        bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
         bindPlayButtonImages(output: output)
         bindwaveStreamAnimationView(output: output)
         
@@ -77,7 +79,6 @@ private extension PlaylistViewController {
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
             self.playlistView.playlistTableView.visibleCells.forEach { $0.isEditing = isEditing }
-            
         }.store(in: &subscription)
         
         output.currentSongIndex.sink { [weak self] _ in
@@ -106,6 +107,32 @@ private extension PlaylistViewController {
                 }
             }
             .store(in: &subscription)
+    }
+    
+    private func bindRepeatMode(output: PlaylistViewModel.Output) {
+        output.repeatMode.sink { [weak self] repeatMode in
+            guard let self else { return }
+            switch repeatMode {
+            case .none:
+                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
+            case .repeatAll:
+                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOnAll.image, for: .normal)
+            case .repeatOnce:
+                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOn1.image, for: .normal)
+            }
+        }.store(in: &subscription)
+    }
+    
+    private func bindShuffleMode(output: PlaylistViewModel.Output) {
+        output.shuffleMode.sink { [weak self] shuffleMode in
+            guard let self else { return }
+            switch shuffleMode {
+            case .off:
+                self.playlistView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
+            case .on:
+                self.playlistView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOn.image, for: .normal)
+            }
+        }.store(in: &subscription)
     }
     
     private func bindPlayButtonImages(output: PlaylistViewModel.Output) {

@@ -40,16 +40,17 @@ public final class AfterSearchViewModel:ViewModelType {
 
     public struct Input {
         let text:BehaviorRelay<String> = BehaviorRelay<String>(value: "")
+        let notiResult:PublishRelay<SongEntity> = PublishRelay()
         
     }
 
     public struct Output {
         
-        let result:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
+        let dataSource:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
         
         // 검색 후 재 검색 시 남아 있는 데이터 처리를 위한 변수
         let isFetchStart:PublishSubject<Void> = PublishSubject()
-
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         
         
     }
@@ -128,10 +129,46 @@ public final class AfterSearchViewModel:ViewModelType {
             
 
             return results
-        }.bind(to: output.result)
+        }.bind(to: output.dataSource)
             .disposed(by: disposeBag)
     
         
+        NotificationCenter.default.rx.notification(.selectedSongOnSearch)
+            .map({ notification -> SongEntity in
+                guard let result = notification.object as? (TabPosition,SongEntity) else {
+                    return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result.1
+                
+            })
+            .filter({$0.id != "_"})
+            .bind(to: input.notiResult)
+            .disposed(by: disposeBag)
+        
+        input.notiResult
+            .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
+            .map({[weak self] (song,songs) -> [SongEntity]   in
+                
+                var nextSongs = songs
+                
+                if nextSongs.contains(where: {$0 == song}) {
+                    
+                    let index = nextSongs.firstIndex(of: song)!
+                    nextSongs.remove(at: index)
+                }
+                
+                else {
+                    nextSongs.append(song)
+                }
+                    
+                
+                return nextSongs
+            })
+            .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+            
         
         
         

@@ -41,7 +41,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         var canLoadMore: BehaviorRelay<Bool>
         var dataSource: BehaviorRelay<[ArtistSongListEntity]>
         let indexOfSelectedSongs: BehaviorRelay<[Int]>
-        let idOfSelectedSongs: BehaviorRelay<[String]>
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]>
     }
     
     public func transform(from input: Input) -> Output {
@@ -52,7 +52,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
         let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-        let idOfSelectedSongs: BehaviorRelay<[String]> = BehaviorRelay(value: [])
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         
         let refresh = Observable.combineLatest(dataSource, input.pageID) { (dataSource, pageID) -> [ArtistSongListEntity] in
             return pageID == 1 ? [] : dataSource
@@ -111,6 +111,8 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .withLatestFrom(dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
                 var newModel = dataSource
+                
+                
                 newModel.indices.forEach { newModel[$0].isSelected = false }
 
                 selectedSongs.forEach { i in
@@ -123,17 +125,29 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         
         indexOfSelectedSongs
             .withLatestFrom(dataSource) { ($0, $1) }
-            .map { (selectedSongs, dataSource) in
-                return selectedSongs.map { dataSource[$0].ID }
+            .map { (indexOfSelectedSongs, dataSource) in
+                
+                return indexOfSelectedSongs.map {
+                    SongEntity(
+                        id: dataSource[$0].ID,
+                        title: dataSource[$0].title,
+                        artist: dataSource[$0].artist,
+                        remix: dataSource[$0].remix,
+                        reaction: dataSource[$0].reaction,
+                        views: dataSource[$0].views,
+                        last: dataSource[$0].last,
+                        date: dataSource[$0].date
+                    )
+                }
             }
-            .bind(to: idOfSelectedSongs)
+            .bind(to: songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
         
         return Output(
             canLoadMore: canLoadMore,
             dataSource: dataSource,
             indexOfSelectedSongs: indexOfSelectedSongs,
-            idOfSelectedSongs: idOfSelectedSongs
+            songEntityOfSelectedSongs: songEntityOfSelectedSongs
         )
     }
 }

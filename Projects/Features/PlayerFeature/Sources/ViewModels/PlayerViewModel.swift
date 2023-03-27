@@ -23,10 +23,10 @@ final class PlayerViewModel: ViewModelType {
         let prevButtonDidTapEvent: Observable<Void>
         let nextButtonDidTapEvent: Observable<Void>
         let sliderValueChangedEvent: Observable<Float>
-        let repeatButtonDidTapEvent: Observable<Void>
-        let shuffleButtonDidTapEvent: Observable<Void>
-        let likeButtonDidTapEvent: Observable<Void>
-        let addPlaylistButtonDidTapEvent: Observable<Void>
+        let repeatButtonDidTapEvent: AnyPublisher<Void, Never>
+        let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
+        let likeButtonDidTapEvent: AnyPublisher<Void, Never>
+        let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: Observable<Void>
         let miniPlayButtonDidTapEvent: Observable<Void>
@@ -44,6 +44,8 @@ final class PlayerViewModel: ViewModelType {
         var totalTimeText = CurrentValueSubject<String, Never>("0:00")
         var likeCountText = CurrentValueSubject<String, Never>("")
         var viewsCountText = CurrentValueSubject<String, Never>("")
+        var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
+        var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
         var didClose = PublishRelay<Bool>()
@@ -51,12 +53,15 @@ final class PlayerViewModel: ViewModelType {
         var didNext = PublishRelay<Bool>()
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
         var willShowPlaylist = PassthroughSubject<Bool, Never>()
+        var showToastMessage = PassthroughSubject<String, Never>()
+        var showConfirmModal = PassthroughSubject<String, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
     var addLikeSongUseCase: AddLikeSongUseCase!
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
+    var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     
     private let playState = PlayState.shared
     private let disposeBag = DisposeBag()
@@ -65,11 +70,12 @@ final class PlayerViewModel: ViewModelType {
     internal var sortedLyrics = [String]()
     internal var isLyricsScrolling = false
     
-    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase) {
+    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase, fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
+        self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
         print("✅ PlayerViewModel 생성")
     }
     
@@ -97,20 +103,72 @@ final class PlayerViewModel: ViewModelType {
             output.didClose.accept(true)
         }.disposed(by: disposeBag)
         
+        input.repeatButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playState.repeatMode.rotate()
+        }.store(in: &subscription)
+        
+        input.shuffleButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playState.shuffleMode.toggle()
+        }.store(in: &subscription)
+        
         input.prevButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
-            self.playState.backWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.backward()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.disposed(by: disposeBag)
         
         input.nextButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
-            self.playState.forWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.forward()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.disposed(by: disposeBag)
         
         input.sliderValueChangedEvent.subscribe { [weak self] value in
             guard let self else { return }
             self.playState.player.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
+        
+        input.likeButtonDidTapEvent
+            .map {
+                Utility.PreferenceManager.userInfo != nil
+            }
+            .sink { [weak self] isLoggedIn in
+                guard let self else { return }
+                guard let currentSong = self.playState.currentSong else { return }
+                let alreadyLiked = output.likeState.value
+                
+                if !isLoggedIn {
+                    output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
+                    return
+                }
+                if alreadyLiked {
+                    self.cancelLikeSong(for: currentSong, output: output)
+                } else {
+                    self.addLikeSong(for: currentSong, output: output)
+                }
+
+        }.store(in: &subscription)
+        
+        input.addPlaylistButtonDidTapEvent
+            .map {
+                Utility.PreferenceManager.userInfo != nil
+            }
+            .sink { isLoggedIn in
+                if !isLoggedIn {
+                    output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
+                    return
+                }
+            }.store(in: &subscription)
         
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
@@ -120,29 +178,91 @@ final class PlayerViewModel: ViewModelType {
             guard let self else { return }
             output.playerState.send(state)
             if state == .ended {
-                self.playState.forWard()
+                self.handlePlaybackEnded()
             }
         }.store(in: &subscription)
         
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-            output.thumbnailImageURL.send(thumbnailURL)
-            output.titleText.send(song.title)
-            output.artistText.send(song.artist)
-            output.viewsCountText.send(self.formatNumber(song.views))
-            output.likeCountText.send("준비중")
+            self.handleCurrentSongChanged(song: song, output: output)
+            self.fetchLyrics(for: song, output: output)
+            self.fetchLikeCount(for: song, output: output)
+            self.fetchLikeState(for: song, output: output)
             
-            // 곡이 변경되면 가사 불러오기
-            self.fetchLyricsUseCase.execute(id: song.id)
-                .retry(3)
-                .subscribe { [weak self] lyricsEntityArray in
-                    guard let self else { return }
-                    self.lyricsDict.removeAll()
-                    self.sortedLyrics.removeAll()
-                    lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
-                    self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
+        }.store(in: &subscription)
+        
+        playState.$progress.sink { [weak self] progress in
+            guard let self else { return }
+            self.handleProgress(progress: progress, output: output)
+        }.store(in: &subscription)
+        
+        playState.$repeatMode.sink { repeatMode in
+            output.repeatMode.send(repeatMode)
+        }.store(in: &subscription)
+        
+        playState.$shuffleMode.sink { shuffleMode in
+            output.shuffleMode.send(shuffleMode)
+        }.store(in: &subscription)
+        
+        return output
+    }
+    
+    func handlePlaybackEnded() {
+        if playState.shuffleMode.isOn {
+            handleShuffleWithRepeatOnce()
+        } else {
+            switch playState.repeatMode {
+            case .none:
+                handleNoneRepeat()
+            case .repeatAll:
+                playState.forward()
+            case .repeatOnce:
+                playState.play()
+            }
+        }
+    }
+    
+    func handleShuffleWithRepeatOnce() {
+        if playState.repeatMode == .repeatOnce {
+            playState.play()
+        } else {
+            playState.shufflePlay()
+        }
+    }
+    
+    func handleNoneRepeat() {
+        if !playState.playList.isLast {
+            playState.forward()
+        }
+    }
+    
+    func handleCurrentSongChanged(song: SongEntity, output: Output) {
+        let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+        output.thumbnailImageURL.send(thumbnailURL)
+        output.titleText.send(song.title)
+        output.artistText.send(song.artist)
+        output.viewsCountText.send(self.formatNumber(song.views))
+        output.likeCountText.send("준비중")
+    }
+    
+    func handleProgress(progress: PlayState.PlayProgress, output: Output) {
+        output.playTimeText.send(self.formatTime(progress.currentProgress))
+        output.totalTimeText.send(self.formatTime(progress.endProgress))
+        output.playTimeValue.send(Float(progress.currentProgress))
+        output.totalTimeValue.send(Float(progress.endProgress))
+    }
+    
+    /// 가사 불러오기
+    func fetchLyrics(for song: SongEntity, output: Output) {
+        fetchLyricsUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe { [weak self] lyricsEntityArray in
+                guard let self else { return }
+                self.lyricsDict.removeAll()
+                self.sortedLyrics.removeAll()
+                lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
+                self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
             } onFailure: { [weak self] error in
                 guard let self else { return }
                 self.lyricsDict.removeAll()
@@ -152,32 +272,66 @@ final class PlayerViewModel: ViewModelType {
             } onDisposed: {
                 output.lyricsDidChangedEvent.send(true)
             }.disposed(by: self.disposeBag)
-            
-            // 좋아요 수 가져오기
-            self.fetchLikeNumOfSongUseCase.execute(id: song.id)
-                .retry(3)
-                .map { [weak self] song in
-                    self?.formatNumber(song.likes) ?? ""
-                }
-                .subscribe { likeCountText in
-                    output.likeCountText.send(likeCountText)
-                } onFailure: { _ in
-                    output.likeCountText.send("좋아요")
-                }.disposed(by: self.disposeBag)
-            
-        }.store(in: &subscription)
-        
-        playState.$progress.sink { [weak self] progress in
-            guard let self else { return }
-            output.playTimeText.send(self.formatTime(progress.currentProgress))
-            output.totalTimeText.send(self.formatTime(progress.endProgress))
-            output.playTimeValue.send(Float(progress.currentProgress))
-            output.totalTimeValue.send(Float(progress.endProgress))
-        }.store(in: &subscription)
-        
-        return output
     }
     
+    /// 좋아요 수 가져오기
+    func fetchLikeCount(for song: SongEntity, output: Output) {
+        fetchLikeNumOfSongUseCase.execute(id: song.id)
+            .retry(3)
+            .map { [weak self] song in
+                self?.formatNumber(song.likes) ?? ""
+            }
+            .subscribe { likeCountText in
+                output.likeCountText.send(likeCountText)
+            } onFailure: { _ in
+                output.likeCountText.send("좋아요")
+            }.disposed(by: self.disposeBag)
+    }
+    
+    /// 좋아요를 누른 곡인지 여부 판별
+    func fetchLikeState(for song: SongEntity, output: Output) {
+        fetchFavoriteSongsUseCase.execute()
+            .retry(3)
+            .map { $0.contains { $0.song.id == song.id } }
+            .subscribe { isLiked in
+                output.likeState.send(isLiked)
+            } onFailure: { _ in
+                output.likeState.send(false)
+            }.disposed(by: self.disposeBag)
+    }
+    
+    func cancelLikeSong(for song: SongEntity, output: Output) {
+        self.cancelLikeSongUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe(
+                onSuccess: { _ in
+                    output.likeState.send(false)
+                },
+                onFailure: { error in
+                    output.showToastMessage.send(error.localizedDescription)
+                }
+            )
+            .disposed(by: self.disposeBag)
+    }
+    
+    func addLikeSong(for song: SongEntity, output: Output) {
+        self.addLikeSongUseCase.execute(id: song.id)
+            .retry(3)
+            .subscribe(
+                onSuccess: { _ in
+                    output.likeState.send(true)
+                },
+                onFailure: { error in
+                    output.showToastMessage.send(error.localizedDescription)
+                }
+            )
+            .disposed(by: self.disposeBag)
+    }
+    
+}
+
+// MARK: - 뷰모델 내 유틸리티 함수들을 모아놓은 곳입니다.
+extension PlayerViewModel {
     func formatTime(_ second: Double) -> String {
         let second = Int(floor(second))
         let min = second / 60
@@ -242,5 +396,4 @@ final class PlayerViewModel: ViewModelType {
         
         return closestIndex
     }
-    
 }

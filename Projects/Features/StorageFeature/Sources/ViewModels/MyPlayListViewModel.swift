@@ -65,14 +65,15 @@ public final class MyPlayListViewModel:ViewModelType {
                     .catchAndReturn([])
             })
             .map { [MyPlayListSectionModel(model: 0, items: $0)] }
-            .bind(to: output.dataSource,output.backUpdataSource)
+            .debug("TESTTEST")
+            .bind(to: output.dataSource, output.backUpdataSource)
             .disposed(by: disposeBag)
         
         
         input.runEditing.withLatestFrom(output.dataSource)
             .map { $0.first?.items.map { $0.key } ?? [] }
             .filter({!$0.isEmpty})
-            .flatMap({[weak self] (ids:[String])  -> Observable<BaseEntity> in
+            .flatMap({[weak self] (ids:[String]) -> Observable<BaseEntity> in
                 
                 guard let self = self else{
                     return Observable.empty()

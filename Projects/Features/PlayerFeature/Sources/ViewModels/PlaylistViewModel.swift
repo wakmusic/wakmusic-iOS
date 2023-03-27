@@ -26,11 +26,13 @@ final class PlaylistViewModel: ViewModelType {
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
         var willClosePlaylist = PassthroughSubject<Bool, Never>()
-        var editState = CurrentValueSubject<Bool, Never>(false)
+        var editState = PassthroughSubject<Bool, Never>()
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var currentSongIndex = CurrentValueSubject<Int, Never>(0)
+        var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
+        var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
     }
     
     private let playState = PlayState.shared
@@ -58,13 +60,19 @@ final class PlaylistViewModel: ViewModelType {
             output.editState.send(self.isEditing)
         }.store(in: &subscription)
         
-        input.repeatButtonDidTapEvent.sink { _ in
-            print("repeat 버튼 누름")
+        input.repeatButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playState.repeatMode.rotate()
         }.store(in: &subscription)
         
         input.prevButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
-            self.playState.backWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.backward()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.store(in: &subscription)
         
         input.playButtonDidTapEvent.sink { [weak self] _ in
@@ -75,11 +83,17 @@ final class PlaylistViewModel: ViewModelType {
         
         input.nextButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
-            self.playState.forWard()
+            switch self.playState.shuffleMode {
+            case .off:
+                self.playState.forward()
+            case .on:
+                self.playState.shufflePlay()
+            }
         }.store(in: &subscription)
         
-        input.shuffleButtonDidTapEvent.sink { _ in
-            print("shuffle 버튼 누름")
+        input.shuffleButtonDidTapEvent.sink { [weak self] _ in
+            guard let self else { return }
+            self.playState.shuffleMode.toggle()
         }.store(in: &subscription)
         
         playState.$state.sink { state in
@@ -98,6 +112,14 @@ final class PlaylistViewModel: ViewModelType {
         playState.$progress.sink { progress in
             output.playTimeValue.send(Float(progress.currentProgress))
             output.totalTimeValue.send(Float(progress.endProgress))
+        }.store(in: &subscription)
+        
+        playState.$repeatMode.sink { repeatMode in
+            output.repeatMode.send(repeatMode)
+        }.store(in: &subscription)
+        
+        playState.$shuffleMode.sink { shuffleMode in
+            output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
         
         return output

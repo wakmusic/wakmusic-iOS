@@ -21,7 +21,8 @@ import DomainModule
 
 
 
-public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard {
+
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
     
     
     @IBOutlet weak var backButton: UIButton!
@@ -39,14 +40,21 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
+    lazy var input = PlayListDetailViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     var multiPurposePopComponent:MultiPurposePopComponent!
+    var containSongsComponent:ContainSongsComponent!
+    
+    public var editSheetView: EditSheetView!
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
     
     
     
     
     @IBAction func backButtonAction(_ sender: UIButton) {
         
-        let isEdit: Bool = viewModel.output.state.value.isEditing
+        let isEdit: Bool = input.state.value.isEditing
         
         if isEdit {
             
@@ -55,11 +63,9 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                 guard let self =  self else {
                     return
                 }
-                //TODO: 저장 코드
-                self.viewModel.input.runEditing.onNext(())
+                self.input.runEditing.onNext(())
                 
-               // self.navigationController?.popViewController(animated: true)
-           // self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
+
             self.navigationController?.popViewController(animated: true)
                 
             },cancelCompletion: { [weak self] in
@@ -68,10 +74,13 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                     return
                 }
                 
-                self.viewModel.output.state.accept(EditState(isEditing: false, force: true))
                 
-                self.viewModel.input.cancelEdit.onNext(())
+                self.input.state.accept(EditState(isEditing: false, force: true))
                 
+                self.input.cancelEdit.onNext(())
+                self.input.runEditing.onNext(())
+                
+
                 
             })
             self.showPanModal(content: vc)
@@ -84,8 +93,11 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditListAction(_ sender: UIButton) {
         
-        viewModel.output.state.accept(EditState(isEditing: true, force: false))
+       
         
+        
+        self.showEditSheet(in: self.view, type: .playList)
+        self.editSheetView.delegate = self
         
        
         
@@ -94,7 +106,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressCompleteAction(_ sender: UIButton) {
         
-        viewModel.output.state.accept(EditState(isEditing: false, force: false))
+        input.state.accept(EditState(isEditing: false, force: false))
         
        
     }
@@ -131,11 +143,13 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         
     }
     
-    public static func viewController(viewModel:PlayListDetailViewModel,multiPurposePopComponent:MultiPurposePopComponent) -> PlayListDetailViewController {
+    public static func viewController(viewModel:PlayListDetailViewModel,multiPurposePopComponent:MultiPurposePopComponent,containSongsComponent:ContainSongsComponent) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
+        
+        viewController.containSongsComponent = containSongsComponent
         
         return viewController
     }
@@ -224,14 +238,14 @@ extension PlayListDetailViewController{
         
         bindRx()
         configureSkeleton()
+        bindSelectedEvent()
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
             guard let self = self else { return UITableViewCell() }
 
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+
             switch self.viewModel.type {
                 
             case .custom:
@@ -240,16 +254,15 @@ extension PlayListDetailViewController{
                     return UITableViewCell()
                 }
                 
-                cell.selectedBackgroundView = bgView
-                cell.update(model,self.viewModel.output.state.value.isEditing)
-                
+                cell.update(model,self.input.state.value.isEditing,index: indexPath.row)
+                cell.cellDelegate = self
+                cell.playDelegate = self
                 return cell
             case .wmRecommend:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: IndexPath(row: indexPath.row, section: 0)) as? SongListCell else{
                     return UITableViewCell()
                 }
                 
-                cell.selectedBackgroundView = bgView
                 cell.update(model)
                 
                 return cell
@@ -273,7 +286,7 @@ extension PlayListDetailViewController{
         //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         //다른 모듈 시 번들 변경 Bundle.module 사용 X
         
-        viewModel.output.dataSource
+        output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
                 guard let self = self else {
@@ -292,31 +305,23 @@ extension PlayListDetailViewController{
             .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
                 guard let `self` = self else { return }
 
-                DEBUG_LOG("sourceIndexPath: \(sourceIndexPath)")
-                DEBUG_LOG("sourceIndexPath: \(destinationIndexPath)")
 
-                self.viewModel.input.sourceIndexPath.accept(sourceIndexPath)
-                self.viewModel.input.destIndexPath.accept(destinationIndexPath)
+                self.input.destIndexPath.accept(destinationIndexPath)
+                self.input.sourceIndexPath.accept(sourceIndexPath)
                 
-                var curr = self.viewModel.output.dataSource.value.first?.items ?? []
-                DEBUG_LOG("current: \(curr)")
                 
-                let tmp = curr[self.viewModel.input.sourceIndexPath.value.row]
-                curr.remove(at: self.viewModel.input.sourceIndexPath.value.row)
-                curr.insert(tmp, at: self.viewModel.input.destIndexPath.value.row)
-
-                let newModel = [PlayListDetailSectionModel(model: 0, items: curr)]
-                self.viewModel.output.dataSource.accept(newModel)
+                
+                
                 
             }).disposed(by: disposeBag)
         
-        viewModel.output.state
+        input.state
             .skip(1)
-            .do(onNext: { [weak self] state in
+            .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
                 
                 if state.isEditing == false && state.force == false {
-                    self.viewModel.input.runEditing.onNext(())
+                    self.input.runEditing.onNext(())
                 }
                 
                 let isEdit = state.isEditing
@@ -327,13 +332,11 @@ extension PlayListDetailViewController{
                 self.editStateLabel.isHidden = !isEdit
                 
                 self.tableView.setEditing(isEdit, animated: true)
+                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
-            .withLatestFrom(viewModel.output.dataSource)
-            .bind(to: viewModel.output.dataSource)
             .disposed(by: disposeBag)
-        
                 
-        viewModel.output.headerInfo.subscribe(onNext: { [weak self] (model) in
+        output.headerInfo.subscribe(onNext: { [weak self] (model) in
             guard let self = self else{
                 return
             }
@@ -378,16 +381,98 @@ extension PlayListDetailViewController{
                 return obj
                 
             })
-            .bind(to: viewModel.input.playListNameLoad)
+            .bind(to: input.playListNameLoad)
             .disposed(by: disposeBag)
         
-        viewModel.input.showErrorToast.subscribe(onNext: { [weak self] in
+        input.showErrorToast.subscribe(onNext: { [weak self] in
             guard let self = self else {
                 return
             }
             self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
         })
         .disposed(by: disposeBag)
+                
+        tableView.rx.itemSelected
+            .withLatestFrom(input.state){($0,$1)}
+            .filter({ [weak self] in
+
+                $0.1.isEditing || self?.viewModel.type == .wmRecommend})
+            .map { $0.0.row }
+            .bind(to: input.songTapped)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSelectedEvent() {
+        
+        output.indexOfSelectedSongs
+            .skip(1)
+            .withLatestFrom(output.dataSource) {($0,$1)}
+            .withLatestFrom(input.state) { ($0,$1)}
+            .subscribe(onNext: { [weak self] (arg0,state)   in
+                
+                
+                let (songs, dataSource) = arg0
+                guard let self = self else {return}
+                
+               
+                
+                guard let type = self.viewModel.type else {
+                    return
+                }
+                
+                
+                switch type {
+                    
+                case .custom:
+                    switch songs.isEmpty {
+                    case true:
+                        self.hideSongCart()
+                        
+                    case false:
+                        self.showSongCart(
+                            in: self.view,
+                            type: .myList,
+                            selectedSongCount: songs.count,
+                            totalSongCount: (dataSource.first?.items.count ?? 0),
+                            useBottomSpace: false
+                        )
+                        self.songCartView?.delegate = self
+                    }
+                case .wmRecommend:
+                    
+                    switch songs.isEmpty {
+                    case true:
+                        self.hideSongCart()
+                        
+                    case false:
+                        self.showSongCart(
+                            in: self.view,
+                            type: .WMPlayList,
+                            selectedSongCount: songs.count,
+                            totalSongCount: (dataSource.first?.items.count ?? 0),
+                            useBottomSpace: false
+                        )
+                        self.songCartView?.delegate = self
+                    }
+                }
+                    
+                
+                
+                    
+                
+        
+                    
+                    
+         
+                
+            })
+            .disposed(by: disposeBag)
+        
+        output.songEntityOfSelectedSongs
+            .filter{ !$0.isEmpty }
+            .subscribe()
+            .disposed(by: disposeBag)
+        
     }
 }
 
@@ -396,12 +481,12 @@ extension PlayListDetailViewController:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        let items = viewModel.output.dataSource.value.first?.items ?? []
+        let items = output.dataSource.value.first?.items ?? []
         return items.isEmpty ? nil : view
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let items = viewModel.output.dataSource.value.first?.items ?? []
+        let items = output.dataSource.value.first?.items ?? []
         return items.isEmpty ? 0 : 80
     }
     
@@ -433,4 +518,79 @@ extension PlayListDetailViewController: UIGestureRecognizerDelegate {
 
 
 
+extension PlayListDetailViewController:SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        
+       
+        
+        switch type {
+        case let .allSelect(flag):
+            input.allSongSelected.onNext(flag)
+        case .addSong:
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.input.allSongSelected.onNext(false)
+                self.input.state.accept(EditState(isEditing: false, force: true))
+            }
+        case .addPlayList:
+            return
+        case .play:
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            
+            DEBUG_LOG("재생할 곡 목록 \(songs.map({$0.title}))")
+            
+        case .remove:
+            self.input.tapRemoveSongs.onNext(())
+        }
+    }
+    
+    
+}
 
+extension PlayListDetailViewController:EditSheetViewDelegate {
+    public func buttonTapped(type: EditSheetSelectType) {
+        
+       
+        
+        switch type {
+            
+        case .edit:
+            input.state.accept(EditState(isEditing: true, force: false))
+        case .share:
+            let vc = multiPurposePopComponent.makeView(type: .share,key: viewModel?.key ?? "")
+            
+            self.showPanModal(content: vc)
+            
+        case .profile:
+            return
+        case .nickname:
+            return
+        }
+        
+        self.hideEditSheet()
+        
+    }
+    
+    
+}
+
+extension PlayListDetailViewController:PlayListCellDelegate {
+    public func pressCell(index: Int) {
+        
+        input.songTapped.onNext(index)
+        
+    }
+    
+    
+}
+
+extension PlayListDetailViewController:PlayButtonDelegate {
+    public func play(model: SongEntity) {
+        DEBUG_LOG(model.title)
+    }
+    
+    
+    
+}

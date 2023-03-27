@@ -133,15 +133,35 @@ extension HomeViewController {
 
         tableView.rx.itemSelected
             .withLatestFrom(output.chartDataSource) { ($0, $1) }
-            .map { $0.1[$0.0.row].id }
-            .debug("✅ idOfAllChart")
+            .map { SongEntity(
+                    id: $0.1[$0.0.row].id,
+                    title: $0.1[$0.0.row].title,
+                    artist: $0.1[$0.0.row].artist,
+                    remix: $0.1[$0.0.row].remix,
+                    reaction: $0.1[$0.0.row].reaction,
+                    views: $0.1[$0.0.row].views,
+                    last: $0.1[$0.0.row].last,
+                    date: $0.1[$0.0.row].date
+                )
+            }
+            .debug("✅ songEntityOfAllChart")
             .subscribe()
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
             .withLatestFrom(output.newSongDataSource) { ($0, $1) }
-            .map { $0.1[$0.0.item].id }
-            .debug("✅ idOfNewSong")
+            .map { SongEntity(
+                    id: $0.1[$0.0.row].id,
+                    title: $0.1[$0.0.row].title,
+                    artist: $0.1[$0.0.row].artist,
+                    remix: $0.1[$0.0.row].remix,
+                    reaction: $0.1[$0.0.row].reaction,
+                    views: $0.1[$0.0.row].views,
+                    last: $0.1[$0.0.row].last,
+                    date: "\($0.1[$0.0.row].date)"
+                )
+            }
+            .debug("✅ songEntityOfAllChart")
             .subscribe()
             .disposed(by: disposeBag)
     }
@@ -217,8 +237,8 @@ extension HomeViewController {
                 }
             }).disposed(by: disposeBag)
         
-        output.idOfAllChart
-            .debug("✅ idOfAllChart")
+        output.songEntityOfAllChart
+            .debug("✅ songEntityOfAllChart")
             .subscribe()
             .disposed(by: disposeBag)
     }

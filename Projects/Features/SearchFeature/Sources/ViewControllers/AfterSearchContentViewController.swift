@@ -37,10 +37,11 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-    
+        DEBUG_LOG("VIEW DID LOAD")
         
         configureUI()
-        bindRx()
+        requestFromParent()
+        
         
 
         // Do any additional setup after loading the view.
@@ -70,7 +71,8 @@ extension AfterSearchContentViewController{
     {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
+        bindRx()
+        bindRxEvent()
     }
     
     private func bindRx()
@@ -105,6 +107,46 @@ extension AfterSearchContentViewController{
         .disposed(by: disposeBag)
         
         
+        
+    }
+    
+    private func bindRxEvent()
+    {
+        tableView.rx.itemSelected
+            .bind(to: input.indexPath)
+            .disposed(by: disposeBag)
+            
+    }
+        
+    
+    func requestFromParent()
+    {
+        
+        guard let parent = self.parent?.parent as? AfterSearchViewController else {
+            return
+        }
+        
+        
+        
+       let entities = parent.output.songEntityOfSelectedSongs.value
+       let models = output.dataSource.value
+       let indexPaths = entities.map { entity -> IndexPath? in
+                    var indexPath: IndexPath?
+
+                    models.enumerated().forEach { (section, model) in
+                        if let row = model.items.firstIndex(where: { $0 == entity }){
+                            indexPath = IndexPath(row: row, section: section)
+                        }
+                    }
+                    return indexPath
+       }.compactMap({$0})
+        
+    input.mandatoryLoadIndexPath.accept(indexPaths)
+        
+        
+    
+       
+       
         
     }
     
@@ -174,11 +216,10 @@ extension AfterSearchContentViewController{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
                 return UITableViewCell()
             }
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+
             
             cell.update(model)
-            cell.selectedBackgroundView = bgView
+    
 
             
             return cell

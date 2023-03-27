@@ -133,73 +133,51 @@ extension FavoriteViewController{
                 }).disposed(by: disposeBag)
         
         
-            output.state
+        output.state
             .skip(1)
-            .do(onNext: { [weak self] state in
-               
-                DEBUG_LOG(state)
-               
+            .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else{
                     return
                 }
-                
                 if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
-                
-                
-    
-                
-                
                 guard let parent = self.parent?.parent as? AfterLoginViewController else{
                     return
                 }
                 // 탭맨 쪽 편집 변경
-                parent.output.state.accept(EditState(isEditing: state.isEditing, force: true))
-                self.tableView.setEditing(state.isEditing, animated: true)
-                
-                
+                let isEdit: Bool = state.isEditing
+                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+                self.tableView.setEditing(isEdit, animated: true)
+                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
-            .withLatestFrom(output.dataSource)
-            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-    
-        
-            input.showConfirmModal.subscribe(onNext: { [weak self] in
-                
-                guard let self = self else{
-                    return
-                }
-                
-                
-                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
 
+        input.showConfirmModal.subscribe(onNext: { [weak self] in
+                    
+            guard let self = self else{
+                return
+            }
+                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
                     self.input.runEditing.onNext(())
-                    
                 },cancelCompletion: {
-                    
                     self.input.cancelEdit.onNext(())
                 })
-             
+            
                 self.showPanModal(content: vc)
-                
+            
             }).disposed(by: disposeBag)
                 
                 
-                input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
-                    
-                    guard let self = self else{
-                        return
-                    }
-                    
-                    self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                    
-                    
-                }).disposed(by: disposeBag)
-      
-        
+        input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
+            guard let self = self else{
+                return
+            }
+            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            
+        }).disposed(by: disposeBag)
+
     }
-    
 }
 
 extension FavoriteViewController:UITableViewDelegate{

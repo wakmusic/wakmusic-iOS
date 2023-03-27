@@ -14,10 +14,9 @@ import DatabaseModule
 import RxSwift
 
 public struct PlayListRepositoryImpl: PlayListRepository {
+ 
     
-    
-   
-    
+  
     private let remotePlayListDataSource: any RemotePlayListDataSource
     
     public init(
@@ -59,4 +58,7 @@ public struct PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.addSongIntoPlayList(key: key, songs: songs)
     }
    
+    public func removeSongs(key: String, songs: [String]) -> RxSwift.Single<DomainModule.BaseEntity> {
+        remotePlayListDataSource.removeSongs(key: key, songs: songs)
+    }
 }

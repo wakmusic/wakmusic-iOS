@@ -122,6 +122,9 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase {
         return appComponent.fetchLikeNumOfSongUseCase
     }
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
+        return appComponent.fetchFavoriteSongsUseCase
+    }
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
@@ -479,6 +482,9 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
         return appComponent.fetchSearchSongUseCase
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -579,8 +585,14 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var editPlayListUseCase: any EditPlayListUseCase {
         return appComponent.editPlayListUseCase
     }
+    var removeSongsUseCase: any RemoveSongsUseCase {
+        return appComponent.removeSongsUseCase
+    }
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
+    }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -652,6 +664,7 @@ extension AppComponent: Registration {
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
+        localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { self.removeSongsUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
@@ -730,6 +743,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.addLikeSongUseCase] = "addLikeSongUseCase-any AddLikeSongUseCase"
         keyPathToName[\PlayerDependency.cancelLikeSongUseCase] = "cancelLikeSongUseCase-any CancelLikeSongUseCase"
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
+        keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
     }
 }
@@ -867,6 +881,7 @@ extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
         keyPathToName[\AfterSearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
+        keyPathToName[\AfterSearchDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension AfterSearchContentComponent: Registration {
@@ -905,7 +920,9 @@ extension PlayListDetailComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
         keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
+        keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension ProfilePopComponent: Registration {

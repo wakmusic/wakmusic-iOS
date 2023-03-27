@@ -43,7 +43,7 @@ public final class HomeViewModel: ViewModelType {
         var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
         let newSongDataSource: BehaviorRelay<[NewSongEntity]>
         var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
-        var idOfAllChart: PublishSubject<[String]>
+        var songEntityOfAllChart: PublishSubject<[SongEntity]>
     }
     
     public func transform(from input: Input) -> Output {
@@ -51,7 +51,7 @@ public final class HomeViewModel: ViewModelType {
         let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
-        let idOfAllChart: PublishSubject<[String]> = PublishSubject()
+        let songEntityOfAllChart: PublishSubject<[SongEntity]> = PublishSubject()
 
         fetchChartRankingUseCase
             .execute(type: .hourly, limit: 100)
@@ -82,8 +82,19 @@ public final class HomeViewModel: ViewModelType {
         
         input.allListenTapped
             .withLatestFrom(chartDataSource)
-            .map { $0.map { $0.id }}
-            .bind(to: idOfAllChart)
+            .map { $0.map { SongEntity(
+                        id: $0.id,
+                        title: $0.title,
+                        artist: $0.artist,
+                        remix: $0.remix,
+                        reaction: $0.reaction,
+                        views: $0.views,
+                        last: $0.last,
+                        date: $0.date
+                    )
+                }
+            }
+            .bind(to: songEntityOfAllChart)
             .disposed(by: disposeBag)
 
         input.newSongTypeTapped
@@ -134,7 +145,7 @@ public final class HomeViewModel: ViewModelType {
             chartDataSource: chartDataSource,
             newSongDataSource: newSongDataSource,
             playListDataSource: playListDataSource,
-            idOfAllChart: idOfAllChart
+            songEntityOfAllChart: songEntityOfAllChart
         )
     }
 }
