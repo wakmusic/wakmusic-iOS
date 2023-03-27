@@ -9,7 +9,8 @@ public struct ChartRankingEntity: Equatable {
         reaction: String,
         views: Int,
         last: Int,
-        date: String
+        date: String,
+        isSelected: Bool
     ) {
         self.id = id
         self.title = title
@@ -25,4 +26,5 @@ public struct ChartRankingEntity: Equatable {
     public let reaction: String
     public let views, last: Int
     public let date: String
+    public let isSelected:Bool = false
 }
