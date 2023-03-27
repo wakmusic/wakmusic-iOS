@@ -22,25 +22,28 @@ public final class ChartContentViewModel: ViewModelType {
         self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
     
-    public struct Input {}
+    public struct Input {
+        
+        let indexPath:PublishRelay<IndexPath> = PublishRelay()
+        let mandatoryLoadIndexPath:PublishRelay<[IndexPath]> = PublishRelay()
+    }
     
     public struct Output {
-        var canLoadMore: BehaviorRelay<Bool>
-        var dataSource: BehaviorRelay<[ChartRankingEntity]>
-        var updateTime: BehaviorRelay<String>
+        var canLoadMore: BehaviorRelay<Bool>  = BehaviorRelay(value: true)
+        var dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
     
     public func transform(from input: Input) -> Output {
-        let dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
-        let updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+       
+        let output = Output()
 
         fetchChartUpdateTimeUseCase
             .execute()
             .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
             .asObservable()
-            .do(onError: { _ in canLoadMore.accept(false) })
-            .bind(to: updateTime)
+            .do(onError: { _ in output.canLoadMore.accept(false) })
+                .bind(to: output.updateTime)
             .disposed(by: disposeBag)
 
         fetchChartRankingUseCase
@@ -48,16 +51,40 @@ public final class ChartContentViewModel: ViewModelType {
             .catchAndReturn([])
             .asObservable()
             .do(
-                onNext: { (model) in canLoadMore.accept(!model.isEmpty)},
-                onError: { _ in canLoadMore.accept(false) }
+                onNext: { (model) in output.canLoadMore.accept(!model.isEmpty)},
+                onError: { _ in output.canLoadMore.accept(false) }
             )
-            .bind(to: dataSource)
+                .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
-        return Output(
-            canLoadMore: canLoadMore,
-            dataSource: dataSource,
-            updateTime: updateTime
-        )
+    
+            input.indexPath
+                .withLatestFrom(output.dataSource){($0,$1)}
+                .map({[weak self] (indexPath,dataSource) -> [ChartRankingEntity] in
+                    
+                    guard let self = self else{return [] }
+                    
+                    let index:Int = indexPath.row
+                    
+                    let song = dataSource[index]
+                    
+                    
+                    NotificationCenter.default.post(name: .selectedSongOnChart, object: (self.type,song))
+                    
+                    
+                    var newModel = dataSource
+                    
+                   newModel[index].isSelected = !newModel[index].isSelected
+                    
+                    
+                    
+                    return newModel
+                })
+                .bind(to: output.dataSource)
+                .disposed(by: disposeBag)
+        
+                
+    
+        return output
     }
 }

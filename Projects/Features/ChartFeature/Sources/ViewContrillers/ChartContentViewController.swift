@@ -58,13 +58,11 @@ extension ChartContentViewController {
                 cell.update(model: model, index: index)
                 return cell
             }.disposed(by: disposeBag)
-
+        
         tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (indexPath, _) in
-                guard let `self` = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }).disposed(by: disposeBag)
+            .bind(to: input.indexPath)
+            .disposed(by: disposeBag)
+
     }
     
     private func configureUI() {

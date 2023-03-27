@@ -28,4 +28,8 @@ public struct ChartRankingEntity: Equatable {
     public let views, last: Int
     public let date: String
     public var isSelected:Bool
+    
+    public static func == (lhs: ChartRankingEntity, rhs:  ChartRankingEntity) -> Bool {
+        lhs.id == rhs.id
+    }
 }

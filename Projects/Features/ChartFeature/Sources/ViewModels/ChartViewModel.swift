@@ -12,11 +12,11 @@ public final class ChartViewModel:ViewModelType {
 
     
     public  struct Input {
-        
+        let notiResult:PublishRelay<SongEntity> = PublishRelay()
     }
     
     public  struct Output {
-        
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
     
   
