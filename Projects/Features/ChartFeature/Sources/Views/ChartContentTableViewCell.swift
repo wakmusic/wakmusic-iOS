@@ -61,6 +61,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
         addView()
         setRankingLayout()
         setLayout()
+        self.selectionStyle = .none
     }
 
     @available(*, unavailable)
