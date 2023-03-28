@@ -19,6 +19,5 @@ public extension Notification.Name {
     static let movedTab = Notification.Name("movedTab")
     
     static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
-    static let selectedSongOnChart = Notification.Name("selectedSongOnChart")
     
 }

@@ -23,7 +23,6 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
         super.viewDidLoad()
         configureUI()
         bind()
-        requestFromParent()
     }
     
     public static func viewController(
@@ -61,6 +60,7 @@ extension ChartContentViewController {
             }.disposed(by: disposeBag)
         
         tableView.rx.itemSelected
+            .map({$0.row})
             .bind(to: input.indexPath)
             .disposed(by: disposeBag)
 
@@ -73,27 +73,7 @@ extension ChartContentViewController {
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
     
-    func requestFromParent()
-    {
-        
-        guard let parent = self.parent?.parent as? ChartViewController else {
-           
-            return
-        }
-        
-        
-        
-       let entities = parent.output.songEntityOfSelectedSongs.value
     
-        DEBUG_LOG("EN \(entities)")
-        input.mandatoryLoadIndexPath.accept(entities)
-        
-        
-    
-       
-       
-        
-    }
 }
 
 extension ChartContentViewController: UITableViewDelegate {
