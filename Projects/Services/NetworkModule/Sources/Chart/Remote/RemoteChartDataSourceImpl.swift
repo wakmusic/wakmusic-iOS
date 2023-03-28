@@ -6,9 +6,9 @@ import ErrorModule
 import Foundation
 
 public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, RemoteChartDataSource {
-    public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[DomainModule.ChartRankingEntity]> {
+    public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[SongEntity]> {
         request(.fetchChartRanking(type: type, limit: limit))
-            .map([SingleChartRankingResponseDTO].self)
+            .map([SingleSongResponseDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
     
