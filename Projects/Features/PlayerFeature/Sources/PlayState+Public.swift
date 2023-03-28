@@ -25,7 +25,6 @@ public extension PlayState {
         }
         songs.dropFirst().forEach { song in
             self.playList.appendIfUnique(item: song)
-            self.load(at: song)
         }
     }
 }
