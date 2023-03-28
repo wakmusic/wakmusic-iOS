@@ -24,7 +24,48 @@ public final class ChartViewModel:ViewModelType {
   
     public func transform(from input: Input) -> Output {
         
-        return Output()
+        let output = Output()
+        
+        NotificationCenter.default.rx.notification(.selectedSongOnChart)
+            .map({ notification -> SongEntity in
+                guard let result = notification.object as? SongEntity else {
+                    return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result
+                
+            })
+            .filter({$0.id != "_"})
+            .bind(to: input.notiResult)
+            .disposed(by: disposeBag)
+        
+        
+        input.notiResult
+            .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
+            .map({[weak self] (song,songs) -> [SongEntity]   in
+                
+                var nextSongs = songs
+                
+                if nextSongs.contains(where: {$0 == song}) {
+                    
+                    let index = nextSongs.firstIndex(of: song)!
+                    nextSongs.remove(at: index)
+                }
+                
+                else {
+                    nextSongs.append(song)
+                }
+                    
+                
+                return nextSongs
+            })
+            .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        
+        
+        
+        return output
     }
     
     
