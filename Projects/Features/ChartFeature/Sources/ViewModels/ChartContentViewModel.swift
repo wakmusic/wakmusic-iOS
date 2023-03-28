@@ -30,7 +30,7 @@ public final class ChartContentViewModel: ViewModelType {
     
     public struct Output {
         var canLoadMore: BehaviorRelay<Bool>  = BehaviorRelay(value: true)
-        var dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        var dataSource: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
     
@@ -60,7 +60,7 @@ public final class ChartContentViewModel: ViewModelType {
     
             input.indexPath
                 .withLatestFrom(output.dataSource){($0,$1)}
-                .map({[weak self] (indexPath,dataSource) -> [ChartRankingEntity] in
+                .map({[weak self] (indexPath,dataSource) -> [SongEntity] in
                     
                     guard let self = self else{return [] }
                     
@@ -83,6 +83,64 @@ public final class ChartContentViewModel: ViewModelType {
                 .bind(to: output.dataSource)
                 .disposed(by: disposeBag)
         
+        
+        
+        
+        NotificationCenter.default.rx.notification(.selectedSongOnChart)
+            .filter({ [weak self]  in
+                
+                guard let self = self else{return false}
+                
+                
+                guard let result = $0.object as? (ChartDateType,SongEntity) else {
+                    return false
+                }
+                
+                
+                return self.type != result.0
+            })
+            .map({(res) -> SongEntity  in
+                
+
+                guard let result = res.object as? (ChartDateType,SongEntity) else {
+                    return SongEntity(id: "-", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+                }
+                
+                return result.1
+            })
+            .filter({$0.id != "-"})
+            .withLatestFrom(output.dataSource){($0,$1)}
+            .map{ [weak self] (song:SongEntity,dataSource:[SongEntity]) -> [SongEntity] in
+                
+                guard let self = self else {return [] }
+                
+                var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
+        
+                var models = dataSource
+                
+                models.enumerated().forEach { (model) in
+                    
+                    if let row =  models.firstIndex(where: {$0 == song}) {
+                        
+                    }
+                    
+                    if let row = models.firstIndex(where: { $0 == song }){
+                        indexPath = IndexPath(row: row, section: 0)
+                    }
+                }
+                
+                guard indexPath.row >= 0 else { // 비어있는 탭 예외 처리
+                    return models
+                }
+                
+                models[indexPath.row].isSelected = !models[indexPath.row].isSelected
+                
+            
+                
+                return models
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
                 
     
         return output
