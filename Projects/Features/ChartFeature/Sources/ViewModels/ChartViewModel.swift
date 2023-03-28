@@ -28,11 +28,16 @@ public final class ChartViewModel:ViewModelType {
         
         NotificationCenter.default.rx.notification(.selectedSongOnChart)
             .map({ notification -> SongEntity in
-                guard let result = notification.object as? SongEntity else {
+                
+                
+                
+                guard let result = notification.object as? (ChartDateType,SongEntity) else {
                     return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
                 }
                 
-                return result
+                
+                
+                return result.1
                 
             })
             .filter({$0.id != "_"})
@@ -41,8 +46,9 @@ public final class ChartViewModel:ViewModelType {
         
         
         input.notiResult
+            
             .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
-            .map({[weak self] (song,songs) -> [SongEntity]   in
+            .map({ (song,songs) -> [SongEntity]   in
                 
                 var nextSongs = songs
                 
@@ -56,7 +62,6 @@ public final class ChartViewModel:ViewModelType {
                     nextSongs.append(song)
                 }
                     
-                
                 return nextSongs
             })
             .bind(to: output.songEntityOfSelectedSongs)

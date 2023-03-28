@@ -12,6 +12,9 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
     
     private var viewModel:ChartViewModel!
     
+    lazy var input = ChartViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
     private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
             chartContentComponent?.makeView(type: .hourly),
@@ -82,6 +85,23 @@ extension ChartViewController {
         addBar(bar, dataSource: self, at: .custom(view: self.tabBarContentView, layout: nil))
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
+    
+//    func clearSongCart()
+//    {
+//        self.output.songEntityOfSelectedSongs.accept([])
+//        
+//        self.viewControllers.forEach({ vc in
+//            
+//            guard let contentView = vc as? ChartContentViewController else {
+//                
+//               
+//                return
+//            }
+//            
+//            contentView.input.deSelectedAllSongs.accept(())
+//            
+//        })
+//    }
     
 
 }

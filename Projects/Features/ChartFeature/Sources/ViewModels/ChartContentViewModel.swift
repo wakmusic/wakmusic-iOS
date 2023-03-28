@@ -25,7 +25,7 @@ public final class ChartContentViewModel: ViewModelType {
     public struct Input {
         
         let indexPath:PublishRelay<IndexPath> = PublishRelay()
-        let mandatoryLoadIndexPath:PublishRelay<[IndexPath]> = PublishRelay()
+        let mandatoryLoadIndexPath:PublishRelay<[SongEntity]> = PublishRelay()
     }
     
     public struct Output {
@@ -56,6 +56,10 @@ public final class ChartContentViewModel: ViewModelType {
             )
                 .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+                
+            
+            
+                
 
     
             input.indexPath
@@ -69,13 +73,13 @@ public final class ChartContentViewModel: ViewModelType {
                     let song = dataSource[index]
                     
                     
+                    
                     NotificationCenter.default.post(name: .selectedSongOnChart, object: (self.type,song))
                     
                     
                     var newModel = dataSource
                     
                    newModel[index].isSelected = !newModel[index].isSelected
-                    
                     
                     
                     return newModel
@@ -112,33 +116,50 @@ public final class ChartContentViewModel: ViewModelType {
             .withLatestFrom(output.dataSource){($0,$1)}
             .map{ [weak self] (song:SongEntity,dataSource:[SongEntity]) -> [SongEntity] in
                 
-                guard let self = self else {return [] }
                 
-                var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
-        
+                DEBUG_LOG("Song \(song)")
                 var models = dataSource
                 
-                models.enumerated().forEach { (model) in
                     
-                    if let row =  models.firstIndex(where: {$0 == song}) {
-                        
-                    }
-                    
-                    if let row = models.firstIndex(where: { $0 == song }){
-                        indexPath = IndexPath(row: row, section: 0)
-                    }
+                if let row = models.firstIndex(where: { $0 == song }){
+                    models[row].isSelected = !models[row].isSelected
                 }
                 
-                guard indexPath.row >= 0 else { // 비어있는 탭 예외 처리
-                    return models
-                }
                 
-                models[indexPath.row].isSelected = !models[indexPath.row].isSelected
+                
+                
+               
                 
             
                 
                 return models
             }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
+        
+        input.mandatoryLoadIndexPath
+            .withLatestFrom(output.dataSource) {($0,$1)}
+            .map({ (songs,dataSource) -> [SongEntity] in
+                
+                var newModel = dataSource
+                
+                DEBUG_LOG("Song \(songs)")
+                
+                    
+                for song in songs {
+                        
+                    if let index = newModel.firstIndex(where: {$0 == song}) {
+                        newModel[index].isSelected = true
+                    }
+                
+                    
+                }
+                
+
+                
+                return newModel
+            })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
                 
