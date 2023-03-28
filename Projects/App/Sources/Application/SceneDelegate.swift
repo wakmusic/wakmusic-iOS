@@ -1,5 +1,6 @@
 import UIKit
 import RootFeature
+import Utility
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -19,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             print("URLContexts: \(url)")
+            GoogleLoginManager.shared.getGoogleToken(url)
         }
     }
 

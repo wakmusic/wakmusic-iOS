@@ -37,7 +37,7 @@
 			<string>WaktaverseMusicwithGoogle</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>https://test.wakmusic.xyz/api/auth/callback/google</string>
+				<string>com.googleusercontent.apps.715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf</string>
 			</array>
 		</dict>
 	</array>

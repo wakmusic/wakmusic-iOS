@@ -39,9 +39,7 @@ public func OS_VERSION() -> String {
 
 // Google redirectURI
 public func REDIRECT_URI() -> String {
-//    return "715762772031-j0b3uav0md0gqjuiajjahebd9jrc22r8.apps.googleusercontent.com"
-//    return "https://test.wakmusic.xyz/api/auth/callback/google"
-    return "xyz.wakmusic.test:/api/auth/callback/google"
+    return "com.googleusercontent.apps.715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf"
 }
 
 // use: colorFromRGB(0xffffff)

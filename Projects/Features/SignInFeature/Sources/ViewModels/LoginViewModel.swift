@@ -23,6 +23,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
     private var fetchUserInfoUseCase: FetchUserInfoUseCase!
 
+    let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     let naverToken: PublishRelay<(String,String)> = PublishRelay()
     let googleToken: PublishRelay<String> = PublishRelay()
@@ -47,6 +48,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ){
         super.init()
+        self.googleLoginManager.googleOAuthLoginDelegate = self
         self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
@@ -150,6 +152,21 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             auth.presentationContextProvider = self
             auth.performRequests()
         }).disposed(by: disposeBag)
+    }
+}
+
+extension LoginViewModel: GoogleOAuthLoginDelegate {
+    public func requestGoogleAccessToken(_ code: String) {
+        print(code)
+        Task {
+            do {
+                let googleAccessToken = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
+                print(String(data: googleAccessToken, encoding: .utf8))
+            }
+            catch {
+                isErrorString.accept("구글 로그인에 실페했습니다.")
+            }
+        }
     }
 }
 
