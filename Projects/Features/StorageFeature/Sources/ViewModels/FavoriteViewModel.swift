@@ -54,6 +54,13 @@ public final class FavoriteViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
         
+        Utility.PreferenceManager.$userInfo
+            .skip(1)
+            .filter { $0 != nil }
+            .map { _ in () }
+            .bind(to: input.likeListLoad)
+            .disposed(by: disposeBag)
+        
         input.likeListLoad
             .flatMap { [weak self] _ -> Observable<[FavoriteSongEntity]> in
                 guard let self = self else{ return Observable.empty() }

@@ -57,6 +57,13 @@ public final class MyPlayListViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
         
+        Utility.PreferenceManager.$userInfo
+            .skip(1)
+            .filter { $0 != nil }
+            .map { _ in () }
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+        
         input.playListLoad
             .flatMap{ [weak self] () -> Observable<[PlayListEntity]> in
                 guard let self = self else{
