@@ -12,8 +12,8 @@ public enum ShuffleMode {
     case on
     case off
     
-    public    var isOn: Bool { return self == .on }
-    public    var isOff: Bool { return self == .off }
+    public var isOn: Bool { return self == .on }
+    public  var isOff: Bool { return self == .off }
     
     public    mutating func toggle() {
         self = (self == .on) ? .off : .on

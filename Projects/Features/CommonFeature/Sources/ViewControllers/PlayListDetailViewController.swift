@@ -49,6 +49,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
+    let playState = PlayState.shared
     
     
     
@@ -535,11 +536,20 @@ extension PlayListDetailViewController:SongCartViewDelegate {
                 self.input.state.accept(EditState(isEditing: false, force: true))
             }
         case .addPlayList:
+            
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            
+            playState.appendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
+            
             return
         case .play:
             let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
             
-            DEBUG_LOG("재생할 곡 목록 \(songs.map({$0.title}))")
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
             
         case .remove:
             self.input.tapRemoveSongs.onNext(())

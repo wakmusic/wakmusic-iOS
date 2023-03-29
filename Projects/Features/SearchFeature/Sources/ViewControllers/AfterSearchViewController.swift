@@ -14,7 +14,6 @@ import Tabman
 import RxSwift
 import DomainModule
 import CommonFeature
-import PlayerFeature
 
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
