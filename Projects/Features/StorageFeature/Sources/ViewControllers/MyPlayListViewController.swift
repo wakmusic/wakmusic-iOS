@@ -167,7 +167,7 @@ extension MyPlayListViewController{
         
         output.willAddSongList
             .skip(1)
-            .debug()
+            .debug("willAddSongList")
             .subscribe(onNext: { (songs) in
                 //TO-DO
             }).disposed(by: disposeBag)
@@ -226,12 +226,8 @@ extension MyPlayListViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allPlayListSelected.onNext(flag)
-        case .addSong:
-            return
         case .addPlayList:
             input.addPlayList.onNext(())
-        case .play:
-            return
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
             let popup = TextPopupViewController.viewController(
@@ -242,6 +238,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
                 self.input.deletePlayList.onNext(())
             })
             self.showPanModal(content: popup)
+        default: return
         }
     }
 }

@@ -29,7 +29,6 @@ public final class MyPlayListViewModel:ViewModelType {
         let allPlayListSelected: PublishSubject<Bool> = PublishSubject()
         let addPlayList: PublishSubject<Void> = PublishSubject()
         let deletePlayList: PublishSubject<Void> = PublishSubject()
-        let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
     }
 
@@ -151,12 +150,7 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.dataSource)
             .bind(to: output.backUpdataSource)
             .disposed(by: disposeBag)
-        
-        input.cancelEdit
-            .withLatestFrom(output.backUpdataSource)
-            .bind(to: output.dataSource)
-            .disposed(by: disposeBag)
-                
+                        
         input.addPlayList
             .withLatestFrom(output.indexPathOfSelectedPlayLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
@@ -199,7 +193,8 @@ public final class MyPlayListViewModel:ViewModelType {
             })
             .debug()
             .do(onNext: { (model) in
-                output.showToast.accept(model.status == 200 ? "리스트가 삭제되었습니다." : model.description)
+                guard model.status != 200 else { return }
+                output.showToast.accept(model.description)
             })
             .map { _ in () }
             .bind(to: input.playListLoad)
@@ -209,13 +204,11 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedPlayLists, dataSource) in
                 var newModel = dataSource
-                
                 for i in 0..<newModel.count {
                     for j in 0..<newModel[i].items.count {
                         newModel[i].items[j].isSelected = false
                     }
                 }
-                
                 selectedPlayLists.forEach {
                     newModel[$0.section].items[$0.row].isSelected = true
                 }

@@ -754,21 +754,21 @@
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="MyPlayListTableViewCell" id="e4v-he-MOf" customClass="MyPlayListTableViewCell" customModule="StorageFeature">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="44"/>
+                                        <rect key="frame" x="0.0" y="50" width="393" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="e4v-he-MOf" id="VoL-j0-uDR">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="32"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="k48-ug-XH5">
-                                                    <rect key="frame" x="20" y="2" width="40" height="40"/>
+                                                    <rect key="frame" x="20" y="-4" width="40" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="TG6-XU-Nfo"/>
                                                         <constraint firstAttribute="width" constant="40" id="j7X-u2-kPX"/>
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Jhl-EH-Z0M">
-                                                    <rect key="frame" x="68" y="1" width="261" height="42"/>
+                                                    <rect key="frame" x="68" y="-5" width="261" height="42"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHT-8H-NlU">
                                                             <rect key="frame" x="0.0" y="0.0" width="261" height="24"/>
@@ -791,7 +791,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8O-jB-v6M">
-                                                    <rect key="frame" x="341" y="5" width="32" height="34"/>
+                                                    <rect key="frame" x="341" y="-1" width="32" height="34"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="32" id="CVl-mW-mkZ"/>
                                                         <constraint firstAttribute="height" constant="34" id="veg-75-zhS"/>
@@ -802,7 +802,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bnN-v4-XIn">
-                                                    <rect key="frame" x="0.0" y="1" width="329" height="42"/>
+                                                    <rect key="frame" x="0.0" y="1" width="329" height="30"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
                                                         <action selector="listSelectButtonAction:" destination="e4v-he-MOf" eventType="touchUpInside" id="Lwp-ha-egs"/>
@@ -810,15 +810,15 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="bnN-v4-XIn" firstAttribute="top" secondItem="VoL-j0-uDR" secondAttribute="top" constant="1" id="4bG-X4-Yp2"/>
                                                 <constraint firstItem="k48-ug-XH5" firstAttribute="centerY" secondItem="VoL-j0-uDR" secondAttribute="centerY" id="4lK-pU-xgO"/>
                                                 <constraint firstItem="Jhl-EH-Z0M" firstAttribute="leading" secondItem="k48-ug-XH5" secondAttribute="trailing" constant="8" id="6L2-Qw-7WU"/>
+                                                <constraint firstAttribute="bottom" secondItem="bnN-v4-XIn" secondAttribute="bottom" constant="1" id="6zf-uN-oSA"/>
                                                 <constraint firstItem="bnN-v4-XIn" firstAttribute="trailing" secondItem="Jhl-EH-Z0M" secondAttribute="trailing" id="K1X-8I-Reo"/>
-                                                <constraint firstItem="bnN-v4-XIn" firstAttribute="bottom" secondItem="Jhl-EH-Z0M" secondAttribute="bottom" id="KEG-Qw-eAN"/>
                                                 <constraint firstAttribute="trailing" secondItem="J8O-jB-v6M" secondAttribute="trailing" constant="20" id="Sob-E9-hUU"/>
                                                 <constraint firstItem="bnN-v4-XIn" firstAttribute="leading" secondItem="VoL-j0-uDR" secondAttribute="leading" id="TNc-k4-BUf"/>
                                                 <constraint firstItem="J8O-jB-v6M" firstAttribute="leading" secondItem="Jhl-EH-Z0M" secondAttribute="trailing" constant="12" id="Ubo-MS-iJC"/>
                                                 <constraint firstItem="k48-ug-XH5" firstAttribute="leading" secondItem="VoL-j0-uDR" secondAttribute="leading" constant="20" id="Y0b-av-soE"/>
-                                                <constraint firstItem="bnN-v4-XIn" firstAttribute="top" secondItem="Jhl-EH-Z0M" secondAttribute="top" id="Znf-R8-SR9"/>
                                                 <constraint firstItem="J8O-jB-v6M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="h7k-W5-hW9"/>
                                                 <constraint firstItem="Jhl-EH-Z0M" firstAttribute="centerY" secondItem="k48-ug-XH5" secondAttribute="centerY" id="wTx-OL-YFd"/>
                                             </constraints>
@@ -2463,7 +2463,7 @@
         <image name="back" width="32" height="32"/>
         <image name="blue_arrow_right" width="16" height="16"/>
         <namedColor name="AccentColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
