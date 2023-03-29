@@ -864,22 +864,22 @@
                                 <rect key="frame" x="0.0" y="163" width="393" height="655"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteTableViewCell" id="Xxm-Sf-ABR" customClass="FavoriteTableViewCell" customModule="StorageFeature">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FavoriteTableViewCell" id="Xxm-Sf-ABR" customClass="FavoriteTableViewCell" customModule="StorageFeature">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Xxm-Sf-ABR" id="R6I-vs-95P">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mcp-83-AcS">
-                                                    <rect key="frame" x="20" y="2" width="72" height="40"/>
+                                                    <rect key="frame" x="20" y="-5" width="72" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="TTg-zu-9bv"/>
                                                         <constraint firstAttribute="width" constant="72" id="jz9-rb-oQg"/>
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m3R-Gf-lHv">
-                                                    <rect key="frame" x="100" y="1" width="229" height="42"/>
+                                                    <rect key="frame" x="100" y="-6" width="229" height="42"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3l-Dj-kBl">
                                                             <rect key="frame" x="0.0" y="0.0" width="229" height="24"/>
@@ -902,30 +902,42 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rps-qR-aPI">
-                                                    <rect key="frame" x="341" y="6" width="32" height="32"/>
+                                                    <rect key="frame" x="341" y="-1" width="32" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="32" id="cbE-Xx-n4i"/>
                                                         <constraint firstAttribute="width" constant="32" id="jif-Zg-2Yy"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
-                                                        <action selector="playAxtion:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="fVJ-4U-58J"/>
+                                                        <action selector="playButtonAction:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="aLU-Lt-euS"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZ1-wF-1HY">
+                                                    <rect key="frame" x="0.0" y="0.0" width="329" height="30"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <connections>
+                                                        <action selector="listSelectButtonAction:" destination="Xxm-Sf-ABR" eventType="touchUpInside" id="kAn-9I-UTQ"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="m3R-Gf-lHv" firstAttribute="leading" secondItem="mcp-83-AcS" secondAttribute="trailing" constant="8" id="7OA-Gp-WyT"/>
                                                 <constraint firstItem="m3R-Gf-lHv" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="BUZ-dM-D2o"/>
+                                                <constraint firstItem="mZ1-wF-1HY" firstAttribute="leading" secondItem="R6I-vs-95P" secondAttribute="leading" id="DRw-2C-EyG"/>
                                                 <constraint firstItem="rps-qR-aPI" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="HQm-u2-aW5"/>
+                                                <constraint firstItem="mZ1-wF-1HY" firstAttribute="top" secondItem="R6I-vs-95P" secondAttribute="top" id="ISL-Iz-ZQa"/>
                                                 <constraint firstItem="mcp-83-AcS" firstAttribute="centerY" secondItem="R6I-vs-95P" secondAttribute="centerY" id="LGr-gM-iyj"/>
                                                 <constraint firstItem="mcp-83-AcS" firstAttribute="leading" secondItem="R6I-vs-95P" secondAttribute="leading" constant="20" id="MVP-cG-UW7"/>
                                                 <constraint firstAttribute="trailing" secondItem="rps-qR-aPI" secondAttribute="trailing" constant="20" id="SrG-wy-8CT"/>
+                                                <constraint firstAttribute="bottom" secondItem="mZ1-wF-1HY" secondAttribute="bottom" id="Vaf-Gd-QDA"/>
                                                 <constraint firstItem="rps-qR-aPI" firstAttribute="leading" secondItem="m3R-Gf-lHv" secondAttribute="trailing" constant="12" id="jGO-IK-xdj"/>
+                                                <constraint firstItem="mZ1-wF-1HY" firstAttribute="trailing" secondItem="m3R-Gf-lHv" secondAttribute="trailing" id="kjA-yj-SCP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="albumImageView" destination="mcp-83-AcS" id="vtt-bD-3wl"/>
                                             <outlet property="artistLabel" destination="lH6-Dk-Z0S" id="DoM-Bg-zki"/>
+                                            <outlet property="listSelectButton" destination="mZ1-wF-1HY" id="9RD-w2-8sy"/>
                                             <outlet property="playButton" destination="rps-qR-aPI" id="6Pe-kV-N5a"/>
                                             <outlet property="playButtonTrailingConstraint" destination="SrG-wy-8CT" id="PyK-xQ-Nqn"/>
                                             <outlet property="titleLabel" destination="y3l-Dj-kBl" id="mTy-oo-8eo"/>

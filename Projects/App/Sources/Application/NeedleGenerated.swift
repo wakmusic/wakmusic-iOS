@@ -285,9 +285,6 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var playListDetailComponent: PlayListDetailComponent {
         return appComponent.playListDetailComponent
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
-    }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
     }
@@ -338,6 +335,9 @@ private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: Needle
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
     }
@@ -812,7 +812,6 @@ extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\MyPlayListDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
-        keyPathToName[\MyPlayListDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
@@ -831,6 +830,7 @@ extension AfterLoginComponent: Registration {
 }
 extension FavoriteComponent: Registration {
     public func registerItems() {
+        keyPathToName[\FavoriteDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\FavoriteDependency.editFavoriteSongsOrderUseCase] = "editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"
     }

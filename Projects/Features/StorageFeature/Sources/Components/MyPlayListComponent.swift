@@ -14,7 +14,6 @@ import DomainModule
 public protocol MyPlayListDependency: Dependency {
     var multiPurposePopComponent:  MultiPurposePopComponent {get}
     var playListDetailComponent:  PlayListDetailComponent {get}
-    var containSongsComponent: ContainSongsComponent {get}
     var fetchPlayListUseCase: any FetchPlayListUseCase {get}
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase {get}
     var deletePlayListUseCase: any DeletePlayListUseCase {get}
@@ -31,8 +30,7 @@ public final class MyPlayListComponent: Component<MyPlayListDependency> {
                 fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase
             ),
             multiPurposePopComponent: dependency.multiPurposePopComponent,
-            playListDetailComponent: dependency.playListDetailComponent,
-            containSongsComponent: dependency.containSongsComponent
+            playListDetailComponent: dependency.playListDetailComponent
         )
     }
 }

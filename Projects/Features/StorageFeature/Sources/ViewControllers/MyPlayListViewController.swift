@@ -27,7 +27,6 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     private var refreshControl = UIRefreshControl()
     var multiPurposePopComponent:MultiPurposePopComponent!
     var playListDetailComponent :PlayListDetailComponent!
-    var containSongsComponent: ContainSongsComponent!
     var viewModel:MyPlayListViewModel!
     
     lazy var input = MyPlayListViewModel.Input()
@@ -47,14 +46,12 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MyPlayListViewModel,
         multiPurposePopComponent: MultiPurposePopComponent,
-        playListDetailComponent: PlayListDetailComponent,
-        containSongsComponent: ContainSongsComponent
+        playListDetailComponent: PlayListDetailComponent
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
         viewController.playListDetailComponent = playListDetailComponent
-        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
@@ -190,7 +187,7 @@ extension MyPlayListViewController{
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
+        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(configureCell: { [weak self] (_, tableView, indexPath, model) -> UITableViewCell in
             guard let self = self else { return UITableViewCell() }
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPlayListTableViewCell",for: IndexPath(row: indexPath.row, section: 0)) as? MyPlayListTableViewCell

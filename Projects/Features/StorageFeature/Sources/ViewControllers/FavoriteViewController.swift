@@ -18,121 +18,75 @@ import RxDataSources
 
 public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
-public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
-    
-    
-  
+      
+    private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
+    var containSongsComponent: ContainSongsComponent!
+
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
-    
     var disposeBag = DisposeBag()
     
-    
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
-
-        // Do any additional setup after loading the view.
+        inputBindRx()
+        outputBindRx()
     }
-    
 
-    public static func viewController(viewModel:FavoriteViewModel) -> FavoriteViewController {
+    public static func viewController(
+        viewModel: FavoriteViewModel,
+        containSongsComponent: ContainSongsComponent
+    ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
-      
         viewController.viewModel = viewModel
-        
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
-
 }
 
 extension FavoriteViewController{
     
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<FavoriteSectionModel>(configureCell: { [weak self] (datasource, tableView, indexPath, model) -> UITableViewCell in
-            guard let self = self else{return UITableViewCell()}
-            
-            let bgView = UIView()
-            bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
-            
-            let index = indexPath.row
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier:  "FavoriteTableViewCell", for: IndexPath(row: index, section: 0)) as? FavoriteTableViewCell
-            else {return UITableViewCell()}
-             
-            cell.selectedBackgroundView = bgView
-            cell.update(model, self.output.state.value.isEditing)
-          
-                    
-         return cell
-            
-        }, canEditRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        })
-        return datasource
+    private func inputBindRx() {
+     
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .bind(to: input.likeListLoad)
+            .disposed(by: disposeBag)
+
+        tableView.rx.itemMoved
+            .debug("itemMoved")
+            .bind(to: input.itemMoved)
+            .disposed(by: disposeBag)
     }
     
-    private func configureUI()
-    {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        tableView.backgroundColor = .clear
+    private func outputBindRx() {
         
-        bindRx()
-        
-    }
-    
-   
-    
-    private func bindRx()
-    {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         output.dataSource
-        .do(onNext: { [weak self] model in
+            .do(onNext: { [weak self] model in
+                guard let self = self else {
+                    return
+                }
+                self.refreshControl.endRefreshing()
+
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
+                warningView.text = "좋아요 한 곡이 없습니다."
             
-            guard let self = self else {
-                return
-            }
-            
-            let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-            warningView.text = "좋아요 한 곡이 없습니다."
-        
-            
-            self.tableView.tableHeaderView = model.isEmpty ?  warningView : nil
-        })
-            
+                let items = model.first?.items ?? []
+                self.tableView.tableHeaderView = items.isEmpty ?  warningView : nil
+            })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
-            
-            tableView.rx.itemMoved.asObservable()
-                .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
-                    guard let `self` = self else { return }
 
-
-
-                    self.input.sourceIndexPath.accept(sourceIndexPath)
-                    self.input.destIndexPath.accept(destinationIndexPath)
-                    
-                    var curr = self.output.dataSource.value.first?.items ?? []
-                    
-                    let tmp = curr[self.input.sourceIndexPath.value.row]
-                    curr.remove(at: self.input.sourceIndexPath.value.row)
-                    curr.insert(tmp, at: self.input.destIndexPath.value.row)
-
-                    let newModel = [FavoriteSectionModel(model: 0, items: curr)]
-                    self.output.dataSource.accept(newModel)
-                    
-                }).disposed(by: disposeBag)
-        
-        
         output.state
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
@@ -152,49 +106,123 @@ extension FavoriteViewController{
                 self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
             })
             .disposed(by: disposeBag)
-
-        input.showConfirmModal.subscribe(onNext: { [weak self] in
-                    
-            guard let self = self else{
-                return
-            }
-                let vc = TextPopupViewController.viewController(text: "변경된 내용을 저장할까요?", cancelButtonIsHidden: false,completion: {
-                    self.input.runEditing.onNext(())
-                },cancelCompletion: {
-                    self.input.cancelEdit.onNext(())
-                })
-            
-                self.showPanModal(content: vc)
-            
+    
+        output.indexPathOfSelectedLikeLists
+            .skip(1)
+            .debug("indexPathOfSelectedLikeLists")
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (songs, dataSource) in
+                guard let self = self else { return }
+                let items = dataSource.first?.items ?? []
+                
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
+                        type: .likeSong,
+                        selectedSongCount: songs.count,
+                        totalSongCount: items.count,
+                        useBottomSpace: true
+                    )
+                    self.songCartView?.delegate = self
+                }
             }).disposed(by: disposeBag)
-                
-                
-        input.showErrorToast.subscribe(onNext: { [weak self] (msg:String) in
-            guard let self = self else{
-                return
-            }
-            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            
-        }).disposed(by: disposeBag)
+        
+        output.willAddSongList
+            .skip(1)
+            .debug("willAddSongList")
+            .subscribe(onNext: { [weak self] (songs) in
+                guard let `self` = self else { return }
+                let viewController = self.containSongsComponent.makeView(songs: songs)
+                viewController.modalPresentationStyle = .overFullScreen
+                self.present(viewController, animated: true) {
+                    self.input.allLikeListSelected.onNext(false)
+                }
+            }).disposed(by: disposeBag)
+        
+        output.willAddPlayList
+            .skip(1)
+            .debug("willAddPlayList")
+            .subscribe(onNext: { (songs) in
+                //TO-DO
+            }).disposed(by: disposeBag)
 
+        output.showToast
+            .subscribe(onNext: { [weak self] (msg:String) in
+                guard let self = self else{ return }
+                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            }).disposed(by: disposeBag)
+    }
+    
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<FavoriteSectionModel>(configureCell: { [weak self] (_, tableView, indexPath, model) -> UITableViewCell in
+            guard let self = self,
+                  let cell = tableView.dequeueReusableCell(withIdentifier:  "FavoriteTableViewCell", for: IndexPath(row: indexPath.row, section: 0)) as? FavoriteTableViewCell
+            else { return UITableViewCell() }
+             
+            cell.update(
+                model: model,
+                isEditing: self.output.state.value.isEditing,
+                indexPath: indexPath
+            )
+            cell.delegate = self
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
+    }
+
+    private func configureUI() {
+        self.tableView.refreshControl = self.refreshControl
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        tableView.backgroundColor = .clear
+    }
+}
+
+extension FavoriteViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        switch type {
+        case let .allSelect(flag):
+            input.allLikeListSelected.onNext(flag)
+        case .addSong:
+            input.addSongs.onNext(())
+        case .addPlayList:
+            input.addPlayList.onNext(())
+        case .remove:
+            let count: Int = output.indexPathOfSelectedLikeLists.value.count
+            let popup = TextPopupViewController.viewController(
+                text: "선택한 좋아요 \(count)개가 삭제됩니다.",
+                cancelButtonIsHidden: false,
+                completion: { [weak self] () in
+                guard let `self` = self else { return }
+                self.input.deleteLikeList.onNext(())
+            })
+            self.showPanModal(content: popup)
+        default: return
+        }
+    }
+}
+
+extension FavoriteViewController: FavoriteTableViewCellDelegate {
+    public func listTapped(indexPath: IndexPath) {
+        self.input.itemSelected.onNext(indexPath)
     }
 }
 
 extension FavoriteViewController:UITableViewDelegate{
-    
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
     }
-    
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-        
 }
-
-
-
