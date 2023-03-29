@@ -144,7 +144,7 @@ extension MyPlayListViewController{
                 
         output.indexPathOfSelectedPlayLists
             .skip(1)
-            .debug("indexOfSelectedSongs")
+            .debug("indexPathOfSelectedPlayLists")
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
@@ -155,11 +155,11 @@ extension MyPlayListViewController{
                     self.hideSongCart()
                 case false:
                     self.showSongCart(
-                        in: self.view,
+                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
                         type: .myPlayList,
                         selectedSongCount: songs.count,
                         totalSongCount: items.count,
-                        useBottomSpace: false
+                        useBottomSpace: true
                     )
                     self.songCartView?.delegate = self
                 }
@@ -167,14 +167,9 @@ extension MyPlayListViewController{
         
         output.willAddSongList
             .skip(1)
-            .filter { !$0.isEmpty }
-            .subscribe(onNext: { [weak self] (songs) in
-                guard let self = self else{ return }
-                let viewController = self.containSongsComponent.makeView(songs: songs)
-                viewController.modalPresentationStyle = .overFullScreen
-                self.present(viewController, animated: true) {
-//                    self.input.allSongSelected.onNext(false)
-                }
+            .debug()
+            .subscribe(onNext: { (songs) in
+                //TO-DO
             }).disposed(by: disposeBag)
                 
         output.showToast

@@ -16,9 +16,10 @@ import Utility
 import CommonFeature
 
 public final class MyPlayListViewModel:ViewModelType {
-    var fetchPlayListUseCase:FetchPlayListUseCase!
-    var editPlayListOrderUseCase:EditPlayListOrderUseCase!
+    var fetchPlayListUseCase: FetchPlayListUseCase!
+    var editPlayListOrderUseCase: EditPlayListOrderUseCase!
     var deletePlayListUseCase: DeletePlayListUseCase!
+    var fetchPlayListDetailUseCase: FetchPlayListDetailUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -37,18 +38,20 @@ public final class MyPlayListViewModel:ViewModelType {
         let dataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
-        let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
+        let willAddSongList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<String> = PublishRelay()
     }
 
     init(
         fetchPlayListUseCase: FetchPlayListUseCase,
         editPlayListOrderUseCase: EditPlayListOrderUseCase,
-        deletePlayListUseCase: DeletePlayListUseCase
+        deletePlayListUseCase: DeletePlayListUseCase,
+        fetchPlayListDetailUseCase: FetchPlayListDetailUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
+        self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
@@ -96,7 +99,6 @@ public final class MyPlayListViewModel:ViewModelType {
 
                 //선택 된 플레이리스트 인덱스 패스 변경
                 var newSelectedPlayLists: [IndexPath] = []
-                
                 for i in 0..<newModel.count {
                     if newModel[i].isSelected {
                         newSelectedPlayLists.append(IndexPath(row: i, section: 0))
@@ -126,9 +128,13 @@ public final class MyPlayListViewModel:ViewModelType {
             .bind(to: output.indexPathOfSelectedPlayLists)
             .disposed(by: disposeBag)
 
-        input.runEditing.withLatestFrom(output.dataSource)
+        input.runEditing
+            .withLatestFrom(output.dataSource)
             .map { $0.first?.items.map { $0.key } ?? [] }
             .filter{ !$0.isEmpty }
+            .do(onNext: { _ in
+                output.indexPathOfSelectedPlayLists.accept([])
+            })
             .flatMap{ [weak self] (ids: [String]) -> Observable<BaseEntity> in
                 guard let self = self else{
                     return Observable.empty()
@@ -142,9 +148,6 @@ public final class MyPlayListViewModel:ViewModelType {
                 }
                 return true
             }
-            .do(onNext: { _ in
-                output.indexPathOfSelectedPlayLists.accept([])
-            })
             .withLatestFrom(output.dataSource)
             .bind(to: output.backUpdataSource)
             .disposed(by: disposeBag)
@@ -158,10 +161,23 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.indexPathOfSelectedPlayLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map{ (indexPathes, dataSource) -> [String] in
-                let songs = indexPathes.map {
-                    dataSource[$0.section].items[$0.row].songlist
-                }.reduce([]) { $0 + $1 }
-                return songs
+                let keys = indexPathes.map {
+                    dataSource[$0.section].items[$0.row].key
+                }
+                return keys
+            }
+            .flatMap{ [weak self] (keys) -> Observable<[SongEntity]> in
+                guard let `self` = self else { return Observable.empty() }
+                return Observable.concat(
+                    keys.map {
+                        self.fetchPlayListDetailUseCase
+                            .execute(id: $0, type: .custom)
+                            .asObservable()
+                            .map { $0.songs }
+                    }
+                ).scan([]) { (pre, new) in
+                    return pre + new
+                }.takeLast(1)
             }
             .bind(to: output.willAddSongList)
             .disposed(by: disposeBag)
