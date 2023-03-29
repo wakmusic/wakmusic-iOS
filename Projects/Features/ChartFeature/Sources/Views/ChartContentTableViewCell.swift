@@ -61,6 +61,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
         addView()
         setRankingLayout()
         setLayout()
+        self.selectionStyle = .none
     }
 
     @available(*, unavailable)
@@ -212,7 +213,10 @@ extension ChartContentTableViewCell {
 
 // MARK: - Update
 extension ChartContentTableViewCell {
-    public func update(model: ChartRankingEntity, index: Int) {
+    public func update(model: SongEntity, index: Int) {
+        
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : .clear
+        
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),

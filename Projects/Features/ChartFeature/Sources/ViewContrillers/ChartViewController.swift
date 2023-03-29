@@ -1,4 +1,5 @@
 import UIKit
+import CommonFeature
 import Utility
 import DesignSystem
 import Pageboy
@@ -6,8 +7,14 @@ import Tabman
 import DomainModule
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
-    private var chartContentComponent: ChartContentComponent?
-
+    private var chartContentComponent: ChartContentComponent? 
+   
+    
+    private var viewModel:ChartViewModel!
+    
+    lazy var input = ChartViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    
     private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
             chartContentComponent?.makeView(type: .hourly),
@@ -27,10 +34,14 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
     }
 
     public static func viewController(
-        chartContentComponent: ChartContentComponent
+        chartContentComponent: ChartContentComponent,
+        viewModel:ChartViewModel
     ) -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.chartContentComponent = chartContentComponent
+        
+        viewController.viewModel = viewModel
+        
         return viewController
     }
 }
@@ -72,6 +83,9 @@ extension ChartViewController {
         addBar(bar, dataSource: self, at: .custom(view: self.tabBarContentView, layout: nil))
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
+
+    
+
 }
 
 extension ChartViewController: PageboyViewControllerDataSource, TMBarDataSource {

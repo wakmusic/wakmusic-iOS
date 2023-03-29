@@ -12,7 +12,7 @@ public struct FetchChartRankingUseCaseImpl: FetchChartRankingUseCase {
         self.chartRepository = chartRepository
     }
 
-    public func execute(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]> {
+    public func execute(type: ChartDateType, limit: Int) -> Single<[SongEntity]> {
         chartRepository.fetchChartRanking(type: type, limit: limit)
     }
 }

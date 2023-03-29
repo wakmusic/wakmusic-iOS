@@ -214,6 +214,9 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
         return appComponent.fetchChartUpdateTimeUseCase
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -779,6 +782,7 @@ extension ChartContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartContentDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
+        keyPathToName[\ChartContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension AskSongComponent: Registration {

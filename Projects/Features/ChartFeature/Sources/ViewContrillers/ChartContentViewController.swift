@@ -10,7 +10,7 @@ import DomainModule
 import SnapKit
 import Then
 
-public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,SongCartViewType {
     private let disposeBag = DisposeBag()
     private var viewModel: ChartContentViewModel!
     fileprivate lazy var input = ChartContentViewModel.Input()
@@ -18,18 +18,25 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
+    
+    private var containSongsComponent: ContainSongsComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bind()
+        outputBind()
     }
     
     public static func viewController(
-        viewModel: ChartContentViewModel
+        viewModel: ChartContentViewModel,
+        containSongsComponent:ContainSongsComponent
     ) -> ChartContentViewController {
         let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.viewModel = viewModel
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
@@ -58,13 +65,12 @@ extension ChartContentViewController {
                 cell.update(model: model, index: index)
                 return cell
             }.disposed(by: disposeBag)
-
+        
         tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (indexPath, _) in
-                guard let `self` = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }).disposed(by: disposeBag)
+            .map({$0.row})
+            .bind(to:input.songTapped)
+            .disposed(by: disposeBag)
+
     }
     
     private func configureUI() {
@@ -73,6 +79,37 @@ extension ChartContentViewController {
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
+    
+    
+    private func outputBind() {
+        
+       
+        output.indexOfSelectedSongs
+            .skip(1)
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (songs, dataSource) in
+                guard let self = self else { return }
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: self.view,
+                        type: .chartSong,
+                        selectedSongCount: songs.count,
+                        totalSongCount: dataSource.count,
+                        useBottomSpace: false
+                    )
+                    self.songCartView?.delegate = self
+                }
+            }).disposed(by: disposeBag)
+        
+        output.songEntityOfSelectedSongs
+            .filter{ !$0.isEmpty }
+            .subscribe()
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension ChartContentViewController: UITableViewDelegate {
@@ -96,5 +133,27 @@ extension ChartContentViewController: UITableViewDelegate {
 extension ChartContentViewController: PlayButtonForChartViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         DEBUG_LOG(event)
+    }
+}
+
+extension ChartContentViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        switch type {
+        case let .allSelect(flag):
+            input.allSongSelected.onNext(flag)
+        case .addSong:
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.input.allSongSelected.onNext(false)
+            }
+        case .addPlayList:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
     }
 }
