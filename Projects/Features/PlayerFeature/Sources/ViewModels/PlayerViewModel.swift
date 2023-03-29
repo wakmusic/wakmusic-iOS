@@ -14,6 +14,7 @@ import BaseFeature
 import DomainModule
 import Combine
 import YouTubePlayerKit
+import CommonFeature
 
 final class PlayerViewModel: ViewModelType {
     struct Input {

@@ -49,6 +49,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
+    let playState = PlayState.shared
     
     
     
@@ -527,6 +528,14 @@ extension PlayListDetailViewController:SongCartViewDelegate {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
         case .addSong:
+            
+            if Utility.PreferenceManager.userInfo
+                == nil {
+                self.showToast(text: "로그인이 필요한 기능입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                return
+            }
+            
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
@@ -535,11 +544,20 @@ extension PlayListDetailViewController:SongCartViewDelegate {
                 self.input.state.accept(EditState(isEditing: false, force: true))
             }
         case .addPlayList:
+            
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            
+            playState.appendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
+            
             return
         case .play:
             let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
             
-            DEBUG_LOG("재생할 곡 목록 \(songs.map({$0.title}))")
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
             
         case .remove:
             self.input.tapRemoveSongs.onNext(())

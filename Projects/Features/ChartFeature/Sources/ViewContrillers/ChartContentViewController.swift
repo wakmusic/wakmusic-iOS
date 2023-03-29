@@ -21,6 +21,8 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
+    let playState = PlayState.shared
+    
     private var containSongsComponent: ContainSongsComponent!
 
     public override func viewDidLoad() {
@@ -142,6 +144,14 @@ extension ChartContentViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
         case .addSong:
+            
+            if Utility.PreferenceManager.userInfo
+                == nil {
+                self.showToast(text: "로그인이 필요한 기능입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                return
+            }
+            
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
@@ -149,9 +159,21 @@ extension ChartContentViewController: SongCartViewDelegate {
                 self.input.allSongSelected.onNext(false)
             }
         case .addPlayList:
-            return
+            
+            let songs = output.songEntityOfSelectedSongs.value
+            
+            playState.appendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            
+            
         case .play:
-            return
+            
+            let songs = output.songEntityOfSelectedSongs.value
+            
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+
+            
         case .remove:
             return
         }

@@ -8,14 +8,14 @@
 
 import Foundation
 
-enum ShuffleMode {
+public enum ShuffleMode {
     case on
     case off
     
-    var isOn: Bool { return self == .on }
-    var isOff: Bool { return self == .off }
+    public var isOn: Bool { return self == .on }
+    public  var isOff: Bool { return self == .off }
     
-    mutating func toggle() {
+    public    mutating func toggle() {
         self = (self == .on) ? .off : .on
     }
 }

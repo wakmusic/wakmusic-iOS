@@ -16,7 +16,6 @@ import DomainModule
 import CommonFeature
 
 
-
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
 
     @IBOutlet weak var tabBarView: UIView!
@@ -38,8 +37,9 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
     lazy var input = AfterSearchViewModel.Input()
-     lazy var output = viewModel.transform(from: input)
+    lazy var output = viewModel.transform(from: input)
     
+    let playState = PlayState.shared
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -240,6 +240,15 @@ extension AfterSearchViewController: SongCartViewDelegate {
         case .allSelect(flag: _):
             return
         case .addSong:
+            
+            if Utility.PreferenceManager.userInfo
+                == nil {
+                self.showToast(text: "로그인이 필요한 기능입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                return
+            }
+            
+            
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
@@ -252,8 +261,18 @@ extension AfterSearchViewController: SongCartViewDelegate {
             }
             
         case .addPlayList:
+            
+            let songs  = output.songEntityOfSelectedSongs.value
+            playState.appendSongsToPlaylist(songs)
+            self.clearSongCart()
+            
             return
         case .play:
+            
+            let songs  = output.songEntityOfSelectedSongs.value
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.clearSongCart()
+            
             return
         case .remove:
             return
