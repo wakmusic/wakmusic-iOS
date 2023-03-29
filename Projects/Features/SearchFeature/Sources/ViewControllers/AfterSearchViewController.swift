@@ -93,7 +93,7 @@ extension AfterSearchViewController {
         }
         
         // indicator
-        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
