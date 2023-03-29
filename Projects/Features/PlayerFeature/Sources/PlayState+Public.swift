@@ -23,8 +23,9 @@ public extension PlayState {
         }
     }
     
-    /// 주어진 곡들을 재생목록에 중복되지 않게 추가합니다.
-    func appendUniqueSongs(_ songs: [SongEntity]) {
+    /// 주어진 곡들을 재생목록에 추가합니다.
+    /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
+    func appendSongs(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
         songs.forEach { self.playList.appendIfUnique(item: $0) }
     }
 }
