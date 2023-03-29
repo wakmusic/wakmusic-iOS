@@ -61,7 +61,7 @@ extension ChartContentViewController {
         
         tableView.rx.itemSelected
             .map({$0.row})
-            .bind(to: input.indexPath)
+            .bind(to:input.songTapped)
             .disposed(by: disposeBag)
 
     }
