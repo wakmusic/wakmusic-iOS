@@ -27,6 +27,7 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
         super.viewDidLoad()
         configureUI()
         bind()
+        outputBind()
     }
     
     public static func viewController(
@@ -89,6 +90,8 @@ extension ChartContentViewController {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
+                
+                DEBUG_LOG("AAA")
                 switch songs.isEmpty {
                 case true :
                     self.hideSongCart()
