@@ -1,4 +1,5 @@
 import UIKit
+import PlayerFeature
 import Utility
 import DesignSystem
 import RxSwift
@@ -20,6 +21,8 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
+    
+    let playState = PlayState.shared
     
     private var containSongsComponent: ContainSongsComponent!
 
@@ -149,9 +152,21 @@ extension ChartContentViewController: SongCartViewDelegate {
                 self.input.allSongSelected.onNext(false)
             }
         case .addPlayList:
-            return
+            
+            let songs = output.songEntityOfSelectedSongs.value
+            
+            playState.appendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            
+            
         case .play:
-            return
+            
+            let songs = output.songEntityOfSelectedSongs.value
+            
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+
+            
         case .remove:
             return
         }
