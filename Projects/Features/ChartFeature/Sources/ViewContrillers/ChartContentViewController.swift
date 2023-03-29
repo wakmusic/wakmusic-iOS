@@ -80,6 +80,36 @@ extension ChartContentViewController {
     }
     
     
+    private func outputBind() {
+        
+       
+        output.indexOfSelectedSongs
+            .skip(1)
+            .debug("indexOfSelectedSongs")
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .subscribe(onNext: { [weak self] (songs, dataSource) in
+                guard let self = self else { return }
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: self.view,
+                        type: .chartSong,
+                        selectedSongCount: songs.count,
+                        totalSongCount: dataSource.count,
+                        useBottomSpace: false
+                    )
+                    self.songCartView?.delegate = self
+                }
+            }).disposed(by: disposeBag)
+        
+        output.songEntityOfSelectedSongs
+            .filter{ !$0.isEmpty }
+            .subscribe()
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension ChartContentViewController: UITableViewDelegate {
@@ -103,5 +133,27 @@ extension ChartContentViewController: UITableViewDelegate {
 extension ChartContentViewController: PlayButtonForChartViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         DEBUG_LOG(event)
+    }
+}
+
+extension ChartContentViewController: SongCartViewDelegate {
+    public func buttonTapped(type: SongCartSelectType) {
+        switch type {
+        case let .allSelect(flag):
+            input.allSongSelected.onNext(flag)
+        case .addSong:
+            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.input.allSongSelected.onNext(false)
+            }
+        case .addPlayList:
+            return
+        case .play:
+            return
+        case .remove:
+            return
+        }
     }
 }
