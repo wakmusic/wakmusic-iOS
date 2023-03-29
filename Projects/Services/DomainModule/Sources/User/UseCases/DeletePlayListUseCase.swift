@@ -3,5 +3,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol DeletePlayListUseCase {
-    func execute(key: String)-> Single<BaseEntity>
+    func execute(ids: [String]) -> Single<BaseEntity>
 }

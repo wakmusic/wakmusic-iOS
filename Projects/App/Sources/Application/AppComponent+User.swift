@@ -81,4 +81,10 @@ public extension AppComponent {
             EditPlayListOrderUseCaseImpl(userRepository: userRepository)
         }
     }
+    
+    var deletePlayListUseCase: any DeletePlayListUseCase {
+        shared {
+            DeletePlayListUseCaseImpl(userRepository: userRepository)
+        }
+    }
 }

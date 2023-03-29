@@ -12,15 +12,25 @@ import CommonFeature
 import DomainModule
 
 public protocol MyPlayListDependency: Dependency {
-    var  multiPurposePopComponent :  MultiPurposePopComponent {get}
-    var  playListDetailComponent :  PlayListDetailComponent {get}
-    var  fetchPlayListUseCase : any FetchPlayListUseCase {get}
-    var  editPlayListOrderUseCase: any EditPlayListOrderUseCase {get}
+    var multiPurposePopComponent:  MultiPurposePopComponent {get}
+    var playListDetailComponent:  PlayListDetailComponent {get}
+    var fetchPlayListUseCase: any FetchPlayListUseCase {get}
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {get}
+    var deletePlayListUseCase: any DeletePlayListUseCase {get}
+    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {get}
 }
 
 public final class MyPlayListComponent: Component<MyPlayListDependency> {
     public func makeView() -> MyPlayListViewController{
-        
-        return MyPlayListViewController.viewController(viewModel: .init(fetchPlayListUseCase: dependency.fetchPlayListUseCase,editPlayListOrderUseCase: dependency.editPlayListOrderUseCase), multiPurposePopComponent: dependency.multiPurposePopComponent,playListDetailComponent: dependency.playListDetailComponent)
+        return MyPlayListViewController.viewController(
+            viewModel: .init(
+                fetchPlayListUseCase: dependency.fetchPlayListUseCase,
+                editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
+                deletePlayListUseCase: dependency.deletePlayListUseCase,
+                fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase
+            ),
+            multiPurposePopComponent: dependency.multiPurposePopComponent,
+            playListDetailComponent: dependency.playListDetailComponent
+        )
     }
 }
