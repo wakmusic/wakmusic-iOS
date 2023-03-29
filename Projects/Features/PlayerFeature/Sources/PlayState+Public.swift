@@ -27,4 +27,9 @@ public extension PlayState {
             self.playList.appendIfUnique(item: song)
         }
     }
+    
+    /// 주어진 곡들을 재생목록에 중복되지 않게 추가합니다.
+    func appendUniqueSongs(_ songs: [SongEntity]) {
+        songs.forEach { self.playList.appendIfUnique(item: $0) }
+    }
 }
