@@ -11,6 +11,7 @@ import Combine
 import BaseFeature
 import YouTubePlayerKit
 import Utility
+import CommonFeature
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
