@@ -20,18 +20,14 @@ import StorageFeature
 public extension AppComponent {
     
     var beforeSearchComponent : BeforeSearchComponent {
-        
         BeforeSearchComponent(parent: self)
-        
     }
     
     var playListDetailComponent: PlayListDetailComponent {
-        
         PlayListDetailComponent(parent: self)
     }
     
     var multiPurposePopComponent: MultiPurposePopComponent {
-        
         MultiPurposePopComponent(parent: self)
     }
     
@@ -39,24 +35,23 @@ public extension AppComponent {
         MyPlayListComponent(parent:self)
     }
     
-    
     var containSongsComponent: ContainSongsComponent {
         ContainSongsComponent(parent: self)
     }
-    
     
     var remotePlayListDataSource: any RemotePlayListDataSource {
         shared {
             RemotePlayListDataSourceImpl(keychain: keychain)
         }
     }
+    
     var playListRepository: any PlayListRepository {
         shared {
             PlayListRepositoryImpl(remotePlayListDataSource:remotePlayListDataSource)
         }
     }
+    
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
-        
         shared {
           FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
         }
@@ -87,12 +82,6 @@ public extension AppComponent {
         }
     }
     
-    var deletePlayListUseCase: any DeletePlayListUseCase {
-        shared {
-            DeletePlayListUseCaseImpl(playListRepository: playListRepository)
-        }
-    }
-    
     var loadPlayListUseCase: any LoadPlayListUseCase {
         shared {
             LoadPlayListUseCaseImpl(playListRepository: playListRepository)
@@ -100,19 +89,14 @@ public extension AppComponent {
     }
     
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
-        
         shared {
             AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
         }
-        
     }
     
     var removeSongsUseCase: any RemoveSongsUseCase {
-        
         shared {
             RemoveSongsUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
-    
 }

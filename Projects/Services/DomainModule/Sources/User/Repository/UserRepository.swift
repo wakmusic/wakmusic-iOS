@@ -19,5 +19,5 @@ public protocol UserRepository {
     func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]>
     func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
     func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
-
+    func deletePlayList(ids: [String]) -> Single<BaseEntity>
 }

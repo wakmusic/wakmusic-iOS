@@ -13,19 +13,16 @@ import DomainModule
 import ErrorModule
 
 public struct DeletePlayListUseCaseImpl: DeletePlayListUseCase {
-  
-  private let playListRepository: any PlayListRepository
+    
+    private let userRepository: any UserRepository
 
     public init(
-        playListRepository: PlayListRepository
+        userRepository: UserRepository
     ) {
-        self.playListRepository = playListRepository
+        self.userRepository = userRepository
     }
     
-    public func execute(key: String) -> Single<BaseEntity> {
-        playListRepository.deletePlayList(key: key)
+    public func execute(ids: [String]) -> Single<BaseEntity> {
+        userRepository.deletePlayList(ids: ids)
     }
-    
-
-   
 }

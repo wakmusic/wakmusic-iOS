@@ -177,7 +177,7 @@ extension MyPlayListViewController{
                 }
             }).disposed(by: disposeBag)
                 
-        output.showErrorToast
+        output.showToast
             .subscribe(onNext: { [weak self] (message: String) in
                 guard let self = self else{
                     return
@@ -238,7 +238,15 @@ extension MyPlayListViewController: SongCartViewDelegate {
         case .play:
             return
         case .remove:
-            return
+            let count: Int = output.indexPathOfSelectedPlayLists.value.count
+            let popup = TextPopupViewController.viewController(
+                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
+                cancelButtonIsHidden: false,
+                completion: { [weak self] () in
+                guard let `self` = self else { return }
+                self.input.deletePlayList.onNext(())
+            })
+            self.showPanModal(content: popup)
         }
     }
 }

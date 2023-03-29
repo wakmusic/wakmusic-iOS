@@ -74,10 +74,10 @@ class MyPlayListHeaderView: UIView {
         self.createPlayListImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
         self.loadPlayListImageView.image = DesignSystemAsset.Storage.share.image
         
-        let createAttr = NSMutableAttributedString(string: "플레이리스트 만들기",
+        let createAttr = NSMutableAttributedString(string: "리스트 만들기",
                                              attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
-        let loadAttr = NSMutableAttributedString(string: "플레이리스트 가져오기",
+        let loadAttr = NSMutableAttributedString(string: "리스트 가져오기",
                                              attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                           .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
         

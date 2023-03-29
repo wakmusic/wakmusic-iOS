@@ -18,6 +18,7 @@ import CommonFeature
 public final class MyPlayListViewModel:ViewModelType {
     var fetchPlayListUseCase:FetchPlayListUseCase!
     var editPlayListOrderUseCase:EditPlayListOrderUseCase!
+    var deletePlayListUseCase: DeletePlayListUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -26,6 +27,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let itemSelected: PublishSubject<IndexPath> = PublishSubject()
         let allPlayListSelected: PublishSubject<Bool> = PublishSubject()
         let addPlayList: PublishSubject<Void> = PublishSubject()
+        let deletePlayList: PublishSubject<Void> = PublishSubject()
         let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
     }
@@ -36,15 +38,17 @@ public final class MyPlayListViewModel:ViewModelType {
         let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
-        let showErrorToast: PublishRelay<String> = PublishRelay()
+        let showToast: PublishRelay<String> = PublishRelay()
     }
 
     init(
         fetchPlayListUseCase: FetchPlayListUseCase,
-        editPlayListOrderUseCase: EditPlayListOrderUseCase
+        editPlayListOrderUseCase: EditPlayListOrderUseCase,
+        deletePlayListUseCase: DeletePlayListUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
+        self.deletePlayListUseCase = deletePlayListUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
@@ -133,7 +137,7 @@ public final class MyPlayListViewModel:ViewModelType {
             }
             .filter{ (model) in
                 guard model.status == 200 else {
-                    output.showErrorToast.accept(model.description)
+                    output.showToast.accept(model.description)
                     return false
                 }
                 return true
@@ -161,7 +165,30 @@ public final class MyPlayListViewModel:ViewModelType {
             }
             .bind(to: output.willAddSongList)
             .disposed(by: disposeBag)
-                
+        
+        input.deletePlayList
+            .withLatestFrom(output.indexPathOfSelectedPlayLists)
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map{ (indexPathes, dataSource) -> [String] in
+                return indexPathes.map {
+                    dataSource[$0.section].items[$0.row].key
+                }
+            }
+            .filter { !$0.isEmpty }
+            .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.deletePlayListUseCase.execute(ids: ids)
+                    .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
+                    .asObservable()
+            })
+            .debug()
+            .do(onNext: { (model) in
+                output.showToast.accept(model.status == 200 ? "리스트가 삭제되었습니다." : model.description)
+            })
+            .map { _ in () }
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+        
         output.indexPathOfSelectedPlayLists
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedPlayLists, dataSource) in
