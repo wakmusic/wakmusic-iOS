@@ -193,9 +193,6 @@ private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
     var chartContentComponent: ChartContentComponent {
         return appComponent.chartContentComponent
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -211,6 +208,9 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
     }
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
         return appComponent.fetchChartUpdateTimeUseCase
+    }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -770,13 +770,13 @@ extension MainContainerComponent: Registration {
 extension ChartComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartDependency.chartContentComponent] = "chartContentComponent-ChartContentComponent"
-        keyPathToName[\ChartDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension ChartContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartContentDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
+        keyPathToName[\ChartContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension AskSongComponent: Registration {

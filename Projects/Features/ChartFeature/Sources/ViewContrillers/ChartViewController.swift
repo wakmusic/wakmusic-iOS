@@ -8,7 +8,7 @@ import DomainModule
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
     private var chartContentComponent: ChartContentComponent? 
-    private var containSongsComponent: ContainSongsComponent!
+   
     
     private var viewModel:ChartViewModel!
     
@@ -35,12 +35,10 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
 
     public static func viewController(
         chartContentComponent: ChartContentComponent,
-        containSongsComponent: ContainSongsComponent,
         viewModel:ChartViewModel
     ) -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.chartContentComponent = chartContentComponent
-        viewController.containSongsComponent = containSongsComponent
         
         viewController.viewModel = viewModel
         

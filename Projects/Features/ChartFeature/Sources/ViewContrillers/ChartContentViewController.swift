@@ -10,7 +10,7 @@ import DomainModule
 import SnapKit
 import Then
 
-public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,SongCartViewType {
     private let disposeBag = DisposeBag()
     private var viewModel: ChartContentViewModel!
     fileprivate lazy var input = ChartContentViewModel.Input()
@@ -18,6 +18,10 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
+    
+    private var containSongsComponent: ContainSongsComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +30,12 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     }
     
     public static func viewController(
-        viewModel: ChartContentViewModel
+        viewModel: ChartContentViewModel,
+        containSongsComponent:ContainSongsComponent
     ) -> ChartContentViewController {
         let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.viewModel = viewModel
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
