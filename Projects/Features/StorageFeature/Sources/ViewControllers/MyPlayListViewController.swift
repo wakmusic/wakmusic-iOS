@@ -27,6 +27,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     private var refreshControl = UIRefreshControl()
     var multiPurposePopComponent:MultiPurposePopComponent!
     var playListDetailComponent :PlayListDetailComponent!
+    var containSongsComponent: ContainSongsComponent!
     var viewModel:MyPlayListViewModel!
     
     lazy var input = MyPlayListViewModel.Input()
@@ -46,12 +47,14 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MyPlayListViewModel,
         multiPurposePopComponent: MultiPurposePopComponent,
-        playListDetailComponent: PlayListDetailComponent
+        playListDetailComponent: PlayListDetailComponent,
+        containSongsComponent: ContainSongsComponent
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.multiPurposePopComponent = multiPurposePopComponent
         viewController.playListDetailComponent = playListDetailComponent
+        viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
@@ -161,6 +164,18 @@ extension MyPlayListViewController{
                     self.songCartView?.delegate = self
                 }
             }).disposed(by: disposeBag)
+        
+        output.willAddSongList
+            .skip(1)
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] (songs) in
+                guard let self = self else{ return }
+                let viewController = self.containSongsComponent.makeView(songs: songs)
+                viewController.modalPresentationStyle = .overFullScreen
+                self.present(viewController, animated: true) {
+//                    self.input.allSongSelected.onNext(false)
+                }
+            }).disposed(by: disposeBag)
                 
         output.showErrorToast
             .subscribe(onNext: { [weak self] (message: String) in
@@ -218,14 +233,8 @@ extension MyPlayListViewController: SongCartViewDelegate {
             input.allPlayListSelected.onNext(flag)
         case .addSong:
             return
-//            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-//            let viewController = containSongsComponent.makeView(songs: songs)
-//            viewController.modalPresentationStyle = .overFullScreen
-//            self.present(viewController, animated: true) {
-//                self.input.allSongSelected.onNext(false)
-//            }
         case .addPlayList:
-            return
+            input.addPlayList.onNext(())
         case .play:
             return
         case .remove:

@@ -25,6 +25,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
         let itemSelected: PublishSubject<IndexPath> = PublishSubject()
         let allPlayListSelected: PublishSubject<Bool> = PublishSubject()
+        let addPlayList: PublishSubject<Void> = PublishSubject()
         let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
     }
@@ -34,6 +35,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let dataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
+        let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         let showErrorToast: PublishRelay<String> = PublishRelay()
     }
 
@@ -136,6 +138,9 @@ public final class MyPlayListViewModel:ViewModelType {
                 }
                 return true
             }
+            .do(onNext: { _ in
+                output.indexPathOfSelectedPlayLists.accept([])
+            })
             .withLatestFrom(output.dataSource)
             .bind(to: output.backUpdataSource)
             .disposed(by: disposeBag)
@@ -144,7 +149,19 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.backUpdataSource)
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+                
+        input.addPlayList
+            .withLatestFrom(output.indexPathOfSelectedPlayLists)
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map{ (indexPathes, dataSource) -> [String] in
+                let songs = indexPathes.map {
+                    dataSource[$0.section].items[$0.row].songlist
+                }.reduce([]) { $0 + $1 }
+                return songs
+            }
+            .bind(to: output.willAddSongList)
+            .disposed(by: disposeBag)
+                
         output.indexPathOfSelectedPlayLists
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedPlayLists, dataSource) in

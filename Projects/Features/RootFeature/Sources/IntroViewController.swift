@@ -23,7 +23,7 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
         configureUI()
         bind()
     }
-
+    
     public static func viewController(
         component: MainContainerComponent,
         viewModel: IntroViewModel
@@ -38,7 +38,7 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 extension IntroViewController {
     
     private func bind() {
-        
+                
         output.showAlert
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (message) in
@@ -63,7 +63,6 @@ extension IntroViewController {
 
 extension IntroViewController {
 
-    @objc
     private func showTabBar() {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)

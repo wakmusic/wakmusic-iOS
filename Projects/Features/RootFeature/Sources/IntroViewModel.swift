@@ -14,6 +14,7 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 import ErrorModule
+import Utility
 
 final public class IntroViewModel: ViewModelType {
 
@@ -36,14 +37,25 @@ final public class IntroViewModel: ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
-        fetchUserInfoUseCase.execute()
-            .asObservable()
+
+        Utility.PreferenceManager.$userInfo
+            .delay(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
             .take(1)
+            .filter{ (userInfo) in
+                guard userInfo != nil else {
+                    output.showAlert.onNext("")
+                    return false
+                }
+                return true
+            }
+            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.fetchUserInfoUseCase.execute()
+                    .asObservable()
+            }
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(onNext: { _ in
                 output.showAlert.onNext("")
-                
             }, onError: { (error) in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired {
@@ -52,7 +64,8 @@ final public class IntroViewModel: ViewModelType {
                     Utility.PreferenceManager.userInfo = nil
                     Utility.PreferenceManager.startPage = 4
                     output.showAlert.onNext(asWMError.errorDescription ?? "")
-                    
+                }else if asWMError == .unknown {
+                    output.showAlert.onNext(asWMError.errorDescription ?? "")
                 }else{
                     output.showAlert.onNext(error.localizedDescription)
                 }

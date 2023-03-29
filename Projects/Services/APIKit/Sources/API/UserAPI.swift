@@ -10,8 +10,9 @@ public enum UserAPI {
     case setUserName(name: String)
     case fetchPlayList
     case fetchFavoriteSongs
-    case editFavoriteSongsOrder(ids:[String])
-    case editPlayListOrder(ids:[String])
+    case editFavoriteSongsOrder(ids: [String])
+    case editPlayListOrder(ids: [String])
+    case deletePlayList(ids: [String])
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -27,6 +28,10 @@ public struct RequsetEditFavoriteSongs:Encodable {
 }
 
 public struct RequsetEditPlayList:Encodable {
+    var playlists:[String]
+}
+
+public struct RequsetDeletePlayList: Encodable {
     var playlists:[String]
 }
 
@@ -52,6 +57,8 @@ extension UserAPI: WMAPI {
             return "/likes/edit"
         case .editPlayListOrder:
             return "/playlists/edit"
+        case .deletePlayList:
+            return "/playlists/delete"
         }
     }
         
@@ -63,6 +70,8 @@ extension UserAPI: WMAPI {
             return .get
         case .editFavoriteSongsOrder,.editPlayListOrder:
             return .patch
+        case .deletePlayList:
+            return .delete
         }
     }
     
@@ -76,26 +85,20 @@ extension UserAPI: WMAPI {
             return .requestPlain
         case .editFavoriteSongsOrder(ids: let ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songs: ids))
-            
         case .editPlayListOrder(ids: let ids):
             return .requestJSONEncodable(RequsetEditPlayList(playlists: ids))
-        
+        case let .deletePlayList(ids):
+            return .requestJSONEncodable(RequsetDeletePlayList(playlists: ids))
         }
-        
     }
-
-    
         
     public var jwtTokenType: JwtTokenType {
-        
         switch self {
         case .fetchProfileList:
             return .none
-        
         default :
             return .accessToken
         }
-        
     }
     
     public var errorMap: [Int: WMError] {

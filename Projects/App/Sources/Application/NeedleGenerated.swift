@@ -285,6 +285,9 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var playListDetailComponent: PlayListDetailComponent {
         return appComponent.playListDetailComponent
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
     }
@@ -803,6 +806,7 @@ extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\MyPlayListDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\MyPlayListDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
     }
