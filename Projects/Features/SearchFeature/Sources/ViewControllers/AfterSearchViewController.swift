@@ -14,7 +14,7 @@ import Tabman
 import RxSwift
 import DomainModule
 import CommonFeature
-
+import PlayerFeature
 
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
@@ -38,8 +38,9 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
     lazy var input = AfterSearchViewModel.Input()
-     lazy var output = viewModel.transform(from: input)
+    lazy var output = viewModel.transform(from: input)
     
+    let playState = PlayState.shared
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -252,8 +253,18 @@ extension AfterSearchViewController: SongCartViewDelegate {
             }
             
         case .addPlayList:
+            
+            let songs  = output.songEntityOfSelectedSongs.value
+            playState.appendSongsToPlaylist(songs)
+            self.clearSongCart()
+            
             return
         case .play:
+            
+            let songs  = output.songEntityOfSelectedSongs.value
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.clearSongCart()
+            
             return
         case .remove:
             return
