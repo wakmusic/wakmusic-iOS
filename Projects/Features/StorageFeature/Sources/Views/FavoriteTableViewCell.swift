@@ -25,15 +25,18 @@ class FavoriteTableViewCell: UITableViewCell {
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var listSelectButton: UIButton!
     
+    var songModel:SongEntity!
+    
     @IBAction func playButtonAction(_ sender: UIButton) {
+        playButtonDelegate?.play(model: songModel)
         
     }
     
     @IBAction func listSelectButtonAction(_ sender: Any) {
-        DEBUG_LOG("weufweuojweogi")
         delegate?.listTapped(indexPath: self.indexPath)
     }
     
+    weak var playButtonDelegate:PlayButtonDelegate?
     weak var delegate: FavoriteTableViewCellDelegate?
     var indexPath: IndexPath = IndexPath(row: 0, section: 0)
 
@@ -59,6 +62,8 @@ class FavoriteTableViewCell: UITableViewCell {
 extension FavoriteTableViewCell {
     
     func update(model: FavoriteSongEntity, isEditing: Bool, indexPath: IndexPath) {
+        
+        songModel = model.song
         self.albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
