@@ -33,6 +33,8 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
+    let playState = PlayState.shared
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -145,8 +147,13 @@ extension FavoriteViewController{
         output.willAddPlayList
             .skip(1)
             .debug("willAddPlayList")
-            .subscribe(onNext: { (songs) in
-                //TO-DO
+            .subscribe(onNext: { [weak self] (songs) in
+                
+                guard let self = self else {return}
+                
+                self.playState.appendSongsToPlaylist(songs)
+                self.input.allLikeListSelected.onNext(false)
+                
             }).disposed(by: disposeBag)
 
         output.showToast
