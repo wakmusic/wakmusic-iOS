@@ -35,6 +35,8 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
+    
+    let playState = PlayState.shared
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,8 +167,14 @@ extension MyPlayListViewController{
         output.willAddPlayList
             .skip(1)
             .debug("willAddPlayList")
-            .subscribe(onNext: { (songs) in
-                //TO-DO
+            .subscribe(onNext: { [weak self] (songs) in
+                
+                guard let self = self else {return}
+                
+                self.playState.appendSongsToPlaylist(songs)
+                self.input.allPlayListSelected.onNext(false)
+                
+                
             }).disposed(by: disposeBag)
                 
         output.showToast
