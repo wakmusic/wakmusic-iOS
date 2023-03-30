@@ -37,7 +37,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let dataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
-        let willAddSongList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<String> = PublishRelay()
     }
 
@@ -180,7 +180,7 @@ public final class MyPlayListViewModel:ViewModelType {
                     return pre + new
                 }.takeLast(1)
             }
-            .bind(to: output.willAddSongList)
+            .bind(to: output.willAddPlayList)
             .disposed(by: disposeBag)
         
         input.deletePlayList
