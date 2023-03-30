@@ -12,6 +12,12 @@ import DomainModule
 import Kingfisher
 import Utility
 
+public protocol PlayListPlayButtonDelegate: AnyObject {
+    
+    func play(key:String)
+    
+}
+
 public protocol MyPlayListTableViewCellDelegate: AnyObject {
     func listTapped(indexPath: IndexPath)
 }
@@ -26,7 +32,7 @@ class MyPlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var listSelectButton: UIButton!
     
     @IBAction func playButtonAction(_ sender: UIButton) {
-        
+        playButtonDelegate?.play(key: key)
     }
     
     @IBAction func listSelectButtonAction(_ sender: Any) {
@@ -34,7 +40,9 @@ class MyPlayListTableViewCell: UITableViewCell {
     }
     
     weak var delegate: MyPlayListTableViewCellDelegate?
+    weak var playButtonDelegate: PlayListPlayButtonDelegate?
     var indexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var key:String!
     
     override var isEditing: Bool {
         didSet {
@@ -58,6 +66,8 @@ class MyPlayListTableViewCell: UITableViewCell {
 extension MyPlayListTableViewCell {
     
     func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath){
+        
+        self.key = model.key
         self.playListImageView.kf.setImage(
             with: WMImageAPI.fetchPlayList(id: String(model.image),version: model.image_version).toURL,
             placeholder: nil,

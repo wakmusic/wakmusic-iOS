@@ -175,6 +175,7 @@ extension FavoriteViewController{
                 indexPath: indexPath
             )
             cell.delegate = self
+            cell.playButtonDelegate = self
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
@@ -220,6 +221,14 @@ extension FavoriteViewController: FavoriteTableViewCellDelegate {
     public func listTapped(indexPath: IndexPath) {
         self.input.itemSelected.onNext(indexPath)
     }
+}
+
+extension FavoriteViewController: PlayButtonDelegate {
+    public func play(model: SongEntity) {
+        playState.loadAndAppendSongsToPlaylist([model])
+    }
+    
+    
 }
 
 extension FavoriteViewController:UITableViewDelegate{
