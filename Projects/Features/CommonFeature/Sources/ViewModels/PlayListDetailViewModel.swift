@@ -45,6 +45,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let allSongSelected: PublishSubject<Bool> = PublishSubject()
         let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
         let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: false))
+        let groupPlayTapped:PublishSubject<PlayEvent> = PublishSubject()
         
     }
 
@@ -56,6 +57,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let refreshPlayList:BehaviorRelay<Void> = BehaviorRelay(value: ())
+        let groupPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
         
     }
 
@@ -70,12 +72,7 @@ public final class PlayListDetailViewModel:ViewModelType {
         self.editPlayListUseCase = editPlayListUseCase
         self.removeSongsUseCase = removeSongsUseCase
        
-       
-        
-        
-       
-        
-        
+
         
         
     }
@@ -385,6 +382,28 @@ public final class PlayListDetailViewModel:ViewModelType {
                 
                 output.indexOfSelectedSongs.accept(indexs)
             })
+        
+        
+        input.groupPlayTapped
+            .withLatestFrom(output.dataSource){($0,$1)}
+            .map({ (type,dataSourc) -> [SongEntity] in
+                
+                guard let songs = dataSourc.first?.items as? [SongEntity] else {
+                    return []
+                }
+                
+                switch type {
+                    
+                case .allPlay:
+                    return songs
+                case .shufflePlay:
+                    return songs.shuffled()
+                }
+                
+                
+            })
+            .bind(to: output.groupPlaySongs)
+            .disposed(by: disposeBag)
         
         
         

@@ -401,6 +401,18 @@ extension PlayListDetailViewController{
             .map { $0.0.row }
             .bind(to: input.songTapped)
             .disposed(by: disposeBag)
+        
+        
+        output.groupPlaySongs
+            .subscribe(onNext: { [weak self] songs in
+                
+                guard let self = self else {return}
+                
+                self.playState.loadAndAppendSongsToPlaylist(songs)
+                
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     private func bindSelectedEvent() {
@@ -506,7 +518,7 @@ extension PlayListDetailViewController:UITableViewDelegate{
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
-        DEBUG_LOG(event)
+        input.groupPlayTapped.onNext(event)
     }
 }
 
