@@ -77,6 +77,7 @@ extension PlayListTableViewCell {
         self.isEditing = isEditing
         self.model = model
         
+        
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         
         albumImageView.kf.setImage(

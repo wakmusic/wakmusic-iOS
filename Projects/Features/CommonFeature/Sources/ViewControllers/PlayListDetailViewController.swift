@@ -606,7 +606,7 @@ extension PlayListDetailViewController:PlayListCellDelegate {
 
 extension PlayListDetailViewController:PlayButtonDelegate {
     public func play(model: SongEntity) {
-        DEBUG_LOG(model.title)
+        playState.loadAndAppendSongsToPlaylist([model])
     }
     
     
