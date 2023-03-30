@@ -30,6 +30,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let addPlayList: PublishSubject<Void> = PublishSubject()
         let deletePlayList: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
+        let getPlayListDetail:PublishSubject<String> = PublishSubject()
     }
 
     public struct Output {
@@ -39,6 +40,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<String> = PublishRelay()
+        let immediatelyPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
     }
 
     init(
@@ -169,14 +171,14 @@ public final class MyPlayListViewModel:ViewModelType {
             }
             .flatMap{ [weak self] (keys) -> Observable<[SongEntity]> in
                 guard let `self` = self else { return Observable.empty() }
-                return Observable.concat(
+                return Observable.concat( 
                     keys.map {
                         self.fetchPlayListDetailUseCase
                             .execute(id: $0, type: .custom)
                             .asObservable()
                             .map { $0.songs }
                     }
-                ).scan([]) { (pre, new) in
+                ).scan([]) { (pre, new) in //총 [1], [1,2] ,[1,2,3] ... [1,2,3,4,5] 인데 last가 [1,2,3,4,5]
                     return pre + new
                 }.takeLast(1)
             }
@@ -222,6 +224,19 @@ public final class MyPlayListViewModel:ViewModelType {
                 return newModel
             }
             .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
+        
+        input.getPlayListDetail
+            .flatMap{ [weak self] (key) -> Observable<[SongEntity]> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.fetchPlayListDetailUseCase
+                            .execute(id: key, type: .custom)
+                            .asObservable()
+                            .map { $0.songs }
+               
+            }
+            .bind(to: output.immediatelyPlaySongs)
             .disposed(by: disposeBag)
 
         return output

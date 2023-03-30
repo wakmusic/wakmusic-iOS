@@ -192,6 +192,17 @@ extension MyPlayListViewController{
             .map({_ in () })
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
+        
+        
+        output.immediatelyPlaySongs.subscribe(onNext: { [weak self] songs in
+            
+            guard let self = self else {return}
+            
+            self.playState.loadAndAppendSongsToPlaylist(songs)
+            
+            
+        })
+        .disposed(by: disposeBag)
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
@@ -207,6 +218,7 @@ extension MyPlayListViewController{
                 indexPath: indexPath
             )
             cell.delegate = self
+            cell.playButtonDelegate = self
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
@@ -274,4 +286,13 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
         let vc =  multiPurposePopComponent.makeView(type: type)
         self.showPanModal(content: vc)
     }    
+}
+
+extension MyPlayListViewController: PlayListPlayButtonDelegate {
+    public func play(key: String) {
+        
+        input.getPlayListDetail.onNext(key)
+    }
+    
+    
 }
