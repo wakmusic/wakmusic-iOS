@@ -175,6 +175,7 @@ public final class MyPlayListViewModel:ViewModelType {
                     keys.map {
                         self.fetchPlayListDetailUseCase
                             .execute(id: $0, type: .custom)
+                            .catchAndReturn(PlayListDetailEntity(id: "", title: "", songs: [], public: false, key: "", creator_id: "", image: "", image_square_version: 1, image_version: 1))
                             .asObservable()
                             .map { $0.songs }
                     }

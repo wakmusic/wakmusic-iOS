@@ -168,13 +168,9 @@ extension MyPlayListViewController{
             .skip(1)
             .debug("willAddPlayList")
             .subscribe(onNext: { [weak self] (songs) in
-                
                 guard let self = self else {return}
-                
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allPlayListSelected.onNext(false)
-                
-                
             }).disposed(by: disposeBag)
                 
         output.showToast
@@ -193,20 +189,12 @@ extension MyPlayListViewController{
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
         
-        
-        output.immediatelyPlaySongs.subscribe(onNext: { [weak self] songs in
-            
-            guard let self = self else {return}
-            
-            self.playState.loadAndAppendSongsToPlaylist(songs)
-            
-            
-        })
-        .disposed(by: disposeBag)
-        
-      
-     
-        
+        output.immediatelyPlaySongs
+            .subscribe(onNext: { [weak self] songs in
+                guard let self = self else {return}
+                self.playState.loadAndAppendSongsToPlaylist(songs)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
@@ -294,9 +282,6 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
 
 extension MyPlayListViewController: PlayListPlayButtonDelegate {
     public func play(key: String) {
-        
         input.getPlayListDetail.onNext(key)
     }
-    
-    
 }
