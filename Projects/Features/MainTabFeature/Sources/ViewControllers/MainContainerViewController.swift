@@ -5,6 +5,7 @@ import BaseFeature
 import PlayerFeature
 import SnapKit
 import RxSwift
+import DomainModule
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -184,35 +185,6 @@ extension MainContainerViewController {
             $0.edges.equalTo(panelView)
         }
         updatePlayerViewController(value: Float(0))
-
-        /*
-        let window: UIWindow? = UIApplication.shared.windows.first
-        let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
-        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-        var statusBarHeight: CGFloat = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-
-        if safeAreaInsetsTop > statusBarHeight {
-            statusBarHeight = safeAreaInsetsTop
-        }
-
-        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
-        
-        self.panelViewTopConstraint.constant = -screenHeight
-
-        UIView.animate(withDuration: 0.35,
-                       delay: 0.0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.8,
-                       options: [.curveEaseInOut],
-                       animations: {
-
-            self.tabBarHeightConstraint.constant = 0
-            self.view.layoutIfNeeded()
-
-        }, completion: { _ in
-            self.tabBarCoverView.isHidden = false
-        })
-         */
     }
 }
 
@@ -228,13 +200,10 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 public extension MainContainerViewController {
     
     // expanded: 플레이어 확장/축소
-    func updatePlayerView(expanded: Bool) {
-        let window: UIWindow? = UIApplication.shared.windows.first
-        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
-        
+    func updatePlayerPosition(expanded: Bool) {
+        let screenHeight = APP_HEIGHT() - SAFEAREA_BOTTOM_HEIGHT()
         self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
-        self.bottomContainerView.isHidden = (expanded) ? false : true
+        self.bottomContainerView.isHidden = (expanded) ? true : false
 
         UIView.animate(withDuration: 0.5,
                        delay: 0.0,
@@ -253,7 +222,7 @@ public extension MainContainerViewController {
     }
     
     // 플레이어 생성
-    func createPlayer(ids: [String]) {
+    func createPlayer(songs: [SongEntity]) {
         let vc = playerComponent.makeView()
         self.addChild(vc)
         panelView.addSubview(vc.view)
@@ -264,11 +233,7 @@ public extension MainContainerViewController {
             $0.edges.equalTo(panelView)
         }
 
-        let window: UIWindow? = UIApplication.shared.windows.first
-        let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-        let screenHeight = APP_HEIGHT() - safeAreaInsetsBottom
-        
-        self.panelViewTopConstraint.constant = -screenHeight
+        self.panelViewTopConstraint.constant = self.originalPanelPosition
         self.bottomContainerView.isHidden = false
 
         UIView.animate(withDuration: 0.5,
@@ -278,17 +243,18 @@ public extension MainContainerViewController {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.bottomContainerViewBottomConstraint.constant = -self.originalTabBarPosition
+            self.bottomContainerViewBottomConstraint.constant = 0
             self.view.layoutIfNeeded()
 
         }, completion: { _ in
         })
         
-        updatePlayerViewController(value: Float(1))
+        //미니플레이어 상태는 0, 풀스크린이면 1
+        updatePlayerViewController(value: Float(0))
     }
     
     // 플레이어가 이미 있는 상태에서 새로운 곡 로드
-    func loadPlayer(ids: [String]) {
+    func loadPlayer(songs: [SongEntity]) {
         guard let playerViewController = self.children.last as? PlayerViewController else {
             DEBUG_LOG("❌ Player Load Failed")
             return
