@@ -153,7 +153,7 @@ extension MyPlayListViewController{
                 case false:
                     self.showSongCart(
                         in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
-                        type: .myPlayList,
+                        type: .myList,
                         selectedSongCount: songs.count,
                         totalSongCount: items.count,
                         useBottomSpace: true
@@ -162,9 +162,9 @@ extension MyPlayListViewController{
                 }
             }).disposed(by: disposeBag)
         
-        output.willAddSongList
+        output.willAddPlayList
             .skip(1)
-            .debug("willAddSongList")
+            .debug("willAddPlayList")
             .subscribe(onNext: { (songs) in
                 //TO-DO
             }).disposed(by: disposeBag)

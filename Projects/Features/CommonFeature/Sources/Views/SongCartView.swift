@@ -110,9 +110,16 @@ public extension SongCartView {
             playButton.isHidden = false
             removeButton.isHidden = true
 
-        case .likeSong, .myList, .myPlayList:
+        case .likeSong, .myPlayList:
             allSelectButton.isHidden = false
             songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = true
+            removeButton.isHidden = false
+            
+        case .myList:
+            allSelectButton.isHidden = false
+            songAddButton.isHidden = true
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
