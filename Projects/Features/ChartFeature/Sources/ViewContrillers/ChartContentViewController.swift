@@ -110,6 +110,16 @@ extension ChartContentViewController {
             .filter{ !$0.isEmpty }
             .subscribe()
             .disposed(by: disposeBag)
+        
+        output.groupPlaySongs
+            .subscribe(onNext: { [weak self] songs in
+                
+                guard let self = self else {return}
+                
+                self.playState.loadAndAppendSongsToPlaylist(songs)
+                
+            })
+            .disposed(by: disposeBag)
     }
     
 }
@@ -134,7 +144,7 @@ extension ChartContentViewController: UITableViewDelegate {
 
 extension ChartContentViewController: PlayButtonForChartViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
-        DEBUG_LOG(event)
+        input.groupPlayTapped.onNext(event)
     }
 }
 

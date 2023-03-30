@@ -25,6 +25,7 @@ public final class ChartContentViewModel: ViewModelType {
     public struct Input {
         var songTapped: PublishSubject<Int> = PublishSubject()
         var allSongSelected: PublishSubject<Bool> = PublishSubject()
+        let groupPlayTapped:PublishSubject<PlayEvent> = PublishSubject()
     }
     
     public struct Output {
@@ -33,6 +34,7 @@ public final class ChartContentViewModel: ViewModelType {
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: []) 
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let groupPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
     }
     
     public func transform(from input: Input) -> Output {
@@ -121,6 +123,24 @@ public final class ChartContentViewModel: ViewModelType {
                 }
             }
             .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        input.groupPlayTapped
+            .withLatestFrom(output.dataSource){($0,$1)}
+            .map({ (type,dataSourc) -> [SongEntity] in
+                
+
+                switch type {
+                    
+                case .allPlay:
+                    return dataSourc
+                case .shufflePlay:
+                    return dataSourc.shuffled()
+                }
+                
+                
+            })
+            .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
         
 
