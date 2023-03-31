@@ -208,7 +208,20 @@ final class PlayerViewModel: ViewModelType {
             output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
         
+        bindUserInfo(output: output)
+        
         return output
+    }
+    
+    func bindUserInfo(output: Output) {
+        Utility.PreferenceManager.$userInfo
+            .skip(1)
+            .subscribe { [weak self] _ in
+                guard let self else { return }
+                guard let currentSong = self.playState.currentSong else { return }
+                self.fetchLikeState(for: currentSong, output: output)
+                self.fetchLikeCount(for: currentSong, output: output)
+            }.disposed(by: disposeBag)
     }
     
     func handlePlaybackEnded() {
