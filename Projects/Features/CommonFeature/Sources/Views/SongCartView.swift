@@ -63,22 +63,30 @@ public class SongCartView: UIView {
         
         guard let button = sender as? UIButton else { return }
         
-        if button == allSelectButton {
+        if button == allSelectButton { //전체선택
             allSelectButton.isSelected = !allSelectButton.isSelected
             allSelectImageView.image = allSelectButton.isSelected ? DesignSystemAsset.PlayListEdit.checkOn.image : DesignSystemAsset.PlayListEdit.checkOff.image
             allSelectLabel.text = allSelectButton.isSelected ? "전체선택해제" : "전체선택"
             delegate?.buttonTapped(type: .allSelect(flag: allSelectButton.isSelected))
             
-        }else if button == songAddButton {
+        }else if button == songAddButton { //노래담기
+            guard Utility.PreferenceManager.userInfo != nil else {
+                showLoginPopup()
+                return
+            }
             delegate?.buttonTapped(type: .addSong)
 
-        }else if button == playListAddButton {
+        }else if button == playListAddButton { //재생목록추가
             delegate?.buttonTapped(type: .addPlayList)
 
-        }else if button == playButton {
+        }else if button == playButton { //재생
             delegate?.buttonTapped(type: .play)
 
-        }else if button == removeButton {
+        }else if button == removeButton { //삭제
+            guard Utility.PreferenceManager.userInfo != nil else {
+                showLoginPopup()
+                return
+            }
             delegate?.buttonTapped(type: .remove)
         }
     }
@@ -205,5 +213,15 @@ public extension SongCartView {
     
     func updateBottomSpace(isUse: Bool) {
         self.bottomSpaceView.isHidden = isUse ? false : true
+    }
+}
+
+extension SongCartView {
+    private func showLoginPopup() {
+        let viewController = TextPopupViewController.viewController(text: "로그인이 필요한 기능입니다.", cancelButtonIsHidden: false, completion: { () in
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+        })
+        guard let parent = self.parentViewController() else { return }
+        parent.showPanModal(content: viewController)
     }
 }

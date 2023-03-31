@@ -66,6 +66,7 @@
                         <outlet property="bottomContainerViewBottomConstraint" destination="VoA-Q3-8AW" id="LfV-Wb-pcP"/>
                         <outlet property="bottomContainerViewHeight" destination="sbB-aw-lJK" id="qGB-15-YEy"/>
                         <outlet property="containerView" destination="gc8-5l-C6x" id="Im9-in-uRo"/>
+                        <outlet property="containerViewBottomConstraint" destination="i46-7q-nep" id="Egl-hb-Fy3"/>
                         <outlet property="panelView" destination="4Tn-23-Dux" id="Vlu-Bt-FKb"/>
                         <outlet property="panelViewHeightConstraint" destination="ksy-Yf-i8Y" id="zi6-1r-IxJ"/>
                         <outlet property="panelViewTopConstraint" destination="2iQ-p1-0Hb" id="5gU-DD-zDh"/>

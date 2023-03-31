@@ -11,6 +11,7 @@ import CommonFeature
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var containerViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomContainerView: UIView!
     @IBOutlet weak var bottomContainerViewHeight: NSLayoutConstraint!
     @IBOutlet weak var bottomContainerViewBottomConstraint: NSLayoutConstraint!
@@ -35,8 +36,12 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         self.panelView.addGestureRecognizer(gesture)
         return gesture
     }()
-    
     var isDarkContentBackground: Bool = false
+    var playerMovement: PlayerMovement = .mini {
+        didSet {
+//            updateContainerViewBottomConstraint()
+        }
+    }
     var disposeBag = DisposeBag()
     
     open override func viewDidLoad() {
@@ -44,6 +49,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
         configureUI()
         configurePlayer()
+//        updateContainerViewBottomConstraint()
         bindNotification()
     }
     
@@ -256,7 +262,7 @@ public extension MainContainerViewController {
     }
     
     // 플레이어 생성 (현재 미사용, 추후에는 쓸지도..?)
-    func makePlayer(songs: [SongEntity], expanded: Bool = false) {
+    private func makePlayer(songs: [SongEntity], expanded: Bool = false) {
         let vc = playerComponent.makeView()
         self.addChild(vc)
         panelView.addSubview(vc.view)
@@ -289,7 +295,7 @@ public extension MainContainerViewController {
     }
     
     // 플레이어 삭제 (현재 미사용, 추후에는 쓸지도..?)
-    func removePlayer() {
+    private func removePlayer() {
         guard let playerViewController = self.children.last as? PlayerViewController else {
             DEBUG_LOG("❌ Player Load Failed")
             return
@@ -303,6 +309,16 @@ public extension MainContainerViewController {
         self.panelView.isHidden = true
         DEBUG_LOG("❌ Player Closed")
     }
+    
+    private func updateContainerViewBottomConstraint() {
+        switch self.playerMovement {
+        case .full, .mini:
+            self.containerViewBottomConstraint.constant = 56
+        case .close:
+            self.containerViewBottomConstraint.constant = 0
+        }
+        self.view.layoutIfNeeded()
+    }
 }
 
 extension MainContainerViewController {
@@ -312,6 +328,7 @@ extension MainContainerViewController {
             .subscribe(onNext: { [weak self] (notification) in
                 guard let movement = notification.object as? PlayerMovement else { return }
                 self?.updatePlayerMovement(with: movement)
+                self?.playerMovement = movement
             }).disposed(by: disposeBag)
         
         NotificationCenter.default.rx
@@ -339,7 +356,7 @@ extension MainContainerViewController {
             .notification(.hideSongCart)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.2) {
                     self.panelView.alpha = 1
                 }
             }).disposed(by: disposeBag)
