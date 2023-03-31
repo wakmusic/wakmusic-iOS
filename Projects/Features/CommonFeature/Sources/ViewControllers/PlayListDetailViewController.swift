@@ -541,12 +541,6 @@ extension PlayListDetailViewController:SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
         case .addSong:
             
-            if Utility.PreferenceManager.userInfo
-                == nil {
-                self.showToast(text: "로그인이 필요한 기능입니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
-                return
-            }
             
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
