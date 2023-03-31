@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "ic_32_play_point@2x.png",
+      "filename" : "blur_bg@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_32_play_point@3x.png",
+      "filename" : "blur_bg@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

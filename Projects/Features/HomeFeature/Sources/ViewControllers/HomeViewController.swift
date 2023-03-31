@@ -19,7 +19,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topCircleImageView: UIImageView!
     @IBOutlet weak var chartContentView: UIView!
     @IBOutlet weak var chartBorderView: UIView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
+    @IBOutlet weak var blurImageView: UIImageView!
     @IBOutlet weak var chartTitleLabel: UILabel!
     @IBOutlet weak var chartArrowImageView: UIImageView!
     @IBOutlet weak var chartAllListenButton: UIButton!
@@ -252,8 +252,8 @@ extension HomeViewController {
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         
-        blurEffectView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color.withAlphaComponent(0.4)
-        blurEffectView.layer.cornerRadius = 12
+        blurImageView.image = DesignSystemAsset.Home.blurBg.image
+        blurImageView.layer.cornerRadius = 12
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
