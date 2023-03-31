@@ -201,16 +201,6 @@ extension PlayState {
             }
         }
         
-        /// 해당 곡이 재생목록에 없을 경우에만 추가합니다.
-        public func appendIfUnique(item: SongEntity) {
-            guard let uniqueIndex = uniqueIndex(of: item) else {
-                list.append(item) // 재생목록에 추가
-                currentPlayIndex = lastIndex // index를 가장 마지막으로 옮김
-                return
-            }
-            currentPlayIndex = uniqueIndex
-        }
-        
         public func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             for (index, song) in list.enumerated() {
