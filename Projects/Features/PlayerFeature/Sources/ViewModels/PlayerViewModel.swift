@@ -93,12 +93,16 @@ final class PlayerViewModel: ViewModelType {
             state == .playing ? self.playState.pause() : self.playState.play()
         }.store(in: &subscription)
         
+        input.closeButtonDidTapEvent.sink { _ in
+            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.mini)
+        }.store(in: &subscription)
+        
         input.miniExtendButtonDidTapEvent.sink { _ in
-            print("미니플레이어 확장버튼 눌림")
+            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.full)
         }.store(in: &subscription)
         
         input.miniCloseButtonDidTapEvent.sink { _ in
-            print("미니플레이어 닫기버튼 눌림")
+            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.close)
         }.store(in: &subscription)
         
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
