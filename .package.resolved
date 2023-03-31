@@ -46,6 +46,24 @@
       }
     },
     {
+      "identity" : "realm-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-core.git",
+      "state" : {
+        "revision" : "3c950f43bafc4fe39ce605e913cc7f30426e1747",
+        "version" : "13.8.0"
+      }
+    },
+    {
+      "identity" : "realm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-swift",
+      "state" : {
+        "revision" : "80368adfbf58360104042522d9f4623a3de7863b",
+        "version" : "10.37.2"
+      }
+    },
+    {
       "identity" : "skeletonview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Juanpe/SkeletonView.git",

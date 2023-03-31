@@ -6,7 +6,8 @@ let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .framework,
     packages: [
-        .GoogleSignIn
+        .GoogleSignIn,
+        .RealmSwift
     ],
     dependencies: [
         .SPM.GoogleSignIn,
@@ -14,6 +15,7 @@ let project = Project.makeModule(
         .SPM.Firebase,
         .SPM.RxSwift,
         .SPM.RxMoya,
-        .SPM.Moya
+        .SPM.Moya,
+        .SPM.RealmSwift
     ]
 )

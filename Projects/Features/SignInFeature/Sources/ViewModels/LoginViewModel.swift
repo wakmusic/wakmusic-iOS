@@ -136,6 +136,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     func inputTransfrom(input: Input) {
         input.pressNaverLoginButton
             .bind {
+                self.naverLoginInstance?.delegate = self
                 self.naverLoginInstance?.requestThirdPartyLogin() // requestDeleteToken() <- 로그아읏
             }.disposed(by: disposeBag)
 
