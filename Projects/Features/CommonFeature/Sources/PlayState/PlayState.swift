@@ -78,6 +78,13 @@ extension PlayState {
         self.player.pause()
     }
     
+    /// ⏹️ 플레이어 닫기
+    public func stop() {
+        self.player.stop()
+        self.currentSong = nil
+        self.playList.list.removeAll()
+    }
+    
     /// ▶️ 해당 곡 새로 재생
     public func load(at song: SongEntity) {
         self.currentSong = song
