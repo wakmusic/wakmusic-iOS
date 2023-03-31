@@ -177,37 +177,11 @@ final class PlayerViewModel: ViewModelType {
             output.willShowPlaylist.send(true)
         }.store(in: &subscription)
         
-        playState.$state.sink { [weak self] state in
-            guard let self else { return }
-            output.playerState.send(state)
-            if state == .ended {
-                self.handlePlaybackEnded()
-            }
-        }.store(in: &subscription)
-        
-        playState.$currentSong.sink { [weak self] song in
-            guard let self else { return }
-            guard let song = song else { return }
-            self.handleCurrentSongChanged(song: song, output: output)
-            self.fetchLyrics(for: song, output: output)
-            self.fetchLikeCount(for: song, output: output)
-            self.fetchLikeState(for: song, output: output)
-            
-        }.store(in: &subscription)
-        
-        playState.$progress.sink { [weak self] progress in
-            guard let self else { return }
-            self.handleProgress(progress: progress, output: output)
-        }.store(in: &subscription)
-        
-        playState.$repeatMode.sink { repeatMode in
-            output.repeatMode.send(repeatMode)
-        }.store(in: &subscription)
-        
-        playState.$shuffleMode.sink { shuffleMode in
-            output.shuffleMode.send(shuffleMode)
-        }.store(in: &subscription)
-        
+        bindPlayStateChanged(output: output)
+        bindCurrentSongChanged(output: output)
+        bindProgress(output: output)
+        bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
         bindUserInfo(output: output)
         
         return output
@@ -222,6 +196,46 @@ final class PlayerViewModel: ViewModelType {
                 self.fetchLikeState(for: currentSong, output: output)
                 self.fetchLikeCount(for: currentSong, output: output)
             }.disposed(by: disposeBag)
+    }
+    
+    func bindPlayStateChanged(output: Output) {
+        playState.$state.sink { [weak self] state in
+            guard let self else { return }
+            output.playerState.send(state)
+            if state == .ended {
+                self.handlePlaybackEnded()
+            }
+        }.store(in: &subscription)
+    }
+    
+    func bindCurrentSongChanged(output: Output) {
+        playState.$currentSong.sink { [weak self] song in
+            guard let self else { return }
+            guard let song = song else { return }
+            self.handleCurrentSongChanged(song: song, output: output)
+            self.fetchLyrics(for: song, output: output)
+            self.fetchLikeCount(for: song, output: output)
+            self.fetchLikeState(for: song, output: output)
+        }.store(in: &subscription)
+    }
+    
+    func bindProgress(output: Output) {
+        playState.$progress.sink { [weak self] progress in
+            guard let self else { return }
+            self.handleProgress(progress: progress, output: output)
+        }.store(in: &subscription)
+    }
+    
+    func bindRepeatMode(output: Output) {
+        playState.$repeatMode.sink { repeatMode in
+            output.repeatMode.send(repeatMode)
+        }.store(in: &subscription)
+    }
+    
+    func bindShuffleMode(output: Output) {
+        playState.$shuffleMode.sink { shuffleMode in
+            output.shuffleMode.send(shuffleMode)
+        }.store(in: &subscription)
     }
     
     func handlePlaybackEnded() {
