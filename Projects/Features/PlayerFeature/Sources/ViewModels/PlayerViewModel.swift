@@ -101,8 +101,9 @@ final class PlayerViewModel: ViewModelType {
             NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.full)
         }.store(in: &subscription)
         
-        input.miniCloseButtonDidTapEvent.sink { _ in
+        input.miniCloseButtonDidTapEvent.sink { [weak self] _ in
             NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.close)
+            self?.playState.stop()
         }.store(in: &subscription)
         
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
