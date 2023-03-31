@@ -54,7 +54,7 @@ final public class PlayState {
             guard let self = self else { return }
             self.progress.currentProgress = currentTime
         }.store(in: &subscription)
-
+        
         player.durationPublisher.sink { [weak self] duration in
             guard let self = self else { return }
             self.progress.endProgress = duration
@@ -69,30 +69,30 @@ final public class PlayState {
 extension PlayState {
     
     /// ⏯️ 현재 곡 재생
-    public  func play() {
+    public func play() {
         self.player.play()
     }
     
     /// ⏸️ 일시정지
-    public    func pause() {
+    public func pause() {
         self.player.pause()
     }
     
     /// ▶️ 해당 곡 새로 재생
-    public    func load(at song: SongEntity) {
+    public func load(at song: SongEntity) {
         self.currentSong = song
         guard let currentSong = currentSong else { return }
         self.player.load(source: .video(id: currentSong.id))
     }
     
     /// ▶️ 플레이리스트의 해당 위치의  곡 재생
-    public    func loadInPlaylist(at index: Int) {
+    public func loadInPlaylist(at index: Int) {
         self.playList.currentPlayIndex = index
         self.currentSong = self.playList.current
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
-
+    
     /// ⏩ 다음 곡으로 변경 후 재생
     public func forward() {
         self.playList.next()
@@ -100,7 +100,7 @@ extension PlayState {
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
-
+    
     /// ⏪ 이전 곡으로 변경 후 재생
     public func backward() {
         self.playList.back()
@@ -118,7 +118,7 @@ extension PlayState {
             self.forward()
         }
     }
-
+    
     /// ♻️ 첫번째 곡으로 변경 후 재생
     public func playAgain() {
         self.playList.currentPlayIndex = 0
@@ -126,61 +126,61 @@ extension PlayState {
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
-
+    
 }
 
 // MARK: 커스텀 타입들을 모아놓은 익스텐션입니다.
 extension PlayState {
     public class PlayList {
-    public    var list: [SongEntity]
-    public    var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
-
+        public var list: [SongEntity]
+        public var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
+        
         init(list: [SongEntity] = []) {
             self.list = list
             currentPlayIndex = 0
         }
-
-        public  var first: SongEntity? { return list.first }
-        public  var last: SongEntity? { return list.last }
-        public  var current: SongEntity? { return list[currentPlayIndex] }
-        public  var count: Int { return list.count }
-        public  var lastIndex: Int { return list.count - 1 }
-        public  var isEmpty: Bool { return list.isEmpty }
-        public  var isLast: Bool { return currentPlayIndex == lastIndex }
-
-    public    func append(_ item: SongEntity) {
+        
+        public var first: SongEntity? { return list.first }
+        public var last: SongEntity? { return list.last }
+        public var current: SongEntity? { return list[currentPlayIndex] }
+        public var count: Int { return list.count }
+        public var lastIndex: Int { return list.count - 1 }
+        public var isEmpty: Bool { return list.isEmpty }
+        public var isLast: Bool { return currentPlayIndex == lastIndex }
+        
+        public func append(_ item: SongEntity) {
             list.append(item)
         }
-
-    public   func insert(_ newElement: SongEntity, at: Int) {
+        
+        public func insert(_ newElement: SongEntity, at: Int) {
             list.insert(newElement, at: at)
         }
         
-    public    func remove(at: Int) {
+        public func remove(at: Int) {
             list.remove(at: at)
         }
         
-     public    func removeAll() {
+        public func removeAll() {
             list.removeAll()
         }
-
-     public   func contains(_ item: SongEntity) -> Bool {
+        
+        public   func contains(_ item: SongEntity) -> Bool {
             return list.contains(item)
         }
         
-     public   func back() {
+        public func back() {
             // 현재 곡이 첫번째 곡이면 마지막 곡으로
             if currentPlayIndex == 0 { currentPlayIndex = lastIndex; return }
             currentPlayIndex -= 1
         }
-
-     public   func next() {
+        
+        public func next() {
             // 현재 곡이 마지막이면 첫번째 곡으로
             if isLast { currentPlayIndex = 0; return }
             currentPlayIndex += 1
         }
         
-     public func reorderPlaylist(from: Int, to: Int) {
+        public func reorderPlaylist(from: Int, to: Int) {
             let movedData = list[from]
             list.remove(at: from)
             list.insert(movedData, at: to)
@@ -195,7 +195,7 @@ extension PlayState {
         }
         
         /// 해당 곡이 재생목록에 없을 경우에만 추가합니다.
-     public   func appendIfUnique(item: SongEntity) {
+        public func appendIfUnique(item: SongEntity) {
             guard let uniqueIndex = uniqueIndex(of: item) else {
                 list.append(item) // 재생목록에 추가
                 currentPlayIndex = lastIndex // index를 가장 마지막으로 옮김
@@ -203,19 +203,19 @@ extension PlayState {
             }
             currentPlayIndex = uniqueIndex
         }
-
-     public   func uniqueIndex(of item: SongEntity) -> Int? {
+        
+        public func uniqueIndex(of item: SongEntity) -> Int? {
             // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             for (index, song) in list.enumerated() {
                 if song == item { return index }
             }
             return nil
         }
-
+        
     }
     
     public struct PlayProgress {
-      public  var currentProgress: Double = 0
-      public  var endProgress: Double = 0
+        public var currentProgress: Double = 0
+        public var endProgress: Double = 0
     }
 }
