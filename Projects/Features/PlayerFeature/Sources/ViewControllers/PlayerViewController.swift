@@ -90,8 +90,8 @@ private extension PlayerViewController {
     private func bindViewModel() {
         let input = PlayerViewModel.Input(
             viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map {_ in },
-            closeButtonDidTapEvent: self.playerView.closeButton.rx.tap.asObservable(),
-            playButtonDidTapEvent: self.playerView.playButton.rx.tap.asObservable(),
+            closeButtonDidTapEvent: self.playerView.closeButton.tapPublisher(),
+            playButtonDidTapEvent: self.playerView.playButton.tapPublisher(),
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
             nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
@@ -100,9 +100,9 @@ private extension PlayerViewController {
             likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
             playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher(),
-            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.rx.tap.asObservable(),
-            miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.rx.tap.asObservable(),
-            miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.rx.tap.asObservable()
+            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.tapPublisher(),
+            miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.tapPublisher(),
+            miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.tapPublisher()
         )
         let output = self.viewModel.transform(from: input)
         
@@ -121,14 +121,6 @@ private extension PlayerViewController {
         bindShowPlaylist(output: output)
         bindShowToastMessage(output: output)
         bindShowConfirmModal(output: output)
-        
-        output.didClose
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 }
-            .drive(onNext: { _ in
-                print("didClose")
-            })
-            .disposed(by: disposeBag)
         
     }
         

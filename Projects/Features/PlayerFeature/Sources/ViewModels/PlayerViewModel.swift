@@ -19,8 +19,8 @@ import CommonFeature
 final class PlayerViewModel: ViewModelType {
     struct Input {
         let viewWillAppearEvent: Observable<Void>
-        let closeButtonDidTapEvent: Observable<Void>
-        let playButtonDidTapEvent: Observable<Void>
+        let closeButtonDidTapEvent: AnyPublisher<Void, Never>
+        let playButtonDidTapEvent: AnyPublisher<Void, Never>
         let prevButtonDidTapEvent: Observable<Void>
         let nextButtonDidTapEvent: Observable<Void>
         let sliderValueChangedEvent: Observable<Float>
@@ -29,9 +29,9 @@ final class PlayerViewModel: ViewModelType {
         let likeButtonDidTapEvent: AnyPublisher<Void, Never>
         let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
-        let miniExtendButtonDidTapEvent: Observable<Void>
-        let miniPlayButtonDidTapEvent: Observable<Void>
-        let miniCloseButtonDidTapEvent: Observable<Void>
+        let miniExtendButtonDidTapEvent: AnyPublisher<Void, Never>
+        let miniPlayButtonDidTapEvent: AnyPublisher<Void, Never>
+        let miniCloseButtonDidTapEvent: AnyPublisher<Void, Never>
     }
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
@@ -49,7 +49,7 @@ final class PlayerViewModel: ViewModelType {
         var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
-        var didClose = PublishRelay<Bool>()
+        //var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
         var didNext = PublishRelay<Bool>()
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
@@ -86,23 +86,20 @@ final class PlayerViewModel: ViewModelType {
     
     func transform(from input: Input) -> Output {
         let output = Output()
+
+        input.playButtonDidTapEvent.merge(with: input.miniPlayButtonDidTapEvent).sink { [weak self] _ in
+            guard let self else { return }
+            let state = self.playState.state
+            state == .playing ? self.playState.pause() : self.playState.play()
+        }.store(in: &subscription)
         
-        Observable.of(input.playButtonDidTapEvent, input.miniPlayButtonDidTapEvent).merge()
-            .subscribe(onNext: { [weak self] _ in
-                guard let self else { return }
-                let state = self.playState.state
-                state == .playing ? self.playState.pause() : self.playState.play()
-            })
-            .disposed(by: disposeBag)
-        
-        input.miniExtendButtonDidTapEvent.subscribe { _ in
+        input.miniExtendButtonDidTapEvent.sink { _ in
             print("미니플레이어 확장버튼 눌림")
-        }.disposed(by: disposeBag)
+        }.store(in: &subscription)
         
-        input.miniCloseButtonDidTapEvent.subscribe { _ in
+        input.miniCloseButtonDidTapEvent.sink { _ in
             print("미니플레이어 닫기버튼 눌림")
-            output.didClose.accept(true)
-        }.disposed(by: disposeBag)
+        }.store(in: &subscription)
         
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
