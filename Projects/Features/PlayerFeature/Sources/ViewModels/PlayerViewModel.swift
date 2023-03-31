@@ -86,7 +86,19 @@ final class PlayerViewModel: ViewModelType {
     
     func transform(from input: Input) -> Output {
         let output = Output()
-
+        
+        bindInput(input: input, output: output)
+        bindPlayStateChanged(output: output)
+        bindCurrentSongChanged(output: output)
+        bindProgress(output: output)
+        bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
+        bindLoginStateChanged(output: output)
+        
+        return output
+    }
+    
+    private func bindInput(input: Input, output: Output) {
         input.playButtonDidTapEvent.merge(with: input.miniPlayButtonDidTapEvent).sink { [weak self] _ in
             guard let self else { return }
             let state = self.playState.state
@@ -159,8 +171,8 @@ final class PlayerViewModel: ViewModelType {
                 } else {
                     self.addLikeSong(for: currentSong, output: output)
                 }
-
-        }.store(in: &subscription)
+                
+            }.store(in: &subscription)
         
         input.addPlaylistButtonDidTapEvent
             .map {
@@ -176,18 +188,9 @@ final class PlayerViewModel: ViewModelType {
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
         }.store(in: &subscription)
-        
-        bindPlayStateChanged(output: output)
-        bindCurrentSongChanged(output: output)
-        bindProgress(output: output)
-        bindRepeatMode(output: output)
-        bindShuffleMode(output: output)
-        bindUserInfo(output: output)
-        
-        return output
     }
     
-    func bindUserInfo(output: Output) {
+    private func bindLoginStateChanged(output: Output) {
         Utility.PreferenceManager.$userInfo
             .skip(1)
             .subscribe { [weak self] _ in
@@ -198,7 +201,7 @@ final class PlayerViewModel: ViewModelType {
             }.disposed(by: disposeBag)
     }
     
-    func bindPlayStateChanged(output: Output) {
+    private func bindPlayStateChanged(output: Output) {
         playState.$state.sink { [weak self] state in
             guard let self else { return }
             output.playerState.send(state)
@@ -208,7 +211,7 @@ final class PlayerViewModel: ViewModelType {
         }.store(in: &subscription)
     }
     
-    func bindCurrentSongChanged(output: Output) {
+    private func bindCurrentSongChanged(output: Output) {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
@@ -219,26 +222,26 @@ final class PlayerViewModel: ViewModelType {
         }.store(in: &subscription)
     }
     
-    func bindProgress(output: Output) {
+    private func bindProgress(output: Output) {
         playState.$progress.sink { [weak self] progress in
             guard let self else { return }
             self.handleProgress(progress: progress, output: output)
         }.store(in: &subscription)
     }
     
-    func bindRepeatMode(output: Output) {
+    private func bindRepeatMode(output: Output) {
         playState.$repeatMode.sink { repeatMode in
             output.repeatMode.send(repeatMode)
         }.store(in: &subscription)
     }
     
-    func bindShuffleMode(output: Output) {
+    private func bindShuffleMode(output: Output) {
         playState.$shuffleMode.sink { shuffleMode in
             output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
     }
     
-    func handlePlaybackEnded() {
+    private func handlePlaybackEnded() {
         if playState.shuffleMode.isOn {
             handleShuffleWithRepeatOnce()
         } else {
@@ -253,7 +256,7 @@ final class PlayerViewModel: ViewModelType {
         }
     }
     
-    func handleShuffleWithRepeatOnce() {
+    private func handleShuffleWithRepeatOnce() {
         if playState.repeatMode == .repeatOnce {
             playState.play()
         } else {
@@ -261,13 +264,13 @@ final class PlayerViewModel: ViewModelType {
         }
     }
     
-    func handleNoneRepeat() {
+    private func handleNoneRepeat() {
         if !playState.playList.isLast {
             playState.forward()
         }
     }
     
-    func handleCurrentSongChanged(song: SongEntity, output: Output) {
+    private func handleCurrentSongChanged(song: SongEntity, output: Output) {
         let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
         output.thumbnailImageURL.send(thumbnailURL)
         output.titleText.send(song.title)
@@ -276,7 +279,7 @@ final class PlayerViewModel: ViewModelType {
         output.likeCountText.send("준비중")
     }
     
-    func handleProgress(progress: PlayState.PlayProgress, output: Output) {
+    private func handleProgress(progress: PlayState.PlayProgress, output: Output) {
         output.playTimeText.send(self.formatTime(progress.currentProgress))
         output.totalTimeText.send(self.formatTime(progress.endProgress))
         output.playTimeValue.send(Float(progress.currentProgress))
