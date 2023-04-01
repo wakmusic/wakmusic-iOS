@@ -23,6 +23,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
     private var fetchUserInfoUseCase: FetchUserInfoUseCase!
 
+    let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
     let naverToken: PublishRelay<(String,String)> = PublishRelay()
     let googleToken: PublishRelay<String> = PublishRelay()
@@ -47,6 +48,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ){
         super.init()
+        self.googleLoginManager.googleOAuthLoginDelegate = self
         self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
@@ -58,6 +60,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
         inputTransfrom(input: input)
 
+        // MARK: NaverToken WMToken으로 치환
         naverToken
             .flatMap{ [weak self] (tokenType: String, accessToken: String) -> Observable<NaverUserInfoEntity> in
                 guard let self = self else { return Observable.empty() }
@@ -84,22 +87,25 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
         
-        appleToken
+        // MARK: GoogleToken, AppleToken WMToken으로 치환
+        [googleToken, appleToken].forEach {
+            $0
             .filter{ !$0.isEmpty }
             .withUnretained(self)
             .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
-                return viewModel.fetchTokenUseCase.execute(id: id, type: .apple)
-                        .catchAndReturn(AuthLoginEntity(token: ""))
-                        .asObservable()
+                return viewModel.fetchTokenUseCase.execute(id: id, type: .google)
+                    .catchAndReturn(AuthLoginEntity(token: ""))
+                    .asObservable()
             }
             .map { $0.token }
             .filter { !$0.isEmpty }
             .do(onNext: {
                 self.keychain.save(type: .accessToken, value: $0)
             })
-            .bind(to: fetchedWMToken)
-            .disposed(by: disposeBag)
-                
+                .bind(to: fetchedWMToken)
+                .disposed(by: disposeBag)
+        }
+
         // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
         fetchedWMToken
             .debug("test")
@@ -133,6 +139,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
         return Output(showErrorToast: showErrorToast)
     }
+
+    // MARK: Input Binding
     func inputTransfrom(input: Input) {
         input.pressNaverLoginButton
             .bind {
@@ -142,7 +150,6 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
         input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
             guard let self = self else { return }
-            
             let appleIdProvider = ASAuthorizationAppleIDProvider()
             let request = appleIdProvider.createRequest()
             request.requestedScopes = [.fullName,.email]
@@ -154,25 +161,34 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     }
 }
 
+// MARK: - GoogleOAuthLoginDelegate를 이용하여 code 받기
+extension LoginViewModel: GoogleOAuthLoginDelegate {
+    public func requestGoogleAccessToken(_ code: String) {
+        Task {
+            let accessToken = try? JSONDecoder().decode(
+                GoogleGetTokenEntity.self,
+                from: try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
+            )
+            googleToken.accept(accessToken?.accessToken ?? "")
+        }
+    }
+}
+
+// MARK: - NaverThirdPartyLoginConnectionDelegate
 extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
         guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        DEBUG_LOG(tokenType)
-        DEBUG_LOG(accessToken)
         naverToken.accept((tokenType, accessToken))
     }
-    
+
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
         guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        DEBUG_LOG(tokenType)
-        DEBUG_LOG(accessToken)
-
         naverToken.accept((tokenType, accessToken))
     }
     
@@ -185,6 +201,7 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     }
 }
 
+// MARK: - AppleLoginDelegate
 extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return UIApplication.shared.windows.last!

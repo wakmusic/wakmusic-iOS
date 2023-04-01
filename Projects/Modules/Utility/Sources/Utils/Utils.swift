@@ -37,6 +37,11 @@ public func OS_VERSION() -> String {
     return UIDevice.current.systemVersion
 }
 
+// Google redirectURI
+public func REDIRECT_URI() -> String {
+    return "com.googleusercontent.apps.715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf"
+}
+
 // use: colorFromRGB(0xffffff)
 public func colorFromRGB(_ rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {
     return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,

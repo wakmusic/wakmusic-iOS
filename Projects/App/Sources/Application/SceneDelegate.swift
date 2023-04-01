@@ -3,10 +3,9 @@ import RootFeature
 import Utility
 import NaverThirdPartyLogin
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -18,6 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let root = AppComponent()
         self.window?.rootViewController = root.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
+    }
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            print("URLContexts: \(url)")
+            GoogleLoginManager.shared.getGoogleToken(url)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
