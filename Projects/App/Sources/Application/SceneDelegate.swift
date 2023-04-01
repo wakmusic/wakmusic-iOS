@@ -18,12 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = root.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
     }
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        if let url = URLContexts.first?.url {
-            print("URLContexts: \(url)")
-            GoogleLoginManager.shared.getGoogleToken(url)
-        }
-    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
 
@@ -38,10 +32,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     }
     func sceneDidEnterBackground(_ scene: UIScene) {
-
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        NaverThirdPartyLoginConnection.getSharedInstance().receiveAccessToken(URLContexts.first?.url)
+        guard let url = URLContexts.first?.url else { return }
+        
+        let scheme: String = url.scheme ?? ""
+        DEBUG_LOG("[openURLContexts] scheme: \(scheme), URL: \(url.absoluteString)")
+        
+        switch scheme {
+        case REDIRECT_URI(): //구글
+            GoogleLoginManager.shared.getGoogleToken(url)
+
+        case "waktaverseMusic.naver": //네이버
+            NaverThirdPartyLoginConnection.getSharedInstance().receiveAccessToken(url)
+            
+        default: return
+        }
     }
 }
