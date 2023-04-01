@@ -24,7 +24,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private lazy var viewControllers: [UIViewController] = {
         return [
             homeComponent.makeView().wrapNavigationController,
-            chartComponent.makeView(),
+            chartComponent.makeView().wrapNavigationController,
             searchComponent.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
             storageComponent.makeView().wrapNavigationController

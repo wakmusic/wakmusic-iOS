@@ -10,16 +10,22 @@ import Foundation
 import NeedleFoundation
 import SignInFeature
 import DomainModule
+import CommonFeature
 
 public protocol FavoriteDependency: Dependency {
-   
+    var containSongsComponent: ContainSongsComponent {get}
     var fetchFavoriteSongsUseCase:any FetchFavoriteSongsUseCase {get}
     var editFavoriteSongsOrderUseCase:any EditFavoriteSongsOrderUseCase {get}
-    
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
     public func makeView() -> FavoriteViewController {
-        return FavoriteViewController.viewController(viewModel: .init(fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase))
+        return FavoriteViewController.viewController(
+            viewModel: .init(
+                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
+                editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase
+            ),
+            containSongsComponent: dependency.containSongsComponent
+        )
     }
 }

@@ -12,6 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SongCartView" customModule="CommonFeature">
             <connections>
                 <outlet property="allSelectButton" destination="OyW-HI-2Ie" id="FVF-iO-aOU"/>
+                <outlet property="allSelectImageView" destination="jK9-30-eZg" id="GfI-iI-Ve3"/>
+                <outlet property="allSelectLabel" destination="d22-uQ-Uga" id="s6o-BY-nz7"/>
                 <outlet property="bottomSpaceView" destination="uSA-bl-8SI" id="B5o-bm-3Hv"/>
                 <outlet property="bottomSpaceViewHeight" destination="F1o-uG-JIM" id="xpL-jI-mYt"/>
                 <outlet property="playButton" destination="sT2-H1-Ex2" id="INi-U5-4cO"/>
@@ -37,16 +39,47 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DTs-ft-o7n">
                                     <rect key="frame" x="40" y="0.0" width="520" height="56"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyW-HI-2Ie">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RYd-PE-XoO">
                                             <rect key="frame" x="0.0" y="0.0" width="104" height="56"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                            <state key="normal" title="전체선택">
-                                                <color key="titleColor" name="gray25"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Zmo-9U-Cp7"/>
-                                            </connections>
-                                        </button>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jK9-30-eZg">
+                                                    <rect key="frame" x="36" y="4" width="32" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="32" id="srq-Um-SyN"/>
+                                                        <constraint firstAttribute="height" constant="32" id="wlI-xP-5M5"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="전체선택" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d22-uQ-Uga">
+                                                    <rect key="frame" x="31.333333333333325" y="36" width="41.666666666666657" height="14"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="14" id="mRJ-eb-AeV"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                                    <color key="textColor" name="gray25"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OyW-HI-2Ie">
+                                                    <rect key="frame" x="0.0" y="0.0" width="104" height="56"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" name="gray25"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="buttonAction:" destination="-1" eventType="touchUpInside" id="Zmo-9U-Cp7"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="jK9-30-eZg" firstAttribute="centerX" secondItem="RYd-PE-XoO" secondAttribute="centerX" id="3tb-XS-YRS"/>
+                                                <constraint firstAttribute="bottom" secondItem="OyW-HI-2Ie" secondAttribute="bottom" id="MEx-jJ-ylx"/>
+                                                <constraint firstItem="d22-uQ-Uga" firstAttribute="top" secondItem="jK9-30-eZg" secondAttribute="bottom" id="Qdv-sq-DLj"/>
+                                                <constraint firstItem="OyW-HI-2Ie" firstAttribute="leading" secondItem="RYd-PE-XoO" secondAttribute="leading" id="XTK-kx-Mpd"/>
+                                                <constraint firstItem="d22-uQ-Uga" firstAttribute="centerX" secondItem="RYd-PE-XoO" secondAttribute="centerX" id="Ye9-B3-WAc"/>
+                                                <constraint firstAttribute="trailing" secondItem="OyW-HI-2Ie" secondAttribute="trailing" id="b6e-Sy-SEm"/>
+                                                <constraint firstItem="OyW-HI-2Ie" firstAttribute="top" secondItem="RYd-PE-XoO" secondAttribute="top" id="l2L-H1-fOO"/>
+                                                <constraint firstAttribute="bottom" secondItem="d22-uQ-Uga" secondAttribute="bottom" constant="6" id="s6A-Kp-Znw"/>
+                                            </constraints>
+                                        </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6p4-Ao-cyX">
                                             <rect key="frame" x="104" y="0.0" width="104" height="56"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>

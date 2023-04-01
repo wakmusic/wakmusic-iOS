@@ -18,6 +18,7 @@ import DomainModule
 
 
 
+
 public final class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var tableView: UITableView!
@@ -30,6 +31,7 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     lazy var input = AfterSearchContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
+   
     
    
     var disposeBag = DisposeBag()

@@ -33,7 +33,7 @@ class HomeChartCell: UITableViewCell {
 }
 
 extension HomeChartCell{
-    public func update(model: ChartRankingEntity, index: Int) {
+    public func update(model: SongEntity, index: Int) {
         
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),

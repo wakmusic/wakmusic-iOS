@@ -40,7 +40,7 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Output {
-        var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
+        var chartDataSource: BehaviorRelay<[SongEntity]>
         let newSongDataSource: BehaviorRelay<[NewSongEntity]>
         var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
         var songEntityOfAllChart: PublishSubject<[SongEntity]>
@@ -48,7 +48,7 @@ public final class HomeViewModel: ViewModelType {
     
     public func transform(from input: Input) -> Output {
      
-        let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        let chartDataSource: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
         let songEntityOfAllChart: PublishSubject<[SongEntity]> = PublishSubject()
@@ -111,7 +111,7 @@ public final class HomeViewModel: ViewModelType {
         
         input.refreshPulled
             .withLatestFrom(input.newSongTypeTapped)
-            .flatMap { [weak self] (type) -> Observable<(([ChartRankingEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
+            .flatMap { [weak self] (type) -> Observable<(([SongEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
                 guard let self = self else{ return Observable.empty() }
                 
                 let chartAndNewSong = Observable.zip(

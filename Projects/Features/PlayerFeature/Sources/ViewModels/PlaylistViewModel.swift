@@ -11,6 +11,7 @@ import Combine
 import BaseFeature
 import YouTubePlayerKit
 import Utility
+import CommonFeature
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
@@ -50,6 +51,17 @@ final class PlaylistViewModel: ViewModelType {
     func transform(from input: Input) -> Output {
         let output = Output()
         
+        bindInput(input: input, output: output)
+        bindPlayStateChanged(output: output)
+        bindCurrentSongChanged(output: output)
+        bindProgress(output: output)
+        bindRepeatMode(output: output)
+        bindShuffleMode(output: output)
+        
+        return output
+    }
+    
+    private func bindInput(input: Input, output: Output) {
         input.closeButtonDidTapEvent.sink { _ in
             output.willClosePlaylist.send(true)
         }.store(in: &subscription)
@@ -95,11 +107,15 @@ final class PlaylistViewModel: ViewModelType {
             guard let self else { return }
             self.playState.shuffleMode.toggle()
         }.store(in: &subscription)
-        
+    }
+    
+    private func bindPlayStateChanged(output: Output) {
         playState.$state.sink { state in
             output.playerState.send(state)
         }.store(in: &subscription)
-        
+    }
+    
+    private func bindCurrentSongChanged(output: Output) {
         playState.$currentSong.sink { [weak self] song in
             guard let self else { return }
             guard let song = song else { return }
@@ -108,20 +124,24 @@ final class PlaylistViewModel: ViewModelType {
             guard let currentSongIndex = self.playState.playList.uniqueIndex(of: song) else { return }
             output.currentSongIndex.send(currentSongIndex)
         }.store(in: &subscription)
-        
+    }
+    
+    private func bindProgress(output: Output) {
         playState.$progress.sink { progress in
             output.playTimeValue.send(Float(progress.currentProgress))
             output.totalTimeValue.send(Float(progress.endProgress))
         }.store(in: &subscription)
-        
+    }
+    
+    private func bindRepeatMode(output: Output) {
         playState.$repeatMode.sink { repeatMode in
             output.repeatMode.send(repeatMode)
         }.store(in: &subscription)
-        
+    }
+    
+    private func bindShuffleMode(output: Output) {
         playState.$shuffleMode.sink { shuffleMode in
             output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
-        
-        return output
     }
 }

@@ -19,7 +19,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topCircleImageView: UIImageView!
     @IBOutlet weak var chartContentView: UIView!
     @IBOutlet weak var chartBorderView: UIView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
+    @IBOutlet weak var blurImageView: UIImageView!
     @IBOutlet weak var chartTitleLabel: UILabel!
     @IBOutlet weak var chartArrowImageView: UIImageView!
     @IBOutlet weak var chartAllListenButton: UIButton!
@@ -144,8 +144,9 @@ extension HomeViewController {
                     date: $0.1[$0.0.row].date
                 )
             }
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (song) in
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
@@ -161,8 +162,9 @@ extension HomeViewController {
                     date: "\($0.1[$0.0.row].date)"
                 )
             }
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (song) in
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
     }
     
@@ -238,8 +240,9 @@ extension HomeViewController {
             }).disposed(by: disposeBag)
         
         output.songEntityOfAllChart
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (songs) in
+                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            })
             .disposed(by: disposeBag)
     }
     
@@ -248,11 +251,12 @@ extension HomeViewController {
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         
-        chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
-        blurEffectView.layer.cornerRadius = 12
+        
+        blurImageView.image = DesignSystemAsset.Home.blurBg.image
+        blurImageView.layer.cornerRadius = 12
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",

@@ -1,10 +1,11 @@
 import UIKit
 import RootFeature
 import Utility
+import NaverThirdPartyLogin
+
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -38,5 +39,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     func sceneDidEnterBackground(_ scene: UIScene) {
 
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        NaverThirdPartyLoginConnection.getSharedInstance().receiveAccessToken(URLContexts.first?.url)
     }
 }

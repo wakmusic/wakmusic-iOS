@@ -21,17 +21,24 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="762"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Tn-23-Dux">
+                                <rect key="frame" x="0.0" y="706" width="393" height="56"/>
+                                <color key="backgroundColor" name="gray200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" id="ksy-Yf-i8Y"/>
+                                </constraints>
+                            </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M73-ud-Z9S">
                                 <rect key="frame" x="0.0" y="762" width="393" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="sbB-aw-lJK"/>
                                 </constraints>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Tn-23-Dux">
-                                <rect key="frame" x="0.0" y="706" width="393" height="56"/>
-                                <color key="backgroundColor" name="gray200"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7KP-pD-BgL">
+                                <rect key="frame" x="0.0" y="818" width="393" height="34"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="ksy-Yf-i8Y"/>
+                                    <constraint firstAttribute="height" constant="34" id="WCZ-hS-lMD"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -43,10 +50,13 @@
                             <constraint firstAttribute="trailing" secondItem="gc8-5l-C6x" secondAttribute="trailing" id="HGP-wJ-BAf"/>
                             <constraint firstItem="M73-ud-Z9S" firstAttribute="top" secondItem="4Tn-23-Dux" secondAttribute="bottom" id="PuD-zG-hrF"/>
                             <constraint firstItem="M73-ud-Z9S" firstAttribute="trailing" secondItem="Pqg-aX-gC5" secondAttribute="trailing" id="RL8-dL-pRd"/>
+                            <constraint firstItem="7KP-pD-BgL" firstAttribute="top" secondItem="M73-ud-Z9S" secondAttribute="bottom" id="TEV-5p-yB9"/>
                             <constraint firstItem="Pqg-aX-gC5" firstAttribute="bottom" secondItem="M73-ud-Z9S" secondAttribute="bottom" id="VoA-Q3-8AW"/>
                             <constraint firstItem="Pqg-aX-gC5" firstAttribute="trailing" secondItem="4Tn-23-Dux" secondAttribute="trailing" id="YLF-IS-vmd"/>
+                            <constraint firstAttribute="trailing" secondItem="7KP-pD-BgL" secondAttribute="trailing" id="cUl-sY-AAD"/>
                             <constraint firstItem="gc8-5l-C6x" firstAttribute="leading" secondItem="0KA-OH-Mpe" secondAttribute="leading" id="hAl-Q0-mIa"/>
                             <constraint firstItem="M73-ud-Z9S" firstAttribute="top" secondItem="gc8-5l-C6x" secondAttribute="bottom" id="i46-7q-nep"/>
+                            <constraint firstItem="7KP-pD-BgL" firstAttribute="leading" secondItem="0KA-OH-Mpe" secondAttribute="leading" id="s5L-JD-UjT"/>
                             <constraint firstItem="M73-ud-Z9S" firstAttribute="leading" secondItem="Pqg-aX-gC5" secondAttribute="leading" id="wGO-b8-7RK"/>
                             <constraint firstItem="gc8-5l-C6x" firstAttribute="top" secondItem="0KA-OH-Mpe" secondAttribute="top" id="z6d-8l-sKl"/>
                         </constraints>
@@ -56,9 +66,12 @@
                         <outlet property="bottomContainerViewBottomConstraint" destination="VoA-Q3-8AW" id="LfV-Wb-pcP"/>
                         <outlet property="bottomContainerViewHeight" destination="sbB-aw-lJK" id="qGB-15-YEy"/>
                         <outlet property="containerView" destination="gc8-5l-C6x" id="Im9-in-uRo"/>
+                        <outlet property="containerViewBottomConstraint" destination="i46-7q-nep" id="Egl-hb-Fy3"/>
                         <outlet property="panelView" destination="4Tn-23-Dux" id="Vlu-Bt-FKb"/>
                         <outlet property="panelViewHeightConstraint" destination="ksy-Yf-i8Y" id="zi6-1r-IxJ"/>
                         <outlet property="panelViewTopConstraint" destination="2iQ-p1-0Hb" id="5gU-DD-zDh"/>
+                        <outlet property="safeAreaBottomView" destination="7KP-pD-BgL" id="xjH-zl-yOF"/>
+                        <outlet property="safeAreaBottomViewHeightConstraint" destination="WCZ-hS-lMD" id="ZwA-9k-T2p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iol-4t-3f5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

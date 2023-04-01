@@ -111,8 +111,6 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .withLatestFrom(dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
                 var newModel = dataSource
-                
-                
                 newModel.indices.forEach { newModel[$0].isSelected = false }
 
                 selectedSongs.forEach { i in
@@ -126,7 +124,6 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         indexOfSelectedSongs
             .withLatestFrom(dataSource) { ($0, $1) }
             .map { (indexOfSelectedSongs, dataSource) in
-                
                 return indexOfSelectedSongs.map {
                     SongEntity(
                         id: dataSource[$0].ID,

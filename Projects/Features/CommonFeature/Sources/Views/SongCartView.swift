@@ -24,6 +24,8 @@ public enum SongCartSelectType {
 
 public class SongCartView: UIView {
 
+    @IBOutlet weak var allSelectImageView: UIImageView!
+    @IBOutlet weak var allSelectLabel: UILabel!
     @IBOutlet weak var allSelectButton: UIButton!
     @IBOutlet weak var songAddButton: UIButton!
     @IBOutlet weak var playListAddButton: UIButton!
@@ -55,27 +57,36 @@ public class SongCartView: UIView {
     
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
-        NotificationCenter.default.post(name: .hideSongCart, object: nil)
     }
     
     @IBAction func buttonAction(_ sender: Any) {
         
         guard let button = sender as? UIButton else { return }
         
-        if button == allSelectButton {
+        if button == allSelectButton { //전체선택
             allSelectButton.isSelected = !allSelectButton.isSelected
+            allSelectImageView.image = allSelectButton.isSelected ? DesignSystemAsset.PlayListEdit.checkOn.image : DesignSystemAsset.PlayListEdit.checkOff.image
+            allSelectLabel.text = allSelectButton.isSelected ? "전체선택해제" : "전체선택"
             delegate?.buttonTapped(type: .allSelect(flag: allSelectButton.isSelected))
             
-        }else if button == songAddButton {
+        }else if button == songAddButton { //노래담기
+            guard Utility.PreferenceManager.userInfo != nil else {
+                showLoginPopup()
+                return
+            }
             delegate?.buttonTapped(type: .addSong)
 
-        }else if button == playListAddButton {
+        }else if button == playListAddButton { //재생목록추가
             delegate?.buttonTapped(type: .addPlayList)
 
-        }else if button == playButton {
+        }else if button == playButton { //재생
             delegate?.buttonTapped(type: .play)
 
-        }else if button == removeButton {
+        }else if button == removeButton { //삭제
+            guard Utility.PreferenceManager.userInfo != nil else {
+                showLoginPopup()
+                return
+            }
             delegate?.buttonTapped(type: .remove)
         }
     }
@@ -110,9 +121,16 @@ public extension SongCartView {
             playButton.isHidden = false
             removeButton.isHidden = true
 
-        case .likeSong, .myList, .myPlayList:
+        case .likeSong, .myPlayList:
             allSelectButton.isHidden = false
             songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = true
+            removeButton.isHidden = false
+            
+        case .myList:
+            allSelectButton.isHidden = false
+            songAddButton.isHidden = true
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
@@ -154,36 +172,25 @@ public extension SongCartView {
               titles.count == buttons.count else { return }
         
         for i in 0..<titles.count {
-            buttons[i].setImage(images[i], for: .normal)
-            
             if buttons[i] == allSelectButton {
-                buttons[i].setImage(DesignSystemAsset.PlayListEdit.checkOn.image, for: .selected)
-                
+                allSelectImageView.image = DesignSystemAsset.PlayListEdit.checkOff.image
                 let attributedString = NSMutableAttributedString.init(string: "전체선택")
                 attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                 .kern: -0.5],
                                                 range: NSRange(location: 0, length: attributedString.string.count))
-                buttons[i].setAttributedTitle(attributedString, for: .normal)
-                
-                let selectedAttributedString = NSMutableAttributedString.init(string: "전체선택해제")
-                selectedAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
-                                                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                                                        .kern: -0.5],
-                                                range: NSRange(location: 0, length: selectedAttributedString.string.count))
-                buttons[i].setAttributedTitle(selectedAttributedString, for: .selected)
+                allSelectLabel.attributedText = attributedString
 
             }else{
+                buttons[i].setImage(images[i], for: .normal)
                 let attributedString = NSMutableAttributedString.init(string: titles[i])
                 attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                 .kern: -0.5],
                                                 range: NSRange(location: 0, length: attributedString.string.count))
-
                 buttons[i].setAttributedTitle(attributedString, for: .normal)
+                buttons[i].alignTextBelow(spacing: -2)
             }
-            
-            buttons[i].alignTextBelow(spacing: -2)
         }
         
         bottomSpaceView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
@@ -200,9 +207,21 @@ public extension SongCartView {
     
     func updateAllSelect(isAll: Bool) {
         self.allSelectButton.isSelected = isAll
+        self.allSelectImageView.image = self.allSelectButton.isSelected ? DesignSystemAsset.PlayListEdit.checkOn.image : DesignSystemAsset.PlayListEdit.checkOff.image
+        self.allSelectLabel.text = self.allSelectButton.isSelected ? "전체선택해제" : "전체선택"
     }
     
     func updateBottomSpace(isUse: Bool) {
         self.bottomSpaceView.isHidden = isUse ? false : true
+    }
+}
+
+extension SongCartView {
+    private func showLoginPopup() {
+        let viewController = TextPopupViewController.viewController(text: "로그인이 필요한 기능입니다.", cancelButtonIsHidden: false, completion: { () in
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+        })
+        guard let parent = self.parentViewController() else { return }
+        parent.showPanModal(content: viewController)
     }
 }

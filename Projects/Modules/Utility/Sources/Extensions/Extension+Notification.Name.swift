@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Notification.Name {
-    
+    static let updatePlayerMovement = Notification.Name("updatePlayerMovement")
     static let playListRefresh = Notification.Name("playListRefresh")
     static let playListNameRefresh = Notification.Name("playListNameRefresh")
     static let statusBarEnterDarkBackground = Notification.Name("statusBarEnterDarkBackground")
@@ -17,7 +17,5 @@ public extension Notification.Name {
     static let showSongCart = Notification.Name("showSongCart")
     static let hideSongCart = Notification.Name("hideSongCart")
     static let movedTab = Notification.Name("movedTab")
-    
     static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
-    
 }

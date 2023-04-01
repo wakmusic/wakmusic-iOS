@@ -49,6 +49,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
+    let playState = PlayState.shared
     
     
     
@@ -400,6 +401,18 @@ extension PlayListDetailViewController{
             .map { $0.0.row }
             .bind(to: input.songTapped)
             .disposed(by: disposeBag)
+        
+        
+        output.groupPlaySongs
+            .subscribe(onNext: { [weak self] songs in
+                
+                guard let self = self else {return}
+                
+                self.playState.loadAndAppendSongsToPlaylist(songs)
+                
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     private func bindSelectedEvent() {
@@ -505,7 +518,7 @@ extension PlayListDetailViewController:UITableViewDelegate{
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
-        DEBUG_LOG(event)
+        input.groupPlayTapped.onNext(event)
     }
 }
 
@@ -527,6 +540,8 @@ extension PlayListDetailViewController:SongCartViewDelegate {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
         case .addSong:
+            
+            
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
@@ -535,11 +550,20 @@ extension PlayListDetailViewController:SongCartViewDelegate {
                 self.input.state.accept(EditState(isEditing: false, force: true))
             }
         case .addPlayList:
+            
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            
+            playState.appendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
+            
             return
         case .play:
             let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
             
-            DEBUG_LOG("재생할 곡 목록 \(songs.map({$0.title}))")
+            playState.loadAndAppendSongsToPlaylist(songs)
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
             
         case .remove:
             self.input.tapRemoveSongs.onNext(())
@@ -588,7 +612,7 @@ extension PlayListDetailViewController:PlayListCellDelegate {
 
 extension PlayListDetailViewController:PlayButtonDelegate {
     public func play(model: SongEntity) {
-        DEBUG_LOG(model.title)
+        playState.loadAndAppendSongsToPlaylist([model])
     }
     
     

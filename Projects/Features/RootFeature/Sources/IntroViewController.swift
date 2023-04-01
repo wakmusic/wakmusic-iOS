@@ -3,31 +3,66 @@ import Utility
 import DesignSystem
 import BaseFeature
 import MainTabFeature
+import CommonFeature
 import Lottie
+import RxSwift
 
 open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var logoContentView: UIView!
 
     var mainContainerComponent: MainContainerComponent?
+    private var viewModel: IntroViewModel!
+    
+    lazy var input = IntroViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    var disposeBag = DisposeBag()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
-        self.perform(#selector(self.showTabBar), with: nil, afterDelay: 1.6)
+        bind()
     }
-
-    public static func viewController(component: MainContainerComponent) -> IntroViewController {
+    
+    public static func viewController(
+        component: MainContainerComponent,
+        viewModel: IntroViewModel
+    ) -> IntroViewController {
         let viewController = IntroViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
         viewController.mainContainerComponent = component
+        viewController.viewModel = viewModel
         return viewController
     }
 }
 
 extension IntroViewController {
+    
+    private func bind() {
+                
+        output.showAlert
+            .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (message) in
+                guard let `self` = self else { return }
+                if message.isEmpty {
+                    self.showTabBar()
+                    
+                }else{
+                    self.showPanModal(content: TextPopupViewController.viewController(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: false,
+                        completion: { [weak self] () in
+                            guard let `self` = self else { return }
+                            self.showTabBar()
+                        })
+                    )
+                }
+            }).disposed(by: disposeBag)
+    }
+}
 
-    @objc
+extension IntroViewController {
+
     private func showTabBar() {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
