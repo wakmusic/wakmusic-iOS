@@ -83,12 +83,17 @@ extension ArtistMusicContentViewController {
         
         output.dataSource
             .skip(1)
-            .do(onNext: { [weak self] _ in
+            .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
+            .do(onNext: { [weak self] (dataSource, songs) in
                 guard let `self` = self else { return }
                 DispatchQueue.main.async {
                     self.activityIncidator.stopAnimating()
                 }
+                
+                guard let songCart = self.songCartView else { return }
+                songCart.updateAllSelect(isAll: songs.count == dataSource.count)
             })
+            .map { $0.0 }
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else{
@@ -100,7 +105,6 @@ extension ArtistMusicContentViewController {
         
         output.indexOfSelectedSongs
             .skip(1)
-            .debug("indexOfSelectedSongs")
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
@@ -118,12 +122,6 @@ extension ArtistMusicContentViewController {
                     self.songCartView?.delegate = self
                 }
             }).disposed(by: disposeBag)
-        
-        output.songEntityOfSelectedSongs
-            .filter{ !$0.isEmpty }
-            .debug("songEntityOfSelectedSongs")
-            .subscribe()
-            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
@@ -138,6 +136,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
+            
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
@@ -146,11 +145,16 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
                 self.input.allSongSelected.onNext(false)
             }
         case .addPlayList:
-            return
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            PlayState.shared.appendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
+
         case .play:
-            return
-        case .remove:
-            return
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
+
+        default: return
         }
     }
 }
