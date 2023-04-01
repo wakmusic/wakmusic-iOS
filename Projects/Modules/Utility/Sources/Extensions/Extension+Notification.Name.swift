@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Notification.Name {
-    static let updatePlayerMovement = Notification.Name("updatePlayerMovement")
+    static let updatePlayerMode = Notification.Name("updatePlayerMode")
     static let playListRefresh = Notification.Name("playListRefresh")
     static let playListNameRefresh = Notification.Name("playListNameRefresh")
     static let statusBarEnterDarkBackground = Notification.Name("statusBarEnterDarkBackground")

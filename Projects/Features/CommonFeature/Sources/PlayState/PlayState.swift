@@ -65,12 +65,6 @@ final public class PlayState {
     
 }
 
-extension PlayState {
-    public func switchPlayerMode(to mode: PlayerMovement) {
-        NotificationCenter.default.post(name: .updatePlayerMovement, object: mode)
-    }
-}
-
 // MARK: YouTubePlayer 컨트롤과 관련된 메소드들을 모아놓은 익스텐션입니다.
 extension PlayState {
     

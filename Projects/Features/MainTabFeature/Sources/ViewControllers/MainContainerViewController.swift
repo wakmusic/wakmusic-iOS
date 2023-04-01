@@ -37,7 +37,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         return gesture
     }()
     var isDarkContentBackground: Bool = false
-    var playerMovement: PlayerMovement = .mini {
+    var playerMode: PlayerMode = .mini {
         didSet {
 //            updateContainerViewBottomConstraint()
         }
@@ -214,10 +214,10 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 
 public extension MainContainerViewController {
     
-    func updatePlayerMovement(with movement: PlayerMovement) {
-        switch movement {
+    func updatePlayerMode(with mode: PlayerMode) {
+        switch mode {
         case .full, .mini:
-            expandPlayer(expanded: movement == .full)
+            expandPlayer(expanded: mode == .full)
         case .close:
             closePlayer()
         }
@@ -311,7 +311,7 @@ public extension MainContainerViewController {
     }
     
     private func updateContainerViewBottomConstraint() {
-        switch self.playerMovement {
+        switch self.playerMode {
         case .full, .mini:
             self.containerViewBottomConstraint.constant = 56
         case .close:
@@ -324,11 +324,11 @@ public extension MainContainerViewController {
 extension MainContainerViewController {
     private func bindNotification() {
         NotificationCenter.default.rx
-            .notification(.updatePlayerMovement)
+            .notification(.updatePlayerMode)
             .subscribe(onNext: { [weak self] (notification) in
-                guard let movement = notification.object as? PlayerMovement else { return }
-                self?.updatePlayerMovement(with: movement)
-                self?.playerMovement = movement
+                guard let mode = notification.object as? PlayerMode else { return }
+                self?.updatePlayerMode(with: mode)
+                self?.playerMode = mode
             }).disposed(by: disposeBag)
         
         NotificationCenter.default.rx
