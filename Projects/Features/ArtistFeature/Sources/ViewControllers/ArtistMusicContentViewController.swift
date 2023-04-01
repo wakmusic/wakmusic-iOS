@@ -105,7 +105,6 @@ extension ArtistMusicContentViewController {
         
         output.indexOfSelectedSongs
             .skip(1)
-            .debug("indexOfSelectedSongs")
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] (songs, dataSource) in
                 guard let self = self else { return }
