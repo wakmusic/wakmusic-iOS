@@ -139,7 +139,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             }
             .bind(to: songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         return Output(
             canLoadMore: canLoadMore,
             dataSource: dataSource,

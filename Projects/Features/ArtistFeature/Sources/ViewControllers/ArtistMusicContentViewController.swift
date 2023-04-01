@@ -118,12 +118,6 @@ extension ArtistMusicContentViewController {
                     self.songCartView?.delegate = self
                 }
             }).disposed(by: disposeBag)
-        
-        output.songEntityOfSelectedSongs
-            .filter{ !$0.isEmpty }
-            .debug("songEntityOfSelectedSongs")
-            .subscribe()
-            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
@@ -138,6 +132,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
+            
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
@@ -146,11 +141,16 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
                 self.input.allSongSelected.onNext(false)
             }
         case .addPlayList:
-            return
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            PlayState.shared.appendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
+
         case .play:
-            return
-        case .remove:
-            return
+            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
+
+        default: return
         }
     }
 }
