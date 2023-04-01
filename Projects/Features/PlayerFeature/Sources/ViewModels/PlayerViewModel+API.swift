@@ -8,6 +8,7 @@
 
 import Foundation
 import DomainModule
+import RxSwift
 
 // MARK: - 뷰모델 내 API를 사용하는 함수들을 모아놓은 곳입니다.
 extension PlayerViewModel {
@@ -49,42 +50,52 @@ extension PlayerViewModel {
     /// 좋아요 상태 가져오기
     func fetchLikeState(for song: SongEntity, output: Output) {
         fetchFavoriteSongsUseCase.execute()
-            .retry(3)
+            .catchAndReturn([])
             .map { $0.contains { $0.song.id == song.id } }
-            .subscribe { isLiked in
-                output.likeState.send(isLiked)
-            } onFailure: { _ in
-                output.likeState.send(false)
-            }.disposed(by: self.disposeBag)
+            .subscribe(onSuccess: { isLiked in
+                output.likeState.send(isLiked ? true : false)
+            })
+            .disposed(by: self.disposeBag)
     }
     
     /// 좋아요 취소
     func cancelLikeSong(for song: SongEntity, output: Output) {
         self.cancelLikeSongUseCase.execute(id: song.id)
-            .retry(3)
-            .subscribe(
-                onSuccess: { _ in
-                    output.likeState.send(false)
-                },
-                onFailure: { error in
-                    output.showToastMessage.send(error.localizedDescription)
+            .catch{ error in
+                return Single<BaseEntity>.create { single in
+                    single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                    return Disposables.create()
                 }
-            )
-            .disposed(by: self.disposeBag)
+            }
+            .map { ($0.status, $0.description) }
+            .subscribe(onSuccess: { (status, description) in
+                if status == 200 {
+                    output.likeState.send(false)
+                } else {
+                    output.showToastMessage.send(description)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     /// 좋아요 추가
     func addLikeSong(for song: SongEntity, output: Output) {
         self.addLikeSongUseCase.execute(id: song.id)
-            .retry(3)
-            .subscribe(
-                onSuccess: { _ in
-                    output.likeState.send(true)
-                },
-                onFailure: { error in
-                    output.showToastMessage.send(error.localizedDescription)
+            .catch{ error in
+                return Single<BaseEntity>.create { single in
+                    single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                    return Disposables.create()
                 }
-            )
+            }
+            .map { ($0.status, $0.description) }
+            .subscribe(onSuccess: { (status, description) in
+                if status == 200 {
+                    output.likeState.send(true)
+                } else {
+                    output.showToastMessage.send(description)
+                }
+            })
             .disposed(by: self.disposeBag)
     }
 }
+
