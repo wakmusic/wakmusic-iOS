@@ -494,12 +494,6 @@ extension PlayListDetailViewController{
     }
 }
 
-extension PlayListDetailViewController: UIScrollViewDelegate {
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        DEBUG_LOG(scrollView.contentOffset.y)
-    }
-}
-
 extension PlayListDetailViewController:UITableViewDelegate{
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
