@@ -144,8 +144,9 @@ extension HomeViewController {
                     date: $0.1[$0.0.row].date
                 )
             }
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (song) in
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
@@ -161,8 +162,9 @@ extension HomeViewController {
                     date: "\($0.1[$0.0.row].date)"
                 )
             }
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (song) in
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
     }
     
@@ -238,8 +240,9 @@ extension HomeViewController {
             }).disposed(by: disposeBag)
         
         output.songEntityOfAllChart
-            .debug("✅ songEntityOfAllChart")
-            .subscribe()
+            .subscribe(onNext: { (songs) in
+                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            })
             .disposed(by: disposeBag)
     }
     
