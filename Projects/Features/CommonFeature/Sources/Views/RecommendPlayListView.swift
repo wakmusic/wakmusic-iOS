@@ -54,7 +54,7 @@ public extension RecommendPlayListView {
         collectionView.delegate = self
         
         let attributedString = NSMutableAttributedString(
-            string: "왁뮤팀이 추천하는 플레이리스트",
+            string: "왁뮤팀이 추천하는 리스트",
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5]

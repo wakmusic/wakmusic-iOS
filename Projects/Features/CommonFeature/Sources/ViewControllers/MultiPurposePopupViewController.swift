@@ -29,13 +29,13 @@ extension PurposeType{
         switch self{
             
         case .creation:
-            return "플레이리스트 만들기"
+            return "리스트 만들기"
         case .edit:
-            return "플레이리스트 수정하기"
+            return "리스트 수정하기"
         case .load:
-            return "플레이리스트 가져오기"
+            return "리스트 가져오기"
         case .share:
-            return "플레이리스트 공유하기"
+            return "리스트 공유하기"
         
         case .nickname:
             return "닉네임 수정"
@@ -50,13 +50,13 @@ extension PurposeType{
         switch self{
             
         case .creation:
-            return "플레이리스트 제목"
+            return "리스트 제목"
         case .edit:
-            return "플레이리스트 제목"
+            return "리스트 제목"
         case .load:
-            return "플레이리스트 코드"
+            return "리스트 코드"
         case .share:
-            return "플레이리스트 코드"
+            return "리스트 코드"
         case .nickname:
             return "닉네임"
             
@@ -67,9 +67,9 @@ extension PurposeType{
     var btnText:String{
         switch self{
         case .creation:
-            return "플레이리스트 생성"
+            return "리스트 생성"
         case .edit:
-            return "플레이리스트 수정"
+            return "리스트 수정"
         case .load:
            return "가져오기"
         case .share:
@@ -182,7 +182,7 @@ extension MultiPurposePopupViewController{
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
         self.textField.attributedPlaceholder = NSAttributedString(string: viewModel.type == .creation || viewModel.type == .edit ?
-                                                                  "플레이리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
+                                                                  "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         
         if viewModel.type == .share { //공유는 오직 읽기 전용
@@ -231,7 +231,7 @@ extension MultiPurposePopupViewController{
             self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
             self.confirmLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
             self.confirmLabel.isHidden = false
-            self.confirmLabel.text =  viewModel.type == .load ?  "· 플레이리스트 코드로 플레이리스트를 가져올 수 있습니다." : "· 플레이리스트 코드로 플레이리스트를 공유할 수 있습니다."
+            self.confirmLabel.text =  viewModel.type == .load ?  "· 리스트 코드로 리스트를 가져올 수 있습니다." : "· 리스트 코드로 리스트를 공유할 수 있습니다."
             self.confireLabelGap.constant = 12
             
             

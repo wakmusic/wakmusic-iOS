@@ -226,9 +226,7 @@ extension PlayListDetailViewController{
         playListInfoView.layer.cornerRadius = 8
         
         
-        
-        
-        
+                
         
         self.playListImage.layer.cornerRadius = 12
         
@@ -294,7 +292,7 @@ extension PlayListDetailViewController{
                     return
                 }
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-                warningView.text = "플레이리스트에 곡이 없습니다."
+                warningView.text = "리스트에 곡이 없습니다."
                 
                 let items = model.first?.items ?? []
                 self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
@@ -337,42 +335,49 @@ extension PlayListDetailViewController{
             })
             .disposed(by: disposeBag)
                 
-        output.headerInfo.subscribe(onNext: { [weak self] (model) in
-            guard let self = self else{
-                return
-            }
-            let type = self.viewModel.type
-            
-            self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: {[weak self]  _ in
-                
+        output.headerInfo
+            .do(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                let imageHeight: CGFloat = (140.0*APP_WIDTH())/375.0
+                let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
+                self.tableView.tableHeaderView?.frame = newFrame
+            })
+            .subscribe(onNext: { [weak self] (model) in
                 guard let self = self else{
                     return
                 }
+                let type = self.viewModel.type
                 
-                self.playListImage.stopSkeletonAnimation()
-                self.playListImage.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-            })
+                self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: {[weak self]  _ in
+                    
+                    guard let self = self else{
+                        return
+                    }
+                    
+                    self.playListImage.stopSkeletonAnimation()
+                    self.playListImage.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                })
+                    
+                DEBUG_LOG(model)
                 
-            DEBUG_LOG(model)
-            
-            self.playListCountLabel.text = model.songCount
-            self.playListNameLabel.text = model.title
-            
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
-                self.playListCountLabel.stopSkeletonAnimation()
-                self.playListCountLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
-
-
-                self.playListNameLabel.stopSkeletonAnimation()
-                self.playListNameLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
-
                 self.playListCountLabel.text = model.songCount
                 self.playListNameLabel.text = model.title
-            }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
+                    self.playListCountLabel.stopSkeletonAnimation()
+                    self.playListCountLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
 
-            self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
-            
-        }).disposed(by: disposeBag)
+
+                    self.playListNameLabel.stopSkeletonAnimation()
+                    self.playListNameLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
+
+                    self.playListCountLabel.text = model.songCount
+                    self.playListNameLabel.text = model.title
+                }
+
+                self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+                
+            }).disposed(by: disposeBag)
                 
         NotificationCenter.default.rx.notification(.playListNameRefresh)
             .map({noti -> String in
@@ -486,6 +491,12 @@ extension PlayListDetailViewController{
             .subscribe()
             .disposed(by: disposeBag)
         
+    }
+}
+
+extension PlayListDetailViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        DEBUG_LOG(scrollView.contentOffset.y)
     }
 }
 
