@@ -105,16 +105,16 @@ final class PlayerViewModel: ViewModelType {
             state == .playing ? self.playState.pause() : self.playState.play()
         }.store(in: &subscription)
         
-        input.closeButtonDidTapEvent.sink { _ in
-            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.mini)
+        input.closeButtonDidTapEvent.sink { [weak self] _ in
+            self?.playState.switchPlayerMode(to: .mini)
         }.store(in: &subscription)
         
-        input.miniExtendButtonDidTapEvent.sink { _ in
-            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.full)
+        input.miniExtendButtonDidTapEvent.sink { [weak self] _ in
+            self?.playState.switchPlayerMode(to: .full)
         }.store(in: &subscription)
         
         input.miniCloseButtonDidTapEvent.sink { [weak self] _ in
-            NotificationCenter.default.post(name: .updatePlayerMovement, object: PlayerMovement.close)
+            self?.playState.switchPlayerMode(to: .close)
             self?.playState.stop()
         }.store(in: &subscription)
         
@@ -204,6 +204,9 @@ final class PlayerViewModel: ViewModelType {
     private func bindPlayStateChanged(output: Output) {
         playState.$state.sink { [weak self] state in
             guard let self else { return }
+            print("\n")
+            print("⭐️⭐️ 플레이백 state:", state)
+            print("\n")
             output.playerState.send(state)
             if state == .ended {
                 self.handlePlaybackEnded()

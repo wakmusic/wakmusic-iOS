@@ -37,7 +37,7 @@ public enum RepeatMode {
     }
 }
 
-public enum PlayerMovement: Equatable {
+public enum PlayerMode: Equatable {
     case full
     case mini
     case close
