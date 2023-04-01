@@ -78,7 +78,6 @@ public class GoogleLoginManager {
                 parameters: parameters
             )
             .responseData { response in
-                DEBUG_LOG(String(data: response.request?.httpBody ?? Data(), encoding: .utf8) ?? Data())
                 switch response.result {
                 case .success(let data):
                     continuation.resume(returning: data)

@@ -9,10 +9,6 @@
 import Foundation
 
 public struct NaverUserInfoEntity: Equatable {
-    
-   
-    
- 
     public init(
         resultcode: String,
         message: String,
@@ -26,13 +22,10 @@ public struct NaverUserInfoEntity: Equatable {
     }
     
     public let resultcode, message ,id, nickname : String
-    
-    
-    public static func == (lhs: NaverUserInfoEntity, rhs: NaverUserInfoEntity) -> Bool {
-        lhs.id == rhs.id
-    }
-   
+
+    public static func == (
+        lhs: NaverUserInfoEntity,
+        rhs: NaverUserInfoEntity) -> Bool  {
+            lhs.id == rhs.id
+        }
 }
-
-
-
