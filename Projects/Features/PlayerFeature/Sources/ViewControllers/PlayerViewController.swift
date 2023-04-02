@@ -142,9 +142,21 @@ private extension PlayerViewController {
     private func bindThumbnail(output: PlayerViewModel.Output) {
         output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
             guard let self else { return }
-            self.playerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
-            self.playerView.backgroundImageView.kf.setImage(with: URL(string: thumbnailImageURL))
-            self.miniPlayerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+            self.playerView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
+            self.playerView.backgroundImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
+            self.miniPlayerView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
         }.store(in: &subscription)
     }
     
