@@ -64,8 +64,17 @@ extension FavoriteViewController{
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
-            .debug("itemMoved")
             .bind(to: input.itemMoved)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
+            .filter { $0.2.isEditing == false }
+            .subscribe(onNext: { (indexPath, dataSource, _) in
+                let song: SongEntity = dataSource[indexPath.section].items[indexPath.row].song
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
     }
     
