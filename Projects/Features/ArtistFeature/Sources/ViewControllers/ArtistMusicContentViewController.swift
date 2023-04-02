@@ -178,7 +178,26 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
-        DEBUG_LOG(event)
+        let songs: [SongEntity] = output.dataSource.value.map {
+            return SongEntity(
+                    id: $0.ID,
+                    title: $0.title,
+                    artist: $0.artist,
+                    remix: $0.remix,
+                    reaction: $0.reaction,
+                    views: $0.views,
+                    last: $0.last,
+                    date: $0.date
+            )
+        }
+        switch event {
+        case .allPlay:
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
+        case .shufflePlay:
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs.shuffled())
+            input.allSongSelected.onNext(false)
+        }
     }
 }
 

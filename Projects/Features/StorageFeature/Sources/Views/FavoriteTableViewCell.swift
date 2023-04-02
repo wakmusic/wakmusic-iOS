@@ -40,12 +40,6 @@ class FavoriteTableViewCell: UITableViewCell {
     weak var delegate: FavoriteTableViewCellDelegate?
     var indexPath: IndexPath = IndexPath(row: 0, section: 0)
 
-    override var isEditing: Bool {
-        didSet {
-            updatePlayingState()
-        }
-    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -63,7 +57,9 @@ extension FavoriteTableViewCell {
     
     func update(model: FavoriteSongEntity, isEditing: Bool, indexPath: IndexPath) {
         
-        songModel = model.song
+        self.songModel = model.song
+        self.indexPath = indexPath
+
         self.albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -73,37 +69,8 @@ extension FavoriteTableViewCell {
         self.artistLabel.text = model.song.artist
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
-        self.isEditing = isEditing
         self.listSelectButton.isHidden = !isEditing
-        self.indexPath = indexPath
-    }
-    
-    private func updatePlayingState() {
-        if self.isEditing {
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 오른쪽으로 사라지는 애니메이션
-                guard let self else { return }
-                self.playButton.alpha = 0
-                self.playButton.transform = CGAffineTransform(translationX: 100, y: 0)
-                self.playButtonTrailingConstraint.constant = -24
-                self.layoutIfNeeded()
-
-            }, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.playButton.isHidden = true
-            })
-        } else {
-            self.playButton.isHidden = false
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in // 다시 나타나는 애니메이ㄴ
-                guard let self else { return }
-                self.playButton.alpha = 1
-                self.playButton.transform = .identity
-                self.playButton.isHidden = false
-                self.playButtonTrailingConstraint.constant = 20
-                self.layoutIfNeeded()
-
-            }, completion: { _ in
-            })
-        }
-        self.listSelectButton.isHidden = !self.isEditing
+        self.playButton.isHidden = isEditing
+        self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
     }
 }

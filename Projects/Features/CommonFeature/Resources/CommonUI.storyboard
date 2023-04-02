@@ -494,7 +494,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jnl-dT-OwE">
-                                                    <rect key="frame" x="20" y="2" width="309" height="40"/>
+                                                    <rect key="frame" x="0.0" y="2" width="329" height="40"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
                                                         <action selector="selectedAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="eCJ-Ru-1ua"/>
@@ -508,16 +508,15 @@
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <connections>
                                                         <action selector="playOrEditAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="fXu-sd-7Ja"/>
-                                                        <action selector="selectedAction:" destination="hzB-vL-DAK" eventType="touchUpInside" id="efM-j5-4ii"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="leading" secondItem="bhH-i1-NNC" secondAttribute="leading" id="L1o-Aa-nde"/>
                                                 <constraint firstItem="I2w-92-VDV" firstAttribute="centerY" secondItem="bhH-i1-NNC" secondAttribute="centerY" id="S1A-7m-74L"/>
                                                 <constraint firstItem="I2w-92-VDV" firstAttribute="leading" secondItem="wDO-ig-sRh" secondAttribute="trailing" constant="8" id="WV3-V1-f5f"/>
                                                 <constraint firstItem="Jnl-dT-OwE" firstAttribute="bottom" secondItem="wDO-ig-sRh" secondAttribute="bottom" id="alQ-ay-Bio"/>
                                                 <constraint firstItem="Jnl-dT-OwE" firstAttribute="top" secondItem="wDO-ig-sRh" secondAttribute="top" id="eb8-Yp-9Ab"/>
-                                                <constraint firstItem="Jnl-dT-OwE" firstAttribute="leading" secondItem="wDO-ig-sRh" secondAttribute="leading" id="o2C-Jp-r1X"/>
                                                 <constraint firstAttribute="trailing" secondItem="uEg-GG-f0m" secondAttribute="trailing" constant="20" id="oEr-Ek-qRL"/>
                                                 <constraint firstItem="uEg-GG-f0m" firstAttribute="leading" secondItem="I2w-92-VDV" secondAttribute="trailing" constant="12" id="rtl-Tm-iBz"/>
                                                 <constraint firstItem="wDO-ig-sRh" firstAttribute="leading" secondItem="bhH-i1-NNC" secondAttribute="leading" constant="20" id="uXb-hw-a5o"/>

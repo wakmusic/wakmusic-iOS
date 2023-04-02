@@ -114,11 +114,11 @@ extension MyPlayListViewController{
                 let isEdit: Bool = state.isEditing
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
                 self.tableView.setEditing(isEdit, animated: true)
-                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
                 
                 let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
                 header.delegate = self
                 self.tableView.tableHeaderView = isEdit ? nil : header
+                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
 

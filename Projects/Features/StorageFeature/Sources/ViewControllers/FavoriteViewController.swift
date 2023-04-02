@@ -105,7 +105,7 @@ extension FavoriteViewController{
                 let isEdit: Bool = state.isEditing
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
                 self.tableView.setEditing(isEdit, animated: true)
-                self.tableView.visibleCells.forEach { $0.isEditing = isEdit }
+                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
     
@@ -148,12 +148,9 @@ extension FavoriteViewController{
             .skip(1)
             .debug("willAddPlayList")
             .subscribe(onNext: { [weak self] (songs) in
-                
                 guard let self = self else {return}
-                
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allLikeListSelected.onNext(false)
-                
             }).disposed(by: disposeBag)
 
         output.showToast
@@ -227,8 +224,6 @@ extension FavoriteViewController: PlayButtonDelegate {
     public func play(model: SongEntity) {
         playState.loadAndAppendSongsToPlaylist([model])
     }
-    
-    
 }
 
 extension FavoriteViewController:UITableViewDelegate{
