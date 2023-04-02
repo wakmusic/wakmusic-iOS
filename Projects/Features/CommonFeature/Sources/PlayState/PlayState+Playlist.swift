@@ -83,8 +83,4 @@ extension PlayState {
         
     }
     
-    public struct PlayProgress {
-        public var currentProgress: Double = 0
-        public var endProgress: Double = 0
-    }
 }
