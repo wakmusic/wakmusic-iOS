@@ -210,7 +210,6 @@ extension MyPlayListViewController{
                 indexPath: indexPath
             )
             cell.delegate = self
-            cell.playButtonDelegate = self
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
@@ -253,8 +252,13 @@ extension MyPlayListViewController: SongCartViewDelegate {
 }
 
 extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
-    public func listTapped(indexPath: IndexPath) {
-        self.input.itemSelected.onNext(indexPath)
+    public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
+        switch type {
+        case let .listTapped(indexPath):
+            input.itemSelected.onNext(indexPath)
+        case let .playTapped(key):
+            input.getPlayListDetail.onNext(key)
+        }
     }
 }
 
@@ -278,10 +282,4 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
         let vc =  multiPurposePopComponent.makeView(type: type)
         self.showPanModal(content: vc)
     }    
-}
-
-extension MyPlayListViewController: PlayListPlayButtonDelegate {
-    public func play(key: String) {
-        input.getPlayListDetail.onNext(key)
-    }
 }

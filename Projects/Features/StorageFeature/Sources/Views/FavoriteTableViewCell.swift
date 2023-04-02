@@ -13,7 +13,12 @@ import DomainModule
 import Utility
 
 public protocol FavoriteTableViewCellDelegate: AnyObject {
-    func listTapped(indexPath: IndexPath)
+    func buttonTapped(type: FavoriteTableViewCellDelegateConstant)
+}
+
+public enum FavoriteTableViewCellDelegateConstant {
+    case listTapped(indexPath: IndexPath)
+    case playTapped(song: SongEntity)
 }
 
 class FavoriteTableViewCell: UITableViewCell {
@@ -24,21 +29,19 @@ class FavoriteTableViewCell: UITableViewCell {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var listSelectButton: UIButton!
-    
-    var songModel:SongEntity!
-    
-    @IBAction func playButtonAction(_ sender: UIButton) {
-        playButtonDelegate?.play(model: songModel)
         
+    @IBAction func playButtonAction(_ sender: UIButton) {
+        guard let song = self.passToModel.1 else { return }
+        delegate?.buttonTapped(type: .playTapped(song: song))
     }
     
     @IBAction func listSelectButtonAction(_ sender: Any) {
-        delegate?.listTapped(indexPath: self.indexPath)
+        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
     
     weak var playButtonDelegate:PlayButtonDelegate?
     weak var delegate: FavoriteTableViewCellDelegate?
-    var indexPath: IndexPath = IndexPath(row: 0, section: 0)
+    var passToModel: (IndexPath, SongEntity?) = (IndexPath(row: 0, section: 0), nil)
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -57,8 +60,7 @@ extension FavoriteTableViewCell {
     
     func update(model: FavoriteSongEntity, isEditing: Bool, indexPath: IndexPath) {
         
-        self.songModel = model.song
-        self.indexPath = indexPath
+        self.passToModel = (indexPath, model.song)
 
         self.albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,

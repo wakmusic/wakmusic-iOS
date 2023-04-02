@@ -12,12 +12,13 @@ import DomainModule
 import Kingfisher
 import Utility
 
-public protocol PlayListPlayButtonDelegate: AnyObject {
-    func play(key: String)
+public protocol MyPlayListTableViewCellDelegate: AnyObject {
+    func buttonTapped(type: MyPlayListTableViewCellDelegateConstant)
 }
 
-public protocol MyPlayListTableViewCellDelegate: AnyObject {
-    func listTapped(indexPath: IndexPath)
+public enum MyPlayListTableViewCellDelegateConstant {
+    case listTapped(indexPath: IndexPath)
+    case playTapped(key: String)
 }
 
 class MyPlayListTableViewCell: UITableViewCell {
@@ -30,17 +31,15 @@ class MyPlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var listSelectButton: UIButton!
     
     @IBAction func playButtonAction(_ sender: UIButton) {
-        playButtonDelegate?.play(key: key)
+        delegate?.buttonTapped(type: .playTapped(key: passToModel.1))
     }
     
     @IBAction func listSelectButtonAction(_ sender: Any) {
-        delegate?.listTapped(indexPath: self.indexPath)
+        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
     
     weak var delegate: MyPlayListTableViewCellDelegate?
-    weak var playButtonDelegate: PlayListPlayButtonDelegate?
-    var indexPath: IndexPath = IndexPath(row: 0, section: 0)
-    var key: String!
+    var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -59,8 +58,7 @@ extension MyPlayListTableViewCell {
     
     func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath){
         
-        self.key = model.key
-        self.indexPath = indexPath
+        self.passToModel = (indexPath, model.key)
 
         self.playListImageView.kf.setImage(
             with: WMImageAPI.fetchPlayList(id: String(model.image),version: model.image_version).toURL,

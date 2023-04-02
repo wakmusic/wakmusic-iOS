@@ -203,9 +203,9 @@ extension PlayListDetailViewController{
                 }
                 
                 cell.update(model,self.input.state.value.isEditing,index: indexPath.row)
-                cell.cellDelegate = self
-                cell.playDelegate = self
+                cell.delegate = self
                 return cell
+                
             case .wmRecommend:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: IndexPath(row: indexPath.row, section: 0)) as? SongListCell else{
                     return UITableViewCell()
@@ -506,13 +506,12 @@ extension PlayListDetailViewController:EditSheetViewDelegate {
 }
 
 extension PlayListDetailViewController:PlayListCellDelegate {
-    public func pressCell(index: Int) {
-        input.songTapped.onNext(index)
-    }
-}
-
-extension PlayListDetailViewController:PlayButtonDelegate {
-    public func play(model: SongEntity) {
-        playState.loadAndAppendSongsToPlaylist([model])
+    public func buttonTapped(type: PlayListCellDelegateConstant) {
+        switch type {
+        case let .listTapped(index):
+            input.songTapped.onNext(index)
+        case let .playTapped(song):
+            playState.loadAndAppendSongsToPlaylist([song])
+        }
     }
 }

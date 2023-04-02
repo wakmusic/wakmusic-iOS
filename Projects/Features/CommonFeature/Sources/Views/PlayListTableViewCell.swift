@@ -10,8 +10,13 @@ import DesignSystem
 import DomainModule
 import Utility
 
-public protocol PlayListCellDelegate:AnyObject {
-    func pressCell(index: Int)
+public protocol PlayListCellDelegate: AnyObject {
+    func buttonTapped(type: PlayListCellDelegateConstant)
+}
+
+public enum PlayListCellDelegateConstant {
+    case listTapped(index: Int)
+    case playTapped(song: SongEntity)
 }
 
 class PlayListTableViewCell: UITableViewCell {
@@ -23,17 +28,16 @@ class PlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var superButton: UIButton!
     
-    public weak var cellDelegate: PlayListCellDelegate?
-    public weak var playDelegate: PlayButtonDelegate?
-    var index: Int!
-    var model: SongEntity!
+    public weak var delegate: PlayListCellDelegate?
+    var passToModel: (Int, SongEntity?) = (0, nil)
 
     @IBAction func selectedAction(_ sender: Any) {
-        cellDelegate?.pressCell(index: index)
+        delegate?.buttonTapped(type: .listTapped(index: passToModel.0))
     }
     
     @IBAction func playOrEditAction(_ sender: UIButton) {
-        playDelegate?.play(model: model)
+        guard let song = self.passToModel.1 else { return }
+        delegate?.buttonTapped(type: .playTapped(song: song))
     }
     
     override func awakeFromNib() {
@@ -52,9 +56,7 @@ class PlayListTableViewCell: UITableViewCell {
 extension PlayListTableViewCell {
     func update(_ model: SongEntity, _ isEditing: Bool, index:Int) {
       
-        self.index = index
-        self.isEditing = isEditing
-        self.model = model
+        self.passToModel = (index, model)
                 
         self.albumImageView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
