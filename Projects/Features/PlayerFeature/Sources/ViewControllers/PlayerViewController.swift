@@ -112,6 +112,7 @@ private extension PlayerViewController {
         bindArtist(output: output)
         bindCurrentPlayTime(output: output)
         bindTotalPlayTime(output: output)
+        bindMiniPlayerSlider(output: output)
         bindlikes(output: output)
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
@@ -189,13 +190,6 @@ private extension PlayerViewController {
         output.playTimeText.sink { [weak self] currentTimeText in
             guard let self else { return }
             self.playerView.currentPlayTimeLabel.text = currentTimeText
-            self.miniPlayerView.currentPlayTimeView.snp.remakeConstraints {
-                let playTimeValue = output.playTimeValue.value
-                let totalTimeValue = output.totalTimeValue.value
-                let newValue = totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
-                $0.top.left.bottom.equalToSuperview()
-                $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
-            }
         }
         .store(in: &subscription)
         
@@ -219,6 +213,21 @@ private extension PlayerViewController {
             self.playerView.playTimeSlider.maximumValue = value
         }
         .store(in: &subscription)
+    }
+    
+    private func bindMiniPlayerSlider(output: PlayerViewModel.Output) {
+        output.playTimeValue.combineLatest(output.totalTimeValue)
+            .map({ (playTimeValue, totalTimeValue) in
+                return totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
+            })
+            .sink { [weak self] newValue in
+                guard let self else { return }
+                self.miniPlayerView.currentPlayTimeView.snp.remakeConstraints {
+                    $0.top.left.bottom.equalToSuperview()
+                    $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
+                }
+            }
+            .store(in: &subscription)
     }
     
     private func bindLyricsDidChangedEvent(output: PlayerViewModel.Output) {
