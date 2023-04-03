@@ -160,6 +160,7 @@ extension FavoriteViewController{
                 guard let self = self else {return}
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allLikeListSelected.onNext(false)
+                self.output.state.accept(EditState(isEditing: false, force: true))
             }).disposed(by: disposeBag)
 
         output.showToast
@@ -205,8 +206,10 @@ extension FavoriteViewController: SongCartViewDelegate {
             input.allLikeListSelected.onNext(flag)
         case .addSong:
             input.addSongs.onNext(())
+            self.hideSongCart()
         case .addPlayList:
             input.addPlayList.onNext(())
+            self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedLikeLists.value.count
             let popup = TextPopupViewController.viewController(
@@ -215,6 +218,7 @@ extension FavoriteViewController: SongCartViewDelegate {
                 completion: { [weak self] () in
                 guard let `self` = self else { return }
                 self.input.deleteLikeList.onNext(())
+                self.hideSongCart()
             })
             self.showPanModal(content: popup)
         default: return

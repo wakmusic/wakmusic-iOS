@@ -171,6 +171,7 @@ extension MyPlayListViewController{
                 guard let self = self else {return}
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allPlayListSelected.onNext(false)
+                self.output.state.accept(EditState(isEditing: false, force: true))
             }).disposed(by: disposeBag)
                 
         output.showToast
@@ -231,6 +232,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
             input.allPlayListSelected.onNext(flag)
         case .addPlayList:
             input.addPlayList.onNext(())
+            self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
             let popup = TextPopupViewController.viewController(
@@ -239,6 +241,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
                 completion: { [weak self] () in
                 guard let `self` = self else { return }
                 self.input.deletePlayList.onNext(())
+                self.hideSongCart()
             })
             self.showPanModal(content: popup)
         default: return

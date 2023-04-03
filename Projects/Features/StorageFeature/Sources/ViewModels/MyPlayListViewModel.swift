@@ -206,10 +206,12 @@ public final class MyPlayListViewModel:ViewModelType {
                     .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
                     .asObservable()
             })
-            .debug()
             .do(onNext: { (model) in
-                guard model.status != 200 else { return }
-                output.showToast.accept(model.description)
+                if model.status == 200 {
+                    output.state.accept(EditState(isEditing: false, force: true))
+                }else{
+                    output.showToast.accept(model.description)
+                }
             })
             .map { _ in () }
             .bind(to: input.playListLoad)
