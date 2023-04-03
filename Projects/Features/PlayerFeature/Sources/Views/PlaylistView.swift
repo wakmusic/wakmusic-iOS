@@ -58,6 +58,14 @@ public final class PlaylistView: UIView {
         $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
     }
     
+    internal lazy var miniPlayerContentView = UIView()
+    
+    internal lazy var miniPlayerStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+        $0.spacing = 20
+    }
+    
     internal lazy var totalPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
     }
@@ -126,7 +134,9 @@ private extension PlaylistView {
         titleBarView.addSubview(editButton)
         contentView.addSubview(playlistTableView)
         contentView.addSubview(miniPlayerView)
-        miniPlayerView.addSubview(thumbnailImageView)
+        miniPlayerView.addSubview(miniPlayerContentView)
+        miniPlayerContentView.addSubview(thumbnailImageView)
+        miniPlayerContentView.addSubview(miniPlayerStackView)
         miniPlayerView.addSubview(totalPlayTimeView)
         totalPlayTimeView.addSubview(currentPlayTimeView)
         miniPlayerView.addSubview(repeatButton)
@@ -203,43 +213,31 @@ private extension PlaylistView {
             $0.width.equalToSuperview().multipliedBy(0)
         }
         
-        let height = 40
-        let width = height * 16 / 9
+        miniPlayerContentView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 16))
+        }
+        
         thumbnailImageView.snp.makeConstraints {
+            let height = 40
+            let width = height * 16 / 9
             $0.centerY.equalToSuperview()
-            $0.left.equalToSuperview().offset(20)
+            $0.left.equalToSuperview()
             $0.width.equalTo(width)
             $0.height.equalTo(height)
         }
         
-        repeatButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalToSuperview()
+        miniPlayerStackView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
             $0.left.equalTo(thumbnailImageView.snp.right).offset(27)
+            $0.right.equalToSuperview()
         }
         
-        prevButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalToSuperview()
-            $0.left.equalTo(repeatButton.snp.right).offset(20)
-        }
+        miniPlayerStackView.addArrangedSubview(repeatButton)
+        miniPlayerStackView.addArrangedSubview(prevButton)
+        miniPlayerStackView.addArrangedSubview(playButton)
+        miniPlayerStackView.addArrangedSubview(nextButton)
+        miniPlayerStackView.addArrangedSubview(shuffleButton)
         
-        playButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalToSuperview()
-            $0.left.equalTo(prevButton.snp.right).offset(20)
-        }
-        
-        nextButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalToSuperview()
-            $0.left.equalTo(playButton.snp.right).offset(20)
-        }
-        
-        shuffleButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalToSuperview()
-            $0.left.equalTo(nextButton.snp.right).offset(20)
-        }
     }
 }
