@@ -54,4 +54,8 @@ public struct UserRepositoryImpl: UserRepository {
     public func deletePlayList(ids: [String]) -> Single<BaseEntity> {
         remoteUserDataSource.deletePlayList(ids: ids)
     }
+    
+    public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {
+        remoteUserDataSource.deleteFavoriteList(ids: ids)
+    }
 }

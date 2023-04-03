@@ -7,7 +7,6 @@ import Foundation
 
 
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
-   
 
     public func fetchProfileList() -> Single<[ProfileListEntity]> {
         return request(.fetchProfileList)
@@ -16,14 +15,12 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
     }
     
     public func setProfile(image: String) -> Single<BaseEntity> {
-        
         return request(.setProfile(image: image))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
     
     public func setUserName(name: String) -> Single<BaseEntity> {
-        
         return request(.setUserName(name: name))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
@@ -59,11 +56,9 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map{$0.toDomain()}
     }
     
-    
-    
-    
-    
-   
-    
-
+    public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {
+        request(.deleteFavoriteList(ids: ids))
+            .map(BaseResponseDTO.self)
+            .map{$0.toDomain()}
+    }
 }

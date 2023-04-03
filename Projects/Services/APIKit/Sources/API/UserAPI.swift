@@ -13,6 +13,7 @@ public enum UserAPI {
     case editFavoriteSongsOrder(ids: [String])
     case editPlayListOrder(ids: [String])
     case deletePlayList(ids: [String])
+    case deleteFavoriteList(ids: [String])
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -35,6 +36,10 @@ public struct RequsetDeletePlayList: Encodable {
     var playlists:[String]
 }
 
+public struct RequestDeleteFavoriteList: Encodable {
+    var songs: [String]
+}
+
 extension UserAPI: WMAPI {
 
     public var domain: WMDomain {
@@ -55,6 +60,8 @@ extension UserAPI: WMAPI {
             return "/likes"
         case .editFavoriteSongsOrder:
             return "/likes/edit"
+        case .deleteFavoriteList:
+            return "/likes/delete"
         case .editPlayListOrder:
             return "/playlists/edit"
         case .deletePlayList:
@@ -70,7 +77,7 @@ extension UserAPI: WMAPI {
             return .get
         case .editFavoriteSongsOrder,.editPlayListOrder:
             return .patch
-        case .deletePlayList:
+        case .deletePlayList, .deleteFavoriteList:
             return .delete
         }
     }
@@ -89,6 +96,8 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetEditPlayList(playlists: ids))
         case let .deletePlayList(ids):
             return .requestJSONEncodable(RequsetDeletePlayList(playlists: ids))
+        case let .deleteFavoriteList(ids):
+            return .requestJSONEncodable(RequestDeleteFavoriteList(songs: ids))
         }
     }
         

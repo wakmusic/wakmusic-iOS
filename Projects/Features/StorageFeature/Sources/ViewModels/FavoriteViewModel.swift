@@ -18,9 +18,10 @@ import CommonFeature
 public final class FavoriteViewModel:ViewModelType {
     
     var disposeBag = DisposeBag()
-    var fetchFavoriteSongsUseCase:FetchFavoriteSongsUseCase!
-    var editFavoriteSongsOrderUseCase:EditFavoriteSongsOrderUseCase!
-
+    var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
+    var editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase!
+    var deleteFavoriteListUseCase: DeleteFavoriteListUseCase!
+    
     public struct Input {
         let likeListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
@@ -44,11 +45,13 @@ public final class FavoriteViewModel:ViewModelType {
 
     init(
         fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase,
-        editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase
+        editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase,
+        deleteFavoriteListUseCase: DeleteFavoriteListUseCase
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
         self.editFavoriteSongsOrderUseCase = editFavoriteSongsOrderUseCase
+        self.deleteFavoriteListUseCase = deleteFavoriteListUseCase
     }
     
     public func transform(from input: Input) -> Output {
@@ -193,18 +196,20 @@ public final class FavoriteViewModel:ViewModelType {
                     dataSource[$0.section].items[$0.row].song.id
                 }
             }
-//            .filter { !$0.isEmpty }
-//            .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
-//                guard let `self` = self else { return Observable.empty() }
-//                return self.deletePlayListUseCase.execute(ids: ids)
-//                    .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
-//                    .asObservable()
-//            })
-            .debug()
-//            .do(onNext: { (model) in
-//                guard model.status != 200 else { return }
-//                output.showToast.accept(model.description)
-//            })
+            .filter { !$0.isEmpty }
+            .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.deleteFavoriteListUseCase.execute(ids: ids)
+                    .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
+                    .asObservable()
+            })
+            .do(onNext: { (model) in
+                if model.status == 200 {
+                    output.state.accept(EditState(isEditing: false, force: true))
+                }else{
+                    output.showToast.accept(model.description)
+                }
+            })
             .map { _ in () }
             .bind(to: input.likeListLoad)
             .disposed(by: disposeBag)
