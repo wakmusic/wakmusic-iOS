@@ -39,7 +39,6 @@ class FavoriteTableViewCell: UITableViewCell {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
     
-    weak var playButtonDelegate:PlayButtonDelegate?
     weak var delegate: FavoriteTableViewCellDelegate?
     var passToModel: (IndexPath, SongEntity?) = (IndexPath(row: 0, section: 0), nil)
 

@@ -14,7 +14,6 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 import ErrorModule
-import Utility
 
 final public class IntroViewModel: ViewModelType {
 

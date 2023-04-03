@@ -183,11 +183,6 @@ extension MyPlayListViewController{
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             }).disposed(by: disposeBag)
-                                
-        NotificationCenter.default.rx.notification(.playListRefresh)
-            .map({_ in () })
-            .bind(to: input.playListLoad)
-            .disposed(by: disposeBag)
         
         output.immediatelyPlaySongs
             .subscribe(onNext: { [weak self] songs in

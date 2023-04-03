@@ -61,6 +61,11 @@ public final class FavoriteViewModel:ViewModelType {
             .bind(to: input.likeListLoad)
             .disposed(by: disposeBag)
         
+        NotificationCenter.default.rx.notification(.likeListRefresh)
+            .map{ _ in () }
+            .bind(to: input.likeListLoad)
+            .disposed(by: disposeBag)
+        
         input.likeListLoad
             .flatMap { [weak self] _ -> Observable<[FavoriteSongEntity]> in
                 guard let self = self else{ return Observable.empty() }

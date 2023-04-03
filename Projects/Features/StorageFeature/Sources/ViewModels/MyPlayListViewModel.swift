@@ -66,6 +66,11 @@ public final class MyPlayListViewModel:ViewModelType {
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
         
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map{ _ in () }
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+
         input.playListLoad
             .flatMap{ [weak self] () -> Observable<[PlayListEntity]> in
                 guard let self = self else{
