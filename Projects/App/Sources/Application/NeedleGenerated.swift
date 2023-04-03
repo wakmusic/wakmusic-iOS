@@ -352,6 +352,9 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
         return appComponent.editFavoriteSongsOrderUseCase
     }
+    var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase {
+        return appComponent.deleteFavoriteListUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -701,6 +704,7 @@ extension AppComponent: Registration {
         localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
         localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
         localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
+        localTable["deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"] = { self.deleteFavoriteListUseCase as Any }
         localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
@@ -846,6 +850,7 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\FavoriteDependency.editFavoriteSongsOrderUseCase] = "editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"
+        keyPathToName[\FavoriteDependency.deleteFavoriteListUseCase] = "deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"
     }
 }
 extension QnaComponent: Registration {

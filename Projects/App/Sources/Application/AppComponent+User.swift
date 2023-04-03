@@ -87,4 +87,10 @@ public extension AppComponent {
             DeletePlayListUseCaseImpl(userRepository: userRepository)
         }
     }
+    
+    var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase {
+        shared {
+            DeleteFavoriteListUseCaseImpl(userRepository: userRepository)
+        }
+    }
 }

@@ -14,8 +14,9 @@ import CommonFeature
 
 public protocol FavoriteDependency: Dependency {
     var containSongsComponent: ContainSongsComponent {get}
-    var fetchFavoriteSongsUseCase:any FetchFavoriteSongsUseCase {get}
-    var editFavoriteSongsOrderUseCase:any EditFavoriteSongsOrderUseCase {get}
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {get}
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {get}
+    var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase {get}
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
@@ -23,7 +24,8 @@ public final class FavoriteComponent: Component<FavoriteDependency> {
         return FavoriteViewController.viewController(
             viewModel: .init(
                 fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
-                editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase
+                editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase,
+                deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase
             ),
             containSongsComponent: dependency.containSongsComponent
         )
