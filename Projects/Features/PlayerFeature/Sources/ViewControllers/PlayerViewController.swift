@@ -304,6 +304,7 @@ private extension PlayerViewController {
         output.showConfirmModal.sink { [weak self] message in
             self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: false, completion: {
                 NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                self?.playState.switchPlayerMode(to: .mini)
             }, cancelCompletion: {
             }))
         }.store(in: &subscription)
