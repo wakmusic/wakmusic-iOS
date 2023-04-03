@@ -54,8 +54,12 @@ public final class PlaylistView: UIView {
         $0.showsVerticalScrollIndicator = false
     }
     
+    private lazy var blurEffectView = UIVisualEffectView().then {
+        $0.effect = UIBlurEffect(style: .regular)
+    }
+    
     internal lazy var miniPlayerView = UIView().then {
-        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
     
     internal lazy var miniPlayerContentView = UIView()
@@ -117,11 +121,13 @@ public final class PlaylistView: UIView {
 
 private extension PlaylistView {
     private func configureUI() {
+        self.backgroundColor = .clear // 가장 뒷배경
         self.configureSubViews()
         self.configureBackground()
         self.configureContent()
         self.configureTitleBar()
         self.configurePlaylist()
+        self.configureBlur()
         self.configureMiniPlayer()
     }
     
@@ -133,6 +139,7 @@ private extension PlaylistView {
         titleBarView.addSubview(titleLabel)
         titleBarView.addSubview(editButton)
         contentView.addSubview(playlistTableView)
+        contentView.addSubview(blurEffectView)
         contentView.addSubview(miniPlayerView)
         miniPlayerView.addSubview(miniPlayerContentView)
         miniPlayerContentView.addSubview(thumbnailImageView)
@@ -147,7 +154,6 @@ private extension PlaylistView {
     }
     
     private func configureBackground() {
-        self.backgroundColor = .white // 가장 뒷배경
         let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         backgroundView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
@@ -193,7 +199,14 @@ private extension PlaylistView {
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-56)
+            $0.bottom.equalToSuperview()
+        }
+    }
+    
+    private func configureBlur() {
+        blurEffectView.snp.makeConstraints {
+            $0.height.equalTo(56)
+            $0.bottom.left.right.equalToSuperview()
         }
     }
     

@@ -14,8 +14,12 @@ import SnapKit
 import Then
 
 final class MiniPlayerView: UIView {
+    private lazy var blurEffectView = UIVisualEffectView().then {
+        $0.effect = UIBlurEffect(style: .regular)
+    }
+    
     private lazy var contentView: UIView = UIView().then {
-        $0.backgroundColor = UIColor(hex: "#fcfdfd")
+        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
     }
     
     internal lazy var extendButton = UIButton().then {
@@ -81,6 +85,7 @@ final class MiniPlayerView: UIView {
 private extension MiniPlayerView {
     private func configureUI() {
         self.configureSubViews()
+        self.configureBlur()
         self.configureContent()
         self.configurePlayTime()
         self.configureThumbnail()
@@ -92,6 +97,7 @@ private extension MiniPlayerView {
     }
     
     private func configureSubViews() {
+        self.addSubview(blurEffectView)
         self.addSubview(contentView)
         self.contentView.addSubview(totalPlayTimeView)
         self.totalPlayTimeView.addSubview(currentPlayTimeView)
@@ -102,6 +108,13 @@ private extension MiniPlayerView {
         self.contentView.addSubview(extendButton)
         self.contentView.addSubview(playButton)
         self.contentView.addSubview(closeButton)
+    }
+    
+    private func configureBlur() {
+        blurEffectView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(56)
+        }
     }
     
     private func configureContent() {
