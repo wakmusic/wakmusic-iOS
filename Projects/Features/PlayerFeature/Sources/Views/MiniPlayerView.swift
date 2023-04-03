@@ -14,7 +14,9 @@ import SnapKit
 import Then
 
 final class MiniPlayerView: UIView {
-    private lazy var contentView: UIView = UIView()
+    private lazy var contentView: UIView = UIView().then {
+        $0.backgroundColor = UIColor(hex: "#fcfdfd")
+    }
     
     internal lazy var extendButton = UIButton().then {
         $0.backgroundColor = .clear
@@ -103,7 +105,6 @@ private extension MiniPlayerView {
     }
     
     private func configureContent() {
-        contentView.backgroundColor = .init(white: 1, alpha: 0.8)
         contentView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(56)
