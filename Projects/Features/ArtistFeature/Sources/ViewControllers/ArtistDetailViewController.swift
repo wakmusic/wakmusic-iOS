@@ -18,6 +18,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     @IBOutlet weak var gradationView: UIView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var headerContentView: UIView!
+    @IBOutlet weak var headerContentViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak public var contentView: UIView!
     
     private lazy var headerViewController: ArtistDetailHeaderViewController = {
@@ -35,6 +36,15 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     var disposeBag: DisposeBag = DisposeBag()
     
     var artistMusicComponent: ArtistMusicComponent!
+    
+    private var maxHeaderHeight: CGFloat {
+        let margin: CGFloat = 8.0 + 20.0
+        let width = (140 * APP_WIDTH()) / 375.0
+        let height = (180 * width) / 140.0
+        return -(margin + height)
+    }
+    private let minHeaderHeight: CGFloat = 0
+    private var previousScrollOffset: CGFloat = 0
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -74,7 +84,6 @@ extension ArtistDetailViewController {
         guard let model = self.model else { return }
 
         let flatColor: String = model.color.first?.first ?? ""
-        
         guard !flatColor.isEmpty else { return }
                 
         let startAlpha: CGFloat = 0.6
@@ -102,5 +111,49 @@ extension ArtistDetailViewController {
     
     private func configureContent() {
         self.add(asChildViewController: contentViewController)
+    }
+}
+
+extension ArtistDetailViewController {
+    func scrollViewDidScrollFromChild(scrollView: UIScrollView) {
+        let scrollDiff = scrollView.contentOffset.y - self.previousScrollOffset
+        let absoluteTop: CGFloat = 0
+        let absoluteBottom: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
+        let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteBottom
+        
+        if scrollView.contentOffset.y < absoluteBottom{
+            if canAnimateHeader(scrollView) {
+                var newHeight = self.headerContentViewTopConstraint.constant
+                
+                if isScrollingDown {
+                    newHeight = max(self.maxHeaderHeight, self.headerContentViewTopConstraint.constant - abs(scrollDiff))
+                    
+                }else if isScrollingUp {
+                    if scrollView.contentOffset.y <= abs(self.maxHeaderHeight) {
+                        newHeight = min(self.minHeaderHeight, self.headerContentViewTopConstraint.constant + abs(scrollDiff))
+                    }
+                }
+                
+                if newHeight != self.headerContentViewTopConstraint.constant {
+                    self.headerContentViewTopConstraint.constant = newHeight
+                    self.updateHeader()
+                }
+                self.view.layoutIfNeeded()
+                self.previousScrollOffset = scrollView.contentOffset.y
+            }
+        }
+    }
+    
+    private func updateHeader() {
+        let openAmount = self.headerContentViewTopConstraint.constant + abs(self.maxHeaderHeight)
+        let percentage = openAmount / abs(self.maxHeaderHeight)
+        //DEBUG_LOG(percentage)
+        self.headerContentView.alpha = percentage
+    }
+    
+    private func canAnimateHeader(_ scrollView: UIScrollView) -> Bool {
+        let scrollViewMaxHeight = scrollView.frame.height + abs(self.maxHeaderHeight) - self.minHeaderHeight
+        return scrollView.contentSize.height > scrollViewMaxHeight
     }
 }
