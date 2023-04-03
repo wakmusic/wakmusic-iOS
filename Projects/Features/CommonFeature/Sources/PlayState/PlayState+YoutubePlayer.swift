@@ -26,6 +26,7 @@ extension PlayState {
     public func stop() {
         self.player.stop()
         self.currentSong = nil
+        self.progress.clear()
         self.playList.list.removeAll()
     }
     

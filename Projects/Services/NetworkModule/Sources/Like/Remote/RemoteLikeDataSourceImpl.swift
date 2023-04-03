@@ -14,15 +14,15 @@ public final class RemoteLikeDataSourceImpl: BaseRemoteDataSource<LikeAPI>, Remo
             .map({$0.toDomain()})
     }
     
-    public func addLikeSong(id: String) -> Single<BaseEntity> {
+    public func addLikeSong(id: String) -> Single<LikeEntity> {
         request(.addLikeSong(id: id))
-            .map(BaseResponseDTO.self)
+            .map(LikeResponseDTO.self)
             .map({$0.toDomain()})
     }
     
-    public func cancelLikeSong(id: String) -> Single<BaseEntity> {
+    public func cancelLikeSong(id: String) -> Single<LikeEntity> {
         request(.cancelLikeSong(id: id))
-            .map(BaseResponseDTO.self)
+            .map(LikeResponseDTO.self)
             .map({$0.toDomain()})
     }
     

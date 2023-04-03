@@ -24,7 +24,7 @@ public struct AddLikeSongUseCaseImpl: AddLikeSongUseCase {
         self.likeRepository = likeRepository
     }
     
-    public func execute(id: String) -> Single<BaseEntity> {
+    public func execute(id: String) -> Single<LikeEntity> {
         likeRepository.addLikeSong(id: id)
     }
 

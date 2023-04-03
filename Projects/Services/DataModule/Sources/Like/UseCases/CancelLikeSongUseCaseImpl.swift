@@ -24,7 +24,7 @@ public struct CancelLikeSongUseCaseImpl: CancelLikeSongUseCase {
         self.likeRepository = likeRepository
     }
     
-    public func execute(id: String) -> Single<BaseEntity> {
+    public func execute(id: String) -> Single<LikeEntity> {
         likeRepository.cancelLikeSong(id: id)
     }
 

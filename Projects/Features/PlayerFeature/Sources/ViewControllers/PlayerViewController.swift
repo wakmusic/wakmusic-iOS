@@ -112,6 +112,7 @@ private extension PlayerViewController {
         bindArtist(output: output)
         bindCurrentPlayTime(output: output)
         bindTotalPlayTime(output: output)
+        bindMiniPlayerSlider(output: output)
         bindlikes(output: output)
         bindViews(output: output)
         bindLyricsDidChangedEvent(output: output)
@@ -141,9 +142,21 @@ private extension PlayerViewController {
     private func bindThumbnail(output: PlayerViewModel.Output) {
         output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
             guard let self else { return }
-            self.playerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
-            self.playerView.backgroundImageView.kf.setImage(with: URL(string: thumbnailImageURL))
-            self.miniPlayerView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+            self.playerView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
+            self.playerView.backgroundImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
+            self.miniPlayerView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+                options: [.transition(.fade(0.2))]
+            )
         }.store(in: &subscription)
     }
     
@@ -189,13 +202,6 @@ private extension PlayerViewController {
         output.playTimeText.sink { [weak self] currentTimeText in
             guard let self else { return }
             self.playerView.currentPlayTimeLabel.text = currentTimeText
-            self.miniPlayerView.currentPlayTimeView.snp.remakeConstraints {
-                let playTimeValue = output.playTimeValue.value
-                let totalTimeValue = output.totalTimeValue.value
-                let newValue = totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
-                $0.top.left.bottom.equalToSuperview()
-                $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
-            }
         }
         .store(in: &subscription)
         
@@ -219,6 +225,21 @@ private extension PlayerViewController {
             self.playerView.playTimeSlider.maximumValue = value
         }
         .store(in: &subscription)
+    }
+    
+    private func bindMiniPlayerSlider(output: PlayerViewModel.Output) {
+        output.playTimeValue.combineLatest(output.totalTimeValue)
+            .map({ (playTimeValue, totalTimeValue) in
+                return totalTimeValue == 0 ? 0 : playTimeValue / totalTimeValue
+            })
+            .sink { [weak self] newValue in
+                guard let self else { return }
+                self.miniPlayerView.currentPlayTimeView.snp.remakeConstraints {
+                    $0.top.left.bottom.equalToSuperview()
+                    $0.width.equalTo(self.miniPlayerView.totalPlayTimeView.snp.width).multipliedBy(newValue)
+                }
+            }
+            .store(in: &subscription)
     }
     
     private func bindLyricsDidChangedEvent(output: PlayerViewModel.Output) {
@@ -283,6 +304,7 @@ private extension PlayerViewController {
         output.showConfirmModal.sink { [weak self] message in
             self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: false, completion: {
                 NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                self?.playState.switchPlayerMode(to: .mini)
             }, cancelCompletion: {
             }))
         }.store(in: &subscription)

@@ -95,7 +95,11 @@ private extension PlaylistViewController {
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
         output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
-            self?.playlistView.thumbnailImageView.kf.setImage(with: URL(string: thumbnailImageURL))
+            self?.playlistView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+                options: [.transition(.fade(0.2))]
+            )
         }.store(in: &subscription)
     }
     

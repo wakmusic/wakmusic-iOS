@@ -13,6 +13,7 @@ import SnapKit
 import Then
 import Lottie
 import Kingfisher
+import Utility
 
 internal class PlaylistTableViewCell: UITableViewCell {
     static let identifier = "PlaylistTableViewCell"
@@ -147,13 +148,14 @@ internal class PlaylistTableViewCell: UITableViewCell {
     }
     
     internal func setContent(song: SongEntity) {
-        self.thumbnailImageView.kf.setImage(with: URL(string: thumbnailURL(from: song.id)))
+        self.thumbnailImageView.kf.setImage(
+            with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
+            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            options: [.transition(.fade(0.2))]
+        )
+        
         self.titleLabel.text = song.title
         self.artistLabel.text = song.artist
-    }
-    
-    private func thumbnailURL(from id: String) -> String {
-        return "https://i.ytimg.com/vi/\(id)/hqdefault.jpg"
     }
     
     private func configureContents() {
