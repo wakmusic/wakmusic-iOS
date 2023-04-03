@@ -17,7 +17,7 @@ public class ArtistMusicViewController: TabmanViewController, ViewControllerFrom
 
     @IBOutlet weak var tabBarContentView: UIView!
     
-    private lazy var viewControllers: [UIViewController] = {
+    lazy var viewControllers: [UIViewController] = {
         let viewControllers = [
             artistMusicContentComponent.makeView(type: .new, model: model),
             artistMusicContentComponent.makeView(type: .popular, model: model),
@@ -58,12 +58,11 @@ public class ArtistMusicViewController: TabmanViewController, ViewControllerFrom
 extension ArtistMusicViewController {
     
     private func configureUI() {
-        
         self.dataSource = self
         let bar = TMBar.ButtonBar()
         
         // 배경색
-        bar.backgroundView.style = .flat(color: DesignSystemAsset.GrayColor.gray100.color)
+        bar.backgroundView.style = .clear
         
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -84,7 +83,6 @@ extension ArtistMusicViewController {
         bar.indicator.overscrollBehavior = .compress
 
         addBar(bar, dataSource: self, at: .custom(view: tabBarContentView, layout: nil))
-        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
 }
 
