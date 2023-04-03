@@ -62,15 +62,22 @@ extension PlayerViewModel {
     func cancelLikeSong(for song: SongEntity, output: Output) {
         self.cancelLikeSongUseCase.execute(id: song.id)
             .catch{ error in
-                return Single<BaseEntity>.create { single in
-                    single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                return Single<LikeEntity>.create { single in
+                    single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
                     return Disposables.create()
                 }
             }
-            .map { ($0.status, $0.description) }
-            .subscribe(onSuccess: { (status, description) in
+            .map { [weak self] likeEntity in
+                return (
+                    likeEntity.status,
+                    self?.formatNumber(likeEntity.likes) ?? "",
+                    likeEntity.description
+                )
+            }
+            .subscribe(onSuccess: { (status, likeCountText, description) in
                 if status == 200 {
                     output.likeState.send(false)
+                    output.likeCountText.send(likeCountText)
                 } else {
                     output.showToastMessage.send(description)
                 }
@@ -82,15 +89,22 @@ extension PlayerViewModel {
     func addLikeSong(for song: SongEntity, output: Output) {
         self.addLikeSongUseCase.execute(id: song.id)
             .catch{ error in
-                return Single<BaseEntity>.create { single in
-                    single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                return Single<LikeEntity>.create { single in
+                    single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
                     return Disposables.create()
                 }
             }
-            .map { ($0.status, $0.description) }
-            .subscribe(onSuccess: { (status, description) in
+            .map { [weak self] likeEntity in
+                return (
+                    likeEntity.status,
+                    self?.formatNumber(likeEntity.likes) ?? "",
+                    likeEntity.description
+                )
+            }
+            .subscribe(onSuccess: { (status, likeCountText, description) in
                 if status == 200 {
                     output.likeState.send(true)
+                    output.likeCountText.send(likeCountText)
                 } else {
                     output.showToastMessage.send(description)
                 }
