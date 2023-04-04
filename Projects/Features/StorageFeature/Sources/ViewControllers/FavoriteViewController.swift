@@ -64,8 +64,17 @@ extension FavoriteViewController{
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
-            .debug("itemMoved")
             .bind(to: input.itemMoved)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
+            .filter { $0.2.isEditing == false }
+            .subscribe(onNext: { (indexPath, dataSource, _) in
+                let song: SongEntity = dataSource[indexPath.section].items[indexPath.row].song
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
             .disposed(by: disposeBag)
     }
     
@@ -151,6 +160,7 @@ extension FavoriteViewController{
                 guard let self = self else {return}
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allLikeListSelected.onNext(false)
+                self.output.state.accept(EditState(isEditing: false, force: true))
             }).disposed(by: disposeBag)
 
         output.showToast
@@ -196,16 +206,19 @@ extension FavoriteViewController: SongCartViewDelegate {
             input.allLikeListSelected.onNext(flag)
         case .addSong:
             input.addSongs.onNext(())
+            self.hideSongCart()
         case .addPlayList:
             input.addPlayList.onNext(())
+            self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedLikeLists.value.count
             let popup = TextPopupViewController.viewController(
-                text: "선택한 좋아요 \(count)개가 삭제됩니다.",
+                text: "선택한 좋아요 리스트 \(count)개가 삭제됩니다.",
                 cancelButtonIsHidden: false,
                 completion: { [weak self] () in
                 guard let `self` = self else { return }
                 self.input.deleteLikeList.onNext(())
+                self.hideSongCart()
             })
             self.showPanModal(content: popup)
         default: return

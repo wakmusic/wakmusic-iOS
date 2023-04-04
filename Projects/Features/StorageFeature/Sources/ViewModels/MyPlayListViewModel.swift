@@ -66,6 +66,11 @@ public final class MyPlayListViewModel:ViewModelType {
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
         
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map{ _ in () }
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+
         input.playListLoad
             .flatMap{ [weak self] () -> Observable<[PlayListEntity]> in
                 guard let self = self else{
@@ -201,10 +206,12 @@ public final class MyPlayListViewModel:ViewModelType {
                     .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
                     .asObservable()
             })
-            .debug()
             .do(onNext: { (model) in
-                guard model.status != 200 else { return }
-                output.showToast.accept(model.description)
+                if model.status == 200 {
+                    output.state.accept(EditState(isEditing: false, force: true))
+                }else{
+                    output.showToast.accept(model.description)
+                }
             })
             .map { _ in () }
             .bind(to: input.playListLoad)

@@ -340,14 +340,15 @@ extension PlayListDetailViewController{
         .disposed(by: disposeBag)
                 
         tableView.rx.itemSelected
-            .withLatestFrom(input.state){($0,$1)}
-            .filter({ [weak self] in
-                $0.1.isEditing || self?.viewModel.type == .wmRecommend
-            })
-            .map { $0.0.row }
-            .bind(to: input.songTapped)
-            .disposed(by: disposeBag)
-        
+           .withLatestFrom(output.dataSource) { ($0, $1) }
+           .withLatestFrom(input.state) { ($0.0, $0.1, $1) }
+           .filter { $0.2.isEditing == false }
+           .subscribe(onNext: { (indexPath, dataSource, _) in
+               let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
+               PlayState.shared.loadAndAppendSongsToPlaylist([song])
+           })
+           .disposed(by: disposeBag)
+
         output.groupPlaySongs
             .subscribe(onNext: { [weak self] songs in
                 guard let self = self else {return}

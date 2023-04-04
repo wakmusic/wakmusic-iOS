@@ -204,9 +204,6 @@ final class PlayerViewModel: ViewModelType {
     private func bindPlayStateChanged(output: Output) {
         playState.$state.sink { [weak self] state in
             guard let self else { return }
-            print("\n")
-            print("⭐️⭐️ 플레이백 state:", state)
-            print("\n")
             output.playerState.send(state)
             if state == .ended {
                 self.handlePlaybackEnded()

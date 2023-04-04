@@ -27,11 +27,11 @@ public struct LikeRepositoryImpl: LikeRepository {
         remoteLikeDataSource.fetchLikeNumOfSong(id: id)
     }
     
-    public func addLikeSong(id: String) -> Single<BaseEntity> {
+    public func addLikeSong(id: String) -> Single<LikeEntity> {
         remoteLikeDataSource.addLikeSong(id: id)
     }
     
-    public func cancelLikeSong(id: String) -> Single<BaseEntity> {
+    public func cancelLikeSong(id: String) -> Single<LikeEntity> {
         remoteLikeDataSource.cancelLikeSong(id: id)
     }
     

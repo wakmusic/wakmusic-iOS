@@ -25,7 +25,6 @@ class HomeChartCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
         albumImageView.layer.cornerRadius = 4
         albumImageView.contentMode = .scaleAspectFill
         playImageView.image = DesignSystemAsset.Home.playSmall.image

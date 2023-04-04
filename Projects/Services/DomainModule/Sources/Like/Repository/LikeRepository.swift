@@ -13,8 +13,8 @@ import ErrorModule
 
 public protocol LikeRepository {
     func fetchLikeNumOfSong(id:String) -> Single<FavoriteSongEntity>
-    func addLikeSong(id:String) -> Single<BaseEntity>
-    func cancelLikeSong(id:String) -> Single<BaseEntity>
+    func addLikeSong(id:String) -> Single<LikeEntity>
+    func cancelLikeSong(id:String) -> Single<LikeEntity>
   
 
 }

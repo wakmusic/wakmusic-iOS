@@ -13,4 +13,5 @@ public protocol RemoteUserDataSource {
     func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
     func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
     func deletePlayList(ids: [String]) -> Single<BaseEntity>
+    func deleteFavoriteList(ids: [String]) -> Single<BaseEntity>
 }

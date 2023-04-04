@@ -181,7 +181,7 @@ extension MainContainerViewController {
         self.originalPanelAlpha = self.panelView.alpha
         
         self.panelView.isHidden = false
-        self.panelView.backgroundColor = .white
+        self.panelView.backgroundColor = .clear
         
         self.safeAreaBottomView.backgroundColor = UIColor.white
         self.safeAreaBottomViewHeightConstraint.constant = SAFEAREA_BOTTOM_HEIGHT()

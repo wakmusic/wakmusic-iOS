@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol AddLikeSongUseCase {
-    func execute(id:String) -> Single<BaseEntity>
+    func execute(id:String) -> Single<LikeEntity>
 }

@@ -126,6 +126,7 @@ extension ArtistMusicContentViewController {
     
     private func configureUI() {
         self.activityIncidator.startAnimating()
+        self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
@@ -170,7 +171,7 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
+        let view = ArtistPlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
         return view
     }
@@ -212,6 +213,21 @@ extension Reactive where Base: ArtistMusicContentViewController{
         return Binder(base) { viewController, _ in
             let pageID = viewController.input.pageID.value
             viewController.input.pageID.accept(pageID + 1)
+        }
+    }
+}
+
+extension ArtistMusicContentViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let parent = self.parent?.parent?.parent as? ArtistDetailViewController else { return }
+        parent.scrollViewDidScrollFromChild(scrollView: scrollView)
+        
+        guard let artistMusicViewController = self.parent?.parent as? ArtistMusicViewController else { return }
+        
+        artistMusicViewController.viewControllers.forEach {
+            guard let content = $0 as? ArtistMusicContentViewController,
+                let tableView = content.tableView else { return }
+            tableView.contentOffset.y = scrollView.contentOffset.y
         }
     }
 }
