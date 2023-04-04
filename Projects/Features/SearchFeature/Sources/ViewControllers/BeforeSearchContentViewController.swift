@@ -79,6 +79,7 @@ extension BeforeSearchContentViewController {
       
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.indicator.startAnimating()
+        self.indicator.hidesWhenStopped = true
     }
     
     
