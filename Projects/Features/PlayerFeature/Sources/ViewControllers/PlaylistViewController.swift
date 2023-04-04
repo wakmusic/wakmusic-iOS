@@ -180,13 +180,10 @@ private extension PlaylistViewController {
 
 private extension PlaylistViewController {
     private func bindActions() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(touchThumbnailImageView))
         playlistView.thumbnailImageView.isUserInteractionEnabled = true
-        playlistView.thumbnailImageView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func touchThumbnailImageView() {
-        self.dismiss(animated: true)
+        playlistView.thumbnailImageView.tapPublisher().sink { [weak self] _ in
+            self?.dismiss(animated: true)
+        }.store(in: &subscription)
     }
 }
 
