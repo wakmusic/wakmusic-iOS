@@ -15,15 +15,9 @@ import PanModal
 import DesignSystem
 import BaseFeature
 import Kingfisher
-import SkeletonView
 import DomainModule
 
-
-
-
-
 public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
-    
     
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var moreButton: UIButton!
@@ -36,7 +30,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editStateLabel: UILabel!
     @IBOutlet weak var playListInfoView: UIView!
     @IBOutlet weak var playListInfoSuperView: UIView!
-    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
     lazy var input = PlayListDetailViewModel.Input()
@@ -100,6 +95,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bindRx()
+        bindSelectedEvent()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -127,36 +124,12 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
 public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
 extension PlayListDetailViewController{
-    
-    private func configureSkeleton(){
         
-        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
-        let baseColor = DesignSystemAsset.PrimaryColor.baseskeleton.color
-        let secondaryColor = DesignSystemAsset.PrimaryColor.secondaryskeleton.color
-        
-        
-        playListInfoSuperView.isSkeletonable = true
-        playListInfoView.isSkeletonable = true
-        
-        // 디졸브 상황에서 두 장면이 서로 교차할 때, 앞 화면이 사라지고 뒤 화면이 뚜렷하게 나타나는 화면 전환 기법
-        playListImage.isSkeletonable = true
-        playListImage.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
-        
-        playListNameLabel.isSkeletonable = true
-        playListNameLabel.skeletonCornerRadius = 2
-        playListNameLabel.skeletonTextLineHeight = .relativeToFont
-        playListNameLabel.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
-                
-        playListCountLabel.isSkeletonable = true
-        playListCountLabel.skeletonCornerRadius = 2
-        playListCountLabel.skeletonTextLineHeight = .relativeToFont
-        playListCountLabel.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: baseColor ,secondaryColor: secondaryColor), animation: animation, transition: .crossDissolve(0.25))
-    }
-    
     private func configureUI(){
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        tableView.backgroundColor = .clear
-         
+        self.tableView.backgroundColor = .clear
+        self.activityIndicator.startAnimating()
+
         self.completeButton.isHidden = true
         self.editStateLabel.isHidden = true
         
@@ -183,10 +156,6 @@ extension PlayListDetailViewController{
         self.playListImage.layer.cornerRadius = 12
         self.moreButton.isHidden = viewModel.type == .wmRecommend
         self.editPlayListNameButton.isHidden = viewModel.type == .wmRecommend
-        
-        bindRx()
-        configureSkeleton()
-        bindSelectedEvent()
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
@@ -240,6 +209,8 @@ extension PlayListDetailViewController{
                 guard let self = self else {
                     return
                 }
+                self.activityIndicator.stopOnMainThread()
+                
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "리스트에 곡이 없습니다."
                 

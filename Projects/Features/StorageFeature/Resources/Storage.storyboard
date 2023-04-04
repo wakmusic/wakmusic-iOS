@@ -840,17 +840,23 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mMS-K5-Tby">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="a8M-lJ-S1N"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="a8M-lJ-S1N" firstAttribute="trailing" secondItem="DGI-pW-v8E" secondAttribute="trailing" id="3oq-lY-6qZ"/>
+                            <constraint firstItem="mMS-K5-Tby" firstAttribute="centerX" secondItem="HZM-LB-aUt" secondAttribute="centerX" id="Bcf-Pa-rAl"/>
                             <constraint firstItem="DGI-pW-v8E" firstAttribute="top" secondItem="a8M-lJ-S1N" secondAttribute="top" constant="104" id="T5C-3B-gJu"/>
                             <constraint firstItem="a8M-lJ-S1N" firstAttribute="bottom" secondItem="DGI-pW-v8E" secondAttribute="bottom" id="c6L-5y-2h2"/>
                             <constraint firstItem="DGI-pW-v8E" firstAttribute="leading" secondItem="a8M-lJ-S1N" secondAttribute="leading" id="ocf-AQ-eiW"/>
+                            <constraint firstItem="mMS-K5-Tby" firstAttribute="centerY" secondItem="HZM-LB-aUt" secondAttribute="centerY" id="tA6-B8-GBp"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="mMS-K5-Tby" id="fKH-mi-rPu"/>
                         <outlet property="tableView" destination="DGI-pW-v8E" id="FsG-TW-Sag"/>
                     </connections>
                 </viewController>
@@ -951,17 +957,23 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="2ZJ-Zw-cdi">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2Ib-sr-kB6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="2Ib-sr-kB6" firstAttribute="bottom" secondItem="Xyb-PZ-bnQ" secondAttribute="bottom" id="51R-iB-Ku1"/>
                             <constraint firstItem="Xyb-PZ-bnQ" firstAttribute="leading" secondItem="2Ib-sr-kB6" secondAttribute="leading" id="ID6-NX-Xdq"/>
+                            <constraint firstItem="2ZJ-Zw-cdi" firstAttribute="centerX" secondItem="g0X-Hf-dA8" secondAttribute="centerX" id="IOG-Fl-DLI"/>
                             <constraint firstItem="Xyb-PZ-bnQ" firstAttribute="top" secondItem="2Ib-sr-kB6" secondAttribute="top" constant="104" id="Yhg-dH-e27"/>
+                            <constraint firstItem="2ZJ-Zw-cdi" firstAttribute="centerY" secondItem="g0X-Hf-dA8" secondAttribute="centerY" id="i9h-GV-pIX"/>
                             <constraint firstItem="2Ib-sr-kB6" firstAttribute="trailing" secondItem="Xyb-PZ-bnQ" secondAttribute="trailing" id="vkc-Hb-6rw"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="2ZJ-Zw-cdi" id="RdI-CJ-nU8"/>
                         <outlet property="tableView" destination="Xyb-PZ-bnQ" id="CxF-Bg-OUd"/>
                     </connections>
                 </viewController>

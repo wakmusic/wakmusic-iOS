@@ -542,20 +542,26 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="VnZ-UO-Ugk">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tyC-GG-XDq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="R7P-Q4-mqC" secondAttribute="bottom" id="9eu-0T-4IQ"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="top" secondItem="tyC-GG-XDq" secondAttribute="top" id="Hat-jm-1L0"/>
+                            <constraint firstItem="VnZ-UO-Ugk" firstAttribute="centerY" secondItem="kt0-1C-Zzo" secondAttribute="centerY" id="Hco-Nq-auH"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="leading" secondItem="tyC-GG-XDq" secondAttribute="leading" id="WjA-D2-Kku"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="top" secondItem="HYw-Pu-AkU" secondAttribute="bottom" id="bUr-4w-ygN"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="trailing" secondItem="tyC-GG-XDq" secondAttribute="trailing" id="fhF-w5-3b1"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="trailing" secondItem="tyC-GG-XDq" secondAttribute="trailing" id="mlf-6i-6Bx"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="leading" secondItem="tyC-GG-XDq" secondAttribute="leading" id="t26-q3-n3I"/>
+                            <constraint firstItem="VnZ-UO-Ugk" firstAttribute="centerX" secondItem="kt0-1C-Zzo" secondAttribute="centerX" id="zEz-bu-N67"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="VnZ-UO-Ugk" id="w15-4A-BCm"/>
                         <outlet property="backButton" destination="361-sW-WEJ" id="E02-Or-4Rt"/>
                         <outlet property="completeButton" destination="fYr-wO-HNS" id="vnh-LF-erc"/>
                         <outlet property="editPlayListNameButton" destination="kOT-Da-3GW" id="wzS-XB-CH7"/>
