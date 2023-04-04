@@ -19,26 +19,22 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabBarView: UIView!
-    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBAction func pressBackAction(_ sender: UIButton) {
-        
         self.navigationController?.popViewController(animated: true)
-        
-    }
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
-        configureUI()
-        // Do any additional setup after loading the view.
     }
     
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+        bindRx()
+    }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
-    
     
     var disposeBag = DisposeBag()
     var viewModel:QnaViewModel!
@@ -46,52 +42,34 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
     lazy var input = QnaViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
-    
     var viewControllers:[UIViewController] = []
-    
-    
 
     public static func viewController(viewModel:QnaViewModel,qnaContentComponent:QnaContentComponent) -> QnaViewController {
         let viewController = QnaViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
         viewController.viewModel = viewModel
         viewController.qnaContentComponent = qnaContentComponent
-        
-        
         return viewController
     }
-    
-
 }
 
 extension QnaViewController {
     
     private func configureUI(){
-        
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-        
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        
-        
-        
+        self.activityIndicator.startAnimating()
         
         //탭바 설정
         self.dataSource = self
         let bar = TMBar.ButtonBar()
-
-
         
         // 배경색
-       
         bar.backgroundView.style = .flat(color: colorFromRGB(0xF0F3F6))
         
-        
         // 간격 설정
-        
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .intrinsic
         bar.layout.transitionStyle = .progressive
-        
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
@@ -101,84 +79,52 @@ extension QnaViewController {
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
         
-      
-        
-        
         // indicator
         bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
-
-        
         addBar(bar, dataSource: self, at: .custom(view: tabBarView,layout: nil))
         
         //회색 구분선 추가
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
-        
-       bindRx()
-        
     }
     
     func bindRx(){
         
-        output.dataSource.subscribe { [weak self] (categories, qna) in
-            
-            guard let self = self else{
-                return
-            }
-            
-            guard let comp = self.qnaContentComponent else{
-                return
-            }
-            
-            
+        output.dataSource
+            .skip(1)
+            .do(onNext: { [weak self] (_, _) in
+                self?.activityIndicator.stopOnMainThread()
+            })
+            .subscribe { [weak self] (categories, qna) in
+                guard let self = self else{
+                    return
+                }
+                guard let comp = self.qnaContentComponent else{
+                    return
+                }
 
-            
-            self.viewControllers  = categories.enumerated().map { (i,c) in
-                
-                if i == 0 {
-                    return comp.makeView(dataSource: qna  )
+                self.viewControllers  = categories.enumerated().map { (i,c) in
+                    if i == 0 {
+                        return comp.makeView(dataSource: qna  )
+                    }else {
+                        return comp.makeView(dataSource:  qna.filter({
+                            $0.category.replacingOccurrences(of: " ", with: "") == c.category.replacingOccurrences(of: " ", with: "")
+                        }))
+                    }
                 }
-                
-                else {
-                    
-                    
-                    
-                    return comp.makeView(dataSource:  qna.filter({
-                        $0.category.replacingOccurrences(of: " ", with: "") == c.category.replacingOccurrences(of: " ", with: "")
-                        
-                    }))
-                }
-                
-                
-            }
-            
-            
-            self.reloadData()
-            
-            
-            
-        }.disposed(by: disposeBag)
-        
-        
-    
+                self.reloadData()
+            }.disposed(by: disposeBag)
     }
-    
 }
-
 
 extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         DEBUG_LOG(self.viewControllers.count)
-        
         return self.viewControllers.count
-        
-        
     }
     
     public func viewController(for pageboyViewController: Pageboy.PageboyViewController, at index: Pageboy.PageboyViewController.PageIndex) -> UIViewController? {
-        
-        
         viewControllers[index]
     }
     
@@ -187,13 +133,6 @@ extension  QnaViewController:PageboyViewControllerDataSource, TMBarDataSource {
     }
     
     public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
-        
         return TMBarItem(title: output.dataSource.value.0[index].category)
-      
-        
-        
-        
     }
- 
 }
-

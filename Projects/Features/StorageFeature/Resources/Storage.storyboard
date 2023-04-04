@@ -522,6 +522,9 @@
                                     <constraint firstAttribute="height" constant="40" id="sRu-1i-uYt"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YyE-Vq-AbJ">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Vie-wt-pVz"/>
                         <color key="backgroundColor" name="gray100"/>
@@ -529,12 +532,15 @@
                             <constraint firstItem="Vie-wt-pVz" firstAttribute="trailing" secondItem="RnJ-Ec-uX3" secondAttribute="trailing" id="P7b-uP-NZR"/>
                             <constraint firstItem="VLw-8a-amY" firstAttribute="top" secondItem="Vie-wt-pVz" secondAttribute="top" id="PDz-qg-EpS"/>
                             <constraint firstItem="RnJ-Ec-uX3" firstAttribute="leading" secondItem="Vie-wt-pVz" secondAttribute="leading" id="VYY-AR-Us9"/>
+                            <constraint firstItem="YyE-Vq-AbJ" firstAttribute="centerY" secondItem="B0x-Ie-O2B" secondAttribute="centerY" id="WY8-Nc-pYi"/>
                             <constraint firstItem="VLw-8a-amY" firstAttribute="leading" secondItem="Vie-wt-pVz" secondAttribute="leading" id="Yay-QC-4Gc"/>
                             <constraint firstItem="RnJ-Ec-uX3" firstAttribute="top" secondItem="VLw-8a-amY" secondAttribute="bottom" constant="18" id="ZTU-YE-rXm"/>
                             <constraint firstItem="Vie-wt-pVz" firstAttribute="trailing" secondItem="VLw-8a-amY" secondAttribute="trailing" id="frm-q0-keP"/>
+                            <constraint firstItem="YyE-Vq-AbJ" firstAttribute="centerX" secondItem="B0x-Ie-O2B" secondAttribute="centerX" id="gbx-xy-Mhq"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="YyE-Vq-AbJ" id="DuA-js-FZ3"/>
                         <outlet property="backButton" destination="k75-pR-K84" id="X7N-BW-Qnt"/>
                         <outlet property="tabBarView" destination="RnJ-Ec-uX3" id="wzf-TZ-iaB"/>
                         <outlet property="titleLabel" destination="qbV-41-I8Z" id="v4d-tV-yXM"/>
