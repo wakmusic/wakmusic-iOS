@@ -32,9 +32,6 @@ public extension TargetDependency.SPM {
     
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
-    static let GoogleSignIn = TargetDependency.package(product: "GoogleSignIn")
-    static let HPParallaxHeader = TargetDependency.package(product: "HPParallaxHeader")
-    static let SkeletonView = TargetDependency.package(product: "SkeletonView")
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
 }
 
@@ -42,18 +39,6 @@ public extension Package {
     static let YouTubePlayerKit = Package.remote(
         url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
         requirement: .upToNextMajor(from: "1.3.1")
-    )
-    static let GoogleSignIn = Package.remote(
-         url: "https://github.com/google/GoogleSignIn-iOS.git",
-         requirement: .upToNextMinor(from: "6.1.0")
-     )
-    static let HPParallaxHeader = Package.remote(
-         url: "https://github.com/ngochiencse/HPParallaxHeader",
-         requirement: .upToNextMinor(from: "1.1.8")
-     )
-    static let SkeletonView = Package.remote(
-        url: "https://github.com/Juanpe/SkeletonView.git",
-        requirement: .upToNextMajor(from: "1.30.4")
     )
     static let RealmSwift = Package.remote(
         url: "https://github.com/realm/realm-swift.git",
