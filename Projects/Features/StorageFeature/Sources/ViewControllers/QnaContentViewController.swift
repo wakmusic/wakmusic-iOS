@@ -47,56 +47,40 @@ public final class QnaContentViewController: UIViewController, ViewControllerFro
 
 extension QnaContentViewController{
     
-    private func configureUI()
-    {
-        
+    private func configureUI(){
         tableView.dataSource = self
         tableView.delegate = self
-
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         tableView.reloadData()
-        
     }
     
     private func scrollToBottom(indexPath:IndexPath){
-
-        
-
-           DispatchQueue.main.async {
-
-               self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-
-           }
-
-       }
-    
+        DispatchQueue.main.async {
+            self.tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        }
+    }
 }
-
 
 extension QnaContentViewController:UITableViewDataSource{
     
     public func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.dataSource.count
     }
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        var data = viewModel.dataSource[section]
     
-        
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var data = viewModel.dataSource[section]
         var count:Int = 0
         
         if data.isOpen {
             count = 2
-        }
-        else{
+        }else{
             count = 1
         }
-        
-
         return count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let Qcell = tableView.dequeueReusableCell(withIdentifier: "QuestionTableViewCell", for: indexPath) as? QuestionTableViewCell else{
             return UITableViewCell()
         }
@@ -111,20 +95,13 @@ extension QnaContentViewController:UITableViewDataSource{
         Acell.update(model: data[indexPath.section])
         Acell.selectionStyle = .none
         
-        
         // 왜 Row는  인덱스 개념이다 0 부터 시작??
-        
         if indexPath.row == 0 {
             return Qcell
-        }
-        else {
+        }else {
             return Acell
         }
-            
-        
     }
-    
-    
 }
 
 extension QnaContentViewController:UITableViewDelegate{
@@ -149,9 +126,6 @@ extension QnaContentViewController:UITableViewDelegate{
         {
             self.scrollToBottom(indexPath: next)
         }
-        
-        
-        
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
