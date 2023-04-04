@@ -206,6 +206,7 @@ public final class FavoriteViewModel:ViewModelType {
             .do(onNext: { (model) in
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
+                    output.indexPathOfSelectedLikeLists.accept([])
                 }else{
                     output.showToast.accept(model.description)
                 }
