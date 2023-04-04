@@ -111,9 +111,7 @@ extension BeforeSearchContentViewController {
         })
         .do(onNext: {[weak self] _ in
             guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.indicator.stopAnimating()
-            }
+            self.indicator.stopOnMainThread()
             
         })
         .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in

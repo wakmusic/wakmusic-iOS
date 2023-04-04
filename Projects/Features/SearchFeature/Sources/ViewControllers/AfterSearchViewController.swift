@@ -134,9 +134,7 @@ extension AfterSearchViewController {
                 comp.makeView(type: .remix, dataSource: result[3])
             ]
             
-            DispatchQueue.main.async {
-                self.indicator.stopAnimating()
-            }
+            self.indicator.stopOnMainThread()
                 
             self.reloadData()
             
