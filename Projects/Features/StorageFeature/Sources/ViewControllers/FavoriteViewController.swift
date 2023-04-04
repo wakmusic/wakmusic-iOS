@@ -21,7 +21,8 @@ public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
-      
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+
     private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
     var containSongsComponent: ContainSongsComponent!
@@ -88,6 +89,7 @@ extension FavoriteViewController{
                     return
                 }
                 self.refreshControl.endRefreshing()
+                self.activityIndicator.stopOnMainThread()
 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "좋아요 한 곡이 없습니다."
@@ -195,7 +197,8 @@ extension FavoriteViewController{
     private func configureUI() {
         self.tableView.refreshControl = self.refreshControl
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        tableView.backgroundColor = .clear
+        self.tableView.backgroundColor = .clear
+        self.activityIndicator.startAnimating()
     }
 }
 

@@ -21,7 +21,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="03d-DU-8zp">
                                 <rect key="frame" x="0.0" y="107" width="393" height="625"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="gray100"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBN-QP-5x1">
                                 <rect key="frame" x="0.0" y="732" width="393" height="86"/>
@@ -86,11 +86,15 @@
                                     <constraint firstAttribute="trailing" secondItem="3an-5f-9hS" secondAttribute="trailing" id="d2O-Px-ajv"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-g9-afA">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8hx-rA-ZfT"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="8hx-rA-ZfT" firstAttribute="trailing" secondItem="03d-DU-8zp" secondAttribute="trailing" id="5lb-3T-5n2"/>
+                            <constraint firstItem="iTt-g9-afA" firstAttribute="centerY" secondItem="Xbs-eE-E3y" secondAttribute="centerY" id="AJm-4m-utt"/>
                             <constraint firstItem="8hx-rA-ZfT" firstAttribute="trailing" secondItem="wBN-QP-5x1" secondAttribute="trailing" id="E5a-jE-W08"/>
                             <constraint firstItem="8hx-rA-ZfT" firstAttribute="bottom" secondItem="wBN-QP-5x1" secondAttribute="bottom" id="J82-gk-YcI"/>
                             <constraint firstItem="03d-DU-8zp" firstAttribute="leading" secondItem="8hx-rA-ZfT" secondAttribute="leading" id="PIG-0x-c19"/>
@@ -100,10 +104,12 @@
                             <constraint firstItem="w6c-sc-hRc" firstAttribute="top" secondItem="Xbs-eE-E3y" secondAttribute="top" id="fP1-cK-QPd"/>
                             <constraint firstItem="wBN-QP-5x1" firstAttribute="leading" secondItem="8hx-rA-ZfT" secondAttribute="leading" id="oaY-vA-5Cs"/>
                             <constraint firstItem="03d-DU-8zp" firstAttribute="top" secondItem="w6c-sc-hRc" secondAttribute="bottom" id="qtx-fo-LRl"/>
+                            <constraint firstItem="iTt-g9-afA" firstAttribute="centerX" secondItem="Xbs-eE-E3y" secondAttribute="centerX" id="rGu-gm-dos"/>
                             <constraint firstItem="8hx-rA-ZfT" firstAttribute="trailing" secondItem="w6c-sc-hRc" secondAttribute="trailing" id="yif-lK-LEa"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="iTt-g9-afA" id="l3O-5B-SQR"/>
                         <outlet property="closeButton" destination="FM8-gk-UgH" id="jyI-h1-pOv"/>
                         <outlet property="confirmButton" destination="QIk-ZL-4hh" id="wjN-qh-hsO"/>
                         <outlet property="fakeView" destination="03d-DU-8zp" id="6Kb-pS-dK6"/>
@@ -536,20 +542,26 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="VnZ-UO-Ugk">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tyC-GG-XDq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="R7P-Q4-mqC" secondAttribute="bottom" id="9eu-0T-4IQ"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="top" secondItem="tyC-GG-XDq" secondAttribute="top" id="Hat-jm-1L0"/>
+                            <constraint firstItem="VnZ-UO-Ugk" firstAttribute="centerY" secondItem="kt0-1C-Zzo" secondAttribute="centerY" id="Hco-Nq-auH"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="leading" secondItem="tyC-GG-XDq" secondAttribute="leading" id="WjA-D2-Kku"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="top" secondItem="HYw-Pu-AkU" secondAttribute="bottom" id="bUr-4w-ygN"/>
                             <constraint firstItem="HYw-Pu-AkU" firstAttribute="trailing" secondItem="tyC-GG-XDq" secondAttribute="trailing" id="fhF-w5-3b1"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="trailing" secondItem="tyC-GG-XDq" secondAttribute="trailing" id="mlf-6i-6Bx"/>
                             <constraint firstItem="R7P-Q4-mqC" firstAttribute="leading" secondItem="tyC-GG-XDq" secondAttribute="leading" id="t26-q3-n3I"/>
+                            <constraint firstItem="VnZ-UO-Ugk" firstAttribute="centerX" secondItem="kt0-1C-Zzo" secondAttribute="centerX" id="zEz-bu-N67"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="VnZ-UO-Ugk" id="w15-4A-BCm"/>
                         <outlet property="backButton" destination="361-sW-WEJ" id="E02-Or-4Rt"/>
                         <outlet property="completeButton" destination="fYr-wO-HNS" id="vnh-LF-erc"/>
                         <outlet property="editPlayListNameButton" destination="kOT-Da-3GW" id="wzS-XB-CH7"/>

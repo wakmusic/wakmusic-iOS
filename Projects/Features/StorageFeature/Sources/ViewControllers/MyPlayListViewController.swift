@@ -23,6 +23,7 @@ public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     private var refreshControl = UIRefreshControl()
     var multiPurposePopComponent:MultiPurposePopComponent!
@@ -131,7 +132,8 @@ extension MyPlayListViewController{
                     return
                 }
                 self.refreshControl.endRefreshing()
-                
+                self.activityIndicator.stopOnMainThread()
+
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "내 리스트가 없습니다."
                 
@@ -222,6 +224,7 @@ extension MyPlayListViewController{
         let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
         header.delegate = self
         self.tableView.tableHeaderView = header
+        self.activityIndicator.startAnimating()
     }
 }
 

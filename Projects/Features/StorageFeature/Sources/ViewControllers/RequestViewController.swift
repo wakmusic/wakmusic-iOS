@@ -17,16 +17,13 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     
-
     @IBOutlet weak var questionImageview: UIImageView!
     @IBOutlet weak var questionButton: UIButton!
     @IBOutlet weak var questionSuperView: UIView!
     
-    
     @IBOutlet weak var qnaSuperView: UIView!
     @IBOutlet weak var qnaSuperImageview: UIImageView!
     @IBOutlet weak var qnaButton: UIButton!
-    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -42,38 +39,24 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
         let vc = qnaComponent.makeView()
-        
-//        containSongsComponent.makeView(songs: <#T##[String]#>)
-//        
-//        vc.modalPresentationStyle = .overFullScreen
-//        
-//        
-//        self.present(vc, animated: true)
-        
-        
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func moveQuestionAction(_ sender: Any) {
-        
         let vc =  questionComponent.makeView().wrapNavigationController
         vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
         
     }
     
-    
     @IBAction func presswithDrawAction(_ sender: UIButton) {
-        
         let secondConfirmVc = TextPopupViewController.viewController(text: "정말 탈퇴하시겠습니까?", cancelButtonIsHidden: false,completion: {
             // 회원탈퇴 작업
             self.input.pressWithdraw.onNext(())
         })
-        
         let firstConfirmVc = TextPopupViewController.viewController(text: "회원탈퇴 신청을 하시겠습니까?", cancelButtonIsHidden: false,completion: {
             self.showPanModal(content: secondConfirmVc)
         })
-        
         self.showPanModal(content: firstConfirmVc)
     }
     
@@ -101,10 +84,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        
         configureUI()
+        bindRx()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -112,34 +93,26 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
-
     public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent,containSongsComponent:ContainSongsComponent) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent
         viewController.questionComponent = questionComponent
         viewController.containSongsComponent = containSongsComponent
-        
         return viewController
     }
-
 }
 
 extension RequestViewController{
     
     private func configureUI(){
-        
-        
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-        
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
         let buttons:[UIButton] = [self.questionButton,self.qnaButton]
         let superViews:[UIView] = [self.questionSuperView,self.qnaSuperView]
         let imageViews:[UIImageView] = [self.questionImageview,self.qnaSuperImageview]
         for i in 0...1 {
-            
             var title = ""
             switch i {
             case 0:
@@ -155,32 +128,22 @@ extension RequestViewController{
             var attr:NSAttributedString = NSAttributedString(string: title, attributes: [
                 NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color])
-            
             buttons[i].setAttributedTitle(attr, for: .normal)
-            
             superViews[i].backgroundColor = .white.withAlphaComponent(0.4)
             superViews[i].layer.borderWidth = 1
             superViews[i].layer.cornerRadius = 12
             superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-            
-            
-            
-
         }
         
         dotLabel.layer.cornerRadius = 2
         dotLabel.clipsToBounds = true
         descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         
-        
         let serviceAttributedString = NSMutableAttributedString.init(string: "서비스 이용약관")
-        
         serviceAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color], range: NSRange(location: 0, length: serviceAttributedString.string.count))
         
-        
         let privacyAttributedString = NSMutableAttributedString.init(string: "개인정보처리방침")
-        
         privacyAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                                                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color], range: NSRange(location: 0, length: privacyAttributedString.string.count))
         
@@ -189,35 +152,21 @@ extension RequestViewController{
         privacyButton.layer.borderWidth = 1
         privacyButton.setAttributedTitle(privacyAttributedString, for: .normal)
         
-        
         serviceButton.layer.cornerRadius = 8
         serviceButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
         serviceButton.layer.borderWidth = 1
         serviceButton.setAttributedTitle(serviceAttributedString, for: .normal)
         
-        
-        
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
-        
         let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
-        
         withDrawAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
                                                .foregroundColor: DesignSystemAsset.GrayColor.gray400.color], range: NSRange(location: 0, length: withDrawAttributedString.string.count))
-        
         withdrawButton.layer.borderWidth = 1
         withdrawButton.layer.cornerRadius = 4
         withdrawButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
         withdrawButton.setAttributedTitle(withDrawAttributedString, for: .normal)
-        
-        
-       
-        fakeViewHeight.constant = calculateFakeViewHeight()
-        self.view.layoutIfNeeded()
-        bindRx()
-        
-        
     }
     
     private func bindRx(){
@@ -239,26 +188,5 @@ extension RequestViewController{
             self.showPanModal(content: withdrawVc)
         })
         .disposed(by: disposeBag)
-    }
-    
-    private func calculateFakeViewHeight() -> CGFloat{
-        let window: UIWindow? = UIApplication.shared.windows.first
-        let statusBarHeight:CGFloat = window?.safeAreaInsets.top ?? 0
-        let safeAreaBottomHeight = window?.safeAreaInsets.bottom ?? 0
-        let navigationBarHeight:CGFloat =  48
-        let gapBtwNaviAndStack:CGFloat = 20
-        let threeButtonHeight:CGFloat = 60 * 3
-        let gapButtons:CGFloat = 8 * 2
-        let gapBtwLabelAndLastButton:CGFloat = 20
-        let textHeight = "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈거다)라는 모토를 가슴에 새기고 일하고 있습니다.".heightConstraintAt(width: APP_WIDTH() - 56, font:DesignSystemFontFamily.Pretendard.light.font(size: 12))
-        let bottomButtonHeight:CGFloat = 44
-        let gapBtwBattomButtonsAndVersionLabel:CGFloat = 20
-        let versionLabelHeight:CGFloat = 18
-        let mainTabBarHeight:CGFloat = 56
-
-        let res:CGFloat = 40
-        //(APP_HEIGHT() - (safeAreaBottomHeight + statusBarHeight + navigationBarHeight + gapBtwNaviAndStack + threeButtonHeight + gapButtons + gapBtwLabelAndLastButton + textHeight + bottomButtonHeight + gapBtwBattomButtonsAndVersionLabel + versionLabelHeight + mainTabBarHeight  +  20))
-        
-        return res
     }
 }
