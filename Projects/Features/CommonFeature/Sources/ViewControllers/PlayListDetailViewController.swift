@@ -262,32 +262,13 @@ extension PlayListDetailViewController{
                 }
                 let type = self.viewModel.type
                 
-                self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: {[weak self]  _ in
-                    
-                    guard let self = self else{
-                        return
-                    }
-                    
-                    self.playListImage.stopSkeletonAnimation()
-                    self.playListImage.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: { _ in
                 })
                     
                 DEBUG_LOG(model)
                 
                 self.playListCountLabel.text = model.songCount
                 self.playListNameLabel.text = model.title
-                
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
-                    self.playListCountLabel.stopSkeletonAnimation()
-                    self.playListCountLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
-
-
-                    self.playListNameLabel.stopSkeletonAnimation()
-                    self.playListNameLabel.hideSkeleton(reloadDataAfter: true,transition: .crossDissolve(0.5))
-
-                    self.playListCountLabel.text = model.songCount
-                    self.playListNameLabel.text = model.title
-                }
                 self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
                 
             }).disposed(by: disposeBag)
