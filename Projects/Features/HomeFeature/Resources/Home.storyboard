@@ -417,6 +417,9 @@
                                     <constraint firstItem="IJw-6l-kM9" firstAttribute="top" secondItem="QCv-HV-K1f" secondAttribute="top" id="t7Q-Q6-c5g"/>
                                 </constraints>
                             </scrollView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="6rt-Zi-OVM">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -426,13 +429,16 @@
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="GeS-Kz-poo"/>
                             <constraint firstAttribute="bottom" secondItem="QCv-HV-K1f" secondAttribute="bottom" id="Kin-vo-tHD"/>
                             <constraint firstAttribute="trailing" secondItem="sV4-yd-6Sv" secondAttribute="trailing" id="UpG-i7-Cma"/>
+                            <constraint firstItem="6rt-Zi-OVM" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Wal-4d-TSw"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cjb-J0-wCq"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="dgH-9b-02b"/>
+                            <constraint firstItem="6rt-Zi-OVM" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="dzo-be-wdN"/>
                         </constraints>
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="6rt-Zi-OVM" id="OZY-nW-FsE"/>
                         <outlet property="blurImageView" destination="dTj-gF-VNr" id="Mah-Re-fim"/>
                         <outlet property="chartAllListenButton" destination="HJb-5L-vKL" id="wb0-L2-kU8"/>
                         <outlet property="chartArrowImageView" destination="yxF-fR-vLG" id="vL4-Ey-G3B"/>

@@ -14,6 +14,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     //왁뮤차트 TOP100
     @IBOutlet weak var topCircleImageView: UIImageView!
@@ -119,6 +120,7 @@ extension HomeViewController {
                 self.latestSongIseButton.isEnabled = false
                 self.latestSongGomButton.isSelected = true
             }
+            self.activityIndicator.startAnimating()
         })
         .map { (currentSelectedType, _) -> NewSongGroupType in
             return currentSelectedType
@@ -182,6 +184,9 @@ extension HomeViewController {
             .skip(1)
             .filter { $0.count >= 5 }
             .map{ Array($0[0..<5]) }
+            .do(onNext: { [weak self] _ in
+                self?.activityIndicator.stopOnMainThread()
+            })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeChartCell", for: indexPath) as? HomeChartCell else{
@@ -196,6 +201,7 @@ extension HomeViewController {
             .do(onNext: { [weak self] _ in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
+                self?.activityIndicator.stopOnMainThread()
                 self?.latestSongAllButton.isEnabled = true
                 self?.latestSongWwgButton.isEnabled = true
                 self?.latestSongIseButton.isEnabled = true
@@ -248,6 +254,7 @@ extension HomeViewController {
     
     private func configureUI() {
         
+        activityIndicator.startAnimating()
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         
