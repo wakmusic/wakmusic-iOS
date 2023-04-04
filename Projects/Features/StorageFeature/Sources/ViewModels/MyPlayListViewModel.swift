@@ -209,6 +209,7 @@ public final class MyPlayListViewModel:ViewModelType {
             .do(onNext: { (model) in
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
+                    output.indexPathOfSelectedPlayLists.accept([])
                 }else{
                     output.showToast.accept(model.description)
                 }
