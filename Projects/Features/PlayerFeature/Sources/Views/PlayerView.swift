@@ -193,6 +193,7 @@ public final class PlayerView: UIView {
 
 private extension PlayerView {
     private func configureUI() {
+        self.backgroundColor = .white
         self.updateSpacing()
         self.configureSubViews()
         self.configureBackground()

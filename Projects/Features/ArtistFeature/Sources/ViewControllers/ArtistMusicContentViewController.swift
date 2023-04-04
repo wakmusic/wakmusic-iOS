@@ -86,9 +86,7 @@ extension ArtistMusicContentViewController {
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
             .do(onNext: { [weak self] (dataSource, songs) in
                 guard let `self` = self else { return }
-                DispatchQueue.main.async {
-                    self.activityIncidator.stopAnimating()
-                }
+                self.activityIncidator.stopOnMainThread()
                 
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)

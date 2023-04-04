@@ -50,7 +50,7 @@ final public class QnaViewModel:ViewModelType {
         
    
         
-        let zip1 = fetchQnaCategoriesUseCase.execute()
+        let zip1 = fetchQnaCategoriesUseCase.execute().catchAndReturn([])
             .filter({!$0.isEmpty})
             .map({
                 var result:[QnaCategoryEntity] = [QnaCategoryEntity(category: "전체    ")]

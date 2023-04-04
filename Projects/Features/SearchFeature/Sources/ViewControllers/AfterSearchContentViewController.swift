@@ -73,6 +73,8 @@ extension AfterSearchContentViewController{
     {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+//        self.indicator.startAnimating()
+//        self.indicator.hidesWhenStopped = true
         bindRx()
         bindRxEvent()
     }
@@ -88,11 +90,11 @@ extension AfterSearchContentViewController{
         output.dataSource
             .do(onNext: { [weak self] model in
                 
-        
-                
+         
                 guard let self = self else {
                     return
                 }
+                
                 
                 self.tableView.isHidden = false // 검색 완료 시 보여줌
                 

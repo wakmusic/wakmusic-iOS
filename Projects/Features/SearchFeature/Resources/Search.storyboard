@@ -32,20 +32,26 @@
                                     <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="c3W-Eb-RdW">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="n2C-C8-98k"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
+                            <constraint firstItem="c3W-Eb-RdW" firstAttribute="centerX" secondItem="Mad-wb-Q4D" secondAttribute="centerX" id="9Oq-Y1-UoD"/>
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="5nx-1t-MMz" secondAttribute="trailing" id="9pS-Rx-amP"/>
                             <constraint firstItem="e54-rK-aGI" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="Dbx-SV-Dap"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="top" secondItem="e54-rK-aGI" secondAttribute="bottom" id="DzQ-zd-5S7"/>
                             <constraint firstItem="e54-rK-aGI" firstAttribute="top" secondItem="n2C-C8-98k" secondAttribute="top" id="TrZ-MK-hLn"/>
                             <constraint firstItem="n2C-C8-98k" firstAttribute="trailing" secondItem="e54-rK-aGI" secondAttribute="trailing" id="UXQ-CF-bOV"/>
+                            <constraint firstItem="c3W-Eb-RdW" firstAttribute="centerY" secondItem="Mad-wb-Q4D" secondAttribute="centerY" id="dWy-lR-izX"/>
                             <constraint firstItem="5nx-1t-MMz" firstAttribute="leading" secondItem="n2C-C8-98k" secondAttribute="leading" id="xnX-8T-irg"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="fakeView" destination="e54-rK-aGI" id="dwV-Tl-hip"/>
+                        <outlet property="indicator" destination="c3W-Eb-RdW" id="luj-Tw-bWI"/>
                         <outlet property="tabBarView" destination="5nx-1t-MMz" id="sqI-Rv-Ui1"/>
                     </connections>
                 </viewController>
@@ -237,17 +243,23 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mZK-mb-waX">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="slZ-f3-dc4"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
+                            <constraint firstItem="mZK-mb-waX" firstAttribute="centerY" secondItem="3xk-U4-Bip" secondAttribute="centerY" id="0QG-ah-Qiq"/>
                             <constraint firstItem="slZ-f3-dc4" firstAttribute="trailing" secondItem="uat-un-eu2" secondAttribute="trailing" id="BRG-se-8Zk"/>
+                            <constraint firstItem="mZK-mb-waX" firstAttribute="centerX" secondItem="3xk-U4-Bip" secondAttribute="centerX" id="ITn-N5-bYr"/>
                             <constraint firstItem="uat-un-eu2" firstAttribute="top" secondItem="slZ-f3-dc4" secondAttribute="top" id="Ije-1m-uY5"/>
                             <constraint firstItem="slZ-f3-dc4" firstAttribute="bottom" secondItem="uat-un-eu2" secondAttribute="bottom" id="JEv-QJ-cZM"/>
                             <constraint firstItem="uat-un-eu2" firstAttribute="leading" secondItem="slZ-f3-dc4" secondAttribute="leading" id="y4u-uW-Gxy"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="indicator" destination="mZK-mb-waX" id="HIF-HK-lst"/>
                         <outlet property="tableView" destination="uat-un-eu2" id="o7O-aM-hpQ"/>
                         <outlet property="view" destination="3xk-U4-Bip" id="tP8-Gi-Vk9"/>
                     </connections>

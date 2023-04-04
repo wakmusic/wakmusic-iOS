@@ -31,6 +31,7 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     let disposeBag = DisposeBag()
     weak var delegate:BeforeSearchContentViewDelegate?
@@ -77,6 +78,8 @@ extension BeforeSearchContentViewController {
     private func configureUI() {
       
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.indicator.startAnimating()
+        self.indicator.hidesWhenStopped = true
     }
     
     
@@ -105,7 +108,13 @@ extension BeforeSearchContentViewController {
             {
                 return item
             }
-        }).bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
+        })
+        .do(onNext: {[weak self] _ in
+            guard let self = self else { return }
+            self.indicator.stopOnMainThread()
+            
+        })
+        .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "RecentRecordTableViewCell") as? RecentRecordTableViewCell  else
             {
                 return RecentRecordTableViewCell()
