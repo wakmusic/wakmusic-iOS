@@ -20,6 +20,12 @@ public final class AppComponent: BootstrapComponent {
             RootComponent(parent: self)
         }
     }
+    
+    var permissionComponent: PermissionComponent {
+        shared {
+            PermissionComponent(parent: self)
+        }
+    }
 }
 
 // MARK: - Tabbar

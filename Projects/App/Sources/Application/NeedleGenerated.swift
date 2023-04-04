@@ -442,6 +442,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
         return appComponent.mainContainerComponent
     }
+    var permissionComponent: PermissionComponent {
+        return appComponent.permissionComponent
+    }
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
@@ -453,6 +456,17 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 /// ^->AppComponent->RootComponent
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class PermissionDependency517ed7598d8c08817d14Provider: PermissionDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->PermissionComponent
+private func factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PermissionDependency517ed7598d8c08817d14Provider()
 }
 private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
     var fetchTokenUseCase: any FetchTokenUseCase {
@@ -886,7 +900,13 @@ extension WakMusicFeedbackComponent: Registration {
 extension RootComponent: Registration {
     public func registerItems() {
         keyPathToName[\RootDependency.mainContainerComponent] = "mainContainerComponent-MainContainerComponent"
+        keyPathToName[\RootDependency.permissionComponent] = "permissionComponent-PermissionComponent"
         keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+    }
+}
+extension PermissionComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension SignInComponent: Registration {
@@ -999,6 +1019,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)

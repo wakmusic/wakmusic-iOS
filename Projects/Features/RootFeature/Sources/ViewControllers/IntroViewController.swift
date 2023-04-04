@@ -11,25 +11,27 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
     @IBOutlet weak var logoContentView: UIView!
 
-    var mainContainerComponent: MainContainerComponent?
+    var mainContainerComponent: MainContainerComponent!
+    var permissionComponent: PermissionComponent!
+
     private var viewModel: IntroViewModel!
-    
     lazy var input = IntroViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         bind()
     }
     
     public static func viewController(
-        component: MainContainerComponent,
+        mainContainerComponent: MainContainerComponent,
+        permissionComponent: PermissionComponent,
         viewModel: IntroViewModel
     ) -> IntroViewController {
         let viewController = IntroViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
-        viewController.mainContainerComponent = component
+        viewController.mainContainerComponent = mainContainerComponent
+        viewController.permissionComponent = permissionComponent
         viewController.viewModel = viewModel
         return viewController
     }
@@ -38,10 +40,31 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 extension IntroViewController {
     
     private func bind() {
-                
-        output.showAlert
+        
+        let combineObservable = Observable.combineLatest(
+            output.showAlert,
+            Utility.PreferenceManager.$appPermissionChecked
+        ) { (message, permission) -> (String, Bool?) in
+            return (message, permission)
+        }
+        
+        combineObservable
+            .do(onNext: { [weak self] (_, permission) in
+                guard let self = self else { return }
+                let show: Bool = !(permission ?? false)
+                guard show else { return }
+                let permission = self.permissionComponent.makeView()
+                permission.modalTransitionStyle = .crossDissolve
+                permission.modalPresentationStyle = .overFullScreen
+                self.present(permission, animated: true)
+            })
+            .filter { return ($0.1 ?? false) == true }
+            .do(onNext: { [weak self] (_, _) in
+                guard let self = self else { return }
+                self.lottiePlay()
+            })
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (message) in
+            .subscribe(onNext: { [weak self] (message, _) in
                 guard let `self` = self else { return }
                 if message.isEmpty {
                     self.showTabBar()
@@ -68,7 +91,7 @@ extension IntroViewController {
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
-    private func configureUI() {
+    private func lottiePlay() {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
