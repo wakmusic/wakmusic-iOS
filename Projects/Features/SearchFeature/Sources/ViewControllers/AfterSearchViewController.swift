@@ -25,6 +25,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     
 
@@ -71,7 +72,10 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     
     private func configureUI() {
+        
         self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        
+        self.indicator.hidesWhenStopped = true
         self.dataSource = self //dateSource
         let bar = TMBar.ButtonBar()
         
@@ -129,6 +133,10 @@ extension AfterSearchViewController {
                 comp.makeView(type: .artist, dataSource: result[2]),
                 comp.makeView(type: .remix, dataSource: result[3])
             ]
+            
+            DispatchQueue.main.async {
+                self.indicator.stopAnimating()
+            }
                 
             self.reloadData()
             
@@ -139,10 +147,12 @@ extension AfterSearchViewController {
         
         output.isFetchStart
             .subscribe(onNext: { [weak self] _ in
-            
+          
             guard let self = self else{
                 return
             }
+            
+                self.indicator.startAnimating()
                 
             guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
                 return

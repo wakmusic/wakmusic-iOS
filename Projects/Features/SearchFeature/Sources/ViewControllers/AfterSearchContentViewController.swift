@@ -27,7 +27,6 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
     //갯수
     //배열 
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
     var viewModel:AfterSearchContentViewModel!
     lazy var input = AfterSearchContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -74,7 +73,8 @@ extension AfterSearchContentViewController{
     {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        self.indicator.startAnimating()
+//        self.indicator.startAnimating()
+//        self.indicator.hidesWhenStopped = true
         bindRx()
         bindRxEvent()
     }
@@ -95,9 +95,6 @@ extension AfterSearchContentViewController{
                     return
                 }
                 
-                DispatchQueue.main.async {
-                    self.indicator.stopAnimating()
-                }
                 
                 self.tableView.isHidden = false // 검색 완료 시 보여줌
                 
