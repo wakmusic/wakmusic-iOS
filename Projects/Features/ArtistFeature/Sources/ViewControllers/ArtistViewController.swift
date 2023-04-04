@@ -53,9 +53,7 @@ extension ArtistViewController {
             .skip(1)
             .do(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                }
+                self.activityIndicator.stopOnMainThread()
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)

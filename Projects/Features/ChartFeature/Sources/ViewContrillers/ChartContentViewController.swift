@@ -53,9 +53,7 @@ extension ChartContentViewController {
             .skip(1)
             .do(onNext: { [weak self] _ in
                 guard let `self` = self else { return }
-                DispatchQueue.main.async {
-                    self.activityIncidator.stopAnimating()
-                }
+                self.activityIncidator.stopOnMainThread()
             })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
