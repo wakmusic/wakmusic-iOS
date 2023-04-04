@@ -78,6 +78,7 @@ extension PlayerViewModel {
                 if status == 200 {
                     output.likeState.send(false)
                     output.likeCountText.send(likeCountText)
+                    NotificationCenter.default.post(name: .likeListRefresh, object: nil)
                 } else {
                     output.showToastMessage.send(description)
                 }
@@ -105,6 +106,7 @@ extension PlayerViewModel {
                 if status == 200 {
                     output.likeState.send(true)
                     output.likeCountText.send(likeCountText)
+                    NotificationCenter.default.post(name: .likeListRefresh, object: nil)
                 } else {
                     output.showToastMessage.send(description)
                 }
