@@ -138,7 +138,7 @@ extension MyPlayListViewController{
                 warningView.text = "내 리스트가 없습니다."
                 
                 let items = model.first?.items ?? []
-                self.tableView.tableFooterView = items.isEmpty ?  warningView : nil
+                self.tableView.tableFooterView = items.isEmpty ?  warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
             })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
@@ -224,6 +224,8 @@ extension MyPlayListViewController{
         let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
         header.delegate = self
         self.tableView.tableHeaderView = header
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         self.activityIndicator.startAnimating()
     }
 }
