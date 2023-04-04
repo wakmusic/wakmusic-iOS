@@ -19,7 +19,7 @@ final class MiniPlayerView: UIView {
     }
     
     private lazy var contentView: UIView = UIView().then {
-        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
     
     internal lazy var extendButton = UIButton().then {
