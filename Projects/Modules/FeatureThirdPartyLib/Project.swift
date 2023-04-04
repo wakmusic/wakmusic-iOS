@@ -6,9 +6,7 @@ let project = Project.makeModule(
     name: "FeatureThirdPartyLib",
     product: .framework,
     packages: [
-        .YouTubePlayerKit,
-        .HPParallaxHeader,
-        .SkeletonView
+        .YouTubePlayerKit
     ],
     dependencies: [
         .SPM.Needle,
@@ -26,8 +24,6 @@ let project = Project.makeModule(
         .SPM.RxKeyboard,
         .SPM.SwiftEntryKit,
         .SPM.CryptoSwift,
-        .SPM.YouTubePlayerKit,
-        .SPM.HPParallaxHeader,
-        .SPM.SkeletonView
+        .SPM.YouTubePlayerKit
     ]
 )
