@@ -78,8 +78,6 @@ extension BeforeSearchContentViewController {
     private func configureUI() {
       
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         self.indicator.startAnimating()
         self.indicator.hidesWhenStopped = true
     }
