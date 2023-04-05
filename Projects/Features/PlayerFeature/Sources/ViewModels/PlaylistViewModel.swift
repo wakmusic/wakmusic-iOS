@@ -143,6 +143,22 @@ final class PlaylistViewModel: ViewModelType {
             }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
+        
+        input.removeSongsButtonDidTapEvent
+            .withLatestFrom(output.songEntityOfSelectedSongs){ $1 }
+            .withLatestFrom(output.dataSource) { ($0,$1)}
+            .map({ (ids:[SongEntity],dataSource:[PlayListDetailSectionModel])  -> [PlayListDetailSectionModel] in
+                let remainDataSource = dataSource.first?.items.filter({ (song:SongEntity) in
+                    return !ids.contains(song)
+                })
+                
+                output.songEntityOfSelectedSongs.accept([])
+                output.indexOfSelectedSongs.accept([])
+                
+                return [PlayListDetailSectionModel(model: 0, items: remainDataSource ?? [])]
+            })
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
     }
     
     private func bindTableView(output: Output) {
