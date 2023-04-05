@@ -165,11 +165,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
         Task {
-            let accessToken = try? JSONDecoder().decode(
-                GoogleGetTokenEntity.self,
-                from: try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
-            )
-            googleToken.accept(accessToken?.accessToken ?? "")
+            let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
+            googleToken.accept(id)
         }
     }
 }

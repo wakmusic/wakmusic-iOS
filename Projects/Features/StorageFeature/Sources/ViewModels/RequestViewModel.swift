@@ -54,21 +54,12 @@ final public class RequestViewModel:ViewModelType {
                         }
                     }.asObservable()
             }
-            .do(onNext: { (model) in
-                
+            .do(onNext: { _ in
                 let platform = Utility.PreferenceManager.userInfo?.platform
                 
                 if platform == "naver" {
-                    
                     self.naverLoginInstance?.requestDeleteToken()
                 }
-                else if platform == "apple" {
-                    
-                }
-                else{
-                    
-                }
-                
                 
                 let keychain = KeychainImpl()
                 keychain.delete(type: .accessToken)
