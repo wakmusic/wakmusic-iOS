@@ -59,6 +59,8 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.contentMode = .scaleAspectFit
     }
     
+    internal lazy var superButton = UIButton()
+    
     internal var isPlaying: Bool = false {
         didSet {
             updateButtonHidden()
@@ -99,6 +101,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.artistLabel)
         self.contentView.addSubview(self.playImageView)
         self.contentView.addSubview(self.waveStreamAnimationView)
+        self.contentView.addSubview(self.superButton)
         
         let height = 40
         let width = height * 16 / 9
@@ -132,6 +135,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.centerY.equalTo(contentView.snp.centerY)
             $0.right.equalTo(contentView.snp.right).offset(-20)
         }
+        
+        superButton.snp.makeConstraints {
+            $0.left.top.bottom.equalToSuperview()
+            $0.right.equalTo(playImageView.snp.left)
+        }
     }
     
 }
@@ -148,6 +156,7 @@ extension PlaylistTableViewCell {
         self.artistLabel.text = song.artist
         
         self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        self.superButton.isHidden = !isEditing
     }
     
     private func updateButtonHidden() {

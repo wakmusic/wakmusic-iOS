@@ -28,6 +28,7 @@ final class PlaylistViewModel: ViewModelType {
         let playButtonDidTapEvent: AnyPublisher<Void, Never>
         let nextButtonDidTapEvent: AnyPublisher<Void, Never>
         let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
+        let songTapped: PublishSubject<Int> = PublishSubject()
         let allSongSelected: PublishSubject<Bool> = PublishSubject()
         let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
         
@@ -35,7 +36,7 @@ final class PlaylistViewModel: ViewModelType {
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
         var willClosePlaylist = PassthroughSubject<Bool, Never>()
-        var editState = PassthroughSubject<Bool, Never>()
+        var editState = CurrentValueSubject<Bool, Never>(false)
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)

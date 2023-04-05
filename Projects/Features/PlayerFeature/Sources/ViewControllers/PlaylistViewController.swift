@@ -17,6 +17,7 @@ import CommonFeature
 import RxSwift
 import RxRelay
 import RxDataSources
+import DomainModule
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
@@ -66,6 +67,7 @@ extension PlaylistViewController {
             else { return UITableViewCell() }
             
             cell.setContent(song: model)
+            cell.selectionStyle = .none
             cell.isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
             cell.isAnimating = self.playState.state == .playing
             return cell
@@ -130,6 +132,16 @@ private extension PlaylistViewController {
             })
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
+        
+                
+                playlistView.playlistTableView.rx.itemSelected
+                .withLatestFrom(output.dataSource) { ($0, $1) }
+                .filter { _ in output.editState.value == false }
+                .subscribe(onNext: { (indexPath, dataSource) in
+                    let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
+                    PlayState.shared.loadAndAppendSongsToPlaylist([song])
+                })
+                .disposed(by: disposeBag)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
