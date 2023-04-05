@@ -60,16 +60,18 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
 }
 
 extension PlaylistViewController {
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
+    private func createDatasources(output: PlaylistViewModel.Output) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (_ , tableView, indexPath, model) -> UITableViewCell in
             guard let self else { return UITableViewCell() }
             guard let cell = tableView.dequeueReusableCell(withIdentifier:  PlaylistTableViewCell.identifier, for: IndexPath(row: indexPath.row, section: 0)) as? PlaylistTableViewCell
             else { return UITableViewCell() }
             
-            cell.setContent(song: model)
+            cell.delegate = self
+            cell.setContent(song: model, output.editState.value, index: indexPath.row)
             cell.selectionStyle = .none
             cell.isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
             cell.isAnimating = self.playState.state == .playing
+            
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in
@@ -112,7 +114,7 @@ private extension PlaylistViewController {
             self.playlistView.editButton.setTitle(isEditing ? "완료" : "편집", for: .normal)
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
-            self.playlistView.playlistTableView.visibleCells.forEach { $0.isEditing = isEditing }
+            self.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
         
         output.currentSongIndex.sink { [weak self] _ in
@@ -130,7 +132,7 @@ private extension PlaylistViewController {
                 let items = model.first?.items ?? []
                 
             })
-            .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources()))
+            .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
         
                 
@@ -296,6 +298,14 @@ extension PlaylistViewController: UITableViewDelegate {
         }
         return proposedDestinationIndexPath
     }
+    
+}
+
+extension PlaylistViewController: PlayListCellDelegate {
+    func buttonTapped(index: Int) {
+        print(index)
+    }
+    
     
 }
     
