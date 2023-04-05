@@ -29,8 +29,8 @@ final class PlaylistViewModel: ViewModelType {
         let nextButtonDidTapEvent: AnyPublisher<Void, Never>
         let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistTableviewCellDidTapEvent: Observable<Int>
-        let allSongSelected: PublishSubject<Bool> = PublishSubject()
-        let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
+        let selectAllSongsButtonDidTapEvent: Observable<Bool>
+        let removeSongsButtonDidTapEvent: Observable<Void>
         
     }
     struct Output {

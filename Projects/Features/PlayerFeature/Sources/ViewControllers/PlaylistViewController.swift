@@ -27,6 +27,8 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     var disposeBag = DisposeBag()
     
     var tappedCellIndex = PublishSubject<Int>()
+    var isSelectedAllSongs = PublishSubject<Bool>()
+    var tappedRemoveSongs = PublishSubject<Void>()
     
     private var containSongsComponent: ContainSongsComponent!
     
@@ -95,7 +97,9 @@ private extension PlaylistViewController {
             playButtonDidTapEvent: playlistView.playButton.tapPublisher,
             nextButtonDidTapEvent: playlistView.nextButton.tapPublisher,
             shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
-            playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable()
+            playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable(),
+            selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
+            removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable()
         )
         let output = self.viewModel.transform(from: input)
         
