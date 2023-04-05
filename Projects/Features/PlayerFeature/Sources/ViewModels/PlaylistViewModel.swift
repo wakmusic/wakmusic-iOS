@@ -164,6 +164,27 @@ final class PlaylistViewModel: ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+        
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (indexOfSelectedSongs, dataSource) in
+                let playlist = dataSource.first?.items ?? []
+                
+                return indexOfSelectedSongs.map {
+                        SongEntity(
+                        id: playlist[$0].id,
+                        title: playlist[$0].title,
+                        artist: playlist[$0].artist,
+                        remix: playlist[$0].remix,
+                        reaction: playlist[$0].reaction,
+                        views: playlist[$0].views,
+                        last: playlist[$0].last,
+                        date: playlist[$0].date
+                    )
+                }
+            }
+            .bind(to: output.songEntityOfSelectedSongs)
+            .disposed(by: disposeBag)
 
     }
     
