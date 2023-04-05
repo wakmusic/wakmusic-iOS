@@ -245,27 +245,7 @@ extension PlaylistViewController {
 }
 
 extension PlaylistViewController: UITableViewDelegate {
-//    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return playState.playList.count
-//    }
-//
-//    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell
-//        else { return UITableViewCell() }
-//        cell.selectionStyle = .none
-//        let songs = playState.playList.list
-//        cell.setContent(song: songs[indexPath.row])
-//        cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
-//        cell.isAnimating = playState.state == .playing
-//        return cell
-//    }
-//
-//    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if playState.playList.currentPlayIndex != indexPath.row {
-//            playState.loadInPlaylist(at: indexPath.row) // 현재 재생중인 곡 이외의 Cell을 선택 시 해당 곡이 재생됩니다.
-//        }
-//    }
-    
+
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
     }
@@ -301,9 +281,9 @@ extension PlaylistViewController: UITableViewDelegate {
     
 }
 
-extension PlaylistViewController: PlayListCellDelegate {
-    func buttonTapped(index: Int) {
-        print(index)
+extension PlaylistViewController: PlaylistTableViewCellDelegate {
+    func superButtonTapped(index: Int) {
+        
     }
     
     

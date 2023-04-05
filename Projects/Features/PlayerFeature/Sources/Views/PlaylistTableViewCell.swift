@@ -15,8 +15,8 @@ import Lottie
 import Kingfisher
 import Utility
 
-internal protocol PlayListCellDelegate: AnyObject {
-    func buttonTapped(index: Int)
+internal protocol PlaylistTableViewCellDelegate: AnyObject {
+    func superButtonTapped(index: Int)
 }
 
 internal class PlaylistTableViewCell: UITableViewCell {
@@ -67,7 +67,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.addTarget(self, action: #selector(superButtonSelectedAction), for: .touchUpInside)
     }
     
-    internal weak var delegate: PlayListCellDelegate?
+    internal weak var delegate: PlaylistTableViewCellDelegate?
     
     internal var model: (index: Int, song: SongEntity?) = (0, nil)
     
@@ -166,7 +166,7 @@ extension PlaylistTableViewCell {
     }
     
     @objc func superButtonSelectedAction() {
-        delegate?.buttonTapped(index: model.index)
+        delegate?.superButtonTapped(index: model.index)
     }
     
     private func updateButtonHidden() {
