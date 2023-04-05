@@ -123,18 +123,24 @@ final class PlaylistViewModel: ViewModelType {
         }.store(in: &subscription)
         
         input.playlistTableviewCellDidTapEvent
-            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
-                if selectedSongs.contains(index) {
-                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (tappedIndex, selectedSongs) -> [Int] in
+                if let indexToRemove = selectedSongs.firstIndex(of: tappedIndex) {
                     var newSelectedSongs = selectedSongs
-                    newSelectedSongs.remove(at: removeTargetIndex)
+                    newSelectedSongs.remove(at: indexToRemove)
                     return newSelectedSongs
-                    
-                }else{
-                    return selectedSongs + [index]
+                } else {
+                    return selectedSongs + [tappedIndex]
                 }
             })
             .map { $0.sorted { $0 < $1 } }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        input.selectAllSongsButtonDidTapEvent
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (flag, dataSource) -> [Int] in
+                return flag ? Array(0..<dataSource.first!.items.count) : []
+            }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
     }
@@ -142,6 +148,22 @@ final class PlaylistViewModel: ViewModelType {
     private func bindTableView(output: Output) {
         // 테이블뷰 -> 뷰모델 dataSource  < --- 동기화 --- > PlayState.playlist.list
         output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
+        
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (selectedSongs, dataSource) in
+                let playlist = dataSource.first?.items ?? []
+                
+                let items = playlist.enumerated().map { (index, item) -> SongEntity in
+                    var newItem = item
+                    newItem.isSelected = selectedSongs.contains(index)
+                    return newItem
+                }
+                
+                return [PlayListDetailSectionModel(model: 0, items: items)]
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
 
     }
     
