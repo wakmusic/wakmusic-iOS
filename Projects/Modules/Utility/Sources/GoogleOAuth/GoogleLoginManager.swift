@@ -27,6 +27,7 @@ public class GoogleLoginManager {
     // MARK: - 변수 선언
     private let googleURL = "https://accounts.google.com/o/oauth2/v2/auth"
     private let accessTokenGoogleURL = "https://oauth2.googleapis.com"
+    private let getProfileURL =  "https://www.googleapis.com/oauth2/v1/userinfo"
     private let googleClientID = "715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf.apps.googleusercontent.com"
     private let googleSecretKey = "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"
     private let scope = "profile"
@@ -48,13 +49,14 @@ public class GoogleLoginManager {
         let codeChallengeMethod = URLQueryItem(name: "code_challenge_method", value: "S256")
         
         components?.queryItems = [scope, responseType, codeChallenge, redirectURI, clientID, codeChallengeMethod]
+
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
             print(url)
             UIApplication.shared.open(url)
         }
     }
 
-    // MARK: - URL 뒤에 스코프로 온 Token catch
+    // MARK: - URL 뒤의 Token catch
     public func getGoogleToken(_ url: URL) {
         let components = URLComponents(string: "\(url)")
         let items = components?.queryItems ?? []
@@ -62,7 +64,7 @@ public class GoogleLoginManager {
     }
 
     // MARK: - Google Oauth 서버로 access_token get하기
-    public func getGoogleOAuthToken(_ code: String) async throws -> Data {
+    public func getGoogleOAuthToken(_ code: String) async throws -> String {
         let parameters: Parameters = [
             "client_id": googleClientID,
             "code": code,
@@ -80,10 +82,55 @@ public class GoogleLoginManager {
             .responseData { response in
                 switch response.result {
                 case .success(let data):
-                    continuation.resume(returning: data)
+                    let accessToken = try? JSONDecoder().decode(
+                        GoogleGetTokenEntity.self,
+                        from: data
+                    )
+
+                    Task {
+                        continuation.resume(
+                            returning: try await self
+                                .getGoogleUserInfo(accessToken?.accessToken ?? "")
+                        )
+                    }
+
                 case .failure(let error):
                     DEBUG_LOG(error)
                     continuation.resume(throwing: WMGoogleError.internalError)
+
+                }
+            }
+        }
+    }
+
+    // MARK: - Google한테 유저 정보 받아오기
+    func getGoogleUserInfo(_ accessToken: String) async throws -> String {
+        let parameters: Parameters = [
+            "alt": "json"
+        ]
+        let headers: HTTPHeaders = [
+            .authorization(bearerToken: accessToken)
+        ]
+
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(
+                getProfileURL,
+                method: .get,
+                parameters: parameters,
+                headers: headers
+            )
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    let id = try? JSONDecoder().decode(
+                        GoogleUserInfoEntity.self,
+                        from: data
+                    )
+                    continuation.resume(returning: id?.id ?? "")
+
+                case .failure:
+                    continuation.resume(throwing: WMGoogleError.internalError)
+
                 }
             }
         }
