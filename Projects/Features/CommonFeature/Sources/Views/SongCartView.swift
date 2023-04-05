@@ -218,7 +218,7 @@ public extension SongCartView {
 
 extension SongCartView {
     private func showLoginPopup() {
-        let viewController = TextPopupViewController.viewController(text: "로그인이 필요한 기능입니다.", cancelButtonIsHidden: false, completion: { () in
+        let viewController = TextPopupViewController.viewController(text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?", cancelButtonIsHidden: false, completion: { () in
             NotificationCenter.default.post(name: .movedTab, object: 4)
         })
         guard let parent = self.parentViewController() else { return }

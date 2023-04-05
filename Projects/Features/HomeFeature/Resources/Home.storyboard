@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,7 +25,7 @@
                                 </constraints>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="QCv-HV-K1f">
-                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="IJw-6l-kM9">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="594"/>
@@ -38,9 +39,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jhv-QX-i3p">
                                                 <rect key="frame" x="0.0" y="20" width="393" height="354"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dTj-gF-VNr">
+                                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ihr-1k-z8Z">
                                                         <rect key="frame" x="20" y="0.0" width="353" height="354"/>
-                                                    </imageView>
+                                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vtp-uJ-acS">
+                                                            <rect key="frame" x="0.0" y="0.0" width="353" height="354"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        </view>
+                                                        <blurEffect style="regular"/>
+                                                    </visualEffectView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPV-8h-6Sd">
                                                         <rect key="frame" x="20" y="0.0" width="353" height="354"/>
                                                         <subviews>
@@ -245,11 +251,11 @@
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="RPV-8h-6Sd" secondAttribute="bottom" id="8dU-Pu-7nC"/>
                                                     <constraint firstItem="RPV-8h-6Sd" firstAttribute="leading" secondItem="Jhv-QX-i3p" secondAttribute="leading" constant="20" id="DDN-pY-J7N"/>
-                                                    <constraint firstItem="dTj-gF-VNr" firstAttribute="bottom" secondItem="RPV-8h-6Sd" secondAttribute="bottom" id="cO7-mu-ISp"/>
-                                                    <constraint firstItem="dTj-gF-VNr" firstAttribute="top" secondItem="RPV-8h-6Sd" secondAttribute="top" id="j9R-tw-8J0"/>
+                                                    <constraint firstItem="Ihr-1k-z8Z" firstAttribute="top" secondItem="RPV-8h-6Sd" secondAttribute="top" id="Ecp-8F-NrJ"/>
+                                                    <constraint firstItem="Ihr-1k-z8Z" firstAttribute="leading" secondItem="RPV-8h-6Sd" secondAttribute="leading" id="Lg6-D6-dkd"/>
+                                                    <constraint firstItem="Ihr-1k-z8Z" firstAttribute="bottom" secondItem="RPV-8h-6Sd" secondAttribute="bottom" id="PY4-Cm-yQk"/>
+                                                    <constraint firstItem="Ihr-1k-z8Z" firstAttribute="trailing" secondItem="RPV-8h-6Sd" secondAttribute="trailing" id="jX8-WK-S21"/>
                                                     <constraint firstItem="RPV-8h-6Sd" firstAttribute="top" secondItem="Jhv-QX-i3p" secondAttribute="top" id="mUS-qz-4fW"/>
-                                                    <constraint firstItem="dTj-gF-VNr" firstAttribute="trailing" secondItem="RPV-8h-6Sd" secondAttribute="trailing" id="o7q-hH-mpK"/>
-                                                    <constraint firstItem="dTj-gF-VNr" firstAttribute="leading" secondItem="RPV-8h-6Sd" secondAttribute="leading" id="oHE-re-oRS"/>
                                                     <constraint firstAttribute="trailing" secondItem="RPV-8h-6Sd" secondAttribute="trailing" constant="20" id="vTm-eS-Phz"/>
                                                 </constraints>
                                             </view>
@@ -422,12 +428,12 @@
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="203:375" id="2ks-Ey-C1D"/>
-                            <constraint firstItem="QCv-HV-K1f" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="5r4-xf-6co"/>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="GeS-Kz-poo"/>
                             <constraint firstAttribute="bottom" secondItem="QCv-HV-K1f" secondAttribute="bottom" id="Kin-vo-tHD"/>
+                            <constraint firstItem="QCv-HV-K1f" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="NJY-Zb-hrT"/>
                             <constraint firstAttribute="trailing" secondItem="sV4-yd-6Sv" secondAttribute="trailing" id="UpG-i7-Cma"/>
                             <constraint firstItem="6rt-Zi-OVM" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Wal-4d-TSw"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cjb-J0-wCq"/>
@@ -439,7 +445,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="6rt-Zi-OVM" id="OZY-nW-FsE"/>
-                        <outlet property="blurImageView" destination="dTj-gF-VNr" id="Mah-Re-fim"/>
+                        <outlet property="blurEffectView" destination="Ihr-1k-z8Z" id="qXq-8B-LzD"/>
                         <outlet property="chartAllListenButton" destination="HJb-5L-vKL" id="wb0-L2-kU8"/>
                         <outlet property="chartArrowImageView" destination="yxF-fR-vLG" id="vL4-Ey-G3B"/>
                         <outlet property="chartBorderView" destination="RPV-8h-6Sd" id="1IP-nH-aak"/>
@@ -464,4 +470,9 @@
             <point key="canvasLocation" x="138.1679389312977" y="-2.1126760563380285"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="gray100">
+            <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -20,7 +20,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topCircleImageView: UIImageView!
     @IBOutlet weak var chartContentView: UIView!
     @IBOutlet weak var chartBorderView: UIView!
-    @IBOutlet weak var blurImageView: UIImageView!
+    @IBOutlet weak var blurEffectView: UIVisualEffectView!
     @IBOutlet weak var chartTitleLabel: UILabel!
     @IBOutlet weak var chartArrowImageView: UIImageView!
     @IBOutlet weak var chartAllListenButton: UIButton!
@@ -238,6 +238,10 @@ extension HomeViewController {
                     recommendView.delegate = self
                     recommendView.heightAnchor.constraint(equalToConstant: height).isActive = true
                     self.stackView.addArrangedSubview(recommendView)
+                    
+                    let bottomSpace = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+                    bottomSpace.heightAnchor.constraint(equalToConstant: bottomSpace.frame.height).isActive = true
+                    self.stackView.addArrangedSubview(bottomSpace)
 
                 }else{
                     guard let recommendView = subviews.first as? RecommendPlayListView else { return }
@@ -262,9 +266,10 @@ extension HomeViewController {
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         
-        blurImageView.image = DesignSystemAsset.Home.blurBg.image
-        blurImageView.layer.cornerRadius = 12
-
+        blurEffectView.layer.cornerRadius = 12
+        blurEffectView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        blurEffectView.clipsToBounds = true
+        
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
