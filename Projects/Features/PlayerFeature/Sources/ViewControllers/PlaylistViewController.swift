@@ -25,7 +25,9 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
     var disposeBag = DisposeBag()
-
+    
+    var tappedCellIndex = PublishSubject<Int>()
+    
     private var containSongsComponent: ContainSongsComponent!
     
     public var songCartView: CommonFeature.SongCartView!
@@ -92,7 +94,8 @@ private extension PlaylistViewController {
             prevButtonDidTapEvent: playlistView.prevButton.tapPublisher,
             playButtonDidTapEvent: playlistView.playButton.tapPublisher,
             nextButtonDidTapEvent: playlistView.nextButton.tapPublisher,
-            shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher
+            shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
+            playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable()
         )
         let output = self.viewModel.transform(from: input)
         
@@ -124,26 +127,17 @@ private extension PlaylistViewController {
     
     private func bindRx(output: PlaylistViewModel.Output) {
         output.dataSource
-            .do(onNext: { [weak self] model in
-                guard let self else { return }
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
-                warningView.text = "리스트에 곡이 없습니다."
-                
-                let items = model.first?.items ?? []
-                
-            })
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
         
-                
-                playlistView.playlistTableView.rx.itemSelected
-                .withLatestFrom(output.dataSource) { ($0, $1) }
-                .filter { _ in output.editState.value == false }
-                .subscribe(onNext: { (indexPath, dataSource) in
-                    let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
-                    PlayState.shared.loadAndAppendSongsToPlaylist([song])
-                })
-                .disposed(by: disposeBag)
+        playlistView.playlistTableView.rx.itemSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .filter { _ in output.editState.value == false }
+            .subscribe(onNext: { (indexPath, dataSource) in
+                let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
+                PlayState.shared.loadAndAppendSongsToPlaylist([song])
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
@@ -283,7 +277,7 @@ extension PlaylistViewController: UITableViewDelegate {
 
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
     func superButtonTapped(index: Int) {
-        
+        tappedCellIndex.onNext(index)
     }
     
     

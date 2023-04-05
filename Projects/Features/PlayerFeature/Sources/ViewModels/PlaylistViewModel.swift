@@ -28,7 +28,7 @@ final class PlaylistViewModel: ViewModelType {
         let playButtonDidTapEvent: AnyPublisher<Void, Never>
         let nextButtonDidTapEvent: AnyPublisher<Void, Never>
         let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
-        let songTapped: PublishSubject<Int> = PublishSubject()
+        let playlistTableviewCellDidTapEvent: Observable<Int>
         let allSongSelected: PublishSubject<Bool> = PublishSubject()
         let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
         
@@ -51,6 +51,7 @@ final class PlaylistViewModel: ViewModelType {
     private let playState = PlayState.shared
     private var isEditing = false
     private var subscription = Set<AnyCancellable>()
+    private var disposeBag = DisposeBag()
     
     init() {
         print("✅ PlaylistViewModel 생성")
@@ -63,10 +64,8 @@ final class PlaylistViewModel: ViewModelType {
     func transform(from input: Input) -> Output {
         let output = Output()
         
-        output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
-        // 테이블뷰 -> 뷰모델 dataSource  < --- 동기화 --- > PlayState.playlist.list
-        
         bindInput(input: input, output: output)
+        bindTableView(output: output)
         bindPlayStateChanged(output: output)
         bindCurrentSongChanged(output: output)
         bindProgress(output: output)
@@ -122,6 +121,28 @@ final class PlaylistViewModel: ViewModelType {
             guard let self else { return }
             self.playState.shuffleMode.toggle()
         }.store(in: &subscription)
+        
+        input.playlistTableviewCellDidTapEvent
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+                if selectedSongs.contains(index) {
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+                    var newSelectedSongs = selectedSongs
+                    newSelectedSongs.remove(at: removeTargetIndex)
+                    return newSelectedSongs
+                    
+                }else{
+                    return selectedSongs + [index]
+                }
+            })
+            .map { $0.sorted { $0 < $1 } }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindTableView(output: Output) {
+        // 테이블뷰 -> 뷰모델 dataSource  < --- 동기화 --- > PlayState.playlist.list
+        output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
+
     }
     
     private func bindPlayStateChanged(output: Output) {
