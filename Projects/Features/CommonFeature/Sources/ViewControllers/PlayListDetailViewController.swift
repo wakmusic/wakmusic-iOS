@@ -357,11 +357,6 @@ extension PlayListDetailViewController{
                 }
             })
             .disposed(by: disposeBag)
-        
-        output.songEntityOfSelectedSongs
-            .filter{ !$0.isEmpty }
-            .subscribe()
-            .disposed(by: disposeBag)
     }
 }
 
