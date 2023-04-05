@@ -14,12 +14,16 @@ import SnapKit
 import DesignSystem
 import Utility
 import CommonFeature
+import RxSwift
+import RxRelay
+import RxDataSources
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
+    var disposeBag = DisposeBag()
 
     private var containSongsComponent: ContainSongsComponent!
     
@@ -48,10 +52,30 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        playlistView.playlistTableView.delegate = self
-        playlistView.playlistTableView.dataSource = self
+        playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
+    }
+}
+
+extension PlaylistViewController {
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (_ , tableView, indexPath, model) -> UITableViewCell in
+            guard let self else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier:  PlaylistTableViewCell.identifier, for: IndexPath(row: indexPath.row, section: 0)) as? PlaylistTableViewCell
+            else { return UITableViewCell() }
+            
+            cell.setContent(song: model)
+            cell.isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
+            cell.isAnimating = self.playState.state == .playing
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
     }
 }
 
@@ -68,6 +92,7 @@ private extension PlaylistViewController {
         )
         let output = self.viewModel.transform(from: input)
         
+        bindRx(output: output)
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
         bindRepeatMode(output: output)
@@ -91,6 +116,20 @@ private extension PlaylistViewController {
         output.currentSongIndex.sink { [weak self] _ in
             self?.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
+    }
+    
+    private func bindRx(output: PlaylistViewModel.Output) {
+        output.dataSource
+            .do(onNext: { [weak self] model in
+                guard let self else { return }
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
+                warningView.text = "리스트에 곡이 없습니다."
+                
+                let items = model.first?.items ?? []
+                
+            })
+            .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources()))
+            .disposed(by: disposeBag)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
@@ -187,27 +226,31 @@ private extension PlaylistViewController {
     }
 }
 
-extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playState.playList.count
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell
-        else { return UITableViewCell() }
-        cell.selectionStyle = .none
-        let songs = playState.playList.list
-        cell.setContent(song: songs[indexPath.row])
-        cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
-        cell.isAnimating = playState.state == .playing
-        return cell
-    }
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if playState.playList.currentPlayIndex != indexPath.row {
-            playState.loadInPlaylist(at: indexPath.row) // 현재 재생중인 곡 이외의 Cell을 선택 시 해당 곡이 재생됩니다.
-        }
-    }
+extension PlaylistViewController {
+
+}
+
+extension PlaylistViewController: UITableViewDelegate {
+//    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return playState.playList.count
+//    }
+//
+//    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell
+//        else { return UITableViewCell() }
+//        cell.selectionStyle = .none
+//        let songs = playState.playList.list
+//        cell.setContent(song: songs[indexPath.row])
+//        cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
+//        cell.isAnimating = playState.state == .playing
+//        return cell
+//    }
+//
+//    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if playState.playList.currentPlayIndex != indexPath.row {
+//            playState.loadInPlaylist(at: indexPath.row) // 현재 재생중인 곡 이외의 Cell을 선택 시 해당 곡이 재생됩니다.
+//        }
+//    }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.

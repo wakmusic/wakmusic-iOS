@@ -27,7 +27,7 @@ extension PlayState {
         self.player.stop()
         self.currentSong = nil
         self.progress.clear()
-        self.playList.list.removeAll()
+        //self.playList.removeAll()
     }
     
     /// ▶️ 해당 곡 새로 재생

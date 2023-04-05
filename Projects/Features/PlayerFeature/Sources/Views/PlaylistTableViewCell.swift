@@ -146,6 +146,8 @@ extension PlaylistTableViewCell {
         
         self.titleLabel.text = song.title
         self.artistLabel.text = song.artist
+        
+        self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
     }
     
     private func updateButtonHidden() {

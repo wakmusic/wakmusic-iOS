@@ -8,10 +8,16 @@
 
 import Foundation
 import Combine
+import RxSwift
+import RxRelay
+import RxDataSources
 import BaseFeature
 import YouTubePlayerKit
 import Utility
 import CommonFeature
+import DomainModule
+
+internal typealias PlayListSectionModel = SectionModel<Int, SongEntity>
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
@@ -22,6 +28,8 @@ final class PlaylistViewModel: ViewModelType {
         let playButtonDidTapEvent: AnyPublisher<Void, Never>
         let nextButtonDidTapEvent: AnyPublisher<Void, Never>
         let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
+        let allSongSelected: PublishSubject<Bool> = PublishSubject()
+        let tapRemoveSongs: PublishSubject<Void> = PublishSubject()
         
     }
     struct Output {
@@ -34,6 +42,9 @@ final class PlaylistViewModel: ViewModelType {
         var currentSongIndex = CurrentValueSubject<Int, Never>(0)
         var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
         var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
+        let dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value: [])
+        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
     
     private let playState = PlayState.shared
@@ -50,6 +61,9 @@ final class PlaylistViewModel: ViewModelType {
     
     func transform(from input: Input) -> Output {
         let output = Output()
+        
+        output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
+        // 테이블뷰 -> 뷰모델 dataSource  < --- 동기화 --- > PlayState.playlist.list
         
         bindInput(input: input, output: output)
         bindPlayStateChanged(output: output)
