@@ -154,6 +154,7 @@ final class PlayerViewModel: ViewModelType {
         }.disposed(by: disposeBag)
         
         input.likeButtonDidTapEvent
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .map {
                 Utility.PreferenceManager.userInfo != nil
             }
