@@ -166,8 +166,8 @@ private extension PlaylistViewController {
                 guard let cell = self.playlistView.playlistTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? PlaylistTableViewCell else { return nil }
                 return (cell, state == .playing)
             }
-            .sink { cell, isPlaying in
-                if isPlaying {
+            .sink { cell, isAnimating in
+                if isAnimating {
                     cell.waveStreamAnimationView.play()
                 } else {
                     cell.waveStreamAnimationView.pause()
@@ -199,6 +199,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
         let songs = playState.playList.list
         cell.setContent(song: songs[indexPath.row])
         cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
+        cell.isAnimating = playState.state == .playing
         return cell
     }
     

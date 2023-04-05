@@ -63,7 +63,12 @@ internal class PlaylistTableViewCell: UITableViewCell {
         didSet {
             updateButtonHidden()
             updateLabelHighlight()
-            isPlaying ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
+        }
+    }
+    
+    internal var isAnimating: Bool = false {
+        didSet {
+            isAnimating ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
         }
     }
     
