@@ -162,9 +162,14 @@ final class PlaylistViewModel: ViewModelType {
     }
     
     private func bindTableView(output: Output) {
-        // 테이블뷰 -> 뷰모델 dataSource  < --- 동기화 --- > PlayState.playlist.list
+        /*
+         테이블뷰 -> 뷰모델 dataSource만 바라봄
+         테이블뷰가 생성될때는 PlayState.playlist.list 를 dataSource에 동기화
+         테이블뷰에서 편집이 끝날때는 dataSource 를 PlayState.playlist.list 에 동기화
+         */
         output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
         
+        // cell 선택 시, cell의 isSelected 속성을 변경시키고 dataSource에 전달
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
@@ -181,6 +186,7 @@ final class PlaylistViewModel: ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
+        // cell 선택 시, cell의 index를 해당 곡으로 변경시키고 songEntityOfSelectedSongs에 전달
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (indexOfSelectedSongs, dataSource) in
@@ -201,7 +207,16 @@ final class PlaylistViewModel: ViewModelType {
             }
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
-
+        
+        // 편집 종료시 동기화
+        output.editState
+            .dropFirst()
+            .filter { $0 == false }
+            .sink { [weak self] _ in
+                guard let self else { return }
+                let localPlaylist = output.dataSource.value.first?.items ?? []
+                self.playState.playList.list = localPlaylist
+        }.store(in: &subscription)
     }
     
     private func bindPlayStateChanged(output: Output) {
