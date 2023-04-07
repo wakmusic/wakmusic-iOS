@@ -60,6 +60,12 @@ final public class PlayState {
             self.progress.endProgress = duration
         }.store(in: &subscription)
         
+        playList.$list.sink { [weak self] list in
+            guard let self else { return }
+            guard let source = self.player.source?.id else { return }
+            guard let index = list.firstIndex(where: { $0.id == source }) else { return }
+            self.playList.currentPlayIndex = index
+        }.store(in: &subscription)
         
     }
     

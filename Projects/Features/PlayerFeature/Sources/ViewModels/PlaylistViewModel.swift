@@ -213,11 +213,15 @@ final class PlaylistViewModel: ViewModelType {
     
     private func bindTableView(output: Output) {
         /*
-         테이블뷰 -> 뷰모델 dataSource만 바라봄
-         테이블뷰가 생성될때는 PlayState.playlist.list 를 dataSource에 동기화
-         테이블뷰에서 편집이 끝날때는 dataSource 를 PlayState.playlist.list 에 동기화
+         테이블뷰가 최초 생성될 때, PlayState.playlist.list 를 dataSource 에 pull
+         dataSource에 변경이 일어날 때, dataSource 를 PlayState.playlist.list 에 push 하는 구조
          */
-        output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
+        self.pullForOriginalPlaylist(output: output)
+        
+        // dataSource에 변경이 일어날 때, 변경사항 push
+        output.dataSource.subscribe { [weak self] _ in
+            self?.pushToOriginalPlaylist(output: output)
+        }.disposed(by: disposeBag)
         
         // cell 선택 시, cell의 isSelected 속성을 변경시키고 dataSource에 전달
         output.indexOfSelectedSongs
@@ -258,14 +262,13 @@ final class PlaylistViewModel: ViewModelType {
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
         
-        // 편집 종료시 동기화
+        // 편집 종료 시, 셀 선택 초기화 및 변경사항 push
         output.editState
             .dropFirst()
             .filter { $0 == false }
             .sink { [weak self] _ in
                 guard let self else { return }
-                let localPlaylist = output.dataSource.value.first?.items ?? []
-                self.playState.playList.list = localPlaylist
+                self.pushToOriginalPlaylist(output: output)
                 output.indexOfSelectedSongs.accept([])
         }.store(in: &subscription)
     }
@@ -304,5 +307,14 @@ final class PlaylistViewModel: ViewModelType {
         playState.$shuffleMode.sink { shuffleMode in
             output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
+    }
+    
+    private func pullForOriginalPlaylist(output: Output) {
+        output.dataSource.accept([PlayListSectionModel(model: 0, items: playState.playList.list)])
+    }
+    
+    private func pushToOriginalPlaylist(output: Output) {
+        let localPlaylist = output.dataSource.value.first?.items ?? []
+        self.playState.playList.list = localPlaylist
     }
 }

@@ -11,8 +11,8 @@ import DomainModule
 
 extension PlayState {
     public class PlayList {
-        public var list: [SongEntity]
-        public var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
+        @Published public var list: [SongEntity]
+        @Published public var currentPlayIndex: Int // 현재 재생중인 노래 인덱스 번호
         
         init(list: [SongEntity] = []) {
             self.list = list
