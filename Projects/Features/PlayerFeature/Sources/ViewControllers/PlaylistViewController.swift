@@ -99,7 +99,8 @@ private extension PlaylistViewController {
             shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
             playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable(),
             selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
-            removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable()
+            removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
+            itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
         )
         let output = self.viewModel.transform(from: input)
         
