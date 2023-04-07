@@ -24,6 +24,11 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var qnaSuperView: UIView!
     @IBOutlet weak var qnaSuperImageview: UIImageView!
     @IBOutlet weak var qnaButton: UIButton!
+    
+    @IBOutlet weak var noticeSuperView: UIView!
+    @IBOutlet weak var noticeButton: UIButton!
+    @IBOutlet weak var noticeImageView: UIImageView!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -46,7 +51,9 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         let vc =  questionComponent.makeView().wrapNavigationController
         vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
         self.present(vc, animated: true)
-        
+    }
+    
+    @IBAction func movenoticeAction(_ sender: Any) {
     }
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
@@ -109,10 +116,11 @@ extension RequestViewController{
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons:[UIButton] = [self.questionButton,self.qnaButton]
-        let superViews:[UIView] = [self.questionSuperView,self.qnaSuperView]
-        let imageViews:[UIImageView] = [self.questionImageview,self.qnaSuperImageview]
-        for i in 0...1 {
+        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton]
+        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView]
+        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView]
+        
+        for i in 0..<buttons.count {
             var title = ""
             switch i {
             case 0:
@@ -121,13 +129,19 @@ extension RequestViewController{
             case 1:
                 title = "자주 묻는 질문"
                 imageViews[i].image = DesignSystemAsset.Storage.qna.image
+            case 2:
+                title = "공지사항"
+                imageViews[i].image = DesignSystemAsset.Storage.notice.image
             default:
                 return
             }
             
-            var attr:NSAttributedString = NSAttributedString(string: title, attributes: [
-                NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color])
+            var attr:NSAttributedString = NSAttributedString(
+                string: title,
+                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                             .kern: -0.5]
+            )
             buttons[i].setAttributedTitle(attr, for: .normal)
             superViews[i].backgroundColor = .white.withAlphaComponent(0.4)
             superViews[i].layer.borderWidth = 1
@@ -141,11 +155,13 @@ extension RequestViewController{
         
         let serviceAttributedString = NSMutableAttributedString.init(string: "서비스 이용약관")
         serviceAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color], range: NSRange(location: 0, length: serviceAttributedString.string.count))
+                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                                               .kern: -0.5], range: NSRange(location: 0, length: serviceAttributedString.string.count))
         
         let privacyAttributedString = NSMutableAttributedString.init(string: "개인정보처리방침")
         privacyAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color], range: NSRange(location: 0, length: privacyAttributedString.string.count))
+                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                                               .kern: -0.5], range: NSRange(location: 0, length: privacyAttributedString.string.count))
         
         privacyButton.layer.cornerRadius = 8
         privacyButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
@@ -161,8 +177,12 @@ extension RequestViewController{
         versionLabel.text = "버전정보 \(APP_VERSION())"
         
         let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
-        withDrawAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray400.color], range: NSRange(location: 0, length: withDrawAttributedString.string.count))
+        withDrawAttributedString.addAttributes(
+            [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
+             .foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
+             .kern: -0.5],
+            range: NSRange(location: 0, length: withDrawAttributedString.string.count)
+        )
         withdrawButton.layer.borderWidth = 1
         withdrawButton.layer.cornerRadius = 4
         withdrawButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
