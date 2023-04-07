@@ -266,6 +266,7 @@ final class PlaylistViewModel: ViewModelType {
                 guard let self else { return }
                 let localPlaylist = output.dataSource.value.first?.items ?? []
                 self.playState.playList.list = localPlaylist
+                output.indexOfSelectedSongs.accept([])
         }.store(in: &subscription)
     }
     
