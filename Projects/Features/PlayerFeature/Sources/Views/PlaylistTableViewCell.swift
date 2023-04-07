@@ -72,22 +72,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
     internal var model: (index: Int, song: SongEntity?) = (0, nil)
     
     
-    internal var isPlaying: Bool = false {
-        didSet {
-            updateButtonHidden()
-            updateLabelHighlight()
-        }
-    }
+    internal var isPlaying: Bool = false
     
     internal var isAnimating: Bool = false {
         didSet {
             isAnimating ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
-        }
-    }
-    
-    override var isEditing: Bool {
-        didSet {
-            updateConstraintPlayImageView()
         }
     }
     
@@ -156,7 +145,8 @@ internal class PlaylistTableViewCell: UITableViewCell {
 }
 
 extension PlaylistTableViewCell {
-    internal func setContent(song: SongEntity, _ isEditing: Bool, index: Int) {
+    internal func setContent(song: SongEntity, index: Int, isEditing: Bool, isPlaying: Bool, isAnimating: Bool) {
+        print("셋컨텐트 호출됨", song.title)
         self.thumbnailImageView.kf.setImage(
             with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -165,17 +155,19 @@ extension PlaylistTableViewCell {
         
         self.titleLabel.text = song.title
         self.artistLabel.text = song.artist
-        
-        self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
-        self.superButton.isHidden = !isEditing
         self.model = (index, song)
+        self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
+        self.updateButtonHidden(isEditing: isEditing, isPlaying: isPlaying)
+        self.updateConstraintPlayImageView(isEditing: isEditing)
+        self.updateLabelHighlight(isPlaying: isPlaying)
     }
     
     @objc func superButtonSelectedAction() {
         delegate?.superButtonTapped(index: model.index)
     }
     
-    private func updateButtonHidden() {
+    private func updateButtonHidden(isEditing: Bool, isPlaying: Bool) {
         if isEditing {
             playImageView.isHidden = true
             waveStreamAnimationView.isHidden = true
@@ -183,16 +175,17 @@ extension PlaylistTableViewCell {
             playImageView.isHidden = isPlaying
             waveStreamAnimationView.isHidden = !isPlaying
         }
+        superButton.isHidden = !isEditing
     }
     
-    private func updateConstraintPlayImageView() {
+    private func updateConstraintPlayImageView(isEditing: Bool) {
         let offset = isEditing ? 22 : -20
         self.playImageView.snp.updateConstraints {
             $0.right.equalToSuperview().offset(offset)
         }
     }
     
-    private func updateLabelHighlight() {
+    private func updateLabelHighlight(isPlaying: Bool) {
         titleLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
         artistLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
     }

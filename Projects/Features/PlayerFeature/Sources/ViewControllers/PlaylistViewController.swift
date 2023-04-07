@@ -63,30 +63,6 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     }
 }
 
-extension PlaylistViewController {
-    private func createDatasources(output: PlaylistViewModel.Output) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (_ , tableView, indexPath, model) -> UITableViewCell in
-            guard let self else { return UITableViewCell() }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier:  PlaylistTableViewCell.identifier, for: IndexPath(row: indexPath.row, section: 0)) as? PlaylistTableViewCell
-            else { return UITableViewCell() }
-            
-            cell.delegate = self
-            cell.setContent(song: model, output.editState.value, index: indexPath.row)
-            cell.selectionStyle = .none
-            cell.isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
-            cell.isAnimating = self.playState.state == .playing
-            
-            return cell
-            
-        }, canEditRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
-            return true
-        })
-        return datasource
-    }
-}
-
 private extension PlaylistViewController {
     private func bindViewModel() {
         let input = PlaylistViewModel.Input(
@@ -240,7 +216,30 @@ private extension PlaylistViewController {
 }
 
 extension PlaylistViewController {
-
+    private func createDatasources(output: PlaylistViewModel.Output) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (_ , tableView, indexPath, model) -> UITableViewCell in
+            guard let self else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier:  PlaylistTableViewCell.identifier, for: IndexPath(row: indexPath.row, section: 0)) as? PlaylistTableViewCell
+            else { return UITableViewCell() }
+            
+            cell.delegate = self
+            cell.selectionStyle = .none
+            
+            let index = indexPath.row
+            let isEditing = output.editState.value
+            let isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
+            let isAnimating = self.playState.state == .playing
+            
+            cell.setContent(song: model, index: index, isEditing: isEditing, isPlaying: isPlaying, isAnimating: isAnimating)
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
+    }
 }
 
 extension PlaylistViewController: UITableViewDelegate {
