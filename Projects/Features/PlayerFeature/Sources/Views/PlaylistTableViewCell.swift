@@ -85,6 +85,12 @@ internal class PlaylistTableViewCell: UITableViewCell {
         }
     }
     
+    override var isEditing: Bool {
+        didSet {
+            updateConstraintPlayImageView()
+        }
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureContents()
@@ -143,7 +149,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         
         superButton.snp.makeConstraints {
             $0.left.top.bottom.equalToSuperview()
-            $0.right.equalTo(titleLabel.snp.right)
+            $0.right.equalToSuperview()
         }
     }
     
@@ -176,6 +182,13 @@ extension PlaylistTableViewCell {
         } else {
             playImageView.isHidden = isPlaying
             waveStreamAnimationView.isHidden = !isPlaying
+        }
+    }
+    
+    private func updateConstraintPlayImageView() {
+        let offset = isEditing ? 22 : -20
+        self.playImageView.snp.updateConstraints {
+            $0.right.equalToSuperview().offset(offset)
         }
     }
     
