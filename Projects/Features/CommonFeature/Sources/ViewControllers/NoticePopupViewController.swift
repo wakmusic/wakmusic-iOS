@@ -100,6 +100,7 @@ extension NoticePopupViewController {
         confirmButton.layer.cornerRadius = 12
         
         pageCountView.layer.cornerRadius = 12
+        pageCountView.backgroundColor = DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.2)
         pageCountView.clipsToBounds = true
         
         pageCountLabel.textColor = DesignSystemAsset.GrayColor.gray25.color

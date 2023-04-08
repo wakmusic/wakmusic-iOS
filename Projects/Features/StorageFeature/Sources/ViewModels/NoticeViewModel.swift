@@ -19,7 +19,6 @@ public class NoticeViewModel {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    
     var fetchNoticeUseCase: FetchNoticeUseCase
     
     public struct Input {

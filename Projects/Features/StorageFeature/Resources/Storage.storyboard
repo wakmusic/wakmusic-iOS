@@ -1133,6 +1133,9 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="DOD-l9-LAk">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vuE-9E-ZRJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1143,11 +1146,14 @@
                             <constraint firstItem="vuE-9E-ZRJ" firstAttribute="trailing" secondItem="i5h-Af-hJO" secondAttribute="trailing" id="GXa-v0-MYb"/>
                             <constraint firstItem="i5h-Af-hJO" firstAttribute="leading" secondItem="vuE-9E-ZRJ" secondAttribute="leading" id="IWP-vh-QwH"/>
                             <constraint firstAttribute="trailing" secondItem="Hmt-gZ-0T5" secondAttribute="trailing" id="Sae-Wz-ctA"/>
+                            <constraint firstItem="DOD-l9-LAk" firstAttribute="centerX" secondItem="XWa-vC-pJx" secondAttribute="centerX" id="dPt-se-kYF"/>
+                            <constraint firstItem="DOD-l9-LAk" firstAttribute="centerY" secondItem="XWa-vC-pJx" secondAttribute="centerY" id="fZw-vl-gYv"/>
                             <constraint firstItem="Hmt-gZ-0T5" firstAttribute="top" secondItem="vuE-9E-ZRJ" secondAttribute="top" id="hKh-vL-aQT"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="ED7-RG-kgQ" id="fC6-Ki-XXs"/>
+                        <outlet property="indicator" destination="DOD-l9-LAk" id="nPO-pw-YKA"/>
                         <outlet property="tableView" destination="i5h-Af-hJO" id="MzD-bh-uvh"/>
                         <outlet property="titleStringLabel" destination="DQV-zm-pFQ" id="M0K-xn-H1B"/>
                     </connections>

@@ -17,6 +17,7 @@ public class NoticeViewController: UIViewController, ViewControllerFromStoryBoar
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     var viewModel: NoticeViewModel!
     var noticeDetailComponent: NoticeDetailComponent!
@@ -48,6 +49,10 @@ extension NoticeViewController {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
         viewModel.output.dataSource
+            .skip(1)
+            .do(onNext: { [weak self] _ in
+                self?.indicator.stopOnMainThread()
+            })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "NoticeListCell", for: indexPath) as? NoticeListCell else{
@@ -71,6 +76,7 @@ extension NoticeViewController {
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        indicator.startAnimating()
     }
 }
 
