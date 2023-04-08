@@ -16,6 +16,7 @@ public protocol MainTabBarDependency: Dependency {
     var artistComponent: ArtistComponent { get }
     var storageComponent: StorageComponent { get }
     var noticePopupComponent: NoticePopupComponent { get }
+    var noticeComponent: NoticeComponent { get }
 }
 
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
@@ -29,7 +30,8 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
             searchComponent: self.dependency.searchComponent,
             artistComponent: self.dependency.artistComponent,
             storageCompoent: self.dependency.storageComponent,
-            noticePopupComponent: self.dependency.noticePopupComponent
+            noticePopupComponent: self.dependency.noticePopupComponent,
+            noticeComponent: self.dependency.noticeComponent
         )
     }
 }

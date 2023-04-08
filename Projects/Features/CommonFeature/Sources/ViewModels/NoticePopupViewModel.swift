@@ -24,13 +24,14 @@ public class NoticePopupViewModel {
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
+        var dataSource: BehaviorRelay<[String]> = BehaviorRelay(value: [])
     }
     
     public init(
         fetchNoticeEntities: [FetchNoticeEntity]
     ){
         self.fetchNoticeEntities = fetchNoticeEntities
-        output.dataSource.accept(self.fetchNoticeEntities)
+        let images = self.fetchNoticeEntities.map { $0.images }.reduce([]){ $0 + $1 }
+        output.dataSource.accept(images)
     }
 }

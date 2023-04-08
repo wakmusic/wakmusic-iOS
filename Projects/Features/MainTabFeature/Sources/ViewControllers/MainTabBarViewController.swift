@@ -45,6 +45,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var artistComponent: ArtistComponent!
     private var storageComponent: StorageComponent!
     private var noticePopupComponent: NoticePopupComponent!
+    private var noticeComponent: NoticeComponent!
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +70,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent,
-        noticePopupComponent: NoticePopupComponent
+        noticePopupComponent: NoticePopupComponent,
+        noticeComponent: NoticeComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -79,6 +81,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.artistComponent = artistComponent
         viewController.storageComponent = storageCompoent
         viewController.noticePopupComponent = noticePopupComponent
+        viewController.noticeComponent = noticeComponent
         return viewController
     }
 }
@@ -89,8 +92,10 @@ extension MainTabBarViewController {
             .dataSource
             .filter { !$0.isEmpty }
             .withUnretained(self)
+            .debug("FetchNoticeUseCase")
             .subscribe(onNext: { (owner, model) in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
+                owner.showPanModal(content: viewController)
             }).disposed(by: disposeBag)
     }
     

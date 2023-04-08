@@ -17,41 +17,14 @@ import RxCocoa
 
 public class NoticePopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var pageCountView: UIView!
+    @IBOutlet weak var pageCountLabel: UILabel!
+    @IBOutlet weak var ignoreButton: UIButton!
+    @IBOutlet weak var confirmButton: UIButton!
+    
     var viewModel: NoticePopupViewModel!
     var disposeBag = DisposeBag()
-
-    private lazy var contentImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
-    }
-    
-    private lazy var buttonContentView = UIView().then {
-        $0.backgroundColor = .white
-    }
-    
-    private lazy var stackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-        $0.spacing = 8
-    }
-    
-    private lazy var nonShowButton = UIButton().then {
-        $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        $0.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
-        $0.setTitle("다시보지 않기", for: .normal)
-        $0.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
-        $0.layer.cornerRadius = 12
-        $0.addTarget(self, action: #selector(nonShowButtonAction), for: .touchUpInside)
-    }
-
-    private lazy var closeButton = UIButton().then {
-        $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        $0.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
-        $0.setTitle("닫기", for: .normal)
-        $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-        $0.layer.cornerRadius = 12
-        $0.addTarget(self, action: #selector(closeButtonAction), for: .touchUpInside)
-    }
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -60,6 +33,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bind()
     }
     
     public static func viewController(
@@ -69,51 +43,82 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         viewController.viewModel = viewModel
         return viewController
     }
-}
-
-extension NoticePopupViewController {
     
-    @objc
-    private func nonShowButtonAction() {
+    @IBAction func ignoreButtonAction(_ sender: Any) {
         DEBUG_LOG("다시보지 않기") //서버 공지 api 확인 후 추가 작업
         dismiss(animated: true)
     }
     
-    @objc
-    private func closeButtonAction() {
+    @IBAction func confirmButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
 }
 
 extension NoticePopupViewController {
+    
+    private func bind() {
+    
+        viewModel.output
+            .dataSource
+            .do(onNext: { [weak self] (model) in
+                self?.pageCountLabel.text = "1/\(model.count)"
+            })
+            .bind(to: collectionView.rx.items) { (collectionView, row, model) -> UICollectionViewCell in
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoticeCollectionViewCell", for: IndexPath(row: row, section: 0)) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                cell.update(model: model)
+                return cell
+            }
+            .disposed(by: disposeBag)
+    }
     
     private func configureUI() {
         
         self.view.backgroundColor = .white
         
-        self.view.addSubview(contentImageView)
-        contentImageView.snp.makeConstraints {
-            $0.top.left.right.equalToSuperview()
-            $0.width.height.equalTo(APP_WIDTH())
-        }
-        
-        self.view.addSubview(buttonContentView)
-        buttonContentView.snp.makeConstraints {
-            $0.top.equalTo(contentImageView.snp.bottom)
-            $0.left.right.equalToSuperview()
-            $0.height.equalTo(96)
-        }
+        ignoreButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        ignoreButton.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
+        ignoreButton.setTitle("다시보지 않기", for: .normal)
+        ignoreButton.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
+        ignoreButton.layer.cornerRadius = 12
 
-        buttonContentView.addSubview(stackView)
-        stackView.snp.makeConstraints {
-            $0.left.equalTo(buttonContentView.snp.left).offset(20)
-            $0.right.equalTo(buttonContentView.snp.right).offset(-20)
-            $0.centerY.equalTo(buttonContentView.snp.centerY)
-            $0.height.equalTo(56)
-        }
+        confirmButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        confirmButton.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
+        confirmButton.setTitle("확인", for: .normal)
+        confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+        confirmButton.layer.cornerRadius = 12
         
-        stackView.addArrangedSubview(nonShowButton)
-        stackView.addArrangedSubview(closeButton)
+        pageCountView.layer.cornerRadius = 12
+        pageCountView.clipsToBounds = true
+        
+        pageCountLabel.textColor = DesignSystemAsset.GrayColor.gray25.color
+        pageCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        
+        collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: Bundle.module), forCellWithReuseIdentifier: "NoticeCollectionViewCell")
+        collectionView.isPagingEnabled = true
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+    }
+}
+
+extension NoticePopupViewController: UIScrollViewDelegate {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let i = Int(scrollView.contentOffset.x / APP_WIDTH())
+        self.pageCountLabel.text = "\(i+1)/\(viewModel.output.dataSource.value.count)"
+    }
+}
+
+extension NoticePopupViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView,
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: APP_WIDTH(), height: APP_WIDTH())
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }
 
