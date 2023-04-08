@@ -268,7 +268,6 @@ extension HomeViewController {
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
         
         blurEffectView.layer.cornerRadius = 12
-        blurEffectView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         blurEffectView.clipsToBounds = true
         
         blurImageView.layer.cornerRadius = 12
