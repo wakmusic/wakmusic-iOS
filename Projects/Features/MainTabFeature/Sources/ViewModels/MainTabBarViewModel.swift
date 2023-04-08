@@ -33,9 +33,19 @@ public class MainTabBarViewModel {
     ){
         self.fetchNoticeUseCase = fetchNoticeUseCase
         
+        let igoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
+        DEBUG_LOG("igoredNoticeIds: \(igoredNoticeIds)")
+        
         self.fetchNoticeUseCase.execute(type: .currently)
             .catchAndReturn([])
             .asObservable()
+            .map{ (entities) in
+                guard !igoredNoticeIds.isEmpty else { return entities }
+                return entities.filter { entity in
+                    return !igoredNoticeIds.contains(where: { $0 == entity.id })
+                }
+            }
+            .debug("igoredNoticeIds")
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     }

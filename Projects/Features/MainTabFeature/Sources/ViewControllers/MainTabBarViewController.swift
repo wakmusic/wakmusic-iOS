@@ -92,7 +92,6 @@ extension MainTabBarViewController {
             .dataSource
             .filter { !$0.isEmpty }
             .withUnretained(self)
-            .debug("FetchNoticeUseCase")
             .subscribe(onNext: { (owner, model) in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = self

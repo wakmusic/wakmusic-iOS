@@ -49,8 +49,16 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         return viewController
     }
     
-    @IBAction func ignoreButtonAction(_ sender: Any) {
-        DEBUG_LOG("다시보지 않기") //서버 공지 api 확인 후 추가 작업
+    @IBAction func ignoreButtonAction(_ sender: Any) {        
+        let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
+        let currentNoticeIds: [Int] = viewModel.output.ids.value
+        
+        if savedIgoredNoticeIds.isEmpty {
+            Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
+            
+        }else{
+            Utility.PreferenceManager.ignoredNoticeIDs = savedIgoredNoticeIds + currentNoticeIds
+        }
         dismiss(animated: true)
     }
     
@@ -67,6 +75,7 @@ extension NoticePopupViewController {
             .dataSource
             .do(onNext: { [weak self] (model) in
                 self?.pageCountLabel.text = "1/\(model.count)"
+                self?.pageCountView.isHidden = model.count <= 1
             })
             .bind(to: collectionView.rx.items) { (collectionView, row, model) -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoticeCollectionViewCell", for: IndexPath(row: row, section: 0)) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
@@ -85,24 +94,31 @@ extension NoticePopupViewController {
     }
     
     private func configureUI() {
-        
         self.view.backgroundColor = .white
         
-        ignoreButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        ignoreButton.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
-        ignoreButton.setTitle("다시보지 않기", for: .normal)
+        let ignoreButtonAttributedString = NSMutableAttributedString.init(string: "다시보지 않기")
+        ignoreButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                                    .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                    .kern: -0.5],
+                                                   range: NSRange(location: 0, length: ignoreButtonAttributedString.string.count))
         ignoreButton.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
         ignoreButton.layer.cornerRadius = 12
+        ignoreButton.setAttributedTitle(ignoreButtonAttributedString, for: .normal)
 
-        confirmButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        confirmButton.titleLabel?.textColor = DesignSystemAsset.GrayColor.gray25.color
-        confirmButton.setTitle("확인", for: .normal)
+
+        let confirmButtonAttributedString = NSMutableAttributedString.init(string: "확인")
+        confirmButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                                     .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                     .kern: -0.5],
+                                                    range: NSRange(location: 0, length: confirmButtonAttributedString.string.count))
         confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         confirmButton.layer.cornerRadius = 12
+        confirmButton.setAttributedTitle(confirmButtonAttributedString, for: .normal)
         
         pageCountView.layer.cornerRadius = 12
         pageCountView.backgroundColor = DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.2)
         pageCountView.clipsToBounds = true
+        pageCountView.isHidden = true
         
         pageCountLabel.textColor = DesignSystemAsset.GrayColor.gray25.color
         pageCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)

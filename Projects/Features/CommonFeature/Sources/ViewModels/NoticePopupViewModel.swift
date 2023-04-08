@@ -25,17 +25,18 @@ public class NoticePopupViewModel {
 
     public struct Output {
         var dataSource: BehaviorRelay<[String]> = BehaviorRelay(value: [])
+        var ids: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
     }
     
     public init(
         fetchNoticeEntities: [FetchNoticeEntity]
     ){
-        
-        //TO-DO: savedIgoreIDs
-//        let savedIgoreIDs: [Int] = []
         self.fetchNoticeEntities = fetchNoticeEntities
+        
         let images: [String] = self.fetchNoticeEntities.map { $0.images }.reduce([]){ $0 + $1 }
-        let ids: [Int] = self.fetchNoticeEntities.map { $0.id }
         output.dataSource.accept(images)
+        
+        let ids: [Int] = self.fetchNoticeEntities.map { $0.id }
+        output.ids.accept(ids)
     }
 }
