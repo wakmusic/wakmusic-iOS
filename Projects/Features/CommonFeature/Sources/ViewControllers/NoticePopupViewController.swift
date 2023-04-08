@@ -15,6 +15,10 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
+public protocol NoticePopupViewControllerDelegate: AnyObject {
+    func noticeTapped()
+}
+
 public class NoticePopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,6 +27,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var ignoreButton: UIButton!
     @IBOutlet weak var confirmButton: UIButton!
     
+    public weak var delegate: NoticePopupViewControllerDelegate?
     var viewModel: NoticePopupViewModel!
     var disposeBag = DisposeBag()
 
@@ -69,6 +74,13 @@ extension NoticePopupViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .withUnretained(self)
+            .subscribe(onNext:{ (owner, _) in
+                owner.dismiss(animated: true)
+                owner.delegate?.noticeTapped()
+            }).disposed(by: disposeBag)
     }
     
     private func configureUI() {

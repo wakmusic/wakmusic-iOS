@@ -54,6 +54,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func movenoticeAction(_ sender: Any) {
+        let viewController = noticeComponent.makeView()
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     @IBAction func presswithDrawAction(_ sender: UIButton) {
@@ -86,6 +88,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     var qnaComponent:QnaComponent!
     var questionComponent:QuestionComponent!
     var containSongsComponent: ContainSongsComponent!
+    var noticeComponent: NoticeComponent!
     
     var disposeBag = DisposeBag()
     
@@ -104,13 +107,15 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewModel:RequestViewModel,
         qnaComponent: QnaComponent,
         questionComponent: QuestionComponent,
-        containSongsComponent: ContainSongsComponent
+        containSongsComponent: ContainSongsComponent,
+        noticeComponent: NoticeComponent
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent
         viewController.questionComponent = questionComponent
         viewController.containSongsComponent = containSongsComponent
+        viewController.noticeComponent = noticeComponent
         return viewController
     }
 }

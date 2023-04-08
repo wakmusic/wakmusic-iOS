@@ -95,6 +95,7 @@ extension MainTabBarViewController {
             .debug("FetchNoticeUseCase")
             .subscribe(onNext: { (owner, model) in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
+                viewController.delegate = self
                 owner.showPanModal(content: viewController)
             }).disposed(by: disposeBag)
     }
@@ -129,8 +130,14 @@ extension MainTabBarViewController {
     }
 }
 
+extension MainTabBarViewController: NoticePopupViewControllerDelegate {
+    public func noticeTapped() {
+        let viewController = noticeComponent.makeView()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 extension MainTabBarViewController: UIGestureRecognizerDelegate {
-    
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }

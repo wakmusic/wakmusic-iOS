@@ -17,7 +17,7 @@ public final class NoticeDetailComponent: Component<NoticeDetailDependency> {
     public func makeView(model: FetchNoticeEntity) -> NoticeDetailViewController  {
         return NoticeDetailViewController.viewController(
             viewModel: .init(
-                dataSource: model
+                model: model
             )
         )
     }

@@ -12,7 +12,7 @@ public struct FetchNoticeResponseDTO: Codable {
     public let id: Int
     public let category, title: String
     public let images: [String]
-    public let createAt, startAt, endAt: Int
+    public let createAt, startAt, endAt: Double
 
     enum CodingKeys: String, CodingKey {
         case id, category, title, images

@@ -26,8 +26,4 @@ public extension Int {
         let stringFromDate = formatter.string(from: dateFromString)
         return stringFromDate
     }
-    
-    var unixTimeToDate: Date {
-        return Date(timeIntervalSince1970: TimeInterval(truncating: NSNumber(value: Int32(self))))
-    }
 }

@@ -30,6 +30,9 @@ public class NoticePopupViewModel {
     public init(
         fetchNoticeEntities: [FetchNoticeEntity]
     ){
+        
+        //TO-DO: savedIgoreIDs
+//        let savedIgoreIDs: [Int] = []
         self.fetchNoticeEntities = fetchNoticeEntities
         let images = self.fetchNoticeEntities.map { $0.images }.reduce([]){ $0 + $1 }
         output.dataSource.accept(images)

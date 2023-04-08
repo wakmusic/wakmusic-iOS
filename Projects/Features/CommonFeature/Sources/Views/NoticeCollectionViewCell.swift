@@ -9,16 +9,18 @@
 import UIKit
 import Utility
 
-class NoticeCollectionViewCell: UICollectionViewCell {
+public class NoticeCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var contentImageView: UIImageView!
     
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
+        contentImageView.contentMode = .scaleAspectFill
+        contentImageView.clipsToBounds = true
     }
 }
 
-extension NoticeCollectionViewCell {
+public extension NoticeCollectionViewCell {
     func update(model: String) {
         contentImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchNotice(id: model).toString),

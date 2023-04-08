@@ -405,6 +405,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var containSongsComponent: ContainSongsComponent {
         return appComponent.containSongsComponent
     }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -937,6 +940,7 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
     }
 }
 extension NoticeDetailComponent: Registration {

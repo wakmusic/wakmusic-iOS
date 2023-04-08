@@ -19,18 +19,21 @@ public class NoticeDetailViewModel {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    var dataSource: FetchNoticeEntity
+    var model: FetchNoticeEntity
     
     public struct Input {
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<FetchNoticeEntity?> = BehaviorRelay(value: nil)
+        var dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
     }
     
     public init(
-        dataSource: FetchNoticeEntity
+        model: FetchNoticeEntity
     ){
-        self.dataSource = dataSource
+        self.model = model
+        let sectionModel = [NoticeDetailSectionModel(model: self.model,
+                                                     items: self.model.images)]
+        output.dataSource.accept(sectionModel)
     }
 }

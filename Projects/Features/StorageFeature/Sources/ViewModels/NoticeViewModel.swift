@@ -33,5 +33,11 @@ public class NoticeViewModel {
         fetchNoticeUseCase: any FetchNoticeUseCase
     ){
         self.fetchNoticeUseCase = fetchNoticeUseCase
+        
+        self.fetchNoticeUseCase.execute(type: .all)
+            .catchAndReturn([])
+            .asObservable()
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
     }
 }

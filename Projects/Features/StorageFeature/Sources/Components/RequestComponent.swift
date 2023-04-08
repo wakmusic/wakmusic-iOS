@@ -16,10 +16,11 @@ public protocol RequestDependency: Dependency {
     var qnaComponent: QnaComponent {get}
     var questionComponent: QuestionComponent {get}
     var containSongsComponent: ContainSongsComponent {get}
+    var noticeComponent: NoticeComponent {get}
 }
 
 public final class RequestComponent: Component<RequestDependency> {
     public func makeView() -> RequestViewController {
-        return RequestViewController.viewController(viewModel: .init(withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase),qnaComponent:dependency.qnaComponent,questionComponent: dependency.questionComponent,containSongsComponent: dependency.containSongsComponent)
+        return RequestViewController.viewController(viewModel: .init(withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase),qnaComponent:dependency.qnaComponent,questionComponent: dependency.questionComponent,containSongsComponent: dependency.containSongsComponent, noticeComponent: dependency.noticeComponent)
     }
 }
