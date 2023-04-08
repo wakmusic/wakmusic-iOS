@@ -247,16 +247,16 @@
                                 <rect key="frame" x="0.0" y="127" width="393" height="691"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="KUh-ao-w0I">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="844"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="912"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zMl-5J-ofH">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="844"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="912"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BGu-F3-sfd">
-                                                        <rect key="frame" x="20" y="0.0" width="353" height="844"/>
+                                                        <rect key="frame" x="20" y="0.0" width="353" height="912"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aaR-4V-WvI">
-                                                                <rect key="frame" x="0.0" y="0.0" width="353" height="128"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="353" height="196"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1d0-Hv-kdq">
                                                                         <rect key="frame" x="0.0" y="0.0" width="353" height="60"/>
@@ -315,10 +315,39 @@
                                                                             <constraint firstItem="t4S-Vg-qjJ" firstAttribute="leading" secondItem="7Tx-L7-y7N" secondAttribute="leading" id="zFQ-lu-ygA"/>
                                                                         </constraints>
                                                                     </view>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gq4-IK-2Tg">
+                                                                        <rect key="frame" x="0.0" y="136" width="353" height="60"/>
+                                                                        <subviews>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVZ-XW-d3c">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="353" height="60"/>
+                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                <state key="normal" title="Button"/>
+                                                                                <connections>
+                                                                                    <action selector="movenoticeAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="n11-Ej-qXP"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kRP-CH-eAc">
+                                                                                <rect key="frame" x="32" y="18" width="24" height="24"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="24" id="918-SU-c3j"/>
+                                                                                    <constraint firstAttribute="width" constant="24" id="hFb-pX-DTe"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstItem="kRP-CH-eAc" firstAttribute="leading" secondItem="gq4-IK-2Tg" secondAttribute="leading" constant="32" id="4Ci-El-EAg"/>
+                                                                            <constraint firstItem="CVZ-XW-d3c" firstAttribute="top" secondItem="gq4-IK-2Tg" secondAttribute="top" id="K1Y-A3-Gh9"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="CVZ-XW-d3c" secondAttribute="trailing" id="PYH-nD-Biq"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="CVZ-XW-d3c" secondAttribute="bottom" id="ZMw-VE-BGt"/>
+                                                                            <constraint firstItem="CVZ-XW-d3c" firstAttribute="leading" secondItem="gq4-IK-2Tg" secondAttribute="leading" id="edO-Jj-bIh"/>
+                                                                            <constraint firstAttribute="height" constant="60" id="gxq-r7-wAv"/>
+                                                                            <constraint firstItem="kRP-CH-eAc" firstAttribute="centerY" secondItem="gq4-IK-2Tg" secondAttribute="centerY" id="r2a-uo-ku9"/>
+                                                                        </constraints>
+                                                                    </view>
                                                                 </subviews>
                                                             </stackView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fJU-We-6wI">
-                                                                <rect key="frame" x="0.0" y="128" width="353" height="594"/>
+                                                                <rect key="frame" x="0.0" y="196" width="353" height="594"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JB3-7G-rDj">
                                                                         <rect key="frame" x="0.0" y="16" width="16" height="16"/>
@@ -359,13 +388,13 @@
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fnj-Dt-I5a">
-                                                                <rect key="frame" x="0.0" y="722" width="353" height="40"/>
+                                                                <rect key="frame" x="0.0" y="790" width="353" height="40"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="wXr-LH-pES"/>
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pPl-yO-YTp">
-                                                                <rect key="frame" x="0.0" y="762" width="353" height="82"/>
+                                                                <rect key="frame" x="0.0" y="830" width="353" height="82"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BxV-hL-tOq">
                                                                         <rect key="frame" x="0.0" y="0.0" width="353" height="44"/>
@@ -471,6 +500,9 @@
                         <outlet property="descriptionLabel" destination="1E7-2j-vSB" id="Nrk-5e-KHm"/>
                         <outlet property="dotLabel" destination="akS-zM-kcB" id="tlA-bu-XNL"/>
                         <outlet property="fakeViewHeight" destination="wXr-LH-pES" id="lBE-Jp-XyB"/>
+                        <outlet property="noticeButton" destination="CVZ-XW-d3c" id="nfo-3e-eqy"/>
+                        <outlet property="noticeImageView" destination="kRP-CH-eAc" id="7xV-7S-cQI"/>
+                        <outlet property="noticeSuperView" destination="gq4-IK-2Tg" id="fjA-ed-mnn"/>
                         <outlet property="privacyButton" destination="jaO-B6-A4K" id="l66-Na-3gM"/>
                         <outlet property="qnaButton" destination="t4S-Vg-qjJ" id="b3G-vn-2cM"/>
                         <outlet property="qnaSuperImageview" destination="oo2-hq-of5" id="5cr-5D-dD6"/>

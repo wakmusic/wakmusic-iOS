@@ -637,6 +637,19 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
+        return appComponent.fetchNoticeUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NoticePopupComponent
+private func factorycd081aacb61d6a707ca7f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticePopupDependency579e3504f53119c2eef1Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase {
         return appComponent.fetchProfileListUseCase
@@ -724,6 +737,11 @@ extension AppComponent: Registration {
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
         localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
+        localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
+        localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { self.remoteNoticeDataSource as Any }
+        localTable["noticeRepository-any NoticeRepository"] = { self.noticeRepository as Any }
+        localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { self.fetchNoticeUseCase as Any }
+        localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { self.fetchNoticeCategoriesUseCase as Any }
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { self.suggestFunctionComponent as Any }
         localTable["wakMusicFeedbackComponent-WakMusicFeedbackComponent"] = { self.wakMusicFeedbackComponent as Any }
@@ -972,6 +990,11 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
+extension NoticePopupComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NoticePopupDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
+    }
+}
 extension ProfilePopComponent: Registration {
     public func registerItems() {
         keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
@@ -1029,6 +1052,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }
 #endif

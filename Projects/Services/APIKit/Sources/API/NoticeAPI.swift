@@ -12,16 +12,14 @@ import DataMappingModule
 import ErrorModule
 
 public enum NoticeAPI {
-    case fetchAllNoticeList
-    case fetchLatestNoticeList
+    case fetchNotice(type: NoticeType)
     case fetchNoticeCategories
 }
 
 extension NoticeAPI: WMAPI {
     public var domain: WMDomain {
         switch self{
-        case .fetchAllNoticeList,
-             .fetchLatestNoticeList,
+        case .fetchNotice,
              .fetchNoticeCategories:
             return .notice
         }
@@ -29,10 +27,8 @@ extension NoticeAPI: WMAPI {
     
     public var urlPath: String {
         switch self {
-        case .fetchAllNoticeList:
-            return ""
-        case .fetchLatestNoticeList:
-            return "/latest"
+        case let .fetchNotice(type):
+            return type.addPathString
         case .fetchNoticeCategories:
             return "/categories"
         }
@@ -40,8 +36,7 @@ extension NoticeAPI: WMAPI {
     
     public var method: Moya.Method {
         switch self {
-        case .fetchAllNoticeList,
-             .fetchLatestNoticeList,
+        case .fetchNotice,
              .fetchNoticeCategories:
             return .get
         }
@@ -49,8 +44,7 @@ extension NoticeAPI: WMAPI {
     
     public var task: Moya.Task {
         switch self {
-        case .fetchAllNoticeList,
-             .fetchLatestNoticeList,
+        case .fetchNotice,
              .fetchNoticeCategories:
             return .requestPlain
         }

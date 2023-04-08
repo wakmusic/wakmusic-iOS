@@ -12,8 +12,13 @@ import PanModal
 import SnapKit
 import Then
 import DesignSystem
+import RxSwift
+import RxCocoa
 
-public class NoticePopupViewController: UIViewController {
+public class NoticePopupViewController: UIViewController, ViewControllerFromStoryBoard {
+
+    var viewModel: NoticePopupViewModel!
+    var disposeBag = DisposeBag()
 
     private lazy var contentImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -55,6 +60,14 @@ public class NoticePopupViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    }
+    
+    public static func viewController(
+        viewModel: NoticePopupViewModel
+    ) -> NoticePopupViewController {
+        let viewController = NoticePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        viewController.viewModel = viewModel
+        return viewController
     }
 }
 
