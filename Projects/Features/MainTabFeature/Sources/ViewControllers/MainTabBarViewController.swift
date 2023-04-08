@@ -92,7 +92,6 @@ extension MainTabBarViewController {
             .subscribe(onNext: { (owner, model) in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
             }).disposed(by: disposeBag)
-
     }
     
     private func configureUI() {
