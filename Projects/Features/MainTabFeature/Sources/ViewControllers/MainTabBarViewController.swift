@@ -94,7 +94,7 @@ extension MainTabBarViewController {
             .withUnretained(self)
             .subscribe(onNext: { (owner, model) in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
-                viewController.delegate = self
+                viewController.delegate = owner
                 owner.showPanModal(content: viewController)
             }).disposed(by: disposeBag)
     }
@@ -131,8 +131,9 @@ extension MainTabBarViewController {
 
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {
     public func noticeTapped() {
+        guard let navigationController = self.viewControllers[selectedIndex] as? UINavigationController else { return }
         let viewController = noticeComponent.makeView()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
 
