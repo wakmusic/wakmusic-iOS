@@ -100,7 +100,12 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
-    public static func viewController(viewModel:RequestViewModel,qnaComponent:QnaComponent,questionComponent:QuestionComponent,containSongsComponent:ContainSongsComponent) -> RequestViewController {
+    public static func viewController(
+        viewModel:RequestViewModel,
+        qnaComponent: QnaComponent,
+        questionComponent: QuestionComponent,
+        containSongsComponent: ContainSongsComponent
+    ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.qnaComponent = qnaComponent

@@ -140,6 +140,9 @@ private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: Needle
     return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
+        return appComponent.fetchNoticeUseCase
+    }
     var homeComponent: HomeComponent {
         return appComponent.homeComponent
     }
@@ -154,6 +157,9 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     }
     var storageComponent: StorageComponent {
         return appComponent.storageComponent
+    }
+    var noticePopupComponent: NoticePopupComponent {
+        return appComponent.noticePopupComponent
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -405,6 +411,33 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
 private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->NoticeDetailComponent
+private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDetailDependency714af3aed40eaebda420Provider()
+}
+private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
+        return appComponent.fetchNoticeUseCase
+    }
+    var noticeDetailComponent: NoticeDetailComponent {
+        return appComponent.noticeDetailComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NoticeComponent
+private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class QnaContentDependency68ed55648233d525d265Provider: QnaContentDependency {
 
 
@@ -638,17 +671,15 @@ private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: Needle
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {
-        return appComponent.fetchNoticeUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
+
+
+    init() {
+
     }
 }
 /// ^->AppComponent->NoticePopupComponent
-private func factorycd081aacb61d6a707ca7f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticePopupDependency579e3504f53119c2eef1Provider(appComponent: parent1(component) as! AppComponent)
+private func factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticePopupDependency579e3504f53119c2eef1Provider()
 }
 private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase {
@@ -738,6 +769,8 @@ extension AppComponent: Registration {
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
         localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
         localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
+        localTable["noticeComponent-NoticeComponent"] = { self.noticeComponent as Any }
+        localTable["noticeDetailComponent-NoticeDetailComponent"] = { self.noticeDetailComponent as Any }
         localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { self.remoteNoticeDataSource as Any }
         localTable["noticeRepository-any NoticeRepository"] = { self.noticeRepository as Any }
         localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { self.fetchNoticeUseCase as Any }
@@ -802,11 +835,13 @@ extension PlayerComponent: Registration {
 }
 extension MainTabBarComponent: Registration {
     public func registerItems() {
+        keyPathToName[\MainTabBarDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
         keyPathToName[\MainTabBarDependency.homeComponent] = "homeComponent-HomeComponent"
         keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
+        keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
     }
 }
 extension BottomTabBarComponent: Registration {
@@ -898,6 +933,17 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+    }
+}
+extension NoticeDetailComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension NoticeComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
+        keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
     }
 }
 extension QnaContentComponent: Registration {
@@ -992,7 +1038,7 @@ extension PlayListDetailComponent: Registration {
 }
 extension NoticePopupComponent: Registration {
     public func registerItems() {
-        keyPathToName[\NoticePopupDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
+
     }
 }
 extension ProfilePopComponent: Registration {
@@ -1038,6 +1084,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
@@ -1052,7 +1100,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }
 #endif

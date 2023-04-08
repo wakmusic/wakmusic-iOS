@@ -118,7 +118,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RGh-wh-enb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1445" y="-725"/>
+            <point key="canvasLocation" x="882" y="-680"/>
         </scene>
         <!--Contain Songs View Controller-->
         <scene sceneID="Y9f-em-std">
@@ -255,7 +255,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DNQ-4g-BhW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2418" y="-725"/>
+            <point key="canvasLocation" x="1621" y="-680"/>
         </scene>
         <!--Text Popup View Controller-->
         <scene sceneID="bI1-0I-ZER">
@@ -335,6 +335,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OBO-2f-SLF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140" y="-2"/>
+        </scene>
+        <!--Notice Popup View Controller-->
+        <scene sceneID="sn3-8P-eI9">
+            <objects>
+                <viewController storyboardIdentifier="NoticePopupViewController" id="viz-QP-RRW" customClass="NoticePopupViewController" customModule="CommonFeature" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wQF-bw-XGd">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="abu-BR-oOQ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="w1o-3k-auu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="702"/>
         </scene>
         <!--Play List Detail View Controller-->
         <scene sceneID="Hgz-d6-FsJ">
@@ -729,7 +744,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d5W-9j-TtV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="832.82442748091603" y="-2.1126760563380285"/>
+            <point key="canvasLocation" x="882" y="-2"/>
         </scene>
         <!--Profile Pop View Controller-->
         <scene sceneID="xLm-FU-JZh">

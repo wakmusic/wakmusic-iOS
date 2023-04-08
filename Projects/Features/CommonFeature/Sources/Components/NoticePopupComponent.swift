@@ -11,14 +11,13 @@ import NeedleFoundation
 import DomainModule
 
 public protocol NoticePopupDependency: Dependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {get}
 }
 
 public final class NoticePopupComponent: Component<NoticePopupDependency> {
-    public func makeView() -> NoticePopupViewController  {
+    public func makeView(model: [FetchNoticeEntity]) -> NoticePopupViewController  {
         return NoticePopupViewController.viewController(
             viewModel: .init(
-                fetchNoticeUseCase: dependency.fetchNoticeUseCase
+                fetchNoticeEntities: model
             )
         )
     }

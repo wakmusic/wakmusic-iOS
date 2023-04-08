@@ -14,8 +14,16 @@ import StorageFeature
 
 public extension AppComponent {
     
-    var noticePopupComponent:  NoticePopupComponent {
+    var noticePopupComponent: NoticePopupComponent {
         NoticePopupComponent(parent: self)
+    }
+    
+    var noticeComponent: NoticeComponent {
+        NoticeComponent(parent: self)
+    }
+
+    var noticeDetailComponent: NoticeDetailComponent {
+        NoticeDetailComponent(parent: self)
     }
     
     var remoteNoticeDataSource: any RemoteNoticeDataSource {

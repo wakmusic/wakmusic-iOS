@@ -1,6 +1,6 @@
 //
-//  NoticePopupViewModel.swift
-//  CommonFeature
+//  NoticeViewModel.swift
+//  StorageFeature
 //
 //  Created by KTH on 2023/04/08.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
@@ -14,11 +14,13 @@ import DomainModule
 import DataMappingModule
 import Utility
 
-public class NoticePopupViewModel {
+public class NoticeViewModel {
+    
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    var fetchNoticeEntities: [FetchNoticeEntity]
+    
+    var fetchNoticeUseCase: FetchNoticeUseCase
     
     public struct Input {
     }
@@ -28,9 +30,8 @@ public class NoticePopupViewModel {
     }
     
     public init(
-        fetchNoticeEntities: [FetchNoticeEntity]
+        fetchNoticeUseCase: any FetchNoticeUseCase
     ){
-        self.fetchNoticeEntities = fetchNoticeEntities
-        output.dataSource.accept(self.fetchNoticeEntities)
+        self.fetchNoticeUseCase = fetchNoticeUseCase
     }
 }
