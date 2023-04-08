@@ -20,6 +20,22 @@ class NoticeDetailHeaderView: UICollectionReusableView {
         
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
+
+        dateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        dateLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        dateLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+        
+        timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        timeLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        timeLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+        
+        contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        contentStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        contentStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
     }
 }
 
@@ -55,23 +71,8 @@ extension NoticeDetailHeaderView {
     
     func update(model: FetchNoticeEntity) {
         titleStringLabel.text = model.title
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
-
-        dateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         dateLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
-        dateLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        dateLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
-        
-        timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         timeLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "HH:mm")
-        timeLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        timeLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
-        
         contentStringLabel.text = model.content ?? "팬치들 스샷 참고하세요! 🥰"
-        contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        contentStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        contentStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
     }
 }

@@ -78,8 +78,9 @@ extension NoticePopupViewController {
         collectionView.rx.itemSelected
             .withUnretained(self)
             .subscribe(onNext:{ (owner, _) in
-                owner.dismiss(animated: true)
-                owner.delegate?.noticeTapped()
+                owner.dismiss(animated: true) {
+                    owner.delegate?.noticeTapped()
+                }
             }).disposed(by: disposeBag)
     }
     
