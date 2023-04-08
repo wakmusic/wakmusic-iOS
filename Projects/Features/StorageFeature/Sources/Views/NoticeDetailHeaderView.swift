@@ -26,21 +26,20 @@ class NoticeDetailHeaderView: UICollectionReusableView {
 extension NoticeDetailHeaderView {
     
     static func getCellHeight(model: FetchNoticeEntity) -> CGFloat {
-        
         let availableWidth: CGFloat = APP_WIDTH()-40
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.26
         
         let titleAttributedString = NSMutableAttributedString(
             string: model.title,
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5,
                          .paragraphStyle: paragraphStyle]
         )
-        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: availableWidth)
+        let titleHeight: CGFloat = max(28, titleAttributedString.height(containerWidth: availableWidth))
 
-        let contentString: String = ""
+        let contentString: String = model.content ?? "팬치들 스샷 참고하세요! 🥰"
         let contentAttributedString = NSMutableAttributedString(
             string: contentString,
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
@@ -56,7 +55,7 @@ extension NoticeDetailHeaderView {
     
     func update(model: FetchNoticeEntity) {
         titleStringLabel.text = model.title
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
 
@@ -70,7 +69,7 @@ extension NoticeDetailHeaderView {
         timeLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
         timeLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
         
-        contentStringLabel.text = ""
+        contentStringLabel.text = model.content ?? "팬치들 스샷 참고하세요! 🥰"
         contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         contentStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         contentStringLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
