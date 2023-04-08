@@ -17,6 +17,7 @@ public enum WMImageAPI {
     case fetchRecommendPlayListWithRound(id: String, version: Int)
     case fetchRecommendPlayListWithSquare(id: String, version: Int)
     case fetchYoutubeThumbnail(id: String)
+    case fetchNotice(id: String)
 }
 
 extension WMImageAPI {
@@ -53,6 +54,9 @@ extension WMImageAPI {
             
         case let .fetchYoutubeThumbnail(id):
             return "/vi/\(id)/hqdefault.jpg"
+            
+        case let .fetchNotice(id):
+            return "/static/notice/\(id)"
         }
     }
     

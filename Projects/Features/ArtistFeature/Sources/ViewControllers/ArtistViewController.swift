@@ -7,7 +7,6 @@ import BaseFeature
 import DomainModule
 import NeedleFoundation
 import PDFKit
-import HPParallaxHeader
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
 
