@@ -26,11 +26,11 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
     let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    let naverToken: PublishRelay<(String,String)> = PublishRelay()
-    let googleToken: PublishRelay<(String, ProviderType)> = PublishRelay()
-    let appleToken: PublishRelay<(String, ProviderType)> = PublishRelay() // 각각의 토큰은 뷰모델에서만 처리, input, output에서 제거
+    let naverToken: PublishRelay<(String, String)> = PublishRelay()
+    let googleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
+    let appleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
     let fetchedWMToken: PublishRelay<String> = PublishRelay()
-
+ 
     let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
     let keychain = KeychainImpl()
 
@@ -91,11 +91,10 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         // MARK: GoogleToken, AppleToken WMToken으로 치환
         [googleToken, appleToken].forEach {
             $0
-            .filter{ !$0.0.isEmpty }
+                .filter{ !$0.1.isEmpty }
             .withUnretained(self)
-            .flatMap { (viewModel, tuple) -> Observable<AuthLoginEntity> in
-                var (id, provider) = tuple
-                return viewModel.fetchTokenUseCase.execute(id: id, type: provider)
+            .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
+                return viewModel.fetchTokenUseCase.execute(id: id.1, type: id.0)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
@@ -168,7 +167,7 @@ extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
-            googleToken.accept((id, .google))
+            googleToken.accept((.google, id))
         }
     }
 }
@@ -209,7 +208,7 @@ extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationContr
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifer = credential.user
-            appleToken.accept((userIdentifer, .apple))
+            appleToken.accept((.apple, userIdentifer))
         }
     }
 
