@@ -28,6 +28,7 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     var tappedCellIndex = PublishSubject<Int>()
     var isSelectedAllSongs = PublishSubject<Bool>()
+    var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
     
     private var containSongsComponent: ContainSongsComponent!
@@ -75,23 +76,25 @@ private extension PlaylistViewController {
             shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
             playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable(),
             selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
+            addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
             removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
             itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
         )
         let output = self.viewModel.transform(from: input)
         
-        bindRx(output: output)
+        bindPlaylistTableView(output: output)
+        bindSongCart(output: output)
+        bindCloseButton(output: output)
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
         bindPlayButtonImages(output: output)
         bindwaveStreamAnimationView(output: output)
-        
-        output.willClosePlaylist.sink { [weak self] _ in
-            self?.dismiss(animated: true)
-        }.store(in: &subscription)
-        
+
+    }
+    
+    private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
         output.editState.sink { [weak self] isEditing in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
@@ -104,9 +107,7 @@ private extension PlaylistViewController {
         output.currentSongIndex.sink { [weak self] _ in
             self?.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
-    }
-    
-    private func bindRx(output: PlaylistViewModel.Output) {
+        
         output.dataSource
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
@@ -119,6 +120,37 @@ private extension PlaylistViewController {
                 PlayState.shared.loadAndAppendSongsToPlaylist([song])
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func bindSongCart(output: PlaylistViewModel.Output) {
+        output.indexOfSelectedSongs
+            .skip(1)
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map({ (songs, dataSource) -> (songs: [Int], dataSourceCount: Int) in
+                return (songs, dataSource.first?.items.count ?? 0)
+            })
+            .subscribe(onNext: { [weak self] (songs, dataSourceCount) in
+                guard let self = self else { return }
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: self.view,
+                        type: .playList,
+                        selectedSongCount: songs.count,
+                        totalSongCount: dataSourceCount,
+                        useBottomSpace: true
+                    )
+                    self.songCartView?.delegate = self
+                }
+            }).disposed(by: disposeBag)
+    }
+    
+    private func bindCloseButton(output: PlaylistViewModel.Output) {
+        output.willClosePlaylist.sink { [weak self] _ in
+            self?.dismiss(animated: true)
+        }.store(in: &subscription)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
@@ -240,50 +272,5 @@ extension PlaylistViewController {
         })
         return datasource
     }
-}
-
-extension PlaylistViewController: UITableViewDelegate {
-
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, dragIndicatorViewForRowAt indexPath: IndexPath) -> UIView? {
-        // 편집모드 시 나타나는 오른쪽 Drag Indicator를 변경합니다.
-        let dragIndicatorView = UIImageView(image: DesignSystemAsset.Player.playLarge.image)
-        dragIndicatorView.frame = .init(x: 0, y: 0, width: 32, height: 32)
-        return dragIndicatorView
-    }
-    
-    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true // 모든 Cell 을 이동 가능하게 설정합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // 이동할 데이터를 가져와서 새로운 위치에 삽입합니다.
-        playState.playList.reorderPlaylist(from: sourceIndexPath.row, to: destinationIndexPath.row)
-        HapticManager.shared.impact(style: .light)
-    }
-    
-    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        // 첫 번째 섹션에서만 이동 가능하게 설정합니다.
-        if proposedDestinationIndexPath.section != 0 {
-            return sourceIndexPath
-        }
-        return proposedDestinationIndexPath
-    }
-    
-}
-
-extension PlaylistViewController: PlaylistTableViewCellDelegate {
-    func superButtonTapped(index: Int) {
-        tappedCellIndex.onNext(index)
-    }
-    
-    
 }
     

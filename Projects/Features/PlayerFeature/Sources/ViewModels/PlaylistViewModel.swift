@@ -30,6 +30,7 @@ final class PlaylistViewModel: ViewModelType {
         let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistTableviewCellDidTapEvent: Observable<Int>
         let selectAllSongsButtonDidTapEvent: Observable<Bool>
+        let addPlaylistButtonDidTapEvent: Observable<Void>
         let removeSongsButtonDidTapEvent: Observable<Void>
         let itemMovedEvent: Observable<(sourceIndex: IndexPath, destinationIndex: IndexPath)>
         
@@ -51,6 +52,7 @@ final class PlaylistViewModel: ViewModelType {
     
     private let playState = PlayState.shared
     private var isEditing = false
+    internal var countOfSelectedSongs = 0
     private var subscription = Set<AnyCancellable>()
     private var disposeBag = DisposeBag()
     
@@ -72,6 +74,12 @@ final class PlaylistViewModel: ViewModelType {
         bindProgress(output: output)
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
+        
+        output.indexOfSelectedSongs
+            .map { $0.count }
+            .subscribe(onNext: { [weak self] count in
+                self?.countOfSelectedSongs = count
+            }).disposed(by: disposeBag)
         
         return output
     }
@@ -145,6 +153,10 @@ final class PlaylistViewModel: ViewModelType {
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
         
+        input.addPlaylistButtonDidTapEvent
+            .subscribe { _ in
+            }.disposed(by: disposeBag)
+        
         input.removeSongsButtonDidTapEvent
             .withLatestFrom(output.songEntityOfSelectedSongs){ $1 }
             .withLatestFrom(output.dataSource) { ($0,$1)}
@@ -163,7 +175,8 @@ final class PlaylistViewModel: ViewModelType {
         
         input.itemMovedEvent
             .map { (source: $0.row, dest: $1.row) }
-            .subscribe(onNext: { source, dest in
+            .subscribe(onNext: { [weak self] source, dest in
+                guard let self else { return }
                 var curr = output.dataSource.value.first?.items ?? []
                 let tmp = curr[source]
                 
@@ -206,7 +219,10 @@ final class PlaylistViewModel: ViewModelType {
                 if sourceIsSelected { indexs.append(dest) }
                 
                 indexs.sort()
- 
+                
+                self.playState.playList.reorderPlaylist(from: source, to: dest)
+                print("⭐️", self.playState.playList.currentPlayIndex)
+                
                 output.indexOfSelectedSongs.accept(indexs)
             }).disposed(by: disposeBag)
     }
