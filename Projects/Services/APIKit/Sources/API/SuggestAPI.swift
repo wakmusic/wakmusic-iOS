@@ -68,10 +68,13 @@ extension SuggestAPI: WMAPI {
 
         switch self {
         case let .bug(attaches, content):
-            return .requestParameters(parameters: ["userId": userID,
-                                                   "nickname": nickname,
-                                                   "attachs": attaches,
-                                                   "detailContent": content],
+            var parameters: [String: Any] = ["userId": userID,
+                                             "nickname": nickname,
+                                             "detailContent": content]
+            if !attaches.isEmpty {
+                parameters["attachs"] = attaches
+            }
+            return .requestParameters(parameters: parameters,
                                       encoding: JSONEncoding.default)
 
         case let .function(type, content):
