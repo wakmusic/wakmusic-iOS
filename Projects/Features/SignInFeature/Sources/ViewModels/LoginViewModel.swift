@@ -103,8 +103,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .do(onNext: {
                 self.keychain.save(type: .accessToken, value: $0)
             })
-                .bind(to: fetchedWMToken)
-                .disposed(by: disposeBag)
+            .bind(to: fetchedWMToken)
+            .disposed(by: disposeBag)
         }
 
         // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장

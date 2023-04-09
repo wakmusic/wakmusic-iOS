@@ -80,6 +80,13 @@ extension NoticeDetailViewController {
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        let attributedString: NSAttributedString = NSAttributedString(
+            string: "공지사항",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        self.titleStringLabel.attributedText = attributedString
         collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
                                 forCellWithReuseIdentifier: "NoticeCollectionViewCell")
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -100,12 +107,10 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
         return UIEdgeInsets(top: 20, left: sideSpace, bottom: 20, right: sideSpace)
     }
     
-    //Top & Bottom Margin Between Cell
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 20
     }
     
-    //Side Margin Between Cell
     public func collectionView(_ collectionView: UICollectionView,
                                layout collectionViewLayout: UICollectionViewLayout,
                                minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

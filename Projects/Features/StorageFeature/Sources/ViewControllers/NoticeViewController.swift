@@ -78,6 +78,13 @@ extension NoticeViewController {
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        let attributedString: NSAttributedString = NSAttributedString(
+            string: "공지사항",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                         .kern: -0.5]
+        )
+        self.titleStringLabel.attributedText = attributedString
         self.indicator.startAnimating()
     }
 }
