@@ -14,6 +14,7 @@ let project = Project.makeModule(
         .SPM.RxSwift,
         .SPM.RxMoya,
         .SPM.Moya,
-        .SPM.RealmSwift
+        .SPM.RealmSwift,
+        .SPM.MarqueeLabel
     ]
 )

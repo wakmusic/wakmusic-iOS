@@ -24,6 +24,7 @@ let project = Project.makeModule(
         .SPM.RxKeyboard,
         .SPM.SwiftEntryKit,
         .SPM.CryptoSwift,
-        .SPM.YouTubePlayerKit
+        .SPM.YouTubePlayerKit,
+        .SPM.MarqueeLabel
     ]
 )

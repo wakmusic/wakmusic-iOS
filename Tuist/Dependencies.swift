@@ -24,7 +24,8 @@ let dependencies = Dependencies(
             .remote(url: "https://github.com/RxSwiftCommunity/RxKeyboard.git", requirement: .upToNextMajor(from: "2.0.0")),
             .remote(url: "https://github.com/huri000/SwiftEntryKit", requirement: .upToNextMajor(from: "2.0.0")),
             .remote(url: "https://github.com/kyungkoo/naveridlogin-ios-sp", requirement: .upToNextMajor(from: "4.1.5")),
-            .remote(url: "https://github.com/krzyzanowskim/CryptoSwift.git", requirement: .upToNextMajor(from: "1.6.0"))
+            .remote(url: "https://github.com/krzyzanowskim/CryptoSwift.git", requirement: .upToNextMajor(from: "1.6.0")),
+            .remote(url: "https://github.com/cbpowell/MarqueeLabel.git", requirement: .upToNextMajor(from: "4.3.0"))
         ],
         baseSettings: .settings(
             configurations: [
