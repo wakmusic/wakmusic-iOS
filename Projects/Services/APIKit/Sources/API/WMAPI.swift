@@ -39,6 +39,7 @@ public enum WMDomain: String {
     case naver = "/v1/nid/me"
     case qna = "api/qna"
     case notice = "api/notice"
+    case suggest = "wakenter/suggest" //추후 api/suggest로 변경 예정
 }
 
 extension WMDomain {
