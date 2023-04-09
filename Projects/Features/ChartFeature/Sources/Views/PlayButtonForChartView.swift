@@ -20,11 +20,11 @@ public final class PlayButtonForChartView: UIView {
 
     private let allPlayButton = UIButton().then {
         $0.setTitle("전체재생", for: .normal)
-        $0.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        $0.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     private let shufflePlayButton = UIButton().then {
         $0.setTitle("랜덤재생", for: .normal)
-        $0.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        $0.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     private let updateTimeLabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
