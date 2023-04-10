@@ -54,6 +54,7 @@ final class MiniPlayerView: UIView {
         $0.trailingBuffer = 0
         $0.fadeLength = 3
         $0.animationDelay = 1
+        $0.speed = .duration(10)
     }
     
     internal lazy var artistLabel = MarqueeLabel().then {
@@ -67,6 +68,7 @@ final class MiniPlayerView: UIView {
         $0.trailingBuffer = 0
         $0.fadeLength = 3
         $0.animationDelay = 1
+        $0.speed = .duration(10)
     }
     
     internal lazy var playButton = UIButton().then {
