@@ -12,4 +12,10 @@ public extension TargetScript {
         name: "Needle",
         basedOnDependencyAnalysis: false
     )
+    
+    static let firebaseCrashlytics = TargetScript.pre(
+        path: .relativeToRoot("Scripts/FirebaseCrashlyticsScript.sh"),
+        name: "FirebaseCrashlytics",
+        basedOnDependencyAnalysis: false
+    )
 }

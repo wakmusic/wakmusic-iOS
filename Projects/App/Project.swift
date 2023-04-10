@@ -13,7 +13,7 @@ let settinges: Settings =
 
 let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
 
-let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : []
+let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrashlytics]
 
 let targets: [Target] = [
     .init(
