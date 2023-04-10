@@ -12,6 +12,7 @@ import Utility
 import DesignSystem
 import SnapKit
 import Then
+import MarqueeLabel
 
 final class MiniPlayerView: UIView {
     private lazy var blurEffectView = UIVisualEffectView().then {
@@ -42,22 +43,30 @@ final class MiniPlayerView: UIView {
     
     internal lazy var titleArtistLabelView: UIView = UIView()
     
-    internal lazy var titleLabel = UILabel().then {
+    internal lazy var titleLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
         $0.text = "리와인드(RE:WIND)"
         $0.setLineHeight(lineHeight: 24)
         $0.lineBreakMode = .byTruncatingTail
+        $0.leadingBuffer = 0
+        $0.trailingBuffer = 0
+        $0.fadeLength = 3
+        $0.animationDelay = 1
     }
     
-    internal lazy var artistLabel = UILabel().then {
+    internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "이세계아이돌"
         $0.setLineHeight(lineHeight: 18)
         $0.lineBreakMode = .byTruncatingTail
+        $0.leadingBuffer = 0
+        $0.trailingBuffer = 0
+        $0.fadeLength = 3
+        $0.animationDelay = 1
     }
     
     internal lazy var playButton = UIButton().then {

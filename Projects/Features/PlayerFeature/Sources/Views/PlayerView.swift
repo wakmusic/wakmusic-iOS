@@ -12,6 +12,7 @@ import Utility
 import DesignSystem
 import SnapKit
 import Then
+import MarqueeLabel
 
 public final class PlayerView: UIView {
     private lazy var backgroundView = UIView().then {
@@ -38,7 +39,7 @@ public final class PlayerView: UIView {
         $0.tintColor = .systemGray
     }
     
-    internal lazy var titleLabel = UILabel().then {
+    internal lazy var titleLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
@@ -46,9 +47,13 @@ public final class PlayerView: UIView {
         $0.setLineHeight(lineHeight: 24)
         $0.lineBreakMode = .byTruncatingTail
         $0.textAlignment = .center
+        $0.leadingBuffer = 0
+        $0.trailingBuffer = 0
+        $0.fadeLength = 3
+        $0.animationDelay = 1
     }
     
-    internal lazy var artistLabel = UILabel().then {
+    internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.alpha = 0.6
@@ -57,6 +62,10 @@ public final class PlayerView: UIView {
         $0.setLineHeight(lineHeight: 20)
         $0.lineBreakMode = .byTruncatingTail
         $0.textAlignment = .center
+        $0.leadingBuffer = 0
+        $0.trailingBuffer = 0
+        $0.fadeLength = 3
+        $0.animationDelay = 1
     }
     
     internal lazy var thumbnailImageView = UIImageView().then {
