@@ -10,11 +10,9 @@ let project = Project.makeModule(
     ],
     dependencies: [
         .SPM.NaverLogin,
-        .SPM.Firebase,
         .SPM.RxSwift,
         .SPM.RxMoya,
         .SPM.Moya,
-        .SPM.RealmSwift,
-        .SPM.MarqueeLabel
+        .SPM.RealmSwift
     ]
 )

@@ -33,7 +33,9 @@ let targets: [Target] = [
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
             .SPM.Nimble,
-            .SPM.Quick
+            .SPM.Quick,
+            .SPM.FirebaseAnalytics,
+            .SPM.FirebaseCrashlytics
         ],
         settings: .settings(base: Environment.baseSetting)
     ),
