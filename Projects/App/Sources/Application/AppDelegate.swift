@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
 
+        // configure NaverThirdPartyLoginConnection
         let naverInstance = NaverThirdPartyLoginConnection.getSharedInstance()
         naverInstance?.isNaverAppOauthEnable = true //네이버앱 로그인 설정
         naverInstance?.isInAppOauthEnable = true //사파리 로그인 설정

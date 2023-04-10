@@ -96,5 +96,7 @@
 	<string>[선택권한] 버그 제보 시 카메라 촬영을 하려면 권한 승인이 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
