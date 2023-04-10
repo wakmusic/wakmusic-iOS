@@ -51,7 +51,7 @@ final class MiniPlayerView: UIView {
         $0.setLineHeight(lineHeight: 24)
         $0.lineBreakMode = .byTruncatingTail
         $0.leadingBuffer = 0
-        $0.trailingBuffer = 0
+        $0.trailingBuffer = 35
         $0.fadeLength = 3
         $0.animationDelay = 1
         $0.speed = .duration(10)
@@ -65,7 +65,7 @@ final class MiniPlayerView: UIView {
         $0.setLineHeight(lineHeight: 18)
         $0.lineBreakMode = .byTruncatingTail
         $0.leadingBuffer = 0
-        $0.trailingBuffer = 0
+        $0.trailingBuffer = 20
         $0.fadeLength = 3
         $0.animationDelay = 1
         $0.speed = .duration(10)
