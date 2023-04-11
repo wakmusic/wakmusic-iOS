@@ -17,7 +17,7 @@ public struct FetchNoticeResponseDTO: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, category, title, images
-        case content
+        case content = "main_text"
         case createAt = "create_at"
         case startAt = "start_at"
         case endAt = "end_at"

@@ -13,7 +13,7 @@ let settinges: Settings =
 
 let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
 
-let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : []
+let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle, .firebaseCrashlytics] : [.firebaseCrashlytics]
 
 let targets: [Target] = [
     .init(
@@ -33,7 +33,9 @@ let targets: [Target] = [
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
             .SPM.Nimble,
-            .SPM.Quick
+            .SPM.Quick,
+            .SPM.FirebaseAnalytics,
+            .SPM.FirebaseCrashlytics
         ],
         settings: .settings(base: Environment.baseSetting)
     ),

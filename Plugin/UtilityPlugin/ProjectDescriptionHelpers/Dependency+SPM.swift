@@ -17,7 +17,6 @@ public extension TargetDependency.SPM {
     static let SnapKit = TargetDependency.external(name: "SnapKit")
     static let ReachabilitySwift = TargetDependency.external(name: "ReachabilitySwift")
     static let Lottie = TargetDependency.external(name: "Lottie")
-    static let Firebase = TargetDependency.external(name: "FirebaseAnalytics")
     static let PinLayout = TargetDependency.external(name: "PinLayout")
     static let FlexLayout = TargetDependency.external(name: "FlexLayout")
     static let Quick = TargetDependency.external(name: "Quick")
@@ -30,7 +29,9 @@ public extension TargetDependency.SPM {
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
-    
+    static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
+    static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
+
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
     static let RealmSwift = TargetDependency.package(product: "RealmSwift")
