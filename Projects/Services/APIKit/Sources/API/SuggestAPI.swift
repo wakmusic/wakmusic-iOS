@@ -11,13 +11,12 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 import KeychainModule
-import Utility
 
 public enum SuggestAPI {
-    case bug(attaches: [Data] = [], content: String)
-    case function(type: SuggestPlatformType, content: String)
-    case weeklyChart(content: String)
-    case song(type: SuggestSongAddType, artist: String, songTitle: String, youtubeLink: String, content: String)
+    case bug(userID: String, nickname: String, attaches: [Data] = [], content: String)
+    case function(type: SuggestPlatformType, userID: String, content: String)
+    case weeklyChart(userID: String, content: String)
+    case song(type: SuggestSongAddType, userID: String, artist: String, songTitle: String, youtubeLink: String, content: String)
 }
 
 extension SuggestAPI: WMAPI {
@@ -63,11 +62,8 @@ extension SuggestAPI: WMAPI {
     }
 
     public var task: Moya.Task {
-        let userID: String = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
-        let nickname: String = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.displayName ?? "")
-
         switch self {
-        case let .bug(attaches, content):
+        case let .bug(userID, nickname, attaches, content):
             var parameters: [String: Any] = ["userId": userID,
                                              "nickname": nickname,
                                              "detailContent": content]
@@ -77,18 +73,18 @@ extension SuggestAPI: WMAPI {
             return .requestParameters(parameters: parameters,
                                       encoding: JSONEncoding.default)
 
-        case let .function(type, content):
+        case let .function(type, userID, content):
             return .requestParameters(parameters: ["userId": userID,
                                                    "platform": type.rawValue,
                                                    "detailContent": content],
                                       encoding: JSONEncoding.default)
 
-        case let .weeklyChart(content):
+        case let .weeklyChart(userID, content):
             return .requestParameters(parameters: ["userId": userID,
                                                    "detailContent": content],
                                       encoding: JSONEncoding.default)
 
-        case let .song(type, artist, songTitle, youtubeLink, content):
+        case let .song(type, userID, artist, songTitle, youtubeLink, content):
             return .requestParameters(parameters: ["userId": userID,
                                                    "type": type.rawValue,
                                                    "artist": artist,
