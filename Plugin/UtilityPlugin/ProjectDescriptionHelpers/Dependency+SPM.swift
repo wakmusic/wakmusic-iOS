@@ -29,7 +29,7 @@ public extension TargetDependency.SPM {
     static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
-    static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics")
+    static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
     static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
 
 // MARK: Native SPM
