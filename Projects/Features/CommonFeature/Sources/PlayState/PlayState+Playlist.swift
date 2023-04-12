@@ -56,14 +56,13 @@ extension PlayState {
         }
         
         public func remove(at index: Int) {
-            guard let currentPlayIndex = currentPlayIndex else { return }
-            if index == currentPlayIndex {
+            if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
                 changeCurrentPlayIndexToNext()
             }
             
             list.remove(at: index)
             
-            if index == currentPlayIndex {
+            if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
                 PlayState.shared.currentSong = list[currentPlayIndex].item
                 PlayState.shared.loadInPlaylist(at: currentPlayIndex)
             }
