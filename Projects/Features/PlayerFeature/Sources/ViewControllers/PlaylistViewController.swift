@@ -74,7 +74,8 @@ private extension PlaylistViewController {
             playButtonDidTapEvent: playlistView.playButton.tapPublisher,
             nextButtonDidTapEvent: playlistView.nextButton.tapPublisher,
             shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
-            playlistTableviewCellDidTapEvent: tappedCellIndex.asObservable(),
+            playlistTableviewCellDidTapEvent: playlistView.playlistTableView.rx.itemSelected.asObservable(),
+            playlistTableviewCellDidTapInEditModeEvent: tappedCellIndex.asObservable(),
             selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
             addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
             removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
@@ -110,15 +111,6 @@ private extension PlaylistViewController {
         
         output.dataSource
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
-            .disposed(by: disposeBag)
-        
-        playlistView.playlistTableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .filter { _ in output.editState.value == false }
-            .subscribe(onNext: { (indexPath, dataSource) in
-                let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
-                PlayState.shared.loadAndAppendSongsToPlaylist([song])
-            })
             .disposed(by: disposeBag)
     }
     
@@ -222,7 +214,7 @@ private extension PlaylistViewController {
         output.playerState
             .compactMap { [weak self] state -> (PlaylistTableViewCell, Bool)? in
                 guard let self else { return nil }
-                let index = self.playState.playList.currentPlayIndex
+                guard let index = self.playState.playList.currentPlayIndex else { return nil }
                 guard let cell = self.playlistView.playlistTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? PlaylistTableViewCell else { return nil }
                 return (cell, state == .playing)
             }
@@ -259,10 +251,10 @@ extension PlaylistViewController {
             
             let index = indexPath.row
             let isEditing = output.editState.value
-            let isPlaying = indexPath.row == self.playState.playList.currentPlayIndex
+            let isPlaying = model.isPlaying
             let isAnimating = self.playState.state == .playing
             
-            cell.setContent(song: model, index: index, isEditing: isEditing, isPlaying: isPlaying, isAnimating: isAnimating)
+            cell.setContent(song: model.item, index: index, isEditing: isEditing, isPlaying: isPlaying, isAnimating: isAnimating)
             return cell
             
         }, canEditRowAtIndexPath: { (_, _) -> Bool in

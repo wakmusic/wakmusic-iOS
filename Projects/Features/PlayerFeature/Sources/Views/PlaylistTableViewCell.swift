@@ -74,11 +74,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     
     internal var isPlaying: Bool = false
     
-    internal var isAnimating: Bool = false {
-        didSet {
-            isAnimating ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
-        }
-    }
+    internal var isAnimating: Bool = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -146,7 +142,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
 
 extension PlaylistTableViewCell {
     internal func setContent(song: SongEntity, index: Int, isEditing: Bool, isPlaying: Bool, isAnimating: Bool) {
-        print("셋컨텐트 호출됨", song.title)
         self.thumbnailImageView.kf.setImage(
             with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -161,6 +156,7 @@ extension PlaylistTableViewCell {
         self.updateButtonHidden(isEditing: isEditing, isPlaying: isPlaying)
         self.updateConstraintPlayImageView(isEditing: isEditing)
         self.updateLabelHighlight(isPlaying: isPlaying)
+        self.updateAnimating(isAnimating: isAnimating)
     }
     
     @objc func superButtonSelectedAction() {
@@ -188,6 +184,10 @@ extension PlaylistTableViewCell {
     private func updateLabelHighlight(isPlaying: Bool) {
         titleLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
         artistLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
+    }
+    
+    private func updateAnimating(isAnimating: Bool) {
+        isAnimating ? self.waveStreamAnimationView.play() : self.waveStreamAnimationView.pause()
     }
     
 }
