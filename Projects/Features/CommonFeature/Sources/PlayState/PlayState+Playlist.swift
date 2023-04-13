@@ -63,7 +63,7 @@ extension PlayState {
             list.remove(at: index)
             
             if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
-                PlayState.shared.currentSong = list[currentPlayIndex].item
+                PlayState.shared.currentSong = list[safe: currentPlayIndex]?.item
                 PlayState.shared.loadInPlaylist(at: currentPlayIndex)
             }
         }
@@ -107,8 +107,8 @@ extension PlayState {
             list.insert(movedData, at: to)
         }
         
+        /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
         public func uniqueIndex(of item: PlayListItem) -> Int? {
-            // 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
             return list.firstIndex(where: { $0.item == item.item })
         }
         

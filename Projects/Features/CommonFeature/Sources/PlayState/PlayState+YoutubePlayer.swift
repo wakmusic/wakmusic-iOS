@@ -39,8 +39,8 @@ extension PlayState {
     
     /// ▶️ 플레이리스트의 해당 위치의  곡 재생
     public func loadInPlaylist(at index: Int) {
-        guard (0..<playList.count).contains(index) else { return }
-        self.currentSong = playList.list[index].item
+        guard let playListItem = playList.list[safe: index] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
@@ -49,7 +49,8 @@ extension PlayState {
     public func forward() {
         self.playList.changeCurrentPlayIndexToNext()
         guard let currentPlayIndex = playList.currentPlayIndex else { return }
-        self.currentSong = playList.list[currentPlayIndex].item
+        guard let playListItem = playList.list[safe: currentPlayIndex] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
@@ -58,7 +59,8 @@ extension PlayState {
     public func backward() {
         self.playList.changeCurrentPlayIndexToPrevious()
         guard let currentPlayIndex = playList.currentPlayIndex else { return }
-        self.currentSong = playList.list[currentPlayIndex].item
+        guard let playListItem = playList.list[safe: currentPlayIndex] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
