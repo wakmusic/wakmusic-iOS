@@ -154,18 +154,17 @@ private extension PlaylistView {
     }
     
     private func configureBackground() {
-        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         backgroundView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
+            $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
         }
     }
     
     private func configureContent() {
-        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        
         contentView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Utility.STATUS_BAR_HEGHIT())
-            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
+            $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
             $0.horizontalEdges.equalToSuperview()
         }
     }
@@ -196,6 +195,7 @@ private extension PlaylistView {
     }
     
     private func configurePlaylist() {
+        playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
