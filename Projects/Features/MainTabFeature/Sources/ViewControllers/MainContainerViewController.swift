@@ -37,7 +37,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         return gesture
     }()
     var isDarkContentBackground: Bool = false
-    var playerMode: PlayerMode = .close
+    var playerMode: PlayerMode = .mini
     var disposeBag = DisposeBag()
     
     open override func viewDidLoad() {
