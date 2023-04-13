@@ -29,7 +29,7 @@ extension PlayState {
         public var list: [PlayListItem] {
             didSet(oldValue) {
                 listChanged.send(list)
-                if oldValue.isEmpty { changeCurrentPlayIndex(to: 0) }
+                if oldValue.isEmpty && !list.isEmpty { changeCurrentPlayIndex(to: 0) }
             }
         }
         public var listChanged: CurrentValueSubject<[PlayListItem], Never>
@@ -77,6 +77,8 @@ extension PlayState {
         
         public func removeAll() {
             list.removeAll()
+            PlayState.shared.stop()
+            PlayState.shared.switchPlayerMode(to: .mini)
         }
         
         public func contains(_ item: PlayListItem) -> Bool {

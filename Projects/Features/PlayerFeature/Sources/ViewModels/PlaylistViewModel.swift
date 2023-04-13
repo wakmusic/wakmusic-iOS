@@ -38,7 +38,7 @@ final class PlaylistViewModel: ViewModelType {
     }
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
-        var willClosePlaylist = PassthroughSubject<Bool, Never>()
+        var willClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<Bool, Never>(false)
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
@@ -48,7 +48,6 @@ final class PlaylistViewModel: ViewModelType {
         var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         let dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-        //let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
     
     private let playState = PlayState.shared
@@ -87,7 +86,7 @@ final class PlaylistViewModel: ViewModelType {
     
     private func bindInput(input: Input, output: Output) {
         input.closeButtonDidTapEvent.sink { _ in
-            output.willClosePlaylist.send(true)
+            output.willClosePlaylist.send()
         }.store(in: &subscription)
         
         input.editButtonDidTapEvent.sink { [weak self] _ in
@@ -167,11 +166,16 @@ final class PlaylistViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         input.removeSongsButtonDidTapEvent
-            .withLatestFrom(output.indexOfSelectedSongs) { $1 }
-            .subscribe { selectedIndexs in
-                self.playState.playList.remove(indexs: selectedIndexs)
-                output.indexOfSelectedSongs.accept([])
-            }.disposed(by: disposeBag)
+            .withLatestFrom(output.indexOfSelectedSongs)
+            .subscribe(onNext: { [weak self] selectedIndexs in
+                if selectedIndexs.count == self?.playState.playList.count {
+                    self?.playState.playList.removeAll()
+                    output.willClosePlaylist.send()
+                } else {
+                    self?.playState.playList.remove(indexs: selectedIndexs)
+                    output.indexOfSelectedSongs.accept([])
+                }
+            }).disposed(by: disposeBag)
         
         input.itemMovedEvent
             .map { (sourceIndex: $0.row, destIndex: $1.row ) }
