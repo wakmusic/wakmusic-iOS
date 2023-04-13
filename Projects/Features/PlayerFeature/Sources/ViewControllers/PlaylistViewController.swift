@@ -14,14 +14,24 @@ import SnapKit
 import DesignSystem
 import Utility
 import CommonFeature
+import RxSwift
+import RxRelay
+import RxDataSources
+import DomainModule
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared
     var subscription = Set<AnyCancellable>()
-
-    private var containSongsComponent: ContainSongsComponent!
+    var disposeBag = DisposeBag()
+    
+    var tappedCellIndex = PublishSubject<Int>()
+    var isSelectedAllSongs = PublishSubject<Bool>()
+    var tappedAddPlaylist = PublishSubject<Void>()
+    var tappedRemoveSongs = PublishSubject<Void>()
+    
+    internal var containSongsComponent: ContainSongsComponent!
     
     public var songCartView: CommonFeature.SongCartView!
     public var bottomSheetView: CommonFeature.BottomSheetView!
@@ -48,8 +58,7 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        playlistView.playlistTableView.delegate = self
-        playlistView.playlistTableView.dataSource = self
+        playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
     }
@@ -64,42 +73,94 @@ private extension PlaylistViewController {
             prevButtonDidTapEvent: playlistView.prevButton.tapPublisher,
             playButtonDidTapEvent: playlistView.playButton.tapPublisher,
             nextButtonDidTapEvent: playlistView.nextButton.tapPublisher,
-            shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher
+            shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
+            playlistTableviewCellDidTapEvent: playlistView.playlistTableView.rx.itemSelected.asObservable(),
+            playlistTableviewCellDidTapInEditModeEvent: tappedCellIndex.asObservable(),
+            selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
+            addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
+            removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
+            itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
         )
         let output = self.viewModel.transform(from: input)
         
+        bindPlaylistTableView(output: output)
+        bindSongCart(output: output)
+        bindCloseButton(output: output)
         bindThumbnail(output: output)
         bindCurrentPlayTime(output: output)
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
         bindPlayButtonImages(output: output)
         bindwaveStreamAnimationView(output: output)
-        
-        output.willClosePlaylist.sink { [weak self] _ in
-            self?.dismiss(animated: true)
-        }.store(in: &subscription)
-        
+
+    }
+    
+    private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
         output.editState.sink { [weak self] isEditing in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
             self.playlistView.editButton.setTitle(isEditing ? "완료" : "편집", for: .normal)
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
-            self.playlistView.playlistTableView.visibleCells.forEach { $0.isEditing = isEditing }
+            self.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
         
         output.currentSongIndex.sink { [weak self] _ in
             self?.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
+        
+        output.dataSource
+            .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindSongCart(output: PlaylistViewModel.Output) {
+        output.indexOfSelectedSongs
+            .skip(1)
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map({ (songs, dataSource) -> (songs: [Int], dataSourceCount: Int) in
+                return (songs, dataSource.first?.items.count ?? 0)
+            })
+            .subscribe(onNext: { [weak self] (songs, dataSourceCount) in
+                guard let self = self else { return }
+                switch songs.isEmpty {
+                case true :
+                    self.hideSongCart()
+                case false:
+                    self.showSongCart(
+                        in: self.view,
+                        type: .playList,
+                        selectedSongCount: songs.count,
+                        totalSongCount: dataSourceCount,
+                        useBottomSpace: true
+                    )
+                    self.songCartView?.delegate = self
+                }
+            }).disposed(by: disposeBag)
+    }
+    
+    private func bindCloseButton(output: PlaylistViewModel.Output) {
+        output.willClosePlaylist.sink { [weak self] _ in
+            self?.dismiss(animated: true)
+        }.store(in: &subscription)
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
-        output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
+        if let song = playState.player.source {
+            let thumbnailImageURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+            self.playlistView.thumbnailImageView.kf.setImage(
+                with: URL(string: thumbnailImageURL),
+                placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+                options: [.transition(.fade(0.2))])
+        }
+        
+        output.thumbnailImageURL
+            .dropFirst()
+            .sink { [weak self] thumbnailImageURL in
             self?.playlistView.thumbnailImageView.kf.setImage(
                 with: URL(string: thumbnailImageURL),
                 placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-                options: [.transition(.fade(0.2))]
-            )
+                options: [.transition(.fade(0.2))])
         }.store(in: &subscription)
     }
     
@@ -162,12 +223,12 @@ private extension PlaylistViewController {
         output.playerState
             .compactMap { [weak self] state -> (PlaylistTableViewCell, Bool)? in
                 guard let self else { return nil }
-                let index = self.playState.playList.currentPlayIndex
+                guard let index = self.playState.playList.currentPlayIndex else { return nil }
                 guard let cell = self.playlistView.playlistTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? PlaylistTableViewCell else { return nil }
                 return (cell, state == .playing)
             }
-            .sink { cell, isPlaying in
-                if isPlaying {
+            .sink { cell, isAnimating in
+                if isAnimating {
                     cell.waveStreamAnimationView.play()
                 } else {
                     cell.waveStreamAnimationView.pause()
@@ -187,59 +248,30 @@ private extension PlaylistViewController {
     }
 }
 
-extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playState.playList.count
+extension PlaylistViewController {
+    private func createDatasources(output: PlaylistViewModel.Output) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(configureCell: { [weak self] (_ , tableView, indexPath, model) -> UITableViewCell in
+            guard let self else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier:  PlaylistTableViewCell.identifier, for: IndexPath(row: indexPath.row, section: 0)) as? PlaylistTableViewCell
+            else { return UITableViewCell() }
+            
+            cell.delegate = self
+            cell.selectionStyle = .none
+            
+            let index = indexPath.row
+            let isEditing = output.editState.value
+            let isPlaying = model.isPlaying
+            let isAnimating = self.playState.state == .playing
+            
+            cell.setContent(song: model.item, index: index, isEditing: isEditing, isPlaying: isPlaying, isAnimating: isAnimating)
+            return cell
+            
+        }, canEditRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        }, canMoveRowAtIndexPath: { (_, _) -> Bool in
+            return true
+        })
+        return datasource
     }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell
-        else { return UITableViewCell() }
-        cell.selectionStyle = .none
-        let songs = playState.playList.list
-        cell.setContent(song: songs[indexPath.row])
-        cell.isPlaying = indexPath.row == playState.playList.currentPlayIndex
-        return cell
-    }
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if playState.playList.currentPlayIndex != indexPath.row {
-            playState.loadInPlaylist(at: indexPath.row) // 현재 재생중인 곡 이외의 Cell을 선택 시 해당 곡이 재생됩니다.
-        }
-    }
-    
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, dragIndicatorViewForRowAt indexPath: IndexPath) -> UIView? {
-        // 편집모드 시 나타나는 오른쪽 Drag Indicator를 변경합니다.
-        let dragIndicatorView = UIImageView(image: DesignSystemAsset.Player.playLarge.image)
-        dragIndicatorView.frame = .init(x: 0, y: 0, width: 32, height: 32)
-        return dragIndicatorView
-    }
-    
-    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true // 모든 Cell 을 이동 가능하게 설정합니다.
-    }
-    
-    public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // 이동할 데이터를 가져와서 새로운 위치에 삽입합니다.
-        playState.playList.reorderPlaylist(from: sourceIndexPath.row, to: destinationIndexPath.row)
-        HapticManager.shared.impact(style: .light)
-    }
-    
-    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        // 첫 번째 섹션에서만 이동 가능하게 설정합니다.
-        if proposedDestinationIndexPath.section != 0 {
-            return sourceIndexPath
-        }
-        return proposedDestinationIndexPath
-    }
-    
 }
     

@@ -15,22 +15,21 @@ public extension PlayState {
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func loadAndAppendSongsToPlaylist(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
         guard let firstSong = songs.first else { return }
+        let uniqueIndex = self.playList.uniqueIndex(of: PlayListItem(item: firstSong))
         
-        if let uniqueIndex = self.playList.uniqueIndex(of: firstSong) {
-            self.playList.currentPlayIndex = uniqueIndex
+        if let uniqueIndex {
+            self.playList.changeCurrentPlayIndex(to: uniqueIndex)
         } else {
-            self.playList.append(firstSong)
-            self.playList.currentPlayIndex = self.playList.lastIndex
+            self.playList.append(PlayListItem(item: firstSong))
+            self.playList.changeCurrentPlayIndex(to: self.playList.lastIndex)
         }
-        if self.state == .cued {
-            self.switchPlayerMode(to: .mini)
-        }
+        
+        if self.state == .cued { self.switchPlayerMode(to: .mini) }
         self.load(at: firstSong)
         
         songs.dropFirst().forEach { song in
-            if self.playList.uniqueIndex(of: song) == nil {
-                self.playList.append(song)
-            }
+            let uniqueIndex = self.playList.uniqueIndex(of: PlayListItem(item: song))
+            if uniqueIndex == nil { self.playList.append(PlayListItem(item: song)) }
         }
     }
     
@@ -38,15 +37,11 @@ public extension PlayState {
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func appendSongsToPlaylist(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
         songs.forEach { song in
-            if self.playList.uniqueIndex(of: song) == nil {
-                self.playList.append(song)
+            if self.playList.uniqueIndex(of: PlayListItem(item: song)) == nil {
+                self.playList.append(PlayListItem(item: song))
             }
         }
-        if self.state == .cued {
-            self.switchPlayerMode(to: .mini)
-            guard let song = songs.first else { return }
-            self.player.cue(source: .video(id: song.id))
-            self.currentSong = song
-        }
+        // player.stop 하면 .cued 상태
+        if self.state == .cued { self.switchPlayerMode(to: .mini) }
     }
 }

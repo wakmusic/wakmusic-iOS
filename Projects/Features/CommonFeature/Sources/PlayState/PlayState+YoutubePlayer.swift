@@ -27,7 +27,7 @@ extension PlayState {
         self.player.stop()
         self.currentSong = nil
         self.progress.clear()
-        self.playList.list.removeAll()
+        //self.playList.removeAll()
     }
     
     /// ▶️ 해당 곡 새로 재생
@@ -39,24 +39,28 @@ extension PlayState {
     
     /// ▶️ 플레이리스트의 해당 위치의  곡 재생
     public func loadInPlaylist(at index: Int) {
-        self.playList.currentPlayIndex = index
-        self.currentSong = self.playList.current
+        guard let playListItem = playList.list[safe: index] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
     
     /// ⏩ 다음 곡으로 변경 후 재생
     public func forward() {
-        self.playList.next()
-        self.currentSong = playList.current
+        self.playList.changeCurrentPlayIndexToNext()
+        guard let currentPlayIndex = playList.currentPlayIndex else { return }
+        guard let playListItem = playList.list[safe: currentPlayIndex] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
     
     /// ⏪ 이전 곡으로 변경 후 재생
     public func backward() {
-        self.playList.back()
-        self.currentSong = playList.current
+        self.playList.changeCurrentPlayIndexToPrevious()
+        guard let currentPlayIndex = playList.currentPlayIndex else { return }
+        guard let playListItem = playList.list[safe: currentPlayIndex] else { return }
+        self.currentSong = playListItem.item
         guard let currentSong = currentSong else { return }
         load(at: currentSong)
     }
@@ -73,7 +77,7 @@ extension PlayState {
     
     /// ♻️ 첫번째 곡으로 변경 후 재생
     public func playAgain() {
-        self.playList.currentPlayIndex = 0
+        self.playList.changeCurrentPlayIndex(to: 0)
         self.currentSong = playList.first
         guard let currentSong = currentSong else { return }
         load(at: currentSong)

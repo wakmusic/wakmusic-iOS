@@ -15,6 +15,10 @@ import Lottie
 import Kingfisher
 import Utility
 
+internal protocol PlaylistTableViewCellDelegate: AnyObject {
+    func superButtonTapped(index: Int)
+}
+
 internal class PlaylistTableViewCell: UITableViewCell {
     static let identifier = "PlaylistTableViewCell"
     
@@ -59,23 +63,18 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.contentMode = .scaleAspectFit
     }
     
-    internal lazy var reorderImageView = UIImageView().then {
-        $0.image = DesignSystemAsset.Storage.move.image
+    internal lazy var superButton = UIButton().then {
+        $0.addTarget(self, action: #selector(superButtonSelectedAction), for: .touchUpInside)
     }
     
-    internal var isPlaying: Bool = false {
-        didSet {
-            updateButtonHidden()
-            highlight()
-            isPlaying ? waveStreamAnimationView.play() : waveStreamAnimationView.pause()
-        }
-    }
+    internal weak var delegate: PlaylistTableViewCellDelegate?
     
-    override var isEditing: Bool {
-        didSet {
-            replaceAnimation()
-        }
-    }
+    internal var model: (index: Int, song: SongEntity?) = (0, nil)
+    
+    
+    internal var isPlaying: Bool = false
+    
+    internal var isAnimating: Bool = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -91,73 +90,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
         isPlaying = false
     }
     
-    private func updateButtonHidden() {
-        if isEditing {
-            playImageView.isHidden = true
-            waveStreamAnimationView.isHidden = true
-        } else {
-            playImageView.isHidden = isPlaying
-            waveStreamAnimationView.isHidden = !isPlaying
-        }
-    }
-    
-    private func replaceAnimation() {
-        if isEditing {
-            UIView.animate(withDuration: 0.3) { [weak self] in // 오른쪽으로 사라지는 애니메이션
-                guard let self else { return }
-                self.playImageView.alpha = 0
-                self.playImageView.transform = CGAffineTransform(translationX: 100, y: 0)
-                self.playImageView.snp.updateConstraints {
-                    $0.right.equalTo(self.contentView.snp.right).offset(24)
-                }
-                self.waveStreamAnimationView.alpha = 0
-                self.waveStreamAnimationView.transform = CGAffineTransform(translationX: 100, y: 0)
-                self.waveStreamAnimationView.snp.updateConstraints {
-                    $0.right.equalTo(self.contentView.snp.right).offset(24)
-                }
-                self.layoutIfNeeded()
-            } completion: { [weak self] _ in
-                guard let self else { return }
-                self.playImageView.isHidden = true
-                self.waveStreamAnimationView.isHidden = true
-            }
-        } else {
-            self.playImageView.isHidden = isPlaying
-            self.waveStreamAnimationView.isHidden = !isPlaying
-            UIView.animate(withDuration: 0.3) { [weak self] in // 다시 돌아오는 애니메이션
-                guard let self else { return }
-                self.playImageView.alpha = 1
-                self.playImageView.transform = .identity
-                self.playImageView.snp.updateConstraints {
-                    $0.right.equalTo(self.contentView.snp.right).offset(-20)
-                }
-                self.waveStreamAnimationView.alpha = 1
-                self.waveStreamAnimationView.transform = .identity
-                self.waveStreamAnimationView.snp.updateConstraints {
-                    $0.right.equalTo(self.contentView.snp.right).offset(-20)
-                }
-                self.layoutIfNeeded()
-            }
-            
-        }
-    }
-    
-    private func highlight() {
-        titleLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
-        artistLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
-    }
-    
-    internal func setContent(song: SongEntity) {
-        self.thumbnailImageView.kf.setImage(
-            with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
-            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-            options: [.transition(.fade(0.2))]
-        )
-        
-        self.titleLabel.text = song.title
-        self.artistLabel.text = song.artist
-    }
-    
     private func configureContents() {
         self.backgroundColor = .clear
         self.contentView.addSubview(self.thumbnailImageView)
@@ -165,6 +97,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.artistLabel)
         self.contentView.addSubview(self.playImageView)
         self.contentView.addSubview(self.waveStreamAnimationView)
+        self.contentView.addSubview(self.superButton)
         
         let height = 40
         let width = height * 16 / 9
@@ -198,6 +131,63 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.centerY.equalTo(contentView.snp.centerY)
             $0.right.equalTo(contentView.snp.right).offset(-20)
         }
+        
+        superButton.snp.makeConstraints {
+            $0.left.top.bottom.equalToSuperview()
+            $0.right.equalToSuperview()
+        }
+    }
+    
+}
+
+extension PlaylistTableViewCell {
+    internal func setContent(song: SongEntity, index: Int, isEditing: Bool, isPlaying: Bool, isAnimating: Bool) {
+        self.thumbnailImageView.kf.setImage(
+            with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
+            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            options: [.transition(.fade(0.2))]
+        )
+        
+        self.titleLabel.text = song.title
+        self.artistLabel.text = song.artist
+        self.model = (index, song)
+        self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        
+        self.updateButtonHidden(isEditing: isEditing, isPlaying: isPlaying)
+        self.updateConstraintPlayImageView(isEditing: isEditing)
+        self.updateLabelHighlight(isPlaying: isPlaying)
+        self.updateAnimating(isAnimating: isAnimating)
+    }
+    
+    @objc func superButtonSelectedAction() {
+        delegate?.superButtonTapped(index: model.index)
+    }
+    
+    private func updateButtonHidden(isEditing: Bool, isPlaying: Bool) {
+        if isEditing {
+            playImageView.isHidden = true
+            waveStreamAnimationView.isHidden = true
+        } else {
+            playImageView.isHidden = isPlaying
+            waveStreamAnimationView.isHidden = !isPlaying
+        }
+        superButton.isHidden = !isEditing
+    }
+    
+    private func updateConstraintPlayImageView(isEditing: Bool) {
+        let offset = isEditing ? 22 : -20
+        self.playImageView.snp.updateConstraints {
+            $0.right.equalToSuperview().offset(offset)
+        }
+    }
+    
+    private func updateLabelHighlight(isPlaying: Bool) {
+        titleLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
+        artistLabel.textColor = isPlaying ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray900.color
+    }
+    
+    private func updateAnimating(isAnimating: Bool) {
+        isAnimating ? self.waveStreamAnimationView.play() : self.waveStreamAnimationView.pause()
     }
     
 }

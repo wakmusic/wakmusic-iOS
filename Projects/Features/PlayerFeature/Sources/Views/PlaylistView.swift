@@ -58,6 +58,10 @@ public final class PlaylistView: UIView {
         $0.effect = UIBlurEffect(style: .regular)
     }
     
+    private lazy var homeIndicatorBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+    }
+    
     internal lazy var miniPlayerView = UIView().then {
         $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
@@ -129,6 +133,7 @@ private extension PlaylistView {
         self.configurePlaylist()
         self.configureBlur()
         self.configureMiniPlayer()
+        self.configreHomeIndicatorBackgroundView()
     }
     
     private func configureSubViews() {
@@ -141,6 +146,7 @@ private extension PlaylistView {
         contentView.addSubview(playlistTableView)
         contentView.addSubview(blurEffectView)
         contentView.addSubview(miniPlayerView)
+        contentView.addSubview(homeIndicatorBackgroundView)
         miniPlayerView.addSubview(miniPlayerContentView)
         miniPlayerContentView.addSubview(thumbnailImageView)
         miniPlayerContentView.addSubview(miniPlayerStackView)
@@ -154,18 +160,16 @@ private extension PlaylistView {
     }
     
     private func configureBackground() {
-        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         backgroundView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
+            $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
         }
     }
     
     private func configureContent() {
-        let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         contentView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Utility.STATUS_BAR_HEGHIT())
-            $0.bottom.equalToSuperview().offset(-safeAreaBottomInset)
+            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
         }
     }
@@ -196,6 +200,7 @@ private extension PlaylistView {
     }
     
     private func configurePlaylist() {
+        playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
@@ -205,7 +210,7 @@ private extension PlaylistView {
     
     private func configureBlur() {
         blurEffectView.snp.makeConstraints {
-            $0.height.equalTo(56)
+            $0.height.equalTo(56 + SAFEAREA_BOTTOM_HEIGHT())
             $0.bottom.left.right.equalToSuperview()
         }
     }
@@ -213,7 +218,8 @@ private extension PlaylistView {
     private func configureMiniPlayer() {
         miniPlayerView.snp.makeConstraints {
             $0.height.equalTo(56)
-            $0.bottom.left.right.equalToSuperview()
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
         }
         
         totalPlayTimeView.snp.makeConstraints {
@@ -252,5 +258,12 @@ private extension PlaylistView {
         miniPlayerStackView.addArrangedSubview(nextButton)
         miniPlayerStackView.addArrangedSubview(shuffleButton)
         
+    }
+    
+    private func configreHomeIndicatorBackgroundView() {
+        homeIndicatorBackgroundView.snp.makeConstraints {
+            $0.height.equalTo(SAFEAREA_BOTTOM_HEIGHT())
+            $0.left.right.bottom.equalToSuperview()
+        }
     }
 }
