@@ -72,11 +72,14 @@ extension PlayButtonGroupView {
         
         
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+
         allPlaySuperView.layer.cornerRadius = 8
         allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
         allPlaySuperView.layer.borderWidth = 1
         allPlayButton.titleLabel?.alpha = 1
-        
+
         let shufflePlayAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
         
         shufflePlayAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
@@ -85,7 +88,9 @@ extension PlayButtonGroupView {
         
     
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
-        
+        shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+
         shufflePlaySuperView.backgroundColor = .white.withAlphaComponent(0.4)
         shufflePlaySuperView.layer.cornerRadius = 8
         shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
