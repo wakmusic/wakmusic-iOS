@@ -163,6 +163,8 @@ final class PlaylistViewModel: ViewModelType {
         
         input.addPlaylistButtonDidTapEvent
             .subscribe { _ in
+                output.indexOfSelectedSongs.accept([])
+                output.editState.send(false)
             }.disposed(by: disposeBag)
         
         input.removeSongsButtonDidTapEvent

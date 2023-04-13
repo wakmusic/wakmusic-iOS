@@ -17,9 +17,15 @@ extension PlaylistViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
-        case .addPlayList:
-            self.tappedAddPlaylist.onNext(())
-            self.hideSongCart()
+        case .addSong:
+            let songs: [String] = self.playState.playList.list.map { $0.item.id }
+            let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true) {
+                self.tappedAddPlaylist.onNext(())
+                self.hideSongCart()
+            }
+            
         case .remove:
             let count: Int = self.viewModel.countOfSelectedSongs
             let popup = TextPopupViewController.viewController(

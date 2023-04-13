@@ -31,7 +31,7 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
     
-    private var containSongsComponent: ContainSongsComponent!
+    internal var containSongsComponent: ContainSongsComponent!
     
     public var songCartView: CommonFeature.SongCartView!
     public var bottomSheetView: CommonFeature.BottomSheetView!
