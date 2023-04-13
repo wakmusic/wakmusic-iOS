@@ -37,11 +37,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         return gesture
     }()
     var isDarkContentBackground: Bool = false
-    var playerMode: PlayerMode = .mini {
-        didSet {
-//            updateContainerViewBottomConstraint()
-        }
-    }
+    var playerMode: PlayerMode = .close
     var disposeBag = DisposeBag()
     
     open override func viewDidLoad() {
@@ -49,7 +45,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
         configureUI()
         configurePlayer()
-//        updateContainerViewBottomConstraint()
+        updatePlayerMode(with: self.playerMode, animate: false)
         bindNotification()
     }
     
@@ -214,22 +210,22 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 
 public extension MainContainerViewController {
     
-    func updatePlayerMode(with mode: PlayerMode) {
+    func updatePlayerMode(with mode: PlayerMode, animate: Bool) {
         switch mode {
         case .full, .mini:
-            expandPlayer(expanded: mode == .full)
+            expandPlayer(expanded: mode == .full, animate: animate)
         case .close:
-            closePlayer()
+            closePlayer(animate: animate)
         }
     }
     
     // 플레이어 확장, 축소
-    private func expandPlayer(expanded: Bool) {
+    private func expandPlayer(expanded: Bool, animate: Bool) {
         let screenHeight = APP_HEIGHT() - SAFEAREA_BOTTOM_HEIGHT()
         self.panelViewTopConstraint.constant = expanded ? -screenHeight : self.originalPanelPosition
         self.bottomContainerView.isHidden = expanded ? true : false
 
-        UIView.animate(withDuration: 0.5,
+        UIView.animate(withDuration: animate ? 0.5 : 0,
                        delay: 0.0,
                        usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0.8,
@@ -246,8 +242,8 @@ public extension MainContainerViewController {
     }
     
     // 플레이어 닫기
-    private func closePlayer() {
-        UIView.animate(withDuration: 0.5,
+    private func closePlayer(animate: Bool) {
+        UIView.animate(withDuration: animate ? 0.5 : 0,
                        delay: 0.0,
                        usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0.8,
@@ -309,16 +305,6 @@ public extension MainContainerViewController {
         self.panelView.isHidden = true
         DEBUG_LOG("❌ Player Closed")
     }
-    
-    private func updateContainerViewBottomConstraint() {
-        switch self.playerMode {
-        case .full, .mini:
-            self.containerViewBottomConstraint.constant = 56
-        case .close:
-            self.containerViewBottomConstraint.constant = 0
-        }
-        self.view.layoutIfNeeded()
-    }
 }
 
 extension MainContainerViewController {
@@ -327,8 +313,8 @@ extension MainContainerViewController {
             .notification(.updatePlayerMode)
             .subscribe(onNext: { [weak self] (notification) in
                 guard let mode = notification.object as? PlayerMode else { return }
-                self?.updatePlayerMode(with: mode)
                 self?.playerMode = mode
+                self?.updatePlayerMode(with: mode, animate: true)
             }).disposed(by: disposeBag)
         
         NotificationCenter.default.rx
