@@ -57,6 +57,8 @@ extension ArtistPlayButtonGroupView {
         allPlayButton.layer.borderWidth = 1
         allPlayButton.backgroundColor = UIColor.white
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         
         let allButtonAttributedString = NSMutableAttributedString.init(string: "전체재생")
         allButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
@@ -71,6 +73,8 @@ extension ArtistPlayButtonGroupView {
         shufflePlayButton.layer.borderWidth = 1
         shufflePlayButton.backgroundColor = UIColor.white
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
 
         let shuffleButtonAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
         shuffleButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),

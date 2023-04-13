@@ -19,12 +19,23 @@ public final class PlayButtonForChartView: UIView {
     private let disposeBag = DisposeBag()
 
     private let allPlayButton = UIButton().then {
-        $0.setTitle("전체재생", for: .normal)
         $0.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        let attributedString = NSMutableAttributedString(string: "전체재생")
+        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                                                 .kern: -0.5],
+                                                range: NSRange(location: 0, length: attributedString.string.count))
+        $0.setAttributedTitle(attributedString, for: .normal)
     }
     private let shufflePlayButton = UIButton().then {
         $0.setTitle("랜덤재생", for: .normal)
         $0.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
+        let attributedString = NSMutableAttributedString(string: "랜덤재생")
+        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                                                 .kern: -0.5],
+                                                range: NSRange(location: 0, length: attributedString.string.count))
+        $0.setAttributedTitle(attributedString, for: .normal)
     }
     private let updateTimeLabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
@@ -60,12 +71,12 @@ extension PlayButtonForChartView {
             allPlayButton,
             shufflePlayButton
         ].forEach {
-            $0.backgroundColor = .white
-            $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-            $0.setTitleColor(DesignSystemAsset.GrayColor.gray900.color, for: .normal)
-            $0.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+            $0.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
+            $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+            $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
             self.addSubview($0)
         }
 
@@ -80,13 +91,13 @@ extension PlayButtonForChartView {
             $0.top.equalTo(16)
             $0.leading.equalTo(20)
             $0.height.equalTo(52)
-            $0.trailing.equalTo(self.snp.centerX).inset(4)
+            $0.trailing.equalTo(self.snp.centerX).inset(8)
         }
         shufflePlayButton.snp.makeConstraints {
             $0.top.equalTo(16)
             $0.trailing.equalTo(-20)
             $0.height.equalTo(52)
-            $0.leading.equalTo(self.snp.centerX).offset(4)
+            $0.leading.equalTo(self.snp.centerX).offset(8)
         }
         updateTimeImageView.snp.makeConstraints {
             $0.top.equalTo(80)
