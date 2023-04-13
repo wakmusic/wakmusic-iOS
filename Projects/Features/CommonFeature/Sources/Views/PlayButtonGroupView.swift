@@ -73,7 +73,7 @@ extension PlayButtonGroupView {
         
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlaySuperView.layer.cornerRadius = 8
-        allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
         allPlaySuperView.layer.borderWidth = 1
         allPlayButton.titleLabel?.alpha = 1
         
@@ -88,7 +88,7 @@ extension PlayButtonGroupView {
         
         shufflePlaySuperView.backgroundColor = .white.withAlphaComponent(0.4)
         shufflePlaySuperView.layer.cornerRadius = 8
-        shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
         shufflePlaySuperView.layer.borderWidth = 1
         
         
