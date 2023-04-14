@@ -275,6 +275,9 @@ final class PlayerViewModel: ViewModelType {
     }
     
     private func handleCurrentSongChanged(song: SongEntity?, output: Output) {
+        lyricsDict.removeAll()
+        sortedLyrics.removeAll()
+        
         if let song = song {
             let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
             output.thumbnailImageURL.send(thumbnailURL)
@@ -282,6 +285,7 @@ final class PlayerViewModel: ViewModelType {
             output.artistText.send(song.artist)
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
+            sortedLyrics.append("가사를 불러오는 중입니다.")
         } else {
             output.thumbnailImageURL.send("")
             output.titleText.send("")
@@ -289,10 +293,9 @@ final class PlayerViewModel: ViewModelType {
             output.viewsCountText.send("조회수")
             output.likeCountText.send("좋아요")
             output.likeState.send(false)
-            lyricsDict.removeAll()
-            sortedLyrics.removeAll()
-            output.lyricsDidChangedEvent.send(true)
         }
+        
+        output.lyricsDidChangedEvent.send(true)
         
     }
     

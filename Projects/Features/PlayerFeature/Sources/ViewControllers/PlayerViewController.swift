@@ -255,9 +255,11 @@ private extension PlayerViewController {
     
     private func bindLyricsTracking(output: PlayerViewModel.Output) {
         output.playTimeValue
-            .compactMap { [weak self] value -> Int? in
-                guard let self = self, value > 0, !self.viewModel.isLyricsScrolling else { return nil }
-                return self.viewModel.getCurrentLyricsIndex(value)
+            .compactMap { [weak self] time -> Int? in
+                guard let self = self, time > 0,
+                        !self.viewModel.lyricsDict.isEmpty,
+                        !self.viewModel.isLyricsScrolling else { return nil }
+                return self.viewModel.getCurrentLyricsIndex(time)
             }
             .sink { [weak self] index in
                 self?.updateLyricsHighlight(index: index)
