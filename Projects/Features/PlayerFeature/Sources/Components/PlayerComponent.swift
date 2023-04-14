@@ -1,4 +1,5 @@
 import Foundation
+import CommonFeature
 import DomainModule
 import NeedleFoundation
 
@@ -9,6 +10,7 @@ public protocol PlayerDependency: Dependency {
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var playlistComponent: PlaylistComponent { get }
+    var containSongsComponent: ContainSongsComponent { get }
 }
 
 public final class PlayerComponent: Component<PlayerDependency> {
@@ -21,7 +23,8 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 fetchLikeNumOfSongUseCase: dependency.fetchLikeNumOfSongUseCase,
                 fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase
             ),
-            playlistComponent: dependency.playlistComponent
+            playlistComponent: dependency.playlistComponent,
+            containSongsComponent: dependency.containSongsComponent
         )
     }
 }

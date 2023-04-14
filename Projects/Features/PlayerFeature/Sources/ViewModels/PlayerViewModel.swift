@@ -38,7 +38,6 @@ final class PlayerViewModel: ViewModelType {
         var titleText = CurrentValueSubject<String, Never>("")
         var artistText = CurrentValueSubject<String, Never>("")
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
-        var lyricsArray = CurrentValueSubject<[String], Never>(["", "", "", "", ""])
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var playTimeText = CurrentValueSubject<String, Never>("0:00")
@@ -56,6 +55,7 @@ final class PlayerViewModel: ViewModelType {
         var willShowPlaylist = PassthroughSubject<Bool, Never>()
         var showToastMessage = PassthroughSubject<String, Never>()
         var showConfirmModal = PassthroughSubject<String, Never>()
+        var showContainSongsViewController = PassthroughSubject<String, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -184,6 +184,9 @@ final class PlayerViewModel: ViewModelType {
                     output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
                     return
                 }
+                if let currentSong = self.playState.currentSong {
+                    output.showContainSongsViewController.send(currentSong.id)
+                }
             }.store(in: &subscription)
         
         input.playlistButtonDidTapEvent.sink { _ in
@@ -214,12 +217,12 @@ final class PlayerViewModel: ViewModelType {
     
     private func bindCurrentSongChanged(output: Output) {
         playState.$currentSong.sink { [weak self] song in
-            guard let self else { return }
-            guard let song = song else { return }
-            self.handleCurrentSongChanged(song: song, output: output)
-            self.fetchLyrics(for: song, output: output)
-            self.fetchLikeCount(for: song, output: output)
-            self.fetchLikeState(for: song, output: output)
+            self?.handleCurrentSongChanged(song: song, output: output)
+            if let song = song {
+                self?.fetchLyrics(for: song, output: output)
+                self?.fetchLikeCount(for: song, output: output)
+                self?.fetchLikeState(for: song, output: output)
+            }
         }.store(in: &subscription)
     }
     
@@ -271,13 +274,29 @@ final class PlayerViewModel: ViewModelType {
         }
     }
     
-    private func handleCurrentSongChanged(song: SongEntity, output: Output) {
-        let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-        output.thumbnailImageURL.send(thumbnailURL)
-        output.titleText.send(song.title)
-        output.artistText.send(song.artist)
-        output.viewsCountText.send(self.formatNumber(song.views))
-        output.likeCountText.send("준비중")
+    private func handleCurrentSongChanged(song: SongEntity?, output: Output) {
+        lyricsDict.removeAll()
+        sortedLyrics.removeAll()
+        
+        if let song = song {
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+            output.thumbnailImageURL.send(thumbnailURL)
+            output.titleText.send(song.title)
+            output.artistText.send(song.artist)
+            output.viewsCountText.send(self.formatNumber(song.views))
+            output.likeCountText.send("준비중")
+            sortedLyrics.append("가사를 불러오는 중입니다.")
+        } else {
+            output.thumbnailImageURL.send("")
+            output.titleText.send("")
+            output.artistText.send("")
+            output.viewsCountText.send("조회수")
+            output.likeCountText.send("좋아요")
+            output.likeState.send(false)
+        }
+        
+        output.lyricsDidChangedEvent.send(true)
+        
     }
     
     private func handleProgress(progress: PlayState.PlayProgress, output: Output) {

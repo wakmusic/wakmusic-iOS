@@ -24,9 +24,10 @@ extension PlayState {
     
     /// ⏹️ 플레이어 닫기
     public func stop() {
-        self.player.stop()
+        self.player.stop() // stop만 하면 playbackState가 .cued로 들어감
         self.currentSong = nil
         self.progress.clear()
+        self.player.cue(source: .video(id: "")) // playbackState를 .unstarted로 바꿈
         //self.playList.removeAll()
     }
     
