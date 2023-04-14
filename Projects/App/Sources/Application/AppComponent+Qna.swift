@@ -18,21 +18,14 @@ import StorageFeature
 
 
 public extension AppComponent {
-
-    
     var qnaComponent:  QnaComponent {
-        
         QnaComponent(parent: self)
     }
     
     var qnaContentComponent:  QnaContentComponent {
-        
         QnaContentComponent(parent: self)
     }
-    
-  
 
-    
     var remoteQnaDataSource: any RemoteQnaDataSource {
         shared {
             RemoteQnaDataSourceImpl(keychain: keychain)
@@ -41,11 +34,9 @@ public extension AppComponent {
     
     var qnaRepository: any QnaRepository {
         shared {
-            
             QnaRepositoryImpl(remoteQnaDataSource: remoteQnaDataSource)
         }
     }
-    
     
     var fetchQnaCategoriesUseCase: any FetchQnaCategoriesUseCase{
         shared {
@@ -58,6 +49,4 @@ public extension AppComponent {
             FetchQnaUseCaseImpl(qnaRepository: qnaRepository)
         }
     }
-    
- 
 }

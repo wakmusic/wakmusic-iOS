@@ -18,36 +18,25 @@ import StorageFeature
 
 
 public extension AppComponent {
-
-
-    
     var questionComponent: QuestionComponent {
-        
         QuestionComponent(parent: self)
     }
     
     var suggestFunctionComponent:SuggestFunctionComponent {
-        
         SuggestFunctionComponent(parent: self)
     }
 
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent {
-        
         WakMusicFeedbackComponent(parent: self)
     }
     
     var askSongComponent: AskSongComponent {
-        
         AskSongComponent(parent: self)
     }
     
     var bugReportComponent: BugReportComponent {
-        
         BugReportComponent(parent: self)
     }
-    
-    
-    
     
     var remoteQuestionDataSource: any RemoteQnaDataSource {
         shared {
@@ -57,9 +46,7 @@ public extension AppComponent {
     
     var questionRepository: any QnaRepository {
         shared {
-            
             QnaRepositoryImpl(remoteQnaDataSource: remoteQnaDataSource)
         }
     }
- 
 }

@@ -14,6 +14,4 @@ import ErrorModule
 public protocol QnaRepository {
     func fetchQnaCategories() -> Single<[QnaCategoryEntity]>
     func fetchQna() -> Single<[QnaEntity]>
-
-
 }
