@@ -11,14 +11,11 @@ import NeedleFoundation
 import DomainModule
 
 public protocol SuggestFunctionDependency: Dependency {
-    
-    
-
-
+    var suggestFunctionUseCase: SuggestFunctionUseCase { get }
 }
 
 public final class SuggestFunctionComponent: Component<SuggestFunctionDependency> {
     public func makeView() -> SuggestFunctionViewController {
-        return SuggestFunctionViewController.viewController(viewModel: .init())
+        return SuggestFunctionViewController.viewController(viewModel: .init(suggestFunctionUseCase: dependency.suggestFunctionUseCase))
     }
 }

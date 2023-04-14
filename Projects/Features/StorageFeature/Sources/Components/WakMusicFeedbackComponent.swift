@@ -11,14 +11,11 @@ import NeedleFoundation
 import DomainModule
 
 public protocol WakMusicFeedbackDependency: Dependency {
-    
-    
-
-
+    var inquiryWeeklyChartUseCase: InquiryWeeklyChartUseCase { get }
 }
 
 public final class WakMusicFeedbackComponent: Component<WakMusicFeedbackDependency> {
     public func makeView() -> WakMusicFeedbackViewController {
-        return WakMusicFeedbackViewController.viewController(viewModel: .init())
+        return WakMusicFeedbackViewController.viewController(viewModel: .init(inquiryWeeklyChartUseCase: dependency.inquiryWeeklyChartUseCase))
     }
 }

@@ -24,6 +24,7 @@ public final class AskSongViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
     var type: SongRequestType!
+    var modifySongUseCase: ModifySongUseCase
     
     public struct Input {
         var artistString:PublishRelay<String> = PublishRelay()
@@ -37,9 +38,9 @@ public final class AskSongViewModel:ViewModelType {
         var enableCompleteButton: BehaviorRelay<Bool>
     }
 
-    public init(type: SongRequestType){
-        DEBUG_LOG("✅ \(Self.self) 생성")
+    public init(type: SongRequestType, modifySongUseCase: ModifySongUseCase){
         self.type = type
+        self.modifySongUseCase = modifySongUseCase
     }
     
     deinit {

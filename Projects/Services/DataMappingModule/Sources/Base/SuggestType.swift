@@ -13,7 +13,7 @@ public enum SuggestPlatformType: String {
     case pc = "PC"
 }
 
-public enum SuggestSongAddType: String {
+public enum SuggestSongModifyType: String {
     case add = "ADD"
     case update = "UPDATE"
 }

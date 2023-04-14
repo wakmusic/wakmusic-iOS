@@ -17,26 +17,20 @@ import KeychainModule
 public final class SuggestFunctionViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
-    
-    
+    var suggestFunctionUseCase: SuggestFunctionUseCase
 
     public struct Input {
-    
         var textString:PublishRelay<String> = PublishRelay()
-    
     }
 
     public struct Output {
-        
         var selectedIndex:BehaviorRelay<Int> = BehaviorRelay(value: -2)
     }
 
     public init(
-
+        suggestFunctionUseCase: SuggestFunctionUseCase
     ) {
-        
-        DEBUG_LOG("✅ \(Self.self) 생성")
-     
+        self.suggestFunctionUseCase = suggestFunctionUseCase
     }
     
     deinit {
@@ -45,9 +39,6 @@ public final class SuggestFunctionViewModel:ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
-        
-        
         return output
     }
 }

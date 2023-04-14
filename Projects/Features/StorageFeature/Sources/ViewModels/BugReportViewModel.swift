@@ -14,17 +14,16 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 
-
 public final class BugReportViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
+    var reportBugUseCase: ReportBugUseCase
     
     public struct Input {
         var wakNickNameOption:BehaviorRelay<String> = BehaviorRelay(value: "선택")
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishRelay<Void> = PublishRelay()
-        
     }
 
     public struct Output {
@@ -32,8 +31,8 @@ public final class BugReportViewModel:ViewModelType {
         var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
     }
 
-    public init(){
-        DEBUG_LOG("✅ \(Self.self) 생성")
+    public init(reportBugUseCase: ReportBugUseCase){
+        self.reportBugUseCase = reportBugUseCase
     }
     
     deinit {
@@ -61,7 +60,7 @@ public final class BugReportViewModel:ViewModelType {
 
         input.completionButtonTapped
             .withLatestFrom(combineObservable)
-            .subscribe(onNext: { (option,nickName,content) in
+            .subscribe(onNext: { (option, nickName, content) in
                 //TO-DO: 여기를 고쳐서 api 연결하세요.
             }).disposed(by: disposeBag)
 
