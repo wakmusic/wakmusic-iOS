@@ -27,7 +27,7 @@
 			<string>WaktaverseMusicwithNaver</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>waktaverseMusic.naver</string>
+				<string>$(NAVER_URL_SCHEME)</string>
 			</array>
 		</dict>
 		<dict>
@@ -37,7 +37,7 @@
 			<string>WaktaverseMusicwithGoogle</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf</string>
+				<string>$(GOOGLE_URL_SCHEME)</string>
 			</array>
 		</dict>
 	</array>
@@ -100,5 +100,22 @@
 	<false/>
 	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
 	<false/>
+	<key>Secrets</key>
+	<dict>
+		<key>NAVER_CONSUMER_KEY</key>
+		<string>$(NAVER_CONSUMER_KEY)</string>
+		<key>NAVER_URL_SCHEME</key>
+		<string>$(NAVER_URL_SCHEME)</string>
+		<key>NAVER_CONSUMER_SECRET</key>
+		<string>$(NAVER_CONSUMER_SECRET)</string>
+		<key>NAVER_APP_NAME</key>
+		<string>$(NAVER_APP_NAME)</string>
+		<key>GOOGLE_URL_SCHEME</key>
+		<string>$(GOOGLE_URL_SCHEME)</string>
+		<key>GOOGLE_CLIENT_ID</key>
+		<string>$(GOOGLE_CLIENT_ID)</string>
+		<key>GOOGLE_SECRET_KEY</key>
+		<string>$(GOOGLE_SECRET_KEY)</string>
+	</dict>
 </dict>
 </plist>

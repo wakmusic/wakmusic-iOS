@@ -21,11 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.isInAppOauthEnable = true //사파리 로그인 설정
         naverInstance?.setOnlyPortraitSupportInIphone(true)
         
-        naverInstance?.serviceUrlScheme = "waktaverseMusic.naver" //URL Scheme
-        naverInstance?.consumerKey = "eSgFVfD8xaTjK8GDRoyu" //클라이언트 아이디
-        naverInstance?.consumerSecret = "aRtLNRjqmN" //시크릿 아이디
-        naverInstance?.appName = "WAKTAVERSE Music" //앱이름
-        
+        DEBUG_LOG("NAVER_URL_SCHEME: \(NAVER_URL_SCHEME())")
+        naverInstance?.serviceUrlScheme = NAVER_URL_SCHEME() //URL Scheme
+        naverInstance?.consumerKey = NAVER_CONSUMER_KEY() //클라이언트 아이디
+        naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() //시크릿 아이디
+        naverInstance?.appName = NAVER_APP_NAME() //앱이름
+
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playback)
