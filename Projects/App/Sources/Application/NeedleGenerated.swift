@@ -239,26 +239,30 @@ private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: Needle
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AskSongDependency02772625c56a0dda0140Provider: AskSongDependency {
-
-
-    init() {
-
+    var modifySongUseCase: any ModifySongUseCase {
+        return appComponent.modifySongUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->AskSongComponent
-private func factory37544fa026b309cd68d7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AskSongDependency02772625c56a0dda0140Provider()
+private func factory37544fa026b309cd68d7f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AskSongDependency02772625c56a0dda0140Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SuggestFunctionDependency229560bbe33097b02547Provider: SuggestFunctionDependency {
-
-
-    init() {
-
+    var suggestFunctionUseCase: any SuggestFunctionUseCase {
+        return appComponent.suggestFunctionUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->SuggestFunctionComponent
-private func factory63287bff3999ed1787dde3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SuggestFunctionDependency229560bbe33097b02547Provider()
+private func factory63287bff3999ed1787ddf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SuggestFunctionDependency229560bbe33097b02547Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInComponent: SignInComponent {
@@ -459,26 +463,30 @@ private func factory1501f7005831c8411229e3b0c44298fc1c149afb(_ component: Needle
     return QnaContentDependency68ed55648233d525d265Provider()
 }
 private class BugReportDependencyeea5818852f336c35729Provider: BugReportDependency {
-
-
-    init() {
-
+    var reportBugUseCase: any ReportBugUseCase {
+        return appComponent.reportBugUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->BugReportComponent
-private func factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return BugReportDependencyeea5818852f336c35729Provider()
+private func factoryafa28e93c96a785ed32af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return BugReportDependencyeea5818852f336c35729Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class WakMusicFeedbackDependency8d09739bdcd24807ec82Provider: WakMusicFeedbackDependency {
-
-
-    init() {
-
+    var inquiryWeeklyChartUseCase: any InquiryWeeklyChartUseCase {
+        return appComponent.inquiryWeeklyChartUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->WakMusicFeedbackComponent
-private func factory32abe9db091bc43329a1e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return WakMusicFeedbackDependency8d09739bdcd24807ec82Provider()
+private func factory32abe9db091bc43329a1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return WakMusicFeedbackDependency8d09739bdcd24807ec82Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
@@ -885,12 +893,12 @@ extension ChartContentComponent: Registration {
 }
 extension AskSongComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\AskSongDependency.modifySongUseCase] = "modifySongUseCase-any ModifySongUseCase"
     }
 }
 extension SuggestFunctionComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\SuggestFunctionDependency.suggestFunctionUseCase] = "suggestFunctionUseCase-any SuggestFunctionUseCase"
     }
 }
 extension StorageComponent: Registration {
@@ -969,12 +977,12 @@ extension QnaContentComponent: Registration {
 }
 extension BugReportComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\BugReportDependency.reportBugUseCase] = "reportBugUseCase-any ReportBugUseCase"
     }
 }
 extension WakMusicFeedbackComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\WakMusicFeedbackDependency.inquiryWeeklyChartUseCase] = "inquiryWeeklyChartUseCase-any InquiryWeeklyChartUseCase"
     }
 }
 extension RootComponent: Registration {
@@ -1091,8 +1099,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AskSongComponent", factory37544fa026b309cd68d7e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787dde3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->AskSongComponent", factory37544fa026b309cd68d7f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787ddf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
@@ -1103,8 +1111,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32af47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)

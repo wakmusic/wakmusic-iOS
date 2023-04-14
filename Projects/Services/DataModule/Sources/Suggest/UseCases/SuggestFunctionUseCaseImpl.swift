@@ -20,7 +20,7 @@ public struct SuggestFunctionUseCaseImpl: SuggestFunctionUseCase {
     ) {
         self.suggestRepository = suggestRepository
     }
-    public func execute(type: SuggestPlatformType, userID: String, content: String) -> RxSwift.Single<SuggestFunctionEntity> {
+    public func execute(type: SuggestPlatformType, userID: String, content: String) -> Single<SuggestFunctionEntity> {
         suggestRepository.suggestFunction(type: type, userID: userID, content: content)
     }
 }

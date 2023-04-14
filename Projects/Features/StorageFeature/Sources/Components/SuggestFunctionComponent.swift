@@ -11,7 +11,7 @@ import NeedleFoundation
 import DomainModule
 
 public protocol SuggestFunctionDependency: Dependency {
-    var suggestFunctionUseCase: SuggestFunctionUseCase { get }
+    var suggestFunctionUseCase: any SuggestFunctionUseCase { get }
 }
 
 public final class SuggestFunctionComponent: Component<SuggestFunctionDependency> {

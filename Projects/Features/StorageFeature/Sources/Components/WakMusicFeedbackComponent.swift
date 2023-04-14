@@ -11,7 +11,7 @@ import NeedleFoundation
 import DomainModule
 
 public protocol WakMusicFeedbackDependency: Dependency {
-    var inquiryWeeklyChartUseCase: InquiryWeeklyChartUseCase { get }
+    var inquiryWeeklyChartUseCase: any InquiryWeeklyChartUseCase { get }
 }
 
 public final class WakMusicFeedbackComponent: Component<WakMusicFeedbackDependency> {

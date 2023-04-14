@@ -11,7 +11,7 @@ import NeedleFoundation
 import DomainModule
 
 public protocol BugReportDependency: Dependency {
-    var reportBugUseCase: ReportBugUseCase { get }
+    var reportBugUseCase: any ReportBugUseCase { get }
 }
 
 public final class BugReportComponent: Component<BugReportDependency> {

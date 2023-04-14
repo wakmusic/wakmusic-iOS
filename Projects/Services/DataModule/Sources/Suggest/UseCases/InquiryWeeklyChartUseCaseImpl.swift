@@ -20,7 +20,7 @@ public struct InquiryWeeklyChartUseCaseImpl: InquiryWeeklyChartUseCase {
     ) {
         self.suggestRepository = suggestRepository
     }
-    public func execute(userID: String, content: String) -> RxSwift.Single<DomainModule.InquiryWeeklyChartEntity> {
+    public func execute(userID: String, content: String) -> Single<InquiryWeeklyChartEntity> {
         suggestRepository.inquiryWeeklyChart(userID: userID, content: content)
     }
 }
