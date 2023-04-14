@@ -38,7 +38,6 @@ final class PlayerViewModel: ViewModelType {
         var titleText = CurrentValueSubject<String, Never>("")
         var artistText = CurrentValueSubject<String, Never>("")
         var thumbnailImageURL = CurrentValueSubject<String, Never>("")
-        var lyricsArray = CurrentValueSubject<[String], Never>(["", "", "", "", ""])
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var playTimeText = CurrentValueSubject<String, Never>("0:00")
@@ -218,12 +217,12 @@ final class PlayerViewModel: ViewModelType {
     
     private func bindCurrentSongChanged(output: Output) {
         playState.$currentSong.sink { [weak self] song in
-            guard let self else { return }
-            guard let song = song else { return }
-            self.handleCurrentSongChanged(song: song, output: output)
-            self.fetchLyrics(for: song, output: output)
-            self.fetchLikeCount(for: song, output: output)
-            self.fetchLikeState(for: song, output: output)
+            self?.handleCurrentSongChanged(song: song, output: output)
+            if let song = song {
+                self?.fetchLyrics(for: song, output: output)
+                self?.fetchLikeCount(for: song, output: output)
+                self?.fetchLikeState(for: song, output: output)
+            }
         }.store(in: &subscription)
     }
     
@@ -275,13 +274,26 @@ final class PlayerViewModel: ViewModelType {
         }
     }
     
-    private func handleCurrentSongChanged(song: SongEntity, output: Output) {
-        let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-        output.thumbnailImageURL.send(thumbnailURL)
-        output.titleText.send(song.title)
-        output.artistText.send(song.artist)
-        output.viewsCountText.send(self.formatNumber(song.views))
-        output.likeCountText.send("준비중")
+    private func handleCurrentSongChanged(song: SongEntity?, output: Output) {
+        if let song = song {
+            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+            output.thumbnailImageURL.send(thumbnailURL)
+            output.titleText.send(song.title)
+            output.artistText.send(song.artist)
+            output.viewsCountText.send(self.formatNumber(song.views))
+            output.likeCountText.send("준비중")
+        } else {
+            output.thumbnailImageURL.send("")
+            output.titleText.send("")
+            output.artistText.send("")
+            output.viewsCountText.send("조회수")
+            output.likeCountText.send("좋아요")
+            output.likeState.send(false)
+            lyricsDict.removeAll()
+            sortedLyrics.removeAll()
+            output.lyricsDidChangedEvent.send(true)
+        }
+        
     }
     
     private func handleProgress(progress: PlayState.PlayProgress, output: Output) {

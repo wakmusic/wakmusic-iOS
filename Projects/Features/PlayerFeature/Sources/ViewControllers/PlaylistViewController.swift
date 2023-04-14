@@ -146,16 +146,7 @@ private extension PlaylistViewController {
     }
     
     private func bindThumbnail(output: PlaylistViewModel.Output) {
-        if let song = playState.player.source {
-            let thumbnailImageURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-            self.playlistView.thumbnailImageView.kf.setImage(
-                with: URL(string: thumbnailImageURL),
-                placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-                options: [.transition(.fade(0.2))])
-        }
-        
         output.thumbnailImageURL
-            .dropFirst()
             .sink { [weak self] thumbnailImageURL in
             self?.playlistView.thumbnailImageView.kf.setImage(
                 with: URL(string: thumbnailImageURL),
