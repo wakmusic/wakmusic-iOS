@@ -13,17 +13,12 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import KeychainModule
-
-
-public enum SongRequestType {
-    case add
-    case edit
-}
+import DataMappingModule
 
 public final class AskSongViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
-    var type: SongRequestType!
+    var type: SuggestSongModifyType!
     var modifySongUseCase: ModifySongUseCase
     
     public struct Input {
@@ -38,7 +33,7 @@ public final class AskSongViewModel:ViewModelType {
         var enableCompleteButton: BehaviorRelay<Bool>
     }
 
-    public init(type: SongRequestType, modifySongUseCase: ModifySongUseCase){
+    public init(type: SuggestSongModifyType, modifySongUseCase: ModifySongUseCase){
         self.type = type
         self.modifySongUseCase = modifySongUseCase
     }

@@ -140,8 +140,8 @@ extension AskSongViewController {
                          .paragraphStyle: style]
         )
         
-        explainContentView2.isHidden = viewModel.type == .edit
-        redirectWebContentView.isHidden = viewModel.type == .edit
+        explainContentView2.isHidden = viewModel.type == .update
+        redirectWebContentView.isHidden = viewModel.type == .update
     }
     
     private func configureUI(){

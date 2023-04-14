@@ -9,16 +9,17 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import DataMappingModule
 
 public protocol AskSongDependency: Dependency {
     var modifySongUseCase: any ModifySongUseCase { get }
 }
 
 public final class AskSongComponent: Component<AskSongDependency> {
-    public func makeView(type:SongRequestType) -> AskSongViewController {
+    public func makeView(type: SuggestSongModifyType) -> AskSongViewController {
         return AskSongViewController.viewController(
                 viewModel: .init(type: type,
-                             modifySongUseCase: dependency.modifySongUseCase
+                modifySongUseCase: dependency.modifySongUseCase
             )
         )
     }

@@ -11,6 +11,7 @@ import DesignSystem
 import RxSwift
 import Utility
 import BaseFeature
+import DataMappingModule
 
 public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
@@ -235,7 +236,7 @@ extension QuestionViewController {
                     let vc = self.askSongComponent.makeView(type: .add)
                     self.navigationController?.pushViewController(vc, animated: true)
                 case 3:
-                    let vc = self.askSongComponent.makeView(type: .edit)
+                    let vc = self.askSongComponent.makeView(type: .update)
                     self.navigationController?.pushViewController(vc, animated: true)
                 case 4:
                     let vc = self.wakMusicFeedbackComponent.makeView()
