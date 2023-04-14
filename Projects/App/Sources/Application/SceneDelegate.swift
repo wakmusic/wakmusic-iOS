@@ -41,10 +41,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         DEBUG_LOG("[openURLContexts] scheme: \(scheme), URL: \(url.absoluteString)")
         
         switch scheme {
-        case REDIRECT_URI(): //구글
+        case GOOGLE_URL_SCHEME(): //구글
             GoogleLoginManager.shared.getGoogleToken(url)
 
-        case "waktaverseMusic.naver": //네이버
+        case NAVER_URL_SCHEME(): //네이버
             NaverThirdPartyLoginConnection.getSharedInstance().receiveAccessToken(url)
             
         default: return

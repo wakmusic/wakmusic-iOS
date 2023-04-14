@@ -27,9 +27,10 @@ public class GoogleLoginManager {
     // MARK: - 변수 선언
     private let googleURL = "https://accounts.google.com/o/oauth2/v2/auth"
     private let accessTokenGoogleURL = "https://oauth2.googleapis.com"
-    private let getProfileURL =  "https://www.googleapis.com/oauth2/v1/userinfo"
-    private let googleClientID = "715762772031-t7fpm1c6eeccfrcmmo75412kvbljtdhf.apps.googleusercontent.com"
-    private let googleSecretKey = "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"
+    private let getProfileURL = "https://www.googleapis.com/oauth2/v1/userinfo"
+    private let googleClientID = GOOGLE_CLIENT_ID()
+    private let googleSecretKey = GOOGLE_SECRET_KEY()
+    private let googleURLScheme = GOOGLE_URL_SCHEME()
     private let scope = "profile"
 
     private let pkce = try? PKCE()
@@ -43,7 +44,7 @@ public class GoogleLoginManager {
 
         let scope = URLQueryItem(name: "scope", value: scope)
         let responseType = URLQueryItem(name: "response_type", value: "code")
-        let redirectURI = URLQueryItem(name: "redirect_uri", value: "\(REDIRECT_URI()):redirect_uri_path")
+        let redirectURI = URLQueryItem(name: "redirect_uri", value: "\(googleURLScheme):redirect_uri_path")
         let clientID = URLQueryItem(name: "client_id", value: googleClientID)
         let codeChallenge = URLQueryItem(name: "code_challenge", value: pkce?.codeChallenge)
         let codeChallengeMethod = URLQueryItem(name: "code_challenge_method", value: "S256")
@@ -69,7 +70,7 @@ public class GoogleLoginManager {
             "client_id": googleClientID,
             "code": code,
             "code_verifier": pkce?.codeVerifier ?? "",
-            "redirect_uri": "\(REDIRECT_URI()):redirect_uri_path",
+            "redirect_uri": "\(googleURLScheme):redirect_uri_path",
             "grant_type": "authorization_code"
         ]
 

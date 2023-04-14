@@ -37,7 +37,11 @@ let targets: [Target] = [
             .SPM.FirebaseAnalytics,
             .SPM.FirebaseCrashlytics
         ],
-        settings: .settings(base: Environment.baseSetting)
+        settings: .settings(base: Environment.baseSetting,
+                            configurations: [
+                              .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
+                              .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
+                            ])
     ),
     .init(
         name: Environment.targetTestName,

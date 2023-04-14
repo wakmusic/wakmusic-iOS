@@ -86,3 +86,6 @@ Tuist/Dependencies
 
 ### Tuist Signing ###
 Tuist/Signing
+
+### Secrets
+Secrets.xcconfig
