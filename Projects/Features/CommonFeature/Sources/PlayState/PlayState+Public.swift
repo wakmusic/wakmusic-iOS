@@ -24,7 +24,7 @@ public extension PlayState {
             self.playList.changeCurrentPlayIndex(to: self.playList.lastIndex)
         }
         
-        if self.state == .cued { self.switchPlayerMode(to: .mini) }
+        if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
         self.load(at: firstSong)
         
         songs.dropFirst().forEach { song in
@@ -41,7 +41,7 @@ public extension PlayState {
                 self.playList.append(PlayListItem(item: song))
             }
         }
-        // player.stop 하면 .cued 상태
-        if self.state == .cued { self.switchPlayerMode(to: .mini) }
+        
+        if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
     }
 }
