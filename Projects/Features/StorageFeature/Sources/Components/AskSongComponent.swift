@@ -11,14 +11,14 @@ import NeedleFoundation
 import DomainModule
 
 public protocol AskSongDependency: Dependency {
-    
-    
-
-
+    var modifySongUseCase: ModifySongUseCase { get }
 }
 
 public final class AskSongComponent: Component<AskSongDependency> {
     public func makeView(type:SongRequestType) -> AskSongViewController {
-        return AskSongViewController.viewController(viewModel: .init(type: type))
+        return AskSongViewController.viewController(viewModel:
+                .init(type: type,
+                      modifySongUseCase: dependency.modifySongUseCase)
+        )
     }
 }

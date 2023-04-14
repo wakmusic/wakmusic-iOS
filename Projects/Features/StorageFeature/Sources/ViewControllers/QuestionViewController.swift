@@ -62,10 +62,10 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     
     public static func viewController(
         viewModel:QuestionViewModel,
-        suggestFunctionComponent:SuggestFunctionComponent,
-        wakMusicFeedbackComponent:WakMusicFeedbackComponent,
-        askSongComponent:AskSongComponent,
-        bugReportComponent:BugReportComponent
+        suggestFunctionComponent: SuggestFunctionComponent,
+        wakMusicFeedbackComponent: WakMusicFeedbackComponent,
+        askSongComponent: AskSongComponent,
+        bugReportComponent: BugReportComponent
     ) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel

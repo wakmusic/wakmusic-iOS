@@ -11,14 +11,11 @@ import NeedleFoundation
 import DomainModule
 
 public protocol BugReportDependency: Dependency {
-    
-    
-
-
+    var reportBugUseCase: ReportBugUseCase { get }
 }
 
 public final class BugReportComponent: Component<BugReportDependency> {
     public func makeView() -> BugReportViewController {
-        return BugReportViewController.viewController(viewModel: .init())
+        return BugReportViewController.viewController(viewModel: .init(reportBugUseCase: dependency.reportBugUseCase))
     }
 }

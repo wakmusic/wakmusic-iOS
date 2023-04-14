@@ -17,25 +17,19 @@ import KeychainModule
 public final class WakMusicFeedbackViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
+    var inquiryWeeklyChartUseCase: InquiryWeeklyChartUseCase
     
-    
-
     public struct Input {
-    
         var textString:PublishRelay<String> = PublishRelay()
-    
     }
 
     public struct Output {
-        
     }
 
     public init(
-
+        inquiryWeeklyChartUseCase: InquiryWeeklyChartUseCase
     ) {
-        
-        DEBUG_LOG("✅ \(Self.self) 생성")
-     
+        self.inquiryWeeklyChartUseCase = inquiryWeeklyChartUseCase
     }
     
     deinit {
@@ -44,9 +38,6 @@ public final class WakMusicFeedbackViewModel:ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
-        
-        
         return output
     }
 }
