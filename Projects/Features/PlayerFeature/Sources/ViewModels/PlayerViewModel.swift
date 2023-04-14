@@ -56,6 +56,7 @@ final class PlayerViewModel: ViewModelType {
         var willShowPlaylist = PassthroughSubject<Bool, Never>()
         var showToastMessage = PassthroughSubject<String, Never>()
         var showConfirmModal = PassthroughSubject<String, Never>()
+        var showContainSongsViewController = PassthroughSubject<String, Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -183,6 +184,9 @@ final class PlayerViewModel: ViewModelType {
                 if !isLoggedIn {
                     output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
                     return
+                }
+                if let currentSong = self.playState.currentSong {
+                    output.showContainSongsViewController.send(currentSong.id)
                 }
             }.store(in: &subscription)
         

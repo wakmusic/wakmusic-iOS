@@ -130,6 +130,9 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -837,6 +840,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
         keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
+        keyPathToName[\PlayerDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension MainTabBarComponent: Registration {

@@ -31,11 +31,13 @@ public class PlayerViewController: UIViewController {
         $0.isHidden = true
     }
     
-    var playlistComponent: PlaylistComponent!
+    internal var playlistComponent: PlaylistComponent!
+    internal var containSongsComponent: ContainSongsComponent!
     
-    init(viewModel: PlayerViewModel, playlistComponent: PlaylistComponent) {
+    init(viewModel: PlayerViewModel, playlistComponent: PlaylistComponent, containSongsComponent: ContainSongsComponent) {
         self.viewModel = viewModel
         self.playlistComponent = playlistComponent
+        self.containSongsComponent = containSongsComponent
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -122,7 +124,8 @@ private extension PlayerViewController {
         bindShowPlaylist(output: output)
         bindShowToastMessage(output: output)
         bindShowConfirmModal(output: output)
-        
+        bindShowContainSongsViewController(output: output)
+
     }
         
     private func bindPlayButtonImages(output: PlayerViewModel.Output) {
@@ -307,6 +310,15 @@ private extension PlayerViewController {
                 self?.playState.switchPlayerMode(to: .mini)
             }, cancelCompletion: {
             }))
+        }.store(in: &subscription)
+    }
+    
+    private func bindShowContainSongsViewController(output: PlayerViewModel.Output) {
+        output.showContainSongsViewController.sink { [weak self] songId in
+            guard let self else { return }
+            let viewController = self.containSongsComponent.makeView(songs: [songId])
+            viewController.modalPresentationStyle = .overFullScreen
+            self.present(viewController, animated: true)
         }.store(in: &subscription)
     }
     
