@@ -73,10 +73,10 @@ extension PlayButtonGroupView {
         
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
 
         allPlaySuperView.layer.cornerRadius = 8
-        allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+        allPlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         allPlaySuperView.layer.borderWidth = 1
         allPlayButton.titleLabel?.alpha = 1
 
@@ -89,11 +89,11 @@ extension PlayButtonGroupView {
     
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
 
         shufflePlaySuperView.backgroundColor = .white.withAlphaComponent(0.4)
         shufflePlaySuperView.layer.cornerRadius = 8
-        shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+        shufflePlaySuperView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         shufflePlaySuperView.layer.borderWidth = 1
         
         

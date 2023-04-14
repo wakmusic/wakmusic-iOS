@@ -54,11 +54,11 @@ extension ArtistPlayButtonGroupView {
         //전체재생
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderWidth = 1
-        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         allPlayButton.backgroundColor = UIColor.white
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+        allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
 
         let allButtonAttributedString = NSMutableAttributedString.init(string: "전체재생")
         allButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
@@ -70,11 +70,11 @@ extension ArtistPlayButtonGroupView {
         //랜덤재생
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderWidth = 1
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         shufflePlayButton.backgroundColor = UIColor.white
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+        shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
 
         let shuffleButtonAttributedString = NSMutableAttributedString.init(string: "랜덤재생")
         shuffleButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),

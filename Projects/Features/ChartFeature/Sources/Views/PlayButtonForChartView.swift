@@ -72,11 +72,11 @@ extension PlayButtonForChartView {
             shufflePlayButton
         ].forEach {
             $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-            $0.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.4).cgColor
+            $0.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-            $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+            $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
             self.addSubview($0)
         }
 
@@ -91,13 +91,13 @@ extension PlayButtonForChartView {
             $0.top.equalTo(16)
             $0.leading.equalTo(20)
             $0.height.equalTo(52)
-            $0.trailing.equalTo(self.snp.centerX).inset(8)
+            $0.trailing.equalTo(self.snp.centerX).offset(-4)
         }
         shufflePlayButton.snp.makeConstraints {
             $0.top.equalTo(16)
             $0.trailing.equalTo(-20)
             $0.height.equalTo(52)
-            $0.leading.equalTo(self.snp.centerX).offset(8)
+            $0.leading.equalTo(self.snp.centerX).offset(4)
         }
         updateTimeImageView.snp.makeConstraints {
             $0.top.equalTo(80)
