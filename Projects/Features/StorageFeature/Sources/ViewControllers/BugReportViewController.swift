@@ -422,7 +422,7 @@ extension BugReportViewController: UICollectionViewDelegate, UICollectionViewDel
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .zero
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20) //오른쪽 끝까지 왔을 때 , 벽에서 20 만큼 떨어짐
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
