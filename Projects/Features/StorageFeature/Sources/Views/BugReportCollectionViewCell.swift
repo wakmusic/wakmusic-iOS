@@ -9,10 +9,24 @@
 import UIKit
 import DesignSystem
 
+protocol BugReportCollectionViewCellDelegate:AnyObject {
+    
+    func tapRemove(index:Int)
+}
+
+
 class BugReportCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
+    
+    @IBAction func removeAction(_ sender: Any) {
+        self.delegate?.tapRemove(index: index)
+    }
+    weak var delegate:BugReportCollectionViewCellDelegate?
+    
+    
+    var index:Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,8 +42,9 @@ class BugReportCollectionViewCell: UICollectionViewCell {
 
 extension BugReportCollectionViewCell {
 
-    func update(model: Data) {
+    func update(model: Data,index:Int) {
         
+        self.index = index
         imageView.image = UIImage(data: model)
         
     }

@@ -25,6 +25,7 @@ public final class BugReportViewModel:ViewModelType {
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishRelay<Void> = PublishRelay()
         var dataSource:BehaviorRelay<[Data]> = BehaviorRelay(value: [])
+        var removeIndex:PublishRelay<Int> = PublishRelay()
     }
 
     public struct Output {
@@ -75,6 +76,20 @@ public final class BugReportViewModel:ViewModelType {
         input.dataSource
             .map({$0.isEmpty})
             .bind(to: output.showCollectionView)
+            .disposed(by: disposeBag)
+        
+        
+        input.removeIndex
+            .withLatestFrom(input.dataSource){($0,$1)}
+            .map({(index,dataSource) -> [Data] in
+                
+               var next = dataSource
+                
+                next.remove(at: index)
+                
+                return next
+            })
+            .bind(to: input.dataSource)
             .disposed(by: disposeBag)
         
         return output

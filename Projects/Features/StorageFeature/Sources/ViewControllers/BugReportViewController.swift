@@ -296,7 +296,8 @@ extension BugReportViewController {
                                                                             for: indexPath) as? BugReportCollectionViewCell else {
                             return UICollectionViewCell()
                         }
-                        cell.update(model: model)
+                    cell.update(model: model,index: indexPath.row)
+                    cell.delegate = self
                         return cell
                     }.disposed(by: disposeBag)
             
@@ -434,5 +435,13 @@ extension BugReportViewController: UICollectionViewDelegate, UICollectionViewDel
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 4.0
+    }
+}
+
+extension BugReportViewController:BugReportCollectionViewCellDelegate {
+    func tapRemove(index: Int) {
+        self.input.removeIndex.accept(index)
+        
+        
     }
 }

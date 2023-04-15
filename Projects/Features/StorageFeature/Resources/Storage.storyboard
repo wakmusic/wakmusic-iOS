@@ -2375,6 +2375,9 @@
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAg-Gp-vAF">
                                                                                             <rect key="frame" x="48" y="2" width="30" height="34"/>
                                                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                            <connections>
+                                                                                                <action selector="removeAction:" destination="OFN-OP-tc5" eventType="touchUpInside" id="Hmc-lr-xoG"/>
+                                                                                            </connections>
                                                                                         </button>
                                                                                     </subviews>
                                                                                     <constraints>
