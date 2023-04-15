@@ -214,33 +214,20 @@ extension BugReportViewController {
             .disposed(by: disposeBag)
         
         cameraButton.rx.tap
-            .subscribe(onNext: {[weak self] in
-                
+            .subscribe(onNext: { [weak self] in
                 guard let self else {return}
-                
                 let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-
                 let library =  UIAlertAction(title: "앨범", style: .default) { (action) in
-                    self.showPhotoLibrary()
+                    self.requestPhotoLibraryPermission()
                 }
-
-
                 let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in
-
-
+                    self.requestCameraPermission()
                 }
-
-
                 let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
 
-
                 alert.addAction(library)
-
                 alert.addAction(camera)
-
                 alert.addAction(cancel)
-
                 self.present(alert, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
@@ -354,28 +341,46 @@ extension BugReportViewController : UITextViewDelegate {
     }
 }
 
-extension BugReportViewController : RequestPermissionable {
+extension BugReportViewController: RequestPermissionable {
     public func showCamera() {
-        
+        let camera = UIImagePickerController()
+        camera.sourceType = .camera
+        camera.allowsEditing = true
+        camera.cameraDevice = .rear
+        camera.cameraCaptureMode = .photo
+        camera.delegate = self
+        self.present(camera, animated: true, completion: nil)
     }
     
     public func showPhotoLibrary() {
         var configuration = PHPickerConfiguration()
-                        configuration.filter = .any(of: [.images, .videos])
-                        configuration.selectionLimit = 10 // 갯수 제한
-                        let picker = PHPickerViewController(configuration: configuration)
-                        picker.delegate = self
-                        picker.modalPresentationStyle = .fullScreen
-                        self.present(picker, animated: true)
+        configuration.filter = .any(of: [.images, .videos])
+        configuration.selectionLimit = 10 // 갯수 제한
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        picker.modalPresentationStyle = .fullScreen
+        self.present(picker, animated: true)
+    }
+}
+
+extension BugReportViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
+            return
+        }
+        let curr = self.input.dataSource.value
+        self.input.dataSource.accept(curr + [image.pngData() ?? Data()])
+        picker.dismiss(animated: true, completion: nil)
     }
     
-    
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
 }
 
 extension BugReportViewController: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        var attachedImages: [(Data, Int)] = []
         var imageProviders: [NSItemProvider] = []
 
         results.forEach {
@@ -393,7 +398,7 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
             model.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
                 guard let self = self else { return }
                 if let error = error {
-                    DEBUG_LOG("error: (error)")
+                    DEBUG_LOG("error: \(error)")
 
                 }else{
                     DispatchQueue.main.async {
@@ -401,14 +406,12 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                               let imageToData = image.pngData() else { return }
                         DEBUG_LOG(imageToData)
                         DEBUG_LOG(i)
-                       
                         let curr = self.input.dataSource.value
                         self.input.dataSource.accept(curr + [imageToData])
                     }
                 }
             }
         }
-       
     }
 }
 
