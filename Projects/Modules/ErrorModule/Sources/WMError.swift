@@ -29,10 +29,10 @@ extension WMError: LocalizedError {
             return "인증이 만료되었습니다.\n다시 로그인해 주세요."
 
         case .tooManyRequest:
-            return "요청 횟수를 초과했습니다. 잠시 후 다시 시도해주세요!"
+            return "요청 횟수를 초과했습니다.\n잠시 후 다시 시도해주세요!"
 
         case .internalServerError:
-            return "서버에서 문제가 발생하였습니다. 잠시 후 다시 시도해주세요!"
+            return "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!"
         }
     }
 }

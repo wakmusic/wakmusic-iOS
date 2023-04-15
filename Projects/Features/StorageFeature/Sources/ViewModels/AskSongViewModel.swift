@@ -26,11 +26,12 @@ public final class AskSongViewModel:ViewModelType {
         var songTitleString:PublishRelay<String> = PublishRelay()
         var youtubeString:PublishRelay<String> = PublishRelay()
         var contentString:PublishRelay<String> = PublishRelay()
-        var completionButtonTapped: PublishRelay<Void> = PublishRelay()
+        var completionButtonTapped: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool>
+        var result:PublishSubject<ModifySongEntity>
     }
 
     public init(type: SuggestSongModifyType, modifySongUseCase: ModifySongUseCase){
@@ -45,7 +46,8 @@ public final class AskSongViewModel:ViewModelType {
     public func transform(from input: Input) -> Output {
         
         let enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-
+        let result:PublishSubject<ModifySongEntity> = PublishSubject()
+        
         let combineObservable = Observable.combineLatest(
             input.artistString,
             input.songTitleString,
@@ -64,13 +66,32 @@ public final class AskSongViewModel:ViewModelType {
         input.completionButtonTapped
             .withLatestFrom(combineObservable)
             .debug("completionButtonTapped")
-            .subscribe(onNext: { (artist, song, youtube, content) in
-                //TO-DO: 여기를 고쳐서 api 연결하세요.
-            }).disposed(by: disposeBag)
+            .flatMap({ [weak self] (artist, song, youtube, content) -> Observable<ModifySongEntity> in
+                
+                guard let self else {return Observable.empty()}
+                let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
+                
+                return self.modifySongUseCase.execute(type: self.type, userID: userId, artist: artist, songTitle: song, youtubeLink: youtube, content: content)
+                    .catch({ (error:Error) in
+                        return Single<ModifySongEntity>.create { single in
+                            single(.success(ModifySongEntity(status: 404, message: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    })
+                    .asObservable()
+                    .map({
+                        ModifySongEntity(status: $0.status ,message: $0.message)
+                    })
+                
+            })
+            .bind(to: result)
+            .disposed(by: disposeBag)
+
         
         
         return Output(
-            enableCompleteButton: enableCompleteButton
+            enableCompleteButton: enableCompleteButton,
+            result: result
         )
     }
 }
