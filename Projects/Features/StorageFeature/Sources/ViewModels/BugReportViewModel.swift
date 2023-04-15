@@ -32,7 +32,7 @@ public final class BugReportViewModel:ViewModelType {
         var wakNickNameOption:BehaviorRelay<String> = BehaviorRelay(value: "선택")
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
-        var completionButtonTapped: PublishRelay<Void> = PublishRelay()
+        var completionButtonTapped: PublishSubject<Void> = PublishSubject()
         var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
         var removeIndex:PublishRelay<Int> = PublishRelay()
     }
@@ -41,6 +41,7 @@ public final class BugReportViewModel:ViewModelType {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
         var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
+        var result:PublishSubject<ReportBugEntity>  = PublishSubject()
     }
 
     public init(reportBugUseCase: ReportBugUseCase){
@@ -58,10 +59,11 @@ public final class BugReportViewModel:ViewModelType {
         let combineObservable = Observable.combineLatest(
             input.wakNickNameOption,
             input.nickNameString,
-            input.bugContentString
+            input.bugContentString,
+            input.dataSource
 
         ){
-            return ($0, $1, $2)
+            return ($0, $1, $2,$3)
         }
 
         combineObservable
@@ -72,9 +74,41 @@ public final class BugReportViewModel:ViewModelType {
 
         input.completionButtonTapped
             .withLatestFrom(combineObservable)
-            .subscribe(onNext: { (option, nickName, content) in
-                //TO-DO: 여기를 고쳐서 api 연결하세요.
-            }).disposed(by: disposeBag)
+            .debug("FFFF")
+            .flatMap({ [weak self] (option, nickName, content,dataSource) -> Observable<ReportBugEntity> in
+                
+                
+                guard let self else { return Observable.empty()}
+                
+                let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
+                
+                var datas: [Data] = dataSource.map { (type) in
+                            switch type {
+                            case let .image(data):
+                                return data
+                            case let .video(data, _):
+                                return data
+                            }
+                    }
+                
+                
+                return self.reportBugUseCase
+                    .execute(userID: userId, nickname: option == "알려주기" ? nickName : "", attaches:datas, content: content)
+                    .catch({ (error:Error) in
+                        return Single<ReportBugEntity>.create { single in
+                            single(.success(ReportBugEntity(status: 404, message: error.asWMError.errorDescription ?? "")))
+                            return Disposables.create {}
+                        }
+                    })
+                    .asObservable()
+                    .map({
+                        ReportBugEntity(status: $0.status ,message: $0.message)
+                    })
+                
+                
+            })
+            .bind(to: output.result)
+            .disposed(by: disposeBag)
 
         
         input.dataSource

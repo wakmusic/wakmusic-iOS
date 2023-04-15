@@ -71,8 +71,12 @@ extension SuggestAPI: WMAPI {
         switch self {
         case let .reportBug(userID, nickname, attaches, content):
             var parameters: [String: Any] = ["userId": userID,
-                                             "nickname": nickname,
                                              "detailContent": content]
+            
+            if !nickname.isEmpty {
+                parameters["nickname"] = nickname
+            }
+            
             if !attaches.isEmpty {
                 parameters["attachs"] = attaches
             }

@@ -233,7 +233,18 @@ extension BugReportViewController {
             .disposed(by: disposeBag)
         
         completionButton.rx.tap
-            .bind(to: input.completionButtonTapped)
+            .subscribe(onNext: { [weak self]  in
+                guard let self else {return}
+                
+                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?", cancelButtonIsHidden: false,completion: { [weak self] in
+                 self?.input.completionButtonTapped.onNext(())
+                })
+                
+                self.showPanModal(content: vc)
+                
+                //TODO: 텍스트 팝업
+                
+            })
             .disposed(by: disposeBag)
     }
     
@@ -283,11 +294,10 @@ extension BugReportViewController {
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 
-//        output.enableCompleteButton
-//            .bind(to: completionButton.rx.isEnabled)
-//            .disposed(by: disposeBag)
-//        
-//        
+        output.enableCompleteButton
+            .bind(to: completionButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+       
             output.dataSource
                 .skip(1)
                 .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
@@ -301,6 +311,19 @@ extension BugReportViewController {
                         return cell
                     }.disposed(by: disposeBag)
             
+        output.result.subscribe(onNext: { [weak self] res in
+            
+            guard let self else {return}
+            
+            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
+                
+                self.dismiss(animated: true)
+            })
+            
+            self.showPanModal(content: vc)
+            
+        })
+        .disposed(by: disposeBag)
                 
     }
     
