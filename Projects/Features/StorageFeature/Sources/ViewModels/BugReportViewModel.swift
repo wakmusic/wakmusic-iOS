@@ -17,14 +17,9 @@ import KeychainModule
 enum MediaDataType {
     case image(data: Data)
     case video(data: Data, url: URL)
-    
-    
-    
 }
 
-
 public final class BugReportViewModel:ViewModelType {
-
     var disposeBag = DisposeBag()
     var reportBugUseCase: ReportBugUseCase
     
@@ -53,7 +48,6 @@ public final class BugReportViewModel:ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        
         let output = Output()
 
         let combineObservable = Observable.combineLatest(
@@ -61,7 +55,6 @@ public final class BugReportViewModel:ViewModelType {
             input.nickNameString,
             input.bugContentString,
             input.dataSource
-
         ){
             return ($0, $1, $2,$3)
         }
@@ -76,22 +69,16 @@ public final class BugReportViewModel:ViewModelType {
             .withLatestFrom(combineObservable)
             .debug("FFFF")
             .flatMap({ [weak self] (option, nickName, content,dataSource) -> Observable<ReportBugEntity> in
-                
-                
                 guard let self else { return Observable.empty()}
-                
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
-                
-                var datas: [Data] = dataSource.map { (type) in
-                            switch type {
-                            case let .image(data):
-                                return data
-                            case let .video(data, _):
-                                return data
-                            }
+                let datas: [Data] = dataSource.map { (type) in
+                    switch type {
+                    case let .image(data):
+                        return data
+                    case let .video(data, _):
+                        return data
                     }
-                
-                
+                }
                 return self.reportBugUseCase
                     .execute(userID: userId, nickname: option == "알려주기" ? nickName : "", attaches:datas, content: content)
                     .catch({ (error:Error) in
@@ -101,37 +88,29 @@ public final class BugReportViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .map({
+                    .map{
                         ReportBugEntity(status: $0.status ,message: $0.message)
-                    })
-                
-                
+                    }
             })
             .bind(to: output.result)
             .disposed(by: disposeBag)
-
         
         input.dataSource
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
         
         input.dataSource
             .map({$0.isEmpty})
             .bind(to: output.showCollectionView)
             .disposed(by: disposeBag)
         
-        
         input.removeIndex
             .withLatestFrom(input.dataSource){($0,$1)}
-            .map({(index,dataSource) -> [MediaDataType] in
-                
+            .map{(index,dataSource) -> [MediaDataType] in
                var next = dataSource
-                
                 next.remove(at: index)
-                
                 return next
-            })
+            }
             .bind(to: input.dataSource)
             .disposed(by: disposeBag)
         

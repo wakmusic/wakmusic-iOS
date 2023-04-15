@@ -67,7 +67,6 @@ public final class AskSongViewModel:ViewModelType {
             .withLatestFrom(combineObservable)
             .debug("completionButtonTapped")
             .flatMap({ [weak self] (artist, song, youtube, content) -> Observable<ModifySongEntity> in
-                
                 guard let self else {return Observable.empty()}
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 
@@ -79,16 +78,13 @@ public final class AskSongViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .map({
+                    .map{
                         ModifySongEntity(status: $0.status ,message: $0.message)
-                    })
-                
+                    }
             })
             .bind(to: result)
             .disposed(by: disposeBag)
 
-        
-        
         return Output(
             enableCompleteButton: enableCompleteButton,
             result: result

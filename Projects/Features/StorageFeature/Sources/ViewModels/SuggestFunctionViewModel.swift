@@ -46,13 +46,11 @@ public final class SuggestFunctionViewModel:ViewModelType {
         input.tabConfirm
             .withLatestFrom(resultObservable)
             .flatMap {[weak self] (text:String, service:Int) -> Observable<SuggestFunctionEntity> in
-                
                 guard let self  else {return Observable.empty() }
-                
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 
-               return self.suggestFunctionUseCase
-                    .execute(type: service == 0 ? .mobile : .pc , userID: userId , content: text)
+                return self.suggestFunctionUseCase
+                    .execute(type: (service == 0) ? .mobile : .pc , userID: userId , content: text)
                     .catch({ (error:Error) in
                         return Single<SuggestFunctionEntity>.create { single in
                             single(.success(SuggestFunctionEntity(status: 404, message: error.asWMError.errorDescription ?? "")))
@@ -63,12 +61,9 @@ public final class SuggestFunctionViewModel:ViewModelType {
                     .map({
                         SuggestFunctionEntity(status: $0.status ,message: $0.message)
                     })
- 
             }
-            .debug("Result")
             .bind(to: output.result)
             .disposed(by: disposeBag)
-            
         
         return output
     }

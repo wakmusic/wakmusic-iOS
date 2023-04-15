@@ -45,7 +45,6 @@ public final class WakMusicFeedbackViewModel:ViewModelType {
             .withLatestFrom(input.textString)
             .debug("completionButtonTapped")
             .flatMap({ [weak self] (content) -> Observable<InquiryWeeklyChartEntity> in
-                
                 guard let self else {return Observable.empty()}
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 
@@ -57,10 +56,9 @@ public final class WakMusicFeedbackViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .map({
+                    .map{
                         InquiryWeeklyChartEntity(status: $0.status ,message: $0.message)
-                    })
-                
+                    }
             })
             .bind(to: output.result)
             .disposed(by: disposeBag)
