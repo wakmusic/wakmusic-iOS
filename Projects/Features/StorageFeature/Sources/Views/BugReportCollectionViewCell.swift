@@ -9,12 +9,12 @@
 import UIKit
 import DesignSystem
 import AVFoundation
+import Kingfisher
+import Utility
 
-protocol BugReportCollectionViewCellDelegate:AnyObject {
-    
-    func tapRemove(index:Int)
+protocol BugReportCollectionViewCellDelegate: AnyObject {
+    func tapRemove(index: Int)
 }
-
 
 class BugReportCollectionViewCell: UICollectionViewCell {
 
@@ -24,10 +24,8 @@ class BugReportCollectionViewCell: UICollectionViewCell {
     @IBAction func removeAction(_ sender: Any) {
         self.delegate?.tapRemove(index: index)
     }
-    weak var delegate:BugReportCollectionViewCellDelegate?
-    
-    
-    var index:Int = 0
+    weak var delegate: BugReportCollectionViewCellDelegate?
+    var index: Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,35 +35,18 @@ class BugReportCollectionViewCell: UICollectionViewCell {
         self.contentView.clipsToBounds = true
         self.deleteButton.setImage(DesignSystemAsset.Storage.attachRemove.image, for: .normal)
         self.imageView.contentMode = .scaleAspectFill
-        
     }
 }
 
 extension BugReportCollectionViewCell {
-
     func update(model: MediaDataType,index:Int) {
-        
         self.index = index
         
-        print(model)
-        
         switch model {
-            
         case .image(data: let data):
             imageView.image = UIImage(data: data)
-        case .video(data: let _, url: let url):
-            
-                AVURLAsset(url: url).generateThumbnail { [weak self] (image) in
-                    DispatchQueue.main.async {
-                        self?.imageView.image = image
-                    }
-                }
-            
-            
-            
+        case let .video(_, url):
+            DEBUG_LOG(url.absoluteString)
         }
-        
-        
-        
     }
 }

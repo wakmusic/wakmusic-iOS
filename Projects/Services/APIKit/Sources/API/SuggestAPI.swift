@@ -75,9 +75,10 @@ extension SuggestAPI: WMAPI {
             if !nickname.isEmpty {
                 parameters["nickname"] = nickname
             }
-            if !attaches.isEmpty {
-                parameters["attachs"] = attaches.map { $0.base64EncodedData() }
-            }
+            //TO-DO: 추후 변경예정
+            //if !attaches.isEmpty {
+            //parameters["attachs"] = attaches.map { $0.base64EncodedString() }
+            //}
             return .requestParameters(parameters: parameters,
                                       encoding: JSONEncoding.default)
 

@@ -56,19 +56,25 @@ public final class BugReportViewModel:ViewModelType {
             input.bugContentString,
             input.dataSource
         ){
-            return ($0, $1, $2,$3)
+            return ($0, $1, $2, $3)
         }
 
         combineObservable
-            .map { return $0.0.description == "선택" ? false: $0.0.description == "알려주기" ?
-                !$0.1.isWhiteSpace && !$0.2.isWhiteSpace : !$0.2.isWhiteSpace }
+            .map{ (option, nickName, content, _) -> Bool in
+                if option == "선택" {
+                    return false
+                }else if option == "알려주기"{
+                    return !nickName.isWhiteSpace && !content.isWhiteSpace
+                }else{ //"비공개"
+                    return !content.isWhiteSpace
+                }
+            }
             .bind(to: output.enableCompleteButton)
             .disposed(by: disposeBag)
 
         input.completionButtonTapped
             .withLatestFrom(combineObservable)
-            .debug("FFFF")
-            .flatMap({ [weak self] (option, nickName, content,dataSource) -> Observable<ReportBugEntity> in
+            .flatMap({ [weak self] (option, nickName, content, dataSource) -> Observable<ReportBugEntity> in
                 guard let self else { return Observable.empty()}
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 let datas: [Data] = dataSource.map { (type) in
@@ -81,6 +87,7 @@ public final class BugReportViewModel:ViewModelType {
                 }
                 return self.reportBugUseCase
                     .execute(userID: userId, nickname: option == "알려주기" ? nickName : "", attaches:datas, content: content)
+                    .debug("reportBugUseCase")
                     .catch({ (error:Error) in
                         return Single<ReportBugEntity>.create { single in
                             single(.success(ReportBugEntity(status: 404, message: error.asWMError.errorDescription ?? "")))
