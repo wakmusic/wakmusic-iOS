@@ -104,7 +104,7 @@ extension SuggestAPI: WMAPI {
     public var jwtTokenType: JwtTokenType {
         switch self {
         case .reportBug, .suggestFunction, .modifySong, .inquiryWeeklyChart:
-            return .accessToken
+            return .none
         }
     }
 

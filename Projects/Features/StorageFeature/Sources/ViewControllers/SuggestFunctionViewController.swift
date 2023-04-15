@@ -197,13 +197,17 @@ extension SuggestFunctionViewController {
         })
         .disposed(by: disposeBag)
         
-        let resultObservable = Observable.combineLatest(input.textString, output.selectedIndex)
+        
         
         completionButton.rx.tap
-            .withLatestFrom(resultObservable)
-            .subscribe(onNext: { [weak self] (text,index) in
+            .subscribe(onNext: { [weak self]  in
+                guard let self else {return}
                 
-                DEBUG_LOG("\(text) \(index)")
+                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?", cancelButtonIsHidden: false,completion: { [weak self] in
+                 self?.input.tabConfirm.onNext(())
+                })
+                
+                self.showPanModal(content: vc)
                 
                 //TODO: 텍스트 팝업
                 
@@ -301,6 +305,20 @@ extension SuggestFunctionViewController {
                 
             })
             .disposed(by: disposeBag)
+        
+        
+        output.result.subscribe(onNext: { [weak self] res in
+            
+            guard let self else {return}
+            
+            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true)
+            
+            self.showPanModal(content: vc)
+            
+            
+            
+        })
+        .disposed(by: disposeBag)
         
      
         

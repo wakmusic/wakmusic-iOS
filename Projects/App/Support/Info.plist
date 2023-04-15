@@ -117,5 +117,10 @@
 		<key>GOOGLE_SECRET_KEY</key>
 		<string>$(GOOGLE_SECRET_KEY)</string>
 	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
