@@ -138,14 +138,16 @@ extension WakMusicFeedbackViewController {
         
         
         completionButton.rx.tap
-            .withLatestFrom(input.textString)
-            .subscribe(onNext: { [weak self] (text:String) in
+            .subscribe(onNext: { [weak self] in
                 
+                guard let self else {return}
                 
+                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?", cancelButtonIsHidden: false,completion: { [weak self] in
+                    self?.input.completionButtonTapped.onNext(())
+                })
                 
-                DEBUG_LOG("\(text)")
+                self.showPanModal(content: vc)
                 
-                //TODO: 텍스트 팝업
                 
             })
             .disposed(by: disposeBag)
@@ -166,6 +168,18 @@ extension WakMusicFeedbackViewController {
             self.completionButton.isEnabled = !$0.isWhiteSpace
             
         })
+        
+        output.result.subscribe(onNext: { [weak self] res in
+            
+            guard let self else {return}
+            
+            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true)
+            
+            self.showPanModal(content: vc)
+            
+       
+        })
+        .disposed(by: disposeBag)
         
     }
     
