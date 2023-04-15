@@ -405,7 +405,10 @@ extension AskSongViewController {
             
             guard let self else {return}
             
-            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true)
+            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
+                
+                self.dismiss(animated: true)
+            })
             
             self.showPanModal(content: vc)
             
