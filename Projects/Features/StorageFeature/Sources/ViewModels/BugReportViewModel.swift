@@ -19,12 +19,19 @@ enum MediaDataType {
     case video(data: Data, url: URL)
 }
 
+enum PublicNameOption: String {
+    case nonDetermined = "선택"
+    case nonSigned = "가입안함"
+    case `public` = "알려주기"
+    case `private` = "비공개"
+}
+
 public final class BugReportViewModel:ViewModelType {
     var disposeBag = DisposeBag()
     var reportBugUseCase: ReportBugUseCase
     
     public struct Input {
-        var wakNickNameOption:BehaviorRelay<String> = BehaviorRelay(value: "선택")
+        var publicNameOption:BehaviorRelay<PublicNameOption> = BehaviorRelay(value: .nonDetermined)
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishSubject<Void> = PublishSubject()
@@ -51,7 +58,7 @@ public final class BugReportViewModel:ViewModelType {
         let output = Output()
 
         let combineObservable = Observable.combineLatest(
-            input.wakNickNameOption,
+            input.publicNameOption,
             input.nickNameString,
             input.bugContentString,
             input.dataSource
@@ -61,12 +68,13 @@ public final class BugReportViewModel:ViewModelType {
 
         combineObservable
             .map{ (option, nickName, content, _) -> Bool in
-                if option == "선택" {
+                switch option {
+                case .nonDetermined:
                     return false
-                }else if option == "알려주기"{
-                    return !nickName.isWhiteSpace && !content.isWhiteSpace
-                }else{ //"비공개"
+                case .nonSigned, .private:
                     return !content.isWhiteSpace
+                case .public:
+                    return !nickName.isWhiteSpace && !content.isWhiteSpace
                 }
             }
             .bind(to: output.enableCompleteButton)
@@ -86,7 +94,7 @@ public final class BugReportViewModel:ViewModelType {
                     }
                 }
                 return self.reportBugUseCase
-                    .execute(userID: userId, nickname: option == "알려주기" ? nickName : "", attaches:datas, content: content)
+                    .execute(userID: userId, nickname: option == .public ? nickName : "", attaches:datas, content: content)
                     .debug("reportBugUseCase")
                     .catch({ (error:Error) in
                         return Single<ReportBugEntity>.create { single in
@@ -113,8 +121,8 @@ public final class BugReportViewModel:ViewModelType {
         
         input.removeIndex
             .withLatestFrom(input.dataSource){($0,$1)}
-            .map{(index,dataSource) -> [MediaDataType] in
-               var next = dataSource
+            .map{ (index,dataSource) -> [MediaDataType] in
+                var next = dataSource
                 next.remove(at: index)
                 return next
             }

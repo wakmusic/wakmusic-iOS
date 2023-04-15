@@ -18,9 +18,9 @@ public final class NickNamePopupViewController: UIViewController,ViewControllerF
     @IBOutlet weak var tableView: UITableView!
     
     var completion: ((String) -> Void)?
-    var dataSource:BehaviorRelay<[NickNameInfo]> = BehaviorRelay(value: [NickNameInfo(description: "알려주기", check: false),
-                                                                         NickNameInfo(description: "비공개", check: false),
-                                                                         NickNameInfo(description: "가입안함", check: false)])
+    var dataSource:BehaviorRelay<[NickNameInfo]> = BehaviorRelay(value: [NickNameInfo(description: PublicNameOption.public.rawValue, check: false),
+                                                                         NickNameInfo(description: PublicNameOption.private.rawValue, check: false),
+                                                                         NickNameInfo(description: PublicNameOption.nonSigned.rawValue, check: false)])
     var disposeBag = DisposeBag()
 
     public override func viewDidLoad() {

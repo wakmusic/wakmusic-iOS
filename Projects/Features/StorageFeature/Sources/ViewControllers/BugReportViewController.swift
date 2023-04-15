@@ -72,6 +72,10 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         super.viewDidLoad()
        
         configureUI()
+        bindRx()
+        bindbuttonEvent()
+        configureCameraButtonUI()
+        responseViewbyKeyboard()
     }
     
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
@@ -170,11 +174,6 @@ extension BugReportViewController {
         self.previousButton.setAttributedTitle(NSMutableAttributedString(string:"이전",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
-        
-        bindRx()
-        bindbuttonEvent()
-        configureCameraButtonUI()
-        responseViewbyKeyboard()
     }
     
     private func bindbuttonEvent(){
@@ -196,15 +195,16 @@ extension BugReportViewController {
         .disposed(by: disposeBag)
         
         noticeCheckButton.rx.tap
-            .withLatestFrom(input.wakNickNameOption)
+            .withLatestFrom(input.publicNameOption)
             .subscribe(onNext: { [weak self] (current) in
                 guard let self = self else { return }
 
-                let vc = NickNamePopupViewController.viewController(current: current , completion: { (description) in
-                    self.input.wakNickNameOption.accept(description)
-                    self.nickNameContentView.isHidden = description != "알려주기"
+                let vc = NickNamePopupViewController.viewController(current: current.rawValue, completion: { (description) in
+                    let option = PublicNameOption(rawValue: description) ?? .nonDetermined
+                    self.input.publicNameOption.accept(option)
+                    self.nickNameContentView.isHidden = option != .public
                     
-                    if description != "알려주기" {
+                    if option != .public {
                         self.input.nickNameString.accept("")
                         self.textField.rx.text.onNext("")
                     }
@@ -217,10 +217,10 @@ extension BugReportViewController {
             .subscribe(onNext: { [weak self] in
                 guard let self else {return}
                 let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-                let library =  UIAlertAction(title: "앨범", style: .default) { (action) in
+                let library =  UIAlertAction(title: "앨범", style: .default) { _ in
                     self.requestPhotoLibraryPermission()
                 }
-                let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in
+                let camera =  UIAlertAction(title: "카메라", style: .default) { _ in
                     self.requestCameraPermission()
                 }
                 let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
@@ -235,15 +235,12 @@ extension BugReportViewController {
         completionButton.rx.tap
             .subscribe(onNext: { [weak self]  in
                 guard let self else {return}
-                
-                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?", cancelButtonIsHidden: false,completion: { [weak self] in
-                 self?.input.completionButtonTapped.onNext(())
+                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?",
+                                                                cancelButtonIsHidden: false,
+                                                                completion: { [weak self] in
+                    self?.input.completionButtonTapped.onNext(())
                 })
-                
                 self.showPanModal(content: vc)
-                
-                //TODO: 텍스트 팝업
-                
             })
             .disposed(by: disposeBag)
     }
@@ -254,7 +251,6 @@ extension BugReportViewController {
             .distinctUntilChanged()
             .bind(to: input.bugContentString)
             .disposed(by: disposeBag)
-
         
         let tfEditingDidBegin = textField.rx.controlEvent(.editingDidBegin)
         let tfEditingDidEnd = textField.rx.controlEvent(.editingDidEnd)
@@ -280,17 +276,14 @@ extension BugReportViewController {
             .bind(to: collectionContentView.rx.isHidden)
             .disposed(by: disposeBag)
         
-        input.wakNickNameOption
-            .do(onNext: { [weak self] (str:String) in
-                DEBUG_LOG(str)
-                
+        input.publicNameOption
+            .do(onNext: { [weak self] (option) in
                 guard let self = self else {
                     return
                 }
-                
-                self.noticeLabel.textColor = str == "선택" ? DesignSystemAsset.GrayColor.gray400.color  : DesignSystemAsset.GrayColor.gray900.color
-                
+                self.noticeLabel.textColor = option == .nonDetermined ? DesignSystemAsset.GrayColor.gray400.color  : DesignSystemAsset.GrayColor.gray900.color
             })
+            .map { $0.rawValue }
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 
@@ -298,18 +291,18 @@ extension BugReportViewController {
             .bind(to: completionButton.rx.isEnabled)
             .disposed(by: disposeBag)
        
-            output.dataSource
-                .skip(1)
-                .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
-                        let indexPath = IndexPath(item: index, section: 0)
-                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BugReportCollectionViewCell",
-                                                                            for: indexPath) as? BugReportCollectionViewCell else {
-                            return UICollectionViewCell()
-                        }
-                    cell.update(model: model,index: indexPath.row)
-                    cell.delegate = self
-                        return cell
-                    }.disposed(by: disposeBag)
+        output.dataSource
+            .skip(1)
+            .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
+                let indexPath = IndexPath(item: index, section: 0)
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BugReportCollectionViewCell",
+                                                                    for: indexPath) as? BugReportCollectionViewCell else {
+                    return UICollectionViewCell()
+                }
+                cell.update(model: model,index: indexPath.row)
+                cell.delegate = self
+                return cell
+            }.disposed(by: disposeBag)
             
         output.result.subscribe(onNext: { [weak self] res in
             
@@ -327,7 +320,6 @@ extension BugReportViewController {
                 
     }
     
-    
     private func responseViewbyKeyboard(){
         
         RxKeyboard.instance.visibleHeight
@@ -335,17 +327,14 @@ extension BugReportViewController {
                 guard let self = self else {return}
                 let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
                 let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
-
-
                 self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
-
                 self.view.setNeedsLayout()
+                
                 UIView.animate(withDuration: 0, animations: {
                     self.scrollView.contentInset.bottom = actualKeyboardHeight
                     self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
                     self.view.layoutIfNeeded()
                 })
-
             }).disposed(by: disposeBag)
     }
     
@@ -355,7 +344,6 @@ extension BugReportViewController {
 }
 
 extension BugReportViewController : UITextViewDelegate {
-
     public func textViewDidBeginEditing(_ textView: UITextView) {
         self.baseLine1.backgroundColor = self.pointColor
     }
@@ -405,18 +393,16 @@ extension BugReportViewController: UIImagePickerControllerDelegate, UINavigation
 extension BugReportViewController: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        var imageProviders: [NSItemProvider] = []
 
         results.forEach {
             let provider = $0.itemProvider
 
             if provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) { // 동영상
-                
                 provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] (fileURL, error) in
                     guard let self = self, let url = fileURL else { return }
 
                     if let error = error {
-                        DEBUG_LOG("error: (error)")
+                        DEBUG_LOG("error: \(error)")
 
                     }else{
                         DispatchQueue.global(qos: .userInteractive).async {
@@ -427,14 +413,11 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                                     self.input.dataSource.accept(curr + [MediaDataType.video(data: data, url: url)])
                                 }
                             }catch let error {
-                                DEBUG_LOG("error: (error)")
+                                DEBUG_LOG("error: \(error)")
                             }
                         }
                     }
                 }
-                
-                
-
             }else if provider.canLoadObject(ofClass: UIImage.self) { // 이미지
                 
                 provider.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
@@ -454,7 +437,6 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                 }
             }
         }
-
     }
 }
 
@@ -483,7 +465,5 @@ extension BugReportViewController: UICollectionViewDelegate, UICollectionViewDel
 extension BugReportViewController:BugReportCollectionViewCellDelegate {
     func tapRemove(index: Int) {
         self.input.removeIndex.accept(index)
-        
-        
     }
 }
