@@ -24,11 +24,13 @@ public final class BugReportViewModel:ViewModelType {
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishRelay<Void> = PublishRelay()
+        var dataSource:BehaviorRelay<[Data]> = BehaviorRelay(value: [])
     }
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        var dataSource:BehaviorRelay<[Data]> = BehaviorRelay(value: [])
     }
 
     public init(reportBugUseCase: ReportBugUseCase){
@@ -64,6 +66,16 @@ public final class BugReportViewModel:ViewModelType {
                 //TO-DO: 여기를 고쳐서 api 연결하세요.
             }).disposed(by: disposeBag)
 
+        
+        input.dataSource
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+        
+        
+        input.dataSource
+            .map({$0.isEmpty})
+            .bind(to: output.showCollectionView)
+            .disposed(by: disposeBag)
         
         return output
     }

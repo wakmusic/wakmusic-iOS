@@ -13,6 +13,8 @@ import RxSwift
 import RxKeyboard
 import CommonFeature
 import SafariServices
+import BaseFeature
+import PhotosUI
 
 public final class BugReportViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -99,6 +101,8 @@ extension BugReportViewController {
     }
     
     private func configureUI(){
+        
+        collectionView.delegate = self
         hideKeyboardWhenTappedAround()
         
         dotLabel.layer.cornerRadius = 2
@@ -209,6 +213,38 @@ extension BugReportViewController {
             })
             .disposed(by: disposeBag)
         
+        cameraButton.rx.tap
+            .subscribe(onNext: {[weak self] in
+                
+                guard let self else {return}
+                
+                let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+
+                let library =  UIAlertAction(title: "앨범", style: .default) { (action) in
+                    self.showPhotoLibrary()
+                }
+
+
+                let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in
+
+
+                }
+
+
+                let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+
+                alert.addAction(library)
+
+                alert.addAction(camera)
+
+                alert.addAction(cancel)
+
+                self.present(alert, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
         completionButton.rx.tap
             .bind(to: input.completionButtonTapped)
             .disposed(by: disposeBag)
@@ -260,9 +296,24 @@ extension BugReportViewController {
             .bind(to: noticeLabel.rx.text)
             .disposed(by: disposeBag)
 
-        output.enableCompleteButton
-            .bind(to: completionButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+//        output.enableCompleteButton
+//            .bind(to: completionButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//        
+//        
+            output.dataSource
+                .skip(1)
+                .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
+                        let indexPath = IndexPath(item: index, section: 0)
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BugReportCollectionViewCell",
+                                                                            for: indexPath) as? BugReportCollectionViewCell else {
+                            return UICollectionViewCell()
+                        }
+                        cell.update(model: model)
+                        return cell
+                    }.disposed(by: disposeBag)
+            
+                
     }
     
     
@@ -300,5 +351,85 @@ extension BugReportViewController : UITextViewDelegate {
     
     public func textViewDidEndEditing(_ textView: UITextView) {
         self.baseLine1.backgroundColor = self.unPointColor
+    }
+}
+
+extension BugReportViewController : RequestPermissionable {
+    public func showCamera() {
+        
+    }
+    
+    public func showPhotoLibrary() {
+        var configuration = PHPickerConfiguration()
+                        configuration.filter = .any(of: [.images, .videos])
+                        configuration.selectionLimit = 10 // 갯수 제한
+                        let picker = PHPickerViewController(configuration: configuration)
+                        picker.delegate = self
+                        picker.modalPresentationStyle = .fullScreen
+                        self.present(picker, animated: true)
+    }
+    
+    
+}
+
+extension BugReportViewController: PHPickerViewControllerDelegate {
+    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        var attachedImages: [(Data, Int)] = []
+        var imageProviders: [NSItemProvider] = []
+
+        results.forEach {
+            let provider = $0.itemProvider
+
+            if provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+               // movieProviders.append(provider)
+
+            }else if provider.canLoadObject(ofClass: UIImage.self) {
+                imageProviders.append(provider)
+            }
+        }
+
+        imageProviders.enumerated().forEach { (i, model) in
+            model.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
+                guard let self = self else { return }
+                if let error = error {
+                    DEBUG_LOG("error: (error)")
+
+                }else{
+                    DispatchQueue.main.async {
+                        guard let image = image as? UIImage,
+                              let imageToData = image.pngData() else { return }
+                        DEBUG_LOG(imageToData)
+                        DEBUG_LOG(i)
+                       
+                        let curr = self.input.dataSource.value
+                        self.input.dataSource.accept(curr + [imageToData])
+                    }
+                }
+            }
+        }
+       
+    }
+}
+
+extension BugReportViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: 80.0, height: 80.0)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .zero
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 4.0
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 4.0
     }
 }

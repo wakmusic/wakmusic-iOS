@@ -2362,7 +2362,7 @@
                                                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                                         </collectionViewFlowLayout>
                                                                         <cells>
-                                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="OFN-OP-tc5">
+                                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BugReportCollectionViewCell" id="OFN-OP-tc5" customClass="BugReportCollectionViewCell" customModule="StorageFeature">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SDM-uf-sdP">
@@ -2373,9 +2373,8 @@
                                                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                                                         </imageView>
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAg-Gp-vAF">
-                                                                                            <rect key="frame" x="54" y="2" width="24" height="24"/>
+                                                                                            <rect key="frame" x="48" y="2" width="30" height="34"/>
                                                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                                            <state key="normal" image="attach_remove"/>
                                                                                         </button>
                                                                                     </subviews>
                                                                                     <constraints>
@@ -2388,6 +2387,10 @@
                                                                                     </constraints>
                                                                                 </collectionViewCellContentView>
                                                                                 <size key="customSize" width="80" height="80"/>
+                                                                                <connections>
+                                                                                    <outlet property="deleteButton" destination="eAg-Gp-vAF" id="JHS-ic-XuI"/>
+                                                                                    <outlet property="imageView" destination="MQc-Dr-JVy" id="J4Y-kX-2Di"/>
+                                                                                </connections>
                                                                             </collectionViewCell>
                                                                         </cells>
                                                                     </collectionView>
@@ -2834,7 +2837,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="attach_remove" width="24" height="24"/>
         <image name="blue_arrow_right" width="16" height="16"/>
         <namedColor name="AccentColor">
             <color red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
