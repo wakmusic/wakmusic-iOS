@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import AVFoundation
 
 protocol BugReportCollectionViewCellDelegate:AnyObject {
     
@@ -42,10 +43,29 @@ class BugReportCollectionViewCell: UICollectionViewCell {
 
 extension BugReportCollectionViewCell {
 
-    func update(model: Data,index:Int) {
+    func update(model: MediaDataType,index:Int) {
         
         self.index = index
-        imageView.image = UIImage(data: model)
+        
+        print(model)
+        
+        switch model {
+            
+        case .image(data: let data):
+            imageView.image = UIImage(data: data)
+        case .video(data: let _, url: let url):
+            
+                AVURLAsset(url: url).generateThumbnail { [weak self] (image) in
+                    DispatchQueue.main.async {
+                        self?.imageView.image = image
+                    }
+                }
+            
+            
+            
+        }
+        
+        
         
     }
 }

@@ -356,7 +356,7 @@ extension BugReportViewController: RequestPermissionable {
     public func showPhotoLibrary() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .any(of: [.images, .videos])
-        configuration.selectionLimit = 10 // 갯수 제한
+        configuration.selectionLimit = 5 // 갯수 제한
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         picker.modalPresentationStyle = .fullScreen
@@ -370,7 +370,7 @@ extension BugReportViewController: UIImagePickerControllerDelegate, UINavigation
             return
         }
         let curr = self.input.dataSource.value
-        self.input.dataSource.accept(curr + [image.pngData() ?? Data()])
+        self.input.dataSource.accept(curr + [MediaDataType.image(data: image.pngData() ?? Data())]   )
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -387,32 +387,51 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
         results.forEach {
             let provider = $0.itemProvider
 
-            if provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-               // movieProviders.append(provider)
+            if provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) { // 동영상
+                
+                provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] (fileURL, error) in
+                    guard let self = self, let url = fileURL else { return }
 
-            }else if provider.canLoadObject(ofClass: UIImage.self) {
-                imageProviders.append(provider)
-            }
-        }
+                    if let error = error {
+                        DEBUG_LOG("error: (error)")
 
-        imageProviders.enumerated().forEach { (i, model) in
-            model.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
-                guard let self = self else { return }
-                if let error = error {
-                    DEBUG_LOG("error: \(error)")
+                    }else{
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            do {
+                                let data = try Data(contentsOf: url)
+                                DispatchQueue.main.async {
+                                    let curr = self.input.dataSource.value
+                                    self.input.dataSource.accept(curr + [MediaDataType.video(data: data, url: url)])
+                                }
+                            }catch let error {
+                                DEBUG_LOG("error: (error)")
+                            }
+                        }
+                    }
+                }
+                
+                
 
-                }else{
-                    DispatchQueue.main.async {
-                        guard let image = image as? UIImage,
-                              let imageToData = image.pngData() else { return }
-                        DEBUG_LOG(imageToData)
-                        DEBUG_LOG(i)
-                        let curr = self.input.dataSource.value
-                        self.input.dataSource.accept(curr + [imageToData])
+            }else if provider.canLoadObject(ofClass: UIImage.self) { // 이미지
+                
+                provider.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
+                    guard let self = self else { return }
+                    if let error = error {
+                        DEBUG_LOG("error: \(error)")
+
+                    }else{
+                        DispatchQueue.main.async {
+                            guard let image = image as? UIImage,
+                                  let imageToData = image.pngData() else { return }
+                            DEBUG_LOG(imageToData)
+                            let curr = self.input.dataSource.value
+                            self.input.dataSource.accept(curr + [MediaDataType.image(data: imageToData)])
+                        }
                     }
                 }
             }
         }
+
     }
 }
 

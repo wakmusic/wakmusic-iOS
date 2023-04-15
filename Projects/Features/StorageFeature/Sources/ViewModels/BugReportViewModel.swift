@@ -14,6 +14,15 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 
+enum MediaDataType {
+    case image(data: Data)
+    case video(data: Data, url: URL)
+    
+    
+    
+}
+
+
 public final class BugReportViewModel:ViewModelType {
 
     var disposeBag = DisposeBag()
@@ -24,14 +33,14 @@ public final class BugReportViewModel:ViewModelType {
         var bugContentString:PublishRelay<String> = PublishRelay()
         var nickNameString:PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishRelay<Void> = PublishRelay()
-        var dataSource:BehaviorRelay<[Data]> = BehaviorRelay(value: [])
+        var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
         var removeIndex:PublishRelay<Int> = PublishRelay()
     }
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
-        var dataSource:BehaviorRelay<[Data]> = BehaviorRelay(value: [])
+        var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
     }
 
     public init(reportBugUseCase: ReportBugUseCase){
@@ -81,7 +90,7 @@ public final class BugReportViewModel:ViewModelType {
         
         input.removeIndex
             .withLatestFrom(input.dataSource){($0,$1)}
-            .map({(index,dataSource) -> [Data] in
+            .map({(index,dataSource) -> [MediaDataType] in
                 
                var next = dataSource
                 
