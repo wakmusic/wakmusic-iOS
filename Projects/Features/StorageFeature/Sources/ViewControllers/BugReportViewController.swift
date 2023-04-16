@@ -214,7 +214,18 @@ extension BugReportViewController {
             .disposed(by: disposeBag)
         
         cameraButton.rx.tap
-            .subscribe(onNext: { [weak self] in
+            .withLatestFrom(output.dataSource)
+            .filter{ (dataSource) in
+                guard dataSource.count < 5 else {
+                    self.showToast(
+                        text: "첨부 파일은 최대 5개 까지 가능합니다.",
+                        font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                    )
+                    return false
+                }
+                return true
+            }
+            .subscribe(onNext: { [weak self] _ in
                 guard let self else {return}
                 let alert =  UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 let library =  UIAlertAction(title: "앨범", style: .default) { _ in
@@ -367,7 +378,8 @@ extension BugReportViewController: RequestPermissionable {
     public func showPhotoLibrary() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .any(of: [.images, .videos])
-        configuration.selectionLimit = 5 // 갯수 제한
+        let current = self.output.dataSource.value
+        configuration.selectionLimit = 5-current.count // 갯수 제한
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         picker.modalPresentationStyle = .fullScreen
