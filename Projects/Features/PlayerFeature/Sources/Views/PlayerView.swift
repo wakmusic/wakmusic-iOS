@@ -51,7 +51,7 @@ public final class PlayerView: UIView {
         $0.trailingBuffer = 35
         $0.fadeLength = 3
         $0.animationDelay = 1
-        $0.speed = .duration(10)
+        $0.speed = .rate(30)
     }
     
     internal lazy var artistLabel = MarqueeLabel().then {
@@ -67,7 +67,7 @@ public final class PlayerView: UIView {
         $0.trailingBuffer = 20
         $0.fadeLength = 3
         $0.animationDelay = 1
-        $0.speed = .duration(10)
+        $0.speed = .rate(30)
     }
     
     internal lazy var thumbnailImageView = UIImageView().then {
