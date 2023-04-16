@@ -253,8 +253,6 @@ extension HomeViewController {
         output.songEntityOfAllChart
             .subscribe(onNext: { (songs) in
                 PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-                let numbers = [0]
-                let _ = numbers[1]
             })
             .disposed(by: disposeBag)
     }
