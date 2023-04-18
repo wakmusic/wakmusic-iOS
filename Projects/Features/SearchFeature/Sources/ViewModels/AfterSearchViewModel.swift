@@ -148,7 +148,7 @@ public final class AfterSearchViewModel:ViewModelType {
         
         input.notiResult
             .withLatestFrom(output.songEntityOfSelectedSongs){ ($0,$1) }
-            .map({[weak self] (song,songs) -> [SongEntity]   in
+            .map({ (song,songs) -> [SongEntity]   in
                 
                 var nextSongs = songs
                 
@@ -168,8 +168,7 @@ public final class AfterSearchViewModel:ViewModelType {
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
         
-            
-        
+
         
         
         return output

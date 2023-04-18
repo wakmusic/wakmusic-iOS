@@ -121,7 +121,16 @@ extension AfterSearchContentViewController{
         tableView.rx.itemSelected
             .bind(to: input.indexPath)
             .disposed(by: disposeBag)
-            
+        
+        Utility.PreferenceManager.$startPage
+            .skip(1)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self, let parent = self.parent?.parent as? AfterSearchViewController else {
+                    return
+                }
+                self.input.deSelectedAllSongs.accept(())
+                parent.output.songEntityOfSelectedSongs.accept([])
+            }).disposed(by: disposeBag)
     }
         
     

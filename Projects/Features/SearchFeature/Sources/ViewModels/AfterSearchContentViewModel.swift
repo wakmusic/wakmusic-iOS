@@ -127,12 +127,8 @@ public  final class AfterSearchContentViewModel:ViewModelType {
             })
             .filter({$0.id != "-"})
             .withLatestFrom(output.dataSource){($0,$1)}
-            .map{ [weak self] (song:SongEntity,dataSource:[SearchSectionModel]) -> [SearchSectionModel] in
-                
-                guard let self = self else {return [] }
-                
+            .map{ (song: SongEntity, dataSource: [SearchSectionModel]) -> [SearchSectionModel] in
                 var indexPath:IndexPath = IndexPath(row: -1, section: 0) // 비어있는 탭 예외 처리
-        
                 var models = dataSource
                 
                 models.enumerated().forEach { (section, model) in
@@ -146,17 +142,14 @@ public  final class AfterSearchContentViewModel:ViewModelType {
                 }
                 
                 models[indexPath.section].items[indexPath.row].isSelected = !models[indexPath.section].items[indexPath.row].isSelected
-                
                 return models
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
-        
         input.deSelectedAllSongs
             .withLatestFrom(output.dataSource)
             .map({(dataSource) -> [SearchSectionModel] in
-        
                return dataSource.map { sectionModel -> SearchSectionModel in
                             var newItems = sectionModel.items
                             newItems.indices.forEach { newItems[$0].isSelected = false }
@@ -165,9 +158,6 @@ public  final class AfterSearchContentViewModel:ViewModelType {
             })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
-        
-        
         
         return output
     }

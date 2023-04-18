@@ -163,10 +163,9 @@ extension AfterSearchViewController {
         })
         .disposed(by: disposeBag)
         
-        
         output.songEntityOfSelectedSongs
+            .skip(1)
             .subscribe(onNext: { [weak self] (songs:[SongEntity])  in
-                
                 guard let self = self else {return}
                 
                 if !songs.isEmpty  {
@@ -179,34 +178,21 @@ extension AfterSearchViewController {
                 } else {
                     self.hideSongCart()
                 }
-                
-                
             })
             .disposed(by: disposeBag)
-
     }
     
     
-    func clearSongCart()
-    {
+    func clearSongCart(){
         self.output.songEntityOfSelectedSongs.accept([])
-        
         self.viewControllers.forEach({ vc in
-            
             guard let afterContentVc = vc as? AfterSearchContentViewController else {
-                
-               
                 return
             }
-            
             afterContentVc.input.deSelectedAllSongs.accept(())
-            
         })
     }
-    
-
 }
-
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
@@ -248,9 +234,6 @@ extension AfterSearchViewController: SongCartViewDelegate {
         case .allSelect(flag: _):
             return
         case .addSong:
-            
-            
-            
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen

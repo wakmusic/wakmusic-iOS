@@ -59,33 +59,37 @@ public final class ChartContentViewModel: ViewModelType {
             )
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
-        
                 
-            input.songTapped
-                .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
-                    if selectedSongs.contains(index) {
-                        guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
-                        var newSelectedSongs = selectedSongs
-                        newSelectedSongs.remove(at: removeTargetIndex)
-                        return newSelectedSongs
-                        
-                    }else{
-                        return selectedSongs + [index]
-                    }
-                })
-                .map { $0.sorted { $0 < $1 } }
-                .bind(to: output.indexOfSelectedSongs)
-                .disposed(by: disposeBag)
-            
-            input.allSongSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-                .map { (flag, dataSource) -> [Int] in
-                    return flag ? Array(0..<dataSource.count) : []
+        input.songTapped
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+                if selectedSongs.contains(index) {
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+                    var newSelectedSongs = selectedSongs
+                    newSelectedSongs.remove(at: removeTargetIndex)
+                    return newSelectedSongs
+                    
+                }else{
+                    return selectedSongs + [index]
                 }
-                .bind(to: output.indexOfSelectedSongs)
-                .disposed(by: disposeBag)
+            })
+            .map { $0.sorted { $0 < $1 } }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
         
+        input.allSongSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { (flag, dataSource) -> [Int] in
+                return flag ? Array(0..<dataSource.count) : []
+            }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+        
+        Utility.PreferenceManager.$startPage
+            .skip(1)
+            .map { _ in [] }
+            .bind(to: output.indexOfSelectedSongs)
+            .disposed(by: disposeBag)
+
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
@@ -101,10 +105,7 @@ public final class ChartContentViewModel: ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
-        
-        
-        
+                
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (indexOfSelectedSongs, dataSource) -> [SongEntity] in
@@ -128,21 +129,15 @@ public final class ChartContentViewModel: ViewModelType {
         input.groupPlayTapped
             .withLatestFrom(output.dataSource){($0,$1)}
             .map({ (type,dataSourc) -> [SongEntity] in
-                
-
                 switch type {
-                    
                 case .allPlay:
                     return dataSourc
                 case .shufflePlay:
                     return dataSourc.shuffled()
                 }
-                
-                
             })
             .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
-        
 
         return output
     }
