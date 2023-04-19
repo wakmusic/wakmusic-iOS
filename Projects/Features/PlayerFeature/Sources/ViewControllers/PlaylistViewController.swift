@@ -112,6 +112,20 @@ private extension PlaylistViewController {
         output.dataSource
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
+        
+        output.dataSource
+            .filter { $0.first?.items.isEmpty ?? true }
+            .subscribe { _ in
+                let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
+                
+                let height = space / 3  * 2
+                
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+                warningView.text = "곡이 없습니다."
+                
+                self.playlistView.playlistTableView.tableFooterView = warningView
+            }.disposed(by: disposeBag)
+
     }
     
     private func bindSongCart(output: PlaylistViewModel.Output) {
