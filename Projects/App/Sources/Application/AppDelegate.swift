@@ -4,6 +4,7 @@ import NaverThirdPartyLogin
 import AVKit
 import Utility
 import FirebaseCore
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() //시크릿 아이디
         naverInstance?.appName = NAVER_APP_NAME() //앱이름
 
+        //Realm register
+        RealmManager.shared.register()
+        
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playback)
