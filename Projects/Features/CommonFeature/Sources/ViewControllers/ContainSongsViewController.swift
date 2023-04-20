@@ -17,6 +17,7 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
@@ -71,7 +72,7 @@ extension ContainSongsViewController {
         
         songCountLabel.text = "\(viewModel.songs.count)곡"
         
-    
+        indicator.startAnimating()
         bindRx()
         
         
@@ -111,7 +112,7 @@ extension ContainSongsViewController {
             
             
             self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
-            
+            self.indicator.stopOnMainThread()
             
             
         })

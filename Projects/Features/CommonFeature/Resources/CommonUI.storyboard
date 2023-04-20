@@ -229,11 +229,15 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="KZe-gM-iQu">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="FR1-Wa-zfj"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
                             <constraint firstItem="170-Tn-9JZ" firstAttribute="top" secondItem="fUZ-Dc-OJs" secondAttribute="bottom" constant="16" id="1bY-Ky-ZIz"/>
+                            <constraint firstItem="KZe-gM-iQu" firstAttribute="centerY" secondItem="7Q3-Zg-c9H" secondAttribute="centerY" id="3tx-dn-LoR"/>
                             <constraint firstItem="fUZ-Dc-OJs" firstAttribute="top" secondItem="FR1-Wa-zfj" secondAttribute="top" id="DIi-u1-I0M"/>
                             <constraint firstItem="FR1-Wa-zfj" firstAttribute="trailing" secondItem="55y-I8-uJW" secondAttribute="trailing" id="H01-Ec-RwV"/>
                             <constraint firstItem="170-Tn-9JZ" firstAttribute="leading" secondItem="FR1-Wa-zfj" secondAttribute="leading" constant="20" id="baJ-yT-c2Y"/>
@@ -243,10 +247,12 @@
                             <constraint firstItem="FR1-Wa-zfj" firstAttribute="bottom" secondItem="55y-I8-uJW" secondAttribute="bottom" id="kQS-68-GKS"/>
                             <constraint firstItem="FR1-Wa-zfj" firstAttribute="trailing" secondItem="170-Tn-9JZ" secondAttribute="trailing" constant="20" id="of3-VI-Nle"/>
                             <constraint firstItem="55y-I8-uJW" firstAttribute="leading" secondItem="FR1-Wa-zfj" secondAttribute="leading" id="vQc-N5-AJ9"/>
+                            <constraint firstItem="KZe-gM-iQu" firstAttribute="centerX" secondItem="7Q3-Zg-c9H" secondAttribute="centerX" id="x9W-R9-y0Q"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="closeButton" destination="4lb-JV-RW7" id="7wL-mm-k3H"/>
+                        <outlet property="indicator" destination="KZe-gM-iQu" id="50i-nc-dDi"/>
                         <outlet property="songCountLabel" destination="gYr-Kd-zN3" id="O9C-RF-1yx"/>
                         <outlet property="subTitleLabel" destination="6EP-hY-u7V" id="gUt-eH-xhe"/>
                         <outlet property="tableView" destination="55y-I8-uJW" id="WIl-4T-zDQ"/>
