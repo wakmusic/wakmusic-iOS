@@ -44,8 +44,13 @@ public extension RealmManager {
     func addRealmDB<T>(model: T, update: Realm.UpdatePolicy = .all) {
         do {
             try self.realm.write {
-                guard let object =  model as? Object else { return }
-                self.realm.add(object, update: update)
+                if let object =  model as? Object {
+                    self.realm.add(object, update: update)
+                }else if let object =  model as? [Object] {
+                    self.realm.add(object, update: update)
+                }else{
+                    DEBUG_LOG("❌ Object Casting Failed")
+                }
             }
         } catch {
             DEBUG_LOG(error.localizedDescription)
