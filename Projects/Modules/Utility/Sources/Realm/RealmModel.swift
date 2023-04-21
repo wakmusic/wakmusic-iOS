@@ -10,20 +10,20 @@ import Foundation
 import RealmSwift
 
 public final class PlayedLists: Object {
-    @objc dynamic var id: String = ""
-    @objc dynamic var title: String = ""
-    @objc dynamic var artist: String = ""
-    @objc dynamic var remix: String = ""
-    @objc dynamic var reaction: String = ""
-    @objc dynamic var views: Int = 0
-    @objc dynamic var last: Int = 0
-    @objc dynamic var date: String = ""
+    @objc public dynamic var id: String = ""
+    @objc public dynamic var title: String = ""
+    @objc public dynamic var artist: String = ""
+    @objc public dynamic var remix: String = ""
+    @objc public dynamic var reaction: String = ""
+    @objc public dynamic var views: Int = 0
+    @objc public dynamic var last: Int = 0
+    @objc public dynamic var date: String = ""
 
     public override static func primaryKey() -> String? {
         return "id"
     }
     
-    convenience init(
+    public convenience init(
         id: String,
         title: String,
         artist: String,
