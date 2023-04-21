@@ -35,7 +35,8 @@ let targets: [Target] = [
             .SPM.Nimble,
             .SPM.Quick,
             .SPM.FirebaseAnalytics,
-            .SPM.FirebaseCrashlytics
+            .SPM.FirebaseCrashlytics,
+            .SPM.RealmSwift
         ],
         settings: .settings(base: Environment.baseSetting,
                             configurations: [
