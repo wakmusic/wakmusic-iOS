@@ -12,6 +12,7 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 import DomainModule
+import DataMappingModule
 
 public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     
@@ -44,7 +45,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         return -(margin + height)
     }
     private let minHeaderHeight: CGFloat = 0
-    private var previousScrollOffset: CGFloat = 0
+    private var previousScrollOffset: [CGFloat] = [0, 0, 0]
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -115,8 +116,9 @@ extension ArtistDetailViewController {
 }
 
 extension ArtistDetailViewController {
-    func scrollViewDidScrollFromChild(scrollView: UIScrollView) {
-        let scrollDiff = scrollView.contentOffset.y - self.previousScrollOffset
+    func scrollViewDidScrollFromChild(scrollView: UIScrollView, type: ArtistSongSortType) {
+        let i = (type == .new) ? 0 : (type == .popular) ? 1 : 2
+        let scrollDiff = scrollView.contentOffset.y - self.previousScrollOffset[i]
         let absoluteTop: CGFloat = 0
         let absoluteBottom: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
@@ -140,7 +142,7 @@ extension ArtistDetailViewController {
                     self.updateHeader()
                 }
                 self.view.layoutIfNeeded()
-                self.previousScrollOffset = scrollView.contentOffset.y
+                self.previousScrollOffset[i] = scrollView.contentOffset.y
             }
         }
     }

@@ -126,8 +126,7 @@ extension ArtistMusicContentViewController {
     private func configureUI() {
         self.activityIndidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndidator.type = .circleStrokeSpin
-        self.activityIndidator
-            .startAnimating()
+        self.activityIndidator.startAnimating()
         self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
@@ -222,14 +221,7 @@ extension Reactive where Base: ArtistMusicContentViewController{
 extension ArtistMusicContentViewController: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let parent = self.parent?.parent?.parent as? ArtistDetailViewController else { return }
-        parent.scrollViewDidScrollFromChild(scrollView: scrollView)
-        
-        guard let artistMusicViewController = self.parent?.parent as? ArtistMusicViewController else { return }
-        
-        artistMusicViewController.viewControllers.forEach {
-            guard let content = $0 as? ArtistMusicContentViewController,
-                let tableView = content.tableView else { return }
-            tableView.contentOffset.y = scrollView.contentOffset.y
-        }
+        let type = self.viewModel.type
+        parent.scrollViewDidScrollFromChild(scrollView: scrollView, type: type)
     }
 }
