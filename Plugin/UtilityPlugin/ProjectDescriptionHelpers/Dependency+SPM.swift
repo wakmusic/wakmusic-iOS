@@ -31,6 +31,9 @@ public extension TargetDependency.SPM {
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
     static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
+    static let Amplify = TargetDependency.external(name: "Amplify")
+    static let AWSPluginsCore = TargetDependency.external(name: "AWSPluginsCore")
+    static let AWSS3StoragePlugin = TargetDependency.external(name: "AWSS3StoragePlugin")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")

@@ -15,6 +15,7 @@ import CommonFeature
 import SafariServices
 import BaseFeature
 import PhotosUI
+import Amplify
 
 public final class BugReportViewController: UIViewController,ViewControllerFromStoryBoard {
     

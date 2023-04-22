@@ -36,7 +36,10 @@ let targets: [Target] = [
             .SPM.Quick,
             .SPM.FirebaseAnalytics,
             .SPM.FirebaseCrashlytics,
-            .SPM.RealmSwift
+            .SPM.RealmSwift,
+            .SPM.Amplify,
+            .SPM.AWSPluginsCore,
+            .SPM.AWSS3StoragePlugin
         ],
         settings: .settings(base: Environment.baseSetting,
                             configurations: [
