@@ -116,8 +116,7 @@ extension ArtistDetailViewController {
 }
 
 extension ArtistDetailViewController {
-    func scrollViewDidScrollFromChild(scrollView: UIScrollView, type: ArtistSongSortType) {
-        let i = (type == .new) ? 0 : (type == .popular) ? 1 : 2
+    func scrollViewDidScrollFromChild(scrollView: UIScrollView, i: Int) {
         let scrollDiff = scrollView.contentOffset.y - self.previousScrollOffset[i]
         let absoluteTop: CGFloat = 0
         let absoluteBottom: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height

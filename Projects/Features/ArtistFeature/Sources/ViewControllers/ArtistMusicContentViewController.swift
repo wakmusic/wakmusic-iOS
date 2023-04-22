@@ -222,6 +222,7 @@ extension ArtistMusicContentViewController: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let parent = self.parent?.parent?.parent as? ArtistDetailViewController else { return }
         let type = self.viewModel.type
-        parent.scrollViewDidScrollFromChild(scrollView: scrollView, type: type)
+        let i = (type == .new) ? 0 : (type == .popular) ? 1 : 2
+        parent.scrollViewDidScrollFromChild(scrollView: scrollView, i: i)
     }
 }
