@@ -153,7 +153,8 @@ extension ArtistDetailViewController {
     }
     
     private func canAnimateHeader(_ scrollView: UIScrollView) -> Bool {
+        let spacing: CGFloat = STATUS_BAR_HEGHIT() + 48 + 56 + SAFEAREA_BOTTOM_HEIGHT()
         let scrollViewMaxHeight = scrollView.frame.height + abs(self.maxHeaderHeight) - self.minHeaderHeight
-        return scrollView.contentSize.height > scrollViewMaxHeight
+        return scrollView.contentSize.height > scrollViewMaxHeight + spacing
     }
 }
