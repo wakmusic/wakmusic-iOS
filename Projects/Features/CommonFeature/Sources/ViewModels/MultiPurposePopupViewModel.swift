@@ -52,7 +52,6 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         
 
        
-        print("✅ \(Self.self) 생성")
         self.key = key
         self.type = type
         self.createPlayListUseCase = createPlayListUseCase

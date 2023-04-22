@@ -31,7 +31,7 @@ public  final class AfterSearchContentViewModel:ViewModelType {
     public init(type:TabPosition,dataSource:[SearchSectionModel]){
         
         // AfterSearchContent 를 없애고 AfterSearch 쪽으로 들어감 
-        print("✅ AfterSearchContentViewModel 생성")
+        DEBUG_LOG("✅ AfterSearchContentViewModel 생성")
         
         self.sectionType = type
         self.dataSource = dataSource

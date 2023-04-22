@@ -27,7 +27,7 @@ public final class BeforeSearchContentViewModel:ViewModelType {
         fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
     ){
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
-        print("✅ BeforeSearchContentViewModel 생성")
+        DEBUG_LOG("✅ BeforeSearchContentViewModel 생성")
     }
     
     

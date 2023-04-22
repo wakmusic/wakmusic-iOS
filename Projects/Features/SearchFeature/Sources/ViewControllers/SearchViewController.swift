@@ -58,7 +58,6 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
 //        guard let child = self.children.first as? AfterSearchViewController else { return }
 //        child.view.frame = searchContentView.bounds
 //
-//        print("DidLayoutSubview")
 //        //오차로 인하여 여기서 설정함
 //        /*
 //          frame != bounds
@@ -304,7 +303,6 @@ extension SearchViewController {
                       return
                 }
                 self.reactSearchHeader(focus)
-                //print("str:\(str.isEmpty) , \(focus)")
                  
                   
                 self.cancelButton.alpha =  !str.isEmpty||focus ? 1 : 0

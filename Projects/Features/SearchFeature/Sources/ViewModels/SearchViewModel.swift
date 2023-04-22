@@ -23,7 +23,7 @@ public  final class SearchViewModel:ViewModelType {
     
     public init(){
         
-        print("✅ SearchViewModel 생성")
+        DEBUG_LOG("✅ \(Self.self) 생성")
         
       
     }

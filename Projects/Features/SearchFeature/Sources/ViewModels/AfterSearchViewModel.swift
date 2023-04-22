@@ -27,7 +27,7 @@ public final class AfterSearchViewModel:ViewModelType {
     
     public init(fetchSearchSongUseCase:FetchSearchSongUseCase){
         
-        print("✅ AfterSearchViewModel 생성")
+        DEBUG_LOG("✅ AfterSearchViewModel 생성")
         self.fetchSearchSongUseCase = fetchSearchSongUseCase
         
         

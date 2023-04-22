@@ -52,7 +52,7 @@ public class GoogleLoginManager {
         components?.queryItems = [scope, responseType, codeChallenge, redirectURI, clientID, codeChallengeMethod]
 
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
-            print(url)
+            DEBUG_LOG(url)
             UIApplication.shared.open(url)
         }
     }
