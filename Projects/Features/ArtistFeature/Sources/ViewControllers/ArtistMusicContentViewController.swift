@@ -15,11 +15,12 @@ import BaseFeature
 import CommonFeature
 import DataMappingModule
 import DomainModule
+import NVActivityIndicatorView
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
@@ -86,7 +87,7 @@ extension ArtistMusicContentViewController {
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
             .do(onNext: { [weak self] (dataSource, songs) in
                 guard let `self` = self else { return }
-                self.activityIncidator.stopOnMainThread()
+                self.activityIndidator.stopAnimating()
                 
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
@@ -123,7 +124,10 @@ extension ArtistMusicContentViewController {
     }
     
     private func configureUI() {
-        self.activityIncidator.startAnimating()
+        self.activityIndidator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.activityIndidator.type = .circleStrokeSpin
+        self.activityIndidator
+            .startAnimating()
         self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)

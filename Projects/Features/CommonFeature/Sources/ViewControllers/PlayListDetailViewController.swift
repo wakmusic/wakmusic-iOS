@@ -16,6 +16,7 @@ import DesignSystem
 import BaseFeature
 import Kingfisher
 import DomainModule
+import NVActivityIndicatorView
 
 public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
     
@@ -30,7 +31,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editStateLabel: UILabel!
     @IBOutlet weak var playListInfoView: UIView!
     @IBOutlet weak var playListInfoSuperView: UIView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     var disposeBag = DisposeBag()
     var viewModel:PlayListDetailViewModel!
@@ -136,6 +137,9 @@ extension PlayListDetailViewController{
         self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        
+        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.activityIndicator.type = .circleStrokeSpin
         self.activityIndicator.startAnimating()
 
         self.completeButton.isHidden = true
@@ -217,7 +221,7 @@ extension PlayListDetailViewController{
                 guard let self = self else {
                     return
                 }
-                self.activityIndicator.stopOnMainThread()
+                self.activityIndicator.stopAnimating()
                 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "리스트에 곡이 없습니다."

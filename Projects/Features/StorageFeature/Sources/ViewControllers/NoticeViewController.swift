@@ -11,13 +11,14 @@ import Utility
 import RxSwift
 import RxCocoa
 import DesignSystem
+import NVActivityIndicatorView
 
 public class NoticeViewController: UIViewController, ViewControllerFromStoryBoard {
     
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
     
     var viewModel: NoticeViewModel!
     var noticeDetailComponent: NoticeDetailComponent!
@@ -51,7 +52,7 @@ extension NoticeViewController {
         viewModel.output.dataSource
             .skip(1)
             .do(onNext: { [weak self] _ in
-                self?.indicator.stopOnMainThread()
+                self?.indicator.stopAnimating()
             })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
@@ -85,6 +86,8 @@ extension NoticeViewController {
                          .kern: -0.5]
         )
         self.titleStringLabel.attributedText = attributedString
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.indicator.startAnimating()
     }
 }

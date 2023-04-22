@@ -14,7 +14,7 @@ import Tabman
 import RxSwift
 import DomainModule
 import CommonFeature
-
+import NVActivityIndicatorView
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
 
@@ -25,7 +25,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
     
     
 
@@ -75,7 +75,8 @@ extension AfterSearchViewController {
         
         self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         
-        self.indicator.hidesWhenStopped = true
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.dataSource = self //dateSource
         let bar = TMBar.ButtonBar()
         
@@ -134,7 +135,7 @@ extension AfterSearchViewController {
                 comp.makeView(type: .remix, dataSource: result[3])
             ]
             
-            self.indicator.stopOnMainThread()
+            self.indicator.stopAnimating()
                 
             self.reloadData()
             

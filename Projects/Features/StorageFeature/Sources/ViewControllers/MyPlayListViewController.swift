@@ -17,13 +17,14 @@ import BaseFeature
 import CommonFeature
 import DomainModule
 import RxDataSources
+import NVActivityIndicatorView
 
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
 public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     private var refreshControl = UIRefreshControl()
     var multiPurposePopComponent:MultiPurposePopComponent!
@@ -132,7 +133,7 @@ extension MyPlayListViewController{
                     return
                 }
                 self.refreshControl.endRefreshing()
-                self.activityIndicator.stopOnMainThread()
+                self.activityIndicator.stopAnimating()
 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/3))
                 warningView.text = "내 리스트가 없습니다."
@@ -226,6 +227,8 @@ extension MyPlayListViewController{
         self.tableView.tableHeaderView = header
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.activityIndicator.type = .circleStrokeSpin
+        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.startAnimating()
     }
 }

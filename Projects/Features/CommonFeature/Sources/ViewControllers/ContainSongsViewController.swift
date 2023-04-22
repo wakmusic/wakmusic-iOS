@@ -11,13 +11,14 @@ import BaseFeature
 import Utility
 import DesignSystem
 import RxSwift
+import NVActivityIndicatorView
 
 public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
     
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
     
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
@@ -72,6 +73,8 @@ extension ContainSongsViewController {
         
         songCountLabel.text = "\(viewModel.songs.count)곡"
         
+        indicator.type = .circleStrokeSpin
+        indicator.color = DesignSystemAsset.PrimaryColor.point.color
         indicator.startAnimating()
         bindRx()
         
@@ -112,7 +115,7 @@ extension ContainSongsViewController {
             
             
             self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
-            self.indicator.stopOnMainThread()
+            self.indicator.stopAnimating()
             
             
         })

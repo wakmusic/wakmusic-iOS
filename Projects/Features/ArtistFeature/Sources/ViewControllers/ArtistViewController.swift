@@ -7,11 +7,12 @@ import BaseFeature
 import DomainModule
 import NeedleFoundation
 import PDFKit
+import NVActivityIndicatorView
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     var disposeBag: DisposeBag = DisposeBag()
     
@@ -52,7 +53,7 @@ extension ArtistViewController {
             .skip(1)
             .do(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.activityIndicator.stopOnMainThread()
+                self.activityIndicator.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
@@ -82,6 +83,8 @@ extension ArtistViewController {
     
     private func configureUI() {
         
+        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
         
         let sideSpace: CGFloat = 20.0

@@ -13,7 +13,7 @@ import RxCocoa
 import RxSwift
 import RxKeyboard
 import DesignSystem
-
+import NVActivityIndicatorView
 
 public enum PurposeType{
     case creation
@@ -97,7 +97,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var confireLabelGap: NSLayoutConstraint!
@@ -262,8 +262,9 @@ extension MultiPurposePopupViewController{
 
         saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         saveButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
+        
+        self.indicator.type = .circleStrokeSpin
         self.indicator.color = .white
-        self.indicator.isHidden = true
         
     }
     
@@ -405,7 +406,6 @@ extension MultiPurposePopupViewController{
             
             
             self.indicator.stopAnimating()
-            self.indicator.isHidden = true
             self.saveButton.setAttributedTitle(
                 NSMutableAttributedString(
                     string:"완료",
@@ -435,7 +435,6 @@ extension MultiPurposePopupViewController{
             }
             
             if self.viewModel.type != .share {
-                self.indicator.isHidden = false
                 self.indicator.startAnimating()
                 self.saveButton.setAttributedTitle(
                     NSMutableAttributedString(

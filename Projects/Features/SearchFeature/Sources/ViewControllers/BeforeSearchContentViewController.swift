@@ -15,7 +15,7 @@ import BaseFeature
 import CommonFeature
 import NeedleFoundation
 import DomainModule
-
+import NVActivityIndicatorView
 
 
 protocol BeforeSearchContentViewDelegate:AnyObject{
@@ -31,7 +31,7 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
     
     let disposeBag = DisposeBag()
     weak var delegate:BeforeSearchContentViewDelegate?
@@ -78,8 +78,9 @@ extension BeforeSearchContentViewController {
     private func configureUI() {
       
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.indicator.startAnimating()
-        self.indicator.hidesWhenStopped = true
     }
     
     
@@ -111,7 +112,7 @@ extension BeforeSearchContentViewController {
         })
         .do(onNext: {[weak self] _ in
             guard let self = self else { return }
-            self.indicator.stopOnMainThread()
+            self.indicator.stopAnimating()
             
         })
         .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in

@@ -8,13 +8,14 @@ import RxSwift
 import RxCocoa
 import DataMappingModule
 import DomainModule
+import NVActivityIndicatorView
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     //왁뮤차트 TOP100
     @IBOutlet weak var topCircleImageView: UIImageView!
@@ -186,7 +187,7 @@ extension HomeViewController {
             .filter { $0.count >= 5 }
             .map{ Array($0[0..<5]) }
             .do(onNext: { [weak self] _ in
-                self?.activityIndicator.stopOnMainThread()
+                self?.activityIndicator.stopAnimating()
             })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
@@ -202,7 +203,7 @@ extension HomeViewController {
             .do(onNext: { [weak self] _ in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
-                self?.activityIndicator.stopOnMainThread()
+                self?.activityIndicator.stopAnimating()
                 self?.latestSongAllButton.isEnabled = true
                 self?.latestSongWwgButton.isEnabled = true
                 self?.latestSongIseButton.isEnabled = true
@@ -259,7 +260,10 @@ extension HomeViewController {
     
     private func configureUI() {
         
+        activityIndicator.type = .circleStrokeSpin
+        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
+        
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         

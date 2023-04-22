@@ -430,28 +430,32 @@
                                     <constraint firstItem="IJw-6l-kM9" firstAttribute="top" secondItem="QCv-HV-K1f" secondAttribute="top" id="t7Q-Q6-c5g"/>
                                 </constraints>
                             </scrollView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="6rt-Zi-OVM">
-                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
-                            </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qoh-aV-lI2" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="WvD-Xa-aqf"/>
+                                    <constraint firstAttribute="height" constant="30" id="wNQ-Rq-vQW"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
+                            <constraint firstItem="Qoh-aV-lI2" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="1b6-RI-qVl"/>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="203:375" id="2ks-Ey-C1D"/>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="GeS-Kz-poo"/>
                             <constraint firstAttribute="bottom" secondItem="QCv-HV-K1f" secondAttribute="bottom" id="Kin-vo-tHD"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="NJY-Zb-hrT"/>
                             <constraint firstAttribute="trailing" secondItem="sV4-yd-6Sv" secondAttribute="trailing" id="UpG-i7-Cma"/>
-                            <constraint firstItem="6rt-Zi-OVM" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Wal-4d-TSw"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cjb-J0-wCq"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="dgH-9b-02b"/>
-                            <constraint firstItem="6rt-Zi-OVM" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="dzo-be-wdN"/>
+                            <constraint firstItem="Qoh-aV-lI2" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="l4Y-X2-5TN"/>
                         </constraints>
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="6rt-Zi-OVM" id="OZY-nW-FsE"/>
+                        <outlet property="activityIndicator" destination="Qoh-aV-lI2" id="h9G-Fr-HzZ"/>
                         <outlet property="blurEffectView" destination="Ihr-1k-z8Z" id="qXq-8B-LzD"/>
                         <outlet property="blurImageView" destination="3Ne-z8-LIQ" id="iqQ-Qb-60I"/>
                         <outlet property="chartAllListenButton" destination="HJb-5L-vKL" id="wb0-L2-kU8"/>

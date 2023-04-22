@@ -12,6 +12,7 @@ import Tabman
 import Pageboy
 import DesignSystem
 import RxSwift
+import NVActivityIndicatorView
 
 public final class QnaViewController: TabmanViewController, ViewControllerFromStoryBoard {
     
@@ -19,7 +20,7 @@ public final class QnaViewController: TabmanViewController, ViewControllerFromSt
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tabBarView: UIView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     @IBAction func pressBackAction(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
@@ -57,6 +58,8 @@ extension QnaViewController {
     private func configureUI(){
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        self.activityIndicator.type = .circleStrokeSpin
+        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.startAnimating()
         
         //탭바 설정
@@ -94,7 +97,7 @@ extension QnaViewController {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] (_, _) in
-                self?.activityIndicator.stopOnMainThread()
+                self?.activityIndicator.stopAnimating()
             })
             .subscribe { [weak self] (categories, qna) in
                 guard let self = self else{

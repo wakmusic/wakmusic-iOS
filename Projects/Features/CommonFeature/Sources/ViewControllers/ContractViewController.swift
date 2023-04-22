@@ -11,6 +11,7 @@ import Utility
 import RxSwift
 import PDFKit
 import DesignSystem
+import NVActivityIndicatorView
 
 public enum ContractType{
     case privacy
@@ -43,7 +44,7 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var confirmButton: UIButton!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     var type:ContractType = .privacy
     var disposeBag = DisposeBag()
@@ -69,6 +70,9 @@ extension ContractViewController{
     private func configureUI(){
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        activityIndicator.type = .circleStrokeSpin
+        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
         
         confirmButton.layer.cornerRadius = 12
@@ -119,6 +123,6 @@ extension ContractViewController{
         pdfView.displayDirection = .vertical
         pdfView.document = document
         self.fakeView.addSubview(pdfView)
-        activityIndicator.stopOnMainThread()
+        activityIndicator.stopAnimating()
     }
 }

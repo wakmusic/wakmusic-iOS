@@ -14,7 +14,7 @@ import RxRelay
 import RxSwift
 import DesignSystem
 import DomainModule
-
+import NVActivityIndicatorView
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {
     
@@ -22,8 +22,8 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var dataLoadActivityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var dataLoadActivityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     var viewModel: ProfilePopViewModel!    
     var disposeBag = DisposeBag()
@@ -61,7 +61,11 @@ extension ProfilePopViewController{
             ), for: .normal
         )
      
+        self.dataLoadActivityIndicator.type = .circleStrokeSpin
+        self.dataLoadActivityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.dataLoadActivityIndicator.startAnimating()
+        
+        self.activityIndicator.type = .circleStrokeSpin
         self.activityIndicator.color = .white
         self.collectionVIewHeight.constant = rowHeight  + 10
     }
