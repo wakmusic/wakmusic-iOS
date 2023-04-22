@@ -16,6 +16,7 @@ public class ArtistPlayButtonGroupView: UIView {
     
     @IBOutlet weak var allPlayButton: UIButton!
     @IBOutlet weak var shufflePlayButton: UIButton!
+    @IBOutlet var blurEffectViews: [UIVisualEffectView]!
     
     public weak var delegate: PlayButtonGroupViewDelegate?
 
@@ -55,7 +56,7 @@ extension ArtistPlayButtonGroupView {
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderWidth = 1
         allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
-        allPlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+        allPlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
@@ -71,7 +72,7 @@ extension ArtistPlayButtonGroupView {
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderWidth = 1
         shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
-        shufflePlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+        shufflePlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
@@ -82,5 +83,10 @@ extension ArtistPlayButtonGroupView {
                                                      .kern: -0.5],
                                                     range: NSRange(location: 0, length: shuffleButtonAttributedString.string.count))
         shufflePlayButton.setAttributedTitle(shuffleButtonAttributedString, for: .normal)
+        
+        blurEffectViews.forEach {
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
+        }
     }
 }
