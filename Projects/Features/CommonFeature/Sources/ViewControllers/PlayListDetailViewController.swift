@@ -104,6 +104,12 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.hideEditSheet()
+        self.moreButton.isSelected = false
+    }
+
     deinit {
         DEBUG_LOG("\(Self.self) deinit")
     }

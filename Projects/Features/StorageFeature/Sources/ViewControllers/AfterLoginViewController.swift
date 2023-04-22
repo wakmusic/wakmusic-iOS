@@ -71,6 +71,12 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         bindEditButtonVisable()
     }
     
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.hideEditSheet()
+        self.profileButton.isSelected = false 
+    }
+    
     //탭맨 페이지 변경 감지 함수
     public override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
         
