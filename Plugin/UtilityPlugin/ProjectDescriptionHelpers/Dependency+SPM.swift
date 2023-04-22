@@ -34,6 +34,7 @@ public extension TargetDependency.SPM {
     static let Amplify = TargetDependency.external(name: "Amplify")
     static let AWSPluginsCore = TargetDependency.external(name: "AWSPluginsCore")
     static let AWSS3StoragePlugin = TargetDependency.external(name: "AWSS3StoragePlugin")
+    static let NVActivityIndicatorView = TargetDependency.external(name: "NVActivityIndicatorView")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")

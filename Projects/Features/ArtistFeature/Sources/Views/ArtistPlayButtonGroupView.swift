@@ -55,7 +55,7 @@ extension ArtistPlayButtonGroupView {
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderWidth = 1
         allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
-        allPlayButton.backgroundColor = UIColor.white
+        allPlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.6)
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         allPlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
@@ -71,7 +71,7 @@ extension ArtistPlayButtonGroupView {
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderWidth = 1
         shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
-        shufflePlayButton.backgroundColor = UIColor.white
+        shufflePlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.6)
         shufflePlayButton.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         shufflePlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         shufflePlayButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)

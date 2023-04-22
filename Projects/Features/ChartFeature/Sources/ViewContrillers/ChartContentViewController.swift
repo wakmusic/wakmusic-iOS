@@ -9,6 +9,7 @@ import DataMappingModule
 import DomainModule
 import SnapKit
 import Then
+import NVActivityIndicatorView
 
 public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,SongCartViewType {
     private let disposeBag = DisposeBag()
@@ -17,7 +18,7 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     fileprivate lazy var output = viewModel.transform(from: input)
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var activityIncidator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     
@@ -53,7 +54,7 @@ extension ChartContentViewController {
             .skip(1)
             .do(onNext: { [weak self] _ in
                 guard let `self` = self else { return }
-                self.activityIncidator.stopOnMainThread()
+                self.activityIncidator.stopAnimating()
             })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
@@ -72,18 +73,7 @@ extension ChartContentViewController {
             .disposed(by: disposeBag)
 
     }
-    
-    private func configureUI() {
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        self.activityIncidator.startAnimating()
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-    }
-    
-    
     private func outputBind() {
-        
-       
         output.indexOfSelectedSongs
             .skip(1)
             .withLatestFrom(output.dataSource) { ($0, $1) }
@@ -111,27 +101,29 @@ extension ChartContentViewController {
         
         output.groupPlaySongs
             .subscribe(onNext: { [weak self] songs in
-                
                 guard let self = self else {return}
-                
                 self.playState.loadAndAppendSongsToPlaylist(songs)
-                
             })
             .disposed(by: disposeBag)
     }
     
+    private func configureUI() {
+        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.activityIncidator.type = .circleStrokeSpin
+        self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.activityIncidator.startAnimating()
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+    }
 }
 
 extension ChartContentViewController: UITableViewDelegate {
-
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 102
     }
-
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = PlayButtonForChartView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 102))
         view.setUpdateTime(updateTime: output.updateTime)
@@ -151,9 +143,8 @@ extension ChartContentViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
-        case .addSong:
-    
             
+        case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
@@ -161,20 +152,14 @@ extension ChartContentViewController: SongCartViewDelegate {
                 self.input.allSongSelected.onNext(false)
             }
         case .addPlayList:
-            
             let songs = output.songEntityOfSelectedSongs.value
-            
             playState.appendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
             
-            
         case .play:
-            
             let songs = output.songEntityOfSelectedSongs.value
-            
             playState.loadAndAppendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
-
             
         case .remove:
             return

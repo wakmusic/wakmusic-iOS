@@ -44,9 +44,13 @@
                                 <rect key="frame" x="0.0" y="99" width="393" height="753"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.95294117649999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="VV6-VU-NB5">
-                                <rect key="frame" x="186.66666666666666" y="465.66666666666669" width="20" height="20"/>
-                            </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="08x-kK-r7k" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="4mg-fd-WAY"/>
+                                    <constraint firstAttribute="height" constant="30" id="Xwa-r6-8kX"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QPb-FV-zYU"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -54,16 +58,16 @@
                             <constraint firstItem="TTu-Bc-teJ" firstAttribute="top" secondItem="yoP-bw-WWh" secondAttribute="bottom" id="2tH-Ar-fig"/>
                             <constraint firstItem="yoP-bw-WWh" firstAttribute="trailing" secondItem="QPb-FV-zYU" secondAttribute="trailing" id="NI0-Cp-YRw"/>
                             <constraint firstItem="yoP-bw-WWh" firstAttribute="top" secondItem="QPb-FV-zYU" secondAttribute="top" id="QdO-SW-Iz4"/>
-                            <constraint firstItem="VV6-VU-NB5" firstAttribute="centerY" secondItem="TTu-Bc-teJ" secondAttribute="centerY" id="aLX-7B-BVC"/>
                             <constraint firstItem="yoP-bw-WWh" firstAttribute="leading" secondItem="QPb-FV-zYU" secondAttribute="leading" id="b13-5G-Bzr"/>
                             <constraint firstItem="TTu-Bc-teJ" firstAttribute="leading" secondItem="QPb-FV-zYU" secondAttribute="leading" id="cBY-xg-9yG"/>
                             <constraint firstAttribute="trailing" secondItem="TTu-Bc-teJ" secondAttribute="trailing" id="d0B-oT-Pvp"/>
                             <constraint firstAttribute="bottom" secondItem="TTu-Bc-teJ" secondAttribute="bottom" id="dVN-0P-aVL"/>
-                            <constraint firstItem="VV6-VU-NB5" firstAttribute="centerX" secondItem="TTu-Bc-teJ" secondAttribute="centerX" id="q5o-pQ-2Mm"/>
+                            <constraint firstItem="08x-kK-r7k" firstAttribute="centerY" secondItem="fJe-Lo-olP" secondAttribute="centerY" id="n9i-Jl-J6o"/>
+                            <constraint firstItem="08x-kK-r7k" firstAttribute="centerX" secondItem="fJe-Lo-olP" secondAttribute="centerX" id="ugN-4r-RDP"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="activityIncidator" destination="VV6-VU-NB5" id="6pI-j1-PXQ"/>
+                        <outlet property="activityIncidator" destination="08x-kK-r7k" id="Ayd-W4-l40"/>
                         <outlet property="tableView" destination="TTu-Bc-teJ" id="cHl-T6-hT5"/>
                     </connections>
                 </viewController>

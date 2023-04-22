@@ -28,6 +28,7 @@ let project = Project.makeModule(
         .SPM.MarqueeLabel,
         .SPM.Amplify,
         .SPM.AWSPluginsCore,
-        .SPM.AWSS3StoragePlugin
+        .SPM.AWSS3StoragePlugin,
+        .SPM.NVActivityIndicatorView
     ]
 )
