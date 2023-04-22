@@ -13,6 +13,7 @@ import DesignSystem
 public class PermissionViewController: UIViewController, ViewControllerFromStoryBoard {
 
     @IBOutlet weak var borderView: UIView!
+    @IBOutlet weak var borderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainTitleLabel: UILabel!
     @IBOutlet weak var optionalPermissionLabel: UILabel!
     
@@ -135,5 +136,8 @@ extension PermissionViewController {
                          .kern: -0.5]
         )
         self.confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
+        
+        self.borderViewWidthConstraint.constant = APP_WIDTH() < 375 ? (APP_WIDTH()-40.0) : 335.0
+        self.view.layoutIfNeeded()
     }
 }

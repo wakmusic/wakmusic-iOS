@@ -338,6 +338,7 @@
                         <outlet property="albumImageView" destination="DbD-nd-NiV" id="tWD-cb-wQH"/>
                         <outlet property="albumLabel" destination="W3E-Cb-fzm" id="Dag-8p-pZc"/>
                         <outlet property="borderView" destination="n0P-Ed-WQG" id="l7b-cl-Gp6"/>
+                        <outlet property="borderViewWidthConstraint" destination="0rB-r7-Xhb" id="rNm-HS-BEX"/>
                         <outlet property="cameraDescriptionLabel" destination="jnX-3R-dJK" id="5Md-Bk-FMM"/>
                         <outlet property="cameraImageView" destination="2cD-3I-IL7" id="59H-We-uRL"/>
                         <outlet property="cameraLabel" destination="vYr-8x-dfD" id="FUZ-8V-yhs"/>
