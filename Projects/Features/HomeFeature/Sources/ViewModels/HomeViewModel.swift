@@ -47,33 +47,39 @@ public final class HomeViewModel: ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-     
         let chartDataSource: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
         let songEntityOfAllChart: PublishSubject<[SongEntity]> = PublishSubject()
-
-        fetchChartRankingUseCase
-            .execute(type: .hourly, limit: 100)
-            .catchAndReturn([])
-            .asObservable()
-            .bind(to: chartDataSource)
-            .disposed(by: disposeBag)
-
-        fetchNewSongUseCase
-            .execute(type: .all)
-            .catchAndReturn([])
-            .asObservable()
-            .bind(to: newSongDataSource)
-            .disposed(by: disposeBag)
         
-        fetchRecommendPlayListUseCase
-            .execute()
-            .catchAndReturn([])
-            .asObservable()
-            .bind(to: playListDataSource)
-            .disposed(by: disposeBag)
+        let chartAndNewSong = Observable.zip(
+            self.fetchChartRankingUseCase
+                .execute(type: .hourly, limit: 100)
+                .catchAndReturn([])
+                .asObservable(),
+            self.fetchNewSongUseCase
+                .execute(type: .all)
+                .catchAndReturn([])
+                .asObservable()
+        )
         
+        let firstLoad = Observable.zip(
+            chartAndNewSong,
+            self.fetchRecommendPlayListUseCase
+                .execute()
+                .catchAndReturn([])
+                .asObservable()
+        )
+
+        firstLoad
+            .take(1)
+            .subscribe(onNext: { (arg, recommendPlayListEntity) in
+                let (chartRankingEntity, newSongEntity) = arg
+                chartDataSource.accept(chartRankingEntity)
+                newSongDataSource.accept(newSongEntity)
+                playListDataSource.accept(recommendPlayListEntity)
+            }).disposed(by: disposeBag)
+
         input.chartMoreTapped
             .map { _ in 1 }
             .subscribe(onNext: { (index) in
