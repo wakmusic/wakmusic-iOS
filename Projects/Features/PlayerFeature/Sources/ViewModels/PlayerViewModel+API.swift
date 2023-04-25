@@ -27,7 +27,6 @@ extension PlayerViewModel {
                 self.lyricsDict.removeAll()
                 self.sortedLyrics.removeAll()
                 self.sortedLyrics.append("가사가 없습니다.")
-                print("title: \(song.title) id: \(song.id) 가사가 없습니다. error: \(error)")
             } onDisposed: {
                 output.lyricsDidChangedEvent.send(true)
             }.disposed(by: self.disposeBag)

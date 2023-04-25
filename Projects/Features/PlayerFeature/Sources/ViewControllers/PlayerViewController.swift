@@ -46,7 +46,7 @@ public class PlayerViewController: UIViewController {
     }
     
     deinit {
-        print("플레이어 뷰컨 deinit")
+        DEBUG_LOG("플레이어 뷰컨 deinit")
     }
     
     public override func loadView() {
@@ -66,7 +66,7 @@ public class PlayerViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
+        DEBUG_LOG("viewDidLoad")
         playerView.lyricsTableView.delegate = self
         playerView.lyricsTableView.dataSource = self
         bindViewModel()
