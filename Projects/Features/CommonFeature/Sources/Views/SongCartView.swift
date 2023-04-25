@@ -83,11 +83,16 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .play)
 
         }else if button == removeButton { //삭제
-            guard Utility.PreferenceManager.userInfo != nil else {
-                showLoginPopup()
-                return
+            if self.type == .playList {
+                delegate?.buttonTapped(type: .remove)
+
+            }else{
+                guard Utility.PreferenceManager.userInfo != nil else {
+                    showLoginPopup()
+                    return
+                }
+                delegate?.buttonTapped(type: .remove)
             }
-            delegate?.buttonTapped(type: .remove)
         }
     }
 }
