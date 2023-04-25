@@ -77,11 +77,11 @@ final class PlayerViewModel: ViewModelType {
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
-        print("✅ PlayerViewModel 생성")
+        DEBUG_LOG("✅ PlayerViewModel 생성")
     }
     
     deinit {
-        print("❌ PlayerViewModel deinit")
+        DEBUG_LOG("❌ PlayerViewModel deinit")
     }
     
     func transform(from input: Input) -> Output {

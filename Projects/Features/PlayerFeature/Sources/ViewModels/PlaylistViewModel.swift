@@ -57,11 +57,11 @@ final class PlaylistViewModel: ViewModelType {
     private var disposeBag = DisposeBag()
     
     init() {
-        print("✅ PlaylistViewModel 생성")
+        DEBUG_LOG("✅ PlaylistViewModel 생성")
     }
     
     deinit {
-        print("❌ PlaylistViewModel deinit")
+        DEBUG_LOG("❌ PlaylistViewModel deinit")
     }
     
     func transform(from input: Input) -> Output {

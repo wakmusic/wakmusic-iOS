@@ -43,7 +43,7 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     }
     
     deinit {
-        print("playlistVC deinit")
+        DEBUG_LOG("❌ PlaylistVC deinit")
     }
     
     required init?(coder: NSCoder) {
