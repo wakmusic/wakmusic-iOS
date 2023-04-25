@@ -22,7 +22,7 @@ public enum WMImageAPI {
 
 extension WMImageAPI {
     public var baseURLString: String {
-        return "https://static.wakmusic.xyz"
+        return BASE_IMAGE_URL()
     }
 
     public var youtubeBaseURLString: String {
@@ -32,49 +32,49 @@ extension WMImageAPI {
     public var path: String {
         switch self {
         case let .fetchNewsThumbnail(time):
-            return "/static/news/\(time).png"
+            return WMDOMAIN_IMAGE_NEWS() + "/\(time).png"
             
         case let .fetchArtistWithRound(id, version):
-            return "/static/artist/round/\(id).png?v=\(version)"
+            return WMDOMAIN_IMAGE_ARTIST_ROUND() + "/\(id).png?v=\(version)"
             
         case let .fetchArtistWithSquare(id, version):
-            return "/static/artist/square/\(id).png?v=\(version)"
+            return WMDOMAIN_IMAGE_ARTIST_SQUARE() + "/\(id).png?v=\(version)"
             
         case let .fetchProfile(name,version):
-            return "/static/profile/\(name).png?v=\(version)"
+            return WMDOMAIN_IMAGE_PROFILE() + "/\(name).png?v=\(version)"
             
         case let .fetchPlayList(id,version):
-            return "/static/playlist/\(id).png?v=\(version)"
+            return WMDOMAIN_IMAGE_PLAYLIST() + "/\(id).png?v=\(version)"
             
         case let .fetchRecommendPlayListWithSquare(id,version):
-            return "/static/playlist/icon/square/\(id).png?v=\(version)"
+            return WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE() + "/\(id).png?v=\(version)"
             
         case let .fetchRecommendPlayListWithRound(id,version):
-            return "/static/playlist/icon/round/\(id).png?v=\(version)"
+            return WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND() + "/\(id).png?v=\(version)"
             
         case let .fetchYoutubeThumbnail(id):
-            return "/vi/\(id)/hqdefault.jpg"
+            return "vi/\(id)/hqdefault.jpg"
             
         case let .fetchNotice(id):
-            return "/static/notice/\(id)"
+            return WMDOMAIN_IMAGE_NOTICE() + "/\(id)"
         }
     }
     
     public var toString: String {
         switch self {
         case .fetchYoutubeThumbnail:
-            return youtubeBaseURLString + path
+            return youtubeBaseURLString + "/" + path
         default:
-            return baseURLString + path
+            return baseURLString + "/" + path
         }
     }
     
     public var toURL: URL? {
         switch self {
         case .fetchYoutubeThumbnail:
-            return URL(string: youtubeBaseURLString + path)
+            return URL(string: youtubeBaseURLString + "/" + path)
         default:
-            return URL(string: baseURLString + path)
+            return URL(string: baseURLString + "/" + path)
         }
     }
 }

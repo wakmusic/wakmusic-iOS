@@ -41,10 +41,8 @@ extension PlayListAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-            
         case .fetchRecommendPlayList:
             return "/recommended"
-            
         case .fetchPlayListDetail(id: let id, type: let type):
             switch type {
             case .custom:
@@ -52,25 +50,18 @@ extension PlayListAPI: WMAPI {
             case .wmRecommend:
                 return "/recommended/\(id)"
             }
-            
         case .createPlayList:
             return "/create"
-            
         case .deletePlayList(key: let key):
             return "/\(key)/delete"
-            
         case .loadPlayList(key: let key):
             return "/\(key)/addToMyPlaylist"
-            
         case .editPlayList(key: let key,_):
             return "/\(key)/edit"
-            
         case .editPlayListName(key: let key,_):
             return "/\(key)/edit/title"
-            
         case .addSongIntoPlayList(key: let key,_):
             return "/\(key)/songs/add"
-            
         case .removeSongs(key: let key,_):
             return "/\(key)/songs/remove"
         }

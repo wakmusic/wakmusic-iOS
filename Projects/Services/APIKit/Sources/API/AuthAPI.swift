@@ -19,10 +19,9 @@ public struct AuthRequset:Encodable {
 extension AuthAPI: WMAPI {
     
     public var baseURL: URL {
-        
         switch self {
         case .fetchToken,.fetUserInfo,.withdrawUserInfo:
-            return URL(string: "https://test.wakmusic.xyz")!
+            return URL(string: BASE_URL())!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }

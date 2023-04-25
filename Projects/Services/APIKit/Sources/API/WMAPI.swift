@@ -11,7 +11,7 @@ public protocol WMAPI: TargetType, JwtAuthorizable {
 
 public extension WMAPI {
     var baseURL: URL {
-        URL(string: "https://test.wakmusic.xyz")!
+        URL(string: BASE_URL())!
     }
     
     var path: String {
@@ -28,22 +28,50 @@ public extension WMAPI {
 }
 
 public enum WMDomain: String {
-    case auth = "api/auth"
-    case charts = "api/charts"
-    case songs = "api/songs"
-    case artist = "api/artist"
-    case user = "api/user"
-    case playlist = "api/playlist"
-    case like = "api/like"
-    case common = "static"
-    case naver = "/v1/nid/me"
-    case qna = "api/qna"
-    case notice = "api/notice"
-    case suggest = "wakenter/suggest" //추후 api/suggest로 변경 예정
+    case auth
+    case charts
+    case songs
+    case artist
+    case user
+    case playlist
+    case like
+    case naver
+    case qna
+    case notice
+    case suggest
 }
 
 extension WMDomain {
     var asURLString: String {
-        "/\(self.rawValue)"
+        "/\(self.asDomainString)"
+    }
+}
+
+extension WMDomain {
+    var asDomainString: String {
+        switch self {
+        case .auth:
+            return WMDOMAIN_AUTH()
+        case .charts:
+            return WMDOMAIN_CHARTS()
+        case .songs:
+            return WMDOMAIN_SONGS()
+        case .artist:
+            return WMDOMAIN_ARTIST()
+        case .user:
+            return WMDOMAIN_USER()
+        case .playlist:
+            return WMDOMAIN_PLAYLIST()
+        case .like:
+            return WMDOMAIN_LIKE()
+        case .naver:
+            return "/v1/nid/me"
+        case .qna:
+            return WMDOMAIN_QNA()
+        case .notice:
+            return WMDOMAIN_NOTICE()
+        case .suggest:
+            return WMDOMAIN_SUGGEST()
+        }
     }
 }

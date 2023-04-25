@@ -5,13 +5,9 @@ import Foundation
 import KeychainModule
 
 public enum QnaAPI {
-  
     case fetchQnaCategories
     case fetchQna
-    
 }
-
-
 
 extension QnaAPI: WMAPI {
 
@@ -21,38 +17,26 @@ extension QnaAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-            
         case .fetchQnaCategories:
             return "/categories"
-        
         case .fetchQna:
             return "/"
-            
         }
-        
-            
     }
         
     public var method: Moya.Method {
         switch self {
         case .fetchQnaCategories,.fetchQna:
             return .get
-            
         }
     }
     
     public var task: Moya.Task {
         switch self {
-            
-            
         case .fetchQnaCategories,.fetchQna:
             return .requestPlain
-            
         }
-       
     }
-
-   
         
     public var jwtTokenType: JwtTokenType {
         return .none

@@ -116,6 +116,46 @@
 		<string>$(GOOGLE_CLIENT_ID)</string>
 		<key>GOOGLE_SECRET_KEY</key>
 		<string>$(GOOGLE_SECRET_KEY)</string>
+		<key>BASE_URL</key>
+		<string>$(BASE_URL)</string>
+		<key>BASE_IMAGE_URL</key>
+		<string>$(BASE_IMAGE_URL)</string>
+		<key>WMDOMAIN_AUTH</key>
+		<string>$(WMDOMAIN_AUTH)</string>
+		<key>WMDOMAIN_CHARTS</key>
+		<string>$(WMDOMAIN_CHARTS)</string>
+		<key>WMDOMAIN_SONGS</key>
+		<string>$(WMDOMAIN_SONGS)</string>
+		<key>WMDOMAIN_ARTIST</key>
+		<string>$(WMDOMAIN_ARTIST)</string>
+		<key>WMDOMAIN_USER</key>
+		<string>$(WMDOMAIN_USER)</string>
+		<key>WMDOMAIN_PLAYLIST</key>
+		<string>$(WMDOMAIN_PLAYLIST)</string>
+		<key>WMDOMAIN_LIKE</key>
+		<string>$(WMDOMAIN_LIKE)</string>
+		<key>WMDOMAIN_QNA</key>
+		<string>$(WMDOMAIN_QNA)</string>
+		<key>WMDOMAIN_NOTICE</key>
+		<string>$(WMDOMAIN_NOTICE)</string>
+		<key>WMDOMAIN_SUGGEST</key>
+		<string>$(WMDOMAIN_SUGGEST)</string>
+		<key>WMDOMAIN_IMAGE_NEWS</key>
+		<string>$(WMDOMAIN_IMAGE_NEWS)</string>
+		<key>WMDOMAIN_IMAGE_ARTIST_ROUND</key>
+		<string>$(WMDOMAIN_IMAGE_ARTIST_ROUND)</string>
+		<key>WMDOMAIN_IMAGE_ARTIST_SQUARE</key>
+		<string>$(WMDOMAIN_IMAGE_ARTIST_SQUARE)</string>
+		<key>WMDOMAIN_IMAGE_PROFILE</key>
+		<string>$(WMDOMAIN_IMAGE_PROFILE)</string>
+		<key>WMDOMAIN_IMAGE_PLAYLIST</key>
+		<string>$(WMDOMAIN_IMAGE_PLAYLIST)</string>
+		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE</key>
+		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
+		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND</key>
+		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
+		<key>WMDOMAIN_IMAGE_NOTICE</key>
+		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
 	</dict>
 	<key>NSAppTransportSecurity</key>
 	<dict>

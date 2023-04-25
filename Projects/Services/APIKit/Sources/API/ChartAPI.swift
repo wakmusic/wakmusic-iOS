@@ -53,7 +53,6 @@ extension ChartAPI: WMAPI {
                 429: .tooManyRequest,
                 500: .internalServerError
             ]
-
         }
     }
 }

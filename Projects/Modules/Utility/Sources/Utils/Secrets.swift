@@ -8,6 +8,64 @@
 
 import Foundation
 
+//MARK: - BASE_IMAGE_URL
+public func BASE_IMAGE_URL() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["BASE_IMAGE_URL"] as? String ?? "not found key"
+}
+
+//MARK: - WMDomain > Image
+public func WMDOMAIN_IMAGE_NEWS() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_NEWS"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_ARTIST_ROUND() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_ARTIST_ROUND"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_ARTIST_SQUARE() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_ARTIST_SQUARE"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_PROFILE() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_PROFILE"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_PLAYLIST() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_PLAYLIST"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND"] as? String ?? "not found key"
+}
+public func WMDOMAIN_IMAGE_NOTICE() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WMDOMAIN_IMAGE_NOTICE"] as? String ?? "not found key"
+}
+
 //MARK: - NAVER
 public func NAVER_URL_SCHEME() -> String {
     guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
