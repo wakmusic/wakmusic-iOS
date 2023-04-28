@@ -25,6 +25,10 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
         
     var viewModel: NoticeDetailViewModel!
     var disposeBag = DisposeBag()
+    
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) Deinit")
+    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()

@@ -17,6 +17,7 @@ public extension FetchNoticeResponseDTO {
             id: id,
             category: category,
             title: title,
+            thumbnail: thumbnail,
             content: content,
             images: images,
             createAt: createAt,

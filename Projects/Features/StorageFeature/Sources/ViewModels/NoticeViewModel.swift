@@ -36,6 +36,7 @@ public class NoticeViewModel {
         self.fetchNoticeUseCase.execute(type: .all)
             .catchAndReturn([])
             .asObservable()
+            .map { $0.sorted { $0.id > $1.id } }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
     }

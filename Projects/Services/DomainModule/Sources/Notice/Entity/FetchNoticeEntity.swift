@@ -13,6 +13,7 @@ public struct FetchNoticeEntity: Codable {
         id: Int,
         category: String,
         title: String,
+        thumbnail: String?,
         content: String?,
         images: [String],
         createAt: Double,
@@ -22,6 +23,7 @@ public struct FetchNoticeEntity: Codable {
         self.id = id
         self.category = category
         self.title = title
+        self.thumbnail = thumbnail
         self.content = content
         self.images = images
         self.createAt = createAt
@@ -31,6 +33,7 @@ public struct FetchNoticeEntity: Codable {
 
     public let id: Int
     public let category, title: String
+    public let thumbnail: String?
     public let content: String?
     public let images: [String]
     public let createAt, startAt, endAt: Double

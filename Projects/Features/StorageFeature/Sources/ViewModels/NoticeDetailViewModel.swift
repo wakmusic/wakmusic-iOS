@@ -21,6 +21,10 @@ public class NoticeDetailViewModel {
     var disposeBag = DisposeBag()
     var model: FetchNoticeEntity
     
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) Deinit")
+    }
+
     public struct Input {
     }
 
