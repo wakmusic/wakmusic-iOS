@@ -14,6 +14,7 @@ import DesignSystem
 import RxDataSources
 import DomainModule
 import CommonFeature
+import NVActivityIndicatorView
 
 typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, String>
 
@@ -22,7 +23,8 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
-        
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
+    
     var viewModel: NoticeDetailViewModel!
     var disposeBag = DisposeBag()
     
@@ -51,9 +53,15 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
 
 extension NoticeDetailViewController {
     private func bind() {
-        viewModel.output
-            .dataSource
+        viewModel.output.dataSource
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
+            .disposed(by: disposeBag)
+        
+        viewModel.output.imageSizes
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] _ in
+                self?.indicator.stopAnimating()
+            })
             .disposed(by: disposeBag)
     }
     
@@ -84,6 +92,7 @@ extension NoticeDetailViewController {
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
@@ -91,9 +100,14 @@ extension NoticeDetailViewController {
                          .kern: -0.5]
         )
         self.titleStringLabel.attributedText = attributedString
+        
         collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
                                 forCellWithReuseIdentifier: "NoticeCollectionViewCell")
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.indicator.startAnimating()
     }
 }
 
@@ -101,9 +115,11 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
     public func collectionView(_ collectionView: UICollectionView,
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
         let sideSpace: CGFloat = 20
-        let width = APP_WIDTH()-(sideSpace*2.0)
-        return CGSize(width: width, height: width)
+        let width: CGFloat = APP_WIDTH()-(sideSpace*2.0)
+        let height: CGFloat = (imageSize.height * width) / imageSize.width
+        return CGSize(width: width, height: height)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
