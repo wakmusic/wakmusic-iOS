@@ -2831,22 +2831,32 @@
                                     </connections>
                                 </collectionReusableView>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yq8-hg-ASV" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="DB5-ZM-iwx"/>
+                                    <constraint firstAttribute="width" constant="30" id="RbF-Ri-3kk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Shn-7O-nvG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="dDG-n2-HUg" firstAttribute="leading" secondItem="BSB-OM-oEZ" secondAttribute="leading" id="2VX-jL-l7K"/>
+                            <constraint firstItem="yq8-hg-ASV" firstAttribute="centerY" secondItem="BSB-OM-oEZ" secondAttribute="centerY" id="3W3-5w-eiX"/>
                             <constraint firstAttribute="bottom" secondItem="nyU-rR-5oG" secondAttribute="bottom" id="7dF-to-uqt"/>
                             <constraint firstItem="nyU-rR-5oG" firstAttribute="leading" secondItem="Shn-7O-nvG" secondAttribute="leading" id="Ekf-qp-WkG"/>
                             <constraint firstItem="Shn-7O-nvG" firstAttribute="trailing" secondItem="dDG-n2-HUg" secondAttribute="trailing" id="PAk-KM-c4X"/>
                             <constraint firstItem="Shn-7O-nvG" firstAttribute="trailing" secondItem="nyU-rR-5oG" secondAttribute="trailing" id="VEp-B6-hXC"/>
                             <constraint firstItem="dDG-n2-HUg" firstAttribute="top" secondItem="Shn-7O-nvG" secondAttribute="top" id="bCe-Ba-E4Z"/>
                             <constraint firstItem="nyU-rR-5oG" firstAttribute="top" secondItem="dDG-n2-HUg" secondAttribute="bottom" id="bbO-td-X5n"/>
+                            <constraint firstItem="yq8-hg-ASV" firstAttribute="centerX" secondItem="BSB-OM-oEZ" secondAttribute="centerX" id="cC0-f5-Bjc"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="closeButton" destination="bau-r8-IYJ" id="nDD-op-OY3"/>
                         <outlet property="collectionView" destination="nyU-rR-5oG" id="Nxr-Pl-mvj"/>
+                        <outlet property="indicator" destination="yq8-hg-ASV" id="NgZ-zy-G9T"/>
                         <outlet property="titleStringLabel" destination="ZeI-bM-ifs" id="VRn-UT-GJo"/>
                     </connections>
                 </viewController>

@@ -20,7 +20,6 @@ public class NoticeDetailViewModel {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    var model: FetchNoticeEntity
     
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
@@ -37,9 +36,8 @@ public class NoticeDetailViewModel {
     public init(
         model: FetchNoticeEntity
     ) {
-        self.model = model
-        let sectionModel = [NoticeDetailSectionModel(model: self.model,
-                                                     items: self.model.images)]
+        let sectionModel = [NoticeDetailSectionModel(model: model,
+                                                     items: model.images)]
         
         let imageURLs: [URL] =
             model.images.map {

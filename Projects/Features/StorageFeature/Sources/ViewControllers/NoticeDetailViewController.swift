@@ -14,6 +14,7 @@ import DesignSystem
 import RxDataSources
 import DomainModule
 import CommonFeature
+import NVActivityIndicatorView
 
 typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, String>
 
@@ -22,7 +23,8 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
-        
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
+    
     var viewModel: NoticeDetailViewModel!
     var disposeBag = DisposeBag()
     
@@ -56,8 +58,10 @@ extension NoticeDetailViewController {
             .disposed(by: disposeBag)
         
         viewModel.output.imageSizes
-            .skip(1)
-            .subscribe()
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] _ in
+                self?.indicator.stopAnimating()
+            })
             .disposed(by: disposeBag)
     }
     
@@ -88,6 +92,7 @@ extension NoticeDetailViewController {
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
@@ -95,9 +100,14 @@ extension NoticeDetailViewController {
                          .kern: -0.5]
         )
         self.titleStringLabel.attributedText = attributedString
+        
         collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
                                 forCellWithReuseIdentifier: "NoticeCollectionViewCell")
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.indicator.startAnimating()
     }
 }
 
