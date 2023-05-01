@@ -51,9 +51,13 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
 
 extension NoticeDetailViewController {
     private func bind() {
-        viewModel.output
-            .dataSource
+        viewModel.output.dataSource
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
+            .disposed(by: disposeBag)
+        
+        viewModel.output.imageSizes
+            .skip(1)
+            .subscribe()
             .disposed(by: disposeBag)
     }
     
@@ -101,9 +105,11 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
     public func collectionView(_ collectionView: UICollectionView,
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
         let sideSpace: CGFloat = 20
-        let width = APP_WIDTH()-(sideSpace*2.0)
-        return CGSize(width: width, height: width)
+        let width: CGFloat = APP_WIDTH()-(sideSpace*2.0)
+        let height: CGFloat = (imageSize.height * width) / imageSize.width
+        return CGSize(width: width, height: height)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -13,6 +13,7 @@ import BaseFeature
 import DomainModule
 import DataMappingModule
 import Utility
+import Kingfisher
 
 public class NoticeDetailViewModel {
     
@@ -30,14 +31,62 @@ public class NoticeDetailViewModel {
 
     public struct Output {
         var dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
+        var imageSizes: BehaviorRelay<[CGSize]> = BehaviorRelay(value: [])
     }
     
     public init(
         model: FetchNoticeEntity
-    ){
+    ) {
         self.model = model
         let sectionModel = [NoticeDetailSectionModel(model: self.model,
                                                      items: self.model.images)]
-        output.dataSource.accept(sectionModel)
+        
+        let imageURLs: [URL] =
+            model.images.map {
+                WMImageAPI.fetchNotice(id: $0).toURL
+            }
+            .compactMap { $0 }
+        
+        Observable.just(imageURLs)
+            .flatMap { [weak self] (urls) -> Observable<[CGSize]> in
+                guard let self else { return Observable.empty() }
+                return self.downloadImage(urls: urls)
+            }
+            .subscribe(onNext: { [weak self] (imageSizes) in
+                self?.output.imageSizes.accept(imageSizes)
+                self?.output.dataSource.accept(sectionModel)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+extension NoticeDetailViewModel {
+    private func downloadImage(urls: [URL]) -> Observable<[CGSize]> {
+        var sizes: [CGSize] = []
+        return Observable.create{ (observer) -> Disposable in
+            urls.forEach {
+                KingfisherManager.shared.retrieveImage(
+                    with: $0,
+                    completionHandler: { (result) in
+                        switch result {
+                        case let .success(value):
+                            sizes.append(CGSize(width: value.image.size.width, height: value.image.size.height))
+                            if urls.count == sizes.count {
+                                observer.onNext(sizes)
+                                observer.onCompleted()
+                            }
+                        case let .failure(error):
+                            DEBUG_LOG(error.localizedDescription)
+                            sizes.append(.zero)
+                            if urls.count == sizes.count {
+                                observer.onNext(sizes)
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                )
+            }
+            return Disposables.create {}
+        }
     }
 }

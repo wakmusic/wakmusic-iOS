@@ -25,7 +25,14 @@ public extension NoticeCollectionViewCell {
         contentImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchNotice(id: model).toString),
             placeholder: nil,
-            options: [.transition(.fade(0.2))]
-        )
+            options: [.transition(.fade(0.2))],
+            completionHandler: { (result) in
+            switch result {
+            case let .success(data):
+                DEBUG_LOG("imageWidth: \(data.image.size.width), imageHeight: \(data.image.size.height)")
+            case let .failure(error):
+                DEBUG_LOG(error.localizedDescription)
+            }
+        })
     }
 }
