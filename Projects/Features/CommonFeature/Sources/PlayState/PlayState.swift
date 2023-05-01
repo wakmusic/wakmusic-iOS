@@ -10,6 +10,7 @@ import Foundation
 import DomainModule
 import YouTubePlayerKit
 import Combine
+import Utility
 
 final public class PlayState {
     public static let shared = PlayState()
@@ -25,7 +26,21 @@ final public class PlayState {
     private var subscription = Set<AnyCancellable>()
     
     init() {
-        playList = PlayList()
+        let playedList = RealmManager.shared.realm.objects(PlayedLists.self)
+            .toArray(type: PlayedLists.self)
+            .map { PlayListItem(item:
+                SongEntity(
+                    id: $0.id,
+                    title: $0.title,
+                    artist: $0.artist,
+                    remix: $0.remix,
+                    reaction: $0.reaction,
+                    views: $0.views,
+                    last: $0.last,
+                    date: $0.date)
+            )}
+        
+        playList = PlayList(list: playedList)
         progress = PlayProgress()
         state = .unstarted
         repeatMode = .none
@@ -45,6 +60,24 @@ final public class PlayState {
         player.durationPublisher.sink { [weak self] duration in
             guard let self = self else { return }
             self.progress.endProgress = duration
+        }.store(in: &subscription)
+        
+        playList.listChanged.sink { playListItems in
+            let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
+            RealmManager.shared.deleteRealmDB(model: allPlayedLists)
+            
+            let playedList = playListItems.map {
+                PlayedLists(
+                    id: $0.item.id,
+                    title: $0.item.title,
+                    artist: $0.item.artist,
+                    remix: $0.item.remix,
+                    reaction: $0.item.reaction,
+                    views: $0.item.views,
+                    last: $0.item.last,
+                    date: $0.item.date
+                )}
+            RealmManager.shared.addRealmDB(model: playedList)
         }.store(in: &subscription)
         
     }
