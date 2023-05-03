@@ -4,9 +4,6 @@ import ProjectDescriptionHelpers
 let project = Project.makeModule(
     name: "MainTabFeature",
     product: .staticFramework,
-    packages: [
-        .RealmSwift
-    ],
     dependencies: [
         .Project.Features.BaseFeature,
         .Project.Features.HomeFeature,
@@ -15,7 +12,6 @@ let project = Project.makeModule(
         .Project.Features.ArtistFeature,
         .Project.Features.StorageFeature,
         .Project.Features.PlayerFeature,
-        .SPM.RealmSwift
     ]
     , resources: ["Resources/**"]
 )

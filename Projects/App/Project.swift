@@ -32,11 +32,8 @@ let targets: [Target] = [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-            .SPM.Nimble,
-            .SPM.Quick,
             .SPM.FirebaseAnalytics,
             .SPM.FirebaseCrashlytics,
-            .SPM.RealmSwift,
             .SPM.Amplify,
             .SPM.AWSPluginsCore,
             .SPM.AWSS3StoragePlugin

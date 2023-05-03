@@ -10,12 +10,10 @@ let project = Project.makeModule(
     ],
     dependencies: [
         .SPM.Needle,
-        .SPM.FlexLayout,
         .SPM.PanModal,
         .SPM.Lottie,
         .SPM.RxSwift,
         .SPM.RxCocoa,
-        .SPM.ReactorKit,
         .SPM.SnapKit,
         .SPM.Then,
         .SPM.Kingfisher,
