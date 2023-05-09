@@ -50,7 +50,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
     private let hitsLabel = UILabel().then {
         $0.textAlignment = .right
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
 
     // MARK: - Life Cycle
