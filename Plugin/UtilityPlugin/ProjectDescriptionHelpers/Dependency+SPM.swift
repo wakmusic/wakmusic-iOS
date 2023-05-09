@@ -33,7 +33,6 @@ public extension TargetDependency.SPM {
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
-//    static let RealmSwift = TargetDependency.package(product: "RealmSwift")
 }
 
 public extension Package {
@@ -41,8 +40,4 @@ public extension Package {
         url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
         requirement: .upToNextMajor(from: "1.3.1")
     )
-//    static let RealmSwift = Package.remote(
-//        url: "https://github.com/realm/realm-swift.git",
-//        requirement: .upToNextMajor(from: "10.37.0")
-//    )
 }
