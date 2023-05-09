@@ -12,4 +12,5 @@ public enum Environment {
         .marketingVersion("2.0.0")
         .currentProjectVersion("0")
         .debugInformationFormat(DebugInformationFormat.dwarfWithDsym)
+        .otherLinkerFlags(["-ObjC"])
 }

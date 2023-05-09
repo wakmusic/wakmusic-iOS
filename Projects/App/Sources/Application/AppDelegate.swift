@@ -4,6 +4,8 @@ import NaverThirdPartyLogin
 import AVKit
 import Utility
 import FirebaseCore
+import FirebaseAnalytics
+import FirebaseCrashlytics
 import RealmSwift
 
 @main
@@ -15,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
+        Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
         // configure NaverThirdPartyLoginConnection
         let naverInstance = NaverThirdPartyLoginConnection.getSharedInstance()
