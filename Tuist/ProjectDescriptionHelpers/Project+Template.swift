@@ -99,8 +99,6 @@ public extension Project {
             infoPlist: .default,
             sources: ["Tests/**"],
             dependencies: testTargetDependencies + [
-                .SPM.Quick,
-                .SPM.Nimble
             ]
         )
         

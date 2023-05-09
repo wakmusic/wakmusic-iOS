@@ -4,12 +4,8 @@ import ProjectDescriptionHelpers
 let project = Project.makeModule(
     name: "ArtistFeature",
     product: .staticFramework,
-    packages: [
-        .RealmSwift
-    ],
     dependencies: [
-        .Project.Features.PlayerFeature,
-        .SPM.RealmSwift
+        .Project.Features.PlayerFeature
     ]
     , resources: ["Resources/**"]
 )

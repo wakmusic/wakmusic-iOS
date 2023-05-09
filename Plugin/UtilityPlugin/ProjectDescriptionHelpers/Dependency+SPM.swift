@@ -11,16 +11,11 @@ public extension TargetDependency.SPM {
     static let PanModal = TargetDependency.external(name: "PanModal")
     static let RxSwift = TargetDependency.external(name: "RxSwift")
     static let RxCocoa = TargetDependency.external(name: "RxCocoa")
-    static let ReactorKit = TargetDependency.external(name: "ReactorKit")
     static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     static let Then = TargetDependency.external(name: "Then")
     static let SnapKit = TargetDependency.external(name: "SnapKit")
     static let ReachabilitySwift = TargetDependency.external(name: "ReachabilitySwift")
     static let Lottie = TargetDependency.external(name: "Lottie")
-    static let PinLayout = TargetDependency.external(name: "PinLayout")
-    static let FlexLayout = TargetDependency.external(name: "FlexLayout")
-    static let Quick = TargetDependency.external(name: "Quick")
-    static let Nimble = TargetDependency.external(name: "Nimble")
     static let Needle = TargetDependency.external(name: "NeedleFoundation")
     static let Tabman = TargetDependency.external(name: "Tabman")
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
@@ -38,7 +33,7 @@ public extension TargetDependency.SPM {
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
-    static let RealmSwift = TargetDependency.package(product: "RealmSwift")
+//    static let RealmSwift = TargetDependency.package(product: "RealmSwift")
 }
 
 public extension Package {
@@ -46,8 +41,8 @@ public extension Package {
         url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
         requirement: .upToNextMajor(from: "1.3.1")
     )
-    static let RealmSwift = Package.remote(
-        url: "https://github.com/realm/realm-swift.git",
-        requirement: .upToNextMajor(from: "10.37.0")
-    )
+//    static let RealmSwift = Package.remote(
+//        url: "https://github.com/realm/realm-swift.git",
+//        requirement: .upToNextMajor(from: "10.37.0")
+//    )
 }
