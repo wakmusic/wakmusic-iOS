@@ -16,6 +16,9 @@ public extension TargetScript {
     static let firebaseCrashlytics = TargetScript.pre(
         path: .relativeToRoot("Scripts/FirebaseCrashlyticsScript.sh"),
         name: "FirebaseCrashlytics",
-        basedOnDependencyAnalysis: false
+        inputPaths: [
+            Path("${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}"),
+            Path("$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"),
+        ]
     )
 }
