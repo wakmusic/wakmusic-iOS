@@ -29,7 +29,7 @@ class ArtistMusicCell: UITableViewCell {
         
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        releaseDateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
 }
 
@@ -58,7 +58,7 @@ extension ArtistMusicCell {
         
         releaseDateLabel.attributedText = getAttributedString(
             text: model.date,
-            font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
         )
         
         albumImageView.kf.setImage(

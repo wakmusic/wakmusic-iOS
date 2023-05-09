@@ -58,7 +58,7 @@ public extension SongListCell {
         
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.releaseDateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        self.releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
         
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
