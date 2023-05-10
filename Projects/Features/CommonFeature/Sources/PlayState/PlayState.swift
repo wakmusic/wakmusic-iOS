@@ -35,7 +35,7 @@ final public class PlayState {
         
         let playedList = fetchPlayListFromLocalDB()
         playList.list = playedList
-        currentSong = playedList.first?.item
+        currentSong = playList.list[safe: playList.currentPlayIndex ?? -1]?.item
         
         player.playbackStatePublisher.sink { [weak self] state in
             guard let self = self else { return }
@@ -52,10 +52,11 @@ final public class PlayState {
             self.progress.endProgress = duration
         }.store(in: &subscription)
         
-        Publishers.Merge3(
+        Publishers.Merge4(
             playList.listAppended.dropFirst(),
             playList.listRemoved.dropFirst(),
-            playList.listReordered.dropFirst()
+            playList.listReordered.dropFirst(),
+            playList.currentSongChanged.dropFirst()
         )
         .sink { playListItems in
             let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
@@ -70,7 +71,8 @@ final public class PlayState {
                     reaction: $0.item.reaction,
                     views: $0.item.views,
                     last: $0.item.last,
-                    date: $0.item.date
+                    date: $0.item.date,
+                    lastPlayed: $0.isPlaying
                 )}
             RealmManager.shared.addRealmDB(model: playedList)
         }.store(in: &subscription)
@@ -89,7 +91,8 @@ final public class PlayState {
                     reaction: $0.reaction,
                     views: $0.views,
                     last: $0.last,
-                    date: $0.date)
+                    date: $0.date),
+                    isPlaying: $0.lastPlayed
             )}
         return playedList
     }

@@ -29,13 +29,18 @@ extension PlayState {
         public var list: [PlayListItem] {
             didSet(oldValue) {
                 listChanged.send(list)
-                if oldValue.isEmpty && !list.isEmpty { changeCurrentPlayIndex(to: 0) }
+                
+                let allItemsNotPlaying = list.allSatisfy { $0.isPlaying == false }
+                if oldValue.isEmpty && !list.isEmpty && allItemsNotPlaying {
+                    changeCurrentPlayIndex(to: 0)
+                }
             }
         }
         public var listChanged = CurrentValueSubject<[PlayListItem], Never>([])
         public var listAppended = CurrentValueSubject<[PlayListItem], Never>([])
         public var listRemoved = CurrentValueSubject<[PlayListItem], Never>([])
         public var listReordered = CurrentValueSubject<[PlayListItem], Never>([])
+        public var currentSongChanged = CurrentValueSubject<[PlayListItem], Never>([])
         
         init(list: [PlayListItem] = []) {
             self.list = list
@@ -100,6 +105,7 @@ extension PlayState {
             let currentPlayIndex = currentPlayIndex ?? 0
             list[currentPlayIndex].isPlaying = false
             list[index].isPlaying = true
+            currentSongChanged.send(list)
         }
         
         public func changeCurrentPlayIndexToPrevious() {
