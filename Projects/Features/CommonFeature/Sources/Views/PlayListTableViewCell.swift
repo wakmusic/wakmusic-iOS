@@ -59,7 +59,7 @@ extension PlayListTableViewCell {
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
-        self.titleLabel.attributedText = getAttributedString(text: model.date, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+        self.titleLabel.attributedText = getAttributedString(text: model.title, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
         self.artistLabel.attributedText = getAttributedString(text: model.artist, font: DesignSystemFontFamily.Pretendard.light.font(size: 12))
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
