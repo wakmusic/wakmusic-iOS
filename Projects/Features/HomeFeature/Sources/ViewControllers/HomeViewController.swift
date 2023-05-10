@@ -225,9 +225,9 @@ extension HomeViewController {
             .subscribe(onNext: { [weak self] (model) in
                 guard let `self` = self else { return }
                 let subviews: [UIView] = self.stackView.arrangedSubviews.filter { $0 is RecommendPlayListView }.compactMap { $0 }
-                
+                let height: CGFloat = RecommendPlayListView.getViewHeight(model: model)
+
                 if subviews.isEmpty {
-                    let height: CGFloat = RecommendPlayListView.getViewHeight(model: model)
                     let recommendView = RecommendPlayListView(
                         frame: CGRect(
                             x: 0,
@@ -247,6 +247,7 @@ extension HomeViewController {
 
                 }else{
                     guard let recommendView = subviews.first as? RecommendPlayListView else { return }
+                    recommendView.heightAnchor.constraint(equalToConstant: height).isActive = true
                     recommendView.dataSource = model
                 }
             }).disposed(by: disposeBag)

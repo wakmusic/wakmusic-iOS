@@ -229,42 +229,31 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
 
 extension AfterSearchViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
-        
         switch type {
-            
-        case .allSelect(flag: _):
+        case .allSelect(_):
             return
+            
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true){ [weak self] in
-                
                 guard let self = self else{return}
-                
                 self.clearSongCart()
-                
             }
             
         case .addPlayList:
-            
             let songs  = output.songEntityOfSelectedSongs.value
             playState.appendSongsToPlaylist(songs)
             self.clearSongCart()
             
-            return
         case .play:
-            
             let songs  = output.songEntityOfSelectedSongs.value
             playState.loadAndAppendSongsToPlaylist(songs)
             self.clearSongCart()
             
-            return
         case .remove:
             return
         }
-
     }
-    
-    
 }
