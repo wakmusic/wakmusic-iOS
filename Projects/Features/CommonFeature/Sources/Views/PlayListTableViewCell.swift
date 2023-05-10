@@ -45,10 +45,6 @@ class PlayListTableViewCell: UITableViewCell {
         
         self.backgroundColor = .clear
         self.albumImageView.layer.cornerRadius = 4
-        self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
     }
 }
@@ -63,12 +59,27 @@ extension PlayListTableViewCell {
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
-        self.titleLabel.text =  model.title
-        self.artistLabel.text = model.artist
+        self.titleLabel.attributedText = getAttributedString(text: model.date, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+        self.artistLabel.attributedText = getAttributedString(text: model.artist, font: DesignSystemFontFamily.Pretendard.light.font(size: 12))
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         self.superButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
         self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
+    }
+    
+    private func getAttributedString(
+        text: String,
+        font: UIFont
+    ) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: font,
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        return attributedString
     }
 }

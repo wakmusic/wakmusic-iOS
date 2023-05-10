@@ -51,32 +51,39 @@ public extension SongListCell {
         albumImageView.kf.setImage(with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,options: [.transition(.fade(0.2))])
         
         
-        self.titleLabel.text = model.title
-        self.artistLabel.text = model.artist
-        self.releaseDateLabel.text = model.date
+        
+        self.titleLabel.attributedText =  getAttributedString(
+            text: model.title,
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        )
+        self.artistLabel.attributedText =  getAttributedString(
+            text: model.artist,
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        )
+        self.releaseDateLabel.attributedText =  getAttributedString(
+            text: model.date,
+            font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+        )
+
         
         
-        self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
-        
-        self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.releaseDateLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
-        
+    }
+    private func getAttributedString(
+        text: String,
+        font: UIFont
+    ) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: font,
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        return attributedString
     }
 }
 
 
-public struct SongInfoDTO {
-    public var name:String
-    public var artist:String
-    public var releaseDay:String
-    
-    public init(name: String, artist: String, releaseDay: String) {
-        self.name = name
-        self.artist = artist
-        self.releaseDay = releaseDay
-    }
-}
+
+

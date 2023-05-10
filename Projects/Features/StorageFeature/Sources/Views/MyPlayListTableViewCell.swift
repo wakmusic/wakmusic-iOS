@@ -46,10 +46,6 @@ class MyPlayListTableViewCell: UITableViewCell {
         
         self.backgroundColor = .clear
         self.playListImageView.layer.cornerRadius = 4
-        self.playListNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.playListNameLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.playListCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.playListCountLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.playButton.setImage(DesignSystemAsset.Storage.play.image , for: .normal)
     }
 }
@@ -64,12 +60,31 @@ extension MyPlayListTableViewCell {
             with: WMImageAPI.fetchPlayList(id: String(model.image),version: model.image_version).toURL,
             placeholder: nil,
             options: [.transition(.fade(0.2))])
-        self.playListNameLabel.text = model.title
-        self.playListCountLabel.text = "\(model.songlist.count)개"
+        
+        self.playListNameLabel.attributedText = getAttributedString(text: model.title, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
+        
+        self.playListCountLabel.attributedText = getAttributedString(text: "\(model.songlist.count)개", font:  DesignSystemFontFamily.Pretendard.light.font(size: 12))
+        
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         self.listSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
         self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
+    }
+    
+    
+    private func getAttributedString(
+        text: String,
+        font: UIFont
+    ) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: font,
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        return attributedString
     }
 }
