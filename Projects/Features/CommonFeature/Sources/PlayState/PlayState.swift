@@ -53,10 +53,11 @@ final public class PlayState {
         }.store(in: &subscription)
         
         Publishers.Merge3(
-            playList.listAppended,
-            playList.listRemoved,
-            playList.listReordered
-        ).sink { playListItems in
+            playList.listAppended.dropFirst(),
+            playList.listRemoved.dropFirst(),
+            playList.listReordered.dropFirst()
+        )
+        .sink { playListItems in
             let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
             RealmManager.shared.deleteRealmDB(model: allPlayedLists)
             
@@ -72,8 +73,6 @@ final public class PlayState {
                     date: $0.item.date
                 )}
             RealmManager.shared.addRealmDB(model: playedList)
-            print("🎉 로컬DB에 저장됨")
-            
         }.store(in: &subscription)
         
     }

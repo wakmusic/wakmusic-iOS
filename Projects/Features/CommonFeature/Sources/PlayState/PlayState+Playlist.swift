@@ -54,6 +54,11 @@ extension PlayState {
             listAppended.send(list)
         }
         
+        public func append(_ items: [PlayListItem]) {
+            list.append(contentsOf: items)
+            listAppended.send(list)
+        }
+        
         public func insert(_ newElement: PlayListItem, at: Int) {
             list.insert(newElement, at: at)
             listAppended.send(list)
