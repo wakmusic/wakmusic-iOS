@@ -235,14 +235,13 @@ public final class MyPlayListViewModel:ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
-        
         input.getPlayListDetail
             .flatMap{ [weak self] (key) -> Observable<[SongEntity]> in
                 guard let `self` = self else { return Observable.empty() }
                 return self.fetchPlayListDetailUseCase
-                            .execute(id: key, type: .custom)
-                            .asObservable()
-                            .map { $0.songs }
+                    .execute(id: key, type: .custom)
+                    .asObservable()
+                    .map { $0.songs }
                
             }
             .bind(to: output.immediatelyPlaySongs)
