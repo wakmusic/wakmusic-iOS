@@ -27,20 +27,23 @@ public extension PlayState {
         if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
         self.load(at: firstSong)
         
-        songs.dropFirst().forEach { song in
-            let uniqueIndex = self.playList.uniqueIndex(of: PlayListItem(item: song))
-            if uniqueIndex == nil { self.playList.append(PlayListItem(item: song)) }
+        let songsWithoutFirst = songs.dropFirst()
+        if songsWithoutFirst.isEmpty { return }
+        
+        let notDuplicatedSongs = songsWithoutFirst.compactMap { song in
+            return self.playList.uniqueIndex(of:PlayListItem(item: song)) == nil ? PlayListItem(item: song) : nil
         }
+        self.playList.append(notDuplicatedSongs)
+        
     }
     
     /// 주어진 곡들을 재생목록에 추가합니다.
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func appendSongsToPlaylist(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
-        songs.forEach { song in
-            if self.playList.uniqueIndex(of: PlayListItem(item: song)) == nil {
-                self.playList.append(PlayListItem(item: song))
-            }
+        let notDuplicatedSongs = songs.compactMap { song in
+            return self.playList.uniqueIndex(of:PlayListItem(item: song)) == nil ? PlayListItem(item: song) : nil
         }
+        self.playList.append(notDuplicatedSongs)
         
         if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
     }
