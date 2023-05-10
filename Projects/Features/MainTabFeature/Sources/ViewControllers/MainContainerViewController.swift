@@ -45,7 +45,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
         configureUI()
         configurePlayer()
-        updatePlayerMode(with: self.playerMode, animate: false)
         bindNotification()
     }
     
@@ -194,8 +193,13 @@ extension MainContainerViewController {
             $0.edges.equalTo(panelView)
         }
         
-        //미니 플레이어 상태
+        //미니 플레이어 상태: 0 - mini, 1 - full
         updatePlayerViewController(value: Float(0))
+        
+        //DB 조회 후 미니 플레이어 초기 상태 결정
+        let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
+        self.playerMode = allPlayedLists.isEmpty ? .close : .mini
+        updatePlayerMode(with: self.playerMode, animate: false)
     }
 }
 
@@ -203,7 +207,6 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
     func handleTapped(index previous: Int, current: Int) {
         guard let navigationController = self.children.first as? UINavigationController,
               let mainTabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController else { return }
-        
         mainTabBarViewController.updateContent(previous: previous, current: current)
     }
 }
@@ -311,6 +314,7 @@ extension MainContainerViewController {
     private func bindNotification() {
         NotificationCenter.default.rx
             .notification(.updatePlayerMode)
+            .debug("updatePlayerMode")
             .subscribe(onNext: { [weak self] (notification) in
                 guard let mode = notification.object as? PlayerMode else { return }
                 self?.playerMode = mode
