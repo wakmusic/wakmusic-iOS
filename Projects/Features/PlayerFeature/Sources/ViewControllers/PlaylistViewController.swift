@@ -115,7 +115,7 @@ private extension PlaylistViewController {
         
         output.dataSource
             .filter { $0.first?.items.isEmpty ?? true }
-            .subscribe { _ in
+            .subscribe { [weak self] _ in
                 let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
                 
                 let height = space / 3  * 2
@@ -123,7 +123,7 @@ private extension PlaylistViewController {
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "곡이 없습니다."
                 
-                self.playlistView.playlistTableView.tableFooterView = warningView
+                self?.playlistView.playlistTableView.tableFooterView = warningView
             }.disposed(by: disposeBag)
 
     }
