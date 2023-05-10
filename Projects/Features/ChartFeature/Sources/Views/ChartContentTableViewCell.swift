@@ -223,10 +223,22 @@ extension ChartContentTableViewCell {
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
-        titleStringLabel.text = model.title
-        groupStringLabel.text = model.artist
-        hitsLabel.text = model.views.addCommaToNumber() + "회"
-        rankingLabel.text = "\(index + 1)"
+        titleStringLabel.attributedText = getAttributedString(
+            text: model.title,
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        )
+        groupStringLabel.attributedText = getAttributedString(
+            text: model.artist,
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        )
+        hitsLabel.attributedText = getAttributedString(
+            text: model.views.addCommaToNumber() + "회",
+            font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+        )        
+        rankingLabel.attributedText = getAttributedString(
+            text: "\(index + 1)",
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        )
         
         if model.last == 0 {
             newThenBefore()
@@ -244,5 +256,20 @@ extension ChartContentTableViewCell {
             lowerThanBefore(ranking: lastRanking)
             return()
         }
+    }
+    
+    private func getAttributedString(
+        text: String,
+        font: UIFont
+    ) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: font,
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        return attributedString
     }
 }
