@@ -39,11 +39,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
-    var disposeBag = DisposeBag()
+    var recommendViewHeightConstraint: NSLayoutConstraint?
 
     var viewModel: HomeViewModel!
     private lazy var input = HomeViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
+    var disposeBag = DisposeBag()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -238,16 +239,18 @@ extension HomeViewController {
                     )
                     recommendView.dataSource = model
                     recommendView.delegate = self
-                    recommendView.heightAnchor.constraint(equalToConstant: height).isActive = true
+                    let constraint = recommendView.heightAnchor.constraint(equalToConstant: height)
+                    constraint.isActive = true
                     self.stackView.addArrangedSubview(recommendView)
-                    
+                    self.recommendViewHeightConstraint = constraint
+
                     let bottomSpace = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
                     bottomSpace.heightAnchor.constraint(equalToConstant: bottomSpace.frame.height).isActive = true
                     self.stackView.addArrangedSubview(bottomSpace)
 
                 }else{
                     guard let recommendView = subviews.first as? RecommendPlayListView else { return }
-                    recommendView.heightAnchor.constraint(equalToConstant: height).isActive = true
+                    self.recommendViewHeightConstraint?.constant = height
                     recommendView.dataSource = model
                 }
             }).disposed(by: disposeBag)
