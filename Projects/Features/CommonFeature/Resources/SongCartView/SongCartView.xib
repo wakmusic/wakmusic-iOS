@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,6 +14,7 @@
                 <outlet property="allSelectButton" destination="OyW-HI-2Ie" id="FVF-iO-aOU"/>
                 <outlet property="allSelectImageView" destination="jK9-30-eZg" id="GfI-iI-Ve3"/>
                 <outlet property="allSelectLabel" destination="d22-uQ-Uga" id="s6o-BY-nz7"/>
+                <outlet property="allSelectView" destination="RYd-PE-XoO" id="q8p-f9-sVd"/>
                 <outlet property="bottomSpaceView" destination="uSA-bl-8SI" id="B5o-bm-3Hv"/>
                 <outlet property="bottomSpaceViewHeight" destination="F1o-uG-JIM" id="xpL-jI-mYt"/>
                 <outlet property="playButton" destination="sT2-H1-Ex2" id="INi-U5-4cO"/>

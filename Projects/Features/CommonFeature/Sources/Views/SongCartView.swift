@@ -24,6 +24,7 @@ public enum SongCartSelectType {
 
 public class SongCartView: UIView {
 
+    @IBOutlet weak var allSelectView: UIView!
     @IBOutlet weak var allSelectImageView: UIImageView!
     @IBOutlet weak var allSelectLabel: UILabel!
     @IBOutlet weak var allSelectButton: UIButton!
@@ -83,11 +84,16 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .play)
 
         }else if button == removeButton { //삭제
-            guard Utility.PreferenceManager.userInfo != nil else {
-                showLoginPopup()
-                return
+            if self.type == .playList {
+                delegate?.buttonTapped(type: .remove)
+
+            }else{
+                guard Utility.PreferenceManager.userInfo != nil else {
+                    showLoginPopup()
+                    return
+                }
+                delegate?.buttonTapped(type: .remove)
             }
-            delegate?.buttonTapped(type: .remove)
         }
     }
 }
@@ -108,35 +114,35 @@ public extension SongCartView {
         switch self.type {
             
         case .playList:
-            allSelectButton.isHidden = false
+            allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = true
             playButton.isHidden = true
             removeButton.isHidden = false
             
         case .chartSong, .artistSong, .WMPlayList:
-            allSelectButton.isHidden = false
+            allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
             playButton.isHidden = false
             removeButton.isHidden = true
 
         case .likeSong, .myPlayList:
-            allSelectButton.isHidden = false
+            allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
             
         case .myList:
-            allSelectButton.isHidden = false
+            allSelectView.isHidden = false
             songAddButton.isHidden = true
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
             
         case .searchSong:
-            allSelectButton.isHidden = true
+            allSelectView.isHidden = true
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
             playButton.isHidden = false

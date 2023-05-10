@@ -57,9 +57,12 @@ public final class PlayButtonForChartView: UIView {
     }
 
     public func setUpdateTime(updateTime: BehaviorRelay<String>) {
-        updateTime
-            .bind(to: updateTimeLabel.rx.text)
-            .disposed(by: disposeBag)
+        let attributedString = NSMutableAttributedString(string: updateTime.value)
+        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+                                        .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                                        .kern: -0.5],
+                                       range: NSRange(location: 0, length: attributedString.string.count))
+        updateTimeLabel.attributedText = attributedString
     }
 }
 

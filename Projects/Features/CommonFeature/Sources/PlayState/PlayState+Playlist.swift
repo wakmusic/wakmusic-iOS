@@ -32,11 +32,13 @@ extension PlayState {
                 if oldValue.isEmpty && !list.isEmpty { changeCurrentPlayIndex(to: 0) }
             }
         }
-        public var listChanged: CurrentValueSubject<[PlayListItem], Never>
+        public var listChanged = CurrentValueSubject<[PlayListItem], Never>([])
+        public var listAppended = CurrentValueSubject<[PlayListItem], Never>([])
+        public var listRemoved = CurrentValueSubject<[PlayListItem], Never>([])
+        public var listReordered = CurrentValueSubject<[PlayListItem], Never>([])
         
         init(list: [PlayListItem] = []) {
             self.list = list
-            self.listChanged = .init([])
         }
         public var currentPlayIndex: Int? { return list.firstIndex(where: { $0.isPlaying == true }) }
         public var first: SongEntity? { return list.first?.item }
@@ -49,13 +51,20 @@ extension PlayState {
         
         public func append(_ item: PlayListItem) {
             list.append(item)
+            listAppended.send(list)
+        }
+        
+        public func append(_ items: [PlayListItem]) {
+            list.append(contentsOf: items)
+            listAppended.send(list)
         }
         
         public func insert(_ newElement: PlayListItem, at: Int) {
             list.insert(newElement, at: at)
+            listAppended.send(list)
         }
         
-        public func remove(at index: Int) {
+        private func remove(at index: Int) {
             if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
                 changeCurrentPlayIndexToNext()
             }
@@ -73,12 +82,14 @@ extension PlayState {
             sortedIndexs.forEach { index in
                 remove(at: index)
             }
+            listRemoved.send(list)
         }
         
         public func removeAll() {
             list.removeAll()
             PlayState.shared.stop()
             PlayState.shared.switchPlayerMode(to: .mini)
+            listRemoved.send(list)
         }
         
         public func contains(_ item: PlayListItem) -> Bool {
@@ -107,6 +118,7 @@ extension PlayState {
             let movedData = list[from]
             list.remove(at: from)
             list.insert(movedData, at: to)
+            listReordered.send(list)
         }
         
         /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴

@@ -2,7 +2,7 @@ import UIKit
 import RootFeature
 import Utility
 import NaverThirdPartyLogin
-
+import CommonFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -32,6 +32,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     }
     func sceneDidEnterBackground(_ scene: UIScene) {
+        let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
+        RealmManager.shared.deleteRealmDB(model: allPlayedLists)
+        
+        let playedList =  PlayState.shared.playList.list.map {
+            PlayedLists(
+                id: $0.item.id,
+                title: $0.item.title,
+                artist: $0.item.artist,
+                remix: $0.item.remix,
+                reaction: $0.item.reaction,
+                views: $0.item.views,
+                last: $0.item.last,
+                date: $0.item.date
+            )}
+        RealmManager.shared.addRealmDB(model: playedList)
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
