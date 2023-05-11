@@ -33,10 +33,8 @@ final public class PlayState {
         shuffleMode = .off
         player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         
-        let playedList = fetchPlayListFromLocalDB()
-        playList.list = playedList
-        
-        currentSong = playList.list[safe: playList.currentPlayIndex ?? -1]?.item
+        playList.list = fetchPlayListFromLocalDB()
+        currentSong = playList.currentPlaySong
         player.cue(source: .video(id: currentSong?.id ?? "")) // 곡이 있으면 .cued 없으면 .unstarted
         
         player.playbackStatePublisher.sink { [weak self] state in
