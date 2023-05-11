@@ -46,6 +46,7 @@ extension PlayState {
             self.list = list
         }
         public var currentPlayIndex: Int? { return list.firstIndex(where: { $0.isPlaying == true }) }
+        public var currentPlaySong: SongEntity? { list[safe: currentPlayIndex ?? -1]?.item }
         public var first: SongEntity? { return list.first?.item }
         public var last: SongEntity? { return list.last?.item }
         public var count: Int { return list.count }
