@@ -98,7 +98,7 @@ extension BugReportViewController {
         let dataString = "제발..2"
         let data = Data(dataString.utf8)
         let uploadTask = Amplify.Storage.uploadData(
-            key: "test4.txt",
+            key: "test5.txt",
             data: data
         )
         uploadTask

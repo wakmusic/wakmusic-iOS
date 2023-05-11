@@ -30,8 +30,6 @@ public extension TargetDependency.SPM {
     static let Amplify = TargetDependency.package(product: "Amplify")
     static let AWSCognitoAuthPlugin = TargetDependency.package(product: "AWSCognitoAuthPlugin")
     static let AWSS3StoragePlugin = TargetDependency.package(product:"AWSS3StoragePlugin")
-    static let AWSAPIPlugin = TargetDependency.package(product: "AWSAPIPlugin")
-    static let AWSDataStorePlugin = TargetDependency.package(product:"AWSDataStorePlugin")
     
     static let NVActivityIndicatorView = TargetDependency.external(name: "NVActivityIndicatorView")
 
