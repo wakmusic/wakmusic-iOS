@@ -35,7 +35,7 @@ let targets: [Target] = [
             .SPM.FirebaseAnalytics,
             .SPM.FirebaseCrashlytics,
             .SPM.Amplify,
-            .SPM.AWSPluginsCore,
+            .SPM.AWSCognitoAuthPlugin,
             .SPM.AWSS3StoragePlugin
         ],
         settings: .settings(base: Environment.baseSetting,
@@ -92,6 +92,7 @@ let project: Project =
     .init(
         name: Environment.targetName,
         organizationName: Environment.organizationName,
+        packages: [.Amplify],
         settings: settinges,
         targets: targets,
         schemes: schemes

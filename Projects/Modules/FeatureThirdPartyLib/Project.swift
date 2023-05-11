@@ -24,9 +24,6 @@ let project = Project.makeModule(
         .SPM.CryptoSwift,
         .SPM.YouTubePlayerKit,
         .SPM.MarqueeLabel,
-        .SPM.Amplify,
-        .SPM.AWSPluginsCore,
-        .SPM.AWSS3StoragePlugin,
         .SPM.NVActivityIndicatorView
     ]
 )
