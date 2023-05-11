@@ -172,6 +172,7 @@ final class PlaylistViewModel: ViewModelType {
             .subscribe(onNext: { [weak self] selectedIndexs in
                 if selectedIndexs.count == self?.playState.playList.count {
                     self?.playState.playList.removeAll()
+                    self?.playState.switchPlayerMode(to: .close)
                     output.willClosePlaylist.send()
                 } else {
                     self?.playState.playList.remove(indexs: selectedIndexs)
