@@ -35,7 +35,9 @@ final public class PlayState {
         
         let playedList = fetchPlayListFromLocalDB()
         playList.list = playedList
+        
         currentSong = playList.list[safe: playList.currentPlayIndex ?? -1]?.item
+        player.cue(source: .video(id: currentSong?.id ?? "")) // 곡이 있으면 .cued 없으면 .unstarted
         
         player.playbackStatePublisher.sink { [weak self] state in
             guard let self = self else { return }
