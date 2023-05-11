@@ -16,6 +16,7 @@ import SafariServices
 import BaseFeature
 import PhotosUI
 import Amplify
+import Combine
 
 public final class BugReportViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -77,6 +78,7 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         bindbuttonEvent()
         configureCameraButtonUI()
         responseViewbyKeyboard()
+        uploadData()
     }
     
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
@@ -87,6 +89,38 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 }
 
 extension BugReportViewController {
+    
+    func uploadData() {
+        
+
+        var cancellable = Set<AnyCancellable>()
+        
+        let dataString = "제발..2"
+        let data = Data(dataString.utf8)
+        let uploadTask = Amplify.Storage.uploadData(
+            key: "test4.txt",
+            data: data
+        )
+        uploadTask
+            .inProcessPublisher
+
+            .sink { progress in
+                print("Progress: \(progress)")
+            }
+            .store(in: &cancellable)
+
+      uploadTask
+            .resultPublisher
+            .sink {
+                if case let .failure(storageError) = $0 {
+                    print("Failed: \(storageError.errorDescription). \(storageError.recoverySuggestion)")
+                }
+            }
+            receiveValue: { data in
+                print("Completed: \(data)")
+            }
+            .store(in: &cancellable)
+    }
     
     private func configureCameraButtonUI(){
         

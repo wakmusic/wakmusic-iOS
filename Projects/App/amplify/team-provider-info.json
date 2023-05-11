@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wakmusic-dev-204642-authRole",
+      "UnauthRoleArn": "arn:aws:iam::256354393789:role/amplify-wakmusic-dev-204642-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::256354393789:role/amplify-wakmusic-dev-204642-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-wakmusic-dev-204642-deployment",
+      "UnauthRoleName": "amplify-wakmusic-dev-204642-unauthRole",
+      "StackName": "amplify-wakmusic-dev-204642",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:256354393789:stack/amplify-wakmusic-dev-204642/803d4810-eff1-11ed-b2af-029342929fa2",
+      "AmplifyAppId": "d3kgbdkv4aameu"
+    },
+    "categories": {
+      "auth": {
+        "wakmusic574f7fc4": {}
+      },
+      "storage": {
+        "s3ecc00560": {}
+      }
+    }
+  }
+}

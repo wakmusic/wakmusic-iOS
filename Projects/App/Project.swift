@@ -36,7 +36,9 @@ let targets: [Target] = [
             .SPM.FirebaseCrashlytics,
             .SPM.Amplify,
             .SPM.AWSCognitoAuthPlugin,
-            .SPM.AWSS3StoragePlugin
+            .SPM.AWSS3StoragePlugin,
+            .SPM.AWSAPIPlugin,
+            .SPM.AWSDataStorePlugin
         ],
         settings: .settings(base: Environment.baseSetting,
                             configurations: [
