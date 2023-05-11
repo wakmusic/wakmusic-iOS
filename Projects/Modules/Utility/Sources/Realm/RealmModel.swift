@@ -18,6 +18,7 @@ public final class PlayedLists: Object {
     @objc public dynamic var views: Int = 0
     @objc public dynamic var last: Int = 0
     @objc public dynamic var date: String = ""
+    @objc public dynamic var lastPlayed: Bool = false
 
     public override static func primaryKey() -> String? {
         return "id"
@@ -31,7 +32,8 @@ public final class PlayedLists: Object {
         reaction: String,
         views: Int,
         last: Int,
-        date: String
+        date: String,
+        lastPlayed: Bool
     ) {
         self.init()
         self.id = id
@@ -42,5 +44,6 @@ public final class PlayedLists: Object {
         self.views = views
         self.last = last
         self.date = date
+        self.lastPlayed = lastPlayed
     }
 }

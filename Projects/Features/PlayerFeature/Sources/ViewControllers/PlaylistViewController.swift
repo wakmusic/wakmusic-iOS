@@ -125,7 +125,13 @@ private extension PlaylistViewController {
                 
                 self?.playlistView.playlistTableView.tableFooterView = warningView
             }.disposed(by: disposeBag)
-
+        
+        output.dataSource
+            .subscribe(onNext: { [weak self] dataSource in
+                let isDataSourceEmpty = dataSource.first?.items.isEmpty ?? true
+                self?.playlistView.editButton.isHidden = isDataSourceEmpty
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindSongCart(output: PlaylistViewModel.Output) {
