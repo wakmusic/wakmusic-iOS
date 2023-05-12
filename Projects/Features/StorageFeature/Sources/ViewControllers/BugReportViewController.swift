@@ -78,8 +78,6 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         bindbuttonEvent()
         configureCameraButtonUI()
         responseViewbyKeyboard()
-        
-       
     }
     
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {

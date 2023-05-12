@@ -49,4 +49,9 @@ public extension String {
         let limit: Int = 8
         return self.count > limit ? String(self.prefix(limit)) + "..." : self
     }
+    
+    func createRandomStr(length: Int) -> String {
+        let str = (0 ..< length).map{ _ in self.randomElement()! }
+        return String(str)
+    }
 }

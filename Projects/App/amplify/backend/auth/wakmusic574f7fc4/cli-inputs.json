@@ -6,7 +6,7 @@
     "resourceNameTruncated": "wakmus574f7fc4",
     "userPoolName": "wakmusic574f7fc4_userpool_574f7fc4",
     "autoVerifiedAttributes": [
-      "email"
+      "phone_number"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
@@ -36,7 +36,7 @@
     "sharedId": "574f7fc4",
     "resourceName": "wakmusic574f7fc4",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
+    "useDefault": "manual",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -54,6 +54,32 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": []
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "wakmusic574f7fc4CustomMessage",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": {
+      "CustomMessage": [
+        "verification-link"
+      ]
+    },
+    "hostedUI": false,
+    "verificationBucketName": "wakmusic574f7fc4verificationbucket",
+    "authProviders": [],
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"wakmusic574f7fc4CustomMessage\"\n  }\n]",
+    "permissions": []
   }
 }

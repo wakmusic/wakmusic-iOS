@@ -25,8 +25,8 @@ extension SuggestAPI: WMAPI {
         case .reportBug,
              .suggestFunction,
              .modifySong,
-             .inquiryWeeklyChart: //추후 baseURL 수정 예정
-            return URL(string: "http://ec2-15-164-250-124.ap-northeast-2.compute.amazonaws.com:4000")!
+             .inquiryWeeklyChart:
+            return URL(string: WAKENTER_BASE_URL())!
         }
     }
         

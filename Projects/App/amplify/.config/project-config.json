@@ -1,8 +1,8 @@
 {
-  "projectName": "wakmusic",
-  "version": "3.1",
-  "frontend": "ios",
   "providers": [
     "awscloudformation"
-  ]
+  ],
+  "projectName": "wakmusic",
+  "version": "3.1",
+  "frontend": "ios"
 }
