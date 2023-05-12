@@ -13,6 +13,7 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import KeychainModule
+import Amplify
 
 enum MediaDataType {
     case image(data: Data)
@@ -93,6 +94,9 @@ public final class BugReportViewModel:ViewModelType {
                         return data
                     }
                 }
+                
+                 
+                
                 return self.reportBugUseCase
                     .execute(userID: userId, nickname: option == .public ? nickName : "", attaches:datas, content: content)
                     .debug("reportBugUseCase")
@@ -131,4 +135,33 @@ public final class BugReportViewModel:ViewModelType {
         
         return output
     }
+}
+
+extension BugReportViewModel {
+    public func uploadImage(data: Data, fileName: String) async throws -> URL {
+            let uploadTask = Amplify.Storage.uploadData(
+                key: "\(fileName).jpg",
+                data: data
+            )
+            Task {
+                for await progress in await uploadTask.progress {
+                    print("Progress: \(progress)")
+                }
+            }
+            let value = try await uploadTask.value
+            print("Completed: \(value)")
+            return try await getURL(fileName: fileName)
+    }
+    
+    public func getURL(fileName: String) async throws -> URL {
+           let url = try await Amplify.Storage.getURL(key: "\(fileName).jpg")
+           if var components = URLComponents(string: url.absoluteString) {
+               components.query = nil
+               return components.url ?? url
+           } else {
+               return url
+           }
+    }
+    
+    
 }
