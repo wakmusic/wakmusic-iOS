@@ -17,6 +17,7 @@ import BaseFeature
 import PhotosUI
 import Amplify
 import Combine
+import NVActivityIndicatorView
 
 public final class BugReportViewController: UIViewController,ViewControllerFromStoryBoard {
     
@@ -53,6 +54,9 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var indicator: NVActivityIndicatorView!
+    @IBOutlet weak var loadingLabel: UILabel!
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
     let pointColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -88,14 +92,10 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 }
 
 extension BugReportViewController {
-    
-    
     private func configureCameraButtonUI(){
         
         let pointColor = DesignSystemAsset.PrimaryColor.decrease.color
-        
         let cameraAttributedString = NSMutableAttributedString.init(string: "첨부하기")
-        
         cameraAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
                                                .foregroundColor: pointColor],
                                               range: NSRange(location: 0, length: cameraAttributedString.string.count))
@@ -177,6 +177,19 @@ extension BugReportViewController {
         self.previousButton.setAttributedTitle(NSMutableAttributedString(string:"이전",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                                   .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        
+        self.loadingView.isHidden = true
+        let loadingAttr = NSMutableAttributedString(
+            string: "처리 중입니다.",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5
+            ]
+        )
+        self.loadingLabel.attributedText = loadingAttr
+        self.indicator.type = .circleStrokeSpin
+        self.indicator.color = UIColor.white
     }
     
     private func bindbuttonEvent(){
@@ -248,11 +261,13 @@ extension BugReportViewController {
         
         completionButton.rx.tap
             .subscribe(onNext: { [weak self]  in
-                guard let self else {return}
+                guard let self else { return }
                 let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?",
                                                                 cancelButtonIsHidden: false,
                                                                 completion: { [weak self] in
                     self?.input.completionButtonTapped.onNext(())
+                    self?.loadingView.isHidden = false
+                    self?.indicator.startAnimating()
                 })
                 self.showPanModal(content: vc)
             })
@@ -319,16 +334,14 @@ extension BugReportViewController {
             }.disposed(by: disposeBag)
             
         output.result.subscribe(onNext: { [weak self] res in
-            
             guard let self else {return}
-            
+            self.loadingView.isHidden = true
+            self.indicator.stopAnimating()
+
             let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
-                
                 self.dismiss(animated: true)
             })
-            
             self.showPanModal(content: vc)
-            
         })
         .disposed(by: disposeBag)
                 
