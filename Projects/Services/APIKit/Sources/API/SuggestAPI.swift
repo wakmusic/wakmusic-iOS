@@ -13,7 +13,7 @@ import Foundation
 import KeychainModule
 
 public enum SuggestAPI {
-    case reportBug(userID: String, nickname: String, attaches: [Data], content: String)
+    case reportBug(userID: String, nickname: String, attaches: [String], content: String)
     case suggestFunction(type: SuggestPlatformType, userID: String, content: String)
     case modifySong(type: SuggestSongModifyType, userID: String, artist: String, songTitle: String, youtubeLink: String, content: String)
     case inquiryWeeklyChart(userID: String, content: String)
@@ -75,10 +75,9 @@ extension SuggestAPI: WMAPI {
             if !nickname.isEmpty {
                 parameters["nickname"] = nickname
             }
-            //TO-DO: 추후 변경예정
-            //if !attaches.isEmpty {
-            //parameters["attachs"] = attaches.map { $0.base64EncodedString() }
-            //}
+            if !attaches.isEmpty {
+                parameters["attachs"] = attaches
+            }
             return .requestParameters(parameters: parameters,
                                       encoding: JSONEncoding.default)
 

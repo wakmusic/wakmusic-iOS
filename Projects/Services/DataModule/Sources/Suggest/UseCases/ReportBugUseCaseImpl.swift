@@ -20,7 +20,7 @@ public struct ReportBugUseCaseImpl: ReportBugUseCase {
     ) {
         self.suggestRepository = suggestRepository
     }
-    public func execute(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity> {
+    public func execute(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity> {
         suggestRepository.reportBug(userID: userID, nickname: nickname, attaches: attaches, content: content)
     }
 }

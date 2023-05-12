@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -2388,6 +2388,13 @@
                                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MQc-Dr-JVy">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                                                         </imageView>
+                                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iJY-lk-YgJ">
+                                                                                            <rect key="frame" x="24" y="24" width="32" height="32"/>
+                                                                                            <constraints>
+                                                                                                <constraint firstAttribute="height" constant="32" id="lK1-L0-d6v"/>
+                                                                                                <constraint firstAttribute="width" constant="32" id="zQE-jh-Eqg"/>
+                                                                                            </constraints>
+                                                                                        </imageView>
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAg-Gp-vAF">
                                                                                             <rect key="frame" x="48" y="2" width="30" height="34"/>
                                                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -2400,6 +2407,8 @@
                                                                                         <constraint firstItem="MQc-Dr-JVy" firstAttribute="top" secondItem="SDM-uf-sdP" secondAttribute="top" id="1Is-u5-dsW"/>
                                                                                         <constraint firstAttribute="trailing" secondItem="eAg-Gp-vAF" secondAttribute="trailing" constant="2" id="5GU-e5-ig3"/>
                                                                                         <constraint firstItem="eAg-Gp-vAF" firstAttribute="top" secondItem="SDM-uf-sdP" secondAttribute="top" constant="2" id="7Cd-wQ-XGk"/>
+                                                                                        <constraint firstItem="iJY-lk-YgJ" firstAttribute="centerX" secondItem="SDM-uf-sdP" secondAttribute="centerX" id="7jv-Pt-Hyx"/>
+                                                                                        <constraint firstItem="iJY-lk-YgJ" firstAttribute="centerY" secondItem="SDM-uf-sdP" secondAttribute="centerY" id="ZFL-Uq-s6T"/>
                                                                                         <constraint firstAttribute="bottom" secondItem="MQc-Dr-JVy" secondAttribute="bottom" id="gLV-KE-FL5"/>
                                                                                         <constraint firstItem="MQc-Dr-JVy" firstAttribute="leading" secondItem="SDM-uf-sdP" secondAttribute="leading" id="iCo-EF-CTn"/>
                                                                                         <constraint firstAttribute="trailing" secondItem="MQc-Dr-JVy" secondAttribute="trailing" id="y8h-2O-5ih"/>
@@ -2409,6 +2418,7 @@
                                                                                 <connections>
                                                                                     <outlet property="deleteButton" destination="eAg-Gp-vAF" id="JHS-ic-XuI"/>
                                                                                     <outlet property="imageView" destination="MQc-Dr-JVy" id="J4Y-kX-2Di"/>
+                                                                                    <outlet property="videoImageView" destination="iJY-lk-YgJ" id="APq-a1-cdd"/>
                                                                                 </connections>
                                                                             </collectionViewCell>
                                                                         </cells>

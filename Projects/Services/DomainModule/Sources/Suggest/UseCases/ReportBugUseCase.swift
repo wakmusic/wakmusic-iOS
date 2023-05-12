@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol ReportBugUseCase {
-    func execute(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity>
+    func execute(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity>
 }
