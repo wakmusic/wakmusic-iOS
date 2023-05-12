@@ -78,7 +78,11 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         bindbuttonEvent()
         configureCameraButtonUI()
         responseViewbyKeyboard()
-        uploadData()
+        Task{
+            try await uploadData()
+        }
+        
+       
     }
     
     public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
@@ -90,7 +94,7 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 
 extension BugReportViewController {
     
-    func uploadData() {
+    func uploadData() async throws {
         
 
         var cancellable = Set<AnyCancellable>()
@@ -98,7 +102,7 @@ extension BugReportViewController {
         let dataString = "제발..2"
         let data = Data(dataString.utf8)
         let uploadTask = Amplify.Storage.uploadData(
-            key: "test5.txt",
+            key: "test6.txt",
             data: data
         )
         uploadTask
@@ -120,6 +124,9 @@ extension BugReportViewController {
                 print("Completed: \(data)")
             }
             .store(in: &cancellable)
+        
+        let url = try await Amplify.Storage.getURL(key: "test6.txt")
+        DEBUG_LOG("GET URL : \(url)")
     }
     
     private func configureCameraButtonUI(){
