@@ -125,14 +125,13 @@ extension PlayState {
             let movedData = list[from]
             list.remove(at: from)
             list.insert(movedData, at: to)
-            listReordered.send(list)
+            //Comment: 순서가 변경되어도 DB를 업데이트 하지 않음
+            //listReordered.send(list)
         }
         
         /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
         public func uniqueIndex(of item: PlayListItem) -> Int? {
             return list.firstIndex(where: { $0.item == item.item })
         }
-        
     }
-    
 }

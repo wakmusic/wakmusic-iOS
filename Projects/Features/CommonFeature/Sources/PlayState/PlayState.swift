@@ -79,7 +79,7 @@ final public class PlayState {
         
     }
     
-    func fetchPlayListFromLocalDB() -> [PlayListItem] {
+    public func fetchPlayListFromLocalDB() -> [PlayListItem] {
         let playedList = RealmManager.shared.realm.objects(PlayedLists.self)
             .toArray(type: PlayedLists.self)
             .map { PlayListItem(item:
