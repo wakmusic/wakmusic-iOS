@@ -65,6 +65,13 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
         bindViewModel()
         bindActions()
     }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //Comment: 재생목록 화면이 사라지는 시점에서 곡 담기 팝업이 올라와 있는 상태면 제거
+        guard self.songCartView != nil else { return }
+        self.hideSongCart()
+    }
 }
 
 private extension PlaylistViewController {
