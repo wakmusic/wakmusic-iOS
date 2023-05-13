@@ -80,7 +80,6 @@ public final class PlayerView: UIView {
     internal lazy var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
-        $0.rowHeight = UITableView.automaticDimension
         $0.rowHeight = 24
         $0.estimatedRowHeight = 24
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
@@ -316,7 +315,7 @@ private extension PlayerView {
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
-            $0.width.equalTo(270)
+            $0.width.equalTo((270 * APP_WIDTH())/375.0)
             $0.height.equalTo(isNotch ? 120 : 72)
         }
     }
