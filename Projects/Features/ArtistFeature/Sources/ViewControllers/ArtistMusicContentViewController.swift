@@ -43,6 +43,11 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
         outputBind()
     }
     
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.input.allSongSelected.onNext(false)
+    }
+    
     public static func viewController(
         viewModel: ArtistMusicContentViewModel,
         containSongsComponent: ContainSongsComponent
