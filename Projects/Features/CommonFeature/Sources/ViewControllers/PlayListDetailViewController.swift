@@ -156,10 +156,14 @@ extension PlayListDetailViewController{
         self.completeButton.backgroundColor = .clear
     
         self.editStateLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        
+        self.editStateLabel.setLineSpacing(kernValue: -0.5)
+
         self.playListCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
         self.playListCountLabel.textColor =  DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6) // opacity 60%
+        self.playListCountLabel.setLineSpacing(kernValue: -0.5)
+
         self.playListNameLabel.font  = DesignSystemFontFamily.Pretendard.bold.font(size: 20)
+        self.playListNameLabel.setLineSpacing(kernValue: -0.5)
         
         playListInfoView.layer.borderWidth = 1
         playListInfoView.layer.borderColor = colorFromRGB(0xFCFCFD).cgColor

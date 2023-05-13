@@ -94,7 +94,7 @@ extension ArtistViewController {
 //        layout.minimumLineSpacing = 15
         layout.minimumInteritemSpacing = 8 // 열 사이의 간격
         layout.headerHeight = 0
-        layout.footerHeight = 50.0
+        layout.footerHeight = 56.0
         
         self.collectionView.setCollectionViewLayout(layout, animated: false)
         self.collectionView.showsVerticalScrollIndicator = false
