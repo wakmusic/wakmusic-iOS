@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
   "auth": {
-    "wakmusic574f7fc4": {
+    "wakmusic49a17e4b": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "CreatedSNSRole": "string",
@@ -12,7 +12,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "wakmusic574f7fc4CustomMessage": {
+    "wakmusic49a17e4bCustomMessage": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
@@ -21,7 +21,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "s3ecc00560": {
+    "WakMusic": {
       "BucketName": "string",
       "Region": "string"
     }

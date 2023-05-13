@@ -14,6 +14,7 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 import Amplify
+import ErrorModule
 
 enum MediaDataType {
     case image(data: Data)
@@ -52,7 +53,7 @@ public final class BugReportViewModel:ViewModelType {
     }
     
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        DEBUG_LOG("❌ \(Self.self) Deinit")
     }
     
     public func transform(from input: Input) -> Output {
@@ -88,7 +89,8 @@ public final class BugReportViewModel:ViewModelType {
                 if attaches.isEmpty {
                     return Observable.just([])
                 }else{
-                    return AsyncStream<String> { continuation in
+                    return AsyncStream<String> { [weak self] continuation in
+                        guard let self = self else { return }
                         Task.detached {
                             for i in 0..<attaches.count {
                                 do {
@@ -96,6 +98,7 @@ public final class BugReportViewModel:ViewModelType {
                                     continuation.yield(url.absoluteString)
                                 }catch {
                                     DEBUG_LOG(error.localizedDescription)
+                                    output.result.onNext(ReportBugEntity(status: 404, message: WMError.unknown.localizedDescription))
                                 }
                             }
                             continuation.finish()
@@ -181,7 +184,7 @@ extension BugReportViewModel {
             }
         }
         let value = try await uploadTask.value
-        DEBUG_LOG("Completed: \(value)")
+        DEBUG_LOG("uploadTask Completed: \(value)")
         return try await getURL(fileName: fileName, ext: ext)
     }
     

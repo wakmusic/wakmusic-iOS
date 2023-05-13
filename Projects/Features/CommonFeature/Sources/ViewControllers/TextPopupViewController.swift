@@ -15,7 +15,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var allowsDragAndTapToDismiss: Bool = true
     
     deinit {
-        DEBUG_LOG("\(Self.self) Deinit")
+        DEBUG_LOG("❌ \(Self.self) Deinit")
     }
     
     public override func viewDidLoad() {

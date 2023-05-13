@@ -1,6 +1,6 @@
 {
   "auth": {
-    "wakmusic574f7fc4": {
+    "wakmusic49a17e4b": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -9,7 +9,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage",
+          "resourceName": "wakmusic49a17e4bCustomMessage",
           "triggerProvider": "Cognito"
         }
       ],
@@ -26,7 +26,9 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "PHONE_NUMBER"
         ]
@@ -36,59 +38,81 @@
     }
   },
   "function": {
-    "wakmusic574f7fc4CustomMessage": {
+    "wakmusic49a17e4bCustomMessage": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_EMAILMESSAGE": {
+    "AMPLIFY_function_wakmusic49a17e4bCustomMessage_EMAILMESSAGE": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage"
+          "resourceName": "wakmusic49a17e4bCustomMessage"
         }
       ]
     },
-    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_EMAILSUBJECT": {
+    "AMPLIFY_function_wakmusic49a17e4bCustomMessage_EMAILSUBJECT": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage"
+          "resourceName": "wakmusic49a17e4bCustomMessage"
         }
       ]
     },
-    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_REDIRECTURL": {
+    "AMPLIFY_function_wakmusic49a17e4bCustomMessage_REDIRECTURL": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage"
+          "resourceName": "wakmusic49a17e4bCustomMessage"
         }
       ]
     },
-    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_deploymentBucketName": {
+    "AMPLIFY_function_wakmusic49a17e4bCustomMessage_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage"
+          "resourceName": "wakmusic49a17e4bCustomMessage"
         }
       ]
     },
-    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_s3Key": {
+    "AMPLIFY_function_wakmusic49a17e4bCustomMessage_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "wakmusic574f7fc4CustomMessage"
+          "resourceName": "wakmusic49a17e4bCustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_storage_wakmusicf69b5548_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "wakmusicf69b5548"
+        }
+      ]
+    },
+    "AMPLIFY_storage_wakmusicf69b5548_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "wakmusicf69b5548"
         }
       ]
     }
   },
   "storage": {
-    "s3ecc00560": {
+    "WakMusic": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
+    },
+    "wakmusicf69b5548": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

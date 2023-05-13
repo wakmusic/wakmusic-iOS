@@ -74,6 +74,10 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     lazy var output = viewModel.transform(from: input)
     var keyboardHeight:CGFloat = 267
     
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) Deinit")
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -231,7 +235,8 @@ extension BugReportViewController {
         
         cameraButton.rx.tap
             .withLatestFrom(output.dataSource)
-            .filter{ (dataSource) in
+            .filter{ [weak self] (dataSource) in
+                guard let self else { return false }
                 guard dataSource.count < 5 else {
                     self.showToast(
                         text: "첨부 파일은 최대 5개 까지 가능합니다.",
@@ -322,7 +327,8 @@ extension BugReportViewController {
        
         output.dataSource
             .skip(1)
-            .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
+            .bind(to: collectionView.rx.items) { [weak self] (collectionView, index, model) -> UICollectionViewCell in
+                guard let self else { return UICollectionViewCell() }
                 let indexPath = IndexPath(item: index, section: 0)
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BugReportCollectionViewCell",
                                                                     for: indexPath) as? BugReportCollectionViewCell else {
@@ -333,17 +339,19 @@ extension BugReportViewController {
                 return cell
             }.disposed(by: disposeBag)
             
-        output.result.subscribe(onNext: { [weak self] res in
-            guard let self else {return}
-            self.loadingView.isHidden = true
-            self.indicator.stopAnimating()
+        output.result
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] res in
+                guard let self else {return}
+                self.loadingView.isHidden = true
+                self.indicator.stopAnimating()
 
-            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
-                self.dismiss(animated: true)
+                let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
+                    self.dismiss(animated: true)
+                })
+                self.showPanModal(content: vc)
             })
-            self.showPanModal(content: vc)
-        })
-        .disposed(by: disposeBag)
+            .disposed(by: disposeBag)
                 
     }
     
@@ -436,6 +444,7 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                         DispatchQueue.global(qos: .userInteractive).async {
                             do {
                                 let data = try Data(contentsOf: url)
+                                DEBUG_LOG("Video: \(data)")
                                 DispatchQueue.main.async {
                                     let curr = self.input.dataSource.value
                                     self.input.dataSource.accept(curr + [MediaDataType.video(data: data, url: url)])
@@ -457,7 +466,7 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
                                   let imageToData = image.pngData() else { return }
-                            DEBUG_LOG(imageToData)
+                            DEBUG_LOG("Image: \(imageToData)")
                             let curr = self.input.dataSource.value
                             self.input.dataSource.accept(curr + [MediaDataType.image(data: imageToData)])
                         }
