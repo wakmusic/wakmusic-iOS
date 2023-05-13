@@ -376,6 +376,15 @@ extension BugReportViewController {
     func spaceHeight() -> CGFloat {
         return 16 * 10
     }
+    
+    private func showToastWithMaxSize() {
+        DispatchQueue.main.async {
+            self.showToast(
+                text: "첨부 파일의 용량은 최대 100MB 까지입니다.",
+                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+            )
+        }
+    }
 }
 
 extension BugReportViewController : UITextViewDelegate {
@@ -416,8 +425,16 @@ extension BugReportViewController: UIImagePickerControllerDelegate, UINavigation
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             return
         }
+        
+        let imageToData: Data = image.pngData() ?? Data()
+        let sizeMB: Double = Double(imageToData.count).megabytes
+        guard sizeMB <= 100 else {
+            self.showToastWithMaxSize()
+            return
+        }
+
         let curr = self.input.dataSource.value
-        self.input.dataSource.accept(curr + [MediaDataType.image(data: image.pngData() ?? Data())]   )
+        self.input.dataSource.accept(curr + [MediaDataType.image(data: imageToData)])
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -445,6 +462,11 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                             do {
                                 let data = try Data(contentsOf: url)
                                 DEBUG_LOG("Video: \(data)")
+                                let sizeMB: Double = Double(data.count).megabytes
+                                guard sizeMB <= 100 else {
+                                    self.showToastWithMaxSize()
+                                    return
+                                }
                                 DispatchQueue.main.async {
                                     let curr = self.input.dataSource.value
                                     self.input.dataSource.accept(curr + [MediaDataType.video(data: data, url: url)])
@@ -467,6 +489,11 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                             guard let image = image as? UIImage,
                                   let imageToData = image.pngData() else { return }
                             DEBUG_LOG("Image: \(imageToData)")
+                            let sizeMB: Double = Double(imageToData.count).megabytes
+                            guard sizeMB <= 100 else {
+                                self.showToastWithMaxSize()
+                                return
+                            }
                             let curr = self.input.dataSource.value
                             self.input.dataSource.accept(curr + [MediaDataType.image(data: imageToData)])
                         }
