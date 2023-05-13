@@ -1,0 +1,94 @@
+{
+  "auth": {
+    "wakmusic574f7fc4": {
+      "customAuth": false,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage",
+          "triggerProvider": "Cognito"
+        }
+      ],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "PHONE_NUMBER"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "function": {
+    "wakmusic574f7fc4CustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_wakmusic574f7fc4CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "wakmusic574f7fc4CustomMessage"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "s3ecc00560": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
+}

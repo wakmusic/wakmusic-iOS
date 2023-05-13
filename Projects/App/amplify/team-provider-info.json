@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wakmusic-dev-204642-authRole",
+      "UnauthRoleArn": "arn:aws:iam::256354393789:role/amplify-wakmusic-dev-204642-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::256354393789:role/amplify-wakmusic-dev-204642-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-wakmusic-dev-204642-deployment",
+      "UnauthRoleName": "amplify-wakmusic-dev-204642-unauthRole",
+      "StackName": "amplify-wakmusic-dev-204642",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:256354393789:stack/amplify-wakmusic-dev-204642/803d4810-eff1-11ed-b2af-029342929fa2",
+      "AmplifyAppId": "d3kgbdkv4aameu",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-wakmusic-dev-204642-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "wakmusic574f7fc4": {}
+      },
+      "function": {
+        "wakmusic574f7fc4CustomMessage": {
+          "REDIRECTURL": "",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": "",
+          "deploymentBucketName": "amplify-wakmusic-dev-204642-deployment",
+          "s3Key": "amplify-builds/wakmusic574f7fc4CustomMessage-4b763953314976704645-build.zip"
+        }
+      },
+      "storage": {
+        "s3ecc00560": {}
+      }
+    }
+  }
+}

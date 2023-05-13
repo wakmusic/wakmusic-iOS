@@ -13,6 +13,7 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import KeychainModule
+import Amplify
 
 enum MediaDataType {
     case image(data: Data)
@@ -41,9 +42,9 @@ public final class BugReportViewModel:ViewModelType {
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        var showCollectionView:BehaviorRelay<Bool> = BehaviorRelay(value: true)
-        var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
-        var result:PublishSubject<ReportBugEntity>  = PublishSubject()
+        var showCollectionView: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        var dataSource: BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
+        var result: PublishSubject<ReportBugEntity>  = PublishSubject()
     }
 
     public init(reportBugUseCase: ReportBugUseCase){
@@ -60,14 +61,13 @@ public final class BugReportViewModel:ViewModelType {
         let combineObservable = Observable.combineLatest(
             input.publicNameOption,
             input.nickNameString,
-            input.bugContentString,
-            input.dataSource
+            input.bugContentString
         ){
-            return ($0, $1, $2, $3)
+            return ($0, $1, $2)
         }
 
         combineObservable
-            .map{ (option, nickName, content, _) -> Bool in
+            .map{ (option, nickName, content) -> Bool in
                 switch option {
                 case .nonDetermined:
                     return false
@@ -81,20 +81,41 @@ public final class BugReportViewModel:ViewModelType {
             .disposed(by: disposeBag)
 
         input.completionButtonTapped
-            .withLatestFrom(combineObservable)
-            .flatMap({ [weak self] (option, nickName, content, dataSource) -> Observable<ReportBugEntity> in
-                guard let self else { return Observable.empty()}
-                let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
-                let datas: [Data] = dataSource.map { (type) in
-                    switch type {
-                    case let .image(data):
-                        return data
-                    case let .video(data, _):
-                        return data
+            .withLatestFrom(input.dataSource)
+            .flatMap{ [weak self] (attaches) -> Observable<[String]> in
+                guard let self = self else { return Observable.empty() }
+                
+                if attaches.isEmpty {
+                    return Observable.just([])
+                }else{
+                    return AsyncStream<String> { continuation in
+                        Task.detached {
+                            for i in 0..<attaches.count {
+                                do {
+                                    let url = try await self.uploadImage(media: attaches[i])
+                                    continuation.yield(url.absoluteString)
+                                }catch {
+                                    DEBUG_LOG(error.localizedDescription)
+                                }
+                            }
+                            continuation.finish()
+                        }
                     }
+                    .asObservable()
+                    .scan([]) { (pre, new) in
+                        var result = pre
+                        result.append(new)
+                        return result
+                    }.takeLast(1)
                 }
+            }
+            .debug("uploadImage")
+            .withLatestFrom(combineObservable) { ($1.0, $1.1, $1.2, $0) }
+            .flatMap({ [weak self] (option, nickName, content, attaches) -> Observable<ReportBugEntity> in
+                guard let self else { return Observable.empty() }
+                let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 return self.reportBugUseCase
-                    .execute(userID: userId, nickname: option == .public ? nickName : "", attaches:datas, content: content)
+                    .execute(userID: userId, nickname: (option == .public) ? nickName : "", attaches: attaches, content: content)
                     .debug("reportBugUseCase")
                     .catch({ (error:Error) in
                         return Single<ReportBugEntity>.create { single in
@@ -103,8 +124,8 @@ public final class BugReportViewModel:ViewModelType {
                         }
                     })
                     .asObservable()
-                    .map{
-                        ReportBugEntity(status: $0.status ,message: $0.message)
+                    .map{ (model) -> ReportBugEntity in
+                        return ReportBugEntity(status: model.status ,message: model.message)
                     }
             })
             .bind(to: output.result)
@@ -130,5 +151,47 @@ public final class BugReportViewModel:ViewModelType {
             .disposed(by: disposeBag)
         
         return output
+    }
+}
+
+extension BugReportViewModel {
+    private func uploadImage(media: MediaDataType) async throws -> URL {
+        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let size = 5
+        let fileName = str.createRandomStr(length: size) + "_" + Date().dateToString(format: "yyyyMMddHHmmss")
+        var data: Data?
+        var ext: String = ""
+        
+        switch media {
+        case let .image(model):
+            data = model
+            ext = "jpg"
+        case let .video(model, _):
+            data = model
+            ext = "mp4"
+        }
+
+        let uploadTask = Amplify.Storage.uploadData(
+            key: "\(fileName).\(ext)",
+            data: data ?? Data()
+        )
+        Task {
+            for await progress in await uploadTask.progress {
+                DEBUG_LOG("Progress: \(progress)")
+            }
+        }
+        let value = try await uploadTask.value
+        DEBUG_LOG("Completed: \(value)")
+        return try await getURL(fileName: fileName, ext: ext)
+    }
+    
+    private func getURL(fileName: String, ext: String) async throws -> URL {
+       let url = try await Amplify.Storage.getURL(key: "\(fileName).\(ext)")
+       if var components = URLComponents(string: url.absoluteString) {
+           components.query = nil
+           return components.url ?? url
+       } else {
+           return url
+       }
     }
 }

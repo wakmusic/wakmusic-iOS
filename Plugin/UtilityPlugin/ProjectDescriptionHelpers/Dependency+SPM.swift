@@ -26,9 +26,11 @@ public extension TargetDependency.SPM {
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
     static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
-    static let Amplify = TargetDependency.external(name: "Amplify")
-    static let AWSPluginsCore = TargetDependency.external(name: "AWSPluginsCore")
-    static let AWSS3StoragePlugin = TargetDependency.external(name: "AWSS3StoragePlugin")
+    
+    static let Amplify = TargetDependency.package(product: "Amplify")
+    static let AWSCognitoAuthPlugin = TargetDependency.package(product: "AWSCognitoAuthPlugin")
+    static let AWSS3StoragePlugin = TargetDependency.package(product:"AWSS3StoragePlugin")
+    
     static let NVActivityIndicatorView = TargetDependency.external(name: "NVActivityIndicatorView")
 
 // MARK: Native SPM
@@ -40,4 +42,6 @@ public extension Package {
         url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
         requirement: .upToNextMajor(from: "1.3.1")
     )
+    
+    static let Amplify = Package.remote(url: "https://github.com/aws-amplify/amplify-swift.git", requirement: .upToNextMajor(from: "2.10.0"))
 }

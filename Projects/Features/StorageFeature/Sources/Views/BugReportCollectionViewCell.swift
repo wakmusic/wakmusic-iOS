@@ -20,6 +20,7 @@ class BugReportCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var videoImageView: UIImageView!
     
     @IBAction func removeAction(_ sender: Any) {
         self.delegate?.tapRemove(index: index)
@@ -35,18 +36,24 @@ class BugReportCollectionViewCell: UICollectionViewCell {
         self.contentView.clipsToBounds = true
         self.deleteButton.setImage(DesignSystemAsset.Storage.attachRemove.image, for: .normal)
         self.imageView.contentMode = .scaleAspectFill
+        self.videoImageView.image = DesignSystemAsset.Storage.playVideo.image
+        self.videoImageView.contentMode = .scaleAspectFit
     }
 }
 
 extension BugReportCollectionViewCell {
-    func update(model: MediaDataType,index:Int) {
+    func update(model: MediaDataType, index: Int) {
         self.index = index
         
         switch model {
         case .image(data: let data):
             imageView.image = UIImage(data: data)
+            videoImageView.isHidden = true
+            contentView.backgroundColor = .clear
         case let .video(_, url):
-            DEBUG_LOG(url.absoluteString)
+            imageView.image = nil
+            videoImageView.isHidden = false
+            contentView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         }
     }
 }

@@ -13,7 +13,7 @@ import DomainModule
 import RxSwift
 
 public protocol RemoteSuggestDataSource {
-    func reportBug(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity>
+    func reportBug(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity>
     func suggestFunction(type: SuggestPlatformType, userID: String, content: String) -> Single<SuggestFunctionEntity>
     func modifySong(type: SuggestSongModifyType,
                     userID: String,

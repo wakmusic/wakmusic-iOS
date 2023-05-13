@@ -154,11 +154,8 @@
 		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
 		<key>WMDOMAIN_IMAGE_NOTICE</key>
 		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
-	</dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<key>WAKENTER_BASE_URL</key>
+		<string>$(WAKENTER_BASE_URL)</string>
 	</dict>
 </dict>
 </plist>

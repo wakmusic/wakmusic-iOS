@@ -23,7 +23,7 @@ public struct SuggestRepositoryImpl: SuggestRepository {
         self.remoteSuggestDataSource = remoteSuggestDataSource
     }
     
-    public func reportBug(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity> {
+    public func reportBug(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity> {
         remoteSuggestDataSource.reportBug(userID: userID, nickname: nickname, attaches: attaches, content: content)
     }
     

@@ -14,7 +14,7 @@ import ErrorModule
 import Foundation
 
 public final class RemoteSuggestDataSourceImpl: BaseRemoteDataSource<SuggestAPI>, RemoteSuggestDataSource {
-    public func reportBug(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity> {
+    public func reportBug(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity> {
         request(.reportBug(userID: userID, nickname: nickname, attaches: attaches, content: content))
             .map(ReportBugResponseDTO.self)
             .map { $0.toDomain() }

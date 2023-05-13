@@ -12,7 +12,7 @@ import DataMappingModule
 import ErrorModule
 
 public protocol SuggestRepository {
-    func reportBug(userID: String, nickname: String, attaches: [Data], content: String) -> Single<ReportBugEntity>
+    func reportBug(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity>
     func suggestFunction(type: SuggestPlatformType, userID: String, content: String) -> Single<SuggestFunctionEntity>
     func modifySong(type: SuggestSongModifyType,
                     userID: String,

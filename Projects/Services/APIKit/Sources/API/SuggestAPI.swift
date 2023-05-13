@@ -13,7 +13,7 @@ import Foundation
 import KeychainModule
 
 public enum SuggestAPI {
-    case reportBug(userID: String, nickname: String, attaches: [Data], content: String)
+    case reportBug(userID: String, nickname: String, attaches: [String], content: String)
     case suggestFunction(type: SuggestPlatformType, userID: String, content: String)
     case modifySong(type: SuggestSongModifyType, userID: String, artist: String, songTitle: String, youtubeLink: String, content: String)
     case inquiryWeeklyChart(userID: String, content: String)
@@ -25,8 +25,8 @@ extension SuggestAPI: WMAPI {
         case .reportBug,
              .suggestFunction,
              .modifySong,
-             .inquiryWeeklyChart: //추후 baseURL 수정 예정
-            return URL(string: "http://ec2-15-164-250-124.ap-northeast-2.compute.amazonaws.com:4000")!
+             .inquiryWeeklyChart:
+            return URL(string: WAKENTER_BASE_URL())!
         }
     }
         
@@ -70,15 +70,39 @@ extension SuggestAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case let .reportBug(userID, nickname, attaches, content):
+            let version = ProcessInfo.processInfo.operatingSystemVersion
+            let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+            let osName: String = {
+                #if os(iOS)
+                #if targetEnvironment(macCatalyst)
+                return "macOS(Catalyst)"
+                #else
+                return "iOS"
+                #endif
+                #elseif os(watchOS)
+                return "watchOS"
+                #elseif os(tvOS)
+                return "tvOS"
+                #elseif os(macOS)
+                return "macOS"
+                #elseif os(Linux)
+                return "Linux"
+                #elseif os(Windows)
+                return "Windows"
+                #else
+                return "Unknown"
+                #endif
+            }()
             var parameters: [String: Any] = ["userId": userID,
-                                             "detailContent": content]
+                                             "detailContent": content,
+                                             "osVersion": "\(osName) \(versionString)",
+                                             "deviceModel": Device().modelName]
             if !nickname.isEmpty {
                 parameters["nickname"] = nickname
             }
-            //TO-DO: 추후 변경예정
-            //if !attaches.isEmpty {
-            //parameters["attachs"] = attaches.map { $0.base64EncodedString() }
-            //}
+            if !attaches.isEmpty {
+                parameters["attachs"] = attaches
+            }
             return .requestParameters(parameters: parameters,
                                       encoding: JSONEncoding.default)
 
