@@ -75,14 +75,16 @@ extension ContainSongsViewController {
                 self.tableView.tableFooterView = model.isEmpty ?  warningView : nil
                 self.indicator.stopAnimating()
             })
-            .bind(to: tableView.rx.items){ [weak self] (tableView,index,model) -> UITableViewCell in
-                guard let self = self else { return UITableViewCell() }
-                
+            .bind(to: tableView.rx.items){ (tableView,index,model) -> UITableViewCell in
                 let bgView = UIView()
                 bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
                 
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentPlayListTableViewCell",for: IndexPath(row: index, section: 0)) as? CurrentPlayListTableViewCell
-                else {return UITableViewCell()}
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "CurrentPlayListTableViewCell",
+                    for: IndexPath(row: index, section: 0)) as? CurrentPlayListTableViewCell
+                else {
+                    return UITableViewCell()
+                }
             
                 cell.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
                 cell.selectedBackgroundView = bgView
@@ -152,9 +154,7 @@ extension ContainSongsViewController : UITableViewDelegate {
 
 extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
-        let vc = multiPurposePopComponent.makeView(type: .creation) {[weak self]  (_:String) in
-            guard let self = self else {return}
-        }
+        let vc = multiPurposePopComponent.makeView(type: .creation)
         self.showPanModal(content: vc)
     }
 }
