@@ -56,7 +56,7 @@ internal class LyricsTableViewCell: UITableViewCell {
         lyricsLabel.textColor = isCurrent ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray500.color
     }
     
-    static public func getCellHeight(lyric: String) -> CGFloat {
+    static func getCellHeight(lyric: String) -> CGFloat {
         let textHeight: CGFloat = lyric.heightConstraintAt(
             width: LyricsTableViewCell.lyricMaxWidth,
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
