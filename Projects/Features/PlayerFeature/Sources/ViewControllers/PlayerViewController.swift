@@ -357,12 +357,12 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        let textHeight:CGFloat = viewModel.sortedLyrics[indexPath.row].heightConstraintAt(width: (270 * APP_WIDTH())/375.0, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
-                                                                                  
-        let yMargin:CGFloat = 7
-        
-        return max(24,textHeight + yMargin)
+        let textHeight: CGFloat = viewModel.sortedLyrics[indexPath.row].heightConstraintAt(
+            width: LyricsTableViewCell.lyricMaxWidth,
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        )
+        let yMargin: CGFloat = 7
+        return max(24, textHeight + yMargin)
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

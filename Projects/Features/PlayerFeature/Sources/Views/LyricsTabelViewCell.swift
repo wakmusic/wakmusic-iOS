@@ -14,14 +14,15 @@ import Utility
 
 internal class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
-    
+    static let lyricMaxWidth: CGFloat = (270 * APP_WIDTH())/375.0
+
     private lazy var lyricsLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray500.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
         $0.text = ""
         $0.numberOfLines = 0
-        $0.preferredMaxLayoutWidth = (270 * APP_WIDTH())/375.0
+        $0.preferredMaxLayoutWidth = LyricsTableViewCell.lyricMaxWidth
         $0.textAlignment = .center
     }
 
