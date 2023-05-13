@@ -9,27 +9,20 @@
 import UIKit
 import DesignSystem
 
-
 public protocol ContainPlayListHeaderViewDelegate : AnyObject {
-    
     func action()
-    
 }
 
 class ContainPlayListHeaderView: UIView {
-
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var buttonImageView: UIImageView!
     
-    
     weak var delegate:ContainPlayListHeaderViewDelegate?
-    
     
     @IBAction func buttonAction(_ sender: Any) {
         self.delegate?.action()
     }
-    
    
     override init(frame: CGRect) { //코드쪽에서 생성 시 호출
         super.init(frame: frame)
@@ -42,7 +35,6 @@ class ContainPlayListHeaderView: UIView {
         self.setupView()
     }
     
-    
     private func setupView()
     {
         if let view = Bundle.module.loadNibNamed("ContainPlayListHeaderView", owner: self,options: nil)!.first as? UIView{
@@ -53,19 +45,19 @@ class ContainPlayListHeaderView: UIView {
         
         self.buttonImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
        
-        let attr = NSMutableAttributedString(string: "새  리스트 만들기",
-                                             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                          .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color ])
- 
+        let attr = NSMutableAttributedString(
+            string: "새 리스트 만들기",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                .foregroundColor:  DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
         
         superView.backgroundColor = .white.withAlphaComponent(0.4)
         superView.layer.cornerRadius = 8
         superView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
         superView.layer.borderWidth = 1
-        
         self.button.setAttributedTitle(attr, for: .normal)
-        
-        
     }
-
 }

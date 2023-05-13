@@ -120,15 +120,19 @@ extension ContainSongsViewController {
         
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
+        titleLabel.text = "리스트에 담기"
+        titleLabel.setLineSpacing(kernValue: -0.5)
+
         subTitleLabel.font =  DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         subTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        subTitleLabel.text = "담을곡"
+        subTitleLabel.setLineSpacing(kernValue: -0.5)
         
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-        
         songCountLabel.text = "\(viewModel.songs.count)곡"
-        
+        songCountLabel.setLineSpacing(kernValue: -0.5)
+
         indicator.type = .circleStrokeSpin
         indicator.color = DesignSystemAsset.PrimaryColor.point.color
         indicator.startAnimating()
