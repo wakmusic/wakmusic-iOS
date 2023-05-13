@@ -65,11 +65,6 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
         bindViewModel()
         bindActions()
     }
-    
-    public override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        DEBUG_LOG("\(Self.self) viewDidDisappear, isEditing: \(self.viewModel.isEditing)")
-    }
 }
 
 private extension PlaylistViewController {
