@@ -70,8 +70,33 @@ extension SuggestAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case let .reportBug(userID, nickname, attaches, content):
+            let version = ProcessInfo.processInfo.operatingSystemVersion
+            let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+            let osName: String = {
+                #if os(iOS)
+                #if targetEnvironment(macCatalyst)
+                return "macOS(Catalyst)"
+                #else
+                return "iOS"
+                #endif
+                #elseif os(watchOS)
+                return "watchOS"
+                #elseif os(tvOS)
+                return "tvOS"
+                #elseif os(macOS)
+                return "macOS"
+                #elseif os(Linux)
+                return "Linux"
+                #elseif os(Windows)
+                return "Windows"
+                #else
+                return "Unknown"
+                #endif
+            }()
             var parameters: [String: Any] = ["userId": userID,
-                                             "detailContent": content]
+                                             "detailContent": content,
+                                             "osVersion": "\(osName) \(versionString)",
+                                             "deviceModel": Device().modelName]
             if !nickname.isEmpty {
                 parameters["nickname"] = nickname
             }
