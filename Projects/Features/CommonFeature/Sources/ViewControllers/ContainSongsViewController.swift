@@ -91,12 +91,11 @@ extension ContainSongsViewController {
             }.disposed(by: disposeBag)
         
         tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource){ ($0,$1) }
-            .subscribe(onNext: { [weak self] (indexPath, models) in
-                guard let self  = self else{ return }
-                let model = models[indexPath.row]
-                self.output.containSongWithKey.onNext(model.key)
-            })
+            .withLatestFrom(output.dataSource){ ($0, $1) }
+            .map{ (indexPath, models) -> String in
+                return models[indexPath.row].key
+            }
+            .bind(to: input.containSongWithKey)
             .disposed(by: disposeBag)
                 
         output.showToastMessage
