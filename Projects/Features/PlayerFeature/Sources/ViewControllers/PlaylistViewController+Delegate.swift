@@ -18,7 +18,7 @@ extension PlaylistViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
-            let songs: [String] = self.playState.playList.list.map { $0.item.id }
+            let songs: [String] = self.playState.playList.list.filter { $0.item.isSelected }.map { $0.item.id }
             let viewController = containSongsComponent.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
