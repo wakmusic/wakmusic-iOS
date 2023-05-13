@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -183,7 +183,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="55y-I8-uJW">
-                                <rect key="frame" x="0.0" y="159" width="393" height="659"/>
+                                <rect key="frame" x="0.0" y="159" width="393" height="693"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrentPlayListTableViewCell" id="ibc-jy-gnQ" customClass="CurrentPlayListTableViewCell" customModule="CommonFeature">
@@ -253,7 +253,7 @@
                             <constraint firstAttribute="trailing" secondItem="fUZ-Dc-OJs" secondAttribute="trailing" id="fEx-jn-mh1"/>
                             <constraint firstItem="fUZ-Dc-OJs" firstAttribute="leading" secondItem="FR1-Wa-zfj" secondAttribute="leading" id="fr3-Eo-iGm"/>
                             <constraint firstItem="55y-I8-uJW" firstAttribute="top" secondItem="170-Tn-9JZ" secondAttribute="bottom" constant="12" id="jBV-Un-BK4"/>
-                            <constraint firstItem="FR1-Wa-zfj" firstAttribute="bottom" secondItem="55y-I8-uJW" secondAttribute="bottom" id="kQS-68-GKS"/>
+                            <constraint firstAttribute="bottom" secondItem="55y-I8-uJW" secondAttribute="bottom" id="kgN-Ra-Jdz"/>
                             <constraint firstItem="FR1-Wa-zfj" firstAttribute="trailing" secondItem="170-Tn-9JZ" secondAttribute="trailing" constant="20" id="of3-VI-Nle"/>
                             <constraint firstItem="55y-I8-uJW" firstAttribute="leading" secondItem="FR1-Wa-zfj" secondAttribute="leading" id="vQc-N5-AJ9"/>
                         </constraints>
