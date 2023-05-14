@@ -58,9 +58,6 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        //Comment: 재생목록 화면이 로드되는 시점에서 DB에 저장된 리스트로 업데이트
-        //PlayState.shared.playList.list와 DB에 저장된 리스트로 동기화하기 위함
-        self.playState.playList.list = self.playState.fetchPlayListFromLocalDB()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
@@ -68,6 +65,9 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        //Comment: 재생목록 화면이 사라지는 시점에서 DB에 저장된 리스트로 업데이트
+        //편집 완료를 했으면 이미 DB가 업데이트 됐을거고, 아니면 이전 DB데이터로 업데이트
+        self.playState.playList.list = self.playState.fetchPlayListFromLocalDB()
         //Comment: 재생목록 화면이 사라지는 시점에서 곡 담기 팝업이 올라와 있는 상태면 제거
         guard self.songCartView != nil else { return }
         self.hideSongCart()
