@@ -21,8 +21,8 @@ import NVActivityIndicatorView
 
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
-
+public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType, LoadingAlertControllerType {
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -37,7 +37,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    var loadingAlert = UIAlertController(title: "처리 중입니다.", message: "", preferredStyle: .alert)
+    public var alertController: UIAlertController!
 
     let playState = PlayState.shared
 
@@ -180,7 +180,7 @@ extension MyPlayListViewController{
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
                 //Stop Loading
-                self.loadingAlert.dismiss(animated: true)
+                self.stopLoading()
             }).disposed(by: disposeBag)
                 
         output.showToast
@@ -249,7 +249,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
             input.addPlayList.onNext(())
             self.hideSongCart()
             //Loading Start
-            self.present(self.loadingAlert, animated: true, completion: nil)
+            self.startLoading(message: "처리 중입니다.")
 
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
