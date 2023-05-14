@@ -207,6 +207,7 @@ public final class FavoriteViewModel:ViewModelType {
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedLikeLists.accept([])
+                    output.showToast.accept("좋아요 리스트에서 삭제되었습니다.")
                 }else{
                     output.showToast.accept(model.description)
                 }

@@ -192,6 +192,8 @@ extension MyPlayListViewController{
                     text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
+                //Stop Loading
+                self.stopLoading()
             }).disposed(by: disposeBag)
         
         output.immediatelyPlaySongs
@@ -260,6 +262,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
                 guard let `self` = self else { return }
                 self.input.deletePlayList.onNext(())
                 self.hideSongCart()
+                self.startLoading(message: "처리 중입니다.")
             })
             self.showPanModal(content: popup)
             

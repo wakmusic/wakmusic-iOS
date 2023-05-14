@@ -210,6 +210,8 @@ public final class MyPlayListViewModel:ViewModelType {
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedPlayLists.accept([])
+                    output.showToast.accept("리스트가 삭제되었습니다.")
+
                 }else{
                     output.showToast.accept(model.description)
                 }
