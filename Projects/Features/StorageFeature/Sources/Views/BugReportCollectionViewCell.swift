@@ -8,9 +8,9 @@
 
 import UIKit
 import DesignSystem
-import AVFoundation
 import Kingfisher
 import Utility
+import AVFoundation
 
 protocol BugReportCollectionViewCellDelegate: AnyObject {
     func tapRemove(index: Int)
@@ -50,8 +50,9 @@ extension BugReportCollectionViewCell {
             imageView.image = UIImage(data: data)
             videoImageView.isHidden = true
             contentView.backgroundColor = .clear
-        case let .video(_, url):
-            imageView.image = nil
+            
+        case let .video(data, _):
+            imageView.image = data.extractThumbnail()
             videoImageView.isHidden = false
             contentView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         }
