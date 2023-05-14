@@ -51,7 +51,7 @@ final class PlaylistViewModel: ViewModelType {
     }
     
     private let playState = PlayState.shared
-    private var isEditing = false
+    var isEditing = false
     internal var countOfSelectedSongs = 0
     private var subscription = Set<AnyCancellable>()
     private var disposeBag = DisposeBag()
@@ -259,7 +259,10 @@ final class PlaylistViewModel: ViewModelType {
             .sink { [weak self] _ in
                 guard let self else { return }
                 output.indexOfSelectedSongs.accept([])
-        }.store(in: &subscription)
+                //Comment: 편집모드가 완료 된 시점에서 list를 가져와서 listReordered.send > DB 업데이트
+                let list = self.playState.playList.list
+                self.playState.playList.listReordered.send(list)
+            }.store(in: &subscription)
     }
     
     private func bindPlayStateChanged(output: Output) {

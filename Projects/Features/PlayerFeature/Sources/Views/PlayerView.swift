@@ -315,7 +315,7 @@ private extension PlayerView {
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
-            $0.width.equalTo((270 * APP_WIDTH())/375.0)
+            $0.width.equalTo(LyricsTableViewCell.lyricMaxWidth)
             $0.height.equalTo(isNotch ? 120 : 72)
         }
     }

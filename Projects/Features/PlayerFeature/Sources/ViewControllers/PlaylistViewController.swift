@@ -58,9 +58,19 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        //Comment: 재생목록 화면이 로드되는 시점에서 DB에 저장된 리스트로 업데이트
+        //PlayState.shared.playList.list와 DB에 저장된 리스트로 동기화하기 위함
+        self.playState.playList.list = self.playState.fetchPlayListFromLocalDB()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //Comment: 재생목록 화면이 사라지는 시점에서 곡 담기 팝업이 올라와 있는 상태면 제거
+        guard self.songCartView != nil else { return }
+        self.hideSongCart()
     }
 }
 
@@ -92,7 +102,6 @@ private extension PlaylistViewController {
         bindShuffleMode(output: output)
         bindPlayButtonImages(output: output)
         bindwaveStreamAnimationView(output: output)
-
     }
     
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
@@ -117,20 +126,15 @@ private extension PlaylistViewController {
             .filter { $0.first?.items.isEmpty ?? true }
             .subscribe { [weak self] _ in
                 let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
-                
                 let height = space / 3  * 2
-                
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "곡이 없습니다."
-                
                 self?.playlistView.playlistTableView.tableFooterView = warningView
             }.disposed(by: disposeBag)
         
         output.dataSource
-            .subscribe(onNext: { [weak self] dataSource in
-                let isDataSourceEmpty = dataSource.first?.items.isEmpty ?? true
-                self?.playlistView.editButton.isHidden = isDataSourceEmpty
-            })
+            .map { return $0.first?.items.isEmpty ?? true }
+            .bind(to: playlistView.editButton.rx.isHidden)
             .disposed(by: disposeBag)
     }
     
@@ -247,7 +251,6 @@ private extension PlaylistViewController {
             }
             .store(in: &subscription)
     }
-    
 }
 
 private extension PlaylistViewController {
