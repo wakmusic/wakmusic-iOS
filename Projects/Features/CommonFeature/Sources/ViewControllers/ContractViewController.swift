@@ -31,9 +31,9 @@ extension ContractType{
     var url:String {
         switch self{
         case .privacy:
-            return "https://static.wakmusic.xyz/static/document/privacy.pdf"
+            return "\(BASE_IMAGE_URL())/static/document/privacy.pdf"
         case .service:
-            return "https://static.wakmusic.xyz/static/document/terms.pdf"
+            return "\(BASE_IMAGE_URL())/static/document/terms.pdf"
         }
     }
 }
@@ -56,7 +56,7 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     }
     
     deinit {
-        DEBUG_LOG("\(Self.self) deinit")
+        DEBUG_LOG("❌ \(Self.self) deinit")
     }
 
     public static func viewController(type:ContractType) -> ContractViewController {
@@ -67,8 +67,34 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
 }
 
 extension ContractViewController{
+    private func bindRx(){
+        closeButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                owner.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+         
+        confirmButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                owner.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func loadPdf(document:PDFDocument){
+        let pdfView = PDFView(frame: self.fakeView.bounds)
+        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        pdfView.autoScales = true
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
+        pdfView.document = document
+        self.fakeView.addSubview(pdfView)
+        activityIndicator.stopAnimating()
+    }
+    
     private func configureUI(){
-        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         activityIndicator.type = .circleStrokeSpin
@@ -81,7 +107,6 @@ extension ContractViewController{
                                                                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                                              .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
         
-
         confirmButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
@@ -96,33 +121,5 @@ extension ContractViewController{
                 }
             }
         }
-    }
-    
-    private func bindRx(){
-        
-        closeButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self =  self else {
-                return
-            }
-            self.dismiss(animated: true)
-        }).disposed(by: disposeBag)
-         
-        confirmButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self =  self else {
-                return
-            }
-            self.dismiss(animated: true )
-        }).disposed(by: disposeBag)
-    }
-    
-    private func loadPdf(document:PDFDocument){
-        let pdfView = PDFView(frame: self.fakeView.bounds)
-        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        pdfView.autoScales = true
-        pdfView.displayMode = .singlePageContinuous
-        pdfView.displayDirection = .vertical
-        pdfView.document = document
-        self.fakeView.addSubview(pdfView)
-        activityIndicator.stopAnimating()
     }
 }

@@ -67,14 +67,14 @@ extension LoginViewController{
         self.serviceButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             let vc = ContractViewController.viewController(type: .service)
-            vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+            vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
         }).disposed(by: disposeBag)
         
         self.privacyButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else { return }
             let vc = ContractViewController.viewController(type: .privacy)
-            vc.modalPresentationStyle = .fullScreen //꽉찬 모달
+            vc.modalPresentationStyle = .overFullScreen 
             self.present(vc, animated: true)
         }).disposed(by: disposeBag)
         
