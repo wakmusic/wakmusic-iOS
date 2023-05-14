@@ -32,7 +32,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     }
     func sceneDidEnterBackground(_ scene: UIScene) {
-        
+        let isPlayed = PlayState.shared.state
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if isPlayed == .playing { PlayState.shared.play() }
+        }
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
