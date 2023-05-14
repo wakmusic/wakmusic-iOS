@@ -164,13 +164,21 @@ extension FavoriteViewController{
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allLikeListSelected.onNext(false)
                 self.output.state.accept(EditState(isEditing: false, force: true))
+                self.showToast(
+                    text: "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다.",
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
             }).disposed(by: disposeBag)
 
         output.showToast
             .subscribe(onNext: { [weak self] (msg:String) in
                 guard let self = self else{ return }
-                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            }).disposed(by: disposeBag)
+                self.showToast(
+                    text: msg,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+            })
+            .disposed(by: disposeBag)
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {

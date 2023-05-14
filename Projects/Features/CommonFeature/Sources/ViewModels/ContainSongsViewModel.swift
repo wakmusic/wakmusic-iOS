@@ -58,21 +58,21 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.addSongIntoPlayListUseCase
                     .execute(key: key, songs: self.songs)
-                    .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
+                    .catchAndReturn(AddSongEntity(status: 500, added_songs_length: 0, duplicated: true))
                     .asObservable()
             })
             .map{ (entity: AddSongEntity) -> String in
-                if entity.status == 400 {
+                if entity.status == 500 {
                     return WMError.unknown.localizedDescription
                 }else{
                     if entity.status == 200 {
                         if entity.duplicated {
-                            return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다. 중복 곡은 제외됩니다.")
+                            return ("\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다.")
                         }else {
-                            return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다.")
+                            return ("\(entity.added_songs_length)곡이 내 리스트에 담겼습니다.")
                         }
                     }else {
-                        return (" 이미 내 보관함에 담긴 곡들입니다.")
+                        return ("이미 내 리스트에 담긴 곡들입니다.")
                     }
                 }
             }

@@ -37,7 +37,8 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    
+    var loadingAlert = UIAlertController(title: "처리 중입니다.", message: "", preferredStyle: .alert)
+
     let playState = PlayState.shared
 
     public override func viewDidLoad() {
@@ -79,7 +80,7 @@ extension MyPlayListViewController{
                 
                 let isEditing: Bool = state.isEditing
                 
-                if isEditing {
+                if isEditing { //편집 중일 때, 동작 안함
                     self.input.itemSelected.onNext(indexPath)
                     
                 }else{
@@ -97,7 +98,6 @@ extension MyPlayListViewController{
     }
 
     private func outputBindRx() {
-        
         output.state
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
@@ -175,6 +175,12 @@ extension MyPlayListViewController{
                 self.playState.appendSongsToPlaylist(songs)
                 self.input.allPlayListSelected.onNext(false)
                 self.output.state.accept(EditState(isEditing: false, force: true))
+                self.showToast(
+                    text: "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다.",
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+                //Stop Loading
+                self.loadingAlert.dismiss(animated: true)
             }).disposed(by: disposeBag)
                 
         output.showToast
@@ -238,9 +244,13 @@ extension MyPlayListViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allPlayListSelected.onNext(flag)
+            
         case .addPlayList:
             input.addPlayList.onNext(())
             self.hideSongCart()
+            //Loading Start
+            self.present(self.loadingAlert, animated: true, completion: nil)
+
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
             let popup = TextPopupViewController.viewController(
@@ -252,6 +262,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
                 self.hideSongCart()
             })
             self.showPanModal(content: popup)
+            
         default: return
         }
     }

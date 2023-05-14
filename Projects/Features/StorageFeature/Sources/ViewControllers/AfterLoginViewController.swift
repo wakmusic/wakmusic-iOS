@@ -17,8 +17,6 @@ import CommonFeature
 import KeychainModule
 import DataMappingModule
 
-
-
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard, EditSheetViewType {
 
     @IBOutlet weak var profileLabel: UILabel!
@@ -49,9 +47,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     
     public var editSheetView: EditSheetView!
     public var bottomSheetView: BottomSheetView!
-
     private var viewControllers: [UIViewController] = [UIViewController(),UIViewController()]
-    var viewModel:AfterLoginViewModel!
     
     var requestComponent:RequestComponent!
     var profilePopComponent: ProfilePopComponent!
@@ -59,9 +55,9 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     var multiPurposePopComponent : MultiPurposePopComponent!
     var favoriteComponent:  FavoriteComponent!
     
+    var viewModel:AfterLoginViewModel!
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
     let disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -118,53 +114,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
 }
 
 extension AfterLoginViewController{
-    
-    private func configureUI(){
-
-        profileImageView.layer.cornerRadius = 20
-        profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        
-        logoutButton.setImage(DesignSystemAsset.Storage.logout.image, for: .normal)
-        requestButton.setImage(DesignSystemAsset.Storage.request.image, for: .normal)
-        
-        editButton.layer.cornerRadius = 4
-        editButton.layer.borderWidth = 1
-        editButton.backgroundColor = .clear
-        editButton.isHidden = true
-        
-        myPlayListFakeView.isHidden = true
-        favoriteFakeView.isHidden = true
-        
-        //탭바 설정
-        self.dataSource = self
-        let bar = TMBar.ButtonBar()
-        
-        // 배경색
-        bar.backgroundView.style = .flat(color: .clear)
-        
-        // 간격 설정
-        bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        bar.layout.contentMode = .intrinsic
-        bar.layout.transitionStyle = .progressive
-        
-        // 버튼 글씨 커스텀
-        bar.buttons.customize { (button) in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
-            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-            button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
-        }
-        
-        // indicator
-        bar.indicator.weight = .custom(value: 3)
-        bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
-        bar.indicator.overscrollBehavior = .compress
-        addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
-        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
-    }
-    
     private func bindRx(){
-
         output.state.subscribe { [weak self]  state in
             guard let self = self else{
                 return
@@ -266,6 +216,49 @@ extension AfterLoginViewController{
             .map { ($0.first?.items ?? []).isEmpty }
             .bind(to: editButton.rx.isHidden)
             .disposed(by: disposeBag)
+    }
+    
+    private func configureUI(){
+        profileImageView.layer.cornerRadius = 20
+        profileLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        
+        logoutButton.setImage(DesignSystemAsset.Storage.logout.image, for: .normal)
+        requestButton.setImage(DesignSystemAsset.Storage.request.image, for: .normal)
+        
+        editButton.layer.cornerRadius = 4
+        editButton.layer.borderWidth = 1
+        editButton.backgroundColor = .clear
+        editButton.isHidden = true
+        
+        myPlayListFakeView.isHidden = true
+        favoriteFakeView.isHidden = true
+
+        //탭바 설정
+        self.dataSource = self
+        let bar = TMBar.ButtonBar()
+        
+        // 배경색
+        bar.backgroundView.style = .flat(color: .clear)
+        
+        // 간격 설정
+        bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        bar.layout.contentMode = .intrinsic
+        bar.layout.transitionStyle = .progressive
+        
+        // 버튼 글씨 커스텀
+        bar.buttons.customize { (button) in
+            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
+        }
+        
+        // indicator
+        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
+        bar.indicator.overscrollBehavior = .compress
+        addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
+        bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
 }
 
