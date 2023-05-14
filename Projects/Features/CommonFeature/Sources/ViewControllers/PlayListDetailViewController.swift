@@ -18,8 +18,7 @@ import Kingfisher
 import DomainModule
 import NVActivityIndicatorView
 
-public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
-    
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType, LoadingAlertControllerType {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var completeButton: UIButton!
@@ -43,7 +42,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public var editSheetView: EditSheetView!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    
+    public var alertController: UIAlertController!
+
     let playState = PlayState.shared
     
     @IBAction func backButtonAction(_ sender: UIButton) {
@@ -280,32 +280,28 @@ extension PlayListDetailViewController{
                 
                 self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: { _ in
                 })
-                    
-                DEBUG_LOG(model)
-                
                 self.playListCountLabel.text = model.songCount
                 self.playListNameLabel.text = model.title
                 self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
-                
             }).disposed(by: disposeBag)
                 
         NotificationCenter.default.rx.notification(.playListNameRefresh)
-            .map({noti -> String in
-                guard let obj = noti.object as? String else {
+            .map{ (notification) -> String in
+                guard let obj = notification.object as? String else {
                     return ""
                 }
                 return obj
-            })
+            }
             .bind(to: input.playListNameLoad)
             .disposed(by: disposeBag)
         
-        input.showErrorToast.subscribe(onNext: { [weak self] in
-            guard let self = self else {
-                return
-            }
-            self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-        })
-        .disposed(by: disposeBag)
+        output.showErrorToast
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.stopLoading()
+                self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            })
+            .disposed(by: disposeBag)
                 
         tableView.rx.itemSelected
            .withLatestFrom(output.dataSource) { ($0, $1) }
@@ -443,7 +439,10 @@ extension PlayListDetailViewController:SongCartViewDelegate {
             self.input.state.accept(EditState(isEditing: false, force: true))
             
         case .remove:
+            self.startLoading(message: "처리 중입니다.")
             self.input.tapRemoveSongs.onNext(())
+            self.input.allSongSelected.onNext(false)
+            self.input.state.accept(EditState(isEditing: false, force: true))
         }
     }
 }
