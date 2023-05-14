@@ -19,6 +19,7 @@ class CurrentPlayListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.playListImageView.layer.cornerRadius = 4
         self.playListNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.playListNameLabel.textColor = DesignSystemAsset.GrayColor.gray900.color

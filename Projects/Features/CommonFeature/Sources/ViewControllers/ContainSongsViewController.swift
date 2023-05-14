@@ -21,6 +21,9 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     @IBOutlet weak var indicator: NVActivityIndicatorView!
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var loadingIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var loadingDescriptionLabel: UILabel!
     
     var multiPurposePopComponent : MultiPurposePopComponent!
     var disposeBag = DisposeBag()
@@ -76,33 +79,35 @@ extension ContainSongsViewController {
                 self.indicator.stopAnimating()
             })
             .bind(to: tableView.rx.items){ (tableView,index,model) -> UITableViewCell in
-                let bgView = UIView()
-                bgView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.6)
-                
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "CurrentPlayListTableViewCell",
                     for: IndexPath(row: index, section: 0)) as? CurrentPlayListTableViewCell
                 else {
                     return UITableViewCell()
                 }
-            
-                cell.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-                cell.selectedBackgroundView = bgView
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
         
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource){ ($0, $1) }
-            .map{ (indexPath, models) -> String in
-                return models[indexPath.row].key
+            .do(onNext: { [weak self] (indexPath, _) in
+                self?.tableView.deselectRow(at: indexPath, animated: true)
+                self?.loadingView.isHidden = false
+                self?.loadingIndicator.startAnimating()
+            })
+            .map{ (indexPath, model) -> String in
+                return model[indexPath.row].key
             }
             .bind(to: input.containSongWithKey)
             .disposed(by: disposeBag)
                 
         output.showToastMessage
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (text:String) in
                 guard let self = self else {return}
+                self.loadingView.isHidden = true
+                self.loadingIndicator.stopAnimating()
                 self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                 self.dismiss(animated: true)
@@ -136,6 +141,19 @@ extension ContainSongsViewController {
         indicator.type = .circleStrokeSpin
         indicator.color = DesignSystemAsset.PrimaryColor.point.color
         indicator.startAnimating()
+        
+        loadingView.isHidden = true
+        let loadingAttr = NSMutableAttributedString(
+            string: "처리 중입니다.",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5
+            ]
+        )
+        loadingDescriptionLabel.attributedText = loadingAttr
+        loadingIndicator.type = .circleStrokeSpin
+        loadingIndicator.color = UIColor.white
     }
 }
 
