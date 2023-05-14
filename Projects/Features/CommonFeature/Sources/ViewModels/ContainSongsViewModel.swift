@@ -11,6 +11,7 @@ import BaseFeature
 import RxRelay
 import DomainModule
 import RxSwift
+import ErrorModule
 
 public final class ContainSongsViewModel: ViewModelType {
     var fetchPlayListUseCase:FetchPlayListUseCase!
@@ -51,25 +52,30 @@ public final class ContainSongsViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.containSongWithKey
-            .flatMap({ [weak self] (key:String) -> Observable<AddSongEntity> in
+            .flatMap({ [weak self] (key: String) -> Observable<AddSongEntity> in
                 guard let self = self else {
                     return Observable.empty()
                 }
-                return self.addSongIntoPlayListUseCase.execute(key: key, songs: self.songs)
-                        .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
-                        .asObservable()
+                return self.addSongIntoPlayListUseCase
+                    .execute(key: key, songs: self.songs)
+                    .catchAndReturn(AddSongEntity(status: 400, added_songs_length: 0, duplicated: true))
+                    .asObservable()
             })
-            .map({ (entity:AddSongEntity) -> String in
-                if entity.status == 200 {
-                    if entity.duplicated {
-                        return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다. 중복 곡은 제외됩니다.")
+            .map{ (entity: AddSongEntity) -> String in
+                if entity.status == 400 {
+                    return WMError.unknown.localizedDescription
+                }else{
+                    if entity.status == 200 {
+                        if entity.duplicated {
+                            return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다. 중복 곡은 제외됩니다.")
+                        }else {
+                            return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다.")
+                        }
                     }else {
-                        return ("\(entity.added_songs_length)곡이 내 보관함에 담겼습니다.")
+                        return (" 이미 내 보관함에 담긴 곡들입니다.")
                     }
-                }else {
-                    return (" 이미 내 보관함에 담긴 곡들입니다.")
                 }
-            })
+            }
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)
         
