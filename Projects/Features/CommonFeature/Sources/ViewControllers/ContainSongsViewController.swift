@@ -13,24 +13,22 @@ import DesignSystem
 import RxSwift
 import NVActivityIndicatorView
 
-public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
-    
+public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard, LoadingAlertControllerType{
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
-    @IBOutlet weak var loadingView: UIView!
-    @IBOutlet weak var loadingIndicator: NVActivityIndicatorView!
-    @IBOutlet weak var loadingDescriptionLabel: UILabel!
     
+    public var alertController: UIAlertController!
     var multiPurposePopComponent : MultiPurposePopComponent!
-    var disposeBag = DisposeBag()
+    
     var viewModel:ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
+    var disposeBag = DisposeBag()
+
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public override func viewDidLoad() {
@@ -93,8 +91,7 @@ extension ContainSongsViewController {
             .withLatestFrom(output.dataSource){ ($0, $1) }
             .do(onNext: { [weak self] (indexPath, _) in
                 self?.tableView.deselectRow(at: indexPath, animated: true)
-                self?.loadingView.isHidden = false
-                self?.loadingIndicator.startAnimating()
+                self?.startLoading(message: "처리 중입니다.")
             })
             .map{ (indexPath, model) -> String in
                 return model[indexPath.row].key
@@ -106,11 +103,11 @@ extension ContainSongsViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (text:String) in
                 guard let self = self else {return}
-                self.loadingView.isHidden = true
-                self.loadingIndicator.stopAnimating()
                 self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                self.dismiss(animated: true)
+                self.stopLoading {
+                    self.dismiss(animated: true)
+                }
             })
             .disposed(by: disposeBag)
         
@@ -141,24 +138,10 @@ extension ContainSongsViewController {
         indicator.type = .circleStrokeSpin
         indicator.color = DesignSystemAsset.PrimaryColor.point.color
         indicator.startAnimating()
-        
-        loadingView.isHidden = true
-        let loadingAttr = NSMutableAttributedString(
-            string: "처리 중입니다.",
-            attributes: [
-                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                .kern: -0.5
-            ]
-        )
-        loadingDescriptionLabel.attributedText = loadingAttr
-        loadingIndicator.type = .circleStrokeSpin
-        loadingIndicator.color = UIColor.white
     }
 }
 
 extension ContainSongsViewController : UITableViewDelegate {
-    
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }

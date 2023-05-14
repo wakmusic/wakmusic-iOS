@@ -21,9 +21,11 @@ public extension LoadingAlertControllerType where Self: UIViewController {
         }
     }
     
-    func stopLoading() {
+    func stopLoading(completion: (() -> Void)? = nil) {
         DispatchQueue.main.async {
-            self.alertController.dismiss(animated: true)
+            self.alertController.dismiss(animated: true) {
+                completion?()
+            }
         }
     }
 }
