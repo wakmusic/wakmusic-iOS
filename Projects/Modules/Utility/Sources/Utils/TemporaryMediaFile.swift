@@ -14,7 +14,7 @@ public class TemporaryMediaFile {
 
     public init(withData: Data) {
         let directory = FileManager.default.temporaryDirectory
-        let fileName = "\(UUID().uuidString).mov"
+        let fileName = "\(UUID().uuidString)_\(Date().dateToString(format: "yyMMddHHmmss")).mov"
         let url = directory.appendingPathComponent(fileName)
         do {
             try withData.write(to: url)
