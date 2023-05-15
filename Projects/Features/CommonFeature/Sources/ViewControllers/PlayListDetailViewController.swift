@@ -439,8 +439,16 @@ extension PlayListDetailViewController:SongCartViewDelegate {
             self.input.state.accept(EditState(isEditing: false, force: true))
             
         case .remove:
-            self.startLoading(message: "처리 중입니다.")
-            self.input.tapRemoveSongs.onNext(())
+            let count: Int = output.songEntityOfSelectedSongs.value.count
+            let popup = TextPopupViewController.viewController(
+                text: "선택한 내 리스트 \(count)곡이 삭제됩니다.",
+                cancelButtonIsHidden: false,
+                completion: { [weak self] () in
+                guard let `self` = self else { return }
+                    self.startLoading(message: "처리 중입니다.")
+                    self.input.tapRemoveSongs.onNext(())
+            })
+            self.showPanModal(content: popup)
             self.input.allSongSelected.onNext(false)
             self.input.state.accept(EditState(isEditing: false, force: true))
         }
