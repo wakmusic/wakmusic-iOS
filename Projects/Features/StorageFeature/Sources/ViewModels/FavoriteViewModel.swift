@@ -21,6 +21,7 @@ public final class FavoriteViewModel:ViewModelType {
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     var editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase!
     var deleteFavoriteListUseCase: DeleteFavoriteListUseCase!
+    var tempDeleteLikeListIds: [String] = []
     
     public struct Input {
         let likeListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
@@ -199,15 +200,24 @@ public final class FavoriteViewModel:ViewModelType {
             .filter { !$0.isEmpty }
             .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
                 guard let `self` = self else { return Observable.empty() }
+                self.tempDeleteLikeListIds = ids
                 return self.deleteFavoriteListUseCase.execute(ids: ids)
                     .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
                     .asObservable()
             })
-            .do(onNext: { (model) in
+            .do(onNext: { [weak self] (model) in
+                guard let `self` = self else { return }
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedLikeLists.accept([])
                     output.showToast.accept("좋아요 리스트에서 삭제되었습니다.")
+                    
+                    //좋아요 삭제 시 > 노티피케이션
+                    let currentSongID: String = PlayState.shared.currentSong?.id ?? ""
+                    if self.tempDeleteLikeListIds.contains(currentSongID) {
+                        DEBUG_LOG("updateCurrentSongLikeState ID: \(currentSongID)")
+                        NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: currentSongID)
+                    }
                 }else{
                     output.showToast.accept(model.description)
                 }
