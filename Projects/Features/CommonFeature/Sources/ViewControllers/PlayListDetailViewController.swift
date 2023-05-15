@@ -300,6 +300,7 @@ extension PlayListDetailViewController{
                 guard let self = self else { return }
                 self.stopLoading()
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                self.input.state.accept(EditState(isEditing: false, force: true))
             })
             .disposed(by: disposeBag)
                 
@@ -449,8 +450,6 @@ extension PlayListDetailViewController:SongCartViewDelegate {
                     self.input.tapRemoveSongs.onNext(())
             })
             self.showPanModal(content: popup)
-            self.input.allSongSelected.onNext(false)
-            self.input.state.accept(EditState(isEditing: false, force: true))
         }
     }
 }
