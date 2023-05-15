@@ -2388,6 +2388,9 @@
                                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MQc-Dr-JVy">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                                                         </imageView>
+                                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pbG-FE-z6q">
+                                                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                                                                        </view>
                                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iJY-lk-YgJ">
                                                                                             <rect key="frame" x="24" y="24" width="32" height="32"/>
                                                                                             <constraints>
@@ -2408,14 +2411,19 @@
                                                                                         <constraint firstAttribute="trailing" secondItem="eAg-Gp-vAF" secondAttribute="trailing" constant="2" id="5GU-e5-ig3"/>
                                                                                         <constraint firstItem="eAg-Gp-vAF" firstAttribute="top" secondItem="SDM-uf-sdP" secondAttribute="top" constant="2" id="7Cd-wQ-XGk"/>
                                                                                         <constraint firstItem="iJY-lk-YgJ" firstAttribute="centerX" secondItem="SDM-uf-sdP" secondAttribute="centerX" id="7jv-Pt-Hyx"/>
+                                                                                        <constraint firstAttribute="bottom" secondItem="pbG-FE-z6q" secondAttribute="bottom" id="KRa-eY-HUt"/>
                                                                                         <constraint firstItem="iJY-lk-YgJ" firstAttribute="centerY" secondItem="SDM-uf-sdP" secondAttribute="centerY" id="ZFL-Uq-s6T"/>
+                                                                                        <constraint firstAttribute="trailing" secondItem="pbG-FE-z6q" secondAttribute="trailing" id="ZLo-5a-BN4"/>
+                                                                                        <constraint firstItem="pbG-FE-z6q" firstAttribute="top" secondItem="SDM-uf-sdP" secondAttribute="top" id="baD-tB-7ve"/>
                                                                                         <constraint firstAttribute="bottom" secondItem="MQc-Dr-JVy" secondAttribute="bottom" id="gLV-KE-FL5"/>
                                                                                         <constraint firstItem="MQc-Dr-JVy" firstAttribute="leading" secondItem="SDM-uf-sdP" secondAttribute="leading" id="iCo-EF-CTn"/>
+                                                                                        <constraint firstItem="pbG-FE-z6q" firstAttribute="leading" secondItem="SDM-uf-sdP" secondAttribute="leading" id="reo-lc-uDp"/>
                                                                                         <constraint firstAttribute="trailing" secondItem="MQc-Dr-JVy" secondAttribute="trailing" id="y8h-2O-5ih"/>
                                                                                     </constraints>
                                                                                 </collectionViewCellContentView>
                                                                                 <size key="customSize" width="80" height="80"/>
                                                                                 <connections>
+                                                                                    <outlet property="deemView" destination="pbG-FE-z6q" id="K0K-df-FaY"/>
                                                                                     <outlet property="deleteButton" destination="eAg-Gp-vAF" id="JHS-ic-XuI"/>
                                                                                     <outlet property="imageView" destination="MQc-Dr-JVy" id="J4Y-kX-2Di"/>
                                                                                     <outlet property="videoImageView" destination="iJY-lk-YgJ" id="APq-a1-cdd"/>

@@ -21,6 +21,7 @@ class BugReportCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var videoImageView: UIImageView!
+    @IBOutlet weak var deemView: UIView!
     
     @IBAction func removeAction(_ sender: Any) {
         self.delegate?.tapRemove(index: index)
@@ -49,12 +50,12 @@ extension BugReportCollectionViewCell {
         case .image(data: let data):
             imageView.image = UIImage(data: data)
             videoImageView.isHidden = true
-            contentView.backgroundColor = .clear
+            deemView.backgroundColor = UIColor.clear
             
         case let .video(data, _):
             imageView.image = data.extractThumbnail()
             videoImageView.isHidden = false
-            contentView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+            deemView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         }
     }
 }
