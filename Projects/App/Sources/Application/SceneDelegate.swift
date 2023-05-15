@@ -3,6 +3,7 @@ import RootFeature
 import Utility
 import NaverThirdPartyLogin
 import CommonFeature
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -28,13 +29,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
 
     }
+    
+    private var statePublisher: AnyCancellable?
+    
     func sceneWillEnterForeground(_ scene: UIScene) {
-
+        statePublisher?.cancel()
     }
     func sceneDidEnterBackground(_ scene: UIScene) {
         let isPlayed = PlayState.shared.state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            if isPlayed == .playing { PlayState.shared.play() }
+        statePublisher = PlayState.shared.$state.sink { state in
+            if state == .paused {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if isPlayed == .playing { PlayState.shared.play() }
+                }
+            }
         }
     }
     
