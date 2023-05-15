@@ -76,19 +76,21 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     //탭맨 페이지 변경 감지 함수
     public override func pageboyViewController(_ pageboyViewController: PageboyViewController, didScrollToPageAt index: TabmanViewController.PageIndex, direction: PageboyViewController.NavigationDirection, animated: Bool) {
         
-        guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
-            return
-        }
-        guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
-            return
-        }
-        
         let state = EditState(isEditing: false, force: true)
         
         if index == 0 {
+            guard let vc1 = self.viewControllers[0] as? MyPlayListViewController  else{
+                return
+            }
             vc1.output.state.accept(state) // 이제 돌아오는 곳을 편집 전 으로 , 이게 밑에 bindEditButtonVisable() 에 연관 됨
+            editButton.isHidden = (vc1.output.dataSource.value.first?.items ?? []).isEmpty
+
         }else {
+            guard let vc2 = self.viewControllers[1] as? FavoriteViewController  else{
+                return
+            }
             vc2.output.state.accept(state)
+            editButton.isHidden = (vc2.output.dataSource.value.first?.items ?? []).isEmpty
         }
         output.state.accept(state)
     }
