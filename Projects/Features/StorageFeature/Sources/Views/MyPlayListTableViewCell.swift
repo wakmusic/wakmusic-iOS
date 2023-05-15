@@ -63,7 +63,7 @@ extension MyPlayListTableViewCell {
         
         self.playListNameLabel.attributedText = getAttributedString(text: model.title, font: DesignSystemFontFamily.Pretendard.medium.font(size: 14))
         
-        self.playListCountLabel.attributedText = getAttributedString(text: "\(model.songlist.count)개", font:  DesignSystemFontFamily.Pretendard.light.font(size: 12))
+        self.playListCountLabel.attributedText = getAttributedString(text: "\(model.songlist.count)곡", font:  DesignSystemFontFamily.Pretendard.light.font(size: 12))
         
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear

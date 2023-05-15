@@ -29,7 +29,7 @@ extension PlaylistViewController: SongCartViewDelegate {
         case .remove:
             let count: Int = self.viewModel.countOfSelectedSongs
             let popup = TextPopupViewController.viewController(
-                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
+                text: "선택한 내 리스트 \(count)곡이 삭제됩니다.",
                 cancelButtonIsHidden: false,
                 completion: { [weak self] () in
                     guard let self else { return }

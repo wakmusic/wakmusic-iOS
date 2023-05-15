@@ -37,6 +37,6 @@ extension CurrentPlayListTableViewCell {
             placeholder: nil,
             options: [.transition(.fade(0.2))])
         self.playListNameLabel.text = model.title
-        self.playListCountLabel.text = "\(model.songlist.count)개"
+        self.playListCountLabel.text = "\(model.songlist.count)곡"
     }
 }
