@@ -45,15 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Realm register
         RealmManager.shared.register()
-        
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback)
-        } catch let error {
-            DEBUG_LOG(error.localizedDescription)
-        }
-        
-        
+
         return true
     }
     

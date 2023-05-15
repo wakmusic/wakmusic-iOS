@@ -43,6 +43,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>naversearchapp</string>
@@ -50,6 +52,69 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>[선택권한] 버그 제보 시 카메라 촬영을 하려면 권한 승인이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다.</string>
+	<key>Secrets</key>
+	<dict>
+		<key>BASE_IMAGE_URL</key>
+		<string>$(BASE_IMAGE_URL)</string>
+		<key>BASE_URL</key>
+		<string>$(BASE_URL)</string>
+		<key>GOOGLE_CLIENT_ID</key>
+		<string>$(GOOGLE_CLIENT_ID)</string>
+		<key>GOOGLE_SECRET_KEY</key>
+		<string>$(GOOGLE_SECRET_KEY)</string>
+		<key>GOOGLE_URL_SCHEME</key>
+		<string>$(GOOGLE_URL_SCHEME)</string>
+		<key>NAVER_APP_NAME</key>
+		<string>$(NAVER_APP_NAME)</string>
+		<key>NAVER_CONSUMER_KEY</key>
+		<string>$(NAVER_CONSUMER_KEY)</string>
+		<key>NAVER_CONSUMER_SECRET</key>
+		<string>$(NAVER_CONSUMER_SECRET)</string>
+		<key>NAVER_URL_SCHEME</key>
+		<string>$(NAVER_URL_SCHEME)</string>
+		<key>WAKENTER_BASE_URL</key>
+		<string>$(WAKENTER_BASE_URL)</string>
+		<key>WMDOMAIN_ARTIST</key>
+		<string>$(WMDOMAIN_ARTIST)</string>
+		<key>WMDOMAIN_AUTH</key>
+		<string>$(WMDOMAIN_AUTH)</string>
+		<key>WMDOMAIN_CHARTS</key>
+		<string>$(WMDOMAIN_CHARTS)</string>
+		<key>WMDOMAIN_IMAGE_ARTIST_ROUND</key>
+		<string>$(WMDOMAIN_IMAGE_ARTIST_ROUND)</string>
+		<key>WMDOMAIN_IMAGE_ARTIST_SQUARE</key>
+		<string>$(WMDOMAIN_IMAGE_ARTIST_SQUARE)</string>
+		<key>WMDOMAIN_IMAGE_NEWS</key>
+		<string>$(WMDOMAIN_IMAGE_NEWS)</string>
+		<key>WMDOMAIN_IMAGE_NOTICE</key>
+		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
+		<key>WMDOMAIN_IMAGE_PLAYLIST</key>
+		<string>$(WMDOMAIN_IMAGE_PLAYLIST)</string>
+		<key>WMDOMAIN_IMAGE_PROFILE</key>
+		<string>$(WMDOMAIN_IMAGE_PROFILE)</string>
+		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND</key>
+		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
+		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE</key>
+		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
+		<key>WMDOMAIN_LIKE</key>
+		<string>$(WMDOMAIN_LIKE)</string>
+		<key>WMDOMAIN_NOTICE</key>
+		<string>$(WMDOMAIN_NOTICE)</string>
+		<key>WMDOMAIN_PLAYLIST</key>
+		<string>$(WMDOMAIN_PLAYLIST)</string>
+		<key>WMDOMAIN_QNA</key>
+		<string>$(WMDOMAIN_QNA)</string>
+		<key>WMDOMAIN_SONGS</key>
+		<string>$(WMDOMAIN_SONGS)</string>
+		<key>WMDOMAIN_SUGGEST</key>
+		<string>$(WMDOMAIN_SUGGEST)</string>
+		<key>WMDOMAIN_USER</key>
+		<string>$(WMDOMAIN_USER)</string>
+	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -70,9 +135,7 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
+	<array/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -92,70 +155,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>NSCameraUsageDescription</key>
-	<string>[선택권한] 버그 제보 시 카메라 촬영을 하려면 권한 승인이 필요합니다.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다.</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>Secrets</key>
-	<dict>
-		<key>NAVER_CONSUMER_KEY</key>
-		<string>$(NAVER_CONSUMER_KEY)</string>
-		<key>NAVER_URL_SCHEME</key>
-		<string>$(NAVER_URL_SCHEME)</string>
-		<key>NAVER_CONSUMER_SECRET</key>
-		<string>$(NAVER_CONSUMER_SECRET)</string>
-		<key>NAVER_APP_NAME</key>
-		<string>$(NAVER_APP_NAME)</string>
-		<key>GOOGLE_URL_SCHEME</key>
-		<string>$(GOOGLE_URL_SCHEME)</string>
-		<key>GOOGLE_CLIENT_ID</key>
-		<string>$(GOOGLE_CLIENT_ID)</string>
-		<key>GOOGLE_SECRET_KEY</key>
-		<string>$(GOOGLE_SECRET_KEY)</string>
-		<key>BASE_URL</key>
-		<string>$(BASE_URL)</string>
-		<key>BASE_IMAGE_URL</key>
-		<string>$(BASE_IMAGE_URL)</string>
-		<key>WMDOMAIN_AUTH</key>
-		<string>$(WMDOMAIN_AUTH)</string>
-		<key>WMDOMAIN_CHARTS</key>
-		<string>$(WMDOMAIN_CHARTS)</string>
-		<key>WMDOMAIN_SONGS</key>
-		<string>$(WMDOMAIN_SONGS)</string>
-		<key>WMDOMAIN_ARTIST</key>
-		<string>$(WMDOMAIN_ARTIST)</string>
-		<key>WMDOMAIN_USER</key>
-		<string>$(WMDOMAIN_USER)</string>
-		<key>WMDOMAIN_PLAYLIST</key>
-		<string>$(WMDOMAIN_PLAYLIST)</string>
-		<key>WMDOMAIN_LIKE</key>
-		<string>$(WMDOMAIN_LIKE)</string>
-		<key>WMDOMAIN_QNA</key>
-		<string>$(WMDOMAIN_QNA)</string>
-		<key>WMDOMAIN_NOTICE</key>
-		<string>$(WMDOMAIN_NOTICE)</string>
-		<key>WMDOMAIN_SUGGEST</key>
-		<string>$(WMDOMAIN_SUGGEST)</string>
-		<key>WMDOMAIN_IMAGE_NEWS</key>
-		<string>$(WMDOMAIN_IMAGE_NEWS)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_SQUARE)</string>
-		<key>WMDOMAIN_IMAGE_PROFILE</key>
-		<string>$(WMDOMAIN_IMAGE_PROFILE)</string>
-		<key>WMDOMAIN_IMAGE_PLAYLIST</key>
-		<string>$(WMDOMAIN_IMAGE_PLAYLIST)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_NOTICE</key>
-		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
-		<key>WAKENTER_BASE_URL</key>
-		<string>$(WAKENTER_BASE_URL)</string>
-	</dict>
 </dict>
 </plist>
