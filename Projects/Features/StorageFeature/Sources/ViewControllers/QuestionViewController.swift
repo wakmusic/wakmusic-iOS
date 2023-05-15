@@ -83,20 +83,31 @@ extension QuestionViewController {
     private func configureUI(){
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.titleLabel.text = "문의하기"
+        self.titleLabel.setLineSpacing(kernValue: -0.5)
+
         self.closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         self.descriptionLabel.text = "어떤 것 관련해서 문의주셨나요?"
         self.descriptionLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 20)
         self.descriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
+        self.descriptionLabel.setLineSpacing(kernValue: -0.5)
+
         self.nextButton.layer.cornerRadius = 12
         self.nextButton.clipsToBounds = true
         self.nextButton.isEnabled = false
         self.nextButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         self.nextButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
-        self.nextButton.setAttributedTitle(NSMutableAttributedString(string:"다음",
-                                                                     attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        self.nextButton.setAttributedTitle(
+            NSMutableAttributedString(
+                string: "다음",
+                attributes: [
+                    .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                    .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                    .kern: -0.5
+                ]
+            ), for: .normal
+        )
             
         let superViews:[UIView] = [self.bugReportSuperView,
                                    self.suggestFunctionSuperView,
@@ -139,9 +150,16 @@ extension QuestionViewController {
                 return
             }
             
-            buttons[i].setAttributedTitle(NSMutableAttributedString(string:title,
-                                                                    attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
-                                                                                 .foregroundColor: unSelectedTextColor ]), for: .normal)
+            buttons[i].setAttributedTitle(
+                NSMutableAttributedString(
+                    string:title,
+                    attributes: [
+                        .font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
+                        .foregroundColor: unSelectedTextColor,
+                        .kern: -0.5
+                    ]
+                ), for: .normal
+            )
         }
     }
     
@@ -208,10 +226,10 @@ extension QuestionViewController {
                         attributes: [
                             .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
                                 DesignSystemFontFamily.Pretendard.light.font(size: 16),
-                            .foregroundColor: i == index ? self.selectedColor : self.unSelectedTextColor
+                            .foregroundColor: i == index ? self.selectedColor : self.unSelectedTextColor,
+                            .kern: -0.5
                         ]
-                    ),
-                    for: .normal
+                    ), for: .normal
                 )
                 imageViews[i].isHidden = i == index ? false : true
                 superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
