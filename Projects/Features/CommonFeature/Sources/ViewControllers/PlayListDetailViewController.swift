@@ -308,9 +308,22 @@ extension PlayListDetailViewController{
            .withLatestFrom(output.dataSource) { ($0, $1) }
            .withLatestFrom(input.state) { ($0.0, $0.1, $1) }
            .filter { $0.2.isEditing == false }
-           .subscribe(onNext: { (indexPath, dataSource, _) in
-               let song: SongEntity = dataSource[indexPath.section].items[indexPath.row]
-               PlayState.shared.loadAndAppendSongsToPlaylist([song])
+           .subscribe(onNext: { [weak self] (indexPath, dataSource, _) in
+               guard let self else {return}
+               
+               guard let type = self.viewModel.type  else {
+                   return
+               }
+               
+               switch type {
+                   
+               case .custom:
+                   let song:SongEntity = dataSource[indexPath.section].items[indexPath.row]
+                   playState.loadAndAppendSongsToPlaylist([song])
+               case .wmRecommend:
+                   input.songTapped.onNext(indexPath.row)
+               }
+               
            })
            .disposed(by: disposeBag)
 
