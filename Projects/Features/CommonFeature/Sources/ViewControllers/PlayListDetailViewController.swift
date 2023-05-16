@@ -248,20 +248,37 @@ extension PlayListDetailViewController{
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
+            
+                let type = self.viewModel.type ?? .wmRecommend
                 
-                if state.isEditing == false && state.force == false {
-                    self.input.runEditing.onNext(())
+                
+                switch type {
+                    
+                case .custom:
+                    if state.isEditing == false && state.force == false {
+                        self.input.runEditing.onNext(())
+                    }
+                    
+                    let isEdit = state.isEditing
+                    self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
+                    
+                    self.moreButton.isHidden = isEdit
+                    self.completeButton.isHidden = !isEdit
+                    self.editStateLabel.isHidden = !isEdit
+                    
+                    self.tableView.setEditing(isEdit, animated: true)
+                    self.tableView.reloadData()
+                case .wmRecommend:
+                    self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+                    
+                    self.moreButton.isHidden = true
+                    self.completeButton.isHidden = true
+                    self.editStateLabel.isHidden = true
+                    
                 }
                 
-                let isEdit = state.isEditing
-                self.navigationController?.interactivePopGestureRecognizer?.delegate = isEdit ? self : nil
                 
-                self.moreButton.isHidden = isEdit
-                self.completeButton.isHidden = !isEdit
-                self.editStateLabel.isHidden = !isEdit
                 
-                self.tableView.setEditing(isEdit, animated: true)
-                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
                 
