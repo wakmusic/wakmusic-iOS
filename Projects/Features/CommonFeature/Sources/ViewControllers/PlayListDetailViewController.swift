@@ -320,6 +320,14 @@ extension PlayListDetailViewController{
                 self.playState.loadAndAppendSongsToPlaylist(songs)
             })
             .disposed(by: disposeBag)
+        
+        Utility.PreferenceManager.$startPage
+            .skip(1)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else {return}
+                self.input.allSongSelected.onNext(false)
+                self.input.state.accept(EditState(isEditing: false, force: true))
+            }).disposed(by: disposeBag)
     }
     
     private func bindSelectedEvent() {
