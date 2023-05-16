@@ -213,11 +213,11 @@ public final class FavoriteViewModel:ViewModelType {
                     output.showToast.accept("좋아요 리스트에서 삭제되었습니다.")
                     
                     //좋아요 삭제 시 > 노티피케이션
-                    let currentSong: SongEntity? = PlayState.shared.currentSong
-                    let currentSongID: String = currentSong?.id ?? ""
+                    guard let currentSong: SongEntity = PlayState.shared.currentSong else { return }
+                    let currentSongID: String = currentSong.id
                     if self.tempDeleteLikeListIds.contains(currentSongID) {
                         DEBUG_LOG("updateCurrentSongLikeState ID: \(currentSongID)")
-                        NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: nil)
+                        NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: currentSong)
                     }
                 }else{
                     output.showToast.accept(model.description)
