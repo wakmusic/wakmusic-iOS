@@ -94,6 +94,7 @@ final class PlayerViewModel: ViewModelType {
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
         bindLoginStateChanged(output: output)
+        bindCurrentSongLikeStateChanged(output: output)
         
         return output
     }
@@ -224,6 +225,18 @@ final class PlayerViewModel: ViewModelType {
                 self?.fetchLikeState(for: song, output: output)
             }
         }.store(in: &subscription)
+    }
+    
+    private func bindCurrentSongLikeStateChanged(output: Output) {
+        NotificationCenter.default.publisher(for: .updateCurrentSongLikeState, object: nil)
+            .compactMap { notification in
+                return notification.object as? SongEntity
+            }
+            .sink { [weak self] currentSong in
+                guard let self else { return }
+                self.fetchLikeCount(for: currentSong, output: output)
+                self.fetchLikeState(for: currentSong, output: output)
+            }.store(in: &subscription)
     }
     
     private func bindProgress(output: Output) {
