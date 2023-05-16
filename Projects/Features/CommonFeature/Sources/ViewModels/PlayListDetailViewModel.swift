@@ -14,6 +14,7 @@ import DomainModule
 import DataMappingModule
 import Utility
 import ErrorModule
+import RxCocoa
 
 struct PlayListHeaderInfo {
     var title:String
@@ -33,8 +34,7 @@ public final class PlayListDetailViewModel: ViewModelType {
 
     public struct Input {
         let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let sourceIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
-        let destIndexPath: BehaviorRelay<IndexPath> = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
         let playListNameLoad: BehaviorRelay<String> = BehaviorRelay(value: "")
         let cancelEdit: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
@@ -201,12 +201,10 @@ public final class PlayListDetailViewModel: ViewModelType {
                 NotificationCenter.default.post(name: .playListRefresh, object: nil)
             }).disposed(by: disposeBag)
 
-        input.sourceIndexPath
-            .skip(1)
-            .withLatestFrom(input.destIndexPath){ ($0,$1)}
-            .subscribe(onNext: {
-                let source = $0.row
-                let dest =   $1.row
+        input.itemMoved
+            .subscribe(onNext: { (itemMovedEvent) in
+                let source = itemMovedEvent.sourceIndex.row
+                let dest = itemMovedEvent.destinationIndex.row
                 var curr = output.dataSource.value.first?.items ?? []
                 let tmp = curr[source]
                 

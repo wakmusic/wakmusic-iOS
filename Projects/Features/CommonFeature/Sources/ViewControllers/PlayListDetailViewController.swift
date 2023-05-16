@@ -178,16 +178,13 @@ extension PlayListDetailViewController{
         let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(configureCell: { [weak self] (_, tableView, indexPath, model) -> UITableViewCell in
             guard let self = self else { return UITableViewCell() }
 
-
             switch self.viewModel.type {
                 
             case .custom:
-                
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayListTableViewCell", for: IndexPath(row: indexPath.row, section: 0)) as? PlayListTableViewCell else{
                     return UITableViewCell()
                 }
-                
-                cell.update(model,self.input.state.value.isEditing,index: indexPath.row)
+                cell.update(model,self.input.state.value.isEditing, index: indexPath.row)
                 cell.delegate = self
                 return cell
                 
@@ -195,10 +192,9 @@ extension PlayListDetailViewController{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: IndexPath(row: indexPath.row, section: 0)) as? SongListCell else{
                     return UITableViewCell()
                 }
-                
                 cell.update(model)
-                
                 return cell
+                
             case .none:
                 return UITableViewCell()
             }
@@ -236,24 +232,17 @@ extension PlayListDetailViewController{
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
                 
-        tableView.rx.itemMoved.asObservable()
-            .subscribe(onNext: { [weak self] (sourceIndexPath, destinationIndexPath) in
-                guard let `self` = self else { return }
-
-                self.input.destIndexPath.accept(destinationIndexPath)
-                self.input.sourceIndexPath.accept(sourceIndexPath)
-            }).disposed(by: disposeBag)
+        tableView.rx.itemMoved
+            .bind(to: input.itemMoved)
+            .disposed(by: disposeBag)
         
         input.state
             .skip(1)
             .subscribe(onNext: { [weak self] (state) in
                 guard let self = self else { return }
-            
                 let type = self.viewModel.type ?? .wmRecommend
                 
-                
                 switch type {
-                    
                 case .custom:
                     if state.isEditing == false && state.force == false {
                         self.input.runEditing.onNext(())
@@ -268,17 +257,13 @@ extension PlayListDetailViewController{
                     
                     self.tableView.setEditing(isEdit, animated: true)
                     self.tableView.reloadData()
+                    
                 case .wmRecommend:
                     self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-                    
                     self.moreButton.isHidden = true
                     self.completeButton.isHidden = true
                     self.editStateLabel.isHidden = true
-                    
                 }
-                
-                
-                
             })
             .disposed(by: disposeBag)
                 
