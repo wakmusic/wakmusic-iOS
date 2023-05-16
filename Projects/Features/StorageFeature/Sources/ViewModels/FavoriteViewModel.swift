@@ -207,9 +207,10 @@ public final class FavoriteViewModel:ViewModelType {
             })
             .do(onNext: { [weak self] (model) in
                 guard let `self` = self else { return }
+                output.state.accept(EditState(isEditing: false, force: true))
+                output.indexPathOfSelectedLikeLists.accept([])
+
                 if model.status == 200 {
-                    output.state.accept(EditState(isEditing: false, force: true))
-                    output.indexPathOfSelectedLikeLists.accept([])
                     output.showToast.accept("좋아요 리스트에서 삭제되었습니다.")
                     
                     //좋아요 삭제 시 > 노티피케이션
