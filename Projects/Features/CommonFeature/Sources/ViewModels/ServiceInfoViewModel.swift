@@ -93,14 +93,12 @@ extension ServiceInfoViewModel {
             case .success(let size):
                 let sizeString = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
                 completionHandler(.success(sizeString))
-
             case let .failure(error):
                 completionHandler(.failure(error))
             }
         }
     }
 }
-
 
 public struct ServiceInfoGroup {
     let identifier: ServiceInfoGroup.Identifier
@@ -116,7 +114,6 @@ extension ServiceInfoGroup{
         case onlyTitle
         case detailTitle
     }
-    
     public enum Identifier: String{
         case termsOfUse = "서비스 이용약관"
         case privacy = "개인정보 처리방침"

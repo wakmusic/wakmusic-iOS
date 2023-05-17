@@ -1188,8 +1188,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xyq-VH-SS9">
-                                                    <rect key="frame" x="20.000000000000004" y="0.0" width="41.333333333333343" height="60"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xyq-VH-SS9">
+                                                    <rect key="frame" x="20" y="0.0" width="279.66666666666669" height="60"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1223,6 +1223,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="Pxh-kD-HQp" firstAttribute="leading" secondItem="Xyq-VH-SS9" secondAttribute="trailing" constant="10" id="3uE-iv-dzO"/>
                                                 <constraint firstItem="Xyq-VH-SS9" firstAttribute="leading" secondItem="DhJ-ns-XE6" secondAttribute="leading" constant="20" id="EGZ-0S-fxq"/>
                                                 <constraint firstItem="Xyq-VH-SS9" firstAttribute="top" secondItem="DhJ-ns-XE6" secondAttribute="top" id="FGX-Fb-Sfl"/>
                                                 <constraint firstAttribute="bottom" secondItem="Pxh-kD-HQp" secondAttribute="bottom" id="KYi-Tp-qfO"/>
