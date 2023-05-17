@@ -94,7 +94,7 @@ extension ServiceInfoViewController {
             .withUnretained(self)
             .subscribe(onNext: { (owner, sizeString) in
                 let popup = TextPopupViewController.viewController(
-                    text: "정말 캐시 데이터(\(sizeString))를 지우시겠습니까?",
+                    text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     completion: {
                         owner.viewModel.input.removeCache.onNext(())
