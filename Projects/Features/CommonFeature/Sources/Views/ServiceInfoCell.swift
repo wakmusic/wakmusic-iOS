@@ -37,5 +37,6 @@ extension ServiceInfoCell{
         subTitleStringLabel.text = model.subName
         arrowImageView.isHidden = model.accessoryType == .onlyTitle
         stackViewTrailingConstraint.constant = (model.accessoryType == .onlyTitle) ? 24 : 18
+        selectionStyle = (model.identifier == .versionInfomation) ? .none : .default
     }
 }
