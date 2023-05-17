@@ -54,11 +54,6 @@ public final class OpenSourceLicenseViewModel {
                 link: "https://github.com/RxSwiftCommunity/RxKeyboard.git"
             ),
             OpenSourceLicense(
-                title: "RxKeyboard",
-                description: "The MIT License\nCopyright (c) 2016 Suyeol Jeon (xoul.kr)",
-                link: "https://github.com/RxSwiftCommunity/RxKeyboard.git"
-            ),
-            OpenSourceLicense(
                 title: "PanModal",
                 description: "The MIT License\nCopyright © 2018 Tiny Speck, Inc.",
                 link: "https://github.com/slackhq/PanModal.git"
