@@ -415,6 +415,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var noticeComponent: NoticeComponent {
         return appComponent.noticeComponent
     }
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -687,6 +690,17 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OpenSourceLicenseComponent
+private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
+}
 private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
 
 
@@ -785,6 +799,7 @@ extension AppComponent: Registration {
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
         localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
+        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { self.openSourceLicenseComponent as Any }
         localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
         localTable["noticeComponent-NoticeComponent"] = { self.noticeComponent as Any }
         localTable["noticeDetailComponent-NoticeDetailComponent"] = { self.noticeDetailComponent as Any }
@@ -957,6 +972,7 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\RequestDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
     }
 }
 extension NoticeDetailComponent: Registration {
@@ -1060,6 +1076,11 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
+extension OpenSourceLicenseComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension NoticePopupComponent: Registration {
     public func registerItems() {
 
@@ -1124,6 +1145,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }

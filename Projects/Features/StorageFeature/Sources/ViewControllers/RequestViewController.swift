@@ -93,9 +93,11 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     var questionComponent:QuestionComponent!
     var containSongsComponent: ContainSongsComponent!
     var noticeComponent: NoticeComponent!
+    var openSourceLicenseComponent: OpenSourceLicenseComponent!
     
     var disposeBag = DisposeBag()
-    
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -112,7 +114,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         qnaComponent: QnaComponent,
         questionComponent: QuestionComponent,
         containSongsComponent: ContainSongsComponent,
-        noticeComponent: NoticeComponent
+        noticeComponent: NoticeComponent,
+        openSourceLicenseComponent: OpenSourceLicenseComponent
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -120,6 +123,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewController.questionComponent = questionComponent
         viewController.containSongsComponent = containSongsComponent
         viewController.noticeComponent = noticeComponent
+        viewController.openSourceLicenseComponent = openSourceLicenseComponent
         return viewController
     }
 }
@@ -153,7 +157,7 @@ extension RequestViewController{
                 return
             }
             
-            var attr:NSAttributedString = NSAttributedString(
+            let attr: NSAttributedString = NSAttributedString(
                 string: title,
                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
                              .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
@@ -225,5 +229,12 @@ extension RequestViewController{
             self.showPanModal(content: withdrawVc)
         })
         .disposed(by: disposeBag)
+        
+        licenseButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let openSource = owner.openSourceLicenseComponent.makeView()
+                owner.navigationController?.pushViewController(openSource, animated: true)
+            }).disposed(by: disposeBag)
     }
 }

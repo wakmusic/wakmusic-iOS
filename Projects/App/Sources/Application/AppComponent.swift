@@ -4,6 +4,7 @@ import NeedleFoundation
 import PlayerFeature
 import RootFeature
 import MainTabFeature
+import CommonFeature
 import KeychainModule
 
 public final class AppComponent: BootstrapComponent {
@@ -51,5 +52,12 @@ public extension AppComponent {
     
     var playlistComponent: PlaylistComponent {
         PlaylistComponent(parent: self)
+    }
+}
+
+// MARK: - ETC
+public extension AppComponent {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        OpenSourceLicenseComponent(parent: self)
     }
 }
