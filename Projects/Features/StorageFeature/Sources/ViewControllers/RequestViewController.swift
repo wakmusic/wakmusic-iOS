@@ -29,6 +29,10 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var noticeButton: UIButton!
     @IBOutlet weak var noticeImageView: UIImageView!
     
+    @IBOutlet weak var licenseSuperView: UIView!
+    @IBOutlet weak var licenseButton: UIButton!
+    @IBOutlet weak var licenseImageView: UIImageView!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -126,9 +130,9 @@ extension RequestViewController{
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton]
-        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView]
-        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView]
+        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.licenseButton]
+        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.licenseSuperView]
+        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView, self.licenseImageView]
         
         for i in 0..<buttons.count {
             var title = ""
@@ -142,6 +146,9 @@ extension RequestViewController{
             case 2:
                 title = "공지사항"
                 imageViews[i].image = DesignSystemAsset.Storage.notice.image
+            case 3:
+                title = "오픈소스 라이선스"
+                imageViews[i].image = DesignSystemAsset.Storage.qna.image
             default:
                 return
             }
