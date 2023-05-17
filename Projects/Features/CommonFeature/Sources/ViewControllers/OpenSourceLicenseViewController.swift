@@ -51,7 +51,7 @@ extension OpenSourceLicenseViewController{
             .subscribe(onNext: { (owner, indexPath, dataSource) in
                 owner.tableView.deselectRow(at: indexPath, animated: true)
                 let model = dataSource[indexPath.row]
-                guard model.clickable, let URL = URL(string: model.link) else { return }
+                guard let URL = URL(string: model.link) else { return }
                 let safari = SFSafariViewController(url: URL)
                 owner.present(safari, animated: true)
             }).disposed(by: disposeBag)
@@ -61,14 +61,26 @@ extension OpenSourceLicenseViewController{
         viewModel.output
             .dataSource
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "OpenSourceLicenseCell",
-                    for: IndexPath(row: index, section: 0)
-                ) as? OpenSourceLicenseCell else{
-                    return UITableViewCell()
+                switch model.type {
+                case .library:
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: "OpenSourceLibraryCell",
+                        for: IndexPath(row: index, section: 0)
+                    ) as? OpenSourceLibraryCell else{
+                        return UITableViewCell()
+                    }
+                    cell.update(model: model)
+                    return cell
+                case .license:
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: "OpenSourceLicenseCell",
+                        for: IndexPath(row: index, section: 0)
+                    ) as? OpenSourceLicenseCell else{
+                        return UITableViewCell()
+                    }
+                    cell.update(model: model)
+                    return cell
                 }
-                cell.update(model: model)
-                return cell
             }.disposed(by: disposeBag)
     }
     
@@ -83,7 +95,13 @@ extension OpenSourceLicenseViewController{
 
 extension OpenSourceLicenseViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        let model = viewModel.output.dataSource.value[indexPath.row]
+        switch model.type {
+        case .library:
+            return OpenSourceLibraryCell.getCellHeight(model: model)
+        case .license:
+            return OpenSourceLicenseCell.getCellHeight(model: model)
+        }
     }
 }
 

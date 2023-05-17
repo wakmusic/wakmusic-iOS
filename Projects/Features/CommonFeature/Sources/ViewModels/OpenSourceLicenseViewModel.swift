@@ -145,11 +145,10 @@ public final class OpenSourceLicenseViewModel {
             switch result {
             case .success(let contents):
                 let apacheLicense = OpenSourceLicense(
-                    title: "[License]\n\nApache License 2.0",
+                    type: .license,
+                    title: "Apache License 2.0",
                     description: contents,
-                    link: "",
-                    showTopLine: true,
-                    clickable: false
+                    link: ""
                 )
                 dataSource.append(apacheLicense)
 
@@ -158,11 +157,10 @@ public final class OpenSourceLicenseViewModel {
                     switch result {
                     case .success(let contents):
                         let mitLicense = OpenSourceLicense(
+                            type: .license,
                             title: "MIT License (MIT)",
                             description: contents,
-                            link: "",
-                            showTopLine: true,
-                            clickable: false
+                            link: ""
                         )
                         dataSource.append(mitLicense)
                         self.output.dataSource.accept(dataSource)
@@ -196,10 +194,14 @@ extension OpenSourceLicenseViewModel {
     }
 }
 
+public enum OpenSourceLicenseType {
+    case library
+    case license
+}
+
 public struct OpenSourceLicense {
+    public var type: OpenSourceLicenseType = .library
     public let title: String
     public let description: String
     public let link: String
-    public var showTopLine: Bool = false
-    public var clickable: Bool = true
 }
