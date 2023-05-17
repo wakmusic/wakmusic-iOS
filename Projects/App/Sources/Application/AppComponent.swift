@@ -4,7 +4,9 @@ import NeedleFoundation
 import PlayerFeature
 import RootFeature
 import MainTabFeature
+import CommonFeature
 import KeychainModule
+import StorageFeature
 
 public final class AppComponent: BootstrapComponent {
     public func makeRootView() -> IntroViewController {
@@ -51,5 +53,15 @@ public extension AppComponent {
     
     var playlistComponent: PlaylistComponent {
         PlaylistComponent(parent: self)
+    }
+}
+
+// MARK: - ETC
+public extension AppComponent {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        OpenSourceLicenseComponent(parent: self)
+    }
+    var serviceInfoComponent: ServiceInfoComponent {
+        ServiceInfoComponent(parent: self)
     }
 }

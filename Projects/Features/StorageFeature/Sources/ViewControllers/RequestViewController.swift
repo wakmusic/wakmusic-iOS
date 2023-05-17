@@ -29,13 +29,14 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var noticeButton: UIButton!
     @IBOutlet weak var noticeImageView: UIImageView!
     
+    @IBOutlet weak var serviceSuperView: UIView!
+    @IBOutlet weak var serviceButton: UIButton!
+    @IBOutlet weak var serviceImageView: UIImageView!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var serviceButton: UIButton!
-    @IBOutlet weak var privacyButton: UIButton!
-    @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var withdrawButton: UIButton!
     
     @IBAction func pressBackAction(_ sender: UIButton) {
@@ -49,7 +50,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     @IBAction func moveQuestionAction(_ sender: Any) {
         let vc =  questionComponent.makeView().wrapNavigationController
-        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
+        vc.modalPresentationStyle = .overFullScreen 
         self.present(vc, animated: true)
     }
     
@@ -69,18 +70,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         self.showPanModal(content: firstConfirmVc)
     }
     
-    @IBAction func pressServiceAction(_ sender: UIButton) {
-        let vc = ContractViewController.viewController(type: .service)
-        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
-        self.present(vc, animated: true)
-    }
-    
-    @IBAction func pressPrivacyAction(_ sender: UIButton) {
-        let vc = ContractViewController.viewController(type: .privacy)
-        vc.modalPresentationStyle = .overFullScreen //꽉찬 모달
-        self.present(vc, animated: true)
-    }
-    
     var viewModel:RequestViewModel!
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -89,9 +78,11 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     var questionComponent:QuestionComponent!
     var containSongsComponent: ContainSongsComponent!
     var noticeComponent: NoticeComponent!
+    var serviceInfoComponent: ServiceInfoComponent!
     
     var disposeBag = DisposeBag()
-    
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -108,7 +99,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         qnaComponent: QnaComponent,
         questionComponent: QuestionComponent,
         containSongsComponent: ContainSongsComponent,
-        noticeComponent: NoticeComponent
+        noticeComponent: NoticeComponent,
+        serviceInfoComponent: ServiceInfoComponent
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -116,6 +108,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewController.questionComponent = questionComponent
         viewController.containSongsComponent = containSongsComponent
         viewController.noticeComponent = noticeComponent
+        viewController.serviceInfoComponent = serviceInfoComponent
         return viewController
     }
 }
@@ -126,9 +119,9 @@ extension RequestViewController{
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton]
-        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView]
-        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView]
+        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.serviceButton]
+        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.serviceSuperView]
+        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView, self.serviceImageView]
         
         for i in 0..<buttons.count {
             var title = ""
@@ -142,11 +135,14 @@ extension RequestViewController{
             case 2:
                 title = "공지사항"
                 imageViews[i].image = DesignSystemAsset.Storage.notice.image
+            case 3:
+                title = "서비스 정보"
+                imageViews[i].image = DesignSystemAsset.Storage.document.image
             default:
                 return
             }
             
-            var attr:NSAttributedString = NSAttributedString(
+            let attr: NSAttributedString = NSAttributedString(
                 string: title,
                 attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
                              .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
@@ -162,29 +158,6 @@ extension RequestViewController{
         dotLabel.layer.cornerRadius = 2
         dotLabel.clipsToBounds = true
         descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        
-        let serviceAttributedString = NSMutableAttributedString.init(string: "서비스 이용약관")
-        serviceAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                                               .kern: -0.5], range: NSRange(location: 0, length: serviceAttributedString.string.count))
-        
-        let privacyAttributedString = NSMutableAttributedString.init(string: "개인정보처리방침")
-        privacyAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                               .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                                               .kern: -0.5], range: NSRange(location: 0, length: privacyAttributedString.string.count))
-        
-        privacyButton.layer.cornerRadius = 8
-        privacyButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
-        privacyButton.layer.borderWidth = 1
-        privacyButton.setAttributedTitle(privacyAttributedString, for: .normal)
-        
-        serviceButton.layer.cornerRadius = 8
-        serviceButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
-        serviceButton.layer.borderWidth = 1
-        serviceButton.setAttributedTitle(serviceAttributedString, for: .normal)
-        
-        versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        versionLabel.text = "버전정보 \(APP_VERSION())"
         
         let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
         withDrawAttributedString.addAttributes(
@@ -218,5 +191,12 @@ extension RequestViewController{
             self.showPanModal(content: withdrawVc)
         })
         .disposed(by: disposeBag)
+        
+        serviceButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let viewController = owner.serviceInfoComponent.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }).disposed(by: disposeBag)
     }
 }

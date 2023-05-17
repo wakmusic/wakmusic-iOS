@@ -415,6 +415,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var noticeComponent: NoticeComponent {
         return appComponent.noticeComponent
     }
+    var serviceInfoComponent: ServiceInfoComponent {
+        return appComponent.serviceInfoComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -640,6 +643,19 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
 private func factory4d4f4455414271fee232f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ContainSongsDependencydbd9ae8a072db3a22630Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ServiceInfoComponent
+private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurposePopDependency {
     var createPlayListUseCase: any CreatePlayListUseCase {
         return appComponent.createPlayListUseCase
@@ -686,6 +702,17 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 /// ^->AppComponent->PlayListDetailComponent
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OpenSourceLicenseComponent
+private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
 }
 private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
 
@@ -785,6 +812,8 @@ extension AppComponent: Registration {
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
         localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
+        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { self.openSourceLicenseComponent as Any }
+        localTable["serviceInfoComponent-ServiceInfoComponent"] = { self.serviceInfoComponent as Any }
         localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
         localTable["noticeComponent-NoticeComponent"] = { self.noticeComponent as Any }
         localTable["noticeDetailComponent-NoticeDetailComponent"] = { self.noticeDetailComponent as Any }
@@ -957,6 +986,7 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
     }
 }
 extension NoticeDetailComponent: Registration {
@@ -1043,6 +1073,11 @@ extension ContainSongsComponent: Registration {
         keyPathToName[\ContainSongsDependency.addSongIntoPlayListUseCase] = "addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"
     }
 }
+extension ServiceInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+    }
+}
 extension MultiPurposePopComponent: Registration {
     public func registerItems() {
         keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
@@ -1058,6 +1093,11 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+    }
+}
+extension OpenSourceLicenseComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension NoticePopupComponent: Registration {
@@ -1122,8 +1162,10 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }

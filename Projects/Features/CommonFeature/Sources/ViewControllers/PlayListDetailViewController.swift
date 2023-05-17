@@ -280,8 +280,11 @@ extension PlayListDetailViewController{
                 }
                 let type = self.viewModel.type
                 
-                self.playListImage.kf.setImage(with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,placeholder: nil,completionHandler: { _ in
-                })
+                self.playListImage.kf.setImage(
+                    with: type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image,version: model.version).toURL : WMImageAPI.fetchPlayList(id: model.image,version: model.version).toURL,
+                    placeholder: nil,
+                    options: [.transition(.fade(0.2))]
+                )
                 self.playListCountLabel.text = model.songCount
                 self.playListNameLabel.text = model.title
                 self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)

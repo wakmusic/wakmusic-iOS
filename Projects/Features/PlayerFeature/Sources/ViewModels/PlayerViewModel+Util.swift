@@ -26,7 +26,9 @@ extension PlayerViewModel {
         formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
         
-        switch number {
+        let correctNumber: Int = max(0, number)
+        
+        switch correctNumber {
         case 0..<1000:
             return String(number)
         case 1000..<10_000:
