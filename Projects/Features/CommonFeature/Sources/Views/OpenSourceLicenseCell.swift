@@ -33,14 +33,24 @@ class OpenSourceLicenseCell: UITableViewCell {
 extension OpenSourceLicenseCell {
     static public func getCellHeight(model: OpenSourceLicense) -> CGFloat {
         let baseMargin: CGFloat = 71
-        let titleHeight: CGFloat = model.title.heightConstraintAt(
-            width: APP_WIDTH()-40,
-            font: DesignSystemFontFamily.Pretendard.bold.font(size: 18)
+        let titleAttributedString = NSAttributedString(
+            string: model.title,
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.bold.font(size: 18),
+                .kern: -0.5
+            ]
         )
-        let descriptionHeight: CGFloat = model.description.heightConstraintAt(
-            width: APP_WIDTH()-40,
-            font: DesignSystemFontFamily.Pretendard.light.font(size: 13)
+        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: APP_WIDTH()-40)
+        
+        let descriptionAttributedString = NSAttributedString(
+            string: model.description,
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 13),
+                .kern: -0.5
+            ]
         )
+        let descriptionHeight: CGFloat = descriptionAttributedString.height(containerWidth: APP_WIDTH()-40)
+        
         return baseMargin + titleHeight + descriptionHeight
     }
     
