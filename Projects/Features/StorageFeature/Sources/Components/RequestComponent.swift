@@ -17,7 +17,7 @@ public protocol RequestDependency: Dependency {
     var questionComponent: QuestionComponent {get}
     var containSongsComponent: ContainSongsComponent {get}
     var noticeComponent: NoticeComponent {get}
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {get}
+    var serviceInfoComponent: ServiceInfoComponent { get }
 }
 
 public final class RequestComponent: Component<RequestDependency> {
@@ -30,7 +30,7 @@ public final class RequestComponent: Component<RequestDependency> {
             questionComponent: dependency.questionComponent,
             containSongsComponent: dependency.containSongsComponent,
             noticeComponent: dependency.noticeComponent,
-            openSourceLicenseComponent: dependency.openSourceLicenseComponent
+            serviceInfoComponent: dependency.serviceInfoComponent
         )
     }
 }

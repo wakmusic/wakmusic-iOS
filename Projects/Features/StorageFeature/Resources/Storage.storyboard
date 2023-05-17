@@ -376,7 +376,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fJU-We-6wI">
-                                                                <rect key="frame" x="0.0" y="264" width="353" height="594"/>
+                                                                <rect key="frame" x="0.0" y="264" width="353" height="676"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JB3-7G-rDj">
                                                                         <rect key="frame" x="0.0" y="16" width="16" height="16"/>
@@ -401,7 +401,7 @@
                                                                         </constraints>
                                                                     </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈거다)라는 모토를 가슴에 새기고 일하고 있습니다." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1E7-2j-vSB">
-                                                                        <rect key="frame" x="16" y="16" width="337" height="574"/>
+                                                                        <rect key="frame" x="16" y="16" width="337" height="656"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" name="gray500"/>
                                                                         <nil key="highlightedColor"/>
@@ -417,67 +417,9 @@
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fnj-Dt-I5a">
-                                                                <rect key="frame" x="0.0" y="858" width="353" height="40"/>
+                                                                <rect key="frame" x="0.0" y="940" width="353" height="40"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="wXr-LH-pES"/>
-                                                                </constraints>
-                                                            </view>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pPl-yO-YTp">
-                                                                <rect key="frame" x="0.0" y="898" width="353" height="82"/>
-                                                                <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BxV-hL-tOq">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="353" height="44"/>
-                                                                        <subviews>
-                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5jz-Br-4MY">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="172.66666666666666" height="44"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="height" constant="44" id="ZbQ-pM-39g"/>
-                                                                                </constraints>
-                                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                                <state key="normal" title="서비스 이용약관">
-                                                                                    <color key="titleColor" name="gray600"/>
-                                                                                </state>
-                                                                                <connections>
-                                                                                    <action selector="pressServiceAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="Dle-Yc-40a"/>
-                                                                                </connections>
-                                                                            </button>
-                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaO-B6-A4K">
-                                                                                <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="44"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="height" constant="44" id="aOq-Os-N1l"/>
-                                                                                </constraints>
-                                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                                <state key="normal" title="개인정보처리방침">
-                                                                                    <color key="titleColor" name="gray600"/>
-                                                                                </state>
-                                                                                <connections>
-                                                                                    <action selector="pressPrivacyAction:" destination="Kfv-4k-d8J" eventType="touchUpInside" id="W2j-PZ-rjm"/>
-                                                                                </connections>
-                                                                            </button>
-                                                                        </subviews>
-                                                                        <constraints>
-                                                                            <constraint firstItem="5jz-Br-4MY" firstAttribute="width" secondItem="jaO-B6-A4K" secondAttribute="width" multiplier="1.00193" id="H1n-N0-LzQ"/>
-                                                                        </constraints>
-                                                                    </stackView>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="버전정보 2.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hi-iv-sF0">
-                                                                        <rect key="frame" x="133" y="64" width="87" height="18"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="18" id="Wl7-Hf-1Wv"/>
-                                                                        </constraints>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <color key="textColor" name="gray400"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="bottom" secondItem="8hi-iv-sF0" secondAttribute="bottom" id="6hQ-TU-c61"/>
-                                                                    <constraint firstItem="BxV-hL-tOq" firstAttribute="top" secondItem="pPl-yO-YTp" secondAttribute="top" id="FUR-6b-NXI"/>
-                                                                    <constraint firstItem="BxV-hL-tOq" firstAttribute="leading" secondItem="pPl-yO-YTp" secondAttribute="leading" id="HzT-wZ-fGE"/>
-                                                                    <constraint firstItem="8hi-iv-sF0" firstAttribute="top" secondItem="BxV-hL-tOq" secondAttribute="bottom" constant="20" id="Phx-3Q-hP8"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="BxV-hL-tOq" secondAttribute="trailing" id="dyH-AQ-Ors"/>
-                                                                    <constraint firstItem="8hi-iv-sF0" firstAttribute="centerX" secondItem="pPl-yO-YTp" secondAttribute="centerX" id="gTW-Q1-3iI"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -529,22 +471,19 @@
                         <outlet property="descriptionLabel" destination="1E7-2j-vSB" id="Nrk-5e-KHm"/>
                         <outlet property="dotLabel" destination="akS-zM-kcB" id="tlA-bu-XNL"/>
                         <outlet property="fakeViewHeight" destination="wXr-LH-pES" id="lBE-Jp-XyB"/>
-                        <outlet property="licenseButton" destination="yhL-ar-SIk" id="oqj-ee-WKL"/>
-                        <outlet property="licenseImageView" destination="tl2-pA-mcO" id="NgX-4J-fjY"/>
-                        <outlet property="licenseSuperView" destination="NNa-M9-MGJ" id="mxu-Wg-yj5"/>
                         <outlet property="noticeButton" destination="CVZ-XW-d3c" id="nfo-3e-eqy"/>
                         <outlet property="noticeImageView" destination="kRP-CH-eAc" id="7xV-7S-cQI"/>
                         <outlet property="noticeSuperView" destination="gq4-IK-2Tg" id="fjA-ed-mnn"/>
-                        <outlet property="privacyButton" destination="jaO-B6-A4K" id="l66-Na-3gM"/>
                         <outlet property="qnaButton" destination="t4S-Vg-qjJ" id="b3G-vn-2cM"/>
                         <outlet property="qnaSuperImageview" destination="oo2-hq-of5" id="5cr-5D-dD6"/>
                         <outlet property="qnaSuperView" destination="7Tx-L7-y7N" id="rcE-7M-ecL"/>
                         <outlet property="questionButton" destination="tUx-V8-7JH" id="sjS-Hl-ELH"/>
                         <outlet property="questionImageview" destination="6L5-fr-e46" id="HTw-MF-qhY"/>
                         <outlet property="questionSuperView" destination="1d0-Hv-kdq" id="F5z-mW-CmP"/>
-                        <outlet property="serviceButton" destination="5jz-Br-4MY" id="dBV-TW-Qci"/>
+                        <outlet property="serviceButton" destination="yhL-ar-SIk" id="iVu-TK-yxW"/>
+                        <outlet property="serviceImageView" destination="tl2-pA-mcO" id="Mav-sw-YWl"/>
+                        <outlet property="serviceSuperView" destination="NNa-M9-MGJ" id="tDY-ru-SVO"/>
                         <outlet property="titleLabel" destination="0kU-I9-SMy" id="dcs-G3-6nH"/>
-                        <outlet property="versionLabel" destination="8hi-iv-sF0" id="HIR-NZ-1sK"/>
                         <outlet property="withdrawButton" destination="jah-go-H3G" id="ZEd-cZ-RFo"/>
                     </connections>
                 </viewController>
@@ -2971,9 +2910,6 @@
         </namedColor>
         <namedColor name="gray500">
             <color red="0.40000000596046448" green="0.43900001049041748" blue="0.5220000147819519" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="gray600">
-            <color red="0.27799999713897705" green="0.32899999618530273" blue="0.40400001406669617" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray900">
             <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
