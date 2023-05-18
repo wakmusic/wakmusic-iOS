@@ -30,18 +30,18 @@ extension PlayerViewModel {
         
         switch correctNumber {
         case 0..<1000:
-            return String(number)
+            return String(correctNumber)
         case 1000..<10_000:
-            let thousands = Double(number) / 1000.0
+            let thousands = Double(correctNumber) / 1000.0
             return formatter.string(from: NSNumber(value: thousands))! + "천"
         case 10_000..<100_000_0:
-            let tenThousands = Double(number) / 10000.0
+            let tenThousands = Double(correctNumber) / 10000.0
             return formatter.string(from: NSNumber(value: tenThousands))! + "만"
         case 100_000_0..<100_000_000:
-            let tenThousands = Int(number) / 10000
+            let tenThousands = Int(correctNumber) / 10000
             return formatter.string(from: NSNumber(value: tenThousands))! + "만"
         default:
-            let millions = Double(number) / 100000000.0
+            let millions = Double(correctNumber) / 100000000.0
             return formatter.string(from: NSNumber(value: millions))! + "억"
         }
     }
