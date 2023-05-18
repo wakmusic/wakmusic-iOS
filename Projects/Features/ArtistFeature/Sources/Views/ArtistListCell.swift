@@ -24,9 +24,7 @@ class ArtistListCell: UICollectionViewCell {
 extension ArtistListCell {
 
     func update(model: ArtistListEntity) {
-
         self.contentView.alpha = model.isHiddenItem ? 0 : 1
-        
         let artistNameAttributedString = NSMutableAttributedString(
             string: model.name,
             attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),

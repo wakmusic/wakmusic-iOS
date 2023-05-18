@@ -111,7 +111,8 @@ extension ArtistViewController: WaterfallLayoutDelegate {
 
         let sideSpace: CGFloat = 8.0
         let width: CGFloat = APP_WIDTH() - ((sideSpace * 2.0) + 40.0)
-        let spacingWithNameHeight: CGFloat = 4.0 + 24.0 + 40.0 + 15
+        let topSpace: CGFloat = 55.0
+        let spacingWithNameHeight: CGFloat = 4.0 + 24.0 + topSpace + 15
         let imageHeight: CGFloat = width * rate
         
         switch indexPath.item {
