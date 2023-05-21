@@ -257,7 +257,19 @@ extension HomeViewController {
         
         output.songEntityOfAllChart
             .subscribe(onNext: { (songs) in
-                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+                let songEntities: [SongEntity] = songs.map {
+                    return SongEntity(
+                        id: $0.id,
+                        title: $0.title,
+                        artist: $0.artist,
+                        remix: $0.remix,
+                        reaction: $0.reaction,
+                        views: $0.views,
+                        last: $0.last,
+                        date: $0.date
+                    )
+                }
+                PlayState.shared.loadAndAppendSongsToPlaylist(songEntities)
             })
             .disposed(by: disposeBag)
     }

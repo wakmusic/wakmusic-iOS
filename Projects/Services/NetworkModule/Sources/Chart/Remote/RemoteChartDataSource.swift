@@ -5,6 +5,6 @@ import RxSwift
 import Foundation
 
 public protocol RemoteChartDataSource {
-    func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[SongEntity]>
+    func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]>
     func fetchChartUpdateTime() -> Single<String>
 }
