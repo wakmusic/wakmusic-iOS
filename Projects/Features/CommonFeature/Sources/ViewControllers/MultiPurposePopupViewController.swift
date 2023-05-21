@@ -174,6 +174,8 @@ extension MultiPurposePopupViewController{
         subTitleLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 16)
         subTitleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         
+    
+        
         let headerFontSize:CGFloat = 20
         
         let focusedplaceHolderAttributes = [
@@ -181,6 +183,7 @@ extension MultiPurposePopupViewController{
             NSAttributedString.Key.font : DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
         
+        textField.becomeFirstResponder()
         self.textField.attributedPlaceholder = NSAttributedString(string: viewModel.type == .creation || viewModel.type == .edit ?
                                                                   "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요."  ,attributes:focusedplaceHolderAttributes) //플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
@@ -335,7 +338,7 @@ extension MultiPurposePopupViewController{
         }.disposed(by: disposeBag)
         
         
-        keyboardBinding()
+      //  keyboardBinding()
         
         
         output.newPlayListKey.subscribe(onNext: { [weak self] (str:String) in
@@ -388,7 +391,8 @@ extension MultiPurposePopupViewController{
         }.disposed(by: disposeBag)
         
         
-        keyboardBinding()
+        //keyboardBinding()
+        
     }
     
     private func bindRxEvent(){
@@ -505,7 +509,7 @@ extension MultiPurposePopupViewController: PanModalPresentable {
     public var longFormHeight: PanModalHeight {
     
    
-        return PanModalHeight.contentHeight(296 + self.fakeViewHeight.constant)
+        return viewModel.type == .share ? PanModalHeight.contentHeight(296 + 0 ) : PanModalHeight.contentHeight(296 + 350 )
      }
 
     public var cornerRadius: CGFloat {
