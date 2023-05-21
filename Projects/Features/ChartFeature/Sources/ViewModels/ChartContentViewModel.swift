@@ -29,8 +29,7 @@ public final class ChartContentViewModel: ViewModelType {
     }
     
     public struct Output {
-        var canLoadMore: BehaviorRelay<Bool>  = BehaviorRelay(value: true)
-        var dataSource: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        var dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: []) 
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
@@ -45,18 +44,13 @@ public final class ChartContentViewModel: ViewModelType {
             .execute()
             .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
             .asObservable()
-            .do(onError: { _ in output.canLoadMore.accept(false) })
-                .bind(to: output.updateTime)
+            .bind(to: output.updateTime)
             .disposed(by: disposeBag)
 
         fetchChartRankingUseCase
             .execute(type: type, limit: 100)
             .catchAndReturn([])
             .asObservable()
-            .do(
-                onNext: { (model) in output.canLoadMore.accept(!model.isEmpty)},
-                onError: { _ in output.canLoadMore.accept(false) }
-            )
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
                 
@@ -94,10 +88,7 @@ public final class ChartContentViewModel: ViewModelType {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { (selectedSongs, dataSource) in
                 var newModel = dataSource
-                
-                
                 newModel.indices.forEach { newModel[$0].isSelected = false }
-
                 selectedSongs.forEach { i in
                     newModel[i].isSelected = true
                 }
@@ -127,15 +118,30 @@ public final class ChartContentViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.groupPlayTapped
-            .withLatestFrom(output.dataSource){($0,$1)}
-            .map({ (type,dataSourc) -> [SongEntity] in
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map{ (type, dataSource) -> (PlayEvent, [SongEntity]) in
+                let songEntities: [SongEntity] = dataSource.map {
+                    return SongEntity(
+                        id: $0.id,
+                        title: $0.title,
+                        artist: $0.artist,
+                        remix: $0.remix,
+                        reaction: $0.reaction,
+                        views: $0.views,
+                        last: $0.last,
+                        date: $0.date
+                    )
+                }
+                return (type, songEntities)
+            }
+            .map{ (type, dataSource) -> [SongEntity] in
                 switch type {
                 case .allPlay:
-                    return dataSourc
+                    return dataSource
                 case .shufflePlay:
-                    return dataSourc.shuffled()
+                    return dataSource.shuffled()
                 }
-            })
+            }
             .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
 
