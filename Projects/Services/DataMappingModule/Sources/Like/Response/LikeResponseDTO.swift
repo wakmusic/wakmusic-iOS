@@ -9,6 +9,6 @@
 import Foundation
 
 public struct LikeResponseDTO: Codable {
-    public let status: Int
+    public let status: Int?
     public let likes: Int
 }
