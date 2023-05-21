@@ -11,8 +11,8 @@ public extension SingleSongResponseDTO {
             artist: artist,
             remix: remix,
             reaction: reaction,
-            views: views,
-            last: last,
+            views: total.views,
+            last: total.last,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }
