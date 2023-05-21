@@ -18,8 +18,8 @@ public extension NewSongResponseDTO {
             artist: artist,
             remix: remix,
             reaction: reaction,
-            views: views,
-            last: last,
+            views: total?.views ?? 0,
+            last: total?.last ?? 0,
             date: date
         )
     }

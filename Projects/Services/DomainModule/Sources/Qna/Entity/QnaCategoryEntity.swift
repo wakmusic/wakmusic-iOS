@@ -1,14 +1,10 @@
 import Foundation
-import DomainModule
 
 public struct QnaCategoryEntity: Equatable {
     public init(
-        category:String
+        category: String
     ) {
         self.category = category
- 
     }
-    
-    public let category:String
-    
+    public let category: String
 }

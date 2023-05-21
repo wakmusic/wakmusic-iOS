@@ -13,7 +13,8 @@ import DomainModule
 public extension FetchNoticeCategoriesResponseDTO {
     func toDomain() -> FetchNoticeCategoriesEntity {
         FetchNoticeCategoriesEntity(
-            id: id
+            type: type,
+            category: category
         )
     }
 }

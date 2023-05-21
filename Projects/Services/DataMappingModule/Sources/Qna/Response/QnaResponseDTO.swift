@@ -8,16 +8,19 @@
 
 import Foundation
 
-public struct QnaResponseDTO: Decodable, Equatable {
-    public let id,create_at:Int
-    public let category,question,description:String
-    
+public struct QnaResponseDTO: Decodable {
+    public let createAt: Int
+    public let question, description: String
+    public let category: QnaResponseDTO.Category?
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
+    private enum CodingKeys: String, CodingKey {
+        case createAt, question, description, category
     }
-    
- 
-    
-  
+}
+
+public extension QnaResponseDTO {
+    struct Category: Codable {
+        public let type: String
+        public let category: String
+    }
 }

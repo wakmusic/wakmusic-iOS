@@ -10,9 +10,12 @@ import Foundation
 
 public struct FetchNoticeCategoriesEntity: Codable {
     public init (
-        id: String
+        type: String,
+        category: String
     ) {
-        self.id = id
+        self.type = type
+        self.category = category
     }
-    public let id: String
+    public let type: String
+    public let category: String
 }

@@ -20,8 +20,8 @@ public extension ArtistSongListResponseDTO {
             remix: remix,
             reaction: reaction,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
-            views: views,
-            last: last,
+            views: total?.views ?? 0,
+            last: total?.last ?? 0,
             isSelected: false
         )
     }

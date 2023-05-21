@@ -17,15 +17,15 @@ public extension ArtistListResponseDTO {
             ID: ID,
             name: name,
             short: short,
-            group: group,
+            group: group?.kr ?? "",
             title: title,
             description: description,
             color: color ?? [],
             youtube: youtube ?? "",
             twitch: twitch ?? "",
             instagram: instagram ?? "",
-            imageRoundVersion: imageRoundVersion ?? 0,
-            imageSquareVersion: imageSquareVersion ?? 0,
+            imageRoundVersion: image?.round ?? 0,
+            imageSquareVersion: image?.square ?? 0,
             graduated: graduated ?? false,
             isHiddenItem: false
         )
