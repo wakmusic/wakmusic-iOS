@@ -18,7 +18,7 @@ import Kingfisher
 import DomainModule
 import NVActivityIndicatorView
 
-public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType, LoadingAlertControllerType {
+public class PlayListDetailViewController: BaseViewController,ViewControllerFromStoryBoard, SongCartViewType, EditSheetViewType {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var completeButton: UIButton!
@@ -42,7 +42,6 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     public var editSheetView: EditSheetView!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    public var alertController: UIAlertController!
 
     let playState = PlayState.shared
     
@@ -303,7 +302,6 @@ extension PlayListDetailViewController{
         output.showErrorToast
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.stopLoading()
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 self.input.state.accept(EditState(isEditing: false, force: true))
             })
@@ -472,7 +470,6 @@ extension PlayListDetailViewController:SongCartViewDelegate {
                 cancelButtonIsHidden: false,
                 completion: { [weak self] () in
                 guard let `self` = self else { return }
-                    self.startLoading(message: "처리 중입니다.")
                     self.input.tapRemoveSongs.onNext(())
             })
             self.showPanModal(content: popup)

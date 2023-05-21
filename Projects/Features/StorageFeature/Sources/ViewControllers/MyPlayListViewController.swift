@@ -21,7 +21,7 @@ import NVActivityIndicatorView
 
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType, LoadingAlertControllerType {
+public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
@@ -37,7 +37,6 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    public var alertController: UIAlertController!
 
     let playState = PlayState.shared
 
@@ -179,8 +178,6 @@ extension MyPlayListViewController{
                     text: "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다.",
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
-                //Stop Loading
-                self.stopLoading()
             }).disposed(by: disposeBag)
                 
         output.showToast
@@ -192,8 +189,6 @@ extension MyPlayListViewController{
                     text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
-                //Stop Loading
-                self.stopLoading()
             }).disposed(by: disposeBag)
         
         output.immediatelyPlaySongs
@@ -250,8 +245,6 @@ extension MyPlayListViewController: SongCartViewDelegate {
         case .addPlayList:
             input.addPlayList.onNext(())
             self.hideSongCart()
-            //Loading Start
-            self.startLoading(message: "처리 중입니다.")
 
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
@@ -262,7 +255,6 @@ extension MyPlayListViewController: SongCartViewDelegate {
                 guard let `self` = self else { return }
                 self.input.deletePlayList.onNext(())
                 self.hideSongCart()
-                self.startLoading(message: "처리 중입니다.")
             })
             self.showPanModal(content: popup)
             
