@@ -19,7 +19,7 @@ import NVActivityIndicatorView
 
 public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
-public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType, LoadingAlertControllerType {
+public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
@@ -34,7 +34,6 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
     
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    public var alertController: UIAlertController!
 
     let playState = PlayState.shared
     
@@ -178,7 +177,6 @@ extension FavoriteViewController{
                     text: msg,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
-                self.stopLoading()
             })
             .disposed(by: disposeBag)
     }
@@ -238,7 +236,6 @@ extension FavoriteViewController: SongCartViewDelegate {
                 guard let `self` = self else { return }
                 self.input.deleteLikeList.onNext(())
                 self.hideSongCart()
-                self.startLoading(message: "처리 중입니다.")
             })
             self.showPanModal(content: popup)
         default: return

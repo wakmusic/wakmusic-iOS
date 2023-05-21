@@ -13,7 +13,7 @@ import DesignSystem
 import RxSwift
 import NVActivityIndicatorView
 
-public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard, LoadingAlertControllerType{
+public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -21,7 +21,6 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
     
-    public var alertController: UIAlertController!
     var multiPurposePopComponent : MultiPurposePopComponent!
     
     var viewModel:ContainSongsViewModel!
@@ -91,7 +90,6 @@ extension ContainSongsViewController {
             .withLatestFrom(output.dataSource){ ($0, $1) }
             .do(onNext: { [weak self] (indexPath, _) in
                 self?.tableView.deselectRow(at: indexPath, animated: true)
-                self?.startLoading(message: "처리 중입니다.")
             })
             .map{ (indexPath, model) -> String in
                 return model[indexPath.row].key
@@ -105,9 +103,7 @@ extension ContainSongsViewController {
                 guard let self = self else {return}
                 self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                self.stopLoading {
-                    self.dismiss(animated: true)
-                }
+                self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
         
