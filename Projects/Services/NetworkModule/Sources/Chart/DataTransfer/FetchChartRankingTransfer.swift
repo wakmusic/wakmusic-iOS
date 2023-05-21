@@ -10,11 +10,9 @@ public extension SingleChartRankingResponseDTO {
             artist: artist,
             remix: remix,
             reaction: reaction,
-            views: monthly,
+            views: views,
             last: last,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }
-    
-
 }

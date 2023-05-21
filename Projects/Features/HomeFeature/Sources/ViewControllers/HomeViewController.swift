@@ -364,7 +364,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        let playListDetailVc = playListDetailComponent.makeView(id: model.id, type: .wmRecommend)
+        let playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

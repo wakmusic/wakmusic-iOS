@@ -13,6 +13,16 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let title: String
     public let songs: [SingleSongResponseDTO]?
     public let `public`: Bool?
-    public let id,key,creator_id,image: String?
-    public let image_version,image_square_version: Int?
+    public let key: String?
+    public let image:SinglePlayListDetailResponseDTO.Image
+    
+}
+
+extension SinglePlayListDetailResponseDTO {
+    public struct Image: Codable {
+        public let round:Int?
+        public let square:Int?
+        public let name:String?
+        public let version:Int?
+    }
 }

@@ -14,6 +14,10 @@ public struct SingleRecommendPlayListResponseDTO: Decodable {
     public let `public`: Bool
     public let image:SingleRecommendPlayListResponseDTO.Image
     
+
+}
+
+extension SingleRecommendPlayListResponseDTO {
     public struct Image: Codable {
         public let round:Int
         public let square:Int

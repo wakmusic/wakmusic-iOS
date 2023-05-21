@@ -295,7 +295,7 @@ extension BeforeSearchContentViewController:UITableViewDelegate{
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
         
-        lazy var playListDetailVc = playListDetailComponent.makeView(id:model.id,type: .wmRecommend)
+        lazy var playListDetailVc = playListDetailComponent.makeView(id:model.key,type: .wmRecommend)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
      
         
@@ -303,6 +303,4 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     
     
 }
-
-
 

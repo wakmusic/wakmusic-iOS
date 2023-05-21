@@ -43,7 +43,7 @@ extension RecommendPlayListCell {
         titleStringLabel.attributedText = attributedString
 
         logoImageView.kf.setImage(
-            with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.id,version: model.image_round_version).toURL,
+            with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.key,version: model.image_round_version).toURL,
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

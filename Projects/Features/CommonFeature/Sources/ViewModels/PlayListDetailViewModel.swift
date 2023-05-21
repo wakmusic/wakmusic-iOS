@@ -82,17 +82,9 @@ public final class PlayListDetailViewModel: ViewModelType {
                 guard let self = self else {return Observable.empty()}
                 return self.fetchPlayListDetailUseCase.execute(id: self.id, type: self.type)
                     .catchAndReturn(
-                        PlayListDetailEntity(
-                            id: "",
-                            title: "",
-                            songs: [],
-                            public: true,
-                            key: "",
-                            creator_id: "",
-                            image: "",
-                            image_square_version: 1,
-                            image_version: 1
-                        )
+                        
+                        PlayListDetailEntity(title: "", songs: [], public: true, key: "", image: "", image_square_version: 0, image_round_version: 0, version: 0)
+  
                     )
                     .asObservable()
                     .do(onNext: { [weak self] (model) in
@@ -102,8 +94,8 @@ public final class PlayListDetailViewModel: ViewModelType {
                                 title: model.title,
                                 songCount: "\(model.songs.count)곡",
                                 image: self.type == .wmRecommend ?
-                                model.id : model.image,version: self.type == .wmRecommend ?
-                                model.image_square_version : model.image_version
+                                model.key : model.image,version: self.type == .wmRecommend ?
+                                model.image_square_version : model.version
                             )
                         )
                         self.key = model.key
