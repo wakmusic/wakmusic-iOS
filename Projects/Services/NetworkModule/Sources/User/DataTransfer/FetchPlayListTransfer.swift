@@ -6,13 +6,11 @@ import Utility
 public extension PlayListResponseDTO {
     func toDomain() -> PlayListEntity {
         PlayListEntity(
-            id: id,
             key: key ??  "",
             title: title,
-            creator_id: creator_id ??  "",
-            image: image ?? "",
-            songlist: songlist,
-            image_version: image_version,
+            image: image.name,
+            songlist: songs.map({$0.songId}),
+            image_version: image.version,
             isSelected: isSelected ?? false
         )
     }

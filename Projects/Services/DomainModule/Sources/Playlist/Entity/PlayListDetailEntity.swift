@@ -10,34 +10,31 @@ import Foundation
 
 public struct PlayListDetailEntity: Equatable {
     public init(
-        id: String,
         title: String,
         songs: [SongEntity],
         `public`:Bool,
         key:String,
-        creator_id:String,
         image:String,
         image_square_version:Int,
-        image_version:Int
-        
+        image_round_version:Int,
+        version:Int
         
     ) {
-        self.id = id
         self.title = title
         self.songs = songs
         self.public = `public`
         self.key = key
-        self.creator_id = creator_id
         self.image = image
-        self.image_version = image_version
+        self.image_round_version = image_round_version
         self.image_square_version = image_square_version
+        self.version = version
    
     }
     
-    public let id, title : String
+    public let title : String
     public let songs: [SongEntity]
     public let `public` : Bool
-    public let key,creator_id,image: String
-    public let image_version,image_square_version :Int
+    public let key,image: String
+    public let image_round_version,image_square_version,version :Int
     
 }

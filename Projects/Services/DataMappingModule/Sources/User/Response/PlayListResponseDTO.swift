@@ -8,15 +8,31 @@
 
 import Foundation
 
-public struct PlayListResponseDTO: Decodable, Equatable {
-    public let id: Int
+public struct PlayListResponseDTO: Decodable{
     public let title: String
-    public let key,creator_id,image: String?
-    public let songlist: [String]
-    public let image_version: Int
+    public let key: String?
+    public let user:PlayListResponseDTO.User
+    public let image:PlayListResponseDTO.Image
+    public let songs: [PlayListResponseDTO.Song]
     public var isSelected: Bool?
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
-    }  
+    
+    public struct User: Codable {
+        public let displayName:String
+        public let profile:Profile
+    }
+
+    public struct Profile: Codable {
+        public let type:String
+        public let version:Int
+    }
+    
+    public struct Image: Codable {
+        public let name:String
+        public let version:Int
+    }
+    
+    public struct Song: Codable {
+        public let songId:String
+    }
 }

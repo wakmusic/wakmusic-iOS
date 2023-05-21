@@ -6,10 +6,11 @@ import Utility
 public extension SingleRecommendPlayListResponseDTO {
     func toDomain() -> RecommendPlayListEntity {
         RecommendPlayListEntity(
-            id: id,
+            key:key,
             title: title,
             public: `public`,
-            image_round_version: image_round_version ?? 0
+            image_round_version: image.round,
+            image_sqaure_version: image.square
         )
     }
 }
