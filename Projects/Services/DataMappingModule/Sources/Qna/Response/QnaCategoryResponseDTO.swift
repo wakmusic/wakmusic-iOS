@@ -1,9 +1,5 @@
-
-
 import Foundation
 
 public struct QnaCategoryResponseDTO: Codable, Equatable {
-    public let category:String
-
-   
+    public let type, category: String
 }

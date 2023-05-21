@@ -11,5 +11,22 @@ import Foundation
 public struct NewSongResponseDTO: Decodable {
     public let id, title, artist, remix: String
     public let reaction: String
-    public let date, views, last: Int
+    public let date: Int
+    public let total: NewSongResponseDTO.Total?
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "songId"
+        case title, artist, remix, reaction, date, total
+    }
+}
+
+public extension NewSongResponseDTO {
+    struct Total: Codable {
+        public let views: Int
+        public let last: Int
+    }
 }

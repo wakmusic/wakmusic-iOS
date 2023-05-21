@@ -18,7 +18,7 @@ public struct ChartRepositoryImpl: ChartRepository {
     public func fetchChartRanking(
         type: ChartDateType,
         limit: Int
-    ) -> Single<[SongEntity]> {
+    ) -> Single<[ChartRankingEntity]> {
         remoteChartDataSource.fetchChartRanking(type: type, limit: limit)
     }
     

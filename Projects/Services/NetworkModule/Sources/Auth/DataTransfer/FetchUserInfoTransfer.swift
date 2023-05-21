@@ -17,10 +17,10 @@ public extension AuthUserInfoResponseDTO {
             id: id,
             platform: platform,
             displayName: displayName,
-            first_login_time: first_login_time,
+            first_login_time: firstLoginTime,
             first: first,
-            profile: profile,
-            version: version
+            profile: profile?.type ?? "",
+            version: profile?.version ?? 0
         )
     }
 }

@@ -15,7 +15,7 @@ public extension FetchNoticeResponseDTO {
     func toDomain() -> FetchNoticeEntity {
         FetchNoticeEntity(
             id: id,
-            category: category,
+            category: category?.category ?? "",
             title: title,
             thumbnail: thumbnail,
             content: content,

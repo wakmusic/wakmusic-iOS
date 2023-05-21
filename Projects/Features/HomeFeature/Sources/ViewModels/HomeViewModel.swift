@@ -40,17 +40,17 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Output {
-        var chartDataSource: BehaviorRelay<[SongEntity]>
+        var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
         let newSongDataSource: BehaviorRelay<[NewSongEntity]>
         var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
-        var songEntityOfAllChart: PublishSubject<[SongEntity]>
+        var songEntityOfAllChart: PublishSubject<[ChartRankingEntity]>
     }
     
     public func transform(from input: Input) -> Output {
-        let chartDataSource: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
-        let songEntityOfAllChart: PublishSubject<[SongEntity]> = PublishSubject()
+        let songEntityOfAllChart: PublishSubject<[ChartRankingEntity]> = PublishSubject()
         
         let chartAndNewSong = Observable.zip(
             self.fetchChartRankingUseCase
@@ -88,18 +88,6 @@ public final class HomeViewModel: ViewModelType {
         
         input.allListenTapped
             .withLatestFrom(chartDataSource)
-            .map { $0.map { SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
-                        views: $0.views,
-                        last: $0.last,
-                        date: $0.date
-                    )
-                }
-            }
             .bind(to: songEntityOfAllChart)
             .disposed(by: disposeBag)
 
@@ -117,7 +105,7 @@ public final class HomeViewModel: ViewModelType {
         
         input.refreshPulled
             .withLatestFrom(input.newSongTypeTapped)
-            .flatMap { [weak self] (type) -> Observable<(([SongEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
+            .flatMap { [weak self] (type) -> Observable<(([ChartRankingEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
                 guard let self = self else{ return Observable.empty() }
                 
                 let chartAndNewSong = Observable.zip(

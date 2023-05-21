@@ -5,10 +5,8 @@ import Utility
 
 public extension QnaCategoryResponseDTO {
     func toDomain() -> QnaCategoryEntity {
-        
         QnaCategoryEntity(
-            category:category
+            category: category
         )
-        
     }
 }
