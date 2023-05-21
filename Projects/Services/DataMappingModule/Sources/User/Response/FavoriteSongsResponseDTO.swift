@@ -8,11 +8,8 @@
 
 import Foundation
 
-public struct FavoriteSongsResponseDTO: Decodable, Equatable {
-    public let id, likes: Int
+public struct FavoriteSongsResponseDTO: Decodable {
+    public let likes: Int
     public let song: SingleSongResponseDTO
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
-    }
 }

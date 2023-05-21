@@ -25,8 +25,8 @@ public struct SingleSongResponseDTO: Decodable {
 extension SingleSongResponseDTO{
     
     public struct Total: Codable {
-        public let views,last:Int
+            public let views,last:Int
             public let increase:Int?
-        }
+    }
     
 }

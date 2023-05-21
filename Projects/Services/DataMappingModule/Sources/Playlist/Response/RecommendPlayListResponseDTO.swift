@@ -10,7 +10,12 @@ import Foundation
 
 
 public struct SingleRecommendPlayListResponseDTO: Decodable {
-    public let id, title: String
+    public let key, title: String
     public let `public`: Bool
-    public let image_round_version: Int
+    public let image:SingleRecommendPlayListResponseDTO.Image
+    
+    public struct Image: Codable {
+        public let round:Int
+        public let square:Int
+    }
 }
