@@ -63,7 +63,6 @@ public extension RecommendPlayListView {
     }
     
     static func getViewHeight(model: [RecommendPlayListEntity]) -> CGFloat {
-        
         guard !model.isEmpty else {
             return 0 
         }
@@ -107,7 +106,6 @@ extension RecommendPlayListView: UICollectionViewDataSource, UICollectionViewDel
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecommendPlayListCell",
                                                             for: indexPath) as? RecommendPlayListCell else {
             return UICollectionViewCell()
