@@ -309,14 +309,14 @@ private extension PlayerView {
         thumbnailImageView.backgroundColor = .white
     }
     private func configureLyrics() {
-        let isNotch = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
-        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
-        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
+        let isIPhoneXOrAbove = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
+        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
+        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
             $0.width.equalTo(LyricsTableViewCell.lyricMaxWidth)
-            $0.height.equalTo(isNotch ? 120 : 72)
+            $0.height.equalTo(isIPhoneXOrAbove ? 120 : 72)
         }
     }
     private func configurePlayTimeSlider() {
@@ -397,7 +397,7 @@ private extension PlayerView {
         let safeAreaWidth: CGFloat = Utility.APP_WIDTH() - left - right
         let safeAreaheight: CGFloat = Utility.APP_HEIGHT() - top - bottom
         var x: CGFloat = 0
-        if safeAreaheight >= 728 { // 12미니 safeArea height를 마지노선으로 설정
+        if Utility.SAFEAREA_BOTTOM_HEIGHT() > 0 {
             x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 334 - 18) / 20)
         } else {
             x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 286 - 18) / 20)
