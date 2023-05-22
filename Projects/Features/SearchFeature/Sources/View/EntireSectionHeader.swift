@@ -44,12 +44,23 @@ extension EntireSectionHeader {
             view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
             self.addSubview(view)
         }
-       
+        configureUI()
+    }
+    
+    public func update(_ type: (TabPosition, Int)) {
+        self.categoryLabel.text = type.0 == .song ? "노래" : type.0 == .artist ? "가수" : "조교"
+        self.numberOfSongLabel.text = String(type.1)
+        self.type = type.0
+    }
+    
+    private func configureUI() {
         self.categoryLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.categoryLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.categoryLabel.setLineSpacing(kernValue: -0.5)
         
         self.numberOfSongLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.numberOfSongLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+        self.numberOfSongLabel.setLineSpacing(kernValue: -0.5)
 
         let attrTitle = NSAttributedString(
             string: "전체보기",
@@ -59,11 +70,5 @@ extension EntireSectionHeader {
         )
         self.moveTabButton.setImage(DesignSystemAsset.Search.searchArrowRight.image, for:.normal)
         self.moveTabButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
-    }
-    
-    public func update(_ type: (TabPosition, Int)) {
-        self.categoryLabel.text = type.0 == .song ? "노래" : type.0 == .artist ? "가수" : "조교"
-        self.numberOfSongLabel.text = String(type.1)
-        self.type = type.0
     }
 }
