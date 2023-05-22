@@ -309,14 +309,14 @@ private extension PlayerView {
         thumbnailImageView.backgroundColor = .white
     }
     private func configureLyrics() {
-        let isNotch = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
-        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
-        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isNotch ? 48 : 24))
+        let isIPhoneXOrAbove = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
+        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
+        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
             $0.width.equalTo(LyricsTableViewCell.lyricMaxWidth)
-            $0.height.equalTo(isNotch ? 120 : 72)
+            $0.height.equalTo(isIPhoneXOrAbove ? 120 : 72)
         }
     }
     private func configurePlayTimeSlider() {
@@ -342,9 +342,9 @@ private extension PlayerView {
     }
     private func configureButtonBar() {
         buttonBarView.snp.makeConstraints {
-            $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
             $0.height.equalTo(80)
+            $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
+            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
         }
         playButton.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -352,23 +352,23 @@ private extension PlayerView {
         }
         prevButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(playButton.snp.left).offset(-24)
-            $0.width.height.equalTo(48)
+            $0.right.equalTo(playButton.snp.left).offset(-32)
+            $0.width.height.equalTo(32)
         }
         nextButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(playButton.snp.right).offset(24)
-            $0.width.height.equalTo(48)
+            $0.left.equalTo(playButton.snp.right).offset(32)
+            $0.width.height.equalTo(32)
         }
         repeatButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(prevButton.snp.left).offset(-24)
-            $0.width.height.equalTo(48)
+            $0.right.equalTo(prevButton.snp.left).offset(-32)
+            $0.width.height.equalTo(32)
         }
         shuffleButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(nextButton.snp.right).offset(24)
-            $0.width.height.equalTo(48)
+            $0.left.equalTo(nextButton.snp.right).offset(32)
+            $0.width.height.equalTo(32)
         }
     }
     private func configureBottomBar() {
@@ -394,14 +394,13 @@ private extension PlayerView {
         let bottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
         let left: CGFloat = window?.safeAreaInsets.left ?? 0
         let right: CGFloat = window?.safeAreaInsets.right ?? 0
-        let width: CGFloat = Utility.APP_WIDTH() - left - right
-        let height: CGFloat = Utility.APP_HEIGHT() - top - bottom
+        let safeAreaWidth: CGFloat = Utility.APP_WIDTH() - left - right
+        let safeAreaheight: CGFloat = Utility.APP_HEIGHT() - top - bottom
         var x: CGFloat = 0
-        
-        if height >= 732 {
-            x = ((height - (width - 50) / (16/9) - 334 - 18) / 20)
+        if Utility.SAFEAREA_BOTTOM_HEIGHT() > 0 {
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 334 - 18) / 20)
         } else {
-            x = ((height - (width - 50) / (16/9) - 286 - 18) / 20)
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 286 - 18) / 20)
         }
         return CGFloat(floorf(Float(x)))
     }
