@@ -111,3 +111,11 @@ public func GOOGLE_SECRET_KEY() -> String {
     }
     return secrets["GOOGLE_SECRET_KEY"] as? String ?? "not found key"
 }
+
+//WAKTAVERSEMUSIC
+public func WM_APP_ID() -> String {
+    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
+        return ""
+    }
+    return secrets["WM_APP_ID"] as? String ?? ""
+}

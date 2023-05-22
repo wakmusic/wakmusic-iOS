@@ -114,6 +114,8 @@
 		<string>$(WMDOMAIN_SUGGEST)</string>
 		<key>WMDOMAIN_USER</key>
 		<string>$(WMDOMAIN_USER)</string>
+		<key>WM_APP_ID</key>
+		<string>$(WM_APP_ID)</string>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

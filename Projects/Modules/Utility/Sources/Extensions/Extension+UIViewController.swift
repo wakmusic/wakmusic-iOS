@@ -78,20 +78,23 @@ public extension UIViewController {
     
     
    static func rootViewController() -> UIViewController? {
-
-            var root: UIViewController?
-
-            if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-
-                if rootViewController is UINavigationController {
-                    root = (rootViewController as! UINavigationController).visibleViewController!
-
-                }else{
-                    if let presentedViewController = rootViewController.presentedViewController {
-                        root  = presentedViewController
-                    }
+        var root: UIViewController?
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            if rootViewController is UINavigationController {
+                root = (rootViewController as! UINavigationController).visibleViewController!
+            }else{
+                if let presentedViewController = rootViewController.presentedViewController {
+                    root  = presentedViewController
                 }
             }
-            return root
         }
+        return root
+    }
+    
+    func goAppStore() {
+        let appID: String = WM_APP_ID()
+        guard let storeURL = URL(string: "https://itunes.apple.com/kr/app/id/\(appID)"),
+            UIApplication.shared.canOpenURL(storeURL) else { return }
+        UIApplication.shared.open(storeURL)
+    }
 }
