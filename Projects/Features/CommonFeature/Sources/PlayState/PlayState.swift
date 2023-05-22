@@ -11,6 +11,7 @@ import DomainModule
 import YouTubePlayerKit
 import Combine
 import Utility
+import AVFAudio
 
 final public class PlayState {
     public static let shared = PlayState()
@@ -77,6 +78,8 @@ final public class PlayState {
             RealmManager.shared.addRealmDB(model: playedList)
         }.store(in: &subscription)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: AVAudioSession.routeChangeNotification, object: AVAudioSession.sharedInstance())
+        
     }
     
     public func fetchPlayListFromLocalDB() -> [PlayListItem] {
@@ -97,4 +100,57 @@ final public class PlayState {
         return playedList
     }
     
+    @objc func handleRouteChange(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
+            return
+        }
+        
+        switch reason {
+            
+        case .unknown:
+            DEBUG_LOG("🚀unknown")
+            
+        case .newDeviceAvailable: //이어폰 꼈을때,
+            DEBUG_LOG("🚀newDeviceAvailable")
+            
+        case .oldDeviceUnavailable: //이어폰 뺐을때 .oldDeviceUnavailable, .categoryChange 두 가지가 간헐적으로 꽂힘
+            let previousRoute = userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription
+            let previousOutput = previousRoute?.outputs.first
+            let portType = previousOutput?.portType
+            
+            if portType == AVAudioSession.Port.headphones || portType == AVAudioSession.Port.bluetoothA2DP {
+                // 이어폰 또는 블루투스 이어폰이 연결 해제됨
+                DEBUG_LOG("🚀oldDeviceUnavailable 이어폰이 연결 해제되었습니다.")
+                self.pause()
+            }
+            
+        case .categoryChange: //이어폰 뺐을때 .oldDeviceUnavailable, .categoryChange 두 가지가 간헐적으로 꽂힘
+            let previousRoute = userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription
+            let previousOutput = previousRoute?.outputs.first
+            let portType = previousOutput?.portType
+            
+            if portType == AVAudioSession.Port.headphones || portType == AVAudioSession.Port.bluetoothA2DP {
+                // 이어폰 또는 블루투스 이어폰이 연결 해제됨
+                DEBUG_LOG("🚀categoryChange 이어폰이 연결 해제되었습니다.")
+                self.pause()
+            }
+            
+        case .override:
+            DEBUG_LOG("🚀override")
+            
+        case .wakeFromSleep:
+            DEBUG_LOG("🚀wakeFromSleep")
+            
+        case .noSuitableRouteForCategory:
+            DEBUG_LOG("🚀noSuitableRouteForCategory")
+            
+        case .routeConfigurationChange:
+            DEBUG_LOG("🚀routeConfigurationChange")
+            
+        default:
+            return
+        }
+    }
 }
