@@ -342,9 +342,9 @@ private extension PlayerView {
     }
     private func configureButtonBar() {
         buttonBarView.snp.makeConstraints {
-            $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
             $0.height.equalTo(80)
+            $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
+            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
         }
         playButton.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -352,23 +352,23 @@ private extension PlayerView {
         }
         prevButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(playButton.snp.left).offset(-24)
-            $0.width.height.equalTo(48)
+            $0.right.equalTo(playButton.snp.left).offset(-32)
+            $0.width.height.equalTo(32)
         }
         nextButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(playButton.snp.right).offset(24)
-            $0.width.height.equalTo(48)
+            $0.left.equalTo(playButton.snp.right).offset(32)
+            $0.width.height.equalTo(32)
         }
         repeatButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(prevButton.snp.left).offset(-24)
-            $0.width.height.equalTo(48)
+            $0.right.equalTo(prevButton.snp.left).offset(-32)
+            $0.width.height.equalTo(32)
         }
         shuffleButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(nextButton.snp.right).offset(24)
-            $0.width.height.equalTo(48)
+            $0.left.equalTo(nextButton.snp.right).offset(32)
+            $0.width.height.equalTo(32)
         }
     }
     private func configureBottomBar() {
