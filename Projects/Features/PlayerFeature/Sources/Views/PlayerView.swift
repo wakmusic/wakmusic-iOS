@@ -394,14 +394,13 @@ private extension PlayerView {
         let bottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
         let left: CGFloat = window?.safeAreaInsets.left ?? 0
         let right: CGFloat = window?.safeAreaInsets.right ?? 0
-        let width: CGFloat = Utility.APP_WIDTH() - left - right
-        let height: CGFloat = Utility.APP_HEIGHT() - top - bottom
+        let safeAreaWidth: CGFloat = Utility.APP_WIDTH() - left - right
+        let safeAreaheight: CGFloat = Utility.APP_HEIGHT() - top - bottom
         var x: CGFloat = 0
-        
-        if height >= 732 {
-            x = ((height - (width - 50) / (16/9) - 334 - 18) / 20)
+        if safeAreaheight >= 728 { // 12미니 safeArea height를 마지노선으로 설정
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 334 - 18) / 20)
         } else {
-            x = ((height - (width - 50) / (16/9) - 286 - 18) / 20)
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 286 - 18) / 20)
         }
         return CGFloat(floorf(Float(x)))
     }
