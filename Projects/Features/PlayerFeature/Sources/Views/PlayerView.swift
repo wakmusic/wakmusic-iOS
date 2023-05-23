@@ -43,7 +43,6 @@ public final class PlayerView: UIView {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.text = "리와인드(RE:WIND)"
         $0.setLineHeight(lineHeight: 24)
         $0.lineBreakMode = .byTruncatingTail
         $0.textAlignment = .center
@@ -59,7 +58,6 @@ public final class PlayerView: UIView {
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.alpha = 0.6
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
-        $0.text = "이세계아이돌"
         $0.setLineHeight(lineHeight: 20)
         $0.lineBreakMode = .byTruncatingTail
         $0.textAlignment = .center
@@ -105,14 +103,14 @@ public final class PlayerView: UIView {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.PrimaryColor.point.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.text = "0:30"
+        $0.text = "-:--"
     }
     
     internal lazy var totalPlayTimeLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray400.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.text = "4:34"
+        $0.text = "-:--"
     }
     
     private lazy var buttonBarView: UIView = UIView()
