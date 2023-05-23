@@ -36,7 +36,6 @@ body:
         버그를 상세히 설명해 주세요!
       placeholder: |
         ex) 이전에 어떤 행동을 한 후 해당 액션을 취하니 이런 버그가 뜸
-      render: bash
     validations:
       required: true
   - type: textarea
@@ -46,6 +45,5 @@ body:
         버그 내용을 사진이나 영상으로 첨부해 주세요. 용량이 큰 경우 디스코드 URL을 첨부해 주세요
       placeholder: |
         ex) 사진 혹은 [http:.....]\
-      render: bash
     validations:
       required: true
