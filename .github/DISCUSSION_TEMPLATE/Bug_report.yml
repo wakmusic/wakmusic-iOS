@@ -1,0 +1,51 @@
+title: "[Bug] : "
+labels: ["Bug_report"]
+
+body:
+  - type: input
+    id: ios-version
+    attributes:
+      label: iOS 버전
+      description: "사용하고 계신 기기의 iOS 버전을 입력해 주세요."
+      placeholder: ex) 16.4(a)
+    validations:
+      required: true
+  - type: input
+    id: iphone-num
+    attributes:
+      label: iPhone 기종
+      description: "사용하고 계신 iPhone 기종을 입력해 주세요."
+      placeholder: ex) iPhone 14 Pro Max
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 로그인 플랫폼
+      description: "로그인한 방식을 선택해 주세요."
+      options:
+        - 로그인 안함
+        - Apple
+        - Google
+        - Naver
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 버그 상세설명
+      description: |
+        버그를 상세히 설명해 주세요!
+      placeholder: |
+        ex) 이전에 어떤 행동을 한 후 해당 액션을 취하니 이런 버그가 뜸
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 첨부파일
+      description: |
+        버그 내용을 사진이나 영상으로 첨부해 주세요. 용량이 큰 경우 디스코드 URL을 첨부해 주세요
+      placeholder: |
+        ex) 사진 혹은 [http:.....]\
+      render: bash
+    validations:
+      required: true
