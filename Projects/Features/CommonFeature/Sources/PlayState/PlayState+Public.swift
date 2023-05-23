@@ -46,5 +46,10 @@ public extension PlayState {
         self.playList.append(notDuplicatedSongs)
         
         if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
+        
+        self.currentSong = self.playList.currentPlaySong
+        if let currentSong {
+            self.player.cue(source: .video(id: currentSong.id))
+        }
     }
 }
