@@ -70,6 +70,7 @@ extension PlayState {
     public func shufflePlay() {
         let shuffledIndices = self.playList.list.indices.shuffled()
         if let index = shuffledIndices.first(where: { $0 != self.playList.currentPlayIndex }) {
+            self.playList.changeCurrentPlayIndex(to: index)
             self.loadInPlaylist(at: index)
         } else {
             self.forward()
