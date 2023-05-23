@@ -2,7 +2,6 @@ name: "버그 제보 for Beta Tester"
 description: "(Beta Tester Only)버그가 생겼으면 작성해 주세요👾"
 title: "[버그 제보]: "
 body:
-body:
   - type: markdown
     attributes:
       value: |
