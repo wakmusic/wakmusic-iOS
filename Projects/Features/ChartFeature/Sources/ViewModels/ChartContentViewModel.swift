@@ -7,8 +7,9 @@ import Utility
 import DataMappingModule
 
 public final class ChartContentViewModel: ViewModelType {
+    public let type: ChartDateType
+
     private let disposeBag = DisposeBag()
-    private let type: ChartDateType
     private let fetchChartRankingUseCase: FetchChartRankingUseCase
     private let fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
     

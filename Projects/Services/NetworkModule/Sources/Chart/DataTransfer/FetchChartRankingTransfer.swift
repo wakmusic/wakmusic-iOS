@@ -33,6 +33,7 @@ public extension SingleChartRankingResponseDTO {
             reaction: reaction,
             views: views,
             last: last,
+            increase: increase ?? 0,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }

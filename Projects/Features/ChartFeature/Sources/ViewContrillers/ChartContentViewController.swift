@@ -68,7 +68,7 @@ extension ChartContentViewController {
                     for: indexPath
                 ) as? ChartContentTableViewCell else {
                     return UITableViewCell() }
-                cell.update(model: model, index: index)
+                cell.update(model: model, index: index, type: self.viewModel.type)
                 return cell
             }.disposed(by: disposeBag)
         
