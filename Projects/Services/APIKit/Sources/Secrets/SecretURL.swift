@@ -89,5 +89,5 @@ public func WMDOMAIN_APP() -> String {
     guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
         return ""
     }
-    return secrets["WMDOMAIN_VERSION"] as? String ?? "not found key"
+    return secrets["WMDOMAIN_APP"] as? String ?? "not found key"
 }
