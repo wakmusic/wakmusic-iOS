@@ -17,7 +17,7 @@ extension AppAPI: WMAPI {
     public var urlPath: String {
         switch self {
             case .checkVersion:
-                return "/version"
+                return "/check"
         }
     }
         
