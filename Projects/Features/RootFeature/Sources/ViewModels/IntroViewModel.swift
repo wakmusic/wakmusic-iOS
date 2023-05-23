@@ -19,6 +19,7 @@ final public class IntroViewModel: ViewModelType {
 
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
+    var fetchCheckVersionUseCase: FetchCheckVersionUseCase!
 
     public struct Input {
     }
@@ -28,9 +29,11 @@ final public class IntroViewModel: ViewModelType {
     }
 
     public init(
-        fetchUserInfoUseCase: FetchUserInfoUseCase
+        fetchUserInfoUseCase: FetchUserInfoUseCase,
+        fetchCheckVersionUseCase: FetchCheckVersionUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        self.fetchCheckVersionUseCase = fetchCheckVersionUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
