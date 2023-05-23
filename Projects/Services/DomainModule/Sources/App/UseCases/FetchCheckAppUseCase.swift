@@ -10,6 +10,6 @@ import Foundation
 import RxSwift
 import DataMappingModule
 
-public protocol FetchCheckVersionUseCase {
-    func execute() -> Single<VersionCheckEntity>
+public protocol FetchCheckAppUseCase {
+    func execute() -> Single<AppInfoEntity>
 }

@@ -30,9 +30,9 @@ public extension AppComponent {
     }
     
     
-    var fetchCheckVersionUseCase: any FetchCheckVersionUseCase{
+    var fetchCheckAppUseCase: any FetchCheckAppUseCase{
         shared {
-            FetchCheckVersionUseCaseImpl(appRepository: appRepository)
+            FetchCheckAppUseCaseImpl(appRepository: appRepository)
         }
     }
 }

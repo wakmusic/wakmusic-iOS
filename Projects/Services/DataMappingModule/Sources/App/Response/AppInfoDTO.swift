@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CheckVersionResponseDTO: Codable {
+public struct AppInfoDTO: Codable {
     public let flag: Int
     public let title,description,version: String?
 }

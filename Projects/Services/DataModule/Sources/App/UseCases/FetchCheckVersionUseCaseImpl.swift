@@ -12,7 +12,7 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchCheckVersionUseCaseImpl: FetchCheckVersionUseCase {
+public struct FetchCheckAppUseCaseImpl: FetchCheckAppUseCase {
     
     private let appRepository: any AppRepository
 
@@ -22,8 +22,8 @@ public struct FetchCheckVersionUseCaseImpl: FetchCheckVersionUseCase {
         self.appRepository = appRepository
     }
     
-    public func execute() -> Single<VersionCheckEntity> {
-        appRepository.checkVersion()
+    public func execute() -> Single<AppInfoEntity> {
+        appRepository.fetchCheckApp()
     }
     
     

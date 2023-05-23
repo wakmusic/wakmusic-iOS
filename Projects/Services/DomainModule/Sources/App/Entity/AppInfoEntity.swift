@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct VersionCheckEntity: Equatable {
+public struct AppInfoEntity: Equatable {
     public init(
         flag:Int,
         title:String,

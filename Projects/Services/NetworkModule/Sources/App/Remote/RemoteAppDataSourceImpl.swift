@@ -15,9 +15,9 @@ import Foundation
 import NetworkModule
 
 public final class RemoteAppDataSourceImpl: BaseRemoteDataSource<AppAPI>, RemoteAppDataSource {
-    public func checkVersion() -> Single<VersionCheckEntity> {
+    public func fetchCheckApp() -> Single<AppInfoEntity> {
         request(.checkVersion)
-            .map(CheckVersionResponseDTO.self)
+            .map(AppInfoDTO.self)
             .map({$0.toDomain()})
     }
     

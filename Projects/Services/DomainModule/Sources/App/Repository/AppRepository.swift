@@ -13,6 +13,6 @@ import ErrorModule
 
 
 public protocol AppRepository {
-    func checkVersion() -> Single<VersionCheckEntity>
+    func fetchCheckApp() -> Single<AppInfoEntity>
    
 }

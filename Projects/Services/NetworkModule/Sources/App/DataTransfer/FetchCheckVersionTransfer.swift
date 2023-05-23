@@ -11,10 +11,10 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-public extension CheckVersionResponseDTO {
-    func toDomain() -> VersionCheckEntity {
+public extension AppInfoDTO {
+    func toDomain() -> AppInfoEntity {
         
-        return VersionCheckEntity(
+        return AppInfoEntity(
             flag:flag,
             title:title ?? "",
             description:description ?? "",

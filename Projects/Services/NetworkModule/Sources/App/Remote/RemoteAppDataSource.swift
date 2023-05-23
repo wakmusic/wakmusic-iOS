@@ -13,5 +13,5 @@ import DomainModule
 import RxSwift
 
 public protocol RemoteAppDataSource {
-    func checkVersion() -> Single<VersionCheckEntity>
+    func fetchCheckApp() -> Single<AppInfoEntity>
 }

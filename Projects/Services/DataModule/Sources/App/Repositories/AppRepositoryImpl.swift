@@ -22,8 +22,8 @@ public struct AppRepositoryImpl :AppRepository {
         self.remoteAppDataSource = remoteAppDataSource
     }
     
-    public func checkVersion() -> Single<VersionCheckEntity> {
-        remoteAppDataSource.checkVersion()
+    public func fetchCheckApp() -> Single<AppInfoEntity> {
+        remoteAppDataSource.fetchCheckApp()
     }
     
     

@@ -7,7 +7,7 @@ public protocol RootDependency: Dependency {
     var mainContainerComponent: MainContainerComponent { get }
     var permissionComponent: PermissionComponent { get }
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
-    var fetchCheckVersionUseCase: any FetchCheckVersionUseCase {get}
+    var fetchCheckAppUseCase: any FetchCheckAppUseCase {get}
 }
 
 public final class RootComponent: Component<RootDependency> {
@@ -15,7 +15,7 @@ public final class RootComponent: Component<RootDependency> {
         return IntroViewController.viewController(
             mainContainerComponent: dependency.mainContainerComponent,
             permissionComponent: dependency.permissionComponent,
-            viewModel: IntroViewModel(fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,fetchCheckVersionUseCase:dependency.fetchCheckVersionUseCase)
+            viewModel: IntroViewModel(fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,fetchCheckAppUseCase:dependency.fetchCheckAppUseCase)
         )
     }
 }
