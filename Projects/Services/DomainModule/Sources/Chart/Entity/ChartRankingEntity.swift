@@ -9,6 +9,7 @@ public struct ChartRankingEntity: Equatable {
         reaction: String,
         views: Int,
         last: Int,
+        increase: Int,
         date: String,
         isSelected: Bool = false
     ) {
@@ -19,13 +20,14 @@ public struct ChartRankingEntity: Equatable {
         self.reaction = reaction
         self.views = views
         self.last = last
+        self.increase = increase
         self.date = date
         self.isSelected = isSelected
     }
     
     public let id, title, artist, remix: String
     public let reaction: String
-    public let views, last: Int
+    public let views, last, increase: Int
     public let date: String
     public var isSelected:Bool
     

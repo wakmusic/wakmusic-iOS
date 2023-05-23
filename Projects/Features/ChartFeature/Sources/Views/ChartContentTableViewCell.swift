@@ -3,6 +3,7 @@ import SnapKit
 import Then
 import DesignSystem
 import DomainModule
+import DataMappingModule
 import Kingfisher
 import Utility
 
@@ -213,7 +214,7 @@ extension ChartContentTableViewCell {
 
 // MARK: - Update
 extension ChartContentTableViewCell {
-    public func update(model: ChartRankingEntity, index: Int) {
+    public func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
         
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : .clear
         
@@ -231,10 +232,17 @@ extension ChartContentTableViewCell {
             text: model.artist,
             font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
         )
-        hitsLabel.attributedText = getAttributedString(
-            text: model.views.addCommaToNumber() + "회",
-            font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
-        )        
+        if type == .total {
+            hitsLabel.attributedText = getAttributedString(
+                text: model.views.addCommaToNumber() + "회",
+                font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+            )
+        } else {
+            hitsLabel.attributedText = getAttributedString(
+                text: model.increase.addCommaToNumber() + "회",
+                font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+            )
+        }
         rankingLabel.attributedText = getAttributedString(
             text: "\(index + 1)",
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 16)
