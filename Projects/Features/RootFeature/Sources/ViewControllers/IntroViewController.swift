@@ -58,9 +58,9 @@ extension IntroViewController {
             .do(onNext: { [weak self] (_) in
                 guard let self = self else { return }
                 self.lottiePlay()
+                self.input.startLottieAnimation.onNext(())
             })
-            .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .map{  _ in () }
+            .map{ _ in () }
             .bind(to: input.fetchAppCheck)
             .disposed(by: disposeBag)
                 
@@ -113,35 +113,40 @@ extension IntroViewController {
                 owner.showPanModal(content: textPopupVc)
             })
             .disposed(by: disposeBag)
+        
+        Observable.zip(
+            output.userInfoResult,
+            output.endLottieAnimation
+        ) { (result, _) -> Result<String, Error> in
+            return result
+        }
+        .withUnretained(self)
+        .subscribe(onNext: { (owner, result) in
+            switch result{
+            case .success(_):
+                owner.showTabBar()
                 
-        output.showUserInfoResult
-            .withUnretained(self)
-            .subscribe(onNext: { owner, result in
-                switch result{
-                case .success(_):
-                    owner.showTabBar()
-                    
-                case .failure(let error):
-                    var message:String
-                    if error.asWMError == .unknown {
-                        message = error.localizedDescription
-                    }else {
-                        message = error.asWMError.errorDescription ?? ""
-                    }
-                    
-                    owner.showPanModal(
-                        content: TextPopupViewController.viewController(
-                            text: message,
-                            cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
-                            completion: { () in
-                                owner.showTabBar()
-                            }
-                        )
-                    )
+            case .failure(let error):
+                var message:String
+                if error.asWMError == .unknown {
+                    message = error.localizedDescription
+                }else {
+                    message = error.asWMError.errorDescription ?? ""
                 }
-            })
-            .disposed(by: disposeBag)
+                
+                owner.showPanModal(
+                    content: TextPopupViewController.viewController(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: false,
+                        completion: { () in
+                            owner.showTabBar()
+                        }
+                    )
+                )
+            }
+        })
+        .disposed(by: disposeBag)
     }
 }
 

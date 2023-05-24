@@ -26,12 +26,14 @@ final public class IntroViewModel: ViewModelType {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
         var fetchAppCheck: PublishSubject<Void> = PublishSubject()
         var fetchUserInfoCheck: PublishSubject<Void>  = PublishSubject()
+        var startLottieAnimation: PublishSubject<Void>  = PublishSubject()
     }
 
     public struct Output {
         var permissionResult: PublishSubject<Bool?> = PublishSubject()
         var appInfoResult: PublishSubject<AppInfoEntity> = PublishSubject()
-        var showUserInfoResult: PublishSubject<Result<String,Error>> = PublishSubject()
+        var userInfoResult: PublishSubject<Result<String,Error>> = PublishSubject()
+        var endLottieAnimation: PublishSubject<Void>  = PublishSubject()
     }
 
     public init(
@@ -55,9 +57,14 @@ final public class IntroViewModel: ViewModelType {
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
         
+        input.startLottieAnimation
+            .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
+            .bind(to: output.endLottieAnimation)
+            .disposed(by: disposeBag)
+        
         input.fetchAppCheck
             .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
-                guard let self else {return Observable.empty()}
+                guard let self else { return Observable.empty() }
                 return self.fetchCheckAppUseCase.execute()
                     .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
                     .asObservable()
@@ -70,7 +77,7 @@ final public class IntroViewModel: ViewModelType {
             .withLatestFrom(Utility.PreferenceManager.$userInfo)
             .filter{ (userInfo) in
                 guard userInfo != nil else {
-                    output.showUserInfoResult.onNext(.success(""))
+                    output.userInfoResult.onNext(.success(""))
                     return false
                 }
                 return true
@@ -82,7 +89,7 @@ final public class IntroViewModel: ViewModelType {
             }
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(onNext: { _ in
-                output.showUserInfoResult.onNext(.success(""))
+                output.userInfoResult.onNext(.success(""))
             }, onError: { (error) in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired {
@@ -90,11 +97,11 @@ final public class IntroViewModel: ViewModelType {
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
                     Utility.PreferenceManager.startPage = 4
-                    output.showUserInfoResult.onNext(.failure(asWMError))
+                    output.userInfoResult.onNext(.failure(asWMError))
                 }else if asWMError == .unknown {
-                    output.showUserInfoResult.onNext(.failure(asWMError))
+                    output.userInfoResult.onNext(.failure(asWMError))
                 }else{
-                    output.showUserInfoResult.onNext(.failure(error))
+                    output.userInfoResult.onNext(.failure(error))
                 }
             }).disposed(by: disposeBag)
         
