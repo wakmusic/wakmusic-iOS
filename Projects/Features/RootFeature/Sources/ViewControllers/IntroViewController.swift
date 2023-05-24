@@ -39,7 +39,6 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 }
 
 extension IntroViewController {
-    
     private func inputBind() {
         input.fetchPermissionCheck.onNext(())
     }
@@ -61,91 +60,97 @@ extension IntroViewController {
                 self.lottiePlay()
             })
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .map({ _ -> Void in
-                    return ()
-            })
+            .map{  _ in () }
             .bind(to: input.fetchAppCheck)
             .disposed(by: disposeBag)
                 
-            output.appInfoResult
-                .withUnretained(self)
-                .subscribe(onNext: { owner,entity in
-                    
-                    var textPopupVc:TextPopupViewController
-                    let updateTitle = "왁타버스 뮤직이 업데이트 되었습니다."
-                    let updateMessage = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
-                    
-                    switch entity.flag {
-                        
-                    case .normal:
-                        owner.input.fetchUserInfoCheck.onNext(())
-                        return
-                    case .event:
-                        textPopupVc = TextPopupViewController.viewController(text:"\(entity.title)\n\(entity.description)",cancelButtonIsHidden: true,completion: {
-                            exit(0)
-                        })
-                    case .update:
-                        textPopupVc = TextPopupViewController.viewController(text:"\(updateTitle)\n\(updateMessage)",cancelButtonIsHidden: false,confirmButtonText: "업데이트",cancelButtonText: "나중에",completion: {
-                            owner.goAppStore()
-                        },cancelCompletion: {
-                            owner.input.fetchUserInfoCheck.onNext(())
-                        })
-                        
-                    case .forceUpdate:
-                        textPopupVc = TextPopupViewController.viewController(text:"\(updateTitle)\n\(updateMessage)",cancelButtonIsHidden: true,confirmButtonText: "업데이트",completion: {
-                            owner.goAppStore()
-                        })
-                        
-                    }
-                    owner.showPanModal(content: textPopupVc)
-                  
-                })
-                .disposed(by: disposeBag)
+        output.appInfoResult
+            .withUnretained(self)
+            .subscribe(onNext: { owner,entity in
+                var textPopupVc: TextPopupViewController
+                let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
+                let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
                 
-                output.showUserInfoResult
-                .withUnretained(self)
-                .subscribe(onNext: { owner,result in
+                switch entity.flag {
                     
+                case .normal:
+                    owner.input.fetchUserInfoCheck.onNext(())
+                    return
+                    
+                case .event:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(entity.title)\n\(entity.description)",
+                        cancelButtonIsHidden: true,
+                        completion: {
+                            exit(0)
+                        }
+                    )
+                    
+                case .update:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(updateTitle)\n\(updateMessage)",
+                        cancelButtonIsHidden: false,
+                        confirmButtonText: "업데이트",
+                        cancelButtonText: "나중에",
+                        completion: {
+                            owner.goAppStore()
+                        },
+                        cancelCompletion: {
+                            owner.input.fetchUserInfoCheck.onNext(())
+                        }
+                    )
+                    
+                case .forceUpdate:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(updateTitle)\n\(updateMessage)",
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "업데이트",
+                        completion: {
+                            owner.goAppStore()
+                        }
+                    )
+                }
+                owner.showPanModal(content: textPopupVc)
+            })
+            .disposed(by: disposeBag)
+                
+        output.showUserInfoResult
+                .withUnretained(self)
+                .subscribe(onNext: { owner, result in
                     switch result{
-                        
                     case .success(_):
                         owner.showTabBar()
+                        
                     case .failure(let error):
-                        
                         var message:String
-                        
                         if error.asWMError == .unknown {
                             message = error.localizedDescription
-                        }
-                        
-                        else {
+                        }else {
                             message = error.asWMError.errorDescription ?? ""
                         }
                         
-                        owner.showPanModal(content: TextPopupViewController.viewController(
-                            text: message ,
-                            cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
-                            completion: { [weak self] () in
-                                guard let `self` = self else { return }
-                                self.showTabBar()
-                            })
+                        owner.showPanModal(
+                            content: TextPopupViewController.viewController(
+                                text: message,
+                                cancelButtonIsHidden: true,
+                                allowsDragAndTapToDismiss: false,
+                                completion: { () in
+                                    owner.showTabBar()
+                                }
+                            )
                         )
                     }
-                    
                 })
                 .disposed(by: disposeBag)
-
     }
 }
 
 extension IntroViewController {
-
     private func showTabBar() {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
-
+    
     private func lottiePlay() {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
