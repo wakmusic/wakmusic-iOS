@@ -14,21 +14,12 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 import ErrorModule
-
-public enum VersionCheckFlag:Int {
-    case noraml = 1
-    case event
-    case update
-    case forceUpdate
-
-}
+import DataMappingModule
 
 public struct AppInfoResult {
-    
-    let title:String
-    let message:String
-    let flag:VersionCheckFlag
-    
+    let title: String
+    let message: String
+    let flag: AppInfoFlagType
 }
 
 final public class IntroViewModel: ViewModelType {
@@ -59,43 +50,27 @@ final public class IntroViewModel: ViewModelType {
         let output = Output()
         
         self.fetchCheckAppUseCase.execute()
+            .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
             .asObservable()
-            .flatMap({ [weak self] (entity:AppInfoEntity) -> Observable<AppInfoResult> in
-                
-                guard let self else {return Observable.empty()}
-                
-                var appInfoResult:AppInfoResult
+            .debug("✅ Intro > fetchCheckAppUseCase")
+            .map{ (entity:AppInfoEntity) -> AppInfoResult in
+                var appInfoResult: AppInfoResult
                 
                 switch entity.flag {
-                        case 1:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .noraml)
-                        case 2:
-                            appInfoResult = AppInfoResult(title: entity.title, message: entity.description, flag: .event)
-                        
-                        case 3:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .update)
-                        
-                        case 4:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .forceUpdate)
-                        
-                        default:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .noraml)
-                    
+                case .normal:
+                    appInfoResult = AppInfoResult(title: "", message: "", flag: .normal)
+                case .event:
+                    appInfoResult = AppInfoResult(title: entity.title, message: entity.description, flag: .event)
+                case .update:
+                    appInfoResult = AppInfoResult(title: "", message: "", flag: .update)
+                case .forceUpdate:
+                    appInfoResult = AppInfoResult(title: "", message: "", flag: .forceUpdate)
                 }
-                
-                return Observable.just(appInfoResult)
-                
-            })
+                return appInfoResult
+            }
             .bind(to: output.appInfoResult)
             .disposed(by: disposeBag)
         
-    
-    
-        
-            
-        
-        
-
         Utility.PreferenceManager.$userInfo
             .delay(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
             .take(1)

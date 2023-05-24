@@ -12,7 +12,6 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 import Foundation
-import NetworkModule
 
 public final class RemoteAppDataSourceImpl: BaseRemoteDataSource<AppAPI>, RemoteAppDataSource {
     public func fetchCheckApp() -> Single<AppInfoEntity> {
@@ -20,6 +19,4 @@ public final class RemoteAppDataSourceImpl: BaseRemoteDataSource<AppAPI>, Remote
             .map(AppInfoDTO.self)
             .map({$0.toDomain()})
     }
-    
-    
 }

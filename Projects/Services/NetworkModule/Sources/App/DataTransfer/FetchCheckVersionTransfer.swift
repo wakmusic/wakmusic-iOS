@@ -13,13 +13,11 @@ import Utility
 
 public extension AppInfoDTO {
     func toDomain() -> AppInfoEntity {
-        
         return AppInfoEntity(
-            flag:flag,
-            title:title ?? "",
-            description:description ?? "",
-            version:version ?? ""
+            flag: flag,
+            title: title ?? "",
+            description: description ?? "",
+            version: version ?? ""
         )
-        
     }
 }
