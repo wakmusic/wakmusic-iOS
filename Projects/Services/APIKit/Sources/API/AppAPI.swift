@@ -2,14 +2,12 @@ import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
-import Utility
 
 public enum AppAPI {
     case checkVersion
 }
 
 extension AppAPI: WMAPI {
-
     public var domain: WMDomain {
         .app
     }
@@ -31,7 +29,7 @@ extension AppAPI: WMAPI {
         case .checkVersion:
             return .requestParameters(parameters: [
                 "os": "ios",
-                "version": APP_VERSION()
+                "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
             ], encoding: URLEncoding.queryString)
             
         }
