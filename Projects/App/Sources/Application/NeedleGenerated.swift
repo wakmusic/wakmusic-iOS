@@ -501,6 +501,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
+    var fetchCheckAppUseCase: any FetchCheckAppUseCase {
+        return appComponent.fetchCheckAppUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -838,6 +841,9 @@ extension AppComponent: Registration {
         localTable["suggestFunctionUseCase-any SuggestFunctionUseCase"] = { self.suggestFunctionUseCase as Any }
         localTable["modifySongUseCase-any ModifySongUseCase"] = { self.modifySongUseCase as Any }
         localTable["inquiryWeeklyChartUseCase-any InquiryWeeklyChartUseCase"] = { self.inquiryWeeklyChartUseCase as Any }
+        localTable["remoteAppDataSource-any RemoteAppDataSource"] = { self.remoteAppDataSource as Any }
+        localTable["appRepository-any AppRepository"] = { self.appRepository as Any }
+        localTable["fetchCheckAppUseCase-any FetchCheckAppUseCase"] = { self.fetchCheckAppUseCase as Any }
         localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
         localTable["chartContentComponent-ChartContentComponent"] = { self.chartContentComponent as Any }
         localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
@@ -1020,6 +1026,7 @@ extension RootComponent: Registration {
         keyPathToName[\RootDependency.mainContainerComponent] = "mainContainerComponent-MainContainerComponent"
         keyPathToName[\RootDependency.permissionComponent] = "permissionComponent-PermissionComponent"
         keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+        keyPathToName[\RootDependency.fetchCheckAppUseCase] = "fetchCheckAppUseCase-any FetchCheckAppUseCase"
     }
 }
 extension PermissionComponent: Registration {

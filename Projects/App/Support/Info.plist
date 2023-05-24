@@ -116,6 +116,8 @@
 		<string>$(WMDOMAIN_USER)</string>
 		<key>WM_APP_ID</key>
 		<string>$(WM_APP_ID)</string>
+		<key>WMDOMAIN_APP</key>
+		<string>$(WMDOMAIN_APP)</string>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

@@ -21,7 +21,8 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        bind()
+        outputBind()
+        inputBind()
     }
     
     public static func viewController(
@@ -38,18 +39,13 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 }
 
 extension IntroViewController {
+    private func inputBind() {
+        input.fetchPermissionCheck.onNext(())
+    }
     
-    private func bind() {
-        
-        let combineObservable = Observable.combineLatest(
-            output.showAlert,
-            Utility.PreferenceManager.$appPermissionChecked
-        ) { (message, permission) -> (String, Bool?) in
-            return (message, permission)
-        }
-        
-        combineObservable
-            .do(onNext: { [weak self] (_, permission) in
+    private func outputBind() {
+        output.permissionResult
+            .do(onNext: { [weak self] (permission) in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
                 guard show else { return }
@@ -58,39 +54,103 @@ extension IntroViewController {
                 permission.modalPresentationStyle = .overFullScreen
                 self.present(permission, animated: true)
             })
-            .filter { return ($0.1 ?? false) == true }
-            .do(onNext: { [weak self] (_, _) in
+            .filter { return ($0 ?? false) == true }
+            .do(onNext: { [weak self] (_) in
                 guard let self = self else { return }
                 self.lottiePlay()
             })
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (message, _) in
-                guard let `self` = self else { return }
-                if message.isEmpty {
-                    self.showTabBar()
+            .map{  _ in () }
+            .bind(to: input.fetchAppCheck)
+            .disposed(by: disposeBag)
+                
+        output.appInfoResult
+            .withUnretained(self)
+            .subscribe(onNext: { owner,entity in
+                var textPopupVc: TextPopupViewController
+                let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
+                let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
+                
+                switch entity.flag {
                     
-                }else{
-                    self.showPanModal(content: TextPopupViewController.viewController(
-                        text: message,
+                case .normal:
+                    owner.input.fetchUserInfoCheck.onNext(())
+                    return
+                    
+                case .event:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(entity.title)\n\(entity.description)",
                         cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
-                        completion: { [weak self] () in
-                            guard let `self` = self else { return }
-                            self.showTabBar()
-                        })
+                        completion: {
+                            exit(0)
+                        }
+                    )
+                    
+                case .update:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(updateTitle)\n\(updateMessage)",
+                        cancelButtonIsHidden: false,
+                        confirmButtonText: "업데이트",
+                        cancelButtonText: "나중에",
+                        completion: {
+                            owner.goAppStore()
+                        },
+                        cancelCompletion: {
+                            owner.input.fetchUserInfoCheck.onNext(())
+                        }
+                    )
+                    
+                case .forceUpdate:
+                    textPopupVc = TextPopupViewController.viewController(
+                        text:"\(updateTitle)\n\(updateMessage)",
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "업데이트",
+                        completion: {
+                            owner.goAppStore()
+                        }
                     )
                 }
-            }).disposed(by: disposeBag)
+                owner.showPanModal(content: textPopupVc)
+            })
+            .disposed(by: disposeBag)
+                
+        output.showUserInfoResult
+            .withUnretained(self)
+            .subscribe(onNext: { owner, result in
+                switch result{
+                case .success(_):
+                    owner.showTabBar()
+                    
+                case .failure(let error):
+                    var message:String
+                    if error.asWMError == .unknown {
+                        message = error.localizedDescription
+                    }else {
+                        message = error.asWMError.errorDescription ?? ""
+                    }
+                    
+                    owner.showPanModal(
+                        content: TextPopupViewController.viewController(
+                            text: message,
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false,
+                            completion: { () in
+                                owner.showTabBar()
+                            }
+                        )
+                    )
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 extension IntroViewController {
-
     private func showTabBar() {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
-
+    
     private func lottiePlay() {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds

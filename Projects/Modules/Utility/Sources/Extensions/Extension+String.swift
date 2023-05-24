@@ -41,7 +41,7 @@ public extension String {
     /// String(text)의 첫 글자만 대문자로 변환합니다.
     var capitalizingFirstLetter: String {
         // 첫 글자는 대문자로 + 대문자로 변환한 첫 글자는 잘라낸 후 더한다.
-        return prefix(1).uppercased() + self.lowercased().dropFirst()
+        return prefix(1).uppercased() + self.dropFirst()
     }
     
     

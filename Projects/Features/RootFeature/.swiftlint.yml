@@ -17,4 +17,4 @@ disabled_rules:
   - line_length # 한줄에 글자 수 제한 , warning: 120, error: 200 (default) 
   - statement_position # if는 반드시 else로 끝나야한다.
   - identifier_name #변수명 글자 수 제한
-
+  - large_tuple # 튜플 갯수 제한 

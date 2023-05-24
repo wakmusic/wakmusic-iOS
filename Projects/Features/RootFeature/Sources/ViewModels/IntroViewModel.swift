@@ -14,35 +14,63 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 import ErrorModule
+import DataMappingModule
+
 
 final public class IntroViewModel: ViewModelType {
-
-    var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
+    var fetchCheckAppUseCase: FetchCheckAppUseCase!
+    var disposeBag = DisposeBag()
 
     public struct Input {
+        var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
+        var fetchAppCheck: PublishSubject<Void> = PublishSubject()
+        var fetchUserInfoCheck: PublishSubject<Void>  = PublishSubject()
     }
 
     public struct Output {
-        var showAlert: PublishSubject<String> = PublishSubject()
+        var permissionResult: PublishSubject<Bool?> = PublishSubject()
+        var appInfoResult: PublishSubject<AppInfoEntity> = PublishSubject()
+        var showUserInfoResult: PublishSubject<Result<String,Error>> = PublishSubject()
     }
 
     public init(
-        fetchUserInfoUseCase: FetchUserInfoUseCase
+        fetchUserInfoUseCase: FetchUserInfoUseCase,
+        fetchCheckAppUseCase: FetchCheckAppUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        self.fetchCheckAppUseCase = fetchCheckAppUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-
-        Utility.PreferenceManager.$userInfo
-            .delay(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
-            .take(1)
+        
+        Observable.combineLatest(
+            input.fetchPermissionCheck,
+            Utility.PreferenceManager.$appPermissionChecked
+        ) { (_, permission) -> Bool? in
+            return permission
+        }
+        .bind(to: output.permissionResult)
+        .disposed(by: disposeBag)
+        
+        input.fetchAppCheck
+            .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
+                guard let self else {return Observable.empty()}
+                return self.fetchCheckAppUseCase.execute()
+                    .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
+                    .asObservable()
+            }
+            .debug("✅ Intro > fetchCheckAppUseCase")
+            .bind(to: output.appInfoResult)
+            .disposed(by: disposeBag)
+        
+        input.fetchUserInfoCheck
+            .withLatestFrom(Utility.PreferenceManager.$userInfo)
             .filter{ (userInfo) in
                 guard userInfo != nil else {
-                    output.showAlert.onNext("")
+                    output.showUserInfoResult.onNext(.success(""))
                     return false
                 }
                 return true
@@ -54,7 +82,7 @@ final public class IntroViewModel: ViewModelType {
             }
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(onNext: { _ in
-                output.showAlert.onNext("")
+                output.showUserInfoResult.onNext(.success(""))
             }, onError: { (error) in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired {
@@ -62,11 +90,11 @@ final public class IntroViewModel: ViewModelType {
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
                     Utility.PreferenceManager.startPage = 4
-                    output.showAlert.onNext(asWMError.errorDescription ?? "")
+                    output.showUserInfoResult.onNext(.failure(asWMError))
                 }else if asWMError == .unknown {
-                    output.showAlert.onNext(asWMError.errorDescription ?? "")
+                    output.showUserInfoResult.onNext(.failure(asWMError))
                 }else{
-                    output.showAlert.onNext(error.localizedDescription)
+                    output.showUserInfoResult.onNext(.failure(error))
                 }
             }).disposed(by: disposeBag)
         
