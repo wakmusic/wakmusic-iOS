@@ -115,33 +115,33 @@ extension IntroViewController {
             .disposed(by: disposeBag)
                 
         output.showUserInfoResult
-                .withUnretained(self)
-                .subscribe(onNext: { owner, result in
-                    switch result{
-                    case .success(_):
-                        owner.showTabBar()
-                        
-                    case .failure(let error):
-                        var message:String
-                        if error.asWMError == .unknown {
-                            message = error.localizedDescription
-                        }else {
-                            message = error.asWMError.errorDescription ?? ""
-                        }
-                        
-                        owner.showPanModal(
-                            content: TextPopupViewController.viewController(
-                                text: message,
-                                cancelButtonIsHidden: true,
-                                allowsDragAndTapToDismiss: false,
-                                completion: { () in
-                                    owner.showTabBar()
-                                }
-                            )
-                        )
+            .withUnretained(self)
+            .subscribe(onNext: { owner, result in
+                switch result{
+                case .success(_):
+                    owner.showTabBar()
+                    
+                case .failure(let error):
+                    var message:String
+                    if error.asWMError == .unknown {
+                        message = error.localizedDescription
+                    }else {
+                        message = error.asWMError.errorDescription ?? ""
                     }
-                })
-                .disposed(by: disposeBag)
+                    
+                    owner.showPanModal(
+                        content: TextPopupViewController.viewController(
+                            text: message,
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false,
+                            completion: { () in
+                                owner.showTabBar()
+                            }
+                        )
+                    )
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
