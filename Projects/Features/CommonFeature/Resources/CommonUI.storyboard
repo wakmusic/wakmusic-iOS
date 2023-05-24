@@ -79,7 +79,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" name="gray100"/>
                                 <constraints>
                                     <constraint firstItem="3an-5f-9hS" firstAttribute="leading" secondItem="w6c-sc-hRc" secondAttribute="leading" id="3Tt-L0-HXq"/>
                                     <constraint firstAttribute="bottom" secondItem="3an-5f-9hS" secondAttribute="bottom" id="5VZ-eH-UAR"/>
