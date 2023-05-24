@@ -15,6 +15,22 @@ import BaseFeature
 import KeychainModule
 import ErrorModule
 
+public enum VersionCheckFlag:Int {
+    case noraml = 1
+    case event
+    case update
+    case forceUpdate
+
+}
+
+public struct AppInfoResult {
+    
+    let title:String
+    let message:String
+    let flag:VersionCheckFlag
+    
+}
+
 final public class IntroViewModel: ViewModelType {
 
     var disposeBag = DisposeBag()
@@ -26,6 +42,8 @@ final public class IntroViewModel: ViewModelType {
 
     public struct Output {
         var showAlert: PublishSubject<String> = PublishSubject()
+        var showErrorPopup: PublishSubject<Void> = PublishSubject()
+        var appInfoResult: PublishSubject<AppInfoResult> = PublishSubject()
     }
 
     public init(
@@ -39,6 +57,44 @@ final public class IntroViewModel: ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
+        
+        self.fetchCheckAppUseCase.execute()
+            .asObservable()
+            .flatMap({ [weak self] (entity:AppInfoEntity) -> Observable<AppInfoResult> in
+                
+                guard let self else {return Observable.empty()}
+                
+                var appInfoResult:AppInfoResult
+                
+                switch entity.flag {
+                        case 1:
+                            appInfoResult = AppInfoResult(title: "", message: "", flag: .noraml)
+                        case 2:
+                            appInfoResult = AppInfoResult(title: entity.title, message: entity.description, flag: .event)
+                        
+                        case 3:
+                            appInfoResult = AppInfoResult(title: "", message: "", flag: .update)
+                        
+                        case 4:
+                            appInfoResult = AppInfoResult(title: "", message: "", flag: .forceUpdate)
+                        
+                        default:
+                            appInfoResult = AppInfoResult(title: "", message: "", flag: .noraml)
+                    
+                }
+                
+                return Observable.just(appInfoResult)
+                
+            })
+            .bind(to: output.appInfoResult)
+            .disposed(by: disposeBag)
+        
+    
+    
+        
+            
+        
+        
 
         Utility.PreferenceManager.$userInfo
             .delay(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
