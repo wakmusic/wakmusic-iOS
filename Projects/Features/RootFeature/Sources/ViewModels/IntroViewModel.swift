@@ -19,6 +19,8 @@ import DataMappingModule
 
 final public class IntroViewModel: ViewModelType {
 
+    var input = Input()
+    var output = Output()
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
     var fetchCheckAppUseCase: FetchCheckAppUseCase!
@@ -30,8 +32,8 @@ final public class IntroViewModel: ViewModelType {
     }
 
     public struct Output {
+        var permissionResult: PublishSubject<Bool?> = PublishSubject()
         var showUserInfoAlert: PublishSubject<Result<String,Error>> = PublishSubject()
-        var permissionResult: PublishSubject<Bool?>  = PublishSubject()
         var appInfoResult: PublishSubject<AppInfoEntity> = PublishSubject()
     }
 
@@ -42,20 +44,23 @@ final public class IntroViewModel: ViewModelType {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.fetchCheckAppUseCase = fetchCheckAppUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
+        
+        Observable.combineLatest(
+            input.fetchPermissionCheck,
+            Utility.PreferenceManager.$appPermissionChecked
+        ) { (_, permission) -> Bool? in
+            return permission
+        }
+        .debug("Permission")
+        .bind(to: output.permissionResult)
+        .disposed(by: disposeBag)
+
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
         
         
-        Observable.combineLatest(
-            input.fetchPermissionCheck,
-            Utility.PreferenceManager.$appPermissionChecked) { (_,permission) -> Bool? in
-                return permission 
-            }
-            .debug("Permission")
-            .bind(to: output.permissionResult)
-            .disposed(by: disposeBag)
         
             
         

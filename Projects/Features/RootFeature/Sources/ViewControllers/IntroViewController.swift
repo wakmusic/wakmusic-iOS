@@ -15,14 +15,14 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
     var permissionComponent: PermissionComponent!
 
     private var viewModel: IntroViewModel!
-    lazy var input = IntroViewModel.Input()
-    lazy var output = viewModel.transform(from: input)
+//    lazy var input = IntroViewModel.Input()
+//    lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        inputBind()
         outputBind()
+        inputBind()
     }
     
     public static func viewController(
@@ -41,15 +41,12 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 extension IntroViewController {
     
     private func inputBind() {
-        
-        input.fetchPermissionCheck.onNext(())
-        
+        viewModel.input.fetchPermissionCheck.onNext(())
     }
     
     private func outputBind() {
         
-        output.permissionResult
-            .debug("Permission2")
+        viewModel.output.permissionResult
             .do(onNext: { [weak self] (permission) in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
