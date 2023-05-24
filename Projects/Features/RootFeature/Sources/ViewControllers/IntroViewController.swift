@@ -101,22 +101,40 @@ extension IntroViewController {
                   
                 })
                 .disposed(by: disposeBag)
-        
-        // 앱 종료 exit(0)
-//                if message.isEmpty {
-//                    self.showTabBar()
-//
-//                }else{
-//                    self.showPanModal(content: TextPopupViewController.viewController(
-//                        text: message,
-//                        cancelButtonIsHidden: true,
-//                        allowsDragAndTapToDismiss: false,
-//                        completion: { [weak self] () in
-//                            guard let `self` = self else { return }
-//                            self.showTabBar()
-//                        })
-//                    )
-//                }
+                
+                output.showUserInfoResult
+                .withUnretained(self)
+                .subscribe(onNext: { owner,result in
+                    
+                    switch result{
+                        
+                    case .success(_):
+                        owner.showTabBar()
+                    case .failure(let error):
+                        
+                        var message:String
+                        
+                        if error.asWMError == .unknown {
+                            message = error.localizedDescription
+                        }
+                        
+                        else {
+                            message = error.asWMError.errorDescription ?? ""
+                        }
+                        
+                        owner.showPanModal(content: TextPopupViewController.viewController(
+                            text: message ,
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false,
+                            completion: { [weak self] () in
+                                guard let `self` = self else { return }
+                                self.showTabBar()
+                            })
+                        )
+                    }
+                    
+                })
+                .disposed(by: disposeBag)
 
     }
 }

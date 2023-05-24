@@ -69,46 +69,38 @@ final public class IntroViewModel: ViewModelType {
             .bind(to: output.appInfoResult)
             .disposed(by: disposeBag)
         
-//        self.fetchCheckAppUseCase.execute()
-//            .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
-//            .asObservable()
-//            .debug("✅ Intro > fetchCheckAppUseCase")
-//            .bind(to: output.appInfoResult)
-//            .disposed(by: disposeBag)
-//
-//        Utility.PreferenceManager.$userInfo
-//            .delay(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
-//            .take(1)
-//            .filter{ (userInfo) in
-//                guard userInfo != nil else {
-//                    output.showAlert.onNext("")
-//                    return false
-//                }
-//                return true
-//            }
-//            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
-//                guard let `self` = self else { return Observable.empty() }
-//                return self.fetchUserInfoUseCase.execute()
-//                    .asObservable()
-//            }
-//            .debug("✅ Intro > fetchUserInfoUseCase")
-//            .subscribe(onNext: { _ in
-//                output.showAlert.onNext("")
-//            }, onError: { (error) in
-//                let asWMError = error.asWMError
-//                if asWMError == .tokenExpired {
-//                    let keychain = KeychainImpl()
-//                    keychain.delete(type: .accessToken)
-//                    Utility.PreferenceManager.userInfo = nil
-//                    Utility.PreferenceManager.startPage = 4
-//                    output.showAlert.onNext(asWMError.errorDescription ?? "")
-//                }else if asWMError == .unknown {
-//                    output.showAlert.onNext(asWMError.errorDescription ?? "")
-//                }else{
-//                    output.showAlert.onNext(error.localizedDescription)
-//                }
-//            }).disposed(by: disposeBag)
-//
+        input.fetchUserInfoCheck
+            .withLatestFrom(Utility.PreferenceManager.$userInfo)
+            .filter{ (userInfo) in
+                guard userInfo != nil else {
+                    output.showUserInfoResult.onNext(.success(""))
+                    return false
+                }
+                return true
+            }
+            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
+                guard let `self` = self else { return Observable.empty() }
+                return self.fetchUserInfoUseCase.execute()
+                    .asObservable()
+            }
+            .debug("✅ Intro > fetchUserInfoUseCase")
+            .subscribe(onNext: { _ in
+                output.showUserInfoResult.onNext(.success(""))
+            }, onError: { (error) in
+                let asWMError = error.asWMError
+                if asWMError == .tokenExpired {
+                    let keychain = KeychainImpl()
+                    keychain.delete(type: .accessToken)
+                    Utility.PreferenceManager.userInfo = nil
+                    Utility.PreferenceManager.startPage = 4
+                    output.showUserInfoResult.onNext(.failure(asWMError))
+                }else if asWMError == .unknown {
+                    output.showUserInfoResult.onNext(.failure(asWMError))
+                }else{
+                    output.showUserInfoResult.onNext(.failure(error))
+                }
+            }).disposed(by: disposeBag)
+        
         return output
     }
 }
