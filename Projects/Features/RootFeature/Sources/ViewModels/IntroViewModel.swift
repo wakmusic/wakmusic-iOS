@@ -56,7 +56,18 @@ final public class IntroViewModel: ViewModelType {
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
 
-            
+        
+        input.fetchAppCheck
+            .flatMap({ [weak self]  _  -> Observable<AppInfoEntity> in
+                
+                guard let self else {return Observable.empty()}
+                
+                return self.fetchCheckAppUseCase.execute()
+                .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
+                .asObservable()
+            })
+            .bind(to: output.appInfoResult)
+            .disposed(by: disposeBag)
         
 //        self.fetchCheckAppUseCase.execute()
 //            .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))

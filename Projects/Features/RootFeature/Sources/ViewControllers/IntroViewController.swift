@@ -61,10 +61,11 @@ extension IntroViewController {
                 self.lottiePlay()
             })
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _  in
-                guard let `self` = self else { return }
-                
-            }).disposed(by: disposeBag)
+            .map({ _ -> Void in
+                    return ()
+            })
+            .bind(to: input.fetchAppCheck)
+            .disposed(by: disposeBag)
         
         // 앱 종료 exit(0)
 //                if message.isEmpty {
