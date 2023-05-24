@@ -21,7 +21,8 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        bind()
+        inputBind()
+        outputBind()
     }
     
     public static func viewController(
@@ -39,51 +40,17 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
 extension IntroViewController {
     
-    private func bind() {
+    private func inputBind() {
         
-        let combineObservable = Observable.combineLatest(
-            output.showErrorPopup,
-            output.appInfoResult,
-            output.showAlert,
-            Utility.PreferenceManager.$appPermissionChecked
-        ) { (showPopup,versionCheckResult,message, permission) -> (Bool,AppInfoResult,String, Bool?) in
-            return (showPopup,versionCheckResult,message, permission)
-        }
+        input.fetchPermissionCheck.onNext(())
         
-        // 앱 종료 exit(0)
+    }
+    
+    private func outputBind() {
         
-        combineObservable
-            .do(onNext: {[weak self] (show,appInfo,_,_) in
-                
-                guard let self else {return}
-                
-                var vc:TextPopupViewController
-                
-                switch appInfo.flag {
-                    
-                case .noraml:
-                    vc = TextPopupViewController.viewController(text: "", cancelButtonIsHidden: false)
-                case .event:
-                    vc = TextPopupViewController.viewController(text:"\(appInfo.title)\n\(appInfo.message)",cancelButtonIsHidden: true,completion: {
-                        
-                    })
-                case .update:
-                    vc = TextPopupViewController.viewController(text:"\(appInfo.title)\n\(appInfo.message)",cancelButtonIsHidden: false,confirmButtonText: "업데이트 하러가기",cancelButtonText: "나중에",completion: {
-                        
-                    })
-                case .forceUpdate:
-                    vc = TextPopupViewController.viewController(text:"\(appInfo.title)\n\(appInfo.message)",cancelButtonIsHidden: false,confirmButtonText: "업데이트 하러가기",completion: {
-                            
-                    })
-                }
-                
-                if show {
-                    self.showPanModal(content: vc)
-                }
-        
-            })
-        
-            .do(onNext: { [weak self] (_,_,_, permission) in
+        output.permissionResult
+            .debug("Permission2")
+            .do(onNext: { [weak self] (permission) in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
                 guard show else { return }
@@ -92,29 +59,33 @@ extension IntroViewController {
                 permission.modalPresentationStyle = .overFullScreen
                 self.present(permission, animated: true)
             })
-            .filter { return ($0.3 ?? false) == true }
-            .do(onNext: { [weak self] (_,_,_, _) in
+            .filter { return ($0 ?? false) == true }
+            .do(onNext: { [weak self] (_) in
                 guard let self = self else { return }
                 self.lottiePlay()
             })
             .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (_,_,message, _) in
+            .subscribe(onNext: { [weak self] _  in
                 guard let `self` = self else { return }
-                if message.isEmpty {
-                    self.showTabBar()
-                    
-                }else{
-                    self.showPanModal(content: TextPopupViewController.viewController(
-                        text: message,
-                        cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
-                        completion: { [weak self] () in
-                            guard let `self` = self else { return }
-                            self.showTabBar()
-                        })
-                    )
-                }
+                
             }).disposed(by: disposeBag)
+        
+        // 앱 종료 exit(0)
+//                if message.isEmpty {
+//                    self.showTabBar()
+//
+//                }else{
+//                    self.showPanModal(content: TextPopupViewController.viewController(
+//                        text: message,
+//                        cancelButtonIsHidden: true,
+//                        allowsDragAndTapToDismiss: false,
+//                        completion: { [weak self] () in
+//                            guard let `self` = self else { return }
+//                            self.showTabBar()
+//                        })
+//                    )
+//                }
+
     }
 }
 
