@@ -13,6 +13,8 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
     var allowsDragAndTapToDismiss: Bool = true
+    var cancelButtonText: String = ""
+    var confirmButtonText: String = ""
     
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
@@ -28,8 +30,11 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         text: String = "",
         cancelButtonIsHidden: Bool,
         allowsDragAndTapToDismiss: Bool = true,
+        confirmButtonText:String = "확인",
+        cancelButtonText:String = "취소",
         completion: (() -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
+        
     ) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
@@ -37,6 +42,8 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         viewController.allowsDragAndTapToDismiss = allowsDragAndTapToDismiss
         viewController.completion = completion
         viewController.cancelCompletion = cancelCompletion
+        viewController.confirmButtonText = confirmButtonText
+        viewController.cancelButtonText = cancelButtonText
         return viewController
     }
 
@@ -61,7 +68,7 @@ extension TextPopupViewController {
         cancelButton.isHidden = cancelButtonIsHidden
 
         let cancelAttributedString = NSMutableAttributedString(
-            string: "취소",
+            string: cancelButtonText,
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
@@ -74,7 +81,7 @@ extension TextPopupViewController {
 
         // 확인
         let confirmAttributedString = NSMutableAttributedString(
-            string: "확인",
+            string: confirmButtonText,
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,

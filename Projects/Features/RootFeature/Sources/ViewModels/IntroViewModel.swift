@@ -42,7 +42,7 @@ final public class IntroViewModel: ViewModelType {
 
     public struct Output {
         var showAlert: PublishSubject<String> = PublishSubject()
-        var showErrorPopup: PublishSubject<Void> = PublishSubject()
+        var showErrorPopup: PublishSubject<Bool> = PublishSubject()
         var appInfoResult: PublishSubject<AppInfoResult> = PublishSubject()
     }
 
@@ -60,11 +60,13 @@ final public class IntroViewModel: ViewModelType {
         
         self.fetchCheckAppUseCase.execute()
             .asObservable()
-            .flatMap({ [weak self] (entity:AppInfoEntity) -> Observable<AppInfoResult> in
-                
-                guard let self else {return Observable.empty()}
+            .map({ [weak self] (entity:AppInfoEntity) -> AppInfoResult in
+                guard let self else {return AppInfoResult(title: "", message: "", flag: .noraml) }
                 
                 var appInfoResult:AppInfoResult
+                
+                let updateTitle = "왁타버스 뮤직이 업데이트 되었습니다."
+                let updateMessage = "최신버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
                 
                 switch entity.flag {
                         case 1:
@@ -73,23 +75,39 @@ final public class IntroViewModel: ViewModelType {
                             appInfoResult = AppInfoResult(title: entity.title, message: entity.description, flag: .event)
                         
                         case 3:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .update)
+                            appInfoResult = AppInfoResult(title: updateTitle, message: updateMessage, flag: .update)
                         
                         case 4:
-                            appInfoResult = AppInfoResult(title: "", message: "", flag: .forceUpdate)
+                            appInfoResult = AppInfoResult(title: updateTitle, message: updateMessage, flag: .forceUpdate)
                         
                         default:
                             appInfoResult = AppInfoResult(title: "", message: "", flag: .noraml)
                     
                 }
                 
-                return Observable.just(appInfoResult)
+                return appInfoResult
                 
             })
+            .debug("Ahh")
             .bind(to: output.appInfoResult)
             .disposed(by: disposeBag)
         
-    
+        
+        
+        output.appInfoResult
+            .subscribe(onNext: {[weak self]  res in
+                
+                guard let self else {return}
+                
+                
+                if res.flag != .noraml {
+                    output.showErrorPopup.onNext(true)
+                }
+                
+                
+                
+            })
+            .disposed(by: disposeBag)
     
         
             
