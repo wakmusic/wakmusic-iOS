@@ -30,8 +30,8 @@ final public class IntroViewModel: ViewModelType {
 
     public struct Output {
         var permissionResult: PublishSubject<Bool?> = PublishSubject()
-        var showUserInfoAlert: PublishSubject<Result<String,Error>> = PublishSubject()
         var appInfoResult: PublishSubject<AppInfoEntity> = PublishSubject()
+        var showUserInfoResult: PublishSubject<Result<String,Error>> = PublishSubject()
     }
 
     public init(
