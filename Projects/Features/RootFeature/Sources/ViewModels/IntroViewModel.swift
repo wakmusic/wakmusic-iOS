@@ -18,12 +18,9 @@ import DataMappingModule
 
 
 final public class IntroViewModel: ViewModelType {
-
-    var input = Input()
-    var output = Output()
-    var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
     var fetchCheckAppUseCase: FetchCheckAppUseCase!
+    var disposeBag = DisposeBag()
 
     public struct Input {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
@@ -44,6 +41,10 @@ final public class IntroViewModel: ViewModelType {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.fetchCheckAppUseCase = fetchCheckAppUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
+    }
+    
+    public func transform(from input: Input) -> Output {
+        let output = Output()
         
         Observable.combineLatest(
             input.fetchPermissionCheck,
@@ -55,13 +56,6 @@ final public class IntroViewModel: ViewModelType {
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
 
-    }
-    
-    public func transform(from input: Input) -> Output {
-        let output = Output()
-        
-        
-        
             
         
 //        self.fetchCheckAppUseCase.execute()
