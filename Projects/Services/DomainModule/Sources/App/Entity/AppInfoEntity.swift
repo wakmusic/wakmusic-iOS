@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import DataMappingModule
 
 public struct AppInfoEntity: Equatable {
     public init(
-        flag:Int,
-        title:String,
-        description:String,
-        version:String
+        flag: AppInfoFlagType,
+        title: String,
+        description: String,
+        version: String
     )
     {
         self.flag = flag
@@ -22,6 +23,6 @@ public struct AppInfoEntity: Equatable {
         self.version = version
     }
     
-    public let flag:Int
-    public let title,description,version:String
+    public let flag: AppInfoFlagType
+    public let title, description, version: String
 }

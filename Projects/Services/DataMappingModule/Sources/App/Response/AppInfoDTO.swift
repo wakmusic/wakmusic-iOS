@@ -9,6 +9,6 @@
 import Foundation
 
 public struct AppInfoDTO: Codable {
-    public let flag: Int
-    public let title,description,version: String?
+    public let flag: AppInfoFlagType
+    public let title, description, version: String?
 }
