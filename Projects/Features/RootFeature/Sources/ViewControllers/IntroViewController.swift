@@ -81,6 +81,7 @@ extension IntroViewController {
                     textPopupVc = TextPopupViewController.viewController(
                         text:"\(entity.title)\n\(entity.description)",
                         cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: false,
                         completion: {
                             exit(0)
                         }
@@ -90,6 +91,7 @@ extension IntroViewController {
                     textPopupVc = TextPopupViewController.viewController(
                         text:"\(updateTitle)\n\(updateMessage)",
                         cancelButtonIsHidden: false,
+                        allowsDragAndTapToDismiss: false,
                         confirmButtonText: "업데이트",
                         cancelButtonText: "나중에",
                         completion: {
@@ -104,6 +106,7 @@ extension IntroViewController {
                     textPopupVc = TextPopupViewController.viewController(
                         text:"\(updateTitle)\n\(updateMessage)",
                         cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: false,
                         confirmButtonText: "업데이트",
                         completion: {
                             owner.goAppStore()
