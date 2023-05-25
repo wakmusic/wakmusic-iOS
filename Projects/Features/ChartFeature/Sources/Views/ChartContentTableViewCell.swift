@@ -238,6 +238,7 @@ extension ChartContentTableViewCell {
                 font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
             )
         } else {
+            print(model)
             hitsLabel.attributedText = getAttributedString(
                 text: model.increase.addCommaToNumber() + "회",
                 font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)

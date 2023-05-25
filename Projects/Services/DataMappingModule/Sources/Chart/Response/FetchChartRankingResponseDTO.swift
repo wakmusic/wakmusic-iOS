@@ -3,7 +3,6 @@ import Foundation
 public struct SingleChartRankingResponseDTO: Codable, Equatable {
     public let id, title, artist, remix, reaction: String
     public let date, start, end: Int
-    public let increase: Int?
     public let monthly, weekly, daily, hourly, total: SingleChartRankingResponseDTO.ChartInfo?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -12,7 +11,7 @@ public struct SingleChartRankingResponseDTO: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case id = "songId"
-        case title, artist, remix, reaction, date, start, end, increase
+        case title, artist, remix, reaction, date, start, end
         case monthly, weekly, daily, hourly, total
     }
 }

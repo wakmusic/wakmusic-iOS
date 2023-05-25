@@ -7,14 +7,8 @@ import Tabman
 import DomainModule
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
-    private var chartContentComponent: ChartContentComponent? 
-   
-    
-    private var viewModel:ChartViewModel!
-    
-    lazy var input = ChartViewModel.Input()
-    lazy var output = viewModel.transform(from: input)
-    
+    private var chartContentComponent: ChartContentComponent?
+
     private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
             chartContentComponent?.makeView(type: .hourly),
@@ -33,15 +27,9 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         configureUI()
     }
 
-    public static func viewController(
-        chartContentComponent: ChartContentComponent,
-        viewModel:ChartViewModel
-    ) -> ChartViewController {
+    public static func viewController(chartContentComponent: ChartContentComponent) -> ChartViewController {
         let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.chartContentComponent = chartContentComponent
-        
-        viewController.viewModel = viewModel
-        
         return viewController
     }
 }
