@@ -11,9 +11,6 @@ public protocol ChartDependency: Dependency {
 
 public final class ChartComponent: Component<ChartDependency> {
     public func makeView() -> ChartViewController {
-        return ChartViewController.viewController(
-            chartContentComponent: dependency.chartContentComponent,
-            viewModel: .init()
-        )
+        return ChartViewController.viewController(chartContentComponent: dependency.chartContentComponent)
     }
 }
