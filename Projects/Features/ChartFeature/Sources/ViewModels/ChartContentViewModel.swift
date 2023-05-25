@@ -38,23 +38,26 @@ public final class ChartContentViewModel: ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-       
         let output = Output()
 
-        fetchChartUpdateTimeUseCase
-            .execute()
-            .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
-            .asObservable()
-            .bind(to: output.updateTime)
+        let dataSourceForZip = Observable.zip(
+            fetchChartUpdateTimeUseCase
+                .execute()
+                .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
+                .asObservable(),
+            fetchChartRankingUseCase
+                .execute(type: type, limit: 100)
+                .catchAndReturn([])
+                .asObservable()
+        )
+        
+        dataSourceForZip
+            .subscribe(onNext: { (time, data) in
+                output.updateTime.accept(time)
+                output.dataSource.accept(data)
+            })
             .disposed(by: disposeBag)
 
-        fetchChartRankingUseCase
-            .execute(type: type, limit: 100)
-            .catchAndReturn([])
-            .asObservable()
-            .bind(to: output.dataSource)
-            .disposed(by: disposeBag)
-                
         input.songTapped
             .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
                 if selectedSongs.contains(index) {
@@ -63,9 +66,8 @@ public final class ChartContentViewModel: ViewModelType {
                     newSelectedSongs.remove(at: removeTargetIndex)
                     return newSelectedSongs
                     
-                }else{
-                    return selectedSongs + [index]
                 }
+                else { return selectedSongs + [index] }
             })
             .map { $0.sorted { $0 < $1 } }
             .bind(to: output.indexOfSelectedSongs)
