@@ -24,10 +24,8 @@ public enum PurposeType{
 }
 
 extension PurposeType{
-    
     var title:String{
         switch self{
-            
         case .creation:
             return "리스트 만들기"
         case .edit:
@@ -36,19 +34,13 @@ extension PurposeType{
             return "리스트 가져오기"
         case .share:
             return "리스트 공유하기"
-        
         case .nickname:
             return "닉네임 수정"
-            
         }
-        
-        
     }
     
     var subTitle:String{
-        
         switch self{
-            
         case .creation:
             return "리스트 제목"
         case .edit:
@@ -59,9 +51,7 @@ extension PurposeType{
             return "리스트 코드"
         case .nickname:
             return "닉네임"
-            
         }
-    
     }
     
     var btnText:String{
@@ -77,17 +67,11 @@ extension PurposeType{
         case .nickname:
             return "완료"
         }
-        
     }
 }
 
-
-
-
 public final class  MultiPurposePopupViewController: UIViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var saveButton: UIButton!
-    
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
