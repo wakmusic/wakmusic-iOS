@@ -401,7 +401,7 @@
                                                                         </constraints>
                                                                     </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈거다)라는 모토를 가슴에 새기고 일하고 있습니다." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1E7-2j-vSB">
-                                                                        <rect key="frame" x="16" y="16" width="337" height="656"/>
+                                                                        <rect key="frame" x="16" y="13" width="337" height="659"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" name="gray500"/>
                                                                         <nil key="highlightedColor"/>
@@ -410,7 +410,7 @@
                                                                 <constraints>
                                                                     <constraint firstItem="JB3-7G-rDj" firstAttribute="leading" secondItem="fJU-We-6wI" secondAttribute="leading" id="TgX-Jg-vb9"/>
                                                                     <constraint firstAttribute="bottom" secondItem="1E7-2j-vSB" secondAttribute="bottom" constant="4" id="UHn-s9-eV9"/>
-                                                                    <constraint firstItem="1E7-2j-vSB" firstAttribute="top" secondItem="JB3-7G-rDj" secondAttribute="top" id="VNv-2t-op8"/>
+                                                                    <constraint firstItem="1E7-2j-vSB" firstAttribute="top" secondItem="JB3-7G-rDj" secondAttribute="top" constant="-3" id="VNv-2t-op8"/>
                                                                     <constraint firstAttribute="trailing" secondItem="1E7-2j-vSB" secondAttribute="trailing" id="ZQA-vJ-5BP"/>
                                                                     <constraint firstItem="JB3-7G-rDj" firstAttribute="top" secondItem="fJU-We-6wI" secondAttribute="top" constant="16" id="fG4-2x-azs"/>
                                                                     <constraint firstItem="1E7-2j-vSB" firstAttribute="leading" secondItem="JB3-7G-rDj" secondAttribute="trailing" id="p6r-wQ-27C"/>

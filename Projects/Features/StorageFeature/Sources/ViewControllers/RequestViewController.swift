@@ -157,7 +157,10 @@ extension RequestViewController{
         
         dotLabel.layer.cornerRadius = 2
         dotLabel.clipsToBounds = true
+        
+        descriptionLabel.text = "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈거다)라는 모토를 가슴에 새기고 일하고 있습니다."
         descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        descriptionLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         
         let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
         withDrawAttributedString.addAttributes(
