@@ -167,6 +167,9 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var noticeComponent: NoticeComponent {
         return appComponent.noticeComponent
     }
+    var noticeDetailComponent: NoticeDetailComponent {
+        return appComponent.noticeDetailComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -900,6 +903,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
         keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
         keyPathToName[\MainTabBarDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\MainTabBarDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
     }
 }
 extension BottomTabBarComponent: Registration {

@@ -66,18 +66,5 @@ extension LoginViewController {
             .foregroundColor: DesignSystemAsset.GrayColor.gray600.color],
             range: NSRange(location: 0, length: privacyAttributedString.string.count)
         )
-        
-        privacyButton.layer.cornerRadius = 8
-        privacyButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
-        privacyButton.layer.borderWidth = 1
-        privacyButton.setAttributedTitle(privacyAttributedString, for: .normal)
-        
-        serviceButton.layer.cornerRadius = 8
-        serviceButton.layer.borderColor = DesignSystemAsset.GrayColor.gray400.color.withAlphaComponent(0.4).cgColor
-        serviceButton.layer.borderWidth = 1
-        serviceButton.setAttributedTitle(serviceAttributedString, for: .normal)
-
-        versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        versionLabel.text = "버전정보 \(APP_VERSION())"
     }
 }
