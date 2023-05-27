@@ -13,9 +13,6 @@ import Utility
 extension LoginViewController {
     public func configureUI() {
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
-        appNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 20)
-        descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-
         configureOAuthLogin()
         configureService()
     }
@@ -51,6 +48,7 @@ extension LoginViewController {
         appleImageView.image = DesignSystemAsset.Signup.apple.image
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
     }
+    
     private func configureService() {
         let appAttributedString = NSMutableAttributedString
             .init(string: "왁타버스 뮤직")
