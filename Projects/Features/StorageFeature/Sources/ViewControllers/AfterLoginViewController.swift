@@ -272,7 +272,7 @@ extension AfterLoginViewController:EditSheetViewDelegate {
             self.showPanModal(content: profile)
         case .nickname:
             let nickname = self.multiPurposePopComponent.makeView(type: .nickname)
-            self.showPanModal(content: nickname)
+            self.showEntryKitModal(content: nickname, height: 296)
         default:
             return
         }

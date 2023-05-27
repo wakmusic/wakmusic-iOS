@@ -11,8 +11,6 @@ import NeedleFoundation
 import DomainModule
 
 public protocol MultiPurposePopDependency: Dependency {
-  
-    
     var createPlayListUseCase : any CreatePlayListUseCase {get}
     var loadPlayListUseCase : any LoadPlayListUseCase {get}
     var setUserNameUseCase: any SetUserNameUseCase {get}

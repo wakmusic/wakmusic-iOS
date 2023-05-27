@@ -88,8 +88,8 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     }
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
-        let multiPurposePopVc = multiPurposePopComponent.makeView(type: .edit,key: viewModel.key!)
-        self.showPanModal(content: multiPurposePopVc)
+        let multiPurposePopVc = multiPurposePopComponent.makeView(type: .edit, key: viewModel.key!)
+        self.showEntryKitModal(content: multiPurposePopVc, height: 296)
     }
     
     public override func viewDidLoad() {
@@ -485,8 +485,8 @@ extension PlayListDetailViewController:EditSheetViewDelegate {
             
         case .share:
             let vc = multiPurposePopComponent.makeView(type: .share,key: viewModel?.key ?? "")
-            self.showPanModal(content: vc)
-            
+            self.showEntryKitModal(content: vc, height: 296)
+
         case .profile:
             return
             

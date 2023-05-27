@@ -156,6 +156,6 @@ extension ContainSongsViewController : UITableViewDelegate {
 extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         let vc = multiPurposePopComponent.makeView(type: .creation)
-        self.showPanModal(content: vc)
+        self.showEntryKitModal(content: vc, height: 296)
     }
 }
