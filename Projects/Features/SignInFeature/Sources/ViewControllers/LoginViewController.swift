@@ -35,10 +35,6 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var appleSuperView: UIView!
     @IBOutlet weak var appleLoginButton: UIButton!
     
-    @IBOutlet weak var serviceButton: UIButton!
-    @IBOutlet weak var privacyButton: UIButton!
-    @IBOutlet weak var versionLabel: UILabel!
-    
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
 
@@ -64,20 +60,6 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
 
 extension LoginViewController{
     private func bindRx(){
-        self.serviceButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            let vc = ContractViewController.viewController(type: .service)
-            vc.modalPresentationStyle = .overFullScreen
-            self.present(vc, animated: true)
-        }).disposed(by: disposeBag)
-        
-        self.privacyButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else { return }
-            let vc = ContractViewController.viewController(type: .privacy)
-            vc.modalPresentationStyle = .overFullScreen 
-            self.present(vc, animated: true)
-        }).disposed(by: disposeBag)
-        
         output
             .showErrorToast
             .subscribe(onNext: { [weak self] (msg: String) in

@@ -19,6 +19,7 @@ import StorageFeature
 import CommonFeature
 import RxSwift
 import RxCocoa
+import DomainModule
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
 
@@ -46,7 +47,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var storageComponent: StorageComponent!
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeComponent: NoticeComponent!
-
+    private var noticeDetailComponent: NoticeDetailComponent!
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -71,7 +73,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent,
         noticePopupComponent: NoticePopupComponent,
-        noticeComponent: NoticeComponent
+        noticeComponent: NoticeComponent,
+        noticeDetailComponent: NoticeDetailComponent
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -82,6 +85,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.storageComponent = storageCompoent
         viewController.noticePopupComponent = noticePopupComponent
         viewController.noticeComponent = noticeComponent
+        viewController.noticeDetailComponent = noticeDetailComponent
         return viewController
     }
 }
@@ -105,9 +109,7 @@ extension MainTabBarViewController {
     }
     
     func updateContent(previous: Int, current: Int) {
-        
         Utility.PreferenceManager.startPage = current
-        
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
         
@@ -116,7 +118,6 @@ extension MainTabBarViewController {
     }
     
     func forceUpdateContent(for index: Int) {
-        
         Utility.PreferenceManager.startPage = index
 
         if let previous = self.previousIndex{
@@ -130,10 +131,10 @@ extension MainTabBarViewController {
 }
 
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {
-    public func noticeTapped() {
-        guard let navigationController = self.viewControllers[selectedIndex] as? UINavigationController else { return }
-        let viewController = noticeComponent.makeView()
-        navigationController.pushViewController(viewController, animated: true)
+    public func noticeTapped(model: FetchNoticeEntity) {
+        let viewController = noticeDetailComponent.makeView(model: model)
+        viewController.modalPresentationStyle = .overFullScreen
+        self.present(viewController, animated: true)
     }
 }
 

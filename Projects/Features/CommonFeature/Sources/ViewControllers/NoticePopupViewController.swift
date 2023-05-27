@@ -14,13 +14,13 @@ import Then
 import DesignSystem
 import RxSwift
 import RxCocoa
+import DomainModule
 
 public protocol NoticePopupViewControllerDelegate: AnyObject {
-    func noticeTapped()
+    func noticeTapped(model: FetchNoticeEntity)
 }
 
 public class NoticePopupViewController: UIViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageCountView: UIView!
     @IBOutlet weak var pageCountLabel: UILabel!
@@ -55,7 +55,6 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         
         if savedIgoredNoticeIds.isEmpty {
             Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
-            
         }else{
             Utility.PreferenceManager.ignoredNoticeIDs = savedIgoredNoticeIds + currentNoticeIds
         }
@@ -68,9 +67,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
 }
 
 extension NoticePopupViewController {
-    
     private func bind() {
-    
         viewModel.output
             .dataSource
             .do(onNext: { [weak self] (model) in
@@ -78,7 +75,10 @@ extension NoticePopupViewController {
                 self?.pageCountView.isHidden = model.count <= 1
             })
             .bind(to: collectionView.rx.items) { (collectionView, row, model) -> UICollectionViewCell in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoticeCollectionViewCell", for: IndexPath(row: row, section: 0)) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "NoticeCollectionViewCell",
+                    for: IndexPath(row: row, section: 0)
+                ) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
                 cell.update(model: model)
                 return cell
             }
@@ -86,9 +86,9 @@ extension NoticePopupViewController {
         
         collectionView.rx.itemSelected
             .withUnretained(self)
-            .subscribe(onNext:{ (owner, _) in
+            .subscribe(onNext:{ (owner, indexPath) in
                 owner.dismiss(animated: true) {
-                    owner.delegate?.noticeTapped()
+                    owner.delegate?.noticeTapped(model: owner.viewModel.fetchNoticeEntities[indexPath.row])
                 }
             }).disposed(by: disposeBag)
     }

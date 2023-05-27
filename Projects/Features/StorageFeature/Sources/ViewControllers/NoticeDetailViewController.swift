@@ -116,15 +116,14 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
         let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
-        let sideSpace: CGFloat = 20
-        let width: CGFloat = APP_WIDTH()-(sideSpace*2.0)
+        let width: CGFloat = APP_WIDTH()
         let height: CGFloat = (imageSize.height * width) / imageSize.width
         return CGSize(width: width, height: height)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let sideSpace: CGFloat = 20
-        return UIEdgeInsets(top: 20, left: sideSpace, bottom: 20, right: sideSpace)
+        return UIEdgeInsets(top: sideSpace, left: 0, bottom: sideSpace, right: 0)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

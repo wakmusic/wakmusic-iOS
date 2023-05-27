@@ -17,6 +17,7 @@ public protocol MainTabBarDependency: Dependency {
     var storageComponent: StorageComponent { get }
     var noticePopupComponent: NoticePopupComponent { get }
     var noticeComponent: NoticeComponent { get }
+    var noticeDetailComponent: NoticeDetailComponent { get }
 }
 
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
@@ -31,7 +32,8 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
             artistComponent: self.dependency.artistComponent,
             storageCompoent: self.dependency.storageComponent,
             noticePopupComponent: self.dependency.noticePopupComponent,
-            noticeComponent: self.dependency.noticeComponent
+            noticeComponent: self.dependency.noticeComponent,
+            noticeDetailComponent: self.dependency.noticeDetailComponent
         )
     }
 }
