@@ -104,6 +104,7 @@ extension NoticeDetailViewController {
         collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
                                 forCellWithReuseIdentifier: "NoticeCollectionViewCell")
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        collectionView.bounces = false
         
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
@@ -123,7 +124,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let sideSpace: CGFloat = 20
-        return UIEdgeInsets(top: sideSpace, left: 0, bottom: sideSpace, right: 0)
+        return UIEdgeInsets(top: sideSpace, left: 0, bottom: 0, right: 0)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
