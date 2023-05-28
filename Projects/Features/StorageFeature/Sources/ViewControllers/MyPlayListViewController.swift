@@ -292,6 +292,6 @@ extension MyPlayListViewController: UITableViewDelegate{
 extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
     public func action(_ type: PurposeType) {
         let vc =  multiPurposePopComponent.makeView(type: type)
-        self.showPanModal(content: vc)
+        self.showEntryKitModal(content: vc, height: 296)
     }    
 }
