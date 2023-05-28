@@ -972,23 +972,13 @@
                                     <constraint firstAttribute="bottom" secondItem="08R-AE-bpr" secondAttribute="bottom" constant="10" id="xOk-dY-Dx3"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tUl-QN-c2b">
-                                <rect key="frame" x="0.0" y="355" width="393" height="0.0"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" id="SPc-gh-6VT"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ALf-P4-DHO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ALf-P4-DHO" firstAttribute="trailing" secondItem="Yxn-RK-R3n" secondAttribute="trailing" id="4dE-hJ-oMp"/>
-                            <constraint firstItem="tUl-QN-c2b" firstAttribute="leading" secondItem="ALf-P4-DHO" secondAttribute="leading" id="K8A-3f-uXe"/>
                             <constraint firstItem="Yxn-RK-R3n" firstAttribute="top" secondItem="ALf-P4-DHO" secondAttribute="top" id="Mpj-GW-OSk"/>
                             <constraint firstItem="Yxn-RK-R3n" firstAttribute="leading" secondItem="ALf-P4-DHO" secondAttribute="leading" id="T4z-Ox-GLz"/>
-                            <constraint firstItem="ALf-P4-DHO" firstAttribute="trailing" secondItem="tUl-QN-c2b" secondAttribute="trailing" id="kub-ma-LYm"/>
-                            <constraint firstItem="tUl-QN-c2b" firstAttribute="top" secondItem="Yxn-RK-R3n" secondAttribute="bottom" id="qam-54-Juy"/>
                         </constraints>
                     </view>
                     <connections>
@@ -999,7 +989,6 @@
                         <outlet property="confirmLabel" destination="pIf-kv-qe0" id="wFr-tq-eow"/>
                         <outlet property="countLabel" destination="MJU-v6-dX3" id="A97-vk-5cp"/>
                         <outlet property="dividerView" destination="42n-JF-5MI" id="6qq-yi-Rs1"/>
-                        <outlet property="fakeViewHeight" destination="SPc-gh-6VT" id="ZNe-Yi-7TI"/>
                         <outlet property="indicator" destination="EFr-kE-XRQ" id="770-ht-vpM"/>
                         <outlet property="limitLabel" destination="L4C-lz-s65" id="dvS-6o-qNm"/>
                         <outlet property="saveButton" destination="08R-AE-bpr" id="6CU-Zx-cmc"/>

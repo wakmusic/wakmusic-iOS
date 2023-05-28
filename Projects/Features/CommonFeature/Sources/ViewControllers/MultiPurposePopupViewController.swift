@@ -82,7 +82,6 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     @IBOutlet weak var confirmLabel: UILabel!
     
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var confireLabelGap: NSLayoutConstraint!
     
