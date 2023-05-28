@@ -76,6 +76,8 @@ public extension UIViewController {
             width: .offset(value: 0),
             height: .constant(value: height)
         )
+        
+        HapticManager.shared.impact(style: .light)
         SwiftEntryKit.display(entry: content, using: attributes)
     }
     
