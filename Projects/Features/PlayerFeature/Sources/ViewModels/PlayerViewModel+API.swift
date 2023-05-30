@@ -90,10 +90,24 @@ extension PlayerViewModel {
     func addLikeSong(for song: SongEntity, output: Output) {
         self.addLikeSongUseCase.execute(id: song.id)
             .catch{ error in
-                return Single<LikeEntity>.create { single in
-                    single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
-                    return Disposables.create()
+                
+                let wmError = error.asWMError
+                
+                if wmError == .tokenExpired {
+                    return Single<LikeEntity>.create { single in
+                        single(.success(LikeEntity(status: 401, likes: 0, description: wmError.errorDescription ?? "")))
+                        return Disposables.create()
+                    }
                 }
+                
+                else {
+                    return Single<LikeEntity>.create { single in
+                        single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
+                        return Disposables.create()
+                    }
+                }
+                
+                
             }
             .map { [weak self] likeEntity in
                 return (
@@ -107,7 +121,13 @@ extension PlayerViewModel {
                     output.likeState.send(true)
                     output.likeCountText.send(likeCountText)
                     NotificationCenter.default.post(name: .likeListRefresh, object: nil)
-                } else {
+                }
+                
+                else if status == 401 {
+                    output.showTokenModal.send(description)
+                }
+                
+                else {
                     output.showToastMessage.send(description)
                 }
             })

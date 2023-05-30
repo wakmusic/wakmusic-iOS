@@ -125,7 +125,20 @@ private extension PlayerViewController {
         bindShowToastMessage(output: output)
         bindShowConfirmModal(output: output)
         bindShowContainSongsViewController(output: output)
+        bindShowTokenModal(output: output)
 
+    }
+    
+    private func bindShowTokenModal(output: PlayerViewModel.Output){
+        output.showTokenModal.sink { [weak self] message in
+            self?.showPanModal(content: TextPopupViewController.viewController(text: message, cancelButtonIsHidden: true, completion: {
+                LOGOUT()
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+                self?.playState.switchPlayerMode(to: .mini)
+            }))
+        }
+        .store(in: &subscription)
+        
     }
         
     private func bindPlayButtonImages(output: PlayerViewModel.Output) {

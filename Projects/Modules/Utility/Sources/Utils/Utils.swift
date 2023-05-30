@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import KeychainModule
 
 public func APP_WIDTH() -> CGFloat {
     return UIScreen.main.bounds.size.width
@@ -58,4 +59,12 @@ public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #func
         let funcName = function.split(separator: "(").first ?? ""
         print("[\(fileName)] \(funcName)(\(line)): \(msg)")
     #endif
+}
+
+public func LOGOUT(){
+    let keychain = KeychainImpl()
+    keychain.delete(type: .accessToken)
+    Utility.PreferenceManager.userInfo = nil
+    Utility.PreferenceManager.startPage = 4
+    
 }
