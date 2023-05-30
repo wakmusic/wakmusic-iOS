@@ -17,24 +17,13 @@ class AnswerTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
         answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        answerLabel.setLineSpacing(lineSpacing: 6)
+        answerLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 6)
     }
-
-    
-
 }
 
 extension AnswerTableViewCell{
     public func update(model:QnaEntity){
-            
-        
         answerLabel.text = model.description
-      
-
     }
-    
-    
 }

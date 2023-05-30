@@ -25,15 +25,15 @@ final public class IntroViewModel: ViewModelType {
     public struct Input {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
         var fetchAppCheck: PublishSubject<Void> = PublishSubject()
-        var fetchUserInfoCheck: PublishSubject<Void>  = PublishSubject()
-        var startLottieAnimation: PublishSubject<Void>  = PublishSubject()
+        var fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
+        var startLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         var permissionResult: PublishSubject<Bool?> = PublishSubject()
-        var appInfoResult: PublishSubject<AppInfoEntity> = PublishSubject()
-        var userInfoResult: PublishSubject<Result<String,Error>> = PublishSubject()
-        var endLottieAnimation: PublishSubject<Void>  = PublishSubject()
+        var appInfoResult: PublishSubject<Result<AppInfoEntity, Error>> = PublishSubject()
+        var userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
+        var endLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public init(
@@ -66,11 +66,14 @@ final public class IntroViewModel: ViewModelType {
             .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
                 guard let self else { return Observable.empty() }
                 return self.fetchCheckAppUseCase.execute()
-                    .catchAndReturn(AppInfoEntity(flag: .normal, title: "", description: "", version: ""))
                     .asObservable()
             }
             .debug("✅ Intro > fetchCheckAppUseCase")
-            .bind(to: output.appInfoResult)
+            .subscribe(onNext: { (model) in
+                output.appInfoResult.onNext(.success(model))
+            }, onError: { (error) in
+                output.appInfoResult.onNext(.failure(error))
+            })
             .disposed(by: disposeBag)
         
         input.fetchUserInfoCheck

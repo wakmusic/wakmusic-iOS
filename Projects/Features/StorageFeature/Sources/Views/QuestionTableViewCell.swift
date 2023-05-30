@@ -19,23 +19,17 @@ class QuestionTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        categoryLabel.setLineSpacing(kernValue: -0.5)
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleLabel.setLineSpacing(lineSpacing: 5)
+        titleLabel.setLineSpacing(kernValue: -0.5, lineSpacing: 5)
     }
-
-
 }
 
 extension QuestionTableViewCell{
     public func update(model:QnaEntity){
-            
         categoryLabel.text = model.category
         titleLabel.text = model.question
         expandImageView.image = model.isOpen ? DesignSystemAsset.Navigation.fold.image : DesignSystemAsset.Navigation.close.image
-
     }
-    
-    
 }
