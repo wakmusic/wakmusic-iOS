@@ -41,7 +41,7 @@ public final class FavoriteViewModel:ViewModelType {
         let indexPathOfSelectedLikeLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let showToast: PublishRelay<String> = PublishRelay()
+        let showToast: PublishRelay<BaseEntity> = PublishRelay()
     }
 
     init(
@@ -150,11 +150,28 @@ public final class FavoriteViewModel:ViewModelType {
                     return Observable.empty()
                 }
                 return self.editFavoriteSongsOrderUseCase.execute(ids: ids)
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create{ single in
+                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                                return Disposables.create()
+                            }
+                        }
+                    })
                     .asObservable()
             }
             .filter{ (model) in
                 guard model.status == 200 else {
-                    output.showToast.accept(model.description)
+                    output.showToast.accept(model)
                     return false
                 }
                 return true
@@ -202,7 +219,23 @@ public final class FavoriteViewModel:ViewModelType {
                 guard let `self` = self else { return Observable.empty() }
                 self.tempDeleteLikeListIds = ids
                 return self.deleteFavoriteListUseCase.execute(ids: ids)
-                    .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create{ single in
+                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                                return Disposables.create()
+                            }
+                        }
+                    })
                     .asObservable()
             })
             .do(onNext: { [weak self] (model) in
@@ -211,17 +244,16 @@ public final class FavoriteViewModel:ViewModelType {
                 output.indexPathOfSelectedLikeLists.accept([])
 
                 if model.status == 200 {
-                    output.showToast.accept("좋아요 리스트에서 삭제되었습니다.")
-                    
+                    output.showToast.accept(BaseEntity(status: 200,description: "좋아요 리스트에서 삭제되었습니다."))
                     //좋아요 삭제 시 > 노티피케이션
                     guard let currentSong: SongEntity = PlayState.shared.currentSong else { return }
                     let currentSongID: String = currentSong.id
                     if self.tempDeleteLikeListIds.contains(currentSongID) {
-                        DEBUG_LOG("updateCurrentSongLikeState ID: \(currentSongID)")
+                      
                         NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: currentSong)
                     }
                 }else{
-                    output.showToast.accept(model.description)
+                    output.showToast.accept(model)
                 }
             })
             .map { _ in () }
