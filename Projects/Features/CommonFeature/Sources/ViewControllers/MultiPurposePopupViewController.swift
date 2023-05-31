@@ -327,7 +327,6 @@ extension MultiPurposePopupViewController{
             }
             
             else if res.status == 401 {
-                //SwiftEntryKit.dismiss()
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 
                 if viewModel.type == .edit {
