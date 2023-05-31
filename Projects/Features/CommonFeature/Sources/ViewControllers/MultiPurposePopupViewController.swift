@@ -113,6 +113,8 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     var delegate: MultiPurposePopupViewDelegate?
     public var disposeBag = DisposeBag()
 
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -335,7 +337,7 @@ extension MultiPurposePopupViewController{
                 LOGOUT()
                 NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
 
-                if viewModel.type == .edit {
+                if self.viewModel.type == .edit {
                     //@구구 플리 디테일 나가기 ..
                     self.delegate?.didTokenExpired()
                 }
