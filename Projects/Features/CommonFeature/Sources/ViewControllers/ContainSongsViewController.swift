@@ -105,6 +105,7 @@ extension ContainSongsViewController {
                 
                 self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 if result.status == 401 {
+                    //@구구 재생목록 내리기..
                     LOGOUT()
                     PlayState.shared.switchPlayerMode(to: .mini)
                     self.dismiss(animated: true)
@@ -172,6 +173,7 @@ extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
 
 extension ContainSongsViewController: MultiPurposePopupViewDelegate{
     public func didTokenExpired() {
+        //@구구 재생목록 내리기..
         PlayState.shared.switchPlayerMode(to: .mini)
         self.dismiss(animated: true)
     }

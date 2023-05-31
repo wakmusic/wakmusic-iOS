@@ -66,5 +66,6 @@ public func LOGOUT(){
     keychain.delete(type: .accessToken)
     Utility.PreferenceManager.userInfo = nil
     Utility.PreferenceManager.startPage = 4
+    NotificationCenter.default.post(name: .movedTab, object: 4)
     
 }
