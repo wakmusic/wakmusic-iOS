@@ -231,6 +231,8 @@ public final class MyPlayListViewModel:ViewModelType {
                 }
             
                 else{
+                    output.state.accept(EditState(isEditing: false, force: true))
+                    output.indexPathOfSelectedPlayLists.accept([])
                     output.showToast.accept(model)
                 }
             })
