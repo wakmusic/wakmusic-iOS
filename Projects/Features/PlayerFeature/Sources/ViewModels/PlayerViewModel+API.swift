@@ -85,8 +85,9 @@ extension PlayerViewModel {
                 )
             }
             .subscribe(onSuccess: { (status, likeCountText, description) in
+                
                 if status == 200 {
-                    output.likeState.send(true)
+                    output.likeState.send(false)
                     output.likeCountText.send(likeCountText)
                     NotificationCenter.default.post(name: .likeListRefresh, object: nil)
                 }
