@@ -330,7 +330,7 @@ extension MultiPurposePopupViewController{
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 
                 if viewModel.type == .edit {
-                    // 플레이리스트 디테일 dismiss 코드 
+                    //@구구 플리 디테일 나가기 ..
                 }
                 
                 LOGOUT()

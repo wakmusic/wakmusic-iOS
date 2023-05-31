@@ -302,6 +302,14 @@ extension PlayListDetailViewController{
         output.showErrorToast
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
+                
+                if $0.status == 401 {
+                    //@구구 플리 디테일 나가기 ..
+                    
+                    LOGOUT()
+                    
+                }
+                
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 self.input.state.accept(EditState(isEditing: false, force: true))
             })
