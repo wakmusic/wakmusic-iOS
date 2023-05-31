@@ -332,14 +332,13 @@ extension MultiPurposePopupViewController{
             
             else if res.status == 401 {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                
+                LOGOUT()
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+
                 if viewModel.type == .edit {
                     //@구구 플리 디테일 나가기 ..
                     self.delegate?.didTokenExpired()
                 }
-                
-                LOGOUT()
-                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
             }
             
             else {
