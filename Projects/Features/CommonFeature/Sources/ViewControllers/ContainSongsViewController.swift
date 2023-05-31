@@ -12,6 +12,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import NVActivityIndicatorView
+import DomainModule
 
 public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
     @IBOutlet weak var closeButton: UIButton!
@@ -99,9 +100,17 @@ extension ContainSongsViewController {
                 
         output.showToastMessage
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (text:String) in
+            .subscribe(onNext: { [weak self] (result:AddSongEntity) in
                 guard let self = self else {return}
-                self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                
+                self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                if result.status == 401 {
+                    LOGOUT()
+                    PlayState.shared.switchPlayerMode(to: .mini)
+                    self.dismiss(animated: true)
+                }
+                
+                
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                 self.dismiss(animated: true)
             })
@@ -156,6 +165,15 @@ extension ContainSongsViewController : UITableViewDelegate {
 extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         let vc = multiPurposePopComponent.makeView(type: .creation)
+        vc.delegate = self
         self.showEntryKitModal(content: vc, height: 296)
     }
+}
+
+extension ContainSongsViewController: MultiPurposePopupViewDelegate{
+    public func didTokenExpired() {
+        PlayState.shared.switchPlayerMode(to: .mini)
+        self.dismiss(animated: true)
+    }
+    
 }

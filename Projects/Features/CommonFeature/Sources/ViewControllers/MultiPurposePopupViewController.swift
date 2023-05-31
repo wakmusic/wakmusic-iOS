@@ -337,8 +337,8 @@ extension MultiPurposePopupViewController{
                 LOGOUT()
                 NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
 
-                if self.viewModel.type == .edit {
-                    //@구구 플리 디테일 나가기 ..
+                if self.viewModel.type == .edit || self.viewModel.type == .creation {
+                   
                     self.delegate?.didTokenExpired()
                 }
             }
