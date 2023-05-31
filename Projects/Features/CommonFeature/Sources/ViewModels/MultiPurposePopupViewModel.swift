@@ -40,6 +40,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
         let result: PublishSubject<BaseEntity> = PublishSubject()
         let newPlayListKey: PublishSubject<String> = PublishSubject()
+        let showTokenModal: PublishSubject<String> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -86,10 +87,22 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .creation:
                 self.createPlayListUseCase.execute(title:text)
                     .catch({ (error:Error) in
-                        return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status: 401,key: "", description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
                         }
+                        else {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
                     })
                     .asObservable()
                     .map({
@@ -97,12 +110,17 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { (result:BaseEntity,key:String) in
                         
-                        if result.status != 200 { //Created == 201
+                        
+                        if result.status == 401 {
+                            output.showTokenModal.onNext(result.description)
+                            return
+                        }
+                        
+                        else if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
                         
-            
                         
                         //리프래쉬 작업
                         output.result.onNext(result)
@@ -117,16 +135,32 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .nickname:
                 self.setUserNameUseCase.execute(name:text)
                     .catch{ (error) in
-                        return Single<BaseEntity>.create { single in
-                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
-                        }
-                    }.asObservable()
+                            let wmError = error.asWMError
+                            
+                            if wmError == .tokenExpired {
+                                return Single<BaseEntity>.create { single in
+                                    single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                    return Disposables.create()
+                                }
+                            }
+                            else {
+                                return Single<BaseEntity>.create { single in
+                                    single(.success(BaseEntity(status:0,description: error.asWMError.errorDescription ?? "")))
+                                    return Disposables.create {}
+                                }
+                            }
+                    }
+                    .asObservable()
                     .subscribe(onNext: { result in
                         
-                        if result.status != 200 {
+                        if result.status == 401 {
+                            output.showTokenModal.onNext(result.description)
+                            return
+                        }
+                        
+                        else if result.status != 200 { //Created == 201
                             output.result.onNext(result)
-                            return 
+                            return
                         }
                         
                         Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))

@@ -112,6 +112,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bindTokenExpiredEvent()
     }
     
     public static func viewController(
@@ -347,5 +348,9 @@ extension MultiPurposePopupViewController{
             self.input.pressConfirm.onNext(())
         })
         .disposed(by: disposeBag)
+    }
+    
+    private func bindTokenExpiredEvent() {
+        
     }
 }
