@@ -112,7 +112,6 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindTokenExpiredEvent()
     }
     
     public static func viewController(
@@ -325,7 +324,21 @@ extension MultiPurposePopupViewController{
             if res.status == 200 {
                 SwiftEntryKit.dismiss()
                 
-            }else {
+            }
+            
+            else if res.status == 401 {
+                SwiftEntryKit.dismiss()
+                self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                
+                if viewModel.type == .edit {
+                    // 플레이리스트 디테일 dismiss 코드 
+                }
+                
+                LOGOUT()
+                NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
+            }
+            
+            else {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             }
         })
@@ -350,7 +363,4 @@ extension MultiPurposePopupViewController{
         .disposed(by: disposeBag)
     }
     
-    private func bindTokenExpiredEvent() {
-        
-    }
 }

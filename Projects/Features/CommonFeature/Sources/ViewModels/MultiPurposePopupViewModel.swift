@@ -40,7 +40,6 @@ public final class MultiPurposePopupViewModel:ViewModelType {
         let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
         let result: PublishSubject<BaseEntity> = PublishSubject()
         let newPlayListKey: PublishSubject<String> = PublishSubject()
-        let showTokenModal: PublishSubject<String> = PublishSubject()
     }
 
     public init(type:PurposeType,
@@ -109,14 +108,9 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         (BaseEntity(status: $0.status ,description: $0.description),$0.key)
                     })
                     .subscribe(onNext: { (result:BaseEntity,key:String) in
+
                         
-                        
-                        if result.status == 401 {
-                            output.showTokenModal.onNext(result.description)
-                            return
-                        }
-                        
-                        else if result.status != 200 { //Created == 201
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -153,12 +147,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     .asObservable()
                     .subscribe(onNext: { result in
                         
-                        if result.status == 401 {
-                            output.showTokenModal.onNext(result.description)
-                            return
-                        }
-                        
-                        else if result.status != 200 { //Created == 201
+
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -192,13 +182,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         BaseEntity(status: $0.status,description: $0.description)
                     })
                     .subscribe(onNext: { result in
-                        
-                        if result.status == 401 {
-                            output.showTokenModal.onNext(result.description)
-                            return
-                        }
-                        
-                        else if result.status != 200 { //Created == 201
+                                        
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -236,12 +221,7 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     .asObservable()
                     .subscribe(onNext: { result in
                      
-                        if result.status == 401 {
-                            output.showTokenModal.onNext(result.description)
-                            return
-                        }
-
-                        else if result.status != 200 {
+                        if result.status != 200 {
                             output.result.onNext(BaseEntity(status: result.status,description: result.description))
                             return
                         }
