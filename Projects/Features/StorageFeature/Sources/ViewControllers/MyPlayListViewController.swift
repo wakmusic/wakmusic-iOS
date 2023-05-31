@@ -181,12 +181,17 @@ extension MyPlayListViewController{
             }).disposed(by: disposeBag)
                 
         output.showToast
-            .subscribe(onNext: { [weak self] (message: String) in
+            .subscribe(onNext: { [weak self] result in
                 guard let self = self else{
                     return
                 }
+                
+                if result.status == 401 {
+                    LOGOUT()
+                }
+                
                 self.showToast(
-                    text: message,
+                    text: result.description,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             }).disposed(by: disposeBag)
