@@ -152,13 +152,32 @@ public final class MyPlayListViewModel:ViewModelType {
                 guard let self = self else{
                     return Observable.empty()
                 }
-                return self.editPlayListOrderUseCase.execute(ids: ids).asObservable()
+                return self.editPlayListOrderUseCase.execute(ids: ids)
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create{ single in
+                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                                return Disposables.create()
+                            }
+                        }
+                    })
+                    .asObservable()
             }
             .filter{ (model) in
                 guard model.status == 200 else {
                     output.showToast.accept(model)
                     return false
                 }
+
                 return true
             }
             .withLatestFrom(output.dataSource)
