@@ -172,9 +172,19 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .load:
                 self.loadPlayListUseCase.execute(key: text)
                     .catch({ (error:Error) in
-                        return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(status: 0,key: "",description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status: 401,key: "", description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        else {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
                         }
                     })
                     .asObservable()
@@ -183,7 +193,12 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                     })
                     .subscribe(onNext: { result in
                         
-                        if  result.status != 200 {
+                        if result.status == 401 {
+                            output.showTokenModal.onNext(result.description)
+                            return
+                        }
+                        
+                        else if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -200,15 +215,33 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .edit:
                 self.editPlayListNameUseCase.execute(key: self.key, title: text)
                     .catch({ (error:Error) in
-                        return Single<EditPlayListNameEntity>.create { single in
-                            single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<EditPlayListNameEntity>.create { single in
+                                single(.success(EditPlayListNameEntity(title: "", status: 401 ,description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
                         }
+                        else {
+                            return Single<EditPlayListNameEntity>.create { single in
+                                single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
+                        
                     })
                     .asObservable()
                     .subscribe(onNext: { result in
                      
-                        if result.status != 200 {
+                        if result.status == 401 {
+                            output.showTokenModal.onNext(result.description)
+                            return
+                        }
+
+                        else if result.status != 200 {
                             output.result.onNext(BaseEntity(status: result.status,description: result.description))
                             return
                         }
