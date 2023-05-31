@@ -70,6 +70,10 @@ extension PurposeType{
     }
 }
 
+public protocol MultiPurposePopupViewDelegate: AnyObject {
+    func didTokenExpired()
+}
+
 public final class  MultiPurposePopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -106,7 +110,7 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     
     var limitCount: Int = 12
     var creationCompletion: ((String) -> Void)?
-    
+    var delegate: MultiPurposePopupViewDelegate?
     public var disposeBag = DisposeBag()
 
     public override func viewDidLoad() {
@@ -331,6 +335,7 @@ extension MultiPurposePopupViewController{
                 
                 if viewModel.type == .edit {
                     //@구구 플리 디테일 나가기 ..
+                    self.delegate?.didTokenExpired()
                 }
                 
                 LOGOUT()
