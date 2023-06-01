@@ -109,11 +109,11 @@ extension ContainSongsViewController {
                     LOGOUT()
                     PlayState.shared.switchPlayerMode(to: .mini)
                     self.dismiss(animated: true)
+                    
+                }else{
+                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    self.dismiss(animated: true)
                 }
-                
-                
-                NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -177,5 +177,4 @@ extension ContainSongsViewController: MultiPurposePopupViewDelegate{
         PlayState.shared.switchPlayerMode(to: .mini)
         self.dismiss(animated: true)
     }
-    
 }

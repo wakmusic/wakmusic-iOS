@@ -46,7 +46,19 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
-                    .catchAndReturn([])
+                    .catch{ (error: Error) in
+                        let wmError = error.asWMError
+                        if wmError == .tokenExpired {
+                            let model = AddSongEntity(
+                                status: 401,
+                                added_songs_length: 0,
+                                duplicated: false,
+                                description: wmError.errorDescription ?? ""
+                            )
+                            output.showToastMessage.onNext(model)
+                        }
+                        return Observable.just([])
+                    }
                 // //@구구 플레이리스트 가져올 때  만료 처리 부탁드립니다.
             })
             .bind(to: output.dataSource)
