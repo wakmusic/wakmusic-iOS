@@ -53,7 +53,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let refreshPlayList: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
-        let showErrorToast: PublishRelay<String> = PublishRelay()
+        let showErrorToast: PublishRelay<BaseEntity> = PublishRelay()
     }
 
     public init(
@@ -121,12 +121,28 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.editPlayListUseCase.execute(key: key, songs: songs)
-                    .catchAndReturn(BaseEntity(status: 400, description: WMError.unknown.localizedDescription))
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                    })
                     .asObservable()
             }
             .subscribe(onNext: { (model) in
                 if model.status != 200 {
-                    output.showErrorToast.accept(model.description)
+                    output.showErrorToast.accept(model)
                     return
                 }
                 output.refreshPlayList.accept(())
@@ -178,15 +194,27 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.editPlayListUseCase.execute(key: key, songs: songs)
-                    .catchAndReturn(
-                        BaseEntity(
-                            status: 404,
-                            description: WMError.unknown.localizedDescription
-                        )
-                    ).asObservable()
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                    })
+                    .asObservable()
             }
             .subscribe(onNext: { (model) in
-                output.showErrorToast.accept((model.status == 200) ? "리스트에서 삭제되었습니다." : model.description)
+                output.showErrorToast.accept((model.status == 200) ? BaseEntity(status: 200,description:"리스트에서 삭제되었습니다.") : model)
                 output.refreshPlayList.accept(())
                 output.indexOfSelectedSongs.accept([])
                 output.songEntityOfSelectedSongs.accept([])

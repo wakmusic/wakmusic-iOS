@@ -139,11 +139,20 @@ extension ProfilePopViewController{
                 if result.status == 200 {
                     self.dismiss(animated: true)
                     
-                }else{
+                }
+                
+                else if result.status == 401 {
+                    self.dismiss(animated: true)
+                    self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    LOGOUT()
+                }
+                
+                else{
                     self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 }
                 
             }).disposed(by: disposeBag)
+
                 
         viewModel.output.collectionViewHeight
             .observe(on: MainScheduler.instance)
@@ -154,6 +163,8 @@ extension ProfilePopViewController{
                 self.panModalTransition(to: .longForm)
                 self.view.layoutIfNeeded()
             }).disposed(by: disposeBag)
+                
+
     }
 }
 

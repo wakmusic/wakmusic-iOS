@@ -89,6 +89,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
     
     @IBAction func pressEditNameAction(_ sender: UIButton) {
         let multiPurposePopVc = multiPurposePopComponent.makeView(type: .edit, key: viewModel.key!)
+        multiPurposePopVc.delegate = self
         self.showEntryKitModal(content: multiPurposePopVc, height: 296)
     }
     
@@ -303,7 +304,14 @@ extension PlayListDetailViewController{
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                self.input.state.accept(EditState(isEditing: false, force: true))
+
+                if $0.status == 401 {
+                   
+                    LOGOUT()
+                    self.navigationController?.popViewController(animated: true)
+                }else{
+                    self.input.state.accept(EditState(isEditing: false, force: true))
+                }
             })
             .disposed(by: disposeBag)
                 
@@ -421,6 +429,12 @@ extension PlayListDetailViewController:UITableViewDelegate{
     
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+}
+
+extension PlayListDetailViewController: MultiPurposePopupViewDelegate {
+    public func didTokenExpired() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 

@@ -86,23 +86,35 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .creation:
                 self.createPlayListUseCase.execute(title:text)
                     .catch({ (error:Error) in
-                        return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status: 401,key: "", description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
                         }
+                        else {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
                     })
                     .asObservable()
                     .map({
                         (BaseEntity(status: $0.status ,description: $0.description),$0.key)
                     })
                     .subscribe(onNext: { (result:BaseEntity,key:String) in
+
                         
                         if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
                         
-            
                         
                         //리프래쉬 작업
                         output.result.onNext(result)
@@ -117,16 +129,28 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .nickname:
                 self.setUserNameUseCase.execute(name:text)
                     .catch{ (error) in
-                        return Single<BaseEntity>.create { single in
-                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
-                        }
-                    }.asObservable()
+                            let wmError = error.asWMError
+                            
+                            if wmError == .tokenExpired {
+                                return Single<BaseEntity>.create { single in
+                                    single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                    return Disposables.create()
+                                }
+                            }
+                            else {
+                                return Single<BaseEntity>.create { single in
+                                    single(.success(BaseEntity(status:0,description: error.asWMError.errorDescription ?? "")))
+                                    return Disposables.create {}
+                                }
+                            }
+                    }
+                    .asObservable()
                     .subscribe(onNext: { result in
                         
-                        if result.status != 200 {
+
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
-                            return 
+                            return
                         }
                         
                         Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(displayName:AES256.encrypt(string: text))
@@ -138,9 +162,19 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .load:
                 self.loadPlayListUseCase.execute(key: text)
                     .catch({ (error:Error) in
-                        return Single<PlayListBaseEntity>.create { single in
-                            single(.success(PlayListBaseEntity(status: 0,key: "",description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status: 401,key: "", description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        else {
+                            return Single<PlayListBaseEntity>.create { single in
+                                single(.success(PlayListBaseEntity(status:0,key: "",description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
                         }
                     })
                     .asObservable()
@@ -148,8 +182,8 @@ public final class MultiPurposePopupViewModel:ViewModelType {
                         BaseEntity(status: $0.status,description: $0.description)
                     })
                     .subscribe(onNext: { result in
-                        
-                        if  result.status != 200 {
+                                        
+                        if result.status != 200 { //Created == 201
                             output.result.onNext(result)
                             return
                         }
@@ -166,10 +200,23 @@ public final class MultiPurposePopupViewModel:ViewModelType {
             case .edit:
                 self.editPlayListNameUseCase.execute(key: self.key, title: text)
                     .catch({ (error:Error) in
-                        return Single<EditPlayListNameEntity>.create { single in
-                            single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<EditPlayListNameEntity>.create { single in
+                                single(.success(EditPlayListNameEntity(title: "", status: 401 ,description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
                         }
+                        else {
+                            return Single<EditPlayListNameEntity>.create { single in
+                                single(.success(EditPlayListNameEntity(title: "", status: 0 ,description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
+                        
                     })
                     .asObservable()
                     .subscribe(onNext: { result in

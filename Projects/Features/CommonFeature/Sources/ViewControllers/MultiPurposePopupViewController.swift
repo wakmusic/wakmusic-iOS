@@ -70,6 +70,10 @@ extension PurposeType{
     }
 }
 
+public protocol MultiPurposePopupViewDelegate: AnyObject {
+    func didTokenExpired()
+}
+
 public final class  MultiPurposePopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -106,8 +110,10 @@ public final class  MultiPurposePopupViewController: UIViewController, ViewContr
     
     var limitCount: Int = 12
     var creationCompletion: ((String) -> Void)?
-    
+    var delegate: MultiPurposePopupViewDelegate?
     public var disposeBag = DisposeBag()
+
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -324,7 +330,18 @@ extension MultiPurposePopupViewController{
             if res.status == 200 {
                 SwiftEntryKit.dismiss()
                 
-            }else {
+            }
+            
+            else if res.status == 401 {
+                self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                LOGOUT()
+
+                if self.viewModel.type == .edit || self.viewModel.type == .creation {                   
+                    self.delegate?.didTokenExpired()
+                }
+            }
+            
+            else {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             }
         })
@@ -348,4 +365,5 @@ extension MultiPurposePopupViewController{
         })
         .disposed(by: disposeBag)
     }
+    
 }

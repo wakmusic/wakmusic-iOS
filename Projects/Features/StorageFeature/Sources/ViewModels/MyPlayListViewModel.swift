@@ -39,7 +39,7 @@ public final class MyPlayListViewModel:ViewModelType {
         let backUpdataSource: BehaviorRelay<[MyPlayListSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let showToast: PublishRelay<String> = PublishRelay()
+        let showToast: PublishRelay<BaseEntity> = PublishRelay()
         let immediatelyPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
     }
 
@@ -152,13 +152,32 @@ public final class MyPlayListViewModel:ViewModelType {
                 guard let self = self else{
                     return Observable.empty()
                 }
-                return self.editPlayListOrderUseCase.execute(ids: ids).asObservable()
+                return self.editPlayListOrderUseCase.execute(ids: ids)
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create{ single in
+                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                                return Disposables.create()
+                            }
+                        }
+                    })
+                    .asObservable()
             }
             .filter{ (model) in
                 guard model.status == 200 else {
-                    output.showToast.accept(model.description)
+                    output.showToast.accept(model)
                     return false
                 }
+
                 return true
             }
             .withLatestFrom(output.dataSource)
@@ -203,17 +222,37 @@ public final class MyPlayListViewModel:ViewModelType {
             .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
                 guard let `self` = self else { return Observable.empty() }
                 return self.deletePlayListUseCase.execute(ids: ids)
-                    .catchAndReturn(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다."))
+                    .catch({ (error:Error) in
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                return Disposables.create()
+                            }
+                        }
+                        
+                        else {
+                            return Single<BaseEntity>.create{ single in
+                                single(.success(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다.")))
+                                return Disposables.create()
+                            }
+                        }
+                    })
                     .asObservable()
             })
             .do(onNext: { (model) in
                 if model.status == 200 {
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedPlayLists.accept([])
-                    output.showToast.accept("리스트가 삭제되었습니다.")
+                    output.showToast.accept(BaseEntity(status: 200,description: "리스트가 삭제되었습니다."))
 
-                }else{
-                    output.showToast.accept(model.description)
+                }
+            
+                else{
+                    output.state.accept(EditState(isEditing: false, force: true))
+                    output.indexPathOfSelectedPlayLists.accept([])
+                    output.showToast.accept(model)
                 }
             })
             .map { _ in () }

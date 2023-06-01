@@ -12,6 +12,11 @@ import Utility
 import DesignSystem
 import RxSwift
 import NVActivityIndicatorView
+import DomainModule
+
+public protocol ContainSongsViewDelegate: AnyObject {
+    func tokenExpired()
+}
 
 public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
     @IBOutlet weak var closeButton: UIButton!
@@ -27,6 +32,7 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
+    public var delegate: ContainSongsViewDelegate?
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
@@ -99,11 +105,24 @@ extension ContainSongsViewController {
                 
         output.showToastMessage
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (text:String) in
+            .subscribe(onNext: { [weak self] (result:AddSongEntity) in
                 guard let self = self else {return}
-                self.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                self.dismiss(animated: true)
+                
+                self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                if result.status == 401 {
+                    LOGOUT()
+                    PlayState.shared.switchPlayerMode(to: .mini)
+                    self.dismiss(animated: true) {[weak self] in
+                        
+                        guard let self else {return}
+                        
+                        self.delegate?.tokenExpired()
+                    }
+                    
+                }else{
+                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    self.dismiss(animated: true)
+                }
             })
             .disposed(by: disposeBag)
         
@@ -156,6 +175,19 @@ extension ContainSongsViewController : UITableViewDelegate {
 extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
     public func action() {
         let vc = multiPurposePopComponent.makeView(type: .creation)
+        vc.delegate = self
         self.showEntryKitModal(content: vc, height: 296)
+    }
+}
+
+extension ContainSongsViewController: MultiPurposePopupViewDelegate{
+    public func didTokenExpired() {
+        PlayState.shared.switchPlayerMode(to: .mini)
+        self.dismiss(animated: true) {[weak self] in
+            
+            guard let self else {return}
+            
+            self.delegate?.tokenExpired()
+        }
     }
 }

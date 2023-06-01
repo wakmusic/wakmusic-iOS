@@ -56,6 +56,8 @@ final class PlayerViewModel: ViewModelType {
         var showToastMessage = PassthroughSubject<String, Never>()
         var showConfirmModal = PassthroughSubject<String, Never>()
         var showContainSongsViewController = PassthroughSubject<String, Never>()
+        
+        var showTokenModal = PassthroughSubject<String,Never>()
     }
     
     var fetchLyricsUseCase: FetchLyricsUseCase!

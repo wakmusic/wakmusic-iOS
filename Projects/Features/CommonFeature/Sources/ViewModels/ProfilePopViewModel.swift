@@ -81,14 +81,35 @@ public final class ProfilePopViewModel {
                 guard let self = self else { return Observable.empty() }
                 return self.setProfileUseCase.execute(image: id)
                     .catch{ (error) in
-                        return Single<BaseEntity>.create { single in
-                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
+                        
+                        let wmError = error.asWMError
+                        
+                        if wmError == .tokenExpired {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 401, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
                         }
+                        
+                        else {
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }
+                        
+                        
                     }.asObservable()
             }
             .withLatestFrom(input.setProfileRequest) { ($0, $1) }
-            .do(onNext: { (model, profile) in
+            .do(onNext: {[weak self] (model, profile) in
+                
+                guard let self else {return}
+                
+                if model.status == 401 {
+                    return
+                }
+                
                 guard model.status == 200 else { return }
                 Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: profile)
             })

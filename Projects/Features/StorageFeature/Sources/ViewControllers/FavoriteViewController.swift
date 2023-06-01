@@ -171,10 +171,15 @@ extension FavoriteViewController{
             }).disposed(by: disposeBag)
 
         output.showToast
-            .subscribe(onNext: { [weak self] (msg:String) in
+            .subscribe(onNext: { [weak self] (result:BaseEntity) in
                 guard let self = self else{ return }
+                
+                if result.status == 401 {
+                    LOGOUT()
+                }
+                
                 self.showToast(
-                    text: msg,
+                    text: result.description,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             })
