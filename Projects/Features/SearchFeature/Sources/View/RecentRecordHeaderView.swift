@@ -12,6 +12,7 @@ import Utility
 
 class RecentRecordHeaderView: UIView {
     @IBOutlet weak var removeAllButton: UIButton!
+    @IBOutlet weak var removeAllLabel: UILabel!
     @IBOutlet weak var recentLabel: UILabel!
     
     //1. 넘겨주는 연결통로
@@ -45,11 +46,9 @@ class RecentRecordHeaderView: UIView {
         self.recentLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.recentLabel.setLineSpacing(kernValue: -0.5)
         
-        let removeButtonAttributedString = NSMutableAttributedString.init(string: "전체삭제")
-        removeButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                    .foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
-                                                    .kern: -0.5],
-                                                   range: NSRange(location: 0, length: removeButtonAttributedString.string.count))
-        self.removeAllButton.setAttributedTitle(removeButtonAttributedString, for: .normal)
+        self.removeAllLabel.text = "전체삭제"
+        self.removeAllLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        self.removeAllLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
+        self.removeAllLabel.setLineSpacing(kernValue: -0.5)
     }
 }
