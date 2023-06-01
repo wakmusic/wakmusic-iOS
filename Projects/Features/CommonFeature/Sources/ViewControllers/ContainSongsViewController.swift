@@ -14,6 +14,10 @@ import RxSwift
 import NVActivityIndicatorView
 import DomainModule
 
+public protocol ContainSongsViewDelegate: AnyObject {
+    func tokenExpired()
+}
+
 public final class ContainSongsViewController: BaseViewController,ViewControllerFromStoryBoard{
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -28,6 +32,7 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
+    public var delegate: ContainSongsViewDelegate?
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
@@ -105,10 +110,14 @@ extension ContainSongsViewController {
                 
                 self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 if result.status == 401 {
-                    //@구구 재생목록 내리기..
                     LOGOUT()
                     PlayState.shared.switchPlayerMode(to: .mini)
-                    self.dismiss(animated: true)
+                    self.dismiss(animated: true) {[weak self] in
+                        
+                        guard let self else {return}
+                        
+                        self.delegate?.tokenExpired()
+                    }
                     
                 }else{
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
@@ -173,8 +182,12 @@ extension ContainSongsViewController : ContainPlayListHeaderViewDelegate {
 
 extension ContainSongsViewController: MultiPurposePopupViewDelegate{
     public func didTokenExpired() {
-        //@구구 재생목록 내리기..
         PlayState.shared.switchPlayerMode(to: .mini)
-        self.dismiss(animated: true)
+        self.dismiss(animated: true) {[weak self] in
+            
+            guard let self else {return}
+            
+            self.delegate?.tokenExpired()
+        }
     }
 }

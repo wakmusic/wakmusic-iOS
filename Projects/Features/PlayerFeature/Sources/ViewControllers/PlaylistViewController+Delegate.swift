@@ -20,7 +20,9 @@ extension PlaylistViewController: SongCartViewDelegate {
         case .addSong:
             let songs: [String] = self.playState.playList.list.filter { $0.item.isSelected }.map { $0.item.id }
             let viewController = containSongsComponent.makeView(songs: songs)
+            viewController.delegate = self
             viewController.modalPresentationStyle = .overFullScreen
+            
             self.present(viewController, animated: true) {
                 self.tappedAddPlaylist.onNext(())
                 self.hideSongCart()
@@ -86,4 +88,10 @@ extension PlaylistViewController: PlaylistTableViewCellDelegate {
     }
     
     
+}
+
+extension PlaylistViewController: ContainSongsViewDelegate{
+    public func tokenExpired() {
+        self.dismiss(animated: true)
+    }
 }
