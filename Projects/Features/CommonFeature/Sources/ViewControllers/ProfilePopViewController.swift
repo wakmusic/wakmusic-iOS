@@ -138,13 +138,12 @@ extension ProfilePopViewController{
                 
                 if result.status == 200 {
                     self.dismiss(animated: true)
-                    
                 }
                 
                 else if result.status == 401 {
+                    LOGOUT()
                     self.dismiss(animated: true)
                     self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                    LOGOUT()
                 }
                 
                 else{

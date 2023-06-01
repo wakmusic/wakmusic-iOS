@@ -329,7 +329,6 @@ extension MultiPurposePopupViewController{
             
             if res.status == 200 {
                 SwiftEntryKit.dismiss()
-                
             }
             
             else if res.status == 401 {

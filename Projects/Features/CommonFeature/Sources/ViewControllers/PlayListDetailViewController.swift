@@ -306,9 +306,9 @@ extension PlayListDetailViewController{
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 
                 if $0.status == 401 {
-                   
                     LOGOUT()
                     self.navigationController?.popViewController(animated: true)
+                    
                 }else{
                     self.input.state.accept(EditState(isEditing: false, force: true))
                 }

@@ -112,10 +112,8 @@ extension ContainSongsViewController {
                 if result.status == 401 {
                     LOGOUT()
                     PlayState.shared.switchPlayerMode(to: .mini)
-                    self.dismiss(animated: true) {[weak self] in
-                        
+                    self.dismiss(animated: true) { [weak self] in
                         guard let self else {return}
-                        
                         self.delegate?.tokenExpired()
                     }
                     
