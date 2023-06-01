@@ -141,16 +141,9 @@ extension IntroViewController {
                 owner.showTabBar()
                 
             case .failure(let error):
-                var message:String
-                if error.asWMError == .unknown {
-                    message = error.localizedDescription
-                }else {
-                    message = error.asWMError.errorDescription ?? ""
-                }
-                
                 owner.showPanModal(
                     content: TextPopupViewController.viewController(
-                        text: message,
+                        text: error.asWMError.errorDescription ?? "",
                         cancelButtonIsHidden: true,
                         allowsDragAndTapToDismiss: false,
                         completion: { () in

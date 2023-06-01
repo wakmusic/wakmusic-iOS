@@ -100,12 +100,8 @@ final public class IntroViewModel: ViewModelType {
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
                     Utility.PreferenceManager.startPage = 4
-                    output.userInfoResult.onNext(.failure(asWMError))
-                }else if asWMError == .unknown {
-                    output.userInfoResult.onNext(.failure(asWMError))
-                }else{
-                    output.userInfoResult.onNext(.failure(error))
                 }
+                output.userInfoResult.onNext(.failure(error))
             }).disposed(by: disposeBag)
         
         return output
