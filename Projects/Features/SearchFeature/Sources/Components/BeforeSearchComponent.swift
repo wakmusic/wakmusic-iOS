@@ -12,15 +12,15 @@ import DomainModule
 import CommonFeature
 
 public protocol BeforeSearchDependency: Dependency {
-    var playListDetailComponent : PlayListDetailComponent { get  }
+    var playListDetailComponent: PlayListDetailComponent { get  }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {get}
-  
-    
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> BeforeSearchContentViewController {
-        return BeforeSearchContentViewController.viewController(recommendPlayListDetailComponent: dependency.playListDetailComponent, viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase) )
-        
+        return BeforeSearchContentViewController.viewController(
+            recommendPlayListDetailComponent: dependency.playListDetailComponent,
+            viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
+        )
     }
 }

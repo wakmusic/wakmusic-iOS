@@ -19,7 +19,7 @@ public final class SearchComponent: Component<SearchDependency> {
         return SearchViewController.viewController(
             viewModel: .init(),
             beforeSearchComponent: self.dependency.beforeSearchComponent,
-           afterSearchComponent: self.dependency.afterSearchComponent
+            afterSearchComponent: self.dependency.afterSearchComponent
         )
     }
 }

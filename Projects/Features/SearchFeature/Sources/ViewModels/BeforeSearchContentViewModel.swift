@@ -14,13 +14,8 @@ import DomainModule
 import Utility
 
 public final class BeforeSearchContentViewModel:ViewModelType {
-  
-    
-
     let input = Input()
-
     var disposeBag = DisposeBag()
-    
     var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
     public init(
@@ -30,20 +25,15 @@ public final class BeforeSearchContentViewModel:ViewModelType {
         DEBUG_LOG("✅ BeforeSearchContentViewModel 생성")
     }
     
-    
     public struct Input {
-        
-        
     }
 
     public struct Output {
-        let showRecommend:BehaviorRelay<Bool>
-        let dataSource:BehaviorRelay<[RecommendPlayListEntity]>
+        let showRecommend: BehaviorRelay<Bool>
+        let dataSource: BehaviorRelay<[RecommendPlayListEntity]>
     }
-
     
     public func transform(from input: Input) -> Output {
-        
         let dataSource:BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
         let showRecommend:BehaviorRelay<Bool> = BehaviorRelay(value:true)
         
@@ -57,7 +47,6 @@ public final class BeforeSearchContentViewModel:ViewModelType {
             .bind(to: dataSource)
             .disposed(by: disposeBag)
     
-        
         return Output(showRecommend: showRecommend, dataSource: dataSource)
     }
 }

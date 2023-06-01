@@ -14,115 +14,75 @@ import DomainModule
 import Utility
 import RxDataSources
 
-
-
-public  final class AfterSearchContentViewModel:ViewModelType {
-   
-    
-
-
-    
+public  final class AfterSearchContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var sectionType:TabPosition!
-    var dataSource:[SearchSectionModel]
-
+    var sectionType: TabPosition!
+    var dataSource: [SearchSectionModel]
     
-    
-    public init(type:TabPosition,dataSource:[SearchSectionModel]){
-        
-        // AfterSearchContent 를 없애고 AfterSearch 쪽으로 들어감 
+    public init(
+        type: TabPosition,
+        dataSource: [SearchSectionModel]
+    ){
+        // AfterSearchContent 를 없애고 AfterSearch 쪽으로 들어감
         DEBUG_LOG("✅ AfterSearchContentViewModel 생성")
-        
         self.sectionType = type
         self.dataSource = dataSource
-      
-        
     }
 
     public struct Input {
-        
-        let indexPath:PublishRelay<IndexPath> = PublishRelay()
-        let mandatoryLoadIndexPath:PublishRelay<[IndexPath]> = PublishRelay()
-        let deSelectedAllSongs:PublishRelay<Void> = PublishRelay()
-        
+        let indexPath: PublishRelay<IndexPath> = PublishRelay()
+        let mandatoryLoadIndexPath: PublishRelay<[IndexPath]> = PublishRelay()
+        let deSelectedAllSongs: PublishRelay<Void> = PublishRelay()
     }
 
     public struct Output {
-        let dataSource:BehaviorRelay<[SearchSectionModel]> =  BehaviorRelay<[SearchSectionModel]>(value: [])
+        let dataSource: BehaviorRelay<[SearchSectionModel]> =  BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
     public func transform(from input: Input) -> Output {
-        
         let output = Output()
         output.dataSource.accept(dataSource)
-        
-        
-        
+                
         input.mandatoryLoadIndexPath
             .withLatestFrom(output.dataSource) {($0,$1)}
-            .map({ (indexPathes,dataSource) -> [SearchSectionModel] in
-                
+            .map({ (indexPathes, dataSource) -> [SearchSectionModel] in
                 var newModel = dataSource
-                
-                
                 for indexPath in indexPathes {
-                    
                     newModel[indexPath.section].items[indexPath.row].isSelected = true
-                    
                 }
-                
                 return newModel
             })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-     
         
         input.indexPath
             .withLatestFrom(output.dataSource){($0,$1)}
-            .map({[weak self] (indexPath,dataSource) -> [SearchSectionModel]  in
-                
-                guard let self = self else{return [] }
+            .map({[weak self] (indexPath, dataSource) -> [SearchSectionModel]  in
+                guard let self = self else{ return [] }
                 
                 let song = dataSource[indexPath.section].items[indexPath.row]
-                
-                
                 NotificationCenter.default.post(name: .selectedSongOnSearch, object: (self.sectionType,song))
                 
-                
                 var newModel = dataSource
-                
-               newModel[indexPath.section].items[indexPath.row].isSelected = !newModel[indexPath.section].items[indexPath.row].isSelected
-                
-                
+                newModel[indexPath.section].items[indexPath.row].isSelected = !newModel[indexPath.section].items[indexPath.row].isSelected
                 
                 return newModel
             })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
         
-        
         NotificationCenter.default.rx.notification(.selectedSongOnSearch)
             .filter({ [weak self]  in
-                
                 guard let self = self else{return false}
-                
-                
                 guard let result = $0.object as? (TabPosition,SongEntity) else {
                     return false
                 }
-                
-                
                 return self.sectionType != result.0
             })
             .map({(res) -> SongEntity  in
-                
-            
-                
-                
                 guard let result = res.object as? (TabPosition,SongEntity) else {
                     return SongEntity(id: "-", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
                 }
-                
                 return result.1
             })
             .filter({$0.id != "-"})
@@ -161,5 +121,4 @@ public  final class AfterSearchContentViewModel:ViewModelType {
         
         return output
     }
-
 }
