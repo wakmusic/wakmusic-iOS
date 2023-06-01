@@ -24,7 +24,7 @@ public extension PlayState {
             self.playList.changeCurrentPlayIndex(to: self.playList.lastIndex)
         }
         
-        if self.state == .unstarted { self.switchPlayerMode(to: .mini) }
+        self.switchPlayerMode(to: .mini)
         self.load(at: firstSong)
         
         let songsWithoutFirst = songs.dropFirst()
