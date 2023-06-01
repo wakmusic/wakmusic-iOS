@@ -146,6 +146,12 @@ extension AfterLoginViewController{
                 guard let self = self else{
                     return
                 }
+                
+                //프로필 편집 팝업을 띄운 상태에서 리스트 편집 시 > 프로필 편집 팝업을 제거
+                if self.editSheetView != nil {
+                    self.hideEditSheet()
+                }
+                
                 let nextState = EditState(isEditing: state.isEditing, force: false)
                 
                 if self.currentIndex ?? 0  == 0 {

@@ -14,8 +14,8 @@ extension AppAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-            case .checkVersion:
-                return "/check"
+        case .checkVersion:
+            return "/check"
         }
     }
         
@@ -47,7 +47,9 @@ extension AppAPI: WMAPI {
                 401: .tokenExpired,
                 404: .notFound,
                 429: .tooManyRequest,
-                500: .internalServerError
+                500: .internalServerError,
+                502: .internalServerError,
+                521: .internalServerError
             ]
         }
     }

@@ -286,16 +286,18 @@ extension HomeViewController {
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
-        
+
         blurEffectView.layer.cornerRadius = 12
         blurEffectView.clipsToBounds = true
-        
+        blurEffectView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+
         blurImageView.layer.cornerRadius = 12
         blurImageView.contentMode = .scaleAspectFill
         blurImageView.image = DesignSystemAsset.Home.blurBg.image
         blurImageView.alpha = 0.8
         blurImageView.clipsToBounds = true
-
+        blurImageView.isHidden = true
+        
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),

@@ -66,54 +66,65 @@ extension IntroViewController {
                 
         output.appInfoResult
             .withUnretained(self)
-            .subscribe(onNext: { owner,entity in
-                var textPopupVc: TextPopupViewController
-                let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
-                let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
-                
-                switch entity.flag {
-                    
-                case .normal:
-                    owner.input.fetchUserInfoCheck.onNext(())
-                    return
-                    
-                case .event:
-                    textPopupVc = TextPopupViewController.viewController(
-                        text:"\(entity.title)\n\(entity.description)",
-                        cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
-                        completion: {
-                            exit(0)
-                        }
-                    )
-                    
-                case .update:
-                    textPopupVc = TextPopupViewController.viewController(
-                        text:"\(updateTitle)\n\(updateMessage)",
-                        cancelButtonIsHidden: false,
-                        allowsDragAndTapToDismiss: false,
-                        confirmButtonText: "업데이트",
-                        cancelButtonText: "나중에",
-                        completion: {
-                            owner.goAppStore()
-                        },
-                        cancelCompletion: {
-                            owner.input.fetchUserInfoCheck.onNext(())
-                        }
-                    )
-                    
-                case .forceUpdate:
-                    textPopupVc = TextPopupViewController.viewController(
-                        text:"\(updateTitle)\n\(updateMessage)",
-                        cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
-                        confirmButtonText: "업데이트",
-                        completion: {
-                            owner.goAppStore()
-                        }
+            .subscribe(onNext: { owner, result in
+                switch result {
+                case let .success(entity):
+                    var textPopupVc: TextPopupViewController
+                    let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
+                    let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
+
+                    switch entity.flag {
+                    case .normal:
+                        owner.input.fetchUserInfoCheck.onNext(())
+                        return
+
+                    case .event:
+                        textPopupVc = TextPopupViewController.viewController(
+                            text:"\(entity.title)\n\(entity.description)",
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false,
+                            completion: {
+                                exit(0)
+                            }
+                        )
+
+                    case .update:
+                        textPopupVc = TextPopupViewController.viewController(
+                            text:"\(updateTitle)\n\(updateMessage)",
+                            cancelButtonIsHidden: false,
+                            allowsDragAndTapToDismiss: false,
+                            confirmButtonText: "업데이트",
+                            cancelButtonText: "나중에",
+                            completion: {
+                                owner.goAppStore()
+                            },
+                            cancelCompletion: {
+                                owner.input.fetchUserInfoCheck.onNext(())
+                            }
+                        )
+
+                    case .forceUpdate:
+                        textPopupVc = TextPopupViewController.viewController(
+                            text:"\(updateTitle)\n\(updateMessage)",
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false,
+                            confirmButtonText: "업데이트",
+                            completion: {
+                                owner.goAppStore()
+                            }
+                        )
+                    }
+                    owner.showPanModal(content: textPopupVc)
+
+                case let .failure(error):
+                    owner.showPanModal(
+                        content: TextPopupViewController.viewController(
+                            text: error.asWMError.errorDescription ?? "",
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: false
+                        )
                     )
                 }
-                owner.showPanModal(content: textPopupVc)
             })
             .disposed(by: disposeBag)
         
