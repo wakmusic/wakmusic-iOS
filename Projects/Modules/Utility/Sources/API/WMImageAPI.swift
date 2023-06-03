@@ -17,6 +17,7 @@ public enum WMImageAPI {
     case fetchRecommendPlayListWithRound(id: String, version: Int)
     case fetchRecommendPlayListWithSquare(id: String, version: Int)
     case fetchYoutubeThumbnail(id: String)
+    case fetchYoutubeThumbnailHD(id: String)
     case fetchNotice(id: String)
 }
 
@@ -53,7 +54,10 @@ extension WMImageAPI {
             return WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND() + "/\(id).png?v=\(version)"
             
         case let .fetchYoutubeThumbnail(id):
-            return "vi/\(id)/hqdefault.jpg"
+            return "vi/\(id)/mqdefault.jpg"
+            
+        case let .fetchYoutubeThumbnailHD(id):
+            return "vi/\(id)/maxresdefault.jpg"
             
         case let .fetchNotice(id):
             return WMDOMAIN_IMAGE_NOTICE() + "/\(id)"
@@ -64,6 +68,8 @@ extension WMImageAPI {
         switch self {
         case .fetchYoutubeThumbnail:
             return youtubeBaseURLString + "/" + path
+        case .fetchYoutubeThumbnailHD:
+            return youtubeBaseURLString + "/" + path
         default:
             return baseURLString + "/" + path
         }
@@ -72,6 +78,8 @@ extension WMImageAPI {
     public var toURL: URL? {
         switch self {
         case .fetchYoutubeThumbnail:
+            return URL(string: youtubeBaseURLString + "/" + path)
+        case .fetchYoutubeThumbnailHD:
             return URL(string: youtubeBaseURLString + "/" + path)
         default:
             return URL(string: baseURLString + "/" + path)

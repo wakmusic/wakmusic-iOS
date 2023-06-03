@@ -37,7 +37,7 @@ final class PlayerViewModel: ViewModelType {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
         var titleText = CurrentValueSubject<String, Never>("")
         var artistText = CurrentValueSubject<String, Never>("")
-        var thumbnailImageURL = CurrentValueSubject<String, Never>("")
+        var thumbnailImageURL = CurrentValueSubject<(sdQuality: String, hdQuality: String), Never>(("", ""))
         var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
         var playTimeText = CurrentValueSubject<String, Never>("0:00")
@@ -294,15 +294,16 @@ final class PlayerViewModel: ViewModelType {
         sortedLyrics.removeAll()
         
         if let song = song {
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-            output.thumbnailImageURL.send(thumbnailURL)
+            let thumbnailSDURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
+            let thumbnailHDURL = Utility.WMImageAPI.fetchYoutubeThumbnailHD(id: song.id).toString
+            output.thumbnailImageURL.send((thumbnailSDURL, thumbnailHDURL))
             output.titleText.send(song.title)
             output.artistText.send(song.artist)
             output.viewsCountText.send(self.formatNumber(song.views))
             output.likeCountText.send("준비중")
             sortedLyrics.append("가사를 불러오는 중입니다.")
         } else {
-            output.thumbnailImageURL.send("")
+            output.thumbnailImageURL.send(("", ""))
             output.titleText.send("")
             output.artistText.send("")
             output.viewsCountText.send("조회수")

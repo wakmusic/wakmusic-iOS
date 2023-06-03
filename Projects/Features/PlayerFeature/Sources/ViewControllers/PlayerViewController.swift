@@ -161,20 +161,54 @@ private extension PlayerViewController {
     private func bindThumbnail(output: PlayerViewModel.Output) {
         output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
             guard let self else { return }
+            
+            let placeholderImage = DesignSystemAsset.Logo.placeHolderLarge.image
+            let transitionOptions: KingfisherOptionsInfo = [.transition(.fade(0.2))]
+            
+            let hdURL = URL(string: thumbnailImageURL.hdQuality)
+            let sdURL = URL(string: thumbnailImageURL.sdQuality)
+            
             self.playerView.thumbnailImageView.kf.setImage(
-                with: URL(string: thumbnailImageURL),
-                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
-                options: [.transition(.fade(0.2))]
+                with: hdURL,
+                placeholder: placeholderImage,
+                options: transitionOptions,
+                completionHandler: { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success:
+                        break
+                    case .failure(let error):
+                        self.playerView.thumbnailImageView.kf.setImage(
+                            with: sdURL,
+                            placeholder: placeholderImage,
+                            options: transitionOptions
+                        )
+                    }
+                }
             )
+            
             self.playerView.backgroundImageView.kf.setImage(
-                with: URL(string: thumbnailImageURL),
-                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
-                options: [.transition(.fade(0.2))]
+                with: sdURL,
+                placeholder: placeholderImage,
+                options: transitionOptions,
+                completionHandler: { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        self.playerView.backgroundImageView.kf.setImage(
+                            with: sdURL,
+                            placeholder: placeholderImage,
+                            options: transitionOptions
+                        )
+                    }
+                }
             )
             self.miniPlayerView.thumbnailImageView.kf.setImage(
-                with: URL(string: thumbnailImageURL),
-                placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
-                options: [.transition(.fade(0.2))]
+                with: sdURL,
+                placeholder: placeholderImage,
+                options: transitionOptions
             )
         }.store(in: &subscription)
     }
