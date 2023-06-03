@@ -71,16 +71,16 @@ extension PlayState {
         }
         
         private func remove(at index: Int) {
+            // 재생중인 곡을 삭제하는 경우 CurrentPlayIndex를 다음으로 옮기고, 옮겨진 currentPlayIndex에 해당하는 곡을 재생
             if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
                 changeCurrentPlayIndexToNext()
+                if let currentPlayIndex = self.currentPlayIndex {
+                    PlayState.shared.currentSong = list[safe: currentPlayIndex]?.item
+                    PlayState.shared.loadInPlaylist(at: currentPlayIndex)
+                }
             }
             
             list.remove(at: index)
-            
-            if let currentPlayIndex = currentPlayIndex, index == currentPlayIndex {
-                PlayState.shared.currentSong = list[safe: currentPlayIndex]?.item
-                PlayState.shared.loadInPlaylist(at: currentPlayIndex)
-            }
         }
         
         public func remove(indexs: [Int]) {
