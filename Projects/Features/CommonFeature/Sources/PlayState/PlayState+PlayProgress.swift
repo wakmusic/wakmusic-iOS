@@ -17,5 +17,9 @@ extension PlayState {
             currentProgress = 0
             endProgress = 0
         }
+
+        public mutating func resetCurrentProgress() {
+            currentProgress = 0
+        }
     }
 }
