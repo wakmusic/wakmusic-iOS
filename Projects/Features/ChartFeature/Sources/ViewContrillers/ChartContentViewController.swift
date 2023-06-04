@@ -23,7 +23,8 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-             
+    private var refreshControl = UIRefreshControl()
+
     let playState = PlayState.shared
     
     private var containSongsComponent: ContainSongsComponent!
@@ -52,34 +53,40 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 }
 
 extension ChartContentViewController {
-    
     private func bind() {
         tableView.register(ChartContentTableViewCell.self, forCellReuseIdentifier: "chartContentTableViewCell")
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         tableView.rx.itemSelected
-            .map({$0.row})
-            .bind(to:input.songTapped)
+            .map{ $0.row }
+            .bind(to: input.songTapped)
             .disposed(by: disposeBag)
 
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .bind(to: input.refreshPulled)
+            .disposed(by: disposeBag)
     }
+    
     private func outputBind() {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.activityIncidator.stopAnimating()
+                self.refreshControl.endRefreshing()
             })
-                .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
-                    let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                    guard let cell = tableView.dequeueReusableCell(
-                        withIdentifier: "chartContentTableViewCell",
-                        for: indexPath
-                    ) as? ChartContentTableViewCell else {
-                        return UITableViewCell() }
-                    cell.update(model: model, index: index, type: self.viewModel.type)
-                    return cell
-                }.disposed(by: disposeBag)
+            .bind(to: tableView.rx.items) { [weak self] (tableView, index, model) -> UITableViewCell in
+                guard let self else { return UITableViewCell() }
+                let indexPath: IndexPath = IndexPath(row: index, section: 0)
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "chartContentTableViewCell",
+                    for: indexPath
+                ) as? ChartContentTableViewCell else {
+                    return UITableViewCell() }
+                cell.update(model: model, index: index, type: self.viewModel.type)
+                return cell
+            }.disposed(by: disposeBag)
 
         output.indexOfSelectedSongs
             .skip(1)
@@ -121,6 +128,7 @@ extension ChartContentViewController {
         self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.tableView.refreshControl = refreshControl
     }
 }
 

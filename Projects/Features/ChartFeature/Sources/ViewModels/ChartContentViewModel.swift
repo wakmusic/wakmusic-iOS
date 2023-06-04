@@ -26,7 +26,8 @@ public final class ChartContentViewModel: ViewModelType {
     public struct Input {
         var songTapped: PublishSubject<Int> = PublishSubject()
         var allSongSelected: PublishSubject<Bool> = PublishSubject()
-        let groupPlayTapped:PublishSubject<PlayEvent> = PublishSubject()
+        let groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
+        var refreshPulled: PublishSubject<Void> = PublishSubject()
     }
     
     public struct Output {
@@ -34,12 +35,12 @@ public final class ChartContentViewModel: ViewModelType {
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: []) 
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let groupPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
+        let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-
+        
         let dataSourceForZip = Observable.zip(
             fetchChartUpdateTimeUseCase
                 .execute()
@@ -52,6 +53,16 @@ public final class ChartContentViewModel: ViewModelType {
         )
         
         dataSourceForZip
+            .subscribe(onNext: { (time, data) in
+                output.updateTime.accept(time)
+                output.dataSource.accept(data)
+            })
+            .disposed(by: disposeBag)
+
+        input.refreshPulled
+            .flatMap { (_) -> Observable<(String, [ChartRankingEntity])> in
+                return dataSourceForZip
+            }
             .subscribe(onNext: { (time, data) in
                 output.updateTime.accept(time)
                 output.dataSource.accept(data)
