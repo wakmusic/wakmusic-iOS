@@ -37,7 +37,12 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         return gesture
     }()
     var isDarkContentBackground: Bool = false
-    var playerMode: PlayerMode = .mini
+    var playerMode: PlayerMode = .mini {
+        didSet{
+            DEBUG_LOG("playerMode: \(playerMode)")
+            PlayState.shared.playerMode = playerMode
+        }
+    }
     var disposeBag = DisposeBag()
     
     open override func viewDidLoad() {
@@ -114,7 +119,8 @@ extension MainContainerViewController {
             
             self.panelViewTopConstraint.constant = (expanded) ? -screenHeight : self.originalPanelPosition
             self.bottomContainerView.isHidden = (expanded) ? true : false
-
+            self.playerMode = expanded ? .full : .mini
+            
             UIView.animate(withDuration: 0.35,
                            delay: 0.0,
                            usingSpringWithDamping: 0.8,

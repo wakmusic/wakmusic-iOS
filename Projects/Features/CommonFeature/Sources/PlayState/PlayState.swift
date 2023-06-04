@@ -23,7 +23,8 @@ final public class PlayState {
     @Published public var playList: PlayList
     @Published public var repeatMode: RepeatMode
     @Published public var shuffleMode: ShuffleMode
-    
+    @Published public var playerMode: PlayerMode
+
     private var subscription = Set<AnyCancellable>()
     
     init() {
@@ -32,6 +33,7 @@ final public class PlayState {
         state = .unstarted
         repeatMode = .none
         shuffleMode = .off
+        playerMode = .mini
         player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         
         playList.list = fetchPlayListFromLocalDB()
