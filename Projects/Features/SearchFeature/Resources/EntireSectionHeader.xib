@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EntireSectionHeader" customModule="SearchFeature_SearchFeature" customModuleProvider="target">
             <connections>
+                <outlet property="allShowArrowImageView" destination="DvV-pb-yMl" id="chh-si-tcv"/>
+                <outlet property="allShowLabel" destination="g2e-Za-IY5" id="0KX-xa-7hs"/>
                 <outlet property="categoryLabel" destination="HCH-Vt-HrF" id="LDX-xp-qLB"/>
                 <outlet property="moveTabButton" destination="3kH-8C-bYa" id="z94-Ni-OAR"/>
                 <outlet property="numberOfSongLabel" destination="v0r-r8-7jX" id="r5B-26-WNY"/>
@@ -32,12 +35,27 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="전체보기" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2e-Za-IY5">
+                    <rect key="frame" x="326.33333333333331" y="140.66666666666666" width="41.666666666666686" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="18" id="56x-3b-mCw"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                    <color key="textColor" name="gray900"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DvV-pb-yMl">
+                    <rect key="frame" x="368" y="141.66666666666666" width="12" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="12" id="8mu-cb-dnl"/>
+                        <constraint firstAttribute="height" constant="16" id="st0-6V-YOa"/>
+                    </constraints>
+                </imageView>
                 <button opaque="NO" contentMode="scaleAspectFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-8C-bYa">
-                    <rect key="frame" x="281" y="138.66666666666666" width="99" height="22"/>
+                    <rect key="frame" x="321.33333333333331" y="135.66666666666666" width="63.666666666666686" height="28"/>
                     <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="18"/>
                     <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="-5" maxY="0.0"/>
-                    <state key="normal" title="ㅁㄴㅇㅁㄴㅇ"/>
                     <connections>
                         <action selector="switchTabAction:" destination="-1" eventType="touchUpInside" id="FUG-Tv-cYl"/>
                     </connections>
@@ -46,14 +64,25 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="HCH-Vt-HrF" secondAttribute="bottom" constant="6" id="0Dp-vR-Wje"/>
-                <constraint firstItem="3kH-8C-bYa" firstAttribute="centerY" secondItem="HCH-Vt-HrF" secondAttribute="centerY" id="0dm-a6-Dmx"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3kH-8C-bYa" secondAttribute="trailing" constant="20" id="M4X-Ni-79w"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="DvV-pb-yMl" secondAttribute="trailing" constant="20" id="3e8-Nc-NiV"/>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="bottom" secondItem="g2e-Za-IY5" secondAttribute="bottom" constant="5" id="HPh-db-vzH"/>
                 <constraint firstItem="v0r-r8-7jX" firstAttribute="leading" secondItem="HCH-Vt-HrF" secondAttribute="trailing" constant="4" id="OqN-ii-kot"/>
+                <constraint firstItem="DvV-pb-yMl" firstAttribute="centerY" secondItem="HCH-Vt-HrF" secondAttribute="centerY" id="YYs-GB-ZYr"/>
+                <constraint firstItem="g2e-Za-IY5" firstAttribute="centerY" secondItem="DvV-pb-yMl" secondAttribute="centerY" id="Ylg-BF-Yto"/>
                 <constraint firstItem="HCH-Vt-HrF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="d0m-Za-bxb"/>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="top" secondItem="g2e-Za-IY5" secondAttribute="top" constant="-5" id="eak-uv-O5X"/>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="leading" secondItem="g2e-Za-IY5" secondAttribute="leading" constant="-5" id="hSM-cd-e2S"/>
                 <constraint firstItem="v0r-r8-7jX" firstAttribute="centerY" secondItem="HCH-Vt-HrF" secondAttribute="centerY" id="kpn-XU-vIc"/>
+                <constraint firstItem="3kH-8C-bYa" firstAttribute="trailing" secondItem="DvV-pb-yMl" secondAttribute="trailing" constant="5" id="rFZ-jP-wUa"/>
+                <constraint firstItem="DvV-pb-yMl" firstAttribute="leading" secondItem="g2e-Za-IY5" secondAttribute="trailing" id="yTx-LA-SCy"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="27.69230769230769" y="20.616113744075829"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="gray900">
+            <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

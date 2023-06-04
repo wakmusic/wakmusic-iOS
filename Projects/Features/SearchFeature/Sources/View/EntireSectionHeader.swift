@@ -17,6 +17,8 @@ class EntireSectionHeader: UIView {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var moveTabButton: UIButton!
     @IBOutlet weak var numberOfSongLabel: UILabel!
+    @IBOutlet weak var allShowLabel: UILabel!
+    @IBOutlet weak var allShowArrowImageView: UIImageView!
     
     weak var delegate: EntireSectionHeaderDelegate?
     var type: TabPosition = .all
@@ -68,7 +70,7 @@ extension EntireSectionHeader {
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5]
         )
-        self.moveTabButton.setImage(DesignSystemAsset.Search.searchArrowRight.image, for:.normal)
-        self.moveTabButton.setAttributedTitle(attrTitle, for: UIControl.State.normal)
+        self.allShowLabel.attributedText = attrTitle
+        self.allShowArrowImageView.image = DesignSystemAsset.Search.searchArrowRight.image
     }
 }
