@@ -57,7 +57,7 @@ extension HomeChartCell{
         songNameLabel.attributedText = songNameAttributedString
 
         let artistAttributedString = NSMutableAttributedString(
-            string: model.title,
+            string: model.artist,
             attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                          .kern: -0.5]
