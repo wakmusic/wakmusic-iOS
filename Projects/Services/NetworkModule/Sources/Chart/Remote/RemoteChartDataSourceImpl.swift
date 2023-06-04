@@ -12,8 +12,8 @@ public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, Re
             .map { $0.map { $0.toDomain(type: type) } }
     }
     
-    public func fetchChartUpdateTime() -> Single<String> {
-        request(.fetchChartUpdateTime)
+    public func fetchChartUpdateTime(type: ChartDateType) -> Single<String> {
+        request(.fetchChartUpdateTime(type: type))
             .map { String(data: $0.data, encoding: .utf8) ?? "" }
     }
 }

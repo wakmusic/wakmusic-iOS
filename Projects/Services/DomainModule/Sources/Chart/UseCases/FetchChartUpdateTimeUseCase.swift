@@ -5,5 +5,5 @@ import RxSwift
 import Foundation
 
 public protocol FetchChartUpdateTimeUseCase {
-    func execute() -> Single<String>
+    func execute(type: ChartDateType) -> Single<String>
 }

@@ -22,9 +22,12 @@ public struct ChartRepositoryImpl: ChartRepository {
         remoteChartDataSource.fetchChartRanking(type: type, limit: limit)
     }
     
-    public func fetchChartUpdateTime() -> Single<String> {
-        remoteChartDataSource.fetchChartUpdateTime()
-            .map { TimeInterval($0) }
-            .map { Date(timeIntervalSince1970: $0 ?? 0).changeDateFormatForChart() + " 업데이트" }
+    public func fetchChartUpdateTime(type: ChartDateType) -> Single<String> {
+        remoteChartDataSource.fetchChartUpdateTime(type: type)
+            .map {
+                let convert: TimeInterval = TimeInterval($0) ?? -1
+                return convert == -1 ?
+                    $0 : Date(timeIntervalSince1970: convert).changeDateFormatForChart() + " 업데이트"
+            }
     }
 }

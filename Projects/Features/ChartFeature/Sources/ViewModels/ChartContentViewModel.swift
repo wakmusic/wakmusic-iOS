@@ -43,7 +43,7 @@ public final class ChartContentViewModel: ViewModelType {
         
         let dataSourceForZip = Observable.zip(
             fetchChartUpdateTimeUseCase
-                .execute()
+                .execute(type: type)
                 .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
                 .asObservable(),
             fetchChartRankingUseCase

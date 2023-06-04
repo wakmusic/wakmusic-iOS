@@ -12,7 +12,7 @@ public struct FetchChartUpdateTimeUseCaseImpl: FetchChartUpdateTimeUseCase {
         self.chartRepository = chartRepository
     }
 
-    public func execute() -> Single<String> {
-        chartRepository.fetchChartUpdateTime()
+    public func execute(type: ChartDateType) -> Single<String> {
+        chartRepository.fetchChartUpdateTime(type: type)
     }
 }

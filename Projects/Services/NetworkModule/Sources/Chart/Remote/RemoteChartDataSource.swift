@@ -6,5 +6,5 @@ import Foundation
 
 public protocol RemoteChartDataSource {
     func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]>
-    func fetchChartUpdateTime() -> Single<String>
+    func fetchChartUpdateTime(type: ChartDateType) -> Single<String>
 }

@@ -5,7 +5,7 @@ import Foundation
 
 public enum ChartAPI {
     case fetchChartRanking(type: ChartDateType, limit: Int)
-    case fetchChartUpdateTime
+    case fetchChartUpdateTime(type: ChartDateType)
 }
 
 extension ChartAPI: WMAPI {
@@ -17,8 +17,8 @@ extension ChartAPI: WMAPI {
         switch self {
         case .fetchChartRanking:
             return "/"
-        case .fetchChartUpdateTime:
-            return "/updated"
+        case let.fetchChartUpdateTime(type):
+            return "/updated/\(type.rawValue)"
         }
     }
 
