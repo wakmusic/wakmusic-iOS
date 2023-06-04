@@ -155,6 +155,7 @@ extension PlayListDetailViewController{
         self.completeButton.layer.borderWidth = 1
         self.completeButton.backgroundColor = .clear
     
+        self.editStateLabel.text = "편집"
         self.editStateLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.editStateLabel.setLineSpacing(kernValue: -0.5)
 
