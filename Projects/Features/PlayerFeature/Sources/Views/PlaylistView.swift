@@ -51,7 +51,7 @@ public final class PlaylistView: UIView {
         $0.rowHeight = 60
         $0.estimatedRowHeight = 60
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        $0.showsVerticalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = true
     }
     
     private lazy var blurEffectView = UIVisualEffectView().then {
@@ -201,6 +201,7 @@ private extension PlaylistView {
     
     private func configurePlaylist() {
         playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        playlistTableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
