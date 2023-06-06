@@ -161,7 +161,6 @@ private extension PlayerViewController {
     private func bindThumbnail(output: PlayerViewModel.Output) {
         output.thumbnailImageURL.sink { [weak self] thumbnailImageURL in
             guard let self else { return }
-            
             let placeholderImage = DesignSystemAsset.Logo.placeHolderLarge.image
             let transitionOptions: KingfisherOptionsInfo = [.transition(.fade(0.2))]
             
@@ -178,6 +177,8 @@ private extension PlayerViewController {
                     case .success:
                         break
                     case .failure(let error):
+                        guard error.errorCode == 2002 else { return } //invalidHTTPStatusCode
+                        DEBUG_LOG("👽:: \(thumbnailImageURL.hdQuality)\n\(error.localizedDescription)")
                         self.playerView.thumbnailImageView.kf.setImage(
                             with: sdURL,
                             placeholder: placeholderImage,
@@ -186,24 +187,10 @@ private extension PlayerViewController {
                     }
                 }
             )
-            
             self.playerView.backgroundImageView.kf.setImage(
                 with: sdURL,
                 placeholder: placeholderImage,
-                options: transitionOptions,
-                completionHandler: { [weak self] result in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success:
-                        break
-                    case .failure:
-                        self.playerView.backgroundImageView.kf.setImage(
-                            with: sdURL,
-                            placeholder: placeholderImage,
-                            options: transitionOptions
-                        )
-                    }
-                }
+                options: transitionOptions
             )
             self.miniPlayerView.thumbnailImageView.kf.setImage(
                 with: sdURL,
