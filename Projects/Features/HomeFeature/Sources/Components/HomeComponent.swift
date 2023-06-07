@@ -11,6 +11,7 @@ import UIKit
 import NeedleFoundation
 import DomainModule
 import CommonFeature
+
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongUseCase: any FetchNewSongUseCase { get }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -192,27 +192,17 @@
                                                                                         <constraint firstAttribute="height" constant="32" id="PRu-ji-ZMy"/>
                                                                                     </constraints>
                                                                                 </imageView>
-                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bjg-KU-WyW">
-                                                                                    <rect key="frame" x="0.0" y="40" width="313" height="18"/>
-                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                    <constraints>
-                                                                                        <constraint firstAttribute="height" constant="18" id="PAA-2S-lby"/>
-                                                                                    </constraints>
-                                                                                </view>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <constraints>
                                                                                 <constraint firstItem="PbW-Ze-OKB" firstAttribute="leading" secondItem="bMX-QM-0aq" secondAttribute="trailing" constant="8" id="Bmm-U0-9Bh"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="7cd-hu-qfI" secondAttribute="bottom" constant="9" id="E1t-QH-5BQ"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="PbW-Ze-OKB" secondAttribute="trailing" id="EYK-cs-aIN"/>
-                                                                                <constraint firstItem="Bjg-KU-WyW" firstAttribute="leading" secondItem="c8b-mc-eGP" secondAttribute="leading" id="RS8-f1-qAc"/>
                                                                                 <constraint firstItem="WQR-zQ-Cmn" firstAttribute="top" secondItem="7cd-hu-qfI" secondAttribute="top" id="SUX-1J-hFQ"/>
                                                                                 <constraint firstItem="7cd-hu-qfI" firstAttribute="leading" secondItem="WQR-zQ-Cmn" secondAttribute="trailing" constant="8" id="Tf4-SW-HOg"/>
                                                                                 <constraint firstItem="WQR-zQ-Cmn" firstAttribute="leading" secondItem="c8b-mc-eGP" secondAttribute="leading" id="UU4-Cb-mgn"/>
                                                                                 <constraint firstItem="4wl-ZM-XNn" firstAttribute="centerX" secondItem="WQR-zQ-Cmn" secondAttribute="centerX" id="YUv-vL-3Um"/>
-                                                                                <constraint firstAttribute="bottom" secondItem="Bjg-KU-WyW" secondAttribute="bottom" id="bFq-gB-QfZ"/>
                                                                                 <constraint firstItem="PbW-Ze-OKB" firstAttribute="centerY" secondItem="7cd-hu-qfI" secondAttribute="centerY" constant="5" id="bTc-SE-fec"/>
-                                                                                <constraint firstAttribute="trailing" secondItem="Bjg-KU-WyW" secondAttribute="trailing" id="h9J-ke-5bB"/>
                                                                                 <constraint firstItem="bMX-QM-0aq" firstAttribute="leading" secondItem="7cd-hu-qfI" secondAttribute="trailing" constant="8" id="rWM-te-5zx"/>
                                                                                 <constraint firstItem="4wl-ZM-XNn" firstAttribute="top" secondItem="WQR-zQ-Cmn" secondAttribute="bottom" id="rcY-cq-vRI"/>
                                                                                 <constraint firstItem="bMX-QM-0aq" firstAttribute="centerY" secondItem="7cd-hu-qfI" secondAttribute="centerY" id="skj-0n-tBy"/>
