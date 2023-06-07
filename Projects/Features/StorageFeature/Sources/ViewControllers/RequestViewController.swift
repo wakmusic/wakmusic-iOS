@@ -33,6 +33,11 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     @IBOutlet weak var serviceButton: UIButton!
     @IBOutlet weak var serviceImageView: UIImageView!
     
+    //폭탄
+    @IBOutlet weak var bombSuperView: UIView!
+    @IBOutlet weak var bombButton: UIButton!
+    @IBOutlet weak var bombImageView: UIImageView!
+    
     @IBOutlet weak var dotLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -119,9 +124,9 @@ extension RequestViewController{
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         
-        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.serviceButton]
-        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.serviceSuperView]
-        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView, self.serviceImageView]
+        let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.serviceButton, self.bombButton]
+        let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.serviceSuperView, self.bombSuperView]
+        let imageViews: [UIImageView] = [self.questionImageview, self.qnaSuperImageview, self.noticeImageView, self.serviceImageView, self.bombImageView]
         
         for i in 0..<buttons.count {
             var title = ""
@@ -138,6 +143,9 @@ extension RequestViewController{
             case 3:
                 title = "서비스 정보"
                 imageViews[i].image = DesignSystemAsset.Storage.document.image
+            case 4:
+                title = "앱 터트리기"
+                imageViews[i].image = DesignSystemAsset.Storage.question.image
             default:
                 return
             }
@@ -200,6 +208,13 @@ extension RequestViewController{
             .subscribe(onNext: { (owner, _) in
                 let viewController = owner.serviceInfoComponent.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
+            }).disposed(by: disposeBag)
+        
+        bombButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let array: [Int] = [0]
+                let _ = array[1]
             }).disposed(by: disposeBag)
     }
 }
