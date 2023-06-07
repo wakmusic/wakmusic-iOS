@@ -16,7 +16,6 @@ import SafariServices
 
 public final class AskSongViewController: UIViewController,ViewControllerFromStoryBoard {
     
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -36,7 +35,6 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var textField1: UITextField!
     @IBOutlet weak var baseLine1: UIView!
     
-    
     @IBOutlet weak var descriptionLabel2: UILabel!
     @IBOutlet weak var textField2: UITextField!
     @IBOutlet weak var baseLine2: UIView!
@@ -45,7 +43,6 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     @IBOutlet weak var descriptionLabel3: UILabel!
     @IBOutlet weak var baseLine3: UIView!
     
-    
     @IBOutlet weak var textView: GrowingTextView!
     @IBOutlet weak var descriptionLabel4: UILabel!
     @IBOutlet weak var baseLine4: UIView!
@@ -53,7 +50,6 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var completionButton: UIButton!
-    
     @IBOutlet weak var lastBaseLineBottomConstraint: NSLayoutConstraint!
     
     let unPointColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
@@ -70,36 +66,28 @@ public final class AskSongViewController: UIViewController,ViewControllerFromSto
     var viewModel:AskSongViewModel!
     lazy var input = AskSongViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
     var keyboardHeight:CGFloat = 267
     
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-       
         configureUI()
-        
+        configureHeaderUI()
+        hideKeyboardWhenTappedAround()
+        bindRx()
+        bindbuttonEvent()
+        responseViewbyKeyboard()
     }
-    
 
-    public static func viewController(viewModel:AskSongViewModel) -> AskSongViewController {
+    public static func viewController(viewModel: AskSongViewModel) -> AskSongViewController {
         let viewController = AskSongViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
-       
         viewController.viewModel = viewModel
-
-        
         return viewController
     }
-
 }
 
-
 extension AskSongViewController {
-    
     private func configureHeaderUI() {
-        
-        
         let explain1 = "이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다."
         let explain2 = "왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
         let explain3 = "조회수가 이상한 경우는 반응 영상이 포함되어 있을 수 있습니다."
@@ -111,17 +99,20 @@ extension AskSongViewController {
         dotLabel2.layer.cornerRadius = 2
         dotLabel2.clipsToBounds = true
         dotLabel2.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
-    
-        
-        redirectWebButton.setTitle("왁뮤 노래 포함 기준", for: .normal)
+                
         redirectWebButton.setImage(DesignSystemAsset.Storage.blueArrowRight.image, for: .normal)
-        redirectWebButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 12)
-        redirectWebButton.titleLabel?.textColor = DesignSystemAsset.PrimaryColor.decrease.color
-        
-        
+        redirectWebButton.setAttributedTitle(NSMutableAttributedString(
+            string: "왁뮤 노래 포함 기준",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
+                         .foregroundColor: DesignSystemAsset.PrimaryColor.decrease.color,
+                         .kern: -0.5]
+            ), for: .normal
+        )
+
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.text = viewModel.type == .add ? "노래 추가" : "노래 수정"
+        titleLabel.setLineSpacing(kernValue: -0.5)
         
         let style = NSMutableParagraphStyle()
         style.lineHeightMultiple = 1.35
@@ -130,6 +121,7 @@ extension AskSongViewController {
             string: viewModel.type == .add ? explain1 : explain3,
             attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                         .kern: -0.5,
                          .paragraphStyle: style]
         )
         
@@ -137,6 +129,7 @@ extension AskSongViewController {
             string: explain2,
             attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                         .kern: -0.5,
                          .paragraphStyle: style]
         )
         
@@ -145,65 +138,38 @@ extension AskSongViewController {
     }
     
     private func configureUI(){
-        
-        hideKeyboardWhenTappedAround()
-        configureHeaderUI()
-       
-        
-        let descriptionLabels:[UILabel] = [descriptionLabel1,descriptionLabel2,descriptionLabel3,descriptionLabel4]
-       
-        let textFields:[UITextField] = [textField1,textField2,textField3]
-        
-        let baseLines:[UIView] = [baseLine1,baseLine2,baseLine3,baseLine4]
-        
+        let descriptionLabels: [UILabel] = [descriptionLabel1,descriptionLabel2,descriptionLabel3,descriptionLabel4]
+        let textFields: [UITextField] = [textField1,textField2,textField3]
+        let baseLines: [UIView] = [baseLine1,baseLine2,baseLine3,baseLine4]
         
         for i in 0..<4 {
-            
             var title:String = ""
             
             switch i {
-                
             case 0 :
                 title = "아티스트"
-                
             case 1 :
                 title = "노래 제목"
-                
             case 2 :
                 title = "유튜브 링크"
-            
             case 3 :
                 title = "내용"
-                
             default :
                 return
-                
-                
             }
-            
-            
             
             descriptionLabels[i].text = title
             descriptionLabels[i].font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
             descriptionLabels[i].textColor = DesignSystemAsset.GrayColor.gray900.color
+            descriptionLabels[i].setLineSpacing(kernValue: -0.5)
             
             if i < 3 {
-                
                 textFields[i].attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes) //플레이스 홀더 설정
-                
                 textFields[i].font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-                
                 textFields[i].textColor = DesignSystemAsset.GrayColor.gray600.color
             }
-            
-            
             baseLines[i].backgroundColor = unPointColor
-
-            
-            
         }
-        
-        
         
         scrollView.delegate = self
         textView.delegate = self
@@ -213,7 +179,6 @@ extension AskSongViewController {
         textView.textColor = DesignSystemAsset.GrayColor.gray600.color
         textView.minHeight = 32.0
         textView.maxHeight = spaceHeight()
-       
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         self.completionButton.layer.cornerRadius = 12
@@ -221,77 +186,61 @@ extension AskSongViewController {
         self.completionButton.isEnabled = false
         self.completionButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         self.completionButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
-        self.completionButton.setAttributedTitle(NSMutableAttributedString(string:"완료",
+        self.completionButton.setAttributedTitle(NSMutableAttributedString(string: "완료",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                                                  .kern: -0.5]), for: .normal)
         
         self.previousButton.layer.cornerRadius = 12
         self.previousButton.clipsToBounds = true
         self.previousButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray400.color, for: .normal)
-        self.previousButton.setAttributedTitle(NSMutableAttributedString(string:"이전",
+        self.previousButton.setAttributedTitle(NSMutableAttributedString(string: "이전",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
-        
-        
-        bindRx()
-        bindbuttonEvent()
-        responseViewbyKeyboard()
+                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                                                  .kern: -0.5]), for: .normal)
     }
     
     private func bindbuttonEvent(){
-        
-
-        
         previousButton.rx.tap.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }
-            
-            
             self.navigationController?.popViewController(animated: true)
-            
         })
         .disposed(by: disposeBag)
         
         closeButton.rx.tap.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }
-            
             self.dismiss(animated: true)
-           
         })
         .disposed(by: disposeBag)
         
         completionButton.rx.tap
             .subscribe(onNext: { [weak self]  in
                 guard let self else {return}
-                
-                let vc = TextPopupViewController.viewController(text: "작성하신 내용을 등록하시겠습니까?", cancelButtonIsHidden: false,completion: { [weak self] in
-                    self?.input.completionButtonTapped.onNext(())
-                })
-                
+                let vc = TextPopupViewController.viewController(
+                    text: "작성하신 내용을 등록하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    completion: { [weak self] in
+                        self?.input.completionButtonTapped.onNext(())
+                    }
+                )
                 self.showPanModal(content: vc)
-                
-                
             })
             .disposed(by: disposeBag)
         
         redirectWebButton.rx.tap
             .subscribe(onNext: { [weak self] () in
                 guard let URL = URL(string: "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS") else { return }
-                
                 let safari = SFSafariViewController(url: URL)
                 self?.present(safari, animated: true)
             })
             .disposed(by: disposeBag)
-            
     }
     
     private func bindRx(){
-        
         textField1.rx.text.orEmpty
             .distinctUntilChanged()
             .bind(to: input.artistString)
@@ -329,70 +278,53 @@ extension AskSongViewController {
         
         let mergeObservable3 = Observable.merge(tfEditingDidBegin3.map { UIControl.Event.editingDidBegin },
                                                tfEditingDidEnd3.map { UIControl.Event.editingDidEnd })
-        
 
         mergeObservable1
             .asObservable()
             .subscribe(onNext: { [weak self] (event) in
-                
                 guard let self = self else{
                     return
                 }
                 
-                
                 if event ==  .editingDidBegin {
                     self.baseLine1.backgroundColor = self.pointColor
                     self.scrollView.scrollToView(view: UIView(frame: .zero))
-                    
                 }
-                
                 else {
                     self.baseLine1.backgroundColor = self.unPointColor
                 }
-                
             })
             .disposed(by: disposeBag)
         
         mergeObservable2
             .asObservable()
             .subscribe(onNext: { [weak self] (event) in
-                
                 guard let self = self else{
                     return
                 }
-                
                 if event ==  .editingDidBegin {
                     self.baseLine2.backgroundColor = self.pointColor
                     self.scrollView.scrollToView(view: self.descriptionLabel1)
-                   
-                    
                 }
-                
                 else {
                     self.baseLine2.backgroundColor = self.unPointColor
                 }
-                
             })
             .disposed(by: disposeBag)
         
         mergeObservable3
             .asObservable()
             .subscribe(onNext: { [weak self] (event) in
-                
                 guard let self = self else{
                     return
                 }
-                
                 if event ==  .editingDidBegin {
                     self.baseLine3.backgroundColor = self.pointColor
                     self.scrollView.scrollToView(view: self.descriptionLabel2)
-                    
                 }
-                
                 else {
                     self.baseLine3.backgroundColor = self.unPointColor
                 }
-                
             })
             .disposed(by: disposeBag)
         
@@ -400,53 +332,40 @@ extension AskSongViewController {
             .bind(to: completionButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        
         output.result.subscribe(onNext: { [weak self] res in
-            
             guard let self else {return}
-            
-            let vc = TextPopupViewController.viewController(text: res.message ?? "오류가 발생했습니다.",cancelButtonIsHidden: true,completion: {
-                
-                self.dismiss(animated: true)
-            })
-            
+            let vc = TextPopupViewController.viewController(
+                text: res.message ?? "오류가 발생했습니다.",
+                cancelButtonIsHidden: true,
+                completion: {
+                    self.dismiss(animated: true)
+                }
+            )
             self.showPanModal(content: vc)
-            
-       
         })
         .disposed(by: disposeBag)
-        
     }
-    
     
     private func responseViewbyKeyboard(){
         RxKeyboard.instance.visibleHeight
-                    .drive(onNext: { [weak self] keyboardVisibleHeight in
-                        guard let self = self else {return}
-                        let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
-                        let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
-                        
-                        
-                        self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
-                        
-                        self.view.setNeedsLayout()
-                        UIView.animate(withDuration: 0, animations: {
-                            self.scrollView.contentInset.bottom = actualKeyboardHeight
-                            self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
-                            self.view.layoutIfNeeded()
-                        })
-                        
-                    }).disposed(by: disposeBag)
-        
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                guard let self = self else {return}
+                let safeAreaInsetsBottom: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+                let actualKeyboardHeight = max(0, keyboardVisibleHeight - safeAreaInsetsBottom)
+                self.keyboardHeight = actualKeyboardHeight == .zero ? self.keyboardHeight : 300
+                self.view.setNeedsLayout()
+                
+                UIView.animate(withDuration: 0, animations: {
+                    self.scrollView.contentInset.bottom = actualKeyboardHeight
+                    self.scrollView.verticalScrollIndicatorInsets.bottom = actualKeyboardHeight
+                    self.view.layoutIfNeeded()
+                })
+            }).disposed(by: disposeBag)
     }
     
     func spaceHeight() -> CGFloat {
-        
-        
         return 16 * 5
-        
     }
-    
 }
 
 extension AskSongViewController: UIScrollViewDelegate {

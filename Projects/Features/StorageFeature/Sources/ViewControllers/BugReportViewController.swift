@@ -82,13 +82,13 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
         super.viewDidLoad()
        
         configureUI()
+        configureCameraButtonUI()
         bindRx()
         bindbuttonEvent()
-        configureCameraButtonUI()
         responseViewbyKeyboard()
     }
     
-    public static func viewController(viewModel:BugReportViewModel) -> BugReportViewController {
+    public static func viewController(viewModel: BugReportViewModel) -> BugReportViewController {
         let viewController = BugReportViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
@@ -97,7 +97,6 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
 
 extension BugReportViewController {
     private func configureCameraButtonUI(){
-        
         let pointColor = DesignSystemAsset.PrimaryColor.decrease.color
         let cameraAttributedString = NSMutableAttributedString.init(string: "첨부하기")
         cameraAttributedString.addAttributes(
@@ -183,16 +182,18 @@ extension BugReportViewController {
         self.completionButton.isEnabled = false
         self.completionButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         self.completionButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
-        self.completionButton.setAttributedTitle(NSMutableAttributedString(string:"완료",
-                                                                     attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+        self.completionButton.setAttributedTitle(NSMutableAttributedString(string: "완료",
+                                                                           attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                                                                                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                                                        .kern: -0.5]), for: .normal)
         
         self.previousButton.layer.cornerRadius = 12
         self.previousButton.clipsToBounds = true
         self.previousButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray400.color, for: .normal)
-        self.previousButton.setAttributedTitle(NSMutableAttributedString(string:"이전",
+        self.previousButton.setAttributedTitle(NSMutableAttributedString(string: "이전",
                                                                      attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
+                                                                                  .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                                                                                  .kern: -0.5]), for: .normal)
         
         self.loadingView.isHidden = true
         let loadingAttr = NSMutableAttributedString(
