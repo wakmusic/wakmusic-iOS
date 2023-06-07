@@ -144,7 +144,7 @@ extension RequestViewController{
                 title = "서비스 정보"
                 imageViews[i].image = DesignSystemAsset.Storage.document.image
             case 4:
-                title = "앱 터트리기"
+                title = "💣 앱 터트리기"
                 imageViews[i].image = DesignSystemAsset.Storage.question.image
             default:
                 return
