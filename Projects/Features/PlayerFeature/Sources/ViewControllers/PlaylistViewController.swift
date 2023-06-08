@@ -105,6 +105,35 @@ private extension PlaylistViewController {
     }
     
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
+        playlistView.playlistTableView.rx
+            .sentMessage(#selector(playlistView.playlistTableView.reloadData))
+            .throttle(RxTimeInterval.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .take(1)
+            .withLatestFrom(output.dataSource)
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, dataSource) in
+                let dataSource = dataSource.first?.items ?? []
+                guard !dataSource.isEmpty else {
+                    DEBUG_LOG("🐛:: 재생목록이 없습니다.")
+                    return
+                }
+                
+                let i = output.currentSongIndex.value
+                guard dataSource.count > i else {
+                    DEBUG_LOG("🐛:: 포커스 하려는 인덱스가 데이터 범위에 없습니다.")
+                    return
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                    owner.playlistView.playlistTableView.scrollToRow(
+                        at: IndexPath(row: i, section: 0),
+                        at: .middle,
+                        animated: false
+                    )
+                }
+            })
+            .disposed(by: disposeBag)
+
         output.editState.sink { [weak self] isEditing in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
