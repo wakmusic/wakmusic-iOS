@@ -61,7 +61,7 @@ public extension PlayState {
     
     /// 플레이어의 상태를 체크하여 출력합니다. (For DEBUG)
     func checkForPlayerState() {
-        guard let playerState = PlayState.shared.player.state else { return }
+        guard let playerState = self.player.state else { return }
         var message: String = ""
         switch playerState {
         case .idle:
@@ -82,8 +82,8 @@ public extension PlayState {
             }
         #endif
             //플레이어 재할당
-            PlayState.shared.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
-            PlayState.shared.player.cue(source: .video(id: PlayState.shared.currentSong?.id ?? ""))
+            self.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
+            self.player.cue(source: .video(id: self.currentSong?.id ?? ""))
         }
     }
 }
