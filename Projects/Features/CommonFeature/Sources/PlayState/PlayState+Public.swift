@@ -8,6 +8,8 @@
 
 import Foundation
 import DomainModule
+import Utility
+import UIKit
 
 public extension PlayState {
     /// 주어진 곡들을 재생목록에 추가하고 재생합니다.
@@ -54,5 +56,38 @@ public extension PlayState {
                 self.player.cue(source: .video(id: currentSong.id))
             }
         }
+    }
+    
+    /// 플레이어의 상태를 체크하여 출력합니다. (For DEBUG)
+    func checkForPlayerState() {
+    #if DEBUG
+        guard let playerState = PlayState.shared.player.state else { return }
+        switch playerState {
+        case .idle:
+            DEBUG_LOG("PlayState.shared.player.state: idle")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                UIApplication.shared.windows.first?.rootViewController?.showToast(
+                    text: "PlayState.shared.player.state: idle",
+                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                )
+            }
+        case .ready:
+            DEBUG_LOG("PlayState.shared.player.state: ready")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                UIApplication.shared.windows.first?.rootViewController?.showToast(
+                    text: "PlayState.shared.player.state: ready",
+                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                )
+            }
+        case let .error(error):
+            DEBUG_LOG("PlayState.shared.player.state: error: \(error.localizedDescription)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                UIApplication.shared.windows.first?.rootViewController?.showToast(
+                    text: error.localizedDescription,
+                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                )
+            }
+        }
+    #endif
     }
 }
