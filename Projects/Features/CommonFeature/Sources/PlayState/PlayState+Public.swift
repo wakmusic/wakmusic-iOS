@@ -62,31 +62,23 @@ public extension PlayState {
     func checkForPlayerState() {
     #if DEBUG
         guard let playerState = PlayState.shared.player.state else { return }
+        var message: String = ""
         switch playerState {
         case .idle:
             DEBUG_LOG("PlayState.shared.player.state: idle")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                UIApplication.shared.windows.first?.rootViewController?.showToast(
-                    text: "PlayState.shared.player.state: idle",
-                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
-                )
-            }
+            message = "PlayState.shared.player.state: idle"
         case .ready:
             DEBUG_LOG("PlayState.shared.player.state: ready")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                UIApplication.shared.windows.first?.rootViewController?.showToast(
-                    text: "PlayState.shared.player.state: ready",
-                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
-                )
-            }
+            message = "PlayState.shared.player.state: ready"
         case let .error(error):
             DEBUG_LOG("PlayState.shared.player.state: error: \(error.localizedDescription)")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                UIApplication.shared.windows.first?.rootViewController?.showToast(
-                    text: error.localizedDescription,
-                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
-                )
-            }
+            message = error.localizedDescription
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            UIApplication.shared.windows.first?.rootViewController?.showToast(
+                text: message,
+                font: UIFont.systemFont(ofSize: 14, weight: .medium)
+            )
         }
     #endif
     }
