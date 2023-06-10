@@ -10,6 +10,7 @@ import Foundation
 import DomainModule
 import Utility
 import UIKit
+import YouTubePlayerKit
 
 public extension PlayState {
     /// 주어진 곡들을 재생목록에 추가하고 재생합니다.
@@ -60,7 +61,6 @@ public extension PlayState {
     
     /// 플레이어의 상태를 체크하여 출력합니다. (For DEBUG)
     func checkForPlayerState() {
-    #if DEBUG
         guard let playerState = PlayState.shared.player.state else { return }
         var message: String = ""
         switch playerState {
@@ -73,13 +73,17 @@ public extension PlayState {
         case let .error(error):
             DEBUG_LOG("PlayState.shared.player.state: error: \(error.localizedDescription)")
             message = error.localizedDescription
+        #if DEBUG
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                UIApplication.shared.windows.first?.rootViewController?.showToast(
+                    text: message,
+                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                )
+            }
+        #endif
+            //플레이어 재할당
+            PlayState.shared.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
+            PlayState.shared.player.cue(source: .video(id: PlayState.shared.currentSong?.id ?? ""))
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            UIApplication.shared.windows.first?.rootViewController?.showToast(
-                text: message,
-                font: UIFont.systemFont(ofSize: 14, weight: .medium)
-            )
-        }
-    #endif
     }
 }
