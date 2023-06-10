@@ -43,3 +43,4 @@
 #error Attempting to use Realm's watchOS framework in a non-watchOS target.
 #endif
 #endif
+#define REALM_IOPLATFORMUUID @""
