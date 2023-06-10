@@ -282,7 +282,7 @@ private extension PlayerView {
         closeButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.left.equalToSuperview().offset(20)
-            $0.width.height.equalTo(48)
+            $0.width.height.equalTo(32)
         }
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(2)
