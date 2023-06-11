@@ -48,6 +48,30 @@ extension LoginViewController {
         googleLoginButton.setAttributedTitle(loginAttributedString[1], for: .normal)
         appleImageView.image = DesignSystemAsset.Signup.apple.image
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
+    }
+    
+    private func configureService() {
+        let appAttributedString = NSMutableAttributedString
+            .init(string: "왁타버스 뮤직")
+        
+        appAttributedString.addAttributes([
+            .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
+            .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+            .kern: -0.5],
+            range: NSRange(location: 0, length: appAttributedString.string.count)
+        )
+        appNameLabel.attributedText = appAttributedString
+        
+        let descriptionAttributedString = NSMutableAttributedString
+            .init(string: "페이지를 이용하기 위해 로그인이 필요합니다.")
+        
+        descriptionAttributedString.addAttributes([
+            .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+            .kern: -0.5],
+            range: NSRange(location: 0, length: descriptionAttributedString.string.count)
+        )
+        descriptionLabel.attributedText = descriptionAttributedString
         
         let servicePrivacyButtons: [UIButton] = [serviceButton, privacyButton]
         let termsAttributedString:[NSMutableAttributedString] = [
@@ -77,29 +101,5 @@ extension LoginViewController {
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.setLineSpacing(kernValue: -0.5)
         versionLabel.textAlignment = .center
-    }
-    
-    private func configureService() {
-        let appAttributedString = NSMutableAttributedString
-            .init(string: "왁타버스 뮤직")
-        
-        appAttributedString.addAttributes([
-            .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
-            .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-            .kern: -0.5],
-            range: NSRange(location: 0, length: appAttributedString.string.count)
-        )
-        appNameLabel.attributedText = appAttributedString
-        
-        let descriptionAttributedString = NSMutableAttributedString
-            .init(string: "페이지를 이용하기 위해 로그인이 필요합니다.")
-        
-        descriptionAttributedString.addAttributes([
-            .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-            .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-            .kern: -0.5],
-            range: NSRange(location: 0, length: descriptionAttributedString.string.count)
-        )
-        descriptionLabel.attributedText = descriptionAttributedString
     }
 }
