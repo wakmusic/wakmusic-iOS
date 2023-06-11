@@ -15,7 +15,7 @@ public extension TargetScript {
     )
     
     static let firebaseCrashlytics = TargetScript.post(
-        path: .relativeToRoot("Scripts/FirebaseCrashlyticsScript.sh"),
+        path: .relativeToRoot("FirebaseCrashlyticsScript.sh"),
         name: "FirebaseCrashlytics",
         inputPaths: [
           "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
