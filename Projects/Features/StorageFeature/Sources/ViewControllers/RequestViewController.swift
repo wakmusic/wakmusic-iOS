@@ -122,7 +122,9 @@ extension RequestViewController{
     
     private func configureUI(){
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        self.titleLabel.text = "건의사항"
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        self.titleLabel.setLineSpacing(kernValue: -0.5)
         
         let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.serviceButton, self.bombButton]
         let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.serviceSuperView, self.bombSuperView]

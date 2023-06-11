@@ -14,8 +14,9 @@ public extension TargetScript {
         basedOnDependencyAnalysis: false
     )
     
+    static let TUIST_ROOT_DIR = ProcessInfo.processInfo.environment["TUIST_ROOT_DIR"] ?? ""
     static let firebaseCrashlytics = TargetScript.post(
-        path: .relativeToRoot("FirebaseCrashlyticsScript.sh"),
+        script: "${\(TUIST_ROOT_DIR)}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run",
         name: "FirebaseCrashlytics",
         inputPaths: [
           "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
