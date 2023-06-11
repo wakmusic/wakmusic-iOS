@@ -13,6 +13,7 @@ import Utility
 extension LoginViewController {
     public func configureUI() {
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         configureOAuthLogin()
         configureService()
     }
@@ -47,6 +48,35 @@ extension LoginViewController {
         googleLoginButton.setAttributedTitle(loginAttributedString[1], for: .normal)
         appleImageView.image = DesignSystemAsset.Signup.apple.image
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
+        
+        let servicePrivacyButtons: [UIButton] = [serviceButton, privacyButton]
+        let termsAttributedString:[NSMutableAttributedString] = [
+            NSMutableAttributedString.init(string: "서비스 이용약관"),
+            NSMutableAttributedString.init(string: "개인정보처리방침")
+        ]
+        for attr in termsAttributedString{
+            attr.addAttributes([
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .kern: -0.5],
+                range: NSRange(location: 0, length: attr.string.count)
+            )
+        }
+        servicePrivacyButtons[0].setAttributedTitle(termsAttributedString[0], for: .normal)
+        servicePrivacyButtons[1].setAttributedTitle(termsAttributedString[1], for: .normal)
+
+        for btn in servicePrivacyButtons {
+            btn.layer.cornerRadius = 8
+            btn.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+            btn.layer.borderWidth = 1
+            btn.clipsToBounds = true
+        }
+        
+        versionLabel.text = "버전 정보 " + APP_VERSION()
+        versionLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
+        versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        versionLabel.setLineSpacing(kernValue: -0.5)
+        versionLabel.textAlignment = .center
     }
     
     private func configureService() {

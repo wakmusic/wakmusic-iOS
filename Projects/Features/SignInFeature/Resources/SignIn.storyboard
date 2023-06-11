@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xTh-PE-mul">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="567"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="679"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ysv-TD-zvH">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="511"/>
@@ -154,10 +154,51 @@
                                                     <constraint firstItem="B2S-jZ-rbW" firstAttribute="leading" secondItem="Ysv-TD-zvH" secondAttribute="leading" id="xkv-fH-psm"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r7L-qI-yW4">
-                                                <rect key="frame" x="0.0" y="511" width="393" height="56"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cUj-HD-yw7">
+                                                <rect key="frame" x="0.0" y="511" width="393" height="82"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85y-ci-J7X">
+                                                        <rect key="frame" x="20" y="0.0" width="172.66666666666666" height="44"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="44" id="TkP-DD-3Nv"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="Button"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKV-nS-HgI">
+                                                        <rect key="frame" x="200.66666666666663" y="0.0" width="172.33333333333337" height="44"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="Button"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-2H-QeH">
+                                                        <rect key="frame" x="20" y="64" width="353" height="18"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="18" id="8Sb-vh-E9i"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="56" id="Gp3-Cy-1YR"/>
+                                                    <constraint firstAttribute="height" constant="82" id="2f6-3j-zZM"/>
+                                                    <constraint firstItem="fKV-nS-HgI" firstAttribute="leading" secondItem="85y-ci-J7X" secondAttribute="trailing" constant="8" id="Mh8-X6-sFM"/>
+                                                    <constraint firstItem="85y-ci-J7X" firstAttribute="top" secondItem="cUj-HD-yw7" secondAttribute="top" id="NtQ-jb-KnB"/>
+                                                    <constraint firstItem="8Yx-2H-QeH" firstAttribute="leading" secondItem="cUj-HD-yw7" secondAttribute="leading" constant="20" id="UVh-wi-wH2"/>
+                                                    <constraint firstAttribute="trailing" secondItem="fKV-nS-HgI" secondAttribute="trailing" constant="20" id="Xea-Wd-bpj"/>
+                                                    <constraint firstItem="85y-ci-J7X" firstAttribute="height" secondItem="fKV-nS-HgI" secondAttribute="height" id="d0W-xi-bsT"/>
+                                                    <constraint firstItem="85y-ci-J7X" firstAttribute="leading" secondItem="cUj-HD-yw7" secondAttribute="leading" constant="20" id="dlt-5G-QeJ"/>
+                                                    <constraint firstAttribute="bottom" secondItem="8Yx-2H-QeH" secondAttribute="bottom" id="dnE-M1-Ix8"/>
+                                                    <constraint firstItem="fKV-nS-HgI" firstAttribute="top" secondItem="cUj-HD-yw7" secondAttribute="top" id="iol-Pm-jti"/>
+                                                    <constraint firstItem="8Yx-2H-QeH" firstAttribute="top" secondItem="85y-ci-J7X" secondAttribute="bottom" constant="20" id="m5P-os-UnA"/>
+                                                    <constraint firstItem="85y-ci-J7X" firstAttribute="width" secondItem="fKV-nS-HgI" secondAttribute="width" id="onr-22-PcM"/>
+                                                    <constraint firstAttribute="trailing" secondItem="8Yx-2H-QeH" secondAttribute="trailing" constant="20" id="wGx-gh-Lqe"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r7L-qI-yW4">
+                                                <rect key="frame" x="0.0" y="593" width="393" height="86"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="86" id="Gp3-Cy-1YR"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -198,7 +239,10 @@
                         <outlet property="naverImageVIew" destination="e57-WE-opc" id="aaj-ke-slr"/>
                         <outlet property="naverLoginButton" destination="ATc-6X-gGr" id="yoU-lE-TfC"/>
                         <outlet property="naverSuperView" destination="XRF-QE-YPw" id="oTJ-n5-BrZ"/>
+                        <outlet property="privacyButton" destination="fKV-nS-HgI" id="CJy-zb-Yvk"/>
                         <outlet property="scrollView" destination="mjm-06-Do6" id="xeh-C4-QUS"/>
+                        <outlet property="serviceButton" destination="85y-ci-J7X" id="QpA-en-EjL"/>
+                        <outlet property="versionLabel" destination="8Yx-2H-QeH" id="Lwl-Ew-0Yu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2HM-Il-WVN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

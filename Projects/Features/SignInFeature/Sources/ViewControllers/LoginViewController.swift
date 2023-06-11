@@ -35,6 +35,10 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var appleSuperView: UIView!
     @IBOutlet weak var appleLoginButton: UIButton!
     
+    @IBOutlet weak var serviceButton: UIButton!
+    @IBOutlet weak var privacyButton: UIButton!
+    @IBOutlet weak var versionLabel: UILabel!
+    
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
 
@@ -80,5 +84,21 @@ extension LoginViewController{
         googleLoginButton.rx.tap.bind {
             GoogleLoginManager.shared.googleLoginRequest()
         }.disposed(by: disposeBag)
+        
+        serviceButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let vc = ContractViewController.viewController(type: .service)
+                vc.modalPresentationStyle = .overFullScreen
+                owner.present(vc, animated: true)
+            }).disposed(by: disposeBag)
+
+        privacyButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let vc = ContractViewController.viewController(type: .privacy)
+                vc.modalPresentationStyle = .overFullScreen
+                owner.present(vc, animated: true)
+            }).disposed(by: disposeBag)
     }
 }
