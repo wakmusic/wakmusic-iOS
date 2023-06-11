@@ -77,7 +77,21 @@ extension IntroViewController {
                     case .normal:
                         owner.input.fetchUserInfoCheck.onNext(())
                         return
-
+                        
+                    case .offline:
+                        owner.showPanModal(
+                            content: TextPopupViewController.viewController(
+                                text: entity.description,
+                                cancelButtonIsHidden: true,
+                                allowsDragAndTapToDismiss: false,
+                                confirmButtonText: "재시도",
+                                completion: {
+                                    owner.input.fetchAppCheck.onNext(())
+                                }
+                            )
+                        )
+                        return
+                        
                     case .event:
                         textPopupVc = TextPopupViewController.viewController(
                             text:"\(entity.title)\n\(entity.description)",

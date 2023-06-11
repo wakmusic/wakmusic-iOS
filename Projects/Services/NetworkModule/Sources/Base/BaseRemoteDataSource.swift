@@ -46,6 +46,9 @@ private extension BaseRemoteDataSource {
             .timeout(.seconds(10), scheduler: MainScheduler.asyncInstance)
             .catch { error in
                 guard let errorCode = (error as? MoyaError)?.response?.statusCode else {
+                    if let moyaError = (error as? MoyaError), moyaError.errorCode == 6 {
+                        return Single.error(api.errorMap[1009] ?? error)
+                    }
                     return Single.error(error)
                 }
                 return Single.error(api.errorMap[errorCode] ?? error)

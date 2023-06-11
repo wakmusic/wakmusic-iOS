@@ -66,6 +66,22 @@ final public class IntroViewModel: ViewModelType {
             .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
                 guard let self else { return Observable.empty() }
                 return self.fetchCheckAppUseCase.execute()
+                    .catch({ (error) -> Single<AppInfoEntity> in
+                        let wmError = error.asWMError
+                        if wmError == .offline {
+                            return Single<AppInfoEntity>.create { single in
+                                single(.success(AppInfoEntity(
+                                    flag: .offline,
+                                    title: "",
+                                    description: wmError.errorDescription ?? "",
+                                    version: ""))
+                                )
+                                return Disposables.create()
+                            }
+                        }else{
+                            return Single.error(error)
+                        }
+                    })
                     .asObservable()
             }
             .debug("✅ Intro > fetchCheckAppUseCase")

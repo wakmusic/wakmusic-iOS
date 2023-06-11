@@ -13,4 +13,5 @@ public enum AppInfoFlagType: Int, Codable {
     case event
     case update
     case forceUpdate
+    case offline
 }

@@ -49,7 +49,8 @@ extension AppAPI: WMAPI {
                 429: .tooManyRequest,
                 500: .internalServerError,
                 502: .internalServerError,
-                521: .internalServerError
+                521: .internalServerError,
+                1009: .offline
             ]
         }
     }
