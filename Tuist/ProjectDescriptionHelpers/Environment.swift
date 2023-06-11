@@ -10,7 +10,7 @@ public enum Environment {
     public static let platform = Platform.iOS
     public static let baseSetting: SettingsDictionary = SettingsDictionary()
         .marketingVersion("2.0.0")
-        .currentProjectVersion("11")
+        .currentProjectVersion("13")
         .debugInformationFormat(DebugInformationFormat.dwarfWithDsym)
         .otherLinkerFlags(["-ObjC"])
 }
