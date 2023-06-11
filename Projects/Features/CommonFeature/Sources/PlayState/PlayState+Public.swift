@@ -10,6 +10,7 @@ import Foundation
 import DomainModule
 import Utility
 import UIKit
+import YouTubePlayerKit
 
 public extension PlayState {
     /// 주어진 곡들을 재생목록에 추가하고 재생합니다.
@@ -58,10 +59,9 @@ public extension PlayState {
         }
     }
     
-    /// 플레이어의 상태를 체크하여 출력합니다. (For DEBUG)
+    /// 플레이어의 상태를 체크하여 출력합니다.
     func checkForPlayerState() {
-    #if DEBUG
-        guard let playerState = PlayState.shared.player.state else { return }
+        guard let playerState = self.player.state else { return }
         var message: String = ""
         switch playerState {
         case .idle:
@@ -73,13 +73,16 @@ public extension PlayState {
         case let .error(error):
             DEBUG_LOG("PlayState.shared.player.state: error: \(error.localizedDescription)")
             message = error.localizedDescription
+            //토스트 자체는 일단 놔둡니다. 오류 토스트가 나타나고 > 플레이어 재할당이 제대로 되었고 > 재생이 되는것을 확인한 후 > 토스트 제거합니다.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                UIApplication.shared.windows.first?.rootViewController?.showToast(
+                    text: message,
+                    font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                )
+            }
+            //플레이어 재할당
+            self.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
+            self.player.cue(source: .video(id: self.currentSong?.id ?? ""))
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            UIApplication.shared.windows.first?.rootViewController?.showToast(
-                text: message,
-                font: UIFont.systemFont(ofSize: 14, weight: .medium)
-            )
-        }
-    #endif
     }
 }

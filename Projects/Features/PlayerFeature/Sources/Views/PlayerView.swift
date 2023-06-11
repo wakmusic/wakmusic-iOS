@@ -282,17 +282,17 @@ private extension PlayerView {
         closeButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.left.equalToSuperview().offset(20)
-            $0.width.height.equalTo(48)
+            $0.width.height.equalTo(32)
         }
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(2)
             $0.left.equalTo(closeButton.snp.right)
-            $0.right.equalToSuperview().offset(-68)
+            $0.right.equalToSuperview().offset(-52)
         }
         artistLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.left.equalTo(closeButton.snp.right)
-            $0.right.equalToSuperview().offset(-68)
+            $0.right.equalToSuperview().offset(-52)
         }
     }
     private func configureThumbnail() {
@@ -348,24 +348,25 @@ private extension PlayerView {
             $0.centerX.centerY.equalToSuperview()
             $0.width.height.equalTo(80)
         }
+        let spacing: CGFloat = (APP_WIDTH() < 375) ? 20 : 32
         prevButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(playButton.snp.left).offset(-32)
+            $0.right.equalTo(playButton.snp.left).offset(-spacing)
             $0.width.height.equalTo(32)
         }
         nextButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(playButton.snp.right).offset(32)
+            $0.left.equalTo(playButton.snp.right).offset(spacing)
             $0.width.height.equalTo(32)
         }
         repeatButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(prevButton.snp.left).offset(-32)
+            $0.right.equalTo(prevButton.snp.left).offset(-spacing)
             $0.width.height.equalTo(32)
         }
         shuffleButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalTo(nextButton.snp.right).offset(32)
+            $0.left.equalTo(nextButton.snp.right).offset(spacing)
             $0.width.height.equalTo(32)
         }
     }

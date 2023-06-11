@@ -18,19 +18,10 @@
 
 #import <Foundation/Foundation.h>
 
-#ifdef NS_HEADER_AUDIT_BEGIN
 #define RLM_HEADER_AUDIT_BEGIN NS_HEADER_AUDIT_BEGIN
 #define RLM_HEADER_AUDIT_END NS_HEADER_AUDIT_END
-#else
-#define RLM_HEADER_AUDIT_BEGIN(...) NS_ASSUME_NONNULL_BEGIN
-#define RLM_HEADER_AUDIT_END(...) NS_ASSUME_NONNULL_END
-#endif
 
-#ifdef NS_SWIFT_SENDABLE
 #define RLM_SWIFT_SENDABLE NS_SWIFT_SENDABLE
-#else
-#define RLM_SWIFT_SENDABLE
-#endif
 
 #define RLM_FINAL __attribute__((objc_subclassing_restricted))
 
@@ -55,7 +46,12 @@ RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 #define RLM_ERROR_ENUM(type, name, domain) NS_ENUM(type, name)
 #endif
 
-#define REALM_HIDDEN __attribute__((visibility("hidden")))
+#define RLM_HIDDEN __attribute__((visibility("hidden")))
+#define RLM_VISIBLE __attribute__((visibility("default")))
+#define RLM_HIDDEN_BEGIN _Pragma("GCC visibility push(hidden)")
+#define RLM_HIDDEN_END _Pragma("GCC visibility pop")
+#define RLM_DIRECT __attribute__((objc_direct))
+#define RLM_DIRECT_MEMBERS __attribute__((objc_direct_members))
 
 #pragma mark - Enums
 

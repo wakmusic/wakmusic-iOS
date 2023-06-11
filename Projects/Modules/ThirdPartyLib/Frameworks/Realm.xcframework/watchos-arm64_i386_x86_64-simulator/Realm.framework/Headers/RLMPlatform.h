@@ -43,3 +43,4 @@
 #if !__is_target_os(watchos)
 #error Attempting to use Realm's watchOS framework in a non-watchOS target.
 #endif
+#define REALM_IOPLATFORMUUID @""
