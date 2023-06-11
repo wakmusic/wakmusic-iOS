@@ -73,15 +73,13 @@ public extension PlayState {
         case let .error(error):
             DEBUG_LOG("PlayState.shared.player.state: error: \(error.localizedDescription)")
             message = error.localizedDescription
-        //토스트 자체는 일단 놔둡니다. 오류 토스트가 나타나고 > 플레이어 재할당이 제대로 되었고 > 재생이 되는것을 확인한 후 > 토스트 제거합니다.
-        #if DEBUG
+            //토스트 자체는 일단 놔둡니다. 오류 토스트가 나타나고 > 플레이어 재할당이 제대로 되었고 > 재생이 되는것을 확인한 후 > 토스트 제거합니다.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 UIApplication.shared.windows.first?.rootViewController?.showToast(
                     text: message,
                     font: UIFont.systemFont(ofSize: 14, weight: .medium)
                 )
             }
-        #endif
             //플레이어 재할당
             self.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
             self.player.cue(source: .video(id: self.currentSong?.id ?? ""))
