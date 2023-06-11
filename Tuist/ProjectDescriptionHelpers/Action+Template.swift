@@ -1,4 +1,5 @@
 import ProjectDescription
+import Foundation
 
 public extension TargetScript {
     static let swiftLint = TargetScript.pre(
@@ -13,12 +14,16 @@ public extension TargetScript {
         basedOnDependencyAnalysis: false
     )
     
-    static let firebaseCrashlytics = TargetScript.pre(
-        path: .relativeToRoot("Scripts/FirebaseCrashlyticsScript.sh"),
+    static let firebaseCrashlytics = TargetScript.post(
+        script: """
+          ROOT_DIR=\(ProcessInfo.processInfo.environment["TUIST_ROOT_DIR"] ?? "")
+          "${ROOT_DIR}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+          """,
         name: "FirebaseCrashlytics",
         inputPaths: [
-            Path("${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}"),
-            Path("$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"),
-        ]
-    )
+          "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+          "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
+        ],
+        basedOnDependencyAnalysis: false
+      )
 }
