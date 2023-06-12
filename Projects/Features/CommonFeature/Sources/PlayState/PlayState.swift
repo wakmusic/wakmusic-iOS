@@ -28,6 +28,7 @@ final public class PlayState {
     private var subscription = Set<AnyCancellable>()
     
     init() {
+        DEBUG_LOG("🚀:: \(Self.self) initialized")
         playList = PlayList()
         progress = PlayProgress()
         state = .unstarted
@@ -80,8 +81,12 @@ final public class PlayState {
             RealmManager.shared.addRealmDB(model: playedList)
         }.store(in: &subscription)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: AVAudioSession.routeChangeNotification, object: AVAudioSession.sharedInstance())
-        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRouteChange(notification:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: AVAudioSession.sharedInstance()
+        )
     }
     
     public func fetchPlayListFromLocalDB() -> [PlayListItem] {

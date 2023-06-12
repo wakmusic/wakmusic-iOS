@@ -34,7 +34,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         statePublisher?.cancel()
-        PlayState.shared.checkForPlayerState()
     }
                   
     func sceneDidEnterBackground(_ scene: UIScene) {
