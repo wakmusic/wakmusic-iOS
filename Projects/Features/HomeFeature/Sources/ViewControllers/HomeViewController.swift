@@ -37,6 +37,18 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    private let colorView = UIView().then {
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+    }
+    private let glassmorphismView = GlassmorphismView().then {
+        $0.setCornerRadius(12)
+        $0.setTheme(theme: .light)
+        $0.setDistance(100)  // value between 0 ~ 100 (default: 20)
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+    }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
@@ -63,9 +75,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 }
 
 extension HomeViewController {
-    
     private func inputBind() {
-        
         chartMoreButton.rx.tap
             .bind(to: input.chartMoreTapped)
             .disposed(by: disposeBag)
@@ -174,7 +184,6 @@ extension HomeViewController {
     }
     
     private func outputBind() {
-        
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -280,22 +289,8 @@ extension HomeViewController {
         activityIndicator.startAnimating()
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
-        
-        let colorView = UIView().then {
-            $0.layer.cornerRadius = 12
-            $0.clipsToBounds = true
-            $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-        }
-        let glassmorphismView = GlassmorphismView().then {
-            $0.setCornerRadius(12)
-            $0.setTheme(theme: .light)
-            $0.setBlurDensity(with: 1.0) // value from 0 to 1 is available (default value is 0.65)
-            $0.setDistance(100)  // value between 0 ~ 100 (default: 20)
-            $0.layer.cornerRadius = 12
-            $0.clipsToBounds = true
-        }
-        
-        [colorView, glassmorphismView].forEach {
+                
+        [glassmorphismView, colorView].forEach {
             chartContentView.insertSubview($0, at: 0)
             $0.snp.makeConstraints {
                 $0.left.equalToSuperview().offset(20)

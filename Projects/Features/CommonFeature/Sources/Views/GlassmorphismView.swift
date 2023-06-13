@@ -11,9 +11,7 @@ import UIKit
 @IBDesignable
 public class GlassmorphismView: UIView {
     // MARK: - Properties
-    private let animator = UIViewPropertyAnimator(duration: 0.5, curve: .linear)
     private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-    private var animatorCompletionValue: CGFloat = 0.35
     private let backgroundView = UIView()
     public override var backgroundColor: UIColor? {
         get {
@@ -33,11 +31,6 @@ public class GlassmorphismView: UIView {
         self.initialize()
     }
     
-    deinit {
-        animator.pauseAnimation()
-        animator.stopAnimation(true)
-    }
-    
     public override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -51,32 +44,11 @@ public class GlassmorphismView: UIView {
             self.blurView.effect = nil
             self.blurView.effect = UIBlurEffect(style: .light)
             self.blurView.backgroundColor = UIColor.clear
-            self.animator.stopAnimation(true)
-            self.animator.addAnimations {
-                self.blurView.effect = nil
-            }
-            self.animator.fractionComplete = animatorCompletionValue
-            self.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         case .dark:
             self.blurView.effect = nil
             self.blurView.effect = UIBlurEffect(style: .dark)
             self.blurView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
-            self.animator.stopAnimation(true)
-            self.animator.addAnimations {
-                self.blurView.effect = nil
-            }
-            self.animator.fractionComplete = animatorCompletionValue
-            self.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
         }
-    }
-    
-    /// Customizes blur density of the view.
-    /// Value can be set between 0 ~ 1 (default: 0.65)
-    /// - parameters:
-    ///     - density:  value between 0 ~ 1 (default: 0.65)
-    public func setBlurDensity(with density: CGFloat) {
-        self.animatorCompletionValue = (1 - density)
-        self.animator.fractionComplete = animatorCompletionValue
     }
     
     /// Changes cornerRadius of the view.
@@ -105,8 +77,6 @@ public class GlassmorphismView: UIView {
         // backgoundView(baseView) setting
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         self.insertSubview(backgroundView, at: 0)
-        backgroundView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        backgroundView.layer.borderWidth = 1
         backgroundView.layer.cornerRadius = 20
         backgroundView.clipsToBounds = true
         backgroundView.layer.masksToBounds = false
@@ -131,12 +101,6 @@ public class GlassmorphismView: UIView {
             blurView.heightAnchor.constraint(equalTo: self.heightAnchor),
             blurView.widthAnchor.constraint(equalTo: self.widthAnchor)
         ])
-        
-        // add animation for managing density
-        animator.addAnimations {
-            self.blurView.effect = nil
-        }
-        animator.fractionComplete = animatorCompletionValue // default value is 0.35
     }
     
     // MARK: - Theme
