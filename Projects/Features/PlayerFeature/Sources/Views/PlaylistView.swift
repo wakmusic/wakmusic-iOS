@@ -71,7 +71,7 @@ public final class PlaylistView: UIView {
     internal lazy var miniPlayerStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
-        $0.spacing = 20
+        $0.spacing = (APP_WIDTH() < 375) ? 10 : 20
     }
     
     internal lazy var totalPlayTimeView = UIView().then {
@@ -248,8 +248,9 @@ private extension PlaylistView {
         }
         
         miniPlayerStackView.snp.makeConstraints {
+            let spacing: CGFloat = (APP_WIDTH() < 375) ? 15 : 27
             $0.top.bottom.equalToSuperview()
-            $0.left.equalTo(thumbnailImageView.snp.right).offset(27)
+            $0.left.equalTo(thumbnailImageView.snp.right).offset(spacing)
             $0.right.equalToSuperview()
         }
         

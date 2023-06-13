@@ -9,6 +9,8 @@ import RxCocoa
 import DataMappingModule
 import DomainModule
 import NVActivityIndicatorView
+import Then
+import SnapKit
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -21,8 +23,6 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topCircleImageView: UIImageView!
     @IBOutlet weak var chartContentView: UIView!
     @IBOutlet weak var chartBorderView: UIView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
-    @IBOutlet weak var blurImageView: UIImageView!
     @IBOutlet weak var chartTitleLabel: UILabel!
     @IBOutlet weak var chartArrowImageView: UIImageView!
     @IBOutlet weak var chartAllListenButton: UIButton!
@@ -275,7 +275,6 @@ extension HomeViewController {
     }
     
     private func configureUI() {
-        
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
@@ -283,20 +282,22 @@ extension HomeViewController {
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         
+        let blurEffectView = UIVisualEffectView().then {
+            $0.effect = UIBlurEffect(style: .regular)
+            $0.layer.cornerRadius = 12
+            $0.clipsToBounds = true
+        }
+        chartContentView.insertSubview(blurEffectView, at: 0)
+        blurEffectView.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
+            $0.top.bottom.equalToSuperview()
+        }
+
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
-
-        blurEffectView.layer.cornerRadius = 12
-        blurEffectView.clipsToBounds = true
-        blurEffectView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-
-        blurImageView.layer.cornerRadius = 12
-        blurImageView.contentMode = .scaleAspectFill
-        blurImageView.image = DesignSystemAsset.Home.blurBg.image
-        blurImageView.alpha = 0.8
-        blurImageView.clipsToBounds = true
-        blurImageView.isHidden = true
+//        chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
