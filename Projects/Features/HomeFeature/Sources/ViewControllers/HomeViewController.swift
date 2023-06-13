@@ -278,26 +278,35 @@ extension HomeViewController {
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
-        
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
         
-        let blurEffectView = UIVisualEffectView().then {
-            $0.effect = UIBlurEffect(style: .regular)
+        let colorView = UIView().then {
+            $0.layer.cornerRadius = 12
+            $0.clipsToBounds = true
+            $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        }
+        let glassmorphismView = GlassmorphismView().then {
+            $0.setCornerRadius(12)
+            $0.setTheme(theme: .light)
+            $0.setBlurDensity(with: 1.0) // value from 0 to 1 is available (default value is 0.65)
+            $0.setDistance(100)  // value between 0 ~ 100 (default: 20)
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }
-        chartContentView.insertSubview(blurEffectView, at: 0)
-        blurEffectView.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(20)
-            $0.right.equalToSuperview().offset(-20)
-            $0.top.bottom.equalToSuperview()
+        
+        [colorView, glassmorphismView].forEach {
+            chartContentView.insertSubview($0, at: 0)
+            $0.snp.makeConstraints {
+                $0.left.equalToSuperview().offset(20)
+                $0.right.equalToSuperview().offset(-20)
+                $0.top.bottom.equalToSuperview()
+            }
         }
 
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
-//        chartBorderView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
