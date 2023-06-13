@@ -90,7 +90,6 @@ Tuist/Signing
 ### Secrets
 Secrets.xcconfig
 
-
 ### Amplify
 #amplify-do-not-edit-begin
 amplify/
@@ -107,3 +106,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+### Google
+GoogleService-Info.plist
