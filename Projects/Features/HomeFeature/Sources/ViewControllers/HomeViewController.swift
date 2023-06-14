@@ -9,6 +9,8 @@ import RxCocoa
 import DataMappingModule
 import DomainModule
 import NVActivityIndicatorView
+import Then
+import SnapKit
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -21,8 +23,6 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var topCircleImageView: UIImageView!
     @IBOutlet weak var chartContentView: UIView!
     @IBOutlet weak var chartBorderView: UIView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
-    @IBOutlet weak var blurImageView: UIImageView!
     @IBOutlet weak var chartTitleLabel: UILabel!
     @IBOutlet weak var chartArrowImageView: UIImageView!
     @IBOutlet weak var chartAllListenButton: UIButton!
@@ -37,6 +37,18 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    private let colorView = UIView().then {
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+    }
+    private let glassmorphismView = GlassmorphismView().then {
+        $0.setCornerRadius(12)
+        $0.setTheme(theme: .light)
+        $0.setDistance(100)
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+    }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
@@ -63,9 +75,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 }
 
 extension HomeViewController {
-    
     private func inputBind() {
-        
         chartMoreButton.rx.tap
             .bind(to: input.chartMoreTapped)
             .disposed(by: disposeBag)
@@ -174,7 +184,6 @@ extension HomeViewController {
     }
     
     private func outputBind() {
-        
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -275,28 +284,24 @@ extension HomeViewController {
     }
     
     private func configureUI() {
-        
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
-        
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
-        
+                
+        [glassmorphismView, colorView].forEach {
+            chartContentView.insertSubview($0, at: 0)
+            $0.snp.makeConstraints {
+                $0.left.equalToSuperview().offset(20)
+                $0.right.equalToSuperview().offset(-20)
+                $0.top.bottom.equalToSuperview()
+            }
+        }
+
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
         chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
-
-        blurEffectView.layer.cornerRadius = 12
-        blurEffectView.clipsToBounds = true
-        blurEffectView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-
-        blurImageView.layer.cornerRadius = 12
-        blurImageView.contentMode = .scaleAspectFill
-        blurImageView.image = DesignSystemAsset.Home.blurBg.image
-        blurImageView.alpha = 0.8
-        blurImageView.clipsToBounds = true
-        blurImageView.isHidden = true
         
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
