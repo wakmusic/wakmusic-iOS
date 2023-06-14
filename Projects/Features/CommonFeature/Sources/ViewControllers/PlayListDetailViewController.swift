@@ -172,7 +172,7 @@ extension PlayListDetailViewController{
  
         self.playListImage.layer.cornerRadius = 12
         self.moreButton.isHidden = viewModel.type == .wmRecommend
-        self.editPlayListNameButton.isHidden = viewModel.type == .wmRecommend
+        self.editPlayListNameButton.isHidden = true
     }
     
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
@@ -255,7 +255,8 @@ extension PlayListDetailViewController{
                     self.moreButton.isHidden = isEdit
                     self.completeButton.isHidden = !isEdit
                     self.editStateLabel.isHidden = !isEdit
-                    
+                    self.editPlayListNameButton.isHidden = !isEdit
+
                     self.tableView.setEditing(isEdit, animated: true)
                     self.tableView.reloadData()
                     
@@ -264,6 +265,7 @@ extension PlayListDetailViewController{
                     self.moreButton.isHidden = true
                     self.completeButton.isHidden = true
                     self.editStateLabel.isHidden = true
+                    self.editPlayListNameButton.isHidden = true
                 }
             })
             .disposed(by: disposeBag)
@@ -274,6 +276,7 @@ extension PlayListDetailViewController{
                 let imageHeight: CGFloat = (140.0*APP_WIDTH())/375.0
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
                 self.tableView.tableHeaderView?.frame = newFrame
+                self.input.state.accept(EditState(isEditing: false, force: true))
             })
             .subscribe(onNext: { [weak self] (model) in
                 guard let self = self else{
