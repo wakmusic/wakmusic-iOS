@@ -118,7 +118,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
         let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
         let width: CGFloat = APP_WIDTH()
-        let height: CGFloat = (imageSize.height * width) / imageSize.width
+        let height: CGFloat = (imageSize.height * width) / max(1.0, imageSize.width)
         return CGSize(width: width, height: height)
     }
     
