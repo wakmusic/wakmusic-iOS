@@ -286,13 +286,13 @@ private extension PlayerView {
         }
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(2)
-            $0.left.equalTo(closeButton.snp.right)
-            $0.right.equalToSuperview().offset(-52)
+            $0.left.equalTo(closeButton.snp.right).offset(10)
+            $0.right.equalToSuperview().offset(-62)
         }
         artistLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom)
             $0.left.equalTo(closeButton.snp.right)
-            $0.right.equalToSuperview().offset(-52)
+            $0.right.equalToSuperview().offset(-62)
         }
     }
     private func configureThumbnail() {
