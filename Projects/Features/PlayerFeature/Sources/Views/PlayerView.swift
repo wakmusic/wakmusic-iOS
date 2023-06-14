@@ -291,7 +291,7 @@ private extension PlayerView {
         }
         artistLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom)
-            $0.left.equalTo(closeButton.snp.right)
+            $0.left.equalTo(closeButton.snp.right).offset(10)
             $0.right.equalToSuperview().offset(-62)
         }
     }
