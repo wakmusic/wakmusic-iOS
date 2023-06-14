@@ -276,7 +276,6 @@ extension PlayListDetailViewController{
                 let imageHeight: CGFloat = (140.0*APP_WIDTH())/375.0
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
                 self.tableView.tableHeaderView?.frame = newFrame
-                self.input.state.accept(EditState(isEditing: false, force: true))
             })
             .subscribe(onNext: { [weak self] (model) in
                 guard let self = self else{
@@ -293,17 +292,7 @@ extension PlayListDetailViewController{
                 self.playListNameLabel.text = model.title
                 self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
             }).disposed(by: disposeBag)
-                
-        NotificationCenter.default.rx.notification(.playListNameRefresh)
-            .map{ (notification) -> String in
-                guard let obj = notification.object as? String else {
-                    return ""
-                }
-                return obj
-            }
-            .bind(to: input.playListNameLoad)
-            .disposed(by: disposeBag)
-        
+
         output.showErrorToast
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }

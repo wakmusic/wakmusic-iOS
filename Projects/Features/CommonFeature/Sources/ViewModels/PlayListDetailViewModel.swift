@@ -347,6 +347,20 @@ public final class PlayListDetailViewModel: ViewModelType {
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
 
+        NotificationCenter.default.rx.notification(.playListNameRefresh)
+            .map{ (notification) -> String in
+                guard let obj = notification.object as? String else {
+                    return ""
+                }
+                return obj
+            }
+            .do(onNext: { _ in
+                input.state.accept(EditState(isEditing: false, force: true))
+                input.cancelEdit.onNext(())
+            })
+            .bind(to: input.playListNameLoad)
+            .disposed(by: disposeBag)
+
         return output
     }
 }
