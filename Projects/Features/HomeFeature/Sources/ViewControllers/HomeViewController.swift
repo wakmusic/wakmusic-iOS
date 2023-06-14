@@ -45,7 +45,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     private let glassmorphismView = GlassmorphismView().then {
         $0.setCornerRadius(12)
         $0.setTheme(theme: .light)
-        $0.setDistance(100)  // value between 0 ~ 100 (default: 20)
+        $0.setDistance(100)
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
