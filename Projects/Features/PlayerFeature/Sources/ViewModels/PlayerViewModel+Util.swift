@@ -25,7 +25,8 @@ extension PlayerViewModel {
         formatter.decimalSeparator = "."
         formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
-        
+        formatter.roundingMode = .floor
+
         let correctNumber: Int = max(0, number)
         
         switch correctNumber {
