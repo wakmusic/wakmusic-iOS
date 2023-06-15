@@ -16,7 +16,7 @@ public extension TargetScript {
     
     static let firebaseCrashlytics = TargetScript.post(
         script: """
-          "../Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+          "Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
           """,
         name: "FirebaseCrashlytics",
         inputPaths: [
