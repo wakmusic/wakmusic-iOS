@@ -19,7 +19,7 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
     }
     
     public func fetchUserInfo() -> Single<AuthUserInfoEntity> {
-        request(.fetUserInfo)
+        request(.fetchUserInfo)
             .map(AuthUserInfoResponseDTO.self)
             .map({$0.toDomain()})
     }
