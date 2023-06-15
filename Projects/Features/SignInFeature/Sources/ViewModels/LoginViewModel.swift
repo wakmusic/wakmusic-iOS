@@ -91,7 +91,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         // MARK: GoogleToken, AppleToken WMToken으로 치환
         [googleToken, appleToken].forEach {
             $0
-                .filter{ !$0.1.isEmpty }
+            .filter{ !$0.1.isEmpty }
             .withUnretained(self)
             .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
                 return viewModel.fetchTokenUseCase.execute(id: id.1, type: id.0)

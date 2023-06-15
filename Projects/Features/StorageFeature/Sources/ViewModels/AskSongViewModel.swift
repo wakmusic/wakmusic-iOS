@@ -16,16 +16,15 @@ import KeychainModule
 import DataMappingModule
 
 public final class AskSongViewModel:ViewModelType {
-
-    var disposeBag = DisposeBag()
     var type: SuggestSongModifyType!
     var modifySongUseCase: ModifySongUseCase
-    
+    var disposeBag = DisposeBag()
+
     public struct Input {
-        var artistString:PublishRelay<String> = PublishRelay()
-        var songTitleString:PublishRelay<String> = PublishRelay()
-        var youtubeString:PublishRelay<String> = PublishRelay()
-        var contentString:PublishRelay<String> = PublishRelay()
+        var artistString: PublishRelay<String> = PublishRelay()
+        var songTitleString: PublishRelay<String> = PublishRelay()
+        var youtubeString: PublishRelay<String> = PublishRelay()
+        var contentString: PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishSubject<Void> = PublishSubject()
     }
 
