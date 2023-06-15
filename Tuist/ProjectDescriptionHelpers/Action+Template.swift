@@ -16,10 +16,7 @@ public extension TargetScript {
     
     static let firebaseCrashlytics = TargetScript.post(
         script: """
-          ROOT_DIR=\(ProcessInfo.processInfo.environment["TUIST_ROOT_DIR"] ?? "")
-          
-          "${ROOT_DIR}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run" -gsp ${ROOT_DIR}/Projects/App/Resources/GoogleService-Info.plist
-
+          "../Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
           """,
         name: "FirebaseCrashlytics",
         inputPaths: [
