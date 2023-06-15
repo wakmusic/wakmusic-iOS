@@ -45,7 +45,7 @@ public extension Project {
         hasDemoApp: Bool = false
     ) -> Project {
         let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
-        let scripts: [TargetScript] = isForDev ? [.swiftLint] : [.firebaseCrashlytics]
+        let scripts: [TargetScript] = isForDev ? [.swiftLint, .firebaseCrashlytics] : [.firebaseCrashlytics]
         let settings: Settings = .settings(
             base: Environment.baseSetting,
             configurations: [
