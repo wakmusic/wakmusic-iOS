@@ -183,33 +183,19 @@ public final class MyPlayListViewModel:ViewModelType {
             .withLatestFrom(output.dataSource)
             .bind(to: output.backUpdataSource)
             .disposed(by: disposeBag)
-                        
+        
         input.addPlayList
             .withLatestFrom(output.indexPathOfSelectedPlayLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (indexPathes, dataSource) -> [String] in
-                let keys = indexPathes.map {
-                    dataSource[$0.section].items[$0.row].key
-                }
-                return keys
-            }
-            .flatMap{ [weak self] (keys) -> Observable<[SongEntity]> in
-                guard let `self` = self else { return Observable.empty() }
-                return Observable.concat( 
-                    keys.map {
-                        self.fetchPlayListDetailUseCase
-                            .execute(id: $0, type: .custom)
-                            .catchAndReturn(PlayListDetailEntity(title: "", songs: [], public: true, key: "", image: "", image_square_version: 0, image_round_version: 0, version: 0))
-                            .asObservable()
-                            .map { $0.songs }
-                    }
-                ).scan([]) { (pre, new) in //총 [1], [1,2] ,[1,2,3] ... [1,2,3,4,5] 인데 last가 [1,2,3,4,5]
-                    return pre + new
-                }.takeLast(1)
+            .map{ (indexPathes, dataSource) -> [SongEntity] in
+                let songs = indexPathes.map {
+                    return dataSource[$0.section].items[$0.row].songlist
+                }.flatMap { $0 }
+                return songs
             }
             .bind(to: output.willAddPlayList)
             .disposed(by: disposeBag)
-        
+
         input.deletePlayList
             .withLatestFrom(output.indexPathOfSelectedPlayLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }

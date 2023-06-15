@@ -5,7 +5,7 @@ public struct PlayListEntity: Equatable {
         key: String,
         title: String,
         image: String,
-        songlist: [String],
+        songlist: [SongEntity],
         image_version: Int,
         isSelected: Bool = false
     ) {
@@ -18,8 +18,8 @@ public struct PlayListEntity: Equatable {
     }
     
     public let image_version: Int
-    public let key,title,image:String
-    public let songlist:[String]
+    public let key, title, image: String
+    public let songlist: [SongEntity]
     public var isSelected: Bool
     
 }
