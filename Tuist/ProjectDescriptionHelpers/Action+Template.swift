@@ -19,11 +19,9 @@ public extension TargetScript {
             """
             "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
 
-            GSP_FILENAME="GoogleService-Info.plist"
+            GSP_FILE="${PWD}/Projects/App/Resources/GoogleService-Info.plist"
 
-            GSP_FILE="${PWD}/Projects/App/Resources/${GSP_FILENAME}"
-
-            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp "${GSP_FILE}" -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp ${GSP_FILE} -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
             """
         ,
         name: "FirebaseCrashlytics",
