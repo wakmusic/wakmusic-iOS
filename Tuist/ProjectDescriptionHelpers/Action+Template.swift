@@ -15,14 +15,21 @@ public extension TargetScript {
     )
     
     static let firebaseCrashlytics = TargetScript.post(
-        script: """
-          "Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
-          """,
+        script:
+            """
+            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+
+            GSP_FILENAME="GoogleService-Info.plist"
+
+            GSP_FILE="${PWD}/Projects/App/Resources/${GSP_FILENAME}"
+
+            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp "${GSP_FILE}" -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+            """
+        ,
         name: "FirebaseCrashlytics",
         inputPaths: [
           "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
           "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
-        ],
-        runForInstallBuildsOnly: true
+        ]
     )
 }
