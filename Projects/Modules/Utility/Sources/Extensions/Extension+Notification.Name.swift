@@ -20,4 +20,5 @@ public extension Notification.Name {
     static let movedTab = Notification.Name("movedTab")
     static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
     static let updateCurrentSongLikeState = Notification.Name("updateCurrentSongLikeState")
+    static let resetYouTubePlayerHostingView = Notification.Name("resetYouTubePlayerHostingView")
 }

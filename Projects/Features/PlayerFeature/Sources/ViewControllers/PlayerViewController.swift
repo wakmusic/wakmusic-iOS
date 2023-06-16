@@ -70,6 +70,7 @@ public class PlayerViewController: UIViewController {
         playerView.lyricsTableView.delegate = self
         playerView.lyricsTableView.dataSource = self
         bindViewModel()
+        bindNotification()
     }
     
     func showPlaylist() {
@@ -78,7 +79,6 @@ public class PlayerViewController: UIViewController {
         playlistVC.view.frame = self.view.frame
         self.present(playlistVC, animated: true)
     }
-    
 }
 
 public extension PlayerViewController {
@@ -89,6 +89,28 @@ public extension PlayerViewController {
 }
 
 private extension PlayerViewController {
+    private func bindNotification() {
+        NotificationCenter.default.rx
+            .notification(.resetYouTubePlayerHostingView)
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                owner.resetYouTubePlayerHostingView()
+            }).disposed(by: disposeBag)
+    }
+    
+    private func resetYouTubePlayerHostingView() {
+        self.youtubePlayerView.removeFromSuperview()
+        self.youtubePlayerView = YouTubePlayerHostingView(player: self.playState.player)
+        self.youtubePlayerView.isHidden = true
+        self.view.addSubview(self.youtubePlayerView)
+        self.youtubePlayerView.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(self.playerView.thumbnailImageView)
+            $0.width.equalTo(self.playerView.thumbnailImageView.snp.width)
+            $0.height.equalTo(self.playerView.thumbnailImageView.snp.height)
+        }
+        PlayState.shared.reSubscriptionPlayPublisher()
+    }
+    
     private func bindViewModel() {
         let input = PlayerViewModel.Input(
             viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map {_ in },
