@@ -90,17 +90,17 @@ final public class PlayState {
     }
     
     public func reSubscriptionPlayPublisher() {
-        self.player.playbackStatePublisher.sink { [weak self] state in
+        player.playbackStatePublisher.sink { [weak self] state in
             guard let self = self else { return }
             self.state = state
         }.store(in: &subscription)
         
-        self.player.currentTimePublisher().sink { [weak self] currentTime in
+        player.currentTimePublisher().sink { [weak self] currentTime in
             guard let self = self else { return }
             self.progress.currentProgress = currentTime
         }.store(in: &subscription)
         
-        self.player.durationPublisher.sink { [weak self] duration in
+        player.durationPublisher.sink { [weak self] duration in
             guard let self = self else { return }
             self.progress.endProgress = duration
         }.store(in: &subscription)

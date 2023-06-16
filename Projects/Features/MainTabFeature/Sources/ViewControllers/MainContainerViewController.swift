@@ -361,17 +361,14 @@ extension MainContainerViewController {
             .notification(UIApplication.didBecomeActiveNotification)
             .subscribe(onNext: { _ in
                 PlayState.shared.checkForPlayerState { (state) in
-                    var message: String = ""
                     switch state {
                     case .idle:
                         DEBUG_LOG("🚀:: Player State ➡️ [idle]")
-                        message = "🚀:: Player State ➡️ [idle]"
                     case .ready:
                         DEBUG_LOG("🚀:: Player State ➡️ [ready]")
-                        message = "🚀:: Player State ➡️ [ready]"
                     case let .error(error):
                         DEBUG_LOG("🚀:: Player State ➡️ [error] \(error.localizedDescription)")
-                        message = "🚀:: Player State ➡️ [error] \(error.localizedDescription)"
+                        let message = "🚀:: Player State ➡️ [error] \(error.localizedDescription)"
                         PlayState.shared.resetPlayer()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             UIApplication.shared.windows.first?.rootViewController?.showToast(
