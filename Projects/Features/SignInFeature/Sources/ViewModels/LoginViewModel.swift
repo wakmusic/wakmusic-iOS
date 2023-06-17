@@ -63,20 +63,22 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
         // MARK: NaverToken WMToken으로 치환
         naverToken
-            .flatMap{ [weak self] (tokenType: String, accessToken: String) -> Observable<NaverUserInfoEntity> in
+            .flatMap{ [weak self] (tokenType: String, accessToken: String) -> Observable<(NaverUserInfoEntity,String)> in
                 guard let self = self else { return Observable.empty() }
                 return self.fetchNaverUserInfoUseCase.execute(
                     tokenType: tokenType,
                     accessToken: accessToken
                 )
                 .catchAndReturn(NaverUserInfoEntity(resultcode: "", message: "", id: "", nickname: ""))
+                .map({($0,accessToken)})
                 .asObservable()
+              
             }
-            .filter{ !$0.id.isEmpty }
-            .map{ $0.id }
+            .filter{ !$0.1.isEmpty }
+            .map{ $0.1 }
             .withUnretained(self)
-            .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
-                return viewModel.fetchTokenUseCase.execute(id: id, type: .naver)
+            .flatMap { (viewModel, token) -> Observable<AuthLoginEntity> in
+                return viewModel.fetchTokenUseCase.execute(token: token, type: .naver)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
@@ -94,7 +96,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .filter{ !$0.1.isEmpty }
             .withUnretained(self)
             .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
-                return viewModel.fetchTokenUseCase.execute(id: id.1, type: id.0)
+                return viewModel.fetchTokenUseCase.execute(token: id.1, type: id.0)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
