@@ -20,7 +20,7 @@ extension AuthAPI: WMAPI {
     public var baseURL: URL {
         switch self {
         case .fetchToken, .fetchUserInfo, .withdrawUserInfo:
-            return URL(string: BASE_URL())!
+            return URL(string:"https://test.eatcocoa.dev")!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
