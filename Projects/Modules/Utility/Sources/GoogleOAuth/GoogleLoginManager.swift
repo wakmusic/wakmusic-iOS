@@ -87,49 +87,9 @@ public class GoogleLoginManager {
                         GoogleGetTokenEntity.self,
                         from: data
                     )
-
-                    Task {
-                        continuation.resume(
-                            returning: try await self
-                                .getGoogleUserInfo(accessToken?.accessToken ?? "")
-                        )
-                    }
-
+                    continuation.resume(returning: accessToken?.accessToken ?? "")
                 case .failure(let error):
                     DEBUG_LOG(error)
-                    continuation.resume(throwing: WMGoogleError.internalError)
-
-                }
-            }
-        }
-    }
-
-    // MARK: - Google한테 유저 정보 받아오기
-    func getGoogleUserInfo(_ accessToken: String) async throws -> String {
-        let parameters: Parameters = [
-            "alt": "json"
-        ]
-        let headers: HTTPHeaders = [
-            .authorization(bearerToken: accessToken)
-        ]
-
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.request(
-                getProfileURL,
-                method: .get,
-                parameters: parameters,
-                headers: headers
-            )
-            .responseData { response in
-                switch response.result {
-                case .success(let data):
-                    let id = try? JSONDecoder().decode(
-                        GoogleUserInfoEntity.self,
-                        from: data
-                    )
-                    continuation.resume(returning: id?.id ?? "")
-
-                case .failure:
                     continuation.resume(throwing: WMGoogleError.internalError)
 
                 }
