@@ -370,12 +370,6 @@ extension MainContainerViewController {
                         DEBUG_LOG("🚀:: Player State ➡️ [error] \(error.localizedDescription)")
                         let message = "🚀:: Player State ➡️ [error] \(error.localizedDescription)"
                         PlayState.shared.resetPlayer()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            UIApplication.shared.windows.first?.rootViewController?.showToast(
-                                text: message,
-                                font: UIFont.systemFont(ofSize: 14, weight: .medium)
-                            )
-                        }
                     }
                 }
             })
