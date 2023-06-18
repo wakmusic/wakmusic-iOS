@@ -209,8 +209,14 @@ extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationContr
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let userIdentifer = credential.user
-            appleToken.accept((.apple, userIdentifer))
+            
+            if let rawData =  credential.identityToken  {
+                
+                let token = String(decoding: rawData, as: UTF8.self)
+                appleToken.accept((.apple, token))
+            }
+            
+            
         }
     }
 
