@@ -26,7 +26,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
     let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    let naverToken: PublishRelay<(String, String)> = PublishRelay()
+    let naverToken: PublishRelay<String> = PublishRelay()
     let googleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
     let appleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
     let fetchedWMToken: PublishRelay<String> = PublishRelay()
@@ -63,19 +63,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
         // MARK: NaverToken WMToken으로 치환
         naverToken
-            .flatMap{ [weak self] (tokenType: String, accessToken: String) -> Observable<(NaverUserInfoEntity,String)> in
-                guard let self = self else { return Observable.empty() }
-                return self.fetchNaverUserInfoUseCase.execute(
-                    tokenType: tokenType,
-                    accessToken: accessToken
-                )
-                .catchAndReturn(NaverUserInfoEntity(resultcode: "", message: "", id: "", nickname: ""))
-                .map({($0,accessToken)})
-                .asObservable()
-              
-            }
-            .filter{ !$0.1.isEmpty }
-            .map{ $0.1 }
+            .debug("naverToken")
+            .filter{ !$0.isEmpty }
             .withUnretained(self)
             .flatMap { (viewModel, token) -> Observable<AuthLoginEntity> in
                 return viewModel.fetchTokenUseCase.execute(token: token, type: .naver)
@@ -179,17 +168,15 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
-        guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        naverToken.accept((tokenType, accessToken))
+        naverToken.accept(accessToken)
     }
 
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
-        guard let tokenType = naverLoginInstance?.tokenType else { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        naverToken.accept((tokenType, accessToken))
+        naverToken.accept(accessToken)
     }
     
     public func oauth20ConnectionDidFinishDeleteToken() {
@@ -208,15 +195,10 @@ extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationContr
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            
-            if let rawData =  credential.identityToken  {
-                
-                let token = String(decoding: rawData, as: UTF8.self)
-                appleToken.accept((.apple, token))
-            }
-            
-            
+        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+           let rawData =  credential.identityToken {
+            let token = String(decoding: rawData, as: UTF8.self)
+            appleToken.accept((.apple, token))
         }
     }
 
