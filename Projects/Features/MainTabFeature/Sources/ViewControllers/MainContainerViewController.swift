@@ -368,7 +368,6 @@ extension MainContainerViewController {
                         DEBUG_LOG("🚀:: Player State ➡️ [ready]")
                     case let .error(error):
                         DEBUG_LOG("🚀:: Player State ➡️ [error] \(error.localizedDescription)")
-                        let message = "🚀:: Player State ➡️ [error] \(error.localizedDescription)"
                         PlayState.shared.resetPlayer()
                     }
                 }
