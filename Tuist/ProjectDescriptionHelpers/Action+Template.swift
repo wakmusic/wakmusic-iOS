@@ -17,11 +17,13 @@ public extension TargetScript {
     static let firebaseCrashlytics = TargetScript.post(
         script:
             """
-            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+            ROOT_DIR=\(ProcessInfo.processInfo.environment["TUIST_ROOT_DIR"] ?? "")
 
-            GSP_FILE="${PWD}/Projects/App/Resources/GoogleService-Info.plist"
+            "${ROOT_DIR}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
 
-            "${PWD}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp ${GSP_FILE} -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+            GSP_FILE_PATH="${ROOT_DIR}/Projects/App/Resources/GoogleService-Info.plist"
+
+            "${ROOT_DIR}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols" -gsp ${GSP_FILE_PATH} -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
             """
         ,
         name: "FirebaseCrashlytics",
