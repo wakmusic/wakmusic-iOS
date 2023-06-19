@@ -82,7 +82,7 @@ extension ArtistViewController {
     }
     
     private func configureUI() {
-        
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
