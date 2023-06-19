@@ -15,28 +15,19 @@ import BaseFeature
 import KeychainModule
 
 public final class QuestionViewModel:ViewModelType {
-
     var disposeBag = DisposeBag()
-    
     
 
     public struct Input {
-    
-    
     }
 
     public struct Output {
-        
-        var selectedIndex:PublishRelay<Int> = PublishRelay()
-    
+        var selectedIndex: PublishRelay<Int> = PublishRelay()
     }
 
     public init(
-
     ) {
-        
         DEBUG_LOG("✅ \(Self.self) 생성")
-     
     }
     
     deinit {
@@ -45,9 +36,6 @@ public final class QuestionViewModel:ViewModelType {
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
-        
-        
         return output
     }
 }

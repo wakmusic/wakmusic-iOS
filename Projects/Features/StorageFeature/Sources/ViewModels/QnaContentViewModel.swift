@@ -15,37 +15,24 @@ import BaseFeature
 import KeychainModule
 
 final public class QnaContentViewModel:ViewModelType {
-
     var disposeBag = DisposeBag()
-    
     var dataSource:[QnaEntity]
-    
 
     public struct Input {
-    
     }
 
     public struct Output {
-      
-
     }
 
     public init(
         dataSource:[QnaEntity]
     ) {
-        
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.dataSource = dataSource
-     
-
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
-   
-        
-        
         return output
     }
 }

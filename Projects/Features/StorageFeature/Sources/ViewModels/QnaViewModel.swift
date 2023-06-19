@@ -23,12 +23,12 @@ final public class QnaViewModel:ViewModelType {
     }
 
     public struct Output {
-        let dataSource:BehaviorRelay<([QnaCategoryEntity],[QnaEntity])> = BehaviorRelay(value: ([],[]))
+        let dataSource:BehaviorRelay<([QnaCategoryEntity], [QnaEntity])> = BehaviorRelay(value: ([], []))
     }
 
     public init(
         fetchQnaCategoriesUseCase: FetchQnaCategoriesUseCase,
-        fetchQnaUseCase : FetchQnaUseCase
+        fetchQnaUseCase: FetchQnaUseCase
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.fetchQnaCategoriesUseCase = fetchQnaCategoriesUseCase

@@ -20,12 +20,12 @@ public final class WakMusicFeedbackViewModel:ViewModelType {
     var inquiryWeeklyChartUseCase: InquiryWeeklyChartUseCase
     
     public struct Input {
-        var textString:PublishRelay<String> = PublishRelay()
+        var textString: PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var result:PublishSubject<InquiryWeeklyChartEntity> = PublishSubject()
+        var result: PublishSubject<InquiryWeeklyChartEntity> = PublishSubject()
     }
 
     public init(
