@@ -27,8 +27,8 @@ public struct AuthRepositoryImpl: AuthRepository {
     }
     
     
-    public func fetchToken(id: String, type: ProviderType) -> Single<AuthLoginEntity> {
-        remoteAuthDataSource.fetchToken(id: id, type: type)
+    public func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity> {
+        remoteAuthDataSource.fetchToken(token: token, type: type)
     }
     
     public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> RxSwift.Single<DomainModule.NaverUserInfoEntity> {

@@ -296,6 +296,10 @@ extension MyPlayListViewController: UITableViewDelegate{
 
 extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
     public func action(_ type: PurposeType) {
+        if let parent = self.parent?.parent as? AfterLoginViewController {
+            parent.hideEditSheet()
+            parent.profileButton.isSelected = false
+        }
         let vc =  multiPurposePopComponent.makeView(type: type)
         self.showEntryKitModal(content: vc, height: 296)
     }    

@@ -5,14 +5,14 @@ import Foundation
 import KeychainModule
 
 public enum AuthAPI {
-    case fetchToken(id: String, type: ProviderType)
+    case fetchToken(token: String, type: ProviderType)
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
     case fetchUserInfo
     case withdrawUserInfo
 }
 
 public struct AuthRequset:Encodable {
-    var id: String
+    var token: String
     var provider: String
 }
 
@@ -20,7 +20,7 @@ extension AuthAPI: WMAPI {
     public var baseURL: URL {
         switch self {
         case .fetchToken, .fetchUserInfo, .withdrawUserInfo:
-            return URL(string: BASE_URL())!
+            return URL(string:"https://test.eatcocoa.dev")!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
@@ -72,8 +72,8 @@ extension AuthAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchToken(id: let id, type: let type):
-            return .requestJSONEncodable(AuthRequset(id: id, provider: type.rawValue))
+        case .fetchToken(token: let id, type: let type):
+            return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
         case .fetchNaverUserInfo, .fetchUserInfo, .withdrawUserInfo:
             return .requestPlain
         }

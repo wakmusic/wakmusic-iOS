@@ -89,6 +89,23 @@ final public class PlayState {
         )
     }
     
+    public func reSubscriptionPlayPublisher() {
+        player.playbackStatePublisher.sink { [weak self] state in
+            guard let self = self else { return }
+            self.state = state
+        }.store(in: &subscription)
+        
+        player.currentTimePublisher().sink { [weak self] currentTime in
+            guard let self = self else { return }
+            self.progress.currentProgress = currentTime
+        }.store(in: &subscription)
+        
+        player.durationPublisher.sink { [weak self] duration in
+            guard let self = self else { return }
+            self.progress.endProgress = duration
+        }.store(in: &subscription)
+    }
+    
     public func fetchPlayListFromLocalDB() -> [PlayListItem] {
         let playedList = RealmManager.shared.realm.objects(PlayedLists.self)
             .toArray(type: PlayedLists.self)

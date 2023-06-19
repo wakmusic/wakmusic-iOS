@@ -21,8 +21,8 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
     }
     
 
-    public func execute(id: String, type:ProviderType) -> Single<AuthLoginEntity> {
-        authRepository.fetchToken(id: id, type: type)
+    public func execute(token: String, type:ProviderType) -> Single<AuthLoginEntity> {
+        authRepository.fetchToken(token: token, type: type)
     }
     
     

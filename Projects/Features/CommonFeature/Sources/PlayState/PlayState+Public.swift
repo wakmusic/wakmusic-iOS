@@ -67,8 +67,8 @@ public extension PlayState {
     
     /// 플레이어를 리셋합니다.
     func resetPlayer() {
-        self.player.update(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         self.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
         self.player.cue(source: .video(id: self.currentSong?.id ?? ""))
+        NotificationCenter.default.post(name: .resetYouTubePlayerHostingView, object: nil)
     }
 }
