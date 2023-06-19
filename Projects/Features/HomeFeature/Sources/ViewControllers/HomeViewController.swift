@@ -330,14 +330,14 @@ extension HomeViewController {
         
         let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton]
         
-        NewSongGroupType.allCases.enumerated().forEach{ (i, model) in
+        for (model, button) in zip(NewSongGroupType.allCases, buttons) {
             let attributedString = NSMutableAttributedString(
                 string: model.display,
                 attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
                              .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                              .kern: -0.5]
             )
-            buttons[i].setAttributedTitle(attributedString, for: .normal)
+            button.setAttributedTitle(attributedString, for: .normal)
             
             let selectedAttributedString = NSMutableAttributedString(
                 string: model.display,
@@ -345,7 +345,7 @@ extension HomeViewController {
                              .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                              .kern: -0.5]
             )
-            buttons[i].setAttributedTitle(selectedAttributedString, for: .selected)
+            button.setAttributedTitle(selectedAttributedString, for: .selected)
         }
         
         latestSongAllButton.isSelected = true
