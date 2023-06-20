@@ -183,6 +183,12 @@ extension RequestViewController{
         withdrawButton.layer.cornerRadius = 4
         withdrawButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
         withdrawButton.setAttributedTitle(withDrawAttributedString, for: .normal)
+        
+        #if DEBUG
+        self.bombSuperView.isHidden = false
+        #else
+        self.bombSuperView.isHidden = true
+        #endif
     }
     
     private func bindRx(){
