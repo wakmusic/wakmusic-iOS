@@ -60,8 +60,8 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
+        configureBlurUI()
         inputBind()
         outputBind()
     }
@@ -283,13 +283,7 @@ extension HomeViewController {
             .disposed(by: disposeBag)
     }
     
-    private func configureUI() {
-        activityIndicator.type = .circleStrokeSpin
-        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
-        activityIndicator.startAnimating()
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
-                
+    private func configureBlurUI() {
         [glassmorphismView, colorView].forEach {
             chartContentView.insertSubview($0, at: 0)
             $0.snp.makeConstraints {
@@ -298,6 +292,14 @@ extension HomeViewController {
                 $0.top.bottom.equalToSuperview()
             }
         }
+    }
+    
+    private func configureUI() {
+        activityIndicator.type = .circleStrokeSpin
+        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIndicator.startAnimating()
+        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
 
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
