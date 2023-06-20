@@ -364,6 +364,7 @@ extension HomeViewController {
 
 extension HomeViewController: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard collectionView != scrollView else { return }
         let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
         let standard: CGFloat = offsetY / topCircleImageView.frame.height
         blurImageView.alpha = 1.0 - standard
