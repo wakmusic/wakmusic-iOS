@@ -42,7 +42,6 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         bind()
     }
@@ -54,15 +53,9 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 }
 
 extension ArtistDetailHeaderViewController {
-    
     func update(model: ArtistListEntity) {
-        
         let artistName: String = model.name
         let artistEngName: String = model.ID.capitalizingFirstLetter
-                
-//        var artistNameParagraphStyle = NSMutableParagraphStyle()
-//        artistNameParagraphStyle.lineHeightMultiple = 1.26
-        
         let artistNameAttributedString = NSMutableAttributedString(
             string: artistName + " " + artistEngName,
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
@@ -109,13 +102,11 @@ extension ArtistDetailHeaderViewController {
                          .paragraphStyle: artistIntroParagraphStyle,
                          .kern: -0.5]
         )
-
         self.artistIntroLabel.lineBreakMode = .byWordWrapping
         self.artistIntroLabel.attributedText = artistIntroAttributedString
         
         self.introTitleLabel.text = "소개글"
-        
-        var artistIntroDescriptionParagraphStyle = NSMutableParagraphStyle()
+        let artistIntroDescriptionParagraphStyle = NSMutableParagraphStyle()
         artistIntroDescriptionParagraphStyle.lineHeightMultiple = 1.26
 
         let artistIntroDescriptionAttributedString = NSMutableAttributedString(
@@ -132,12 +123,10 @@ extension ArtistDetailHeaderViewController {
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
-        
         self.view.layoutIfNeeded()
     }
     
     private func bind() {
-        
         let mergeObservable = Observable.merge(descriptionFrontButton.rx.tap.map { _ in () },
                                                descriptionBackButton.rx.tap.map { _ in () })
 
@@ -146,11 +135,9 @@ extension ArtistDetailHeaderViewController {
                 guard let `self` = self else { return }
                 self.flip()
             }).disposed(by: disposeBag)
-
     }
     
     private func flip() {
-        
         if self.isBack {
             self.isBack = false
             self.descriptionFrontView.isHidden = self.isBack
@@ -162,7 +149,6 @@ extension ArtistDetailHeaderViewController {
                               animations: nil,
                               completion: { _ in
             })
-
         }else{
             self.isBack = true
             self.descriptionFrontView.isHidden = self.isBack
@@ -178,7 +164,6 @@ extension ArtistDetailHeaderViewController {
     }
     
     private func configureUI() {
-        
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
         
