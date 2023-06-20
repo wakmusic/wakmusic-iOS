@@ -50,6 +50,11 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
+    private let colorView = UIView().then {
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white.withAlphaComponent(0.4)
+    }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
@@ -285,7 +290,7 @@ extension HomeViewController {
     }
     
     private func configureBlurUI() {
-        [blurImageView, glassmorphismView].forEach {
+        [blurImageView, colorView, glassmorphismView].forEach {
             chartContentView.insertSubview($0, at: 0)
             $0.snp.makeConstraints {
                 $0.left.equalToSuperview().offset(20)
@@ -363,6 +368,7 @@ extension HomeViewController: UIScrollViewDelegate {
         let standard: CGFloat = offsetY / topCircleImageView.frame.height
         blurImageView.alpha = 1.0 - standard
         glassmorphismView.alpha = min(1.0, standard + 0.8)
+        colorView.alpha = glassmorphismView.alpha
     }
 }
 
