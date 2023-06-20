@@ -171,11 +171,16 @@ extension MyPlayListViewController{
             .debug("willAddPlayList")
             .subscribe(onNext: { [weak self] (songs) in
                 guard let self = self else {return}
-                self.playState.appendSongsToPlaylist(songs)
+                if !songs.isEmpty {
+                    self.playState.appendSongsToPlaylist(songs)
+                }
                 self.input.allPlayListSelected.onNext(false)
                 self.output.state.accept(EditState(isEditing: false, force: true))
+                let message: String = songs.isEmpty ?
+                    "리스트에 곡이 없습니다." :
+                    "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다."
                 self.showToast(
-                    text: "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다.",
+                    text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             }).disposed(by: disposeBag)
