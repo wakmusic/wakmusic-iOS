@@ -15,22 +15,22 @@ import Utility
 
 public final class AfterSearchViewModel:ViewModelType {
     var disposeBag = DisposeBag()
-    var fetchSearchSongUseCase:FetchSearchSongUseCase!
+    var fetchSearchSongUseCase: FetchSearchSongUseCase!
     
-    public init(fetchSearchSongUseCase:FetchSearchSongUseCase){
+    public init(fetchSearchSongUseCase: FetchSearchSongUseCase){
         DEBUG_LOG("✅ AfterSearchViewModel 생성")
         self.fetchSearchSongUseCase = fetchSearchSongUseCase
     }
     
     public struct Input {
-        let text:BehaviorRelay<String> = BehaviorRelay<String>(value: "")
-        let notiResult:PublishRelay<SongEntity> = PublishRelay()
+        let text: BehaviorRelay<String> = BehaviorRelay<String>(value: "")
+        let notiResult: PublishRelay<SongEntity> = PublishRelay()
     }
 
     public struct Output {
-        let dataSource:BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
+        let dataSource: BehaviorRelay<[[SearchSectionModel]]> = BehaviorRelay<[[SearchSectionModel]]>(value: [])
         // 검색 후 재 검색 시 남아 있는 데이터 처리를 위한 변수
-        let isFetchStart:PublishSubject<Void> = PublishSubject()
+        let isFetchStart: PublishSubject<Void> = PublishSubject()
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
     
@@ -47,50 +47,49 @@ public final class AfterSearchViewModel:ViewModelType {
                 guard let self = self else{
                     return Observable.empty()
                 }
-                
                 let zip = Observable.zip(
                     self.fetchSearchSongUseCase.execute(type: .title, keyword: str).asObservable().catchAndReturn([]),
                     self.fetchSearchSongUseCase.execute(type: .artist, keyword: str).asObservable().catchAndReturn([])
                 )
                 let remix = self.fetchSearchSongUseCase.execute(type: .remix, keyword: str).asObservable().catchAndReturn([])
                 let result = Observable.zip(zip, remix)
-                
                 return result
             }
-            .map{ (res,r3) in
-            var results: [[SearchSectionModel]] = []
-            let (r1, r2) = res
-            var all: [SearchSectionModel] = []
-            
-            if !r1.isEmpty && ( r2.isEmpty && r3.isEmpty ) {
-                all = [
-                    SearchSectionModel(model: (.song,r1.count), items: r1)
-                ]
-            }else if !r2.isEmpty && ( r1.isEmpty && r3.isEmpty ) {
-                all = [
-                    SearchSectionModel(model: (.artist,r2.count), items: r2)
-                ]
-            }else if !r3.isEmpty && ( r1.isEmpty && r2.isEmpty ) {
-                all = [
-                    SearchSectionModel(model: (.remix,r3.count), items: r3)
-                ]
-            }else {
-                all  = [
-                    SearchSectionModel(model: (.song,r1.count), items: r1.count > 3 ? Array(r1[0...2]) : r1),
-                    SearchSectionModel(model: (.artist,r2.count), items: r2.count > 3 ? Array(r2[0...2]) : r2),
-                    SearchSectionModel(model: (.remix,r3.count), items: r3.count > 3 ? Array(r3[0...2]) : r3)
-                ]
-            }
-            
-            results.append(all)
-            results.append([SearchSectionModel(model: (.song,r1.count), items: r1)])
-            results.append([SearchSectionModel(model: (.artist,r2.count), items: r2)])
-            results.append([SearchSectionModel(model: (.remix,r3.count), items: r3)])
+            .map{ (res, r3) in
+                let (r1, r2) = res
+                var all: [SearchSectionModel] = []
+                let limitCount: Int = 3
+                
+                if !r1.isEmpty && ( r2.isEmpty && r3.isEmpty ) {
+                    all = [
+                        SearchSectionModel(model: (.song, r1.count), items: r1)
+                    ]
+                }else if !r2.isEmpty && ( r1.isEmpty && r3.isEmpty ) {
+                    all = [
+                        SearchSectionModel(model: (.artist, r2.count), items: r2)
+                    ]
+                }else if !r3.isEmpty && ( r1.isEmpty && r2.isEmpty ) {
+                    all = [
+                        SearchSectionModel(model: (.remix, r3.count), items: r3)
+                    ]
+                }else {
+                    all  = [
+                        SearchSectionModel(model: (.song, r1.count), items: r1.count > limitCount ? Array(r1[0...limitCount-1]) : r1),
+                        SearchSectionModel(model: (.artist, r2.count), items: r2.count > limitCount ? Array(r2[0...limitCount-1]) : r2),
+                        SearchSectionModel(model: (.remix, r3.count), items: r3.count > limitCount ? Array(r3[0...limitCount-1]) : r3)
+                    ]
+                }
+                
+                var results: [[SearchSectionModel]] = []
+                results.append(all)
+                results.append([SearchSectionModel(model: (.song, r1.count), items: r1)])
+                results.append([SearchSectionModel(model: (.artist, r2.count), items: r2)])
+                results.append([SearchSectionModel(model: (.remix, r3.count), items: r3)])
 
-            return results
-        }
-        .bind(to: output.dataSource)
-        .disposed(by: disposeBag)
+                return results
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
     
         NotificationCenter.default.rx.notification(.selectedSongOnSearch)
             .map({ notification -> SongEntity in
@@ -98,7 +97,6 @@ public final class AfterSearchViewModel:ViewModelType {
                     return SongEntity(id: "_", title: "", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
                 }
                 return result.1
-                
             })
             .filter({$0.id != "_"})
             .bind(to: input.notiResult)
@@ -122,5 +120,4 @@ public final class AfterSearchViewModel:ViewModelType {
         
         return output
     }
-
 }
