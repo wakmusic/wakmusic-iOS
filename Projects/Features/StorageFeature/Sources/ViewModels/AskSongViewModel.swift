@@ -15,7 +15,7 @@ import BaseFeature
 import KeychainModule
 import DataMappingModule
 
-public final class AskSongViewModel:ViewModelType {
+public final class AskSongViewModel: ViewModelType {
     var type: SuggestSongModifyType!
     var modifySongUseCase: ModifySongUseCase
     var disposeBag = DisposeBag()
@@ -43,10 +43,8 @@ public final class AskSongViewModel:ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        
         let enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let result:PublishSubject<ModifySongEntity> = PublishSubject()
-        
         let combineObservable = Observable.combineLatest(
             input.artistString,
             input.songTitleString,

@@ -155,14 +155,12 @@ public final class MyPlayListViewModel:ViewModelType {
                 return self.editPlayListOrderUseCase.execute(ids: ids)
                     .catch({ (error:Error) in
                         let wmError = error.asWMError
-                        
                         if wmError == .tokenExpired {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
                                 return Disposables.create()
                             }
                         }
-                        
                         else {
                             return Single<BaseEntity>.create{ single in
                                 single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
@@ -177,7 +175,6 @@ public final class MyPlayListViewModel:ViewModelType {
                     output.showToast.accept(model)
                     return false
                 }
-
                 return true
             }
             .withLatestFrom(output.dataSource)
@@ -210,14 +207,12 @@ public final class MyPlayListViewModel:ViewModelType {
                 return self.deletePlayListUseCase.execute(ids: ids)
                     .catch({ (error:Error) in
                         let wmError = error.asWMError
-                        
                         if wmError == .tokenExpired {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
                                 return Disposables.create()
                             }
                         }
-                        
                         else {
                             return Single<BaseEntity>.create{ single in
                                 single(.success(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다.")))
@@ -232,10 +227,7 @@ public final class MyPlayListViewModel:ViewModelType {
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedPlayLists.accept([])
                     output.showToast.accept(BaseEntity(status: 200,description: "리스트가 삭제되었습니다."))
-
-                }
-            
-                else{
+                }else{
                     output.state.accept(EditState(isEditing: false, force: true))
                     output.indexPathOfSelectedPlayLists.accept([])
                     output.showToast.accept(model)
@@ -269,7 +261,6 @@ public final class MyPlayListViewModel:ViewModelType {
                     .execute(id: key, type: .custom)
                     .asObservable()
                     .map { $0.songs }
-               
             }
             .bind(to: output.immediatelyPlaySongs)
             .disposed(by: disposeBag)

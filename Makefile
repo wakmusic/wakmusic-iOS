@@ -1,6 +1,6 @@
 generate:
 	tuist fetch
-	TUIST_DEV=1 tuist generate
+	TUIST_DEV=1 TUIST_ROOT_DIR=${PWD} tuist generate
 
 clean:
 	rm -rf **/*.xcodeproj

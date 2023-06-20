@@ -10,21 +10,17 @@ import PDFKit
 import NVActivityIndicatorView
 
 public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
-    
-    var disposeBag: DisposeBag = DisposeBag()
     
     private var viewModel: ArtistViewModel!
     private lazy var input = ArtistViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
-    
     var artistDetailComponent: ArtistDetailComponent!
+    var disposeBag: DisposeBag = DisposeBag()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
         bindRx()
     }
@@ -46,9 +42,7 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
 }
 
 extension ArtistViewController {
-    
     private func bindRx() {
-        
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] _ in
@@ -82,7 +76,7 @@ extension ArtistViewController {
     }
     
     private func configureUI() {
-        
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
@@ -102,9 +96,7 @@ extension ArtistViewController {
 }
 
 extension ArtistViewController: WaterfallLayoutDelegate {
-
     public func collectionView(_ collectionView: UICollectionView, layout: WaterfallLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
         let originWidth: CGFloat = 106.0
         let originHeight: CGFloat = 130.0
         let rate: CGFloat = originHeight/max(1.0, originWidth)
@@ -118,7 +110,6 @@ extension ArtistViewController: WaterfallLayoutDelegate {
         switch indexPath.item {
         case 0, 2:
             return CGSize(width: width, height: (imageHeight) + (width / 2) + spacingWithNameHeight)
-
         default:
             return CGSize(width: width, height: (imageHeight) + spacingWithNameHeight)
         }

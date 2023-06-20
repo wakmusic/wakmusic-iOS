@@ -22,7 +22,7 @@ final public class RequestViewModel:ViewModelType {
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
-        let pressWithdraw:PublishSubject<Void> = PublishSubject()
+        let pressWithdraw: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -30,9 +30,8 @@ final public class RequestViewModel:ViewModelType {
     }
 
     public init(
-        withDrawUserInfoUseCase:WithdrawUserInfoUseCase
+        withDrawUserInfoUseCase: WithdrawUserInfoUseCase
     ) {
-        
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }

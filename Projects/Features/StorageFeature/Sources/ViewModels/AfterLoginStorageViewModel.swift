@@ -16,19 +16,19 @@ import CommonFeature
 import NaverThirdPartyLogin
 import KeychainModule
 
-final public class AfterLoginViewModel:ViewModelType {
+final public class AfterLoginViewModel: ViewModelType {
 
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
-        let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
-        let pressLogOut:PublishRelay<Void> = PublishRelay()
+        let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let pressLogOut: PublishRelay<Void> = PublishRelay()
     }
 
     public struct Output {
-        let state:BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: true))
+        let state: BehaviorRelay<EditState> = BehaviorRelay(value:EditState(isEditing: false, force: true))
         let userInfo: BehaviorRelay<UserInfo?> = BehaviorRelay(value: nil)
     }
 
@@ -36,11 +36,10 @@ final public class AfterLoginViewModel:ViewModelType {
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
-        DEBUG_LOG("✅ AfterLoginViewModel 생성")
+        DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
     public func transform(from input: Input) -> Output {
-        
         let output = Output()
 
         //MARK: 앱 접속 후 최초 1회는 서버에서 유저 정보를 가져와 동기화 한다. 삭제 후 재설치 한 경우는 제외 함.
@@ -66,32 +65,22 @@ final public class AfterLoginViewModel:ViewModelType {
         
         
         input.pressLogOut.subscribe(onNext: { [weak self] in
-            
             guard let self = self else{
                 return
             }
-            
             let platform = Utility.PreferenceManager.userInfo?.platform
             
             if platform == "naver" {
-                
                 self.naverLoginInstance?.resetToken()
-            }
-            else if platform == "apple" {
+            }else if platform == "apple" {
+                
+            }else{
                 
             }
-            else{
-                
-            }
-            
             let keychain = KeychainImpl()
             keychain.delete(type: .accessToken)
             Utility.PreferenceManager.userInfo = nil
-            
-          
-            
         }).disposed(by: disposeBag)
-        
         
         return output
     }

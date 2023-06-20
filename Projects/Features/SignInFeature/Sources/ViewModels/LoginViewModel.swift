@@ -26,11 +26,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
     let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    let naverToken: PublishRelay<String> = PublishRelay()
-    let googleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
-    let appleToken: PublishRelay<(ProviderType, String)> = PublishRelay()
+    let oauthToken: PublishRelay<(ProviderType, String)> = PublishRelay()
     let fetchedWMToken: PublishRelay<String> = PublishRelay()
- 
     let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
     let keychain = KeychainImpl()
 
@@ -58,34 +55,16 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
     public func transform(from input: Input) -> Output {
         let showErrorToast = PublishRelay<String>()
-
         inputTransfrom(input: input)
-
-        // MARK: NaverToken WMToken으로 치환
-        naverToken
-            .debug("naverToken")
-            .filter{ !$0.isEmpty }
-            .withUnretained(self)
-            .flatMap { (viewModel, token) -> Observable<AuthLoginEntity> in
-                return viewModel.fetchTokenUseCase.execute(token: token, type: .naver)
-                    .catchAndReturn(AuthLoginEntity(token: ""))
-                    .asObservable()
-            }
-            .map { $0.token }
-            .filter { !$0.isEmpty }
-            .do(onNext: {
-                self.keychain.save(type: .accessToken, value: $0)
-            })
-            .bind(to: fetchedWMToken)
-            .disposed(by: disposeBag)
         
-        // MARK: GoogleToken, AppleToken WMToken으로 치환
-        [googleToken, appleToken].forEach {
-            $0
+        // MARK: (Naver, Google, Apple)Token WMToken으로 치환
+        oauthToken
+            .debug("🚚 oauthToken")
             .filter{ !$0.1.isEmpty }
             .withUnretained(self)
             .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
-                return viewModel.fetchTokenUseCase.execute(token: id.1, type: id.0)
+                let (providerType, token) = id
+                return viewModel.fetchTokenUseCase.execute(token: token, type: providerType)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
@@ -96,11 +75,10 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             })
             .bind(to: fetchedWMToken)
             .disposed(by: disposeBag)
-        }
 
         // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
         fetchedWMToken
-            .debug("test")
+            .debug("🚚 fetchedWMToken")
             .flatMap { _ -> Observable<AuthUserInfoEntity> in
                 return self.fetchUserInfoUseCase.execute()
                     .catchAndReturn(
@@ -158,7 +136,7 @@ extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
-            googleToken.accept((.google, id))
+            oauthToken.accept((.google, id))
         }
     }
 }
@@ -169,14 +147,14 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        naverToken.accept(accessToken)
+        oauthToken.accept((.naver, accessToken))
     }
 
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
         if !accessToken { return }
         guard let accessToken = naverLoginInstance?.accessToken else { return }
-        naverToken.accept(accessToken)
+        oauthToken.accept((.naver, accessToken))
     }
     
     public func oauth20ConnectionDidFinishDeleteToken() {
@@ -198,7 +176,7 @@ extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationContr
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
            let rawData =  credential.identityToken {
             let token = String(decoding: rawData, as: UTF8.self)
-            appleToken.accept((.apple, token))
+            oauthToken.accept((.apple, token))
         }
     }
 
