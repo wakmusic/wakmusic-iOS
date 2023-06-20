@@ -37,10 +37,11 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let colorView = UIView().then {
+    private let blurImageView = UIImageView().then {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
-        $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        $0.image = DesignSystemAsset.Home.blurBg.image
+        $0.contentMode = .scaleAspectFill
     }
     private let glassmorphismView = GlassmorphismView().then {
         $0.setCornerRadius(12)
@@ -284,7 +285,7 @@ extension HomeViewController {
     }
     
     private func configureBlurUI() {
-        [glassmorphismView, colorView].forEach {
+        [blurImageView, glassmorphismView].forEach {
             chartContentView.insertSubview($0, at: 0)
             $0.snp.makeConstraints {
                 $0.left.equalToSuperview().offset(20)
@@ -352,6 +353,16 @@ extension HomeViewController {
         
         latestSongAllButton.isSelected = true
         scrollView.refreshControl = refreshControl
+        scrollView.delegate = self
+    }
+}
+
+extension HomeViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
+        let standard: CGFloat = offsetY / topCircleImageView.frame.height
+        blurImageView.alpha = 1.0 - standard
+        glassmorphismView.alpha = min(1.0, standard + 0.8)
     }
 }
 
