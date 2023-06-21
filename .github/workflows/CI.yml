@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+env:
+  CACHED_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+
+jobs:
+  prepare-ci:
+    name: Prepare CI
+    runs-on: macOS-latest
+    outputs:
+      NAME: ${{ steps.get_name.outputs.NAME }}
+      CI-NEEDED: ${{ steps.check_ci_needed.outputs.CI-NEEDED }}
+      WROKING-PATH: ${{ steps.get_working_directory.outputs.PATH }}
+      TESTS-EXISTENCE: ${{ steps.check_tests_existence.outputs.files_exists }}
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Get Branch Name
+      uses: tj-actions/branch-names@v6.2
+      id: branch_name
+
+    - name: Get Type
+      id: get_type
+      run: |
+        echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 1
+        echo "TYPE=$(echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 1)" >> $GITHUB_OUTPUT
+
+    - name: Get Name
+      id: get_name
+      run: |
+        echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 2
+        echo "NAME=$(echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 2)" >> $GITHUB_OUTPUT
+
+    - name: Check CI Needed
+      id: check_ci_needed
+      run: |
+        echo ${{steps.get_type.outputs.TYPE == 'Application' || steps.get_type.outputs.TYPE == 'Modules' || steps.get_type.outputs.TYPE == 'Services'}}
+        echo "CI-NEEDED=${{steps.get_type.outputs.TYPE == 'Application' || steps.get_type.outputs.TYPE == 'Modules' || steps.get_type.outputs.TYPE == 'Services'}}" >> $GITHUB_OUTPUT
+
+    - name: Get Working Directory
+      id: get_working_directory
+      if: steps.check_ci_needed.outputs.CI-NEEDED == 'true'
+      run: |
+        cd ${{ steps.get_type.outputs.TYPE }}
+        if [ ${{ steps.get_type.outputs.TYPE }} != "Application" ]
+        then
+          cd ${{ steps.get_name.outputs.NAME }}
+        fi
+        echo "PATH=$(pwd)" >> $GITHUB_OUTPUT
+
+    - name: Check tests existence
+      id: check_tests_existence
+      if: steps.check_ci_needed.outputs.CI-NEEDED == 'true'
+      uses: andstor/file-existence-action@v1
+      with:
+        files: "${{ steps.get_working_directory.outputs.PATH }}/Tests"
+
+
+
+
+  build:
+    name: ⚡️ Build
+    runs-on: macOS-latest
+    needs: prepare-ci
+    if: needs.prepare-ci.outputs.CI-NEEDED == 'true'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install needs
+      run: |
+        bash <(curl -Ls https://install.tuist.io)
+
+    - name: Compute dependency cache key
+      id: compute_hash
+      run: echo "hash=${{ hashFiles('Tuist/Dependencies.swift') }}" >> $GITHUB_OUTPUT
+
+    - name: Check dependency cache
+      uses: actions/cache@v3
+      id: cache_dependencies
+      with:
+        path: ${{ env.CACHED_DEPENDENCY_PATHS }}
+        key: ${{ steps.compute_hash.outputs.hash }}
+
+    - name: Install dependencies
+      if: steps.cache_dependencies.outputs.cache-hit != 'true'
+      run: tuist fetch
+
+    - name: build codes
+      working-directory: ${{ needs.prepare-ci.outputs.WROKING-PATH }}
+      run: tuist build
+
+
+
+  test:
+    name: 🧪 Test
+    runs-on: macOS-latest
+    needs: [prepare-ci]
+    if: needs.prepare-ci.outputs.TESTS-EXISTENCE == 'true'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install needs
+      run: |
+        bash <(curl -Ls https://install.tuist.io)
+
+    - name: Compute dependency cache key
+      id: compute_hash
+      run: echo "hash=${{ hashFiles('Tuist/Dependencies.swift') }}" >> $GITHUB_OUTPUT
+
+    - name: Check dependency cache
+      uses: actions/cache@v3
+      id: cache_dependencies
+      with:
+        path: ${{ env.CACHED_DEPENDENCY_PATHS }}
+        key: ${{ steps.compute_hash.outputs.hash }}
+
+    - name: Install dependencies
+      if: steps.cache_dependencies.outputs.cache-hit != 'true'
+      run: tuist fetch
+
+    - name: test codes
+      working-directory: ${{ needs.prepare-ci.outputs.WROKING-PATH }}
+      run: tuist test ${{ needs.prepare-ci.outputs.NAME }}Test
+
