@@ -37,17 +37,17 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let colorView = UIView().then {
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-    }
     private let glassmorphismView = GlassmorphismView().then {
         $0.setCornerRadius(12)
         $0.setTheme(theme: .light)
         $0.setDistance(100)
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
+    }
+    private let colorView = UIView().then {
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white.withAlphaComponent(0.4)
     }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
