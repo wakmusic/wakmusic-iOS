@@ -39,14 +39,13 @@ extension ContractType{
 }
 
 public final class ContractViewController: UIViewController, ViewControllerFromStoryBoard {
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
-    var type:ContractType = .privacy
+    var type: ContractType = .privacy
     var disposeBag = DisposeBag()
     
     public override func viewDidLoad() {
@@ -59,7 +58,7 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
         DEBUG_LOG("❌ \(Self.self) deinit")
     }
 
-    public static func viewController(type:ContractType) -> ContractViewController {
+    public static func viewController(type: ContractType) -> ContractViewController {
         let viewController = ContractViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.type = type
         return viewController
@@ -68,19 +67,15 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
 
 extension ContractViewController{
     private func bindRx(){
-        closeButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
-                owner.dismiss(animated: true)
-            })
-            .disposed(by: disposeBag)
-         
-        confirmButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
-                owner.dismiss(animated: true)
-            })
-            .disposed(by: disposeBag)
+        Observable.merge(
+            closeButton.rx.tap.map { _ in () },
+            confirmButton.rx.tap.map { _ in () }
+        )
+        .withUnretained(self)
+        .subscribe(onNext: { (owner, _) in
+            owner.dismiss(animated: true)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func loadPdf(document:PDFDocument){
