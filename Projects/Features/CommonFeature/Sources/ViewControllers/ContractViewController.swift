@@ -101,18 +101,22 @@ extension ContractViewController{
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
         
+        confirmButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         confirmButton.layer.cornerRadius = 12
         confirmButton.clipsToBounds = true
-        confirmButton.setAttributedTitle(NSMutableAttributedString(string:"확인",
-                                                                attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                                             .foregroundColor: DesignSystemAsset.GrayColor.gray25.color ]), for: .normal)
-        
-        confirmButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
+        confirmButton.setAttributedTitle(NSMutableAttributedString(
+            string: "확인",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                         .kern: -0.5
+            ]
+        ), for: .normal)
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         titleLabel.text = type.title
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        titleLabel.setLineSpacing(kernValue: -0.5)
         
         DispatchQueue.global(qos: .default).async {
             if let url = URL(string: self.type.url), let document = PDFDocument(url: url) {
