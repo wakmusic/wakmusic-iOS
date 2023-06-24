@@ -11,21 +11,16 @@ import Utility
 import RxSwift
 import RxCocoa
 import RxRelay
+import CommonFeature
 
 public final class QnaContentViewController: UIViewController, ViewControllerFromStoryBoard {
-    
     @IBOutlet weak var tableView: UITableView!
     
-    
     var viewModel:QnaContentViewModel!
-
-    
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
-        // Do any additional setup after loading the view.
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -33,24 +28,22 @@ public final class QnaContentViewController: UIViewController, ViewControllerFro
         navigationController?.interactivePopGestureRecognizer?.delegate = nil //스와이프로 뒤로가기
     }
     
-    
-
-    public static func viewController(viewModel:QnaContentViewModel) -> QnaContentViewController {
+    public static func viewController(viewModel: QnaContentViewModel) -> QnaContentViewController {
         let viewController = QnaContentViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        
-        viewController.viewModel = viewModel
+                viewController.viewModel = viewModel
         return viewController
     }
-
 }
 
-
 extension QnaContentViewController{
-    
     private func configureUI(){
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        let space = APP_HEIGHT() - 106 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
+        let height = space / 3 * 2
+        let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+        warningView.text = "자주 묻는 질문이 없습니다."
+        tableView.tableFooterView = viewModel.dataSource.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         tableView.reloadData()
     }
@@ -63,7 +56,6 @@ extension QnaContentViewController{
 }
 
 extension QnaContentViewController:UITableViewDataSource{
-    
     public func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.dataSource.count
     }
