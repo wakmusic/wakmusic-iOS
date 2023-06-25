@@ -35,6 +35,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongWwgButton: UIButton!
     @IBOutlet weak var latestSongIseButton: UIButton!
     @IBOutlet weak var latestSongGomButton: UIButton!
+    @IBOutlet weak var latestSongAcademyButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
     private let glassmorphismView = GlassmorphismView().then {
@@ -88,7 +89,8 @@ extension HomeViewController {
             latestSongAllButton.rx.tap.map { _ -> NewSongGroupType in .all },
             latestSongWwgButton.rx.tap.map { _ -> NewSongGroupType in .woowakgood },
             latestSongIseButton.rx.tap.map { _ -> NewSongGroupType in .isedol },
-            latestSongGomButton.rx.tap.map { _ -> NewSongGroupType in .gomem }
+            latestSongGomButton.rx.tap.map { _ -> NewSongGroupType in .gomem },
+            latestSongAcademyButton.rx.tap.map { _ -> NewSongGroupType in .academy }
         )
         .withLatestFrom(input.newSongTypeTapped) { ($0, $1) }
         .filter{ (currentSelectedType, previousType) in
@@ -108,6 +110,8 @@ extension HomeViewController {
                 self.latestSongIseButton.isSelected = false
             case .gomem:
                 self.latestSongGomButton.isSelected = false
+            case .academy:
+                self.latestSongAcademyButton.isSelected = false
             }
 
             switch currentSelectedType {
@@ -116,22 +120,31 @@ extension HomeViewController {
                 self.latestSongWwgButton.isEnabled = false
                 self.latestSongIseButton.isEnabled = false
                 self.latestSongGomButton.isEnabled = false
+                self.latestSongAcademyButton.isSelected = false
             case .woowakgood:
                 self.latestSongAllButton.isEnabled = false
                 self.latestSongWwgButton.isSelected = true
                 self.latestSongIseButton.isEnabled = false
                 self.latestSongGomButton.isEnabled = false
+                self.latestSongAcademyButton.isSelected = false
             case .isedol:
                 self.latestSongAllButton.isEnabled = false
                 self.latestSongWwgButton.isEnabled = false
                 self.latestSongIseButton.isSelected = true
                 self.latestSongGomButton.isEnabled = false
-
+                self.latestSongAcademyButton.isSelected = false
             case .gomem:
                 self.latestSongAllButton.isEnabled = false
                 self.latestSongWwgButton.isEnabled = false
                 self.latestSongIseButton.isEnabled = false
                 self.latestSongGomButton.isSelected = true
+                self.latestSongAcademyButton.isSelected = false
+            case .academy:
+                self.latestSongAllButton.isEnabled = false
+                self.latestSongWwgButton.isEnabled = false
+                self.latestSongIseButton.isEnabled = false
+                self.latestSongGomButton.isSelected = false
+                self.latestSongAcademyButton.isSelected = true
             }
             self.activityIndicator.startAnimating()
         })
@@ -218,6 +231,7 @@ extension HomeViewController {
                 self?.latestSongWwgButton.isEnabled = true
                 self?.latestSongIseButton.isEnabled = true
                 self?.latestSongGomButton.isEnabled = true
+                self?.latestSongAcademyButton.isEnabled = true
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
@@ -330,7 +344,7 @@ extension HomeViewController {
         )
         latestSongLabel.attributedText = latestSongAttributedString
         
-        let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton]
+        let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton, latestSongAcademyButton]
         
         for (model, button) in zip(NewSongGroupType.allCases, buttons) {
             let attributedString = NSMutableAttributedString(
