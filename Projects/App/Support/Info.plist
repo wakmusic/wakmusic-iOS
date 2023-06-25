@@ -78,6 +78,8 @@
 		<string>$(NAVER_URL_SCHEME)</string>
 		<key>WAKENTER_BASE_URL</key>
 		<string>$(WAKENTER_BASE_URL)</string>
+		<key>WMDOMAIN_APP</key>
+		<string>$(WMDOMAIN_APP)</string>
 		<key>WMDOMAIN_ARTIST</key>
 		<string>$(WMDOMAIN_ARTIST)</string>
 		<key>WMDOMAIN_AUTH</key>
@@ -116,8 +118,6 @@
 		<string>$(WMDOMAIN_USER)</string>
 		<key>WM_APP_ID</key>
 		<string>$(WM_APP_ID)</string>
-		<key>WMDOMAIN_APP</key>
-		<string>$(WMDOMAIN_APP)</string>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -138,8 +138,6 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UIBackgroundModes</key>
-	<array/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
