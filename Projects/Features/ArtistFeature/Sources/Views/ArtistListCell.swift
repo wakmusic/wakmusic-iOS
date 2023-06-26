@@ -31,11 +31,13 @@ extension ArtistListCell {
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
                          .kern: -0.5]
         )
+        let originImageURLString: String = WMImageAPI.fetchArtistWithRound(id: model.ID, version: model.imageRoundVersion).toString
+        let encodedImageURLString: String = originImageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? originImageURLString
         
         artistLabel.attributedText = artistNameAttributedString
         artistLabel.textAlignment = .center
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithRound(id: model.ID, version: model.imageRoundVersion).toString),
+            with: URL(string: encodedImageURLString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
