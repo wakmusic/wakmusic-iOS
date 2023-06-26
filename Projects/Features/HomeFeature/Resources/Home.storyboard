@@ -256,7 +256,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="w41-rM-Ron">
-                                                        <rect key="frame" x="217" y="0.0" width="156" height="51"/>
+                                                        <rect key="frame" x="142" y="0.0" width="231" height="51"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71V-cg-e0X">
                                                                 <rect key="frame" x="0.0" y="0.0" width="24" height="51"/>
@@ -289,6 +289,11 @@
                                                                 </constraints>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <state key="normal" title="고멤"/>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pNY-GS-QA0">
+                                                                <rect key="frame" x="168" y="0.0" width="63" height="51"/>
+                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                <state key="normal" title="아카데미"/>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -434,6 +439,7 @@
                         <outlet property="chartMoreButton" destination="5ri-c7-NeA" id="82A-RU-zwg"/>
                         <outlet property="chartTitleLabel" destination="Ha5-D0-Yv1" id="A7L-vj-gqJ"/>
                         <outlet property="collectionView" destination="ONM-XL-Wa9" id="lVA-q2-zqY"/>
+                        <outlet property="latestSongAcademyButton" destination="pNY-GS-QA0" id="ehp-uh-cXu"/>
                         <outlet property="latestSongAllButton" destination="71V-cg-e0X" id="dMZ-M9-LQ7"/>
                         <outlet property="latestSongGomButton" destination="Cz2-tR-mZQ" id="a0U-ST-6m8"/>
                         <outlet property="latestSongIseButton" destination="Mfx-m4-38A" id="9rJ-V9-UUN"/>

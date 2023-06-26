@@ -19,62 +19,50 @@ import NVActivityIndicatorView
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,SongCartViewType  {
 
     @IBOutlet weak var tabBarView: UIView!
-    
     @IBOutlet weak var fakeView: UIView!
-    
-    public var songCartView: SongCartView!
-    public var bottomSheetView: BottomSheetView!
-
     @IBOutlet weak var indicator: NVActivityIndicatorView!
     
-    
-
-    var viewModel:AfterSearchViewModel!
-    var afterSearchContentComponent:AfterSearchContentComponent!
-    var containSongsComponent:ContainSongsComponent!
-    
+    var viewModel: AfterSearchViewModel!
+    var afterSearchContentComponent: AfterSearchContentComponent!
+    var containSongsComponent: ContainSongsComponent!
     let disposeBag = DisposeBag()
     
-    
-    private var viewControllers: [UIViewController] = [UIViewController(),UIViewController(),UIViewController(),UIViewController()]
+    private var viewControllers: [UIViewController] = [UIViewController(), UIViewController(), UIViewController(), UIViewController()]
     lazy var input = AfterSearchViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
+    public var songCartView: SongCartView!
+    public var bottomSheetView: BottomSheetView!
     let playState = PlayState.shared
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        // Do any additional setup after loading the view.
+        bindRx()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.scrollToPage(.at(index: 0), animated: false)
-
     }
     
 
-    public static func viewController(afterSearchContentComponent:AfterSearchContentComponent,containSongsComponent:ContainSongsComponent,viewModel:AfterSearchViewModel) -> AfterSearchViewController {
+    public static func viewController(
+        afterSearchContentComponent: AfterSearchContentComponent,
+        containSongsComponent: ContainSongsComponent,
+        viewModel: AfterSearchViewModel
+    ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
-        
         viewController.viewModel = viewModel
         viewController.afterSearchContentComponent = afterSearchContentComponent
         viewController.containSongsComponent = containSongsComponent
-     
-        
-        
         return viewController
     }
-
 }
 
 extension AfterSearchViewController {
-    
     private func configureUI() {
-        
         self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.dataSource = self //dateSource
@@ -87,7 +75,6 @@ extension AfterSearchViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
-        
         
         // 버튼 글씨 커스텀
         bar.buttons.customize { (button) in
@@ -102,73 +89,47 @@ extension AfterSearchViewController {
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
-        
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
-
-
-    
-        bindRx()
-
-        
     }
     
     private func bindRx(){
-        
         output.dataSource
             .skip(1)
             .subscribe(onNext: { [weak self] result in
-            
-            guard let self = self else{
-                return
-            }
-            
-
-            
-            guard let comp = self.afterSearchContentComponent else {
-                return
-            }
-            
-            self.viewControllers = [
-                comp.makeView(type: .all, dataSource: result[0]),
-                comp.makeView(type: .song, dataSource: result[1]),
-                comp.makeView(type: .artist, dataSource: result[2]),
-                comp.makeView(type: .remix, dataSource: result[3])
-            ]
-            
-            self.indicator.stopAnimating()
-                
-            self.reloadData()
-            
-            
-        })
-        .disposed(by: disposeBag)
-        
+                guard let self = self else{
+                    return
+                }
+                guard let comp = self.afterSearchContentComponent else {
+                    return
+                }
+                self.viewControllers = [
+                    comp.makeView(type: .all, dataSource: result[0]),
+                    comp.makeView(type: .song, dataSource: result[1]),
+                    comp.makeView(type: .artist, dataSource: result[2]),
+                    comp.makeView(type: .remix, dataSource: result[3])
+                ]
+                self.indicator.stopAnimating()
+                self.reloadData()
+            })
+            .disposed(by: disposeBag)
         
         output.isFetchStart
             .subscribe(onNext: { [weak self] _ in
-          
-            guard let self = self else{
-                return
-            }
-            
+                guard let self = self else{
+                    return
+                }
                 self.indicator.startAnimating()
-                
-            guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
-                return
-            }
-           
+                guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
+                    return
+                }
                 child.tableView.isHidden = true // 검색 시작 시 테이블 뷰 숨김
-            
-            
-
-        })
-        .disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         output.songEntityOfSelectedSongs
             .skip(1)
             .subscribe(onNext: { [weak self] (songs:[SongEntity])  in
                 guard let self = self else {return}
-                
                 if !songs.isEmpty  {
                     self.showSongCart(in: self.view,
                                       type: .searchSong,
@@ -182,7 +143,6 @@ extension AfterSearchViewController {
             })
             .disposed(by: disposeBag)
     }
-    
     
     func clearSongCart(){
         self.output.songEntityOfSelectedSongs.accept([])
@@ -223,8 +183,6 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
            return TMBarItem(title: title)
         }
     }
-    
-    
 }
 
 extension AfterSearchViewController: SongCartViewDelegate {

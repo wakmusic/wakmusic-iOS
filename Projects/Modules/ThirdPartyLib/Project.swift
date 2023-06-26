@@ -12,5 +12,7 @@ let project = Project.makeModule(
         .SPM.RxSwift,
         .SPM.RxMoya,
         .SPM.Moya,
+        .SPM.FirebaseAnalytics,
+        .SPM.FirebaseCrashlytics
     ]
 )

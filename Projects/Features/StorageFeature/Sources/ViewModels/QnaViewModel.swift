@@ -39,7 +39,6 @@ final public class QnaViewModel:ViewModelType {
         let output = Output()
         
         let zip1 = fetchQnaCategoriesUseCase.execute().catchAndReturn([])
-            .filter({!$0.isEmpty})
             .map({
                 var result:[QnaCategoryEntity] = [QnaCategoryEntity(category: "전체    ")]
 
@@ -55,7 +54,6 @@ final public class QnaViewModel:ViewModelType {
             .asObservable()
         
         let zip2 = fetchQnaUseCase.execute().catchAndReturn([])
-            .filter({!$0.isEmpty})
             .asObservable()
         
         Observable.zip(zip1, zip2)

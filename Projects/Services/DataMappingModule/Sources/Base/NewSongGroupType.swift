@@ -13,6 +13,7 @@ public enum NewSongGroupType: CaseIterable {
     case woowakgood
     case isedol
     case gomem
+    case academy
 
     public var apiKey: String {
         switch self {
@@ -24,6 +25,8 @@ public enum NewSongGroupType: CaseIterable {
             return "isedol"
         case .gomem:
             return "gomem"
+        case .academy:
+            return "academy"
         }
     }
 
@@ -37,6 +40,8 @@ public enum NewSongGroupType: CaseIterable {
             return "이세돌"
         case .gomem:
             return "고멤"
+        case .academy:
+            return "아카데미"
         }
     }
 }

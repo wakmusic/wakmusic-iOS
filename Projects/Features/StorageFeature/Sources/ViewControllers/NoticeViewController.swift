@@ -12,6 +12,7 @@ import RxSwift
 import RxCocoa
 import DesignSystem
 import NVActivityIndicatorView
+import CommonFeature
 
 public class NoticeViewController: UIViewController, ViewControllerFromStoryBoard {
     
@@ -51,8 +52,13 @@ extension NoticeViewController {
 
         viewModel.output.dataSource
             .skip(1)
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] (model) in
                 self?.indicator.stopAnimating()
+                let space = APP_HEIGHT() - 48 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
+                let height = space / 3 * 2
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+                warningView.text = "공지사항이 없습니다."
+                self?.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
             })
             .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)

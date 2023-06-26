@@ -273,6 +273,7 @@
                         <outlet property="artistGroupLabel" destination="he6-oI-bGB" id="uQN-HD-EDe"/>
                         <outlet property="artistImageView" destination="meV-gF-5BZ" id="dUg-HZ-EFX"/>
                         <outlet property="artistIntroLabel" destination="ne5-kV-2su" id="I4d-LH-IDA"/>
+                        <outlet property="artistIntroLabelBottomConstraint" destination="FNe-2r-Avv" id="7bR-jq-6uI"/>
                         <outlet property="artistNameLabel" destination="7rb-8Q-BEe" id="JdJ-eX-T81"/>
                         <outlet property="artistNameLabelHeight" destination="zPQ-dD-b7K" id="Tv4-wl-ZF4"/>
                         <outlet property="descriptionBackButton" destination="oAc-YA-UoU" id="yYA-wc-8Gr"/>

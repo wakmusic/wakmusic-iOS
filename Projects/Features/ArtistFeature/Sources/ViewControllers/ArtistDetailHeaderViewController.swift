@@ -25,6 +25,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var artistNameLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var artistGroupLabel: UILabel!
     @IBOutlet weak var artistIntroLabel: UILabel!
+    @IBOutlet weak var artistIntroLabelBottomConstraint: NSLayoutConstraint!
     
     //Description Back
     @IBOutlet weak var descriptionBackView: UIView!
@@ -93,7 +94,7 @@ extension ArtistDetailHeaderViewController {
         self.artistGroupLabel.text = model.group + (model.graduated ? " · 졸업" : "")
         
         let artistIntroParagraphStyle = NSMutableParagraphStyle()
-        artistIntroParagraphStyle.lineHeightMultiple = 1.44
+        artistIntroParagraphStyle.lineHeightMultiple = (APP_WIDTH() < 375) ? 0 : 1.44
         
         let artistIntroAttributedString = NSMutableAttributedString(
             string: model.title,
@@ -102,8 +103,9 @@ extension ArtistDetailHeaderViewController {
                          .paragraphStyle: artistIntroParagraphStyle,
                          .kern: -0.5]
         )
-        self.artistIntroLabel.lineBreakMode = .byWordWrapping
+        self.artistIntroLabel.lineBreakMode = .byCharWrapping
         self.artistIntroLabel.attributedText = artistIntroAttributedString
+        self.artistIntroLabelBottomConstraint.constant = (APP_WIDTH() < 375) ? 0 : 16
         
         self.introTitleLabel.text = "소개글"
         let artistIntroDescriptionParagraphStyle = NSMutableParagraphStyle()
@@ -177,18 +179,21 @@ extension ArtistDetailHeaderViewController {
                 
         artistGroupLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         artistGroupLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-
+        artistGroupLabel.setLineSpacing(kernValue: -0.5)
+        
         artistIntroLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         artistIntroLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         artistIntroLabel.textAlignment = .left
-        
+
         introTitleLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 14)
         introTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        
+        introTitleLabel.setLineSpacing(kernValue: -0.5)
+
         introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         introDescriptionLabel.textAlignment = .left
         introDescriptionLabel.lineBreakMode = .byWordWrapping
+        introDescriptionLabel.setLineSpacing(kernValue: -0.5)
 
         scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
     }
