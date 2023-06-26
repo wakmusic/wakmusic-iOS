@@ -37,6 +37,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var latestSongAcademyButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var latestSongEmptyLabel: UILabel!
     
     private let blurImageView = UIImageView().then {
         $0.layer.cornerRadius = 12
@@ -224,7 +225,7 @@ extension HomeViewController {
         
         output.newSongDataSource
             .skip(1)
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] (model) in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator.stopAnimating()
@@ -233,6 +234,7 @@ extension HomeViewController {
                 self?.latestSongIseButton.isEnabled = true
                 self?.latestSongGomButton.isEnabled = true
                 self?.latestSongAcademyButton.isEnabled = true
+                self?.latestSongEmptyLabel.isHidden = !model.isEmpty
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
@@ -364,8 +366,12 @@ extension HomeViewController {
             )
             button.setAttributedTitle(selectedAttributedString, for: .selected)
         }
-        
         latestSongAllButton.isSelected = true
+        latestSongEmptyLabel.isHidden = true
+        latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
+        latestSongEmptyLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        latestSongEmptyLabel.setLineSpacing(kernValue: -0.5)
+        latestSongEmptyLabel.textAlignment = .center
         scrollView.refreshControl = refreshControl
         scrollView.delegate = self
     }
