@@ -107,8 +107,8 @@ extension ContainSongsViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] (result:AddSongEntity) in
                 guard let self = self else {return}
-                
                 self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                
                 if result.status == 401 {
                     LOGOUT()
                     PlayState.shared.switchPlayerMode(to: .mini)
@@ -116,7 +116,6 @@ extension ContainSongsViewController {
                         guard let self else {return}
                         self.delegate?.tokenExpired()
                     }
-                    
                 }else{
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
