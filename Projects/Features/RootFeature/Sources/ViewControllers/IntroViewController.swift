@@ -94,7 +94,7 @@ extension IntroViewController {
                         
                     case .event:
                         textPopupVc = TextPopupViewController.viewController(
-                            text:"\(entity.title)\n\(entity.description)",
+                            text:"\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
                             allowsDragAndTapToDismiss: false,
                             completion: {
