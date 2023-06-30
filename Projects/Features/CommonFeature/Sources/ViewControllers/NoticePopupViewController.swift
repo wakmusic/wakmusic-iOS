@@ -106,7 +106,7 @@ extension NoticePopupViewController {
         ignoreButton.setAttributedTitle(ignoreButtonAttributedString, for: .normal)
 
 
-        let confirmButtonAttributedString = NSMutableAttributedString.init(string: "확인")
+        let confirmButtonAttributedString = NSMutableAttributedString.init(string: "닫기")
         confirmButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                                                      .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
                                                      .kern: -0.5],
@@ -126,6 +126,7 @@ extension NoticePopupViewController {
         collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: Bundle.module), forCellWithReuseIdentifier: "NoticeCollectionViewCell")
         collectionView.isPagingEnabled = true
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        collectionView.bounces = false
     }
 }
 
