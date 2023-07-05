@@ -35,9 +35,7 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
 }
 
 extension ChartViewController {
-    
     private func configureUI() {
-        
         self.dataSource = self
         let bar = TMBar.ButtonBar()
         
@@ -71,13 +69,9 @@ extension ChartViewController {
         addBar(bar, dataSource: self, at: .custom(view: self.tabBarContentView, layout: nil))
         bar.layer.addBorder([.bottom], color:DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4), height: 1)
     }
-
-    
-
 }
 
 extension ChartViewController: PageboyViewControllerDataSource, TMBarDataSource {
-    
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         switch index {
         case 0:
@@ -106,5 +100,19 @@ extension ChartViewController: PageboyViewControllerDataSource, TMBarDataSource 
     
     public func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
         return nil
+    }
+}
+
+extension ChartViewController {
+    public func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            let current: Int = self.currentIndex ?? 0
+            let chartContent = self.viewControllers.compactMap { $0 }
+            guard chartContent.count > current else { return }
+            chartContent[current].scrollToTop()
+        }
     }
 }

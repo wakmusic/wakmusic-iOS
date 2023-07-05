@@ -175,3 +175,9 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }
+
+extension BeforeSearchContentViewController {
+    func scrollToTop() {
+        tableView.setContentOffset(.zero, animated: true)
+    }
+}

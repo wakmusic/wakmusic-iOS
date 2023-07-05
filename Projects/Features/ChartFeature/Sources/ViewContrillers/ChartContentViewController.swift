@@ -182,3 +182,10 @@ extension ChartContentViewController: SongCartViewDelegate {
         }
     }
 }
+
+extension ChartContentViewController {
+    public func scrollToTop() {
+        guard !output.dataSource.value.isEmpty else { return }
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
+}

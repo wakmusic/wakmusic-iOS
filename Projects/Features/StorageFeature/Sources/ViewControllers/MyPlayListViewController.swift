@@ -309,3 +309,11 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
         self.showEntryKitModal(content: vc, height: 296)
     }    
 }
+
+extension MyPlayListViewController {
+    func scrollToTop() {
+        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+        guard !itemIsEmpty else { return }
+        tableView.setContentOffset(.zero, animated: true)
+    }
+}

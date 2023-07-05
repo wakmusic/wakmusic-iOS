@@ -102,3 +102,9 @@ extension LoginViewController{
             }).disposed(by: disposeBag)
     }
 }
+
+public extension LoginViewController{
+    func scrollToTop() {
+        scrollView.setContentOffset(.zero, animated: true)
+    }
+}

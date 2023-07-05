@@ -159,3 +159,11 @@ extension AfterSearchContentViewController:EntireSectionHeaderDelegate{
         tabMan.scrollToPage(.at(index: type.rawValue), animated: true)
     }
 }
+
+extension AfterSearchContentViewController {
+    func scrollToTop() {
+        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+        guard !itemIsEmpty else { return }
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
+}
