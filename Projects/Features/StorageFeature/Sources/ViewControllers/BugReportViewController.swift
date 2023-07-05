@@ -73,7 +73,7 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     lazy var input = BugReportViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var keyboardHeight:CGFloat = 267
-    var maxAttachedSize: Double = 100
+    var maxAttachedSize: Double = 30
     
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
