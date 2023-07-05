@@ -270,3 +270,18 @@ extension SearchViewController:BeforeSearchContentViewDelegate{
         UIView.setAnimationsEnabled(true)
     }
 }
+
+extension SearchViewController {
+    public func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            if let before = children.first as? BeforeSearchContentViewController{
+                before.scrollToTop()
+            }else if let after = children.first as? AfterSearchViewController{
+                after.scrollToTop()
+            }
+        }
+    }
+}

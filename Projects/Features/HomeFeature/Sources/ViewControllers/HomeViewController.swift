@@ -12,8 +12,7 @@ import NVActivityIndicatorView
 import Then
 import SnapKit
 
-public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
-
+public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var stackView: UIStackView!
@@ -420,5 +419,16 @@ extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
         let playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
+    }
+}
+
+extension HomeViewController {
+    public func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+        }
     }
 }

@@ -7,6 +7,7 @@ import SnapKit
 import RxSwift
 import DomainModule
 import CommonFeature
+import ArtistFeature
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
 
@@ -214,6 +215,12 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
         guard let navigationController = self.children.first as? UINavigationController,
               let mainTabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController else { return }
         mainTabBarViewController.updateContent(previous: previous, current: current)
+    }
+    
+    func equalHandleTapped(index current: Int) {
+        guard let navigationController = self.children.first as? UINavigationController,
+              let mainTabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController else { return }
+        mainTabBarViewController.equalHandleTapped(for: current)
     }
 }
 

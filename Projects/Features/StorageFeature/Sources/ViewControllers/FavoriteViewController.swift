@@ -270,3 +270,11 @@ extension FavoriteViewController:UITableViewDelegate{
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
 }
+
+extension FavoriteViewController {
+    func scrollToTop() {
+        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+        guard !itemIsEmpty else { return }
+        tableView.setContentOffset(.zero, animated: true)
+    }
+}
