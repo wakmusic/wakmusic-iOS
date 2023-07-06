@@ -127,7 +127,7 @@ extension ArtistViewController {
             self.navigationController?.popToRootViewController(animated: true)
         }else{
             guard !output.dataSource.value.isEmpty else { return }
-            self.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
     }
 }
