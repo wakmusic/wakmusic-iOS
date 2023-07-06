@@ -116,6 +116,7 @@ extension FavoriteViewController{
                 // 탭맨 쪽 편집 변경
                 let isEdit: Bool = state.isEditing
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
                 self.tableView.setEditing(isEdit, animated: true)
                 self.tableView.reloadData()
             })
