@@ -44,12 +44,17 @@ extension NoticeAPI: WMAPI {
     
     public var task: Moya.Task {
         switch self {
-        case .fetchNotice,
-             .fetchNoticeCategories:
+        case .fetchNotice:
+            return .requestParameters(
+                parameters: ["os": "ios",
+                             "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""],
+                encoding: URLEncoding.queryString
+            )
+        case .fetchNoticeCategories:
             return .requestPlain
         }
     }
-    
+
     public var jwtTokenType: JwtTokenType {
         return .none
     }
