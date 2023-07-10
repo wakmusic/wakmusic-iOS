@@ -327,20 +327,34 @@ extension MultiPurposePopupViewController{
             )
             self.view.endEditing(true)
             
+            // 토스트도 EntryKit을 사용하기 때문에 토스트만 띄워도 떠있던 팝업이 자동으로 내려감.
             if res.status == 200 {
-                SwiftEntryKit.dismiss()
-            }
-            
-            else if res.status == 401 {
+                var description: String = ""
+                switch self.viewModel.type {
+                case .creation:
+                    description = "리스트가 생성되었습니다."
+                case .edit:
+                    description = "리스트가 수정되었습니다."
+                case .load:
+                    description = "리스트를 가져왔습니다."
+                case .share:
+                    break
+                case .nickname:
+                    description = "닉네임이 수정되었습니다."
+                }
+                self.showToast(
+                    text: description,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+                
+            }else if res.status == 401 {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
                 LOGOUT()
-
-                if self.viewModel.type == .edit || self.viewModel.type == .creation {                   
+                if self.viewModel.type == .edit || self.viewModel.type == .creation {
                     self.delegate?.didTokenExpired()
                 }
-            }
-            
-            else {
+                
+            }else {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             }
         })

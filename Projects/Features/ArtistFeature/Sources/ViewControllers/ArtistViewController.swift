@@ -9,7 +9,7 @@ import NeedleFoundation
 import PDFKit
 import NVActivityIndicatorView
 
-public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
@@ -117,5 +117,17 @@ extension ArtistViewController: WaterfallLayoutDelegate {
 
     public func collectionViewLayout(for section: Int) -> WaterfallLayout.Layout {
         return .waterfall(column: 3, distributionMethod: .balanced)
+    }
+}
+
+extension ArtistViewController {
+    public func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            guard !output.dataSource.value.isEmpty else { return }
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+        }
     }
 }

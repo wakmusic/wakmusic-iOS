@@ -116,6 +116,7 @@ extension FavoriteViewController{
                 // 탭맨 쪽 편집 변경
                 let isEdit: Bool = state.isEditing
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
                 self.tableView.setEditing(isEdit, animated: true)
                 self.tableView.reloadData()
             })
@@ -268,5 +269,13 @@ extension FavoriteViewController:UITableViewDelegate{
     }
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+}
+
+extension FavoriteViewController {
+    func scrollToTop() {
+        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+        guard !itemIsEmpty else { return }
+        tableView.setContentOffset(.zero, animated: true)
     }
 }

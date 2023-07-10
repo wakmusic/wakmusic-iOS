@@ -39,7 +39,6 @@ public class MainTabBarViewModel {
         self.fetchNoticeUseCase.execute(type: .currently)
             .catchAndReturn([])
             .asObservable()
-            .map { $0.sorted { $0.id > $1.id } }
             .map{ (entities) in
                 guard !igoredNoticeIds.isEmpty else { return entities }
                 return entities.filter { entity in

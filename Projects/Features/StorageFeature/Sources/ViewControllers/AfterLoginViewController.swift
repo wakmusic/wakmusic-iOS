@@ -312,3 +312,15 @@ extension AfterLoginViewController:PageboyViewControllerDataSource, TMBarDataSou
         }
     }
 }
+
+extension AfterLoginViewController {
+    func scrollToTop() {
+        let current: Int = self.currentIndex ?? 0
+        guard self.viewControllers.count > current else { return }
+        if let myPlayList = self.viewControllers[current] as? MyPlayListViewController {
+            myPlayList.scrollToTop()
+        }else if let favorite = self.viewControllers[current] as? FavoriteViewController {
+            favorite.scrollToTop()
+        }
+    }
+}
