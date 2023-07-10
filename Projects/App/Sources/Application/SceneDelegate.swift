@@ -47,6 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
+    ///MARK: - Handling DeepLink
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
         
@@ -62,5 +63,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         default: return
         }
+    }
+    
+    ///MARK: - Handling UniversalLink
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let webpageURL = userActivity.webpageURL else {
+            return
+        }
+        DEBUG_LOG(webpageURL.absoluteString)
     }
 }
