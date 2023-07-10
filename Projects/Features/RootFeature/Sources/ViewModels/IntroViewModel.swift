@@ -118,7 +118,7 @@ final public class IntroViewModel: ViewModelType {
                 output.userInfoResult.onNext(.success(""))
             }, onError: { (error) in
                 let asWMError = error.asWMError
-                if asWMError == .tokenExpired {
+                if asWMError == .tokenExpired || asWMError == .notFound {
                     let keychain = KeychainImpl()
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
