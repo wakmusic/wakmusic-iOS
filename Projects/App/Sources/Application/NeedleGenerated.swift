@@ -321,9 +321,6 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var deletePlayListUseCase: any DeletePlayListUseCase {
         return appComponent.deletePlayListUseCase
     }
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
-        return appComponent.fetchPlayListDetailUseCase
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -961,7 +958,6 @@ extension MyPlayListComponent: Registration {
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
-        keyPathToName[\MyPlayListDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
     }
 }
 extension AfterLoginComponent: Registration {

@@ -18,7 +18,7 @@ public protocol MyPlayListTableViewCellDelegate: AnyObject {
 
 public enum MyPlayListTableViewCellDelegateConstant {
     case listTapped(indexPath: IndexPath)
-    case playTapped(key: String)
+    case playTapped(indexPath: IndexPath)
 }
 
 class MyPlayListTableViewCell: UITableViewCell {
@@ -31,7 +31,7 @@ class MyPlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var listSelectButton: UIButton!
     
     @IBAction func playButtonAction(_ sender: UIButton) {
-        delegate?.buttonTapped(type: .playTapped(key: passToModel.1))
+        delegate?.buttonTapped(type: .playTapped(indexPath: passToModel.0))
     }
     
     @IBAction func listSelectButtonAction(_ sender: Any) {
