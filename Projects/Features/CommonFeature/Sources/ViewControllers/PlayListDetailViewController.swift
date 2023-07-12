@@ -63,6 +63,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                 }
                 self.input.state.accept(EditState(isEditing: false, force: true))
                 self.input.cancelEdit.onNext(())
+                self.input.runEditing.onNext(())
             })
             self.showPanModal(content: vc)
             

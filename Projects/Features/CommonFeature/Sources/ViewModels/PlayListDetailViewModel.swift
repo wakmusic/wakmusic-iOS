@@ -116,6 +116,10 @@ public final class PlayListDetailViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !($0.first?.items ?? []).isEmpty }
             .map { $0.first?.items.map { $0.id } ?? [] }
+            .do(onNext: { _ in
+                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+            })
             .filter{ (ids: [String]) -> Bool in
                 let beforeIds: [String] = output.backUpdataSource.value.first?.items.map { $0.id } ?? []
                 let elementsEqual: Bool = beforeIds.elementsEqual(ids)
@@ -152,8 +156,6 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return
                 }
                 output.refreshPlayList.accept(())
-                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
-                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 바깥 플리 업데이트
             }).disposed(by: disposeBag)
                 
