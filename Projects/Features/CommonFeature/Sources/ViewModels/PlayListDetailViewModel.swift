@@ -102,7 +102,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                     })
                 })
             .map { [PlayListDetailSectionModel(model: 0, items: $0.songs)] }
-            .bind(to: output.dataSource,output.backUpdataSource)
+            .bind(to: output.dataSource, output.backUpdataSource)
             .disposed(by: disposeBag)
         
         input.playListNameLoad
@@ -116,6 +116,16 @@ public final class PlayListDetailViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !($0.first?.items ?? []).isEmpty }
             .map { $0.first?.items.map { $0.id } ?? [] }
+            .do(onNext: { _ in
+                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
+            })
+            .filter{ (ids: [String]) -> Bool in
+                let beforeIds: [String] = output.backUpdataSource.value.first?.items.map { $0.id } ?? []
+                let elementsEqual: Bool = beforeIds.elementsEqual(ids)
+                DEBUG_LOG(elementsEqual ? "❌ 변경된 내용이 없습니다." : "✅ 리스트가 변경되었습니다.")
+                return elementsEqual == false
+            }
             .flatMap{ [weak self] (songs: [String]) -> Observable<BaseEntity> in
                 guard let self = self, let key = self.key else {
                     return Observable.empty()
@@ -146,8 +156,6 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return
                 }
                 output.refreshPlayList.accept(())
-                output.indexOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
-                output.songEntityOfSelectedSongs.accept([]) //  바텀 Tab 내려가게 하기 위해
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 바깥 플리 업데이트
             }).disposed(by: disposeBag)
                 
