@@ -11,10 +11,11 @@
 
 ## 다운로드
 
-<a href='https://apps.apple.com/kr/app/id1641642735'><img alt='Available on the App Store' src='https://github.com/wakmusic/wakmusic-iOS/assets/68860610/18de4992-0e91-4354-8240-e7a574eeedc5' height='60px'/></a> 
-<a href='https://play.google.com/store/apps/details?id=com.waktaverse.music'><img alt='Available on the Play Store' src='https://github.com/wakmusic/wakmusic-iOS/assets/68860610/093d3d6c-ff3d-4632-ba60-912134bfe950' height='60px'/></a>
+<a href='https://apps.apple.com/kr/app/id1641642735'><img alt='Available on the App Store' src='https://user-images.githubusercontent.com/67373938/227817078-7aab7bea-3af0-4930-b341-1a166a39501d.svg' height='60px'/></a> 
+<a href='https://play.google.com/store/apps/details?id=com.waktaverse.music'><img alt='Available on the Play Store' src='https://user-images.githubusercontent.com/67373938/227817080-0c069757-4000-4e3e-919b-b062e667ecc4.svg' height='60px'/></a>
 
-## iOS Developer 💻
+## iOS Developer
+
 | iOS Hamp | 구구 | 케이 | 김대희 | 댕댕 |
 | --- | --- | --- | --- | -- |
 | <img src="https://avatars.githubusercontent.com/u/48616183?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/37323252?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/60254939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/68860610?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/31872539?v=4" width="200px"/> | 
