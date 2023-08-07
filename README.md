@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/wakmusic/wakmusic-iOS/assets/68860610/ac5ae167-63df-4bc2-8917-297a6f674f19.png" width = "1200">
+<img src="https://github.com/wakmusic/wakmusic-iOS/assets/68860610/ac5ae167-63df-4bc2-8917-297a6f674f19.png" width = "1200px">
 
 </div>
 
