@@ -13,12 +13,12 @@
 
 <a href='https://apps.apple.com/kr/app/id1641642735'><img alt='Available on the App Store' src='https://user-images.githubusercontent.com/67373938/227817078-7aab7bea-3af0-4930-b341-1a166a39501d.svg' height='60px'/></a> 
 
-## iOS Developer
+## iOS Developer & Designer
 
-| iOS Hamp | 구구 | 케이 | 김대희 | 댕댕 |
+| iOS Hamp | 구구 | 케이 | 김대희 | 샴퓨(디자인) |
 | --- | --- | --- | --- | -- |
-| <img src="https://avatars.githubusercontent.com/u/48616183?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/37323252?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/60254939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/68860610?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/31872539?v=4" width="200px"/> | 
-| [yongbeomkwak](https://github.com/yongbeomkwak) | [KangTaeHoon](https://github.com/KangTaeHoon) | [youn9k](https://github.com/youn9k) | [kimdaehee0824](https://github.com/kimdaehee0824) | [CoCoE1203](https://github.com/CoCoE1203) |
+| <img src="https://avatars.githubusercontent.com/u/48616183?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/37323252?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/60254939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/68860610?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/134786201?v=4" width="200px"/> | 
+| [yongbeomkwak](https://github.com/yongbeomkwak) | [KangTaeHoon](https://github.com/KangTaeHoon) | [youn9k](https://github.com/youn9k) | [kimdaehee0824](https://github.com/kimdaehee0824) | [syampuuu](instagram.com/jjma._.y) |
 
 ## iOS 모듈 구조도
 
