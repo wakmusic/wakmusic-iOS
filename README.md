@@ -4,7 +4,7 @@
 
 </div>
 
-## WAKTAVERS MUSIC의 iOS Github 저장소 입니다.
+## WAKTAVERSE MUSIC의 iOS Github 저장소 입니다.
 
 매주 왁물원에서 만나보던 왁타버스 뮤직을 iOS 앱에서 들을 수 있다고?
 왁타버스 뮤직을 이용하면 실시간 차트, 나만의 플래이리스트, 검색 기능 등 많은 기능을 사용할 수 있습니다!
