@@ -9,8 +9,8 @@ public enum Environment {
     public static let deploymentTarget: DeploymentTarget = .iOS(targetVersion: "14.0", devices: [.iphone])
     public static let platform = Platform.iOS
     public static let baseSetting: SettingsDictionary = SettingsDictionary()
-        .marketingVersion("2.0.0")
-        .currentProjectVersion("40")
+        .marketingVersion("2.0.2")
+        .currentProjectVersion("0")
         .debugInformationFormat(DebugInformationFormat.dwarfWithDsym)
         .otherLinkerFlags(["-ObjC"])
         .bitcodeEnabled(false)

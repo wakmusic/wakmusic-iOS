@@ -406,6 +406,12 @@
                                     <constraint firstItem="IJw-6l-kM9" firstAttribute="top" secondItem="QCv-HV-K1f" secondAttribute="top" id="t7Q-Q6-c5g"/>
                                 </constraints>
                             </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IF-tl-6xw">
+                                <rect key="frame" x="0.0" y="455" width="393" height="131"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qoh-aV-lI2" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
                                 <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
                                 <constraints>
@@ -419,12 +425,16 @@
                         <constraints>
                             <constraint firstItem="Qoh-aV-lI2" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="1b6-RI-qVl"/>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="203:375" id="2ks-Ey-C1D"/>
+                            <constraint firstItem="ONM-XL-Wa9" firstAttribute="top" secondItem="4IF-tl-6xw" secondAttribute="top" id="Al3-3L-Fm7"/>
                             <constraint firstItem="sV4-yd-6Sv" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="GeS-Kz-poo"/>
                             <constraint firstAttribute="bottom" secondItem="QCv-HV-K1f" secondAttribute="bottom" id="Kin-vo-tHD"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="NJY-Zb-hrT"/>
                             <constraint firstAttribute="trailing" secondItem="sV4-yd-6Sv" secondAttribute="trailing" id="UpG-i7-Cma"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cjb-J0-wCq"/>
+                            <constraint firstItem="ONM-XL-Wa9" firstAttribute="leading" secondItem="4IF-tl-6xw" secondAttribute="leading" id="d5A-zL-eUP"/>
                             <constraint firstItem="QCv-HV-K1f" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="dgH-9b-02b"/>
+                            <constraint firstItem="ONM-XL-Wa9" firstAttribute="bottom" secondItem="4IF-tl-6xw" secondAttribute="bottom" id="irC-0z-cSc"/>
+                            <constraint firstItem="ONM-XL-Wa9" firstAttribute="trailing" secondItem="4IF-tl-6xw" secondAttribute="trailing" id="jO6-87-RMS"/>
                             <constraint firstItem="Qoh-aV-lI2" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="l4Y-X2-5TN"/>
                         </constraints>
                     </view>
@@ -441,6 +451,7 @@
                         <outlet property="collectionView" destination="ONM-XL-Wa9" id="lVA-q2-zqY"/>
                         <outlet property="latestSongAcademyButton" destination="pNY-GS-QA0" id="ehp-uh-cXu"/>
                         <outlet property="latestSongAllButton" destination="71V-cg-e0X" id="dMZ-M9-LQ7"/>
+                        <outlet property="latestSongEmptyLabel" destination="4IF-tl-6xw" id="d61-tX-mdc"/>
                         <outlet property="latestSongGomButton" destination="Cz2-tR-mZQ" id="a0U-ST-6m8"/>
                         <outlet property="latestSongIseButton" destination="Mfx-m4-38A" id="9rJ-V9-UUN"/>
                         <outlet property="latestSongLabel" destination="P5p-0Q-HaW" id="n0f-ON-hbX"/>

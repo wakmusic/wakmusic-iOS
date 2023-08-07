@@ -120,8 +120,10 @@ extension ArtistDetailHeaderViewController {
         )
         self.introDescriptionLabel.attributedText = artistIntroDescriptionAttributedString
         
+        let originImageURLString: String = WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString
+        let encodedImageURLString: String = originImageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? originImageURLString
         artistImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString),
+            with: URL(string: encodedImageURLString),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

@@ -114,6 +114,7 @@ extension MyPlayListViewController{
                 // 탭맨 쪽 편집 변경
                 let isEdit: Bool = state.isEditing
                 parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
                 self.tableView.setEditing(isEdit, animated: true)
                 
                 let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
@@ -199,12 +200,6 @@ extension MyPlayListViewController{
                     text: result.description,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
-            }).disposed(by: disposeBag)
-        
-        output.immediatelyPlaySongs
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else {return}
-                self.playState.loadAndAppendSongsToPlaylist(songs)
             })
             .disposed(by: disposeBag)
     }
@@ -278,8 +273,16 @@ extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
         switch type {
         case let .listTapped(indexPath):
             input.itemSelected.onNext(indexPath)
-        case let .playTapped(key):
-            input.getPlayListDetail.onNext(key)
+        case let .playTapped(indexPath):
+            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
+            guard !songs.isEmpty else {
+                self.showToast(
+                    text: "리스트에 곡이 없습니다.",
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+                return
+            }
+            self.playState.loadAndAppendSongsToPlaylist(songs)
         }
     }
 }
@@ -308,4 +311,12 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate{
         let vc =  multiPurposePopComponent.makeView(type: type)
         self.showEntryKitModal(content: vc, height: 296)
     }    
+}
+
+extension MyPlayListViewController {
+    func scrollToTop() {
+        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+        guard !itemIsEmpty else { return }
+        tableView.setContentOffset(.zero, animated: true)
+    }
 }

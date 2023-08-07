@@ -49,6 +49,11 @@ extension PlayerViewModel {
     
     /// 좋아요 상태 가져오기
     func fetchLikeState(for song: SongEntity, output: Output) {
+        guard Utility.PreferenceManager.userInfo != nil else {
+            DEBUG_LOG("💡 비로그인 상태입니다. 로그인 후 가능합니다.")
+            output.likeState.send(false)
+            return
+        }
         fetchFavoriteSongsUseCase.execute()
             .catchAndReturn([])
             .map { $0.contains { $0.song.id == song.id } }

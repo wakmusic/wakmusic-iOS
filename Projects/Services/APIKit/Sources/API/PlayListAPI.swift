@@ -122,6 +122,7 @@ extension PlayListAPI: WMAPI {
                 400: .badRequest,
                 401: .tokenExpired,
                 404: .notFound,
+                409: .conflict,
                 429: .tooManyRequest,
                 500: .internalServerError
             ]

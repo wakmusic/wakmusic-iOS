@@ -13,7 +13,11 @@ public func BASE_URL() -> String {
     guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
         return ""
     }
-    return secrets["BASE_URL"] as? String ?? "not found key"
+    #if DEBUG
+    return secrets["BASE_DEV_URL"] as? String ?? "not found key"
+    #else
+    return secrets["BASE_PROD_URL"] as? String ?? "not found key"
+    #endif
 }
 
 //MARK: - WAKENTER_BASE_URL

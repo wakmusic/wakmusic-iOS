@@ -128,6 +128,21 @@ extension MainTabBarViewController {
         self.previousIndex = self.selectedIndex
         self.selectedIndex = index
     }
+    
+    func equalHandleTapped(for index: Int) {
+        guard let navigationController = self.viewControllers[index] as? UINavigationController else { return }
+        if let home = navigationController.viewControllers.first as? HomeViewController {
+            home.equalHandleTapped()
+        }else if let chart = navigationController.viewControllers.first as? ChartViewController {
+            chart.equalHandleTapped()
+        }else if let search = navigationController.viewControllers.first as? SearchViewController {
+            search.equalHandleTapped()
+        }else if let artist = navigationController.viewControllers.first as? ArtistViewController {
+            artist.equalHandleTapped()
+        }else if let storage = navigationController.viewControllers.first as? StorageViewController {
+            storage.equalHandleTapped()
+        }
+    }
 }
 
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {

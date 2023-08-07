@@ -12,8 +12,7 @@ import NVActivityIndicatorView
 import Then
 import SnapKit
 
-public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard {
-
+public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var stackView: UIStackView!
@@ -37,18 +36,20 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongGomButton: UIButton!
     @IBOutlet weak var latestSongAcademyButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var latestSongEmptyLabel: UILabel!
     
+    private let blurImageView = UIImageView().then {
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.image = DesignSystemAsset.Home.blurBg.image
+        $0.contentMode = .scaleAspectFill
+    }
     private let glassmorphismView = GlassmorphismView().then {
         $0.setCornerRadius(12)
         $0.setTheme(theme: .light)
         $0.setDistance(100)
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
-    }
-    private let colorView = UIView().then {
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.backgroundColor = .white.withAlphaComponent(0.4)
     }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
@@ -223,7 +224,7 @@ extension HomeViewController {
         
         output.newSongDataSource
             .skip(1)
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] (model) in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator.stopAnimating()
@@ -232,6 +233,7 @@ extension HomeViewController {
                 self?.latestSongIseButton.isEnabled = true
                 self?.latestSongGomButton.isEnabled = true
                 self?.latestSongAcademyButton.isEnabled = true
+                self?.latestSongEmptyLabel.isHidden = !model.isEmpty
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
@@ -298,7 +300,7 @@ extension HomeViewController {
     }
     
     private func configureBlurUI() {
-        [glassmorphismView, colorView].forEach {
+        [blurImageView, glassmorphismView].forEach {
             chartContentView.insertSubview($0, at: 0)
             $0.snp.makeConstraints {
                 $0.left.equalToSuperview().offset(20)
@@ -363,9 +365,25 @@ extension HomeViewController {
             )
             button.setAttributedTitle(selectedAttributedString, for: .selected)
         }
-        
         latestSongAllButton.isSelected = true
+        latestSongEmptyLabel.isHidden = true
+        latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
+        latestSongEmptyLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        latestSongEmptyLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        latestSongEmptyLabel.setLineSpacing(kernValue: -0.5)
+        latestSongEmptyLabel.textAlignment = .center
         scrollView.refreshControl = refreshControl
+        scrollView.delegate = self
+    }
+}
+
+extension HomeViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard collectionView != scrollView else { return }
+        let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
+        let standard: CGFloat = offsetY / topCircleImageView.frame.height
+        blurImageView.alpha = 1.0 - standard
+        glassmorphismView.alpha = min(1.0, standard + 0.8)
     }
 }
 
@@ -401,5 +419,16 @@ extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
         let playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
+    }
+}
+
+extension HomeViewController {
+    public func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+        }
     }
 }

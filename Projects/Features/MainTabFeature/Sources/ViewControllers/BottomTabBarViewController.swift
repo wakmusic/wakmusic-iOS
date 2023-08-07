@@ -13,10 +13,10 @@ import RxSwift
 
 protocol BottomTabBarViewDelegate: AnyObject {
     func handleTapped(index previous: Int, current: Int)
+    func equalHandleTapped(index current: Int)
 }
 
 public class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var stackView: UIStackView!
     
     var currentIndex = Utility.PreferenceManager.startPage ?? 0
@@ -59,7 +59,6 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         bindNotification()
     }
@@ -71,9 +70,7 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
 }
 
 extension BottomTabBarViewController {
-    
     private func configureUI() {
-        
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
         DEBUG_LOG("startPage: \(startPage)")
 
@@ -102,10 +99,9 @@ extension BottomTabBarViewController {
 }
 
 extension BottomTabBarViewController: TabItemViewDelegate {
-    
     func handleTap(view: TabItemView) {
         guard view.isSelected == false else {
-            DEBUG_LOG("equal handleTap")
+            self.delegate?.equalHandleTapped(index: self.currentIndex)
             return
         }
         

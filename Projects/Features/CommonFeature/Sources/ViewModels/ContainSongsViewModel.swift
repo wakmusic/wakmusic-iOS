@@ -70,31 +70,30 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.addSongIntoPlayListUseCase
                     .execute(key: key, songs: self.songs)
-                    .catch({ (error:Error) in
-                        
+                    .catch({ (error: Error) in
                         let wmError = error.asWMError
                         
                         if wmError == .tokenExpired {
                             return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(status: 401,added_songs_length: 0, duplicated:false, description:  wmError.errorDescription ?? "")))
+                                single(.success(AddSongEntity(status: 401, added_songs_length: 0, duplicated: false, description: wmError.errorDescription ?? "")))
                                 return Disposables.create()
                             }
-                        }
-                        
-                        else if wmError == .badRequest {
+                        }else if wmError == .badRequest {
                             return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(status: 400,added_songs_length: 0, duplicated:true, description:"이미 내 리스트에 담긴 곡들입니다.")))
+                                single(.success(AddSongEntity(status: 400, added_songs_length: 0, duplicated: false, description: wmError.errorDescription ?? "")))
+                                return Disposables.create {}
+                            }
+                        }else if wmError == .conflict {
+                            return Single<AddSongEntity>.create { single in
+                                single(.success(AddSongEntity(status: 409, added_songs_length: 0, duplicated: true, description: "이미 내 리스트에 담긴 곡들입니다.")))
+                                return Disposables.create {}
+                            }
+                        }else {
+                            return Single<AddSongEntity>.create { single in
+                                single(.success(AddSongEntity(status: 500, added_songs_length: 0, duplicated: false, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
                                 return Disposables.create {}
                             }
                         }
-                        
-                        else  {
-                            return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(status: 500,added_songs_length: 0, duplicated:false, description:"서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
-                                return Disposables.create {}
-                            }
-                        }
-                        
                     })
                     .asObservable()
             })

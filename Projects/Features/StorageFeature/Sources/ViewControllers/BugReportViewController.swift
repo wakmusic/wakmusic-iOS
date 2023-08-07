@@ -73,6 +73,7 @@ public final class BugReportViewController: UIViewController,ViewControllerFromS
     lazy var input = BugReportViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var keyboardHeight:CGFloat = 267
+    var maxAttachedSize: Double = 30
     
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
@@ -391,9 +392,10 @@ extension BugReportViewController {
     }
     
     private func showToastWithMaxSize() {
+        let doubleToInt: Int = Int(self.maxAttachedSize)
         DispatchQueue.main.async {
             self.showToast(
-                text: "첨부 파일의 용량은 최대 100MB 까지입니다.",
+                text: "첨부 파일의 용량은 최대 \(doubleToInt)MB 까지입니다.",
                 font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
             )
         }
@@ -441,7 +443,7 @@ extension BugReportViewController: UIImagePickerControllerDelegate, UINavigation
         
         let imageToData: Data = image.pngData() ?? Data()
         let sizeMB: Double = Double(imageToData.count).megabytes
-        guard sizeMB <= 100 else {
+        guard sizeMB <= self.maxAttachedSize else {
             self.showToastWithMaxSize()
             return
         }
@@ -459,7 +461,8 @@ extension BugReportViewController: UIImagePickerControllerDelegate, UINavigation
 extension BugReportViewController: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-
+        let maxAttachedSize: Double = self.maxAttachedSize
+        
         results.forEach {
             let provider = $0.itemProvider
 
@@ -476,7 +479,7 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                                 let data = try Data(contentsOf: url)
                                 DEBUG_LOG("Video: \(data)")
                                 let sizeMB: Double = Double(data.count).megabytes
-                                guard sizeMB <= 100 else {
+                                guard sizeMB <= maxAttachedSize else {
                                     self.showToastWithMaxSize()
                                     return
                                 }
@@ -503,7 +506,7 @@ extension BugReportViewController: PHPickerViewControllerDelegate {
                                   let imageToData = image.pngData() else { return }
                             DEBUG_LOG("Image: \(imageToData)")
                             let sizeMB: Double = Double(imageToData.count).megabytes
-                            guard sizeMB <= 100 else {
+                            guard sizeMB <= maxAttachedSize else {
                                 self.showToastWithMaxSize()
                                 return
                             }

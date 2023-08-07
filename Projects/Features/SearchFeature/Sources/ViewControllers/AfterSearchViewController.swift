@@ -46,7 +46,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         self.scrollToPage(.at(index: 0), animated: false)
     }
     
-
     public static func viewController(
         afterSearchContentComponent: AfterSearchContentComponent,
         containSongsComponent: ContainSongsComponent,
@@ -213,5 +212,14 @@ extension AfterSearchViewController: SongCartViewDelegate {
         case .remove:
             return
         }
+    }
+}
+
+extension AfterSearchViewController {
+    func scrollToTop() {
+        let current: Int = self.currentIndex ?? 0
+        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
+        guard searchContent.count > current else { return }
+        searchContent[current].scrollToTop()
     }
 }

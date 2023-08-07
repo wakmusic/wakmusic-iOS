@@ -96,6 +96,13 @@ final public class IntroViewModel: ViewModelType {
             .withLatestFrom(Utility.PreferenceManager.$userInfo)
             .filter{ (userInfo) in
                 guard userInfo != nil else {
+                    ///비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
+                    let keychain = KeychainImpl()
+                    let accessToken = keychain.load(type: .accessToken)
+                    if !accessToken.isEmpty {
+                        DEBUG_LOG("💡 비로그인 상태입니다. 엑세스 토큰을 삭제합니다.")
+                        keychain.delete(type: .accessToken)
+                    }
                     output.userInfoResult.onNext(.success(""))
                     return false
                 }
@@ -111,7 +118,7 @@ final public class IntroViewModel: ViewModelType {
                 output.userInfoResult.onNext(.success(""))
             }, onError: { (error) in
                 let asWMError = error.asWMError
-                if asWMError == .tokenExpired {
+                if asWMError == .tokenExpired || asWMError == .notFound {
                     let keychain = KeychainImpl()
                     keychain.delete(type: .accessToken)
                     Utility.PreferenceManager.userInfo = nil
