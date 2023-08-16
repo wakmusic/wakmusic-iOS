@@ -56,29 +56,14 @@ public final class AfterSearchViewModel:ViewModelType {
                 return result
             }
             .map{ (res, r3) in
-                let (r1, r2) = res
-                var all: [SearchSectionModel] = []
+                let (r1, r2): ([SongEntity], [SongEntity]) = res
                 let limitCount: Int = 3
                 
-                if !r1.isEmpty && ( r2.isEmpty && r3.isEmpty ) {
-                    all = [
-                        SearchSectionModel(model: (.song, r1.count), items: r1)
-                    ]
-                }else if !r2.isEmpty && ( r1.isEmpty && r3.isEmpty ) {
-                    all = [
-                        SearchSectionModel(model: (.artist, r2.count), items: r2)
-                    ]
-                }else if !r3.isEmpty && ( r1.isEmpty && r2.isEmpty ) {
-                    all = [
-                        SearchSectionModel(model: (.remix, r3.count), items: r3)
-                    ]
-                }else {
-                    all  = [
-                        SearchSectionModel(model: (.song, r1.count), items: r1.count > limitCount ? Array(r1[0...limitCount-1]) : r1),
-                        SearchSectionModel(model: (.artist, r2.count), items: r2.count > limitCount ? Array(r2[0...limitCount-1]) : r2),
-                        SearchSectionModel(model: (.remix, r3.count), items: r3.count > limitCount ? Array(r3[0...limitCount-1]) : r3)
-                    ]
-                }
+                let all: [SearchSectionModel] = [
+                    SearchSectionModel(model: (.song, r1.count), items: r1.count > limitCount ? Array(r1[0...limitCount-1]) : r1),
+                    SearchSectionModel(model: (.artist, r2.count), items: r2.count > limitCount ? Array(r2[0...limitCount-1]) : r2),
+                    SearchSectionModel(model: (.remix, r3.count), items: r3.count > limitCount ? Array(r3[0...limitCount-1]) : r3)
+                ]
                 
                 var results: [[SearchSectionModel]] = []
                 results.append(all)
