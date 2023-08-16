@@ -54,9 +54,9 @@ extension EntireSectionHeader {
         self.categoryLabel.text = type.0 == .song ? "노래" : type.0 == .artist ? "가수" : "조교"
         let numberOfSong: Int = type.1
         self.numberOfSongLabel.text = String(numberOfSong)
-        self.allShowLabel.isHidden = numberOfSong <= 0
-        self.allShowArrowImageView.isHidden = numberOfSong <= 0
-        self.moveTabButton.isHidden = numberOfSong <= 0
+        self.allShowLabel.isHidden = numberOfSong <= 3
+        self.allShowArrowImageView.isHidden = numberOfSong <= 3
+        self.moveTabButton.isHidden = numberOfSong <= 3
     }
     
     private func configureUI() {
