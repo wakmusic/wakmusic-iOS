@@ -36,7 +36,7 @@ extension RecommendPlayListCell {
     func update(model: RecommendPlayListEntity) {
         let attributedString = NSMutableAttributedString(
             string: model.title,
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14.2),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
                          .kern: -0.5]
         )

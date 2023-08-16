@@ -23,8 +23,8 @@ public final class ContainSongsViewController: BaseViewController,ViewController
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var songCountLabel: UILabel!
+    @IBOutlet weak var subTitleLabel: UILabel!
     
     var multiPurposePopComponent : MultiPurposePopComponent!
     
@@ -137,15 +137,15 @@ extension ContainSongsViewController {
         titleLabel.text = "리스트에 담기"
         titleLabel.setLineSpacing(kernValue: -0.5)
 
-        subTitleLabel.font =  DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        subTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        subTitleLabel.text = "담을곡"
-        subTitleLabel.setLineSpacing(kernValue: -0.5)
-        
-        songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        songCountLabel.font =  DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-        songCountLabel.text = "\(viewModel.songs.count)곡"
+        songCountLabel.text = "\(viewModel.songs.count)"
         songCountLabel.setLineSpacing(kernValue: -0.5)
+        
+        subTitleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+        subTitleLabel.textColor = DesignSystemAsset.PrimaryColor.sub3.color
+        subTitleLabel.text = "곡 선택"
+        subTitleLabel.setLineSpacing(kernValue: -0.5)
 
         indicator.type = .circleStrokeSpin
         indicator.color = DesignSystemAsset.PrimaryColor.point.color
