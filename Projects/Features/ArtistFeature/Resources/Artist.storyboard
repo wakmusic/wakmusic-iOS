@@ -480,21 +480,33 @@
                                                     <color key="textColor" red="0.062745098040000002" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B82-OA-TLx">
+                                                    <rect key="frame" x="20" y="15" width="72" height="40"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <connections>
+                                                        <action selector="thumbnailToPlayButtonAction:" destination="oZA-yq-ZYb" eventType="touchUpInside" id="VGh-xm-zY1"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="B82-OA-TLx" firstAttribute="top" secondItem="1FX-OY-QzQ" secondAttribute="top" id="4yd-pI-Eh9"/>
                                                 <constraint firstItem="ksh-pj-Ow4" firstAttribute="leading" secondItem="1FX-OY-QzQ" secondAttribute="trailing" constant="8" id="5au-3L-fHy"/>
                                                 <constraint firstItem="DWl-L0-2Ot" firstAttribute="centerY" secondItem="dbj-1W-O37" secondAttribute="centerY" id="Bzq-fw-YYb"/>
                                                 <constraint firstItem="DWl-L0-2Ot" firstAttribute="leading" secondItem="ksh-pj-Ow4" secondAttribute="trailing" constant="8" id="Dmb-g6-hhd"/>
                                                 <constraint firstAttribute="trailing" secondItem="DWl-L0-2Ot" secondAttribute="trailing" constant="20" id="KaJ-ih-Xc0"/>
                                                 <constraint firstItem="ksh-pj-Ow4" firstAttribute="centerY" secondItem="1FX-OY-QzQ" secondAttribute="centerY" id="XGO-4D-S95"/>
                                                 <constraint firstItem="1FX-OY-QzQ" firstAttribute="leading" secondItem="dbj-1W-O37" secondAttribute="leading" constant="20" id="Yy5-aw-ane"/>
+                                                <constraint firstItem="B82-OA-TLx" firstAttribute="bottom" secondItem="1FX-OY-QzQ" secondAttribute="bottom" id="ZGU-P0-7io"/>
+                                                <constraint firstItem="B82-OA-TLx" firstAttribute="trailing" secondItem="1FX-OY-QzQ" secondAttribute="trailing" id="dBA-gz-oHh"/>
                                                 <constraint firstItem="1FX-OY-QzQ" firstAttribute="centerY" secondItem="dbj-1W-O37" secondAttribute="centerY" id="u4K-Ob-2zG"/>
+                                                <constraint firstItem="B82-OA-TLx" firstAttribute="leading" secondItem="1FX-OY-QzQ" secondAttribute="leading" id="zHY-Do-5Er"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="albumImageView" destination="1FX-OY-QzQ" id="GRy-bh-YGS"/>
                                             <outlet property="groupStringLabel" destination="TIv-S7-U4W" id="s5h-MT-QiG"/>
                                             <outlet property="releaseDateLabel" destination="DWl-L0-2Ot" id="RFa-yp-Jkg"/>
+                                            <outlet property="thumbnailToPlayButton" destination="B82-OA-TLx" id="vua-8X-gWd"/>
                                             <outlet property="titleStringLabel" destination="9nq-Yr-eaj" id="Eac-vq-hNq"/>
                                         </connections>
                                     </tableViewCell>
