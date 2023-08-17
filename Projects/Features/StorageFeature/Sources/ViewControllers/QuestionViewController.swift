@@ -285,28 +285,32 @@ extension QuestionViewController {
                 guard let self else {return}
                 
                 
-                let vc = TextPopupViewController.viewController(text: state.message,cancelButtonIsHidden: true,confirmButtonText:state.buttonText ,completion: {
+                switch state {
                     
-                    switch state {
+                case .sent:
+                    
+                    self.showToast(text: state.message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                    self.output.showPopUp.accept(false)
+                    
+                case .notReady:
+                    
+                    let vc = TextPopupViewController.viewController(text: state.message,cancelButtonIsHidden: true,confirmButtonText:state.buttonText ,completion: {
                         
-                       
-                    case .sent,.fail:
-                        self.dismiss(animated: true)
-                        
-                    case .notReady:
-                        // 가라 셋티으
                         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
 
                         if UIApplication.shared.canOpenURL(url) {
                             UIApplication.shared.open(url)
                         }
-                    }
-                    
-                    self.output.showPopUp.accept(false)
-                })
+                        
+                        self.output.showPopUp.accept(false)
+                    })
+                                                                    
                                                                 
-                                                            
-                self.showPanModal(content: vc)
+                    self.showPanModal(content: vc)
+                }
+                
+                
+               
                                                                 
             }
             .disposed(by: disposeBag)
@@ -323,9 +327,6 @@ extension QuestionViewController : MFMailComposeViewControllerDelegate {
             output.state.accept(.sent)
         }
         
-        else {
-            output.state.accept(.fail)
-        }
         
         controller.dismiss(animated: true, completion: { [weak self]  in
             

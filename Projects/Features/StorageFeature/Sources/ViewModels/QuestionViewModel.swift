@@ -17,7 +17,6 @@ import KeychainModule
 public enum MailState {
     
     case sent
-    case fail
     case notReady
     
     var message:String {
@@ -26,8 +25,6 @@ public enum MailState {
             
         case .sent:
             return "소중한 의견 감사합니다."
-        case .fail:
-            return "실패 했습니다."
         case .notReady:
             return "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 계정을 설정해주세요."
         }
@@ -39,8 +36,6 @@ public enum MailState {
         switch self {
             
         case .sent:
-            return "확인"
-        case .fail:
             return "확인"
         case .notReady:
             return "설정하러 가기"
