@@ -182,6 +182,7 @@ extension QuestionViewController {
         .disposed(by: disposeBag)
         
         output.mailSource
+            .filter { $0 != .unknown }
             .map { $0.rawValue }
             .subscribe(onNext: { [weak self] (index: Int) in
                 guard let self = self else{
