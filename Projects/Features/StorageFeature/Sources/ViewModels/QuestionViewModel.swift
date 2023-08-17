@@ -20,7 +20,7 @@ public final class QuestionViewModel:ViewModelType {
     
     public struct Input {
         var selectedIndex: PublishSubject<Int> = PublishSubject()
-        var mailComposeResult: PublishSubject<MFMailComposeResult> = PublishSubject()
+        var mailComposeResult: PublishSubject<Result<MFMailComposeResult, Error>> = PublishSubject()
     }
 
     public struct Output {
@@ -48,12 +48,13 @@ public final class QuestionViewModel:ViewModelType {
             .disposed(by: disposeBag)
         
         input.mailComposeResult
-            .map { (result: MFMailComposeResult) -> String in
+            .map { (result: Result<MFMailComposeResult, Error>) -> String in
                 switch result {
-                case .sent:
-                    return "소중한 의견 감사합니다."
-                default:
-                    return ""
+                case let .success(result):
+                    DEBUG_LOG("MFMailComposeResult: \(result)")
+                    return (result == .sent) ? "소중한 의견 감사합니다." : ""
+                case let .failure(error):
+                    return error.localizedDescription
                 }
             }
             .bind(to: output.showToast)

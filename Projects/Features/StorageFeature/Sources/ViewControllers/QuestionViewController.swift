@@ -287,9 +287,10 @@ extension QuestionViewController {
 
 extension QuestionViewController : MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        DEBUG_LOG("result: \(result)")
-        if result == .sent {
-            input.mailComposeResult.onNext(result)
+        if let error = error {
+            input.mailComposeResult.onNext(.failure(error))
+        }else{
+            input.mailComposeResult.onNext(.success(result))
         }
         controller.dismiss(animated: true, completion: nil)
     }
