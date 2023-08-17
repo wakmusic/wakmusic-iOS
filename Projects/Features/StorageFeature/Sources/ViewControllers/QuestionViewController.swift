@@ -81,7 +81,6 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
 }
 
 extension QuestionViewController {
-    
     private func configureUI(){
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -264,12 +263,7 @@ extension QuestionViewController {
                     let vc = TextPopupViewController.viewController(
                         text: "메일 계정이 설정되어있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
                         cancelButtonIsHidden: true,
-                        confirmButtonText: "설정 바로가기",
-                        completion: {
-                            guard let url = URL(string: UIApplication.openSettingsURLString),
-                                  UIApplication.shared.canOpenURL(url) else { return }
-                            UIApplication.shared.open(url)
-                        }
+                        confirmButtonText: "확인"
                     )
                     self.showPanModal(content: vc)
                 }
