@@ -12,6 +12,7 @@ import RxSwift
 import Utility
 import BaseFeature
 import DataMappingModule
+import MessageUI
 
 public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
@@ -204,6 +205,14 @@ extension QuestionViewController {
                                             self.editSongCheckImageView,
                                             self.wakMusicFeedbackCheckImageView]
             
+            let emailContent:[MailContent] = [MailContent(title: "버그 제보", body: "버그 제보 입니다."),
+                                              MailContent(title: "기능 제안", body: "기능 제안 입니다."),
+                                              MailContent(title: "노래 추가", body: "노래 추가 입니다."),
+                                              MailContent(title: "노래 수정", body: "노래 수정 입니다."),
+                                              MailContent(title: "주간 왁뮤", body: "주간 왁뮤 입니다.")]
+            
+            self.output.mailContent.accept(emailContent[index]) //해당 이메일 넘겨 주
+            
             for i in 0..<superViews.count {
                 var title:String = ""
                 switch i {
@@ -234,35 +243,52 @@ extension QuestionViewController {
                 imageViews[i].isHidden = i == index ? false : true
                 superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
                 superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
+                
             }
         }).disposed(by: disposeBag)
         
         self.nextButton.rx.tap
-            .withLatestFrom(output.selectedIndex)
+            .withLatestFrom(output.mailContent)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else{
                     return
                 }
-                switch $0 {
-                case 0:
-                    let vc = self.bugReportComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 1:
-                    let vc = self.suggestFunctionComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 2:
-                    let vc = self.askSongComponent.makeView(type: .add)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 3:
-                    let vc = self.askSongComponent.makeView(type: .update)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 4:
-                    let vc = self.wakMusicFeedbackComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                default:
-                    return
+                
+                if MFMailComposeViewController.canSendMail() {
+                        
+                        let compseVC = MFMailComposeViewController()
+                        compseVC.mailComposeDelegate = self
+                        
+                        compseVC.setToRecipients([$0.receiver])
+                        compseVC.setSubject($0.title)
+                        compseVC.setMessageBody($0.body, isHTML: false)
+                        self.present(compseVC, animated: true, completion: nil)
+                        
                 }
+                else {
+                    self.showSendMailErrorAlert()
+                }
+                
+                
             })
             .disposed(by: disposeBag)
+    }
+    
+    func showSendMailErrorAlert() {
+            let sendMailErrorAlert = UIAlertController(title: "메일 설정 오류", message: "아이폰 이메일 설정을 확인하고 다시 시도해주세요.", preferredStyle: .alert)
+            let confirmAction = UIAlertAction(title: "확인", style: .default) {
+                (action) in
+
+            }
+            sendMailErrorAlert.addAction(confirmAction)
+            self.present(sendMailErrorAlert, animated: true, completion: nil)
+    }
+ 
+}
+
+
+extension QuestionViewController : MFMailComposeViewControllerDelegate {
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }

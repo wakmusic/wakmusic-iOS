@@ -14,6 +14,13 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 
+public struct MailContent{
+     
+    let receiver:String = "contact@wakmusic.xyz"
+    let title:String
+    let body:String
+}
+
 public final class QuestionViewModel:ViewModelType {
     var disposeBag = DisposeBag()
     
@@ -23,6 +30,7 @@ public final class QuestionViewModel:ViewModelType {
 
     public struct Output {
         var selectedIndex: PublishRelay<Int> = PublishRelay()
+        var mailContent: BehaviorRelay<MailContent> = .init(value: MailContent(title: "버그 제보", body: "버그 제보 입니다."))
     }
 
     public init(
