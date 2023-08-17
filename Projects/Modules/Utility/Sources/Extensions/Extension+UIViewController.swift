@@ -81,11 +81,15 @@ public extension UIViewController {
         SwiftEntryKit.display(entry: content, using: attributes)
     }
     
-    func showToast(text: String, font: UIFont) {
+    func showToast(text: String, font: UIFont, verticalOffset: CGFloat? = nil) {
         var attributes = EKAttributes.bottomFloat
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
         attributes.roundCorners = .all(radius: 20)
+        
+        if let verticalOffset = verticalOffset {
+            attributes.positionConstraints.verticalOffset = verticalOffset
+        }
 
         let style = EKProperty.LabelStyle(
             font: font,

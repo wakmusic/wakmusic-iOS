@@ -271,7 +271,7 @@ extension QuestionViewController {
                         }
                     )
                     self.showPanModal(content: vc)
-                }                
+                }
             })
             .disposed(by: disposeBag)
         
@@ -279,7 +279,11 @@ extension QuestionViewController {
             .filter { !$0.isEmpty }
             .withUnretained(self)
             .subscribe(onNext: { (owner, text) in
-                owner.showToast(text: text, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                owner.showToast(
+                    text: text,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    verticalOffset: 56+10+20
+                )
             })
             .disposed(by: disposeBag)
     }
