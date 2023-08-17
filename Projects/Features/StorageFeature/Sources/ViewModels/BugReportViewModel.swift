@@ -13,7 +13,7 @@ import RxRelay
 import DomainModule
 import BaseFeature
 import KeychainModule
-import Amplify
+//import Amplify
 import ErrorModule
 
 enum MediaDataType {
@@ -94,8 +94,8 @@ public final class BugReportViewModel:ViewModelType {
                         Task.detached {
                             for i in 0..<attaches.count {
                                 do {
-                                    let url = try await self.uploadImage(media: attaches[i])
-                                    continuation.yield(url.absoluteString)
+//                                    let url = try await self.uploadImage(media: attaches[i])
+//                                    continuation.yield(url.absoluteString)
                                 }catch {
                                     DEBUG_LOG(error.localizedDescription)
                                     output.result.onNext(ReportBugEntity(status: 404, message: WMError.unknown.localizedDescription))
@@ -158,43 +158,43 @@ public final class BugReportViewModel:ViewModelType {
 }
 
 extension BugReportViewModel {
-    private func uploadImage(media: MediaDataType) async throws -> URL {
-        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let size = 5
-        let fileName = str.createRandomStr(length: size) + "_" + Date().dateToString(format: "yyyyMMddHHmmss")
-        var data: Data?
-        var ext: String = ""
-        
-        switch media {
-        case let .image(model):
-            data = model
-            ext = "jpg"
-        case let .video(model, _):
-            data = model
-            ext = "mp4"
-        }
-
-        let uploadTask = Amplify.Storage.uploadData(
-            key: "\(fileName).\(ext)",
-            data: data ?? Data()
-        )
-        Task {
-            for await progress in await uploadTask.progress {
-                DEBUG_LOG("Progress: \(progress)")
-            }
-        }
-        let value = try await uploadTask.value
-        DEBUG_LOG("uploadTask Completed: \(value)")
-        return try await getURL(fileName: fileName, ext: ext)
-    }
-    
-    private func getURL(fileName: String, ext: String) async throws -> URL {
-       let url = try await Amplify.Storage.getURL(key: "\(fileName).\(ext)")
-       if var components = URLComponents(string: url.absoluteString) {
-           components.query = nil
-           return components.url ?? url
-       } else {
-           return url
-       }
-    }
+//    private func uploadImage(media: MediaDataType) async throws -> URL {
+//        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+//        let size = 5
+//        let fileName = str.createRandomStr(length: size) + "_" + Date().dateToString(format: "yyyyMMddHHmmss")
+//        var data: Data?
+//        var ext: String = ""
+//
+//        switch media {
+//        case let .image(model):
+//            data = model
+//            ext = "jpg"
+//        case let .video(model, _):
+//            data = model
+//            ext = "mp4"
+//        }
+//
+//        let uploadTask = Amplify.Storage.uploadData(
+//            key: "\(fileName).\(ext)",
+//            data: data ?? Data()
+//        )
+//        Task {
+//            for await progress in await uploadTask.progress {
+//                DEBUG_LOG("Progress: \(progress)")
+//            }
+//        }
+//        let value = try await uploadTask.value
+//        DEBUG_LOG("uploadTask Completed: \(value)")
+//        return try await getURL(fileName: fileName, ext: ext)
+//    }
+//
+//    private func getURL(fileName: String, ext: String) async throws -> URL {
+//       let url = try await Amplify.Storage.getURL(key: "\(fileName).\(ext)")
+//       if var components = URLComponents(string: url.absoluteString) {
+//           components.query = nil
+//           return components.url ?? url
+//       } else {
+//           return url
+//       }
+//    }
 }
