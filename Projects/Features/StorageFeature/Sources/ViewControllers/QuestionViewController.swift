@@ -207,11 +207,13 @@ extension QuestionViewController {
                                             self.editSongCheckImageView,
                                             self.wakMusicFeedbackCheckImageView]
             
-            let emailContent:[MailContent] = [MailContent(title: "버그 제보", body: "버그 제보 입니다."),
-                                              MailContent(title: "기능 제안", body: "기능 제안 입니다."),
-                                              MailContent(title: "노래 추가", body: "노래 추가 입니다."),
-                                              MailContent(title: "노래 수정", body: "노래 수정 입니다."),
-                                              MailContent(title: "주간 왁뮤", body: "주간 왁뮤 입니다.")]
+            let mailContentSuffix:String = "* 자동으로 작성된 시스템 정보입니다.\n* 원활한 문의를 위해서 삭제하지 말아주세요\n\n하드웨어 / \(OS_VERSION())\n\n userID:\(AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.displayName ?? "") )"
+            
+            let emailContent:[MailContent] = [MailContent(title: "버그 제보", body: "겪으신 버그에 대해 설명해 주세요.\n\n버그와 관련된 사진이나 영상을 첨부해 주세요.\n\n왁물원 닉네임을 알려주세요.\n\n\(mailContentSuffix)"),
+                                              MailContent(title: "기능 제안", body: "제안해 주고 싶은 기능에 대해 설명해 주세요.\n\n어떤 플랫폼과 관련된 기능인가요\n\n a. 모바일 앱\n b. 데스크 앱\n c. 웹 사이트\n\n\(mailContentSuffix)"),
+                                              MailContent(title: "노래 추가", body: "- 이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.\n- 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.\n\n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\(mailContentSuffix)"),
+                                              MailContent(title: "노래 수정", body:"- 이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.\n- 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.\n\n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\(mailContentSuffix)"),
+                                              MailContent(title: "주간 왁뮤", body: "문의하실 내용을 적어주세요.\n\n\(mailContentSuffix)")]
             
             self.output.mailContent.accept(emailContent[index]) //해당 이메일 넘겨 주
             

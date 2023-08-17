@@ -26,7 +26,7 @@ public enum MailState {
         case .sent:
             return "소중한 의견 감사합니다."
         case .notReady:
-            return "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 계정을 설정해주세요."
+            return "설정 > Mail 앱 > 계정을 설정해주세요."
         }
         
     }
