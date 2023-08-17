@@ -13,6 +13,7 @@ import Utility
 import BaseFeature
 import DataMappingModule
 import MessageUI
+import CommonFeature
 
 public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
@@ -165,6 +166,7 @@ extension QuestionViewController {
     }
     
     private func bindRx(){
+        
         self.closeButton.rx.tap.subscribe(onNext: { [weak self] in
             self?.dismiss(animated: true)
         }).disposed(by: disposeBag)
@@ -266,29 +268,70 @@ extension QuestionViewController {
                         
                 }
                 else {
-                    self.showSendMailErrorAlert()
+                    self.output.state.accept(.notReady)
+                    self.output.showPopUp.accept(true)
                 }
                 
                 
             })
             .disposed(by: disposeBag)
+        
+        
+        output.showPopUp
+            .filter({$0})
+            .withLatestFrom(output.state){($1)}
+            .subscribe {[weak self]  state in
+                
+                guard let self else {return}
+                
+                
+                let vc = TextPopupViewController.viewController(text: state.message,cancelButtonIsHidden: true,confirmButtonText:state.buttonText ,completion: {
+                    
+                    switch state {
+                        
+                       
+                    case .sent,.fail:
+                        self.dismiss(animated: true)
+                        
+                    case .notReady:
+                        // 가라 셋티으
+                        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    
+                    self.output.showPopUp.accept(false)
+                })
+                                                                
+                                                            
+                self.showPanModal(content: vc)
+                                                                
+            }
+            .disposed(by: disposeBag)
     }
     
-    func showSendMailErrorAlert() {
-            let sendMailErrorAlert = UIAlertController(title: "메일 설정 오류", message: "아이폰 이메일 설정을 확인하고 다시 시도해주세요.", preferredStyle: .alert)
-            let confirmAction = UIAlertAction(title: "확인", style: .default) {
-                (action) in
-
-            }
-            sendMailErrorAlert.addAction(confirmAction)
-            self.present(sendMailErrorAlert, animated: true, completion: nil)
-    }
  
 }
 
 
 extension QuestionViewController : MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true, completion: nil)
+        
+        if result == .sent {
+            output.state.accept(.sent)
+        }
+        
+        else {
+            output.state.accept(.fail)
+        }
+        
+        controller.dismiss(animated: true, completion: { [weak self]  in
+            
+            guard let self else {return}
+            
+            self.output.showPopUp.accept(true)
+        })
     }
 }

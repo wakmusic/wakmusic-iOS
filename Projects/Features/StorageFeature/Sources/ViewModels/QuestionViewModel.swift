@@ -14,6 +14,44 @@ import DomainModule
 import BaseFeature
 import KeychainModule
 
+public enum MailState {
+    
+    case sent
+    case fail
+    case notReady
+    
+    var message:String {
+        
+        switch self {
+            
+        case .sent:
+            return "소중한 의견 감사합니다."
+        case .fail:
+            return "실패 했습니다."
+        case .notReady:
+            return "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 계정을 설정해주세요."
+        }
+        
+    }
+    
+    var buttonText:String {
+        
+        switch self {
+            
+        case .sent:
+            return "확인"
+        case .fail:
+            return "확인"
+        case .notReady:
+            return "설정하러 가기"
+        }
+        
+    }
+    
+    
+    
+}
+
 public struct MailContent{
      
     let receiver:String = "contact@wakmusic.xyz"
@@ -31,6 +69,8 @@ public final class QuestionViewModel:ViewModelType {
     public struct Output {
         var selectedIndex: PublishRelay<Int> = PublishRelay()
         var mailContent: BehaviorRelay<MailContent> = .init(value: MailContent(title: "버그 제보", body: "버그 제보 입니다."))
+        var showPopUp: BehaviorRelay<Bool> = .init(value: false)
+        var state:PublishRelay<MailState> = PublishRelay()
     }
 
     public init(
