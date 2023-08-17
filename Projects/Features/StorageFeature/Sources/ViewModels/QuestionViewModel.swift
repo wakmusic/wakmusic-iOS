@@ -116,7 +116,7 @@ extension InquiryType {
             """
         case .modifySong:
             return """
-                조회수가 이상한 경우는 반응 영상이 포함되어 있을 수 있습니다.
+                · 조회수가 이상한 경우는 반응 영상이 포함되어 있을 수 있습니다.
                 \n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\n\n
             """
         case .weeklyChart:
