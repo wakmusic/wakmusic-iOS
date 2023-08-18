@@ -278,7 +278,7 @@ extension QuestionViewController {
                 owner.showToast(
                     text: text,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56+56+20
+                    verticalOffset: 56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20
                 )
                 owner.dismiss(animated: true)
             })
