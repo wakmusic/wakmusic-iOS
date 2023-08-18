@@ -34,6 +34,10 @@ public func APP_VERSION() -> String {
     return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
 }
 
+public func APP_NAME() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? ""
+}
+
 public func OS_VERSION() -> String {
     return UIDevice.current.systemVersion
 }

@@ -134,7 +134,7 @@ extension InquiryType {
             return """
                 -------------------------------------------
                 * 자동으로 작성된 시스템 정보입니다. 원활한 문의를 위해서 삭제하지 말아 주세요.\n
-                왁타버스뮤직 v\(APP_VERSION())
+                \(APP_NAME()) v\(APP_VERSION())
                 \(Device().modelName) / \(OS_NAME()) \(OS_VERSION())
                 닉네임: \(AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.displayName ?? ""))
             """
