@@ -262,7 +262,7 @@ extension QuestionViewController {
                         
                 }else {
                     let vc = TextPopupViewController.viewController(
-                        text: "메일 계정이 설정되어있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
+                        text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
                         cancelButtonIsHidden: true,
                         confirmButtonText: "확인"
                     )
