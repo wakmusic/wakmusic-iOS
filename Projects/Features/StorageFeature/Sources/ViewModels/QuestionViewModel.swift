@@ -25,7 +25,7 @@ public final class QuestionViewModel:ViewModelType {
 
     public struct Output {
         var mailSource: BehaviorRelay<InquiryType> = .init(value: .unknown)
-        var showToast: PublishSubject<String> = PublishSubject()
+        var showToastWithDismiss: PublishSubject<(String, Bool)> = PublishSubject() // (message, toDismiss)
     }
 
     public init(
@@ -48,16 +48,16 @@ public final class QuestionViewModel:ViewModelType {
             .disposed(by: disposeBag)
         
         input.mailComposeResult
-            .map { (result: Result<MFMailComposeResult, Error>) -> String in
+            .map { (result: Result<MFMailComposeResult, Error>) -> (String, Bool) in
                 switch result {
                 case let .success(result):
                     DEBUG_LOG("MFMailComposeResult: \(result)")
-                    return (result == .sent) ? "소중한 의견 감사합니다." : ""
+                    return (result == .sent) ? ("소중한 의견 감사합니다.", true) : ("", false)
                 case let .failure(error):
-                    return error.localizedDescription
+                    return (error.localizedDescription, false)
                 }
             }
-            .bind(to: output.showToast)
+            .bind(to: output.showToastWithDismiss)
             .disposed(by: disposeBag)
 
         return output

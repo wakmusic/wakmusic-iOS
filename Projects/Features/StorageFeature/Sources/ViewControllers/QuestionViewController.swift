@@ -271,15 +271,17 @@ extension QuestionViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showToast
-            .filter { !$0.isEmpty }
+        output.showToastWithDismiss
+            .filter { !$0.0.isEmpty }
             .withUnretained(self)
-            .subscribe(onNext: { (owner, text) in
+            .subscribe(onNext: { (owner, params) in
+                let (text, toDismiss) = params
                 owner.showToast(
                     text: text,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20
+                    verticalOffset: toDismiss ? (56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20) : (56 + 10 + 20)
                 )
+                guard toDismiss else { return }
                 owner.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
