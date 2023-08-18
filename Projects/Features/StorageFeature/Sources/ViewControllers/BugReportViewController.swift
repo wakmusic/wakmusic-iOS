@@ -15,7 +15,7 @@ import CommonFeature
 import SafariServices
 import BaseFeature
 import PhotosUI
-import Amplify
+//import Amplify
 import Combine
 import NVActivityIndicatorView
 

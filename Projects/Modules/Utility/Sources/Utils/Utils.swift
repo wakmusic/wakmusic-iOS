@@ -38,6 +38,31 @@ public func OS_VERSION() -> String {
     return UIDevice.current.systemVersion
 }
 
+public func OS_NAME() -> String {
+    let osName: String = {
+        #if os(iOS)
+        #if targetEnvironment(macCatalyst)
+        return "macOS(Catalyst)"
+        #else
+        return "iOS"
+        #endif
+        #elseif os(watchOS)
+        return "watchOS"
+        #elseif os(tvOS)
+        return "tvOS"
+        #elseif os(macOS)
+        return "macOS"
+        #elseif os(Linux)
+        return "Linux"
+        #elseif os(Windows)
+        return "Windows"
+        #else
+        return "Unknown"
+        #endif
+    }()
+    return osName
+}
+
 // use: colorFromRGB(0xffffff)
 public func colorFromRGB(_ rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {
     return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
