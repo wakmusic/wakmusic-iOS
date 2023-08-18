@@ -110,7 +110,7 @@ extension InquiryType {
             """
         case .addSong:
             return """
-                · 이세돌 분들이 부르신걸 이파리분들이 개인소장용으로 일부공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.
+                · 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.
                 · 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.
                 \n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\n\n
             """
@@ -133,7 +133,7 @@ extension InquiryType {
         default:
             return """
                 -------------------------------------------
-                * 자동으로 작성된 시스템 정보입니다. 원활한 문의를 위해서 삭제하지 말아주세요.\n
+                * 자동으로 작성된 시스템 정보입니다. 원활한 문의를 위해서 삭제하지 말아 주세요.\n
                 왁타버스뮤직 v\(APP_VERSION())
                 \(Device().modelName) / \(OS_NAME()) \(OS_VERSION())
                 닉네임: \(AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.displayName ?? ""))
