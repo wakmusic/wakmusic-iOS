@@ -36,12 +36,9 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editSongButton: UIButton!
     @IBOutlet weak var editSongCheckImageView: UIImageView!
     
-    
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
-    
-    
     @IBOutlet weak var nextButton: UIButton!
     
     let selectedColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -57,6 +54,10 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     var askSongComponent: AskSongComponent!
     var bugReportComponent: BugReportComponent!
     
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -277,8 +278,9 @@ extension QuestionViewController {
                 owner.showToast(
                     text: text,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56+10+20
+                    verticalOffset: 56+56+20
                 )
+                owner.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -287,11 +289,12 @@ extension QuestionViewController {
 
 extension QuestionViewController : MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        if let error = error {
-            input.mailComposeResult.onNext(.failure(error))
-        }else{
-            input.mailComposeResult.onNext(.success(result))
+        controller.dismiss(animated: true) {
+            if let error = error {
+                self.input.mailComposeResult.onNext(.failure(error))
+            }else{
+                self.input.mailComposeResult.onNext(.success(result))
+            }
         }
-        controller.dismiss(animated: true, completion: nil)
     }
 }
