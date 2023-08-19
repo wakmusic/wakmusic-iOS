@@ -11,6 +11,7 @@ import UIKit
 import Alamofire
 import RxSwift
 import RxRelay
+import SafariServices
 
 // MARK: - Delegate protocol
 public protocol GoogleOAuthLoginDelegate: AnyObject {
@@ -53,7 +54,9 @@ public class GoogleLoginManager {
 
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
             DEBUG_LOG(url)
-            UIApplication.shared.open(url)
+            //UIApplication.shared.open(url) // 이건 앱 외부로 나가서 사파리 앱이 실행되는거고,
+            let safari = SFSafariViewController(url: url) //이건 앱 안에서 사파리 컨트롤러를 띄울 수 있음
+            UIApplication.shared.windows.first?.rootViewController?.present(safari, animated: true)
         }
     }
 

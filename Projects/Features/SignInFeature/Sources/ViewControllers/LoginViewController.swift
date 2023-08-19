@@ -14,6 +14,7 @@ import RxSwift
 import RxRelay
 import AuthenticationServices
 import CommonFeature
+import SafariServices
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var scrollView: UIScrollView!
@@ -84,6 +85,15 @@ extension LoginViewController{
         googleLoginButton.rx.tap.bind {
             GoogleLoginManager.shared.googleLoginRequest()
         }.disposed(by: disposeBag)
+        
+        viewModel.getGoogleTokenToSafariDismiss
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                guard let safari = UIApplication.shared.windows.first?.rootViewController?.presentedViewController as? SFSafariViewController else{
+                    return
+                }
+                safari.dismiss(animated: true, completion: nil)
+            }).disposed(by: disposeBag)
         
         serviceButton.rx.tap
             .withUnretained(self)
