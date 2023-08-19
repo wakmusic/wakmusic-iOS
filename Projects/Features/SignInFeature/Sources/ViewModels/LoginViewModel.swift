@@ -16,6 +16,7 @@ import KeychainModule
 import CryptoSwift
 import AuthenticationServices
 import DataMappingModule
+import SafariServices
 
 public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let disposeBag = DisposeBag()
@@ -137,6 +138,11 @@ extension LoginViewModel: GoogleOAuthLoginDelegate {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
             oauthToken.accept((.google, id))
+            DispatchQueue.main.async {
+                if let safari = UIApplication.shared.windows.first?.rootViewController?.presentedViewController as? SFSafariViewController{
+                    safari.dismiss(animated: true)
+                }
+            }
         }
     }
 }
