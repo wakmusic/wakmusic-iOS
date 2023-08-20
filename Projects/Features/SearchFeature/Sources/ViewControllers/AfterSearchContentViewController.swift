@@ -54,8 +54,15 @@ extension AfterSearchContentViewController{
                 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/2))
                 warningView.text = "검색결과가 없습니다."
-                let isEmpty = model.first?.items.isEmpty ?? false
-                self.tableView.tableHeaderView = isEmpty ?  warningView : nil
+                
+                if self.viewModel.sectionType == .all {
+                    let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
+                    self.tableView.tableHeaderView = allSectionisEmpty ? warningView : nil
+                    
+                }else{
+                    let isEmpty = model.first?.items.isEmpty ?? false
+                    self.tableView.tableHeaderView = isEmpty ?  warningView : nil
+                }
             })
             .bind(to: tableView.rx.items(dataSource: createDatasource()))
             .disposed(by: disposeBag)
@@ -117,7 +124,9 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         if viewModel.sectionType != .all{
             return nil
         }
-        if self.output.dataSource.value[section].items.count == 0{
+        
+        let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
+        if allSectionisEmpty{
             return nil
         }
         songlistHeader.update(self.output.dataSource.value[section].model)
@@ -129,7 +138,9 @@ extension AfterSearchContentViewController:UITableViewDelegate{
         if viewModel.sectionType != .all{
             return 0
         }
-        if self.output.dataSource.value[section].items.count == 0{
+
+        let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
+        if allSectionisEmpty{
             return 0
         }
         return 44

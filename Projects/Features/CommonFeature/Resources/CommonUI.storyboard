@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -159,21 +159,21 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="170-Tn-9JZ">
                                 <rect key="frame" x="20" y="123" width="353" height="24"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="담을곡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6EP-hY-u7V">
-                                        <rect key="frame" x="0.0" y="2" width="44.333333333333336" height="20.333333333333332"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6EP-hY-u7V">
+                                        <rect key="frame" x="0.0" y="2" width="20.666666666666668" height="20.333333333333332"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00곡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYr-Kd-zN3">
-                                        <rect key="frame" x="48.333333333333329" y="2" width="35.333333333333329" height="20.333333333333332"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="곡 선택" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYr-Kd-zN3">
+                                        <rect key="frame" x="20.666666666666668" y="2" width="48.666666666666643" height="20.333333333333332"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="gYr-Kd-zN3" firstAttribute="leading" secondItem="6EP-hY-u7V" secondAttribute="trailing" constant="4" id="26D-05-6xx"/>
+                                    <constraint firstItem="gYr-Kd-zN3" firstAttribute="leading" secondItem="6EP-hY-u7V" secondAttribute="trailing" id="26D-05-6xx"/>
                                     <constraint firstAttribute="height" constant="24" id="4Ge-JK-Qfj"/>
                                     <constraint firstItem="6EP-hY-u7V" firstAttribute="centerY" secondItem="170-Tn-9JZ" secondAttribute="centerY" id="4Oz-Ph-bKT"/>
                                     <constraint firstItem="gYr-Kd-zN3" firstAttribute="centerY" secondItem="170-Tn-9JZ" secondAttribute="centerY" id="cF1-n5-1Xl"/>
@@ -266,8 +266,8 @@
                     <connections>
                         <outlet property="closeButton" destination="4lb-JV-RW7" id="7wL-mm-k3H"/>
                         <outlet property="indicator" destination="Evg-l5-Rct" id="oeK-Rh-zTy"/>
-                        <outlet property="songCountLabel" destination="gYr-Kd-zN3" id="O9C-RF-1yx"/>
-                        <outlet property="subTitleLabel" destination="6EP-hY-u7V" id="gUt-eH-xhe"/>
+                        <outlet property="songCountLabel" destination="6EP-hY-u7V" id="gUt-eH-xhe"/>
+                        <outlet property="subTitleLabel" destination="gYr-Kd-zN3" id="O9C-RF-1yx"/>
                         <outlet property="tableView" destination="55y-I8-uJW" id="WIl-4T-zDQ"/>
                         <outlet property="titleLabel" destination="9b1-Vu-kuJ" id="oau-9B-0PA"/>
                     </connections>

@@ -124,11 +124,6 @@ public final class OpenSourceLicenseViewModel {
                 link: "https://github.com/realm/realm-swift"
             ),
             OpenSourceLicense(
-                title: "Amplify",
-                description: "aws-amplify/amplify-swift is licensed under the Apache License 2.0",
-                link: "https://github.com/aws-amplify/amplify-swift.git"
-            ),
-            OpenSourceLicense(
                 title: "YouTubePlayerKit",
                 description: "The MIT License\nCopyright (c) 2023 Sven Tiigi",
                 link: "https://github.com/SvenTiigi/YouTubePlayerKit.git"

@@ -15,11 +15,10 @@ import DomainModule
 import Utility
 import CommonFeature
 
-public final class MyPlayListViewModel:ViewModelType {
+public final class MyPlayListViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
     var editPlayListOrderUseCase: EditPlayListOrderUseCase!
     var deletePlayListUseCase: DeletePlayListUseCase!
-    var fetchPlayListDetailUseCase: FetchPlayListDetailUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -30,7 +29,6 @@ public final class MyPlayListViewModel:ViewModelType {
         let addPlayList: PublishSubject<Void> = PublishSubject()
         let deletePlayList: PublishSubject<Void> = PublishSubject()
         let runEditing: PublishSubject<Void> = PublishSubject()
-        let getPlayListDetail:PublishSubject<String> = PublishSubject()
     }
 
     public struct Output {
@@ -40,19 +38,16 @@ public final class MyPlayListViewModel:ViewModelType {
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<BaseEntity> = PublishRelay()
-        let immediatelyPlaySongs:PublishSubject<[SongEntity]> = PublishSubject()
     }
 
     init(
         fetchPlayListUseCase: FetchPlayListUseCase,
         editPlayListOrderUseCase: EditPlayListOrderUseCase,
-        deletePlayListUseCase: DeletePlayListUseCase,
-        fetchPlayListDetailUseCase: FetchPlayListDetailUseCase
+        deletePlayListUseCase: DeletePlayListUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
-        self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
@@ -148,6 +143,12 @@ public final class MyPlayListViewModel:ViewModelType {
             .do(onNext: { _ in
                 output.indexPathOfSelectedPlayLists.accept([])
             })
+            .filter{ (ids: [String]) -> Bool in
+                let beforeIds: [String] = output.backUpdataSource.value.first?.items.map { $0.key } ?? []
+                let elementsEqual: Bool = beforeIds.elementsEqual(ids)
+                DEBUG_LOG(elementsEqual ? "❌ 변경된 내용이 없습니다." : "✅ 리스트가 변경되었습니다.")
+                return elementsEqual == false
+            }
             .flatMap{ [weak self] (ids: [String]) -> Observable<BaseEntity> in
                 guard let self = self else{
                     return Observable.empty()
@@ -252,17 +253,6 @@ public final class MyPlayListViewModel:ViewModelType {
                 return newModel
             }
             .bind(to: output.dataSource)
-            .disposed(by: disposeBag)
-        
-        input.getPlayListDetail
-            .flatMap{ [weak self] (key) -> Observable<[SongEntity]> in
-                guard let `self` = self else { return Observable.empty() }
-                return self.fetchPlayListDetailUseCase
-                    .execute(id: key, type: .custom)
-                    .asObservable()
-                    .map { $0.songs }
-            }
-            .bind(to: output.immediatelyPlaySongs)
             .disposed(by: disposeBag)
 
         return output

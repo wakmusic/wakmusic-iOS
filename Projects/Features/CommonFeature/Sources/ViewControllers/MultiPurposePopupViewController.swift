@@ -338,7 +338,8 @@ extension MultiPurposePopupViewController{
                 case .load:
                     description = "리스트를 가져왔습니다."
                 case .share:
-                    break
+                    SwiftEntryKit.dismiss()
+                    return
                 case .nickname:
                     description = "닉네임이 수정되었습니다."
                 }

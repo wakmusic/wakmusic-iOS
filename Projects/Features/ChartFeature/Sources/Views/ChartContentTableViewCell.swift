@@ -6,6 +6,7 @@ import DomainModule
 import DataMappingModule
 import Kingfisher
 import Utility
+import CommonFeature
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI
@@ -53,6 +54,12 @@ public final class ChartContentTableViewCell: UITableViewCell {
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
+    private let thumbnailToPlayButton = UIButton(type: .system).then {
+        $0.backgroundColor = UIColor.clear
+    }
+                     
+    // MARK: -Property
+    private var model: ChartRankingEntity?
 
     // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -62,6 +69,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
         addView()
         setRankingLayout()
         setLayout()
+        addTarget()
         self.selectionStyle = .none
     }
 
@@ -95,11 +103,13 @@ extension ChartContentTableViewCell {
             albumImageView,
             hitsLabel,
             titleStringLabel,
-            groupStringLabel
+            groupStringLabel,
+            thumbnailToPlayButton
         ].forEach {
             contentView.addSubview($0)
         }
     }
+    
     private func setRankingLayout() {
         rankingLabel.snp.makeConstraints {
             $0.top.equalTo(10)
@@ -145,6 +155,7 @@ extension ChartContentTableViewCell {
             $0.right.equalTo(-20)
         }
     }
+    
     private func setLayout() {
         titleStringLabel.snp.makeConstraints {
             $0.height.equalTo(24)
@@ -158,6 +169,13 @@ extension ChartContentTableViewCell {
             $0.left.equalTo(albumImageView.snp.right).offset(8)
             $0.right.equalTo(hitsLabel.snp.left).offset(-8)
         }
+        thumbnailToPlayButton.snp.makeConstraints {
+            $0.edges.equalTo(albumImageView)
+        }
+    }
+    
+    private func addTarget() {
+        thumbnailToPlayButton.addTarget(self, action: #selector(thumbnailToPlayButtonAction), for: .touchUpInside)
     }
 }
 
@@ -215,7 +233,7 @@ extension ChartContentTableViewCell {
 // MARK: - Update
 extension ChartContentTableViewCell {
     public func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
-        
+        self.model = model
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : .clear
         
         let lastRanking = model.last - (index + 1)
@@ -279,5 +297,20 @@ extension ChartContentTableViewCell {
             ]
         )
         return attributedString
+    }
+            
+    @objc private func thumbnailToPlayButtonAction() {
+        guard let song = self.model else { return }
+        let songEntity: SongEntity = SongEntity(
+            id: song.id,
+            title: song.title,
+            artist: song.artist,
+            remix: song.remix,
+            reaction: song.reaction,
+            views: song.views,
+            last: song.last,
+            date: song.date
+        )
+        PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
     }
 }

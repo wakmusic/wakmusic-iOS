@@ -30,9 +30,9 @@ public extension TargetDependency.SPM {
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
-    static let Amplify = TargetDependency.package(product: "Amplify")
-    static let AWSCognitoAuthPlugin = TargetDependency.package(product: "AWSCognitoAuthPlugin")
-    static let AWSS3StoragePlugin = TargetDependency.package(product:"AWSS3StoragePlugin")
+  //  static let Amplify = TargetDependency.package(product: "Amplify")
+ //   static let AWSCognitoAuthPlugin = TargetDependency.package(product: "AWSCognitoAuthPlugin")
+ //   static let AWSS3StoragePlugin = TargetDependency.package(product:"AWSS3StoragePlugin")
 }
 
 public extension Package {
@@ -40,8 +40,11 @@ public extension Package {
         url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
         requirement: .upToNextMajor(from: "1.3.1")
     )
+    
+    /*
     static let Amplify = Package.remote(
         url: "https://github.com/aws-amplify/amplify-swift.git",
         requirement: .upToNextMajor(from: "2.10.0")
     )
+     */
 }

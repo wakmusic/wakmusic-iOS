@@ -32,9 +32,9 @@ let targets: [Target] = [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-            .SPM.Amplify,
-            .SPM.AWSCognitoAuthPlugin,
-            .SPM.AWSS3StoragePlugin,
+          //  .SPM.Amplify,
+          //  .SPM.AWSCognitoAuthPlugin,
+          //  .SPM.AWSS3StoragePlugin,
         ],
         settings: .settings(base: Environment.baseSetting,
                             configurations: [
@@ -90,7 +90,8 @@ let project: Project =
     .init(
         name: Environment.targetName,
         organizationName: Environment.organizationName,
-        packages: [.Amplify],
+        packages: [],
+        //packages: [.Amplify],
         settings: settinges,
         targets: targets,
         schemes: schemes

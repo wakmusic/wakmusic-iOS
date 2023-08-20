@@ -145,6 +145,12 @@ public final class FavoriteViewModel:ViewModelType {
             .do(onNext: { _ in
                 output.indexPathOfSelectedLikeLists.accept([])
             })
+            .filter{ (ids: [String]) -> Bool in
+                let beforeIds: [String] = output.backUpdataSource.value.first?.items.map { $0.song.id } ?? []
+                let elementsEqual: Bool = beforeIds.elementsEqual(ids)
+                DEBUG_LOG(elementsEqual ? "❌ 변경된 내용이 없습니다." : "✅ 리스트가 변경되었습니다.")
+                return elementsEqual == false
+            }
             .flatMap{ [weak self] (ids: [String]) -> Observable<BaseEntity> in
                 guard let self = self else{
                     return Observable.empty()

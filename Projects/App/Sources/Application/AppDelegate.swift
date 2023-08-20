@@ -7,9 +7,9 @@ import FirebaseCore
 import FirebaseAnalytics
 import FirebaseCrashlytics
 import RealmSwift
-import Amplify
-import AWSCognitoAuthPlugin
-import AWSS3StoragePlugin
+//import Amplify
+//import AWSCognitoAuthPlugin
+//import AWSS3StoragePlugin
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,14 +34,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.appName = NAVER_APP_NAME() //앱이름
 
         //Amplify
-        do {
-            try Amplify.add(plugin: AWSCognitoAuthPlugin())
-            try Amplify.add(plugin: AWSS3StoragePlugin())
-            try Amplify.configure()
-            DEBUG_LOG("Amplify configured with Auth and Storage plugins")
-        } catch {
-            DEBUG_LOG("Failed to initialize Amplify with \(error)")
-        }
+//        do {
+//            try Amplify.add(plugin: AWSCognitoAuthPlugin())
+//            try Amplify.add(plugin: AWSS3StoragePlugin())
+//            try Amplify.configure()
+//            DEBUG_LOG("Amplify configured with Auth and Storage plugins")
+//        } catch {
+//            DEBUG_LOG("Failed to initialize Amplify with \(error)")
+//        }
         
         //Realm register
         RealmManager.shared.register()

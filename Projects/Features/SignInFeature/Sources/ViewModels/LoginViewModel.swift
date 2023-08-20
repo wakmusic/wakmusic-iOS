@@ -30,6 +30,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     let fetchedWMToken: PublishRelay<String> = PublishRelay()
     let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
     let keychain = KeychainImpl()
+    let getGoogleTokenToSafariDismiss: PublishSubject<Void> = PublishSubject()
 
     public struct Input {
         let pressNaverLoginButton: PublishRelay<Void>
@@ -137,6 +138,7 @@ extension LoginViewModel: GoogleOAuthLoginDelegate {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
             oauthToken.accept((.google, id))
+            getGoogleTokenToSafariDismiss.onNext(())
         }
     }
 }

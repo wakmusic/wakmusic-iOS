@@ -12,6 +12,8 @@ import RxSwift
 import Utility
 import BaseFeature
 import DataMappingModule
+import MessageUI
+import CommonFeature
 
 public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
@@ -34,12 +36,9 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     @IBOutlet weak var editSongButton: UIButton!
     @IBOutlet weak var editSongCheckImageView: UIImageView!
     
-    
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
-    
-    
     @IBOutlet weak var nextButton: UIButton!
     
     let selectedColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -55,6 +54,10 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
     var askSongComponent: AskSongComponent!
     var bugReportComponent: BugReportComponent!
     
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -79,7 +82,6 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
 }
 
 extension QuestionViewController {
-    
     private func configureUI(){
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -164,105 +166,137 @@ extension QuestionViewController {
     }
     
     private func bindRx(){
-        self.closeButton.rx.tap.subscribe(onNext: { [weak self] in
-            self?.dismiss(animated: true)
-        }).disposed(by: disposeBag)
+        closeButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss(animated: true)
+            }).disposed(by: disposeBag)
 
         Observable.merge(
-            bugReportButton.rx.tap.map { _ in 0 },
-            suggestFunctionButton.rx.tap.map { _ in 1 },
-            addSongButton.rx.tap.map { _ in 2 },
-            editSongButton.rx.tap.map { _ in 3 },
-            wakMusicFeedbackButton.rx.tap.map{_ in 4}
+            bugReportButton.rx.tap.map { _ -> Int in 0 },
+            suggestFunctionButton.rx.tap.map { _ -> Int in 1 },
+            addSongButton.rx.tap.map { _ -> Int in 2 },
+            editSongButton.rx.tap.map { _ -> Int in 3 },
+            wakMusicFeedbackButton.rx.tap.map{ _ -> Int in 4 }
         )
-        .bind(to: output.selectedIndex)
+        .bind(to: input.selectedIndex)
         .disposed(by: disposeBag)
         
-        self.output.selectedIndex.subscribe(onNext: { [weak self]  (index:Int) in
-            guard let self = self else{
-                return
-            }
-            
-            if !self.nextButton.isEnabled {
-                self.nextButton.isEnabled = true
-            }
-            let superViews:[UIView] = [self.bugReportSuperView,
-                                       self.suggestFunctionSuperView,
-                                       self.addSongSuperView,
-                                       self.editSongSuperView,
-                                       self.wakMusicFeedbackSuperView]
-            
-            let buttons:[UIButton] = [self.bugReportButton,
-                                      self.suggestFunctionButton,
-                                      self.addSongButton,
-                                      self.editSongButton,
-                                      self.wakMusicFeedbackButton]
-            
-            let imageViews:[UIImageView] = [self.bugReportCheckImageView,
-                                            self.suggestFunctionCheckImageView,
-                                            self.addSongCheckImageView,
-                                            self.editSongCheckImageView,
-                                            self.wakMusicFeedbackCheckImageView]
-            
-            for i in 0..<superViews.count {
-                var title:String = ""
-                switch i {
-                case 0:
-                    title = "버그 제보"
-                case 1:
-                    title = "기능 제안"
-                case 2:
-                    title = "노래 추가"
-                case 3:
-                    title = "노래 수정"
-                case 4:
-                    title = "주간차트 영상"
-                default:
-                    return
-                }
-                buttons[i].setAttributedTitle(
-                    NSMutableAttributedString(
-                        string:title,
-                        attributes: [
-                            .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
-                                DesignSystemFontFamily.Pretendard.light.font(size: 16),
-                            .foregroundColor: i == index ? self.selectedColor : self.unSelectedTextColor,
-                            .kern: -0.5
-                        ]
-                    ), for: .normal
-                )
-                imageViews[i].isHidden = i == index ? false : true
-                superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
-                superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
-            }
-        }).disposed(by: disposeBag)
-        
-        self.nextButton.rx.tap
-            .withLatestFrom(output.selectedIndex)
-            .subscribe(onNext: { [weak self] in
+        output.mailSource
+            .filter { $0 != .unknown }
+            .map { $0.rawValue }
+            .subscribe(onNext: { [weak self] (index: Int) in
                 guard let self = self else{
                     return
                 }
-                switch $0 {
-                case 0:
-                    let vc = self.bugReportComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 1:
-                    let vc = self.suggestFunctionComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 2:
-                    let vc = self.askSongComponent.makeView(type: .add)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 3:
-                    let vc = self.askSongComponent.makeView(type: .update)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                case 4:
-                    let vc = self.wakMusicFeedbackComponent.makeView()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                default:
-                    return
+                
+                if !self.nextButton.isEnabled {
+                    self.nextButton.isEnabled = true
+                }
+                let superViews:[UIView] = [self.bugReportSuperView,
+                                           self.suggestFunctionSuperView,
+                                           self.addSongSuperView,
+                                           self.editSongSuperView,
+                                           self.wakMusicFeedbackSuperView]
+                
+                let buttons:[UIButton] = [self.bugReportButton,
+                                          self.suggestFunctionButton,
+                                          self.addSongButton,
+                                          self.editSongButton,
+                                          self.wakMusicFeedbackButton]
+                
+                let imageViews:[UIImageView] = [self.bugReportCheckImageView,
+                                                self.suggestFunctionCheckImageView,
+                                                self.addSongCheckImageView,
+                                                self.editSongCheckImageView,
+                                                self.wakMusicFeedbackCheckImageView]
+
+                for i in 0..<superViews.count {
+                    var title:String = ""
+                    switch i {
+                    case 0:
+                        title = "버그 제보"
+                    case 1:
+                        title = "기능 제안"
+                    case 2:
+                        title = "노래 추가"
+                    case 3:
+                        title = "노래 수정"
+                    case 4:
+                        title = "주간차트 영상"
+                    default:
+                        return
+                    }
+                    buttons[i].setAttributedTitle(
+                        NSMutableAttributedString(
+                            string:title,
+                            attributes: [
+                                .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
+                                    DesignSystemFontFamily.Pretendard.light.font(size: 16),
+                                .foregroundColor: i == index ? self.selectedColor : self.unSelectedTextColor,
+                                .kern: -0.5
+                            ]
+                        ), for: .normal
+                    )
+                    imageViews[i].isHidden = i == index ? false : true
+                    superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
+                    superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
                 }
             })
             .disposed(by: disposeBag)
+        
+        nextButton.rx.tap
+            .withLatestFrom(output.mailSource)
+            .filter { $0 != .unknown }
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                
+                if MFMailComposeViewController.canSendMail() {
+                    let compseVC = MFMailComposeViewController()
+                    compseVC.mailComposeDelegate = self
+                    compseVC.setToRecipients([$0.receiver])
+                    compseVC.setSubject($0.title)
+                    compseVC.setMessageBody($0.body + $0.suffix, isHTML: false)
+                    self.present(compseVC, animated: true, completion: nil)
+                        
+                }else {
+                    let vc = TextPopupViewController.viewController(
+                        text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인"
+                    )
+                    self.showPanModal(content: vc)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.showToastWithDismiss
+            .filter { !$0.0.isEmpty }
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, params) in
+                let (text, toDismiss) = params
+                owner.showToast(
+                    text: text,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    verticalOffset: toDismiss ? (56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20) : (56 + 10 + 20)
+                )
+                guard toDismiss else { return }
+                owner.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+
+extension QuestionViewController : MFMailComposeViewControllerDelegate {
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true) {
+            if let error = error {
+                self.input.mailComposeResult.onNext(.failure(error))
+            }else{
+                self.input.mailComposeResult.onNext(.success(result))
+            }
+        }
     }
 }

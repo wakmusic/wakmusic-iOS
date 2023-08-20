@@ -57,7 +57,7 @@ public class PlayListDetailViewController: BaseViewController,ViewControllerFrom
                 self.input.runEditing.onNext(())
                 self.navigationController?.popViewController(animated: true)
                 
-            },cancelCompletion: { [weak self] in
+            }, cancelCompletion: { [weak self] in
                 guard let self =  self else {
                     return
                 }

@@ -10,13 +10,16 @@ import UIKit
 import Utility
 import DesignSystem
 import DomainModule
+import CommonFeature
 
 class ArtistMusicCell: UITableViewCell {
-
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var groupStringLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
+    @IBOutlet weak var thumbnailToPlayButton: UIButton!
+    
+    private var model: ArtistSongListEntity?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,10 +34,24 @@ class ArtistMusicCell: UITableViewCell {
         groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
+    
+    @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {
+        guard let song = self.model else { return }
+        let songEntity: SongEntity = SongEntity(
+            id: song.ID,
+            title: song.title,
+            artist: song.artist,
+            remix: song.remix,
+            reaction: song.reaction,
+            views: song.views,
+            last: song.last,
+            date: song.date
+        )
+        PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
+    }
 }
 
 extension ArtistMusicCell {
-    
     static func getCellHeight() -> CGFloat {
         let base: CGFloat = 10 + 10
         let width: CGFloat = (72.0 * APP_WIDTH()) / 375.0
@@ -43,7 +60,7 @@ extension ArtistMusicCell {
     }
     
     func update(model: ArtistSongListEntity) {
-        
+        self.model = model
         self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
         
         titleStringLabel.attributedText = getAttributedString(

@@ -60,8 +60,10 @@
 	<dict>
 		<key>BASE_IMAGE_URL</key>
 		<string>$(BASE_IMAGE_URL)</string>
-		<key>BASE_URL</key>
-		<string>$(BASE_URL)</string>
+		<key>BASE_DEV_URL</key>
+		<string>$(BASE_DEV_URL)</string>
+		<key>BASE_PROD_URL</key>
+		<string>$(BASE_PROD_URL)</string>
 		<key>GOOGLE_CLIENT_ID</key>
 		<string>$(GOOGLE_CLIENT_ID)</string>
 		<key>GOOGLE_SECRET_KEY</key>
