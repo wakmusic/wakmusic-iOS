@@ -123,39 +123,29 @@ extension ArtistDetailViewController {
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
         let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteBottom
         
-        if scrollView.contentOffset.y < absoluteBottom{
-            if canAnimateHeader(scrollView) {
-                var newHeight = self.headerContentViewTopConstraint.constant
-                
-                if isScrollingDown {
-                    newHeight = max(self.maxHeaderHeight, self.headerContentViewTopConstraint.constant - abs(scrollDiff))
-                    
-                }else if isScrollingUp {
-                    if scrollView.contentOffset.y <= abs(self.maxHeaderHeight) {
-                        newHeight = min(self.minHeaderHeight, self.headerContentViewTopConstraint.constant + abs(scrollDiff))
-                    }
+        if scrollView.contentOffset.y < absoluteBottom {
+            var newHeight = self.headerContentViewTopConstraint.constant
+            
+            if isScrollingDown {
+                newHeight = max(self.maxHeaderHeight, self.headerContentViewTopConstraint.constant - abs(scrollDiff))
+            }else if isScrollingUp {
+                if scrollView.contentOffset.y <= abs(self.maxHeaderHeight) {
+                    newHeight = min(self.minHeaderHeight, self.headerContentViewTopConstraint.constant + abs(scrollDiff))
                 }
-                
-                if newHeight != self.headerContentViewTopConstraint.constant {
-                    self.headerContentViewTopConstraint.constant = newHeight
-                    self.updateHeader()
-                }
-                self.view.layoutIfNeeded()
-                self.previousScrollOffset[i] = scrollView.contentOffset.y
             }
+            
+            if newHeight != self.headerContentViewTopConstraint.constant {
+                self.headerContentViewTopConstraint.constant = newHeight
+                self.updateHeader()
+            }
+            self.view.layoutIfNeeded()
+            self.previousScrollOffset[i] = scrollView.contentOffset.y
         }
     }
     
     private func updateHeader() {
         let openAmount = self.headerContentViewTopConstraint.constant + abs(self.maxHeaderHeight)
         let percentage = openAmount / abs(self.maxHeaderHeight)
-        //DEBUG_LOG(percentage)
         self.headerContentView.alpha = percentage
-    }
-    
-    private func canAnimateHeader(_ scrollView: UIScrollView) -> Bool {
-        let spacing: CGFloat = STATUS_BAR_HEGHIT() + 48 + 56 + SAFEAREA_BOTTOM_HEIGHT()
-        let scrollViewMaxHeight = scrollView.frame.height + (2 * abs(self.maxHeaderHeight)) - self.minHeaderHeight
-        return scrollView.contentSize.height > scrollViewMaxHeight + spacing
     }
 }

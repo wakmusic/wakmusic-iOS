@@ -18,7 +18,6 @@ import DomainModule
 import NVActivityIndicatorView
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
-
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     
@@ -31,13 +30,10 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
-    deinit {
-        DEBUG_LOG("\(Self.self) Deinit")
-    }
+    deinit { DEBUG_LOG("\(Self.self) Deinit") }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
         inputBind()
         outputBind()
@@ -60,10 +56,10 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 }
 
 extension ArtistMusicContentViewController {
-    
     private func inputBind() {
-                
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
         
         tableView.rx.willDisplayCell
             .map { $1 }
@@ -86,7 +82,6 @@ extension ArtistMusicContentViewController {
     }
     
     private func outputBind() {
-        
         output.dataSource
             .skip(1)
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
@@ -133,8 +128,8 @@ extension ArtistMusicContentViewController {
         self.activityIndidator.type = .circleStrokeSpin
         self.activityIndidator.startAnimating()
         self.tableView.backgroundColor = .clear
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
     }
 }
 
@@ -167,7 +162,6 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 }
 
 extension ArtistMusicContentViewController: UITableViewDelegate {
-
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
@@ -225,6 +219,7 @@ extension Reactive where Base: ArtistMusicContentViewController{
 
 extension ArtistMusicContentViewController: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard self.output.dataSource.value.count >= 25 else { return }
         guard let parent = self.parent?.parent?.parent as? ArtistDetailViewController else { return }
         let type = self.viewModel.type
         let i = (type == .new) ? 0 : (type == .popular) ? 1 : 2
