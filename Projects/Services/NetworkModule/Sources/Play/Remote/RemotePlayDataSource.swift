@@ -5,5 +5,5 @@ import RxSwift
 import Foundation
 
 public protocol RemotePlayDataSource {
-    func postPlaybackLog(item: Data) -> Single<PostPlaybackLogEntity>
+    func postPlaybackLog(item: Data) -> Single<PlaybackLogEntity>
 }

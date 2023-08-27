@@ -4,5 +4,5 @@ import ErrorModule
 import Foundation
 
 public protocol PlayRepository {
-    func postPlaybackLog(item: Data) -> Single<PostPlaybackLogEntity>
+    func postPlaybackLog(item: Data) -> Single<PlaybackLogEntity>
 }

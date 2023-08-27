@@ -21,7 +21,7 @@ public struct PostPlaybackLogUseCaseImpl: PostPlaybackLogUseCase {
         self.playRepository = playRepository
     }
     
-    public func execute(item: Data) -> Single<PostPlaybackLogEntity> {
+    public func execute(item: Data) -> Single<PlaybackLogEntity> {
         playRepository.postPlaybackLog(item: item)
     }
 }

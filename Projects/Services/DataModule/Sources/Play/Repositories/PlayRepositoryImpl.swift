@@ -15,7 +15,7 @@ public struct PlayRepositoryImpl: PlayRepository {
         self.remotePlayDataSource = remotePlayDataSource
     }
     
-    public func postPlaybackLog(item: Data) -> Single<PostPlaybackLogEntity> {
+    public func postPlaybackLog(item: Data) -> Single<PlaybackLogEntity> {
         remotePlayDataSource.postPlaybackLog(item: item)
     }
 }

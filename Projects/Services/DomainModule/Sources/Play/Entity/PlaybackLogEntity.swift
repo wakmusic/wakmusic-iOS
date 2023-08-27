@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PostPlaybackLogEntity: Equatable {
+public struct PlaybackLogEntity: Equatable {
     public init(
         id: String,
         title: String,
@@ -21,7 +21,7 @@ public struct PostPlaybackLogEntity: Equatable {
     
     public let id, title, artist: String
     
-    public static func == (lhs: PostPlaybackLogEntity, rhs:  PostPlaybackLogEntity) -> Bool {
+    public static func == (lhs: PlaybackLogEntity, rhs:  PlaybackLogEntity) -> Bool {
         lhs.id == rhs.id
     }
 }

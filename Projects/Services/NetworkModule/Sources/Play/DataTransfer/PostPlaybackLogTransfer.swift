@@ -12,8 +12,8 @@ import DomainModule
 import Utility
 
 public extension PlaybackLogResponseDTO {
-    func toDomain() -> PostPlaybackLogEntity {
-        return PostPlaybackLogEntity(
+    func toDomain() -> PlaybackLogEntity {
+        return PlaybackLogEntity(
                 id: songId,
                 title: title,
                 artist: artist

@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol PostPlaybackLogUseCase {
-    func execute(item: Data) -> Single<PostPlaybackLogEntity>
+    func execute(item: Data) -> Single<PlaybackLogEntity>
 }

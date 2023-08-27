@@ -152,13 +152,13 @@ extension PlayerViewModel {
         self.postPlaybackLogUseCase
             .execute(item: item)
             .catch { _ in
-                return Single<PostPlaybackLogEntity>.create { single in
-                    single(.success(PostPlaybackLogEntity(id: "", title: "", artist: "")))
+                return Single<PlaybackLogEntity>.create { single in
+                    single(.success(PlaybackLogEntity(id: "", title: "", artist: "")))
                     return Disposables.create()
                 }
             }
             .asObservable()
-            .subscribe(onNext: { (entity: PostPlaybackLogEntity) in
+            .subscribe(onNext: { (entity: PlaybackLogEntity) in
                 DEBUG_LOG("🎤: \(entity)")
             })
             .disposed(by: disposeBag)
