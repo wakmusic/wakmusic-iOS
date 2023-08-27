@@ -65,6 +65,7 @@ final class PlayerViewModel: ViewModelType {
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
+    var postPlaybackLogUseCase: PostPlaybackLogUseCase!
     
     let disposeBag = DisposeBag()
     private let playState = PlayState.shared
@@ -73,12 +74,20 @@ final class PlayerViewModel: ViewModelType {
     internal var sortedLyrics = [String]()
     internal var isLyricsScrolling = false
     
-    init(fetchLyricsUseCase: FetchLyricsUseCase, addLikeSongUseCase: AddLikeSongUseCase, cancelLikeSongUseCase: CancelLikeSongUseCase, fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase, fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase) {
+    init(
+        fetchLyricsUseCase: FetchLyricsUseCase,
+        addLikeSongUseCase: AddLikeSongUseCase,
+        cancelLikeSongUseCase: CancelLikeSongUseCase,
+        fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase,
+        fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase,
+        postPlaybackLogUseCase: PostPlaybackLogUseCase
+    ) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
+        self.postPlaybackLogUseCase = postPlaybackLogUseCase
         DEBUG_LOG("✅ PlayerViewModel 생성")
     }
     
@@ -97,6 +106,7 @@ final class PlayerViewModel: ViewModelType {
         bindShuffleMode(output: output)
         bindLoginStateChanged(output: output)
         bindCurrentSongLikeStateChanged(output: output)
+        bindRequestPlaybackLog()
         
         return output
     }
@@ -105,7 +115,11 @@ final class PlayerViewModel: ViewModelType {
         input.playButtonDidTapEvent.merge(with: input.miniPlayButtonDidTapEvent).sink { [weak self] _ in
             guard let self else { return }
             let state = self.playState.state
-            state == .playing ? self.playState.pause() : self.playState.play()
+            if state == .playing {
+                self.playState.pause()
+            }else{
+                self.playState.play()
+            }
         }.store(in: &subscription)
         
         input.closeButtonDidTapEvent.sink { [weak self] _ in
@@ -238,6 +252,23 @@ final class PlayerViewModel: ViewModelType {
                 guard let self else { return }
                 self.fetchLikeCount(for: currentSong, output: output)
                 self.fetchLikeState(for: currentSong, output: output)
+            }.store(in: &subscription)
+    }
+    
+    private func bindRequestPlaybackLog() {
+        NotificationCenter.default.publisher(for: .requestPlaybackLog, object: nil)
+            .compactMap { notification in
+                return notification.object as? PlayState.PlaybackLog
+            }
+            .filter { !$0.prev.songId.isEmpty && $0.prev.songLength > 0 }
+            .sink { [weak self] (item) in
+                guard let self else { return }
+                do {
+                    let jsonData = try JSONEncoder().encode(item)
+                    self.postPlaybackLog(item: jsonData)
+                }catch {
+                    DEBUG_LOG("🎤: \(error.localizedDescription)")
+                }
             }.store(in: &subscription)
     }
     
