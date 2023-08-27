@@ -108,6 +108,8 @@
 		<string>$(WMDOMAIN_LIKE)</string>
 		<key>WMDOMAIN_NOTICE</key>
 		<string>$(WMDOMAIN_NOTICE)</string>
+		<key>WMDOMAIN_PLAY</key>
+		<string>$(WMDOMAIN_PLAY)</string>
 		<key>WMDOMAIN_PLAYLIST</key>
 		<string>$(WMDOMAIN_PLAYLIST)</string>
 		<key>WMDOMAIN_QNA</key>

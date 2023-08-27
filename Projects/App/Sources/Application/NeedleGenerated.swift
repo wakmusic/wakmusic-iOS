@@ -127,6 +127,9 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
     }
+    var postPlaybackLogUseCase: any PostPlaybackLogUseCase {
+        return appComponent.postPlaybackLogUseCase
+    }
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
@@ -750,6 +753,9 @@ extension AppComponent: Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { self.keychain as Any }
+        localTable["remotePlayDataSource-any RemotePlayDataSource"] = { self.remotePlayDataSource as Any }
+        localTable["playRepository-any PlayRepository"] = { self.playRepository as Any }
+        localTable["postPlaybackLogUseCase-any PostPlaybackLogUseCase"] = { self.postPlaybackLogUseCase as Any }
         localTable["searchComponent-SearchComponent"] = { self.searchComponent as Any }
         localTable["afterSearchComponent-AfterSearchComponent"] = { self.afterSearchComponent as Any }
         localTable["afterSearchContentComponent-AfterSearchContentComponent"] = { self.afterSearchContentComponent as Any }
@@ -886,6 +892,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.cancelLikeSongUseCase] = "cancelLikeSongUseCase-any CancelLikeSongUseCase"
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
         keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
+        keyPathToName[\PlayerDependency.postPlaybackLogUseCase] = "postPlaybackLogUseCase-any PostPlaybackLogUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
         keyPathToName[\PlayerDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
