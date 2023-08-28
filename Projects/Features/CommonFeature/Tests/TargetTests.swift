@@ -7,6 +7,15 @@ class TargetTests: XCTestCase {
     var playState = PlayState.shared
     var playlist = PlayState.shared.playList
     var subscription = Set<AnyCancellable>()
+    let givenList = [
+        SongEntity(id: "", title: "제목1", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목2", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목3", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목4", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목5", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+        SongEntity(id: "", title: "제목7", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+    ].map { PlayListItem(item: $0) }
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,19 +29,32 @@ class TargetTests: XCTestCase {
         XCTAssertEqual("A", "A")
     }
     
+    func testAppendSong() {
+        // given
+        playlist.list = givenList
+        
+        // when
+        let testList = [
+            SongEntity(id: "", title: "제목3", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+            SongEntity(id: "", title: "제목2", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+            SongEntity(id: "", title: "제목5", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
+            SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
+        ]
+        playState.loadAndAppendSongsToPlaylist(testList)
+        
+        // then 147 3256
+        let currentPlayIndex = playlist.currentPlayIndex ?? -1
+        XCTAssertEqual(currentPlayIndex, 3)
+        XCTAssertEqual(playlist.list[2].item.title, "제목7")
+        XCTAssertEqual(playlist.list[3].item.title, "제목3")
+        XCTAssertEqual(playlist.list[4].item.title, "제목2")
+        XCTAssertEqual(playlist.list[5].item.title, "제목5")
+        XCTAssertEqual(playlist.list[6].item.title, "제목6")
+    }
+    
     func testRemoveSong() {
         // given
-        let list = [
-            SongEntity(id: "", title: "제목1", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목2", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목3", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목4", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목5", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목7", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
-        ].map { PlayListItem(item: $0) }
-        
-        playlist.list = list
+        playlist.list = givenList
         playlist.changeCurrentPlayIndex(to: 2)
         
         // when
@@ -46,7 +68,7 @@ class TargetTests: XCTestCase {
         XCTAssertEqual(playlist.list[1].item.title, "제목4")
         
         // given
-        playlist.list = list
+        playlist.list = givenList
         playlist.changeCurrentPlayIndex(to: playlist.lastIndex)
         
         // when
@@ -62,16 +84,7 @@ class TargetTests: XCTestCase {
     
     func testRorderSong() {
         // given
-        let list = [
-            SongEntity(id: "", title: "제목1", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목2", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목3", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목4", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목5", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목7", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
-        ].map { PlayListItem(item: $0) }
-        playlist.list = list
+        playlist.list = givenList
         
         // when
         playlist.reorderPlaylist(from: 2, to: 1)
