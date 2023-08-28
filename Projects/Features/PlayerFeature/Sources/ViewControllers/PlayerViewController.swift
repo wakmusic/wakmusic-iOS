@@ -108,7 +108,7 @@ private extension PlayerViewController {
             $0.width.equalTo(self.playerView.thumbnailImageView.snp.width)
             $0.height.equalTo(self.playerView.thumbnailImageView.snp.height)
         }
-        PlayState.shared.reSubscriptionPlayPublisher()
+        PlayState.shared.subscribePlayPublisher()
     }
     
     private func bindViewModel() {
