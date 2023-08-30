@@ -17,38 +17,31 @@ public extension PlayState {
     /// - 먼저 주어진 곡들의 첫번째 곡을 재생하며, 이후의 곡들은 재생목록의 마지막에 추가합니다.
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func loadAndAppendSongsToPlaylist(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
-        guard let firstSong = songs.first else { return }
-        let uniqueIndex = self.playList.uniqueIndex(of: PlayListItem(item: firstSong))
+        if songs.isEmpty { return }
+        // 1. 이미 있는 곡들 인덱스 찾기
+        // 2. 리스트에서 해당 인덱스들 곡 삭제
+        // 3. 리스트 뒤에 곡들 추가
+        // 4. currentPlayIndex 변경
+        // 5. 주어진 첫번째 곡 재생
+        let existSongIndexs = songs.uniqueElements.compactMap { self.playList.uniqueIndex(of: PlayListItem(item: $0)) }
+        self.playList.remove(indexs: existSongIndexs)
+        let mappedSongs = songs.uniqueElements.map { PlayListItem(item: $0) }
+        self.playList.append(mappedSongs)
         
-        if let uniqueIndex {
-            self.playList.changeCurrentPlayIndex(to: uniqueIndex)
-        } else {
-            self.playList.append(PlayListItem(item: firstSong))
-            self.playList.changeCurrentPlayIndex(to: self.playList.lastIndex)
+        if let firstSong = mappedSongs.first, let playSongIndex = self.playList.uniqueIndex(of: firstSong) {
+            if self.playerMode == .close { self.switchPlayerMode(to: .mini) }
+            self.playList.changeCurrentPlayIndex(to: playSongIndex)
+            self.load(at: firstSong.item)
         }
-        
-        if self.playerMode == .close {
-            self.switchPlayerMode(to: .mini)
-        }
-        self.load(at: firstSong)
-        
-        let songsWithoutFirst = songs.dropFirst()
-        if songsWithoutFirst.isEmpty { return }
-        
-        let notDuplicatedSongs = songsWithoutFirst.uniqueElements.compactMap { song in
-            return self.playList.uniqueIndex(of:PlayListItem(item: song)) == nil ? PlayListItem(item: song) : nil
-        }
-        self.playList.append(notDuplicatedSongs)
-        
     }
     
     /// 주어진 곡들을 재생목록에 추가합니다.
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func appendSongsToPlaylist(_ songs: [SongEntity], duplicateAllowed: Bool = false) {
-        let notDuplicatedSongs = songs.uniqueElements.compactMap { song in
-            return self.playList.uniqueIndex(of:PlayListItem(item: song)) == nil ? PlayListItem(item: song) : nil
-        }
-        self.playList.append(notDuplicatedSongs)
+        let existSongIndexs = songs.uniqueElements.compactMap { self.playList.uniqueIndex(of: PlayListItem(item: $0)) }
+        self.playList.remove(indexs: existSongIndexs)
+        let mappedSongs = songs.uniqueElements.map { PlayListItem(item: $0) }
+        self.playList.append(mappedSongs)
         
         if self.playerMode == .close {
             self.switchPlayerMode(to: .mini)
