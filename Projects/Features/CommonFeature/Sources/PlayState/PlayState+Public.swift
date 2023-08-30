@@ -31,7 +31,7 @@ public extension PlayState {
         if let firstSong = mappedSongs.first, let playSongIndex = self.playList.uniqueIndex(of: firstSong) {
             if self.playerMode == .close { self.switchPlayerMode(to: .mini) }
             self.playList.changeCurrentPlayIndex(to: playSongIndex)
-            self.load(at: mappedSongs.first!.item)
+            self.load(at: firstSong.item)
         }
     }
     
@@ -43,13 +43,11 @@ public extension PlayState {
         let mappedSongs = songs.uniqueElements.map { PlayListItem(item: $0) }
         self.playList.append(mappedSongs)
         
-        if let firstSong = mappedSongs.first, let playSongIndex = self.playList.uniqueIndex(of: firstSong) {
-            if self.playerMode == .close {
-                self.switchPlayerMode(to: .mini)
-                self.currentSong = self.playList.currentPlaySong
-                if let currentSong = currentSong {
-                    self.player.cue(source: .video(id: currentSong.id))
-                }
+        if self.playerMode == .close {
+            self.switchPlayerMode(to: .mini)
+            self.currentSong = self.playList.currentPlaySong
+            if let currentSong = currentSong {
+                self.player.cue(source: .video(id: currentSong.id))
             }
         }
     }
