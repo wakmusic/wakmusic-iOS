@@ -34,7 +34,7 @@ extension PlayState {
     
     /// ▶️ 해당 곡 새로 재생
     public func load(at song: SongEntity) {
-        requestPlaybackLog(current: song)
+        //requestPlaybackLog(current: song) // v2 api 완성 후 적용하기로 함.
         self.currentSong = song
         guard let currentSong = currentSong else { return }
         self.player.load(source: .video(id: currentSong.id))
