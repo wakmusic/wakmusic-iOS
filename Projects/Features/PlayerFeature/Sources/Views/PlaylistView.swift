@@ -20,7 +20,7 @@ public final class PlaylistView: UIView {
     
     private lazy var contentView = UIView()
     
-    private lazy var titleBarView: UIView = UIView()
+    internal lazy var titleBarView: UIView = UIView()
     
     internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
