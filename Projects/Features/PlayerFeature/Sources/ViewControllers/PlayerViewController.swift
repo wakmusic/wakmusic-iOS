@@ -77,7 +77,7 @@ public class PlayerViewController: UIViewController {
         let playlistVC = playlistComponent.makeView()
         playlistVC.modalPresentationStyle = .overFullScreen
         playlistVC.view.frame = self.view.frame
-        self.present(playlistVC, animated: true)
+        self.showPanModal(content: playlistVC)
     }
 }
 

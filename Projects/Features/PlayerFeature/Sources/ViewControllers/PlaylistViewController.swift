@@ -18,6 +18,7 @@ import RxSwift
 import RxRelay
 import RxDataSources
 import DomainModule
+import PanModal
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
@@ -318,3 +319,36 @@ extension PlaylistViewController {
     }
 }
     
+extension PlaylistViewController: PanModalPresentable {
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+
+    public var panModalBackgroundColor: UIColor {
+        return colorFromRGB(0x000000, alpha: 0.4)
+    }
+
+    public var panScrollable: UIScrollView? {
+        return nil
+    }
+
+    public var longFormHeight: PanModalHeight {
+        return PanModalHeight.contentHeight(APP_HEIGHT())
+     }
+    
+    public var topOffset: CGFloat {
+        return 0
+    }
+
+    public var cornerRadius: CGFloat {
+        return 0
+    }
+
+    public var allowsExtendedPanScrolling: Bool {
+        return true
+    }
+
+    public var showDragIndicator: Bool {
+        return false
+    }
+}
