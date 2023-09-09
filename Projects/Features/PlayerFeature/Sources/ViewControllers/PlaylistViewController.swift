@@ -88,9 +88,9 @@ private extension PlaylistViewController {
             
         case .changed:
             let distanceY = max(distance.y, 0)
-            let opacity = 1 - (distanceY / screenHeight)
             view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
-            updateOpacity(value: Float(opacity))
+            //let opacity = 1 - (distanceY / screenHeight)
+            //updateOpacity(value: Float(opacity))
             
         case .ended:
             let velocity = gestureRecognizer.velocity(in: self.view)
