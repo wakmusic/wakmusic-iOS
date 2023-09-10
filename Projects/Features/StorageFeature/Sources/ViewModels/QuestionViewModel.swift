@@ -52,7 +52,7 @@ public final class QuestionViewModel:ViewModelType {
                 switch result {
                 case let .success(result):
                     DEBUG_LOG("MFMailComposeResult: \(result)")
-                    return (result == .sent) ? ("소중한 의견 감사합니다.", true) : ("", false)
+                    return (result == .sent) ? ("문의가 등록되었습니다. 도움을 주셔서 감사합니다.", true) : ("", false)
                 case let .failure(error):
                     return (error.localizedDescription, false)
                 }
