@@ -36,6 +36,8 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     public var songCartView: CommonFeature.SongCartView!
     public var bottomSheetView: CommonFeature.BottomSheetView!
     
+    private var panGestureRecognizer: UIPanGestureRecognizer!
+    
     init(viewModel: PlaylistViewModel, containSongsComponent: ContainSongsComponent) {
         self.viewModel = viewModel
         self.containSongsComponent = containSongsComponent
@@ -59,6 +61,7 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     public override func viewDidLoad() {
         super.viewDidLoad()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
+        bindGesture()
         bindViewModel()
         bindActions()
     }
@@ -75,6 +78,55 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
 }
 
 private extension PlaylistViewController {
+    @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        let distance = gestureRecognizer.translation(in: self.view)
+        let screenHeight = Utility.APP_HEIGHT()
+        
+        switch gestureRecognizer.state {
+        case .began:
+            return
+            
+        case .changed:
+            let distanceY = max(distance.y, 0)
+            view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
+            //let opacity = 1 - (distanceY / screenHeight)
+            //updateOpacity(value: Float(opacity))
+            
+        case .ended:
+            let velocity = gestureRecognizer.velocity(in: self.view)
+            
+            // 빠르게 드래그하거나 화면의 40% 이상 드래그 했을 경우 dismiss
+            if velocity.y > 1000 || view.frame.origin.y > (screenHeight * 0.4) {
+                dismiss(animated: true)
+            } else {
+                UIView.animate(withDuration: 0.35,
+                               delay: 0.0,
+                               usingSpringWithDamping: 0.8,
+                               initialSpringVelocity: 0.8,
+                               options: [.curveEaseInOut],
+                               animations: {
+                    self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: screenHeight)
+                    self.updateOpacity(value  : 1)
+                })
+            }
+            
+        default:
+            break
+        }
+    }
+    
+    func updateOpacity(value: Float) {
+        playlistView.layer.opacity = value
+    }
+}
+
+private extension PlaylistViewController {
+    private func bindGesture() {
+        panGestureRecognizer = UIPanGestureRecognizer(target: self,
+                                                      action: #selector(handlePanGesture(_:)))
+        self.playlistView.titleBarView.addGestureRecognizer(panGestureRecognizer)
+    }
+    
     private func bindViewModel() {
         let input = PlaylistViewModel.Input(
             closeButtonDidTapEvent: playlistView.closeButton.tapPublisher,
