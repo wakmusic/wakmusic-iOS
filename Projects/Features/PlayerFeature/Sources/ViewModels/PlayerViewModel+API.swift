@@ -112,7 +112,6 @@ extension PlayerViewModel {
     func addLikeSong(for song: SongEntity, output: Output) {
         self.addLikeSongUseCase.execute(id: song.id)
             .catch{ error in
-                
                 let wmError = error.asWMError
                 
                 if wmError == .tokenExpired {
@@ -120,16 +119,12 @@ extension PlayerViewModel {
                         single(.success(LikeEntity(status: 401, likes: 0, description: wmError.errorDescription ?? "")))
                         return Disposables.create()
                     }
-                }
-                
-                else {
+                }else {
                     return Single<LikeEntity>.create { single in
                         single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
                         return Disposables.create()
                     }
                 }
-                
-                
             }
             .map { [weak self] likeEntity in
                 return (
@@ -143,17 +138,29 @@ extension PlayerViewModel {
                     output.likeState.send(true)
                     output.likeCountText.send(likeCountText)
                     NotificationCenter.default.post(name: .likeListRefresh, object: nil)
-                }
-                
-                else if status == 401 {
+                }else if status == 401 {
                     output.showTokenModal.send(description)
-                }
-                
-                else {
+                }else {
                     output.showToastMessage.send(description)
                 }
             })
             .disposed(by: self.disposeBag)
     }
+    
+    /// 재생 로그 전송
+    func postPlaybackLog(item: Data) {
+        self.postPlaybackLogUseCase
+            .execute(item: item)
+            .catch { _ in
+                return Single<PlaybackLogEntity>.create { single in
+                    single(.success(PlaybackLogEntity(id: "", title: "", artist: "")))
+                    return Disposables.create()
+                }
+            }
+            .asObservable()
+            .subscribe(onNext: { (entity: PlaybackLogEntity) in
+                DEBUG_LOG("🎤: \(entity)")
+            })
+            .disposed(by: disposeBag)
+    }
 }
-

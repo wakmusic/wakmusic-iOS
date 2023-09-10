@@ -41,6 +41,17 @@ final public class PlayState {
         currentSong = playList.currentPlaySong
         player.cue(source: .video(id: currentSong?.id ?? "")) // 곡이 있으면 .cued 없으면 .unstarted
         
+        subscribePlayPublisher()
+        subscribePlayListChanges()
+        registerAudioRouteChangeNotification()
+    }
+    
+    deinit {
+        DEBUG_LOG("🚀:: \(Self.self) deinit")
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    public func subscribePlayPublisher() {
         player.playbackStatePublisher.sink { [weak self] state in
             guard let self = self else { return }
             self.state = state
@@ -55,55 +66,39 @@ final public class PlayState {
             guard let self = self else { return }
             self.progress.endProgress = duration
         }.store(in: &subscription)
-        
+    }
+    
+    /// 플레이리스트에 변경사항이 생겼을 때, 로컬 DB를 덮어씁니다.
+    public func subscribePlayListChanges() {
         Publishers.Merge4(
             playList.listAppended.dropFirst(),
             playList.listRemoved.dropFirst(),
             playList.listReordered.dropFirst(),
             playList.currentSongChanged.dropFirst()
         )
-        .sink { playListItems in
-            let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
-            RealmManager.shared.deleteRealmDB(model: allPlayedLists)
-            
-            let playedList = playListItems.map {
-                PlayedLists(
-                    id: $0.item.id,
-                    title: $0.item.title,
-                    artist: $0.item.artist,
-                    remix: $0.item.remix,
-                    reaction: $0.item.reaction,
-                    views: $0.item.views,
-                    last: $0.item.last,
-                    date: $0.item.date,
-                    lastPlayed: $0.isPlaying
-                )}
-            RealmManager.shared.addRealmDB(model: playedList)
+        .sink { [weak self] playListItems in
+            guard let self else { return }
+            self.updatePlayListChangesToLocalDB(playList: playListItems)
         }.store(in: &subscription)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleRouteChange(notification:)),
-            name: AVAudioSession.routeChangeNotification,
-            object: AVAudioSession.sharedInstance()
-        )
     }
     
-    public func reSubscriptionPlayPublisher() {
-        player.playbackStatePublisher.sink { [weak self] state in
-            guard let self = self else { return }
-            self.state = state
-        }.store(in: &subscription)
+    public func updatePlayListChangesToLocalDB(playList: [PlayListItem]) {
+        let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
+        RealmManager.shared.deleteRealmDB(model: allPlayedLists)
         
-        player.currentTimePublisher().sink { [weak self] currentTime in
-            guard let self = self else { return }
-            self.progress.currentProgress = currentTime
-        }.store(in: &subscription)
-        
-        player.durationPublisher.sink { [weak self] duration in
-            guard let self = self else { return }
-            self.progress.endProgress = duration
-        }.store(in: &subscription)
+        let playedList = playList.map {
+            PlayedLists(
+                id: $0.item.id,
+                title: $0.item.title,
+                artist: $0.item.artist,
+                remix: $0.item.remix,
+                reaction: $0.item.reaction,
+                views: $0.item.views,
+                last: $0.item.last,
+                date: $0.item.date,
+                lastPlayed: $0.isPlaying
+            )}
+        RealmManager.shared.addRealmDB(model: playedList)
     }
     
     public func fetchPlayListFromLocalDB() -> [PlayListItem] {
@@ -122,6 +117,16 @@ final public class PlayState {
                     isPlaying: $0.lastPlayed
             )}
         return playedList
+    }
+    
+    /// 디바이스와 연결된 오디오 장치가 변경되었음을 감지합니다.
+    public func registerAudioRouteChangeNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRouteChange(notification:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: AVAudioSession.sharedInstance()
+        )
     }
     
     @objc func handleRouteChange(notification: Notification) {

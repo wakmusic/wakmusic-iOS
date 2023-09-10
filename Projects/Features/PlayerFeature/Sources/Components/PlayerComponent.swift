@@ -9,6 +9,7 @@ public protocol PlayerDependency: Dependency {
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
+    var postPlaybackLogUseCase: any PostPlaybackLogUseCase { get }
     var playlistComponent: PlaylistComponent { get }
     var containSongsComponent: ContainSongsComponent { get }
 }
@@ -21,7 +22,8 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 addLikeSongUseCase: dependency.addLikeSongUseCase,
                 cancelLikeSongUseCase: dependency.cancelLikeSongUseCase,
                 fetchLikeNumOfSongUseCase: dependency.fetchLikeNumOfSongUseCase,
-                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase
+                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
+                postPlaybackLogUseCase: dependency.postPlaybackLogUseCase
             ),
             playlistComponent: dependency.playlistComponent,
             containSongsComponent: dependency.containSongsComponent
