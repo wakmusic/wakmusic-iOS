@@ -26,6 +26,7 @@ public class NoticeDetailViewModel {
     }
 
     public struct Input {
+        var fetchNoticeDetail: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -45,10 +46,10 @@ public class NoticeDetailViewModel {
             }
             .compactMap { $0 }
         
-        Observable.just(imageURLs)
-            .flatMap { [weak self] (urls) -> Observable<[CGSize]> in
+        input.fetchNoticeDetail
+            .flatMap { [weak self] _ -> Observable<[CGSize]> in
                 guard let self else { return Observable.empty() }
-                return urls.isEmpty ? Observable.just([]) : self.downloadImage(urls: urls)
+                return imageURLs.isEmpty ? Observable.just([]) : self.downloadImage(urls: imageURLs)
             }
             .subscribe(onNext: { [weak self] (imageSizes) in
                 self?.output.imageSizes.accept(imageSizes)

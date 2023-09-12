@@ -35,7 +35,8 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
     
     public static func viewController(
@@ -52,7 +53,11 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
 }
 
 extension NoticeDetailViewController {
-    private func bind() {
+    private func inputBind() {
+        viewModel.input.fetchNoticeDetail.onNext(())
+    }
+    
+    private func outputBind() {
         viewModel.output.dataSource
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
             .disposed(by: disposeBag)
