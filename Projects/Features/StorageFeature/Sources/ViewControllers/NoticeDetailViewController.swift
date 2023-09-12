@@ -58,7 +58,7 @@ extension NoticeDetailViewController {
             .disposed(by: disposeBag)
         
         viewModel.output.imageSizes
-            .filter { !$0.isEmpty }
+            .skip(1)
             .subscribe(onNext: { [weak self] _ in
                 self?.indicator.stopAnimating()
             })
