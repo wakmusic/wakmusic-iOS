@@ -48,7 +48,7 @@ public class NoticeDetailViewModel {
         Observable.just(imageURLs)
             .flatMap { [weak self] (urls) -> Observable<[CGSize]> in
                 guard let self else { return Observable.empty() }
-                return self.downloadImage(urls: urls)
+                return urls.isEmpty ? Observable.just([]) : self.downloadImage(urls: urls)
             }
             .subscribe(onNext: { [weak self] (imageSizes) in
                 self?.output.imageSizes.accept(imageSizes)
