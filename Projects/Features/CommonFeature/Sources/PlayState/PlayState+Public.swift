@@ -47,21 +47,21 @@ public extension PlayState {
             self.switchPlayerMode(to: .mini)
             self.currentSong = self.playList.currentPlaySong
             if let currentSong = currentSong {
-                self.player.cue(source: .video(id: currentSong.id))
+                self.player?.cue(source: .video(id: currentSong.id))
             }
         }
     }
     
     /// 플레이어의 상태를 체크합니다.
     func checkForPlayerState(completion: ((YouTubePlayer.State) -> Void)? = nil) {
-        guard let playerState = self.player.state else { return }
+        guard let playerState = self.player?.state else { return }
         completion?(playerState)
     }
     
     /// 플레이어를 리셋합니다.
     func resetPlayer() {
         self.player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
-        self.player.cue(source: .video(id: self.currentSong?.id ?? ""))
+        self.player?.cue(source: .video(id: self.currentSong?.id ?? ""))
         NotificationCenter.default.post(name: .resetYouTubePlayerHostingView, object: nil)
     }
 }
