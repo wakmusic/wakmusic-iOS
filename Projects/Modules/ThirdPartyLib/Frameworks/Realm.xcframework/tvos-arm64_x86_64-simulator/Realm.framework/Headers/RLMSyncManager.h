@@ -50,7 +50,7 @@ typedef RLM_CLOSED_ENUM(NSUInteger, RLMSyncLogLevel) {
     ///
     /// - warning: Will incur a measurable performance impact.
     RLMSyncLogLevelAll
-} __attribute__((deprecated("Use `RLMLogLevel`/`LogLevel` instead")));
+};
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -218,11 +218,6 @@ __attribute__((deprecated("Use `RLMLogger.default`/`Logger.shared` to set/get th
 ///
 /// Defaults to 1 minute.
 @property (nonatomic) NSUInteger fastReconnectLimit;
-
-/// The app configuration that has initialized this SyncManager.
-/// This can be set multiple times. This gives the SyncManager
-/// access to necessary app functionality.
-@property (nonatomic, readonly) RLMAppConfiguration *appConfiguration;
 @end
 
 RLM_HEADER_AUDIT_END(nullability, sendability)
