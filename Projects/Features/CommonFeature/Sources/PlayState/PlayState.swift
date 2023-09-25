@@ -74,14 +74,22 @@ final public class PlayState {
     /// 플레이리스트에 변경사항이 생겼을 때, 로컬 DB를 덮어씁니다.
     public func subscribePlayListChanges() {
         Publishers.Merge4(
-            playList.listAppended.dropFirst(),
-            playList.listRemoved.dropFirst(),
-            playList.listReordered.dropFirst(),
-            playList.currentSongChanged.dropFirst()
+            playList.listAppended,
+            playList.listRemoved,
+            playList.listReordered,
+            playList.currentPlayIndexChanged
         )
         .sink { [weak self] playListItems in
             guard let self else { return }
             self.updatePlayListChangesToLocalDB(playList: playListItems)
+        }.store(in: &subscription)
+        
+        playList.currentPlaySongChanged.sink { [weak self] song in
+            guard let self else { return }
+            self.currentSong = song
+            if let index = self.playList.currentPlayIndex {
+                loadInPlaylist(at: index)
+            }
         }.store(in: &subscription)
     }
     
