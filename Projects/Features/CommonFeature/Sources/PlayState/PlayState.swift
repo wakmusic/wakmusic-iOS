@@ -14,7 +14,7 @@ import Utility
 import AVFAudio
 
 final public class PlayState {
-    public static let shared = PlayState()
+    public static let shared = PlayState(player: YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false)))
     
     @Published public var player: YouTubePlayer?
     @Published public var state: YouTubePlayer.PlaybackState = .unstarted
@@ -27,7 +27,11 @@ final public class PlayState {
 
     private var subscription = Set<AnyCancellable>()
     
-    public init(player: YouTubePlayer?, playList: PlayList, playProgress: PlayProgress, fetchPlayListFromLocalDB: () -> [PlayListItem]) {
+    public init(
+        player: YouTubePlayer?,
+        playList: PlayList = PlayList(),
+        playProgress: PlayProgress = PlayProgress())
+    {
         DEBUG_LOG("🚀:: \(Self.self) initialized")
         self.player = player
         self.playList = playList
@@ -40,13 +44,6 @@ final public class PlayState {
         subscribePlayPublisher()
         subscribePlayListChanges()
         registerAudioRouteChangeNotification()
-    }
-    
-    convenience public init() {
-        self.init(player: YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false)), playList: PlayList(), playProgress: PlayProgress(), fetchPlayListFromLocalDB: { return [] })
-    }
-    convenience public init(player: YouTubePlayer?) {
-        self.init(player: player, playList: PlayList(), playProgress: PlayProgress(), fetchPlayListFromLocalDB: { return [] })
     }
     
     deinit {

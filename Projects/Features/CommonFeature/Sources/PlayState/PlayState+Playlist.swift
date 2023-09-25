@@ -24,7 +24,6 @@ public struct PlayListItem: Equatable {
     }
 }
 
-
 public class PlayList {
     public var list: [PlayListItem] {
         didSet(oldValue) {
@@ -135,4 +134,3 @@ public class PlayList {
         return list.firstIndex(where: { $0.item == item.item })
     }
 }
-
