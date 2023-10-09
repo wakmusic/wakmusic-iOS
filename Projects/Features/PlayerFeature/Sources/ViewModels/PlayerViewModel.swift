@@ -167,7 +167,7 @@ final class PlayerViewModel: ViewModelType {
         
         input.sliderValueChangedEvent.subscribe { [weak self] value in
             guard let self else { return }
-            self.playState.player.seek(to: Double(value), allowSeekAhead: true)
+            self.playState.player?.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
         
         input.likeButtonDidTapEvent
@@ -346,7 +346,7 @@ final class PlayerViewModel: ViewModelType {
         
     }
     
-    private func handleProgress(progress: PlayState.PlayProgress, output: Output) {
+    private func handleProgress(progress: PlayProgress, output: Output) {
         output.playTimeText.send(self.formatTime(progress.currentProgress))
         output.totalTimeText.send(self.formatTime(progress.endProgress))
         output.playTimeValue.send(Float(progress.currentProgress))

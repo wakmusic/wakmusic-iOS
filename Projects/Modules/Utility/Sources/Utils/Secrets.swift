@@ -8,114 +8,70 @@
 
 import Foundation
 
-//MARK: - BASE_IMAGE_URL
-public func BASE_IMAGE_URL() -> String {
+public func config(key: String) -> String {
     guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
         return ""
     }
-    return secrets["BASE_IMAGE_URL"] as? String ?? "not found key"
+    return secrets[key] as? String ?? "not found key"
+}
+
+//MARK: - BASE_IMAGE_URL
+public func BASE_IMAGE_URL() -> String {
+    return config(key: "BASE_IMAGE_URL")
 }
 
 //MARK: - WMDomain > Image
 public func WMDOMAIN_IMAGE_NEWS() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_NEWS"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_NEWS")
 }
 public func WMDOMAIN_IMAGE_ARTIST_ROUND() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_ARTIST_ROUND"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_ARTIST_ROUND")
 }
 public func WMDOMAIN_IMAGE_ARTIST_SQUARE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_ARTIST_SQUARE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_ARTIST_SQUARE")
 }
 public func WMDOMAIN_IMAGE_PROFILE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_PROFILE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_PROFILE")
 }
 public func WMDOMAIN_IMAGE_PLAYLIST() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_PLAYLIST"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_PLAYLIST")
 }
 public func WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE")
 }
 public func WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND")
 }
 public func WMDOMAIN_IMAGE_NOTICE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_IMAGE_NOTICE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_IMAGE_NOTICE")
 }
 
 //MARK: - NAVER
 public func NAVER_URL_SCHEME() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["NAVER_URL_SCHEME"] as? String ?? "not found key"
+    return config(key: "NAVER_URL_SCHEME")
 }
 public func NAVER_CONSUMER_KEY() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["NAVER_CONSUMER_KEY"] as? String ?? "not found key"
+    return config(key: "NAVER_CONSUMER_KEY")
 }
 public func NAVER_CONSUMER_SECRET() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["NAVER_CONSUMER_SECRET"] as? String ?? "not found key"
+    return config(key: "NAVER_CONSUMER_SECRET")
 }
 public func NAVER_APP_NAME() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["NAVER_APP_NAME"] as? String ?? "not found key"
+    return config(key: "NAVER_APP_NAME")
 }
 
 //MARK: - GOOGLE
 public func GOOGLE_URL_SCHEME() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["GOOGLE_URL_SCHEME"] as? String ?? "not found key"
+    return config(key: "GOOGLE_URL_SCHEME")
 }
 public func GOOGLE_CLIENT_ID() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["GOOGLE_CLIENT_ID"] as? String ?? "not found key"
+    return config(key: "GOOGLE_CLIENT_ID")
 }
 public func GOOGLE_SECRET_KEY() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["GOOGLE_SECRET_KEY"] as? String ?? "not found key"
+    return config(key: "GOOGLE_SECRET_KEY")
 }
 
 //WAKTAVERSEMUSIC
 public func WM_APP_ID() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WM_APP_ID"] as? String ?? ""
+    return config(key: "WM_APP_ID")
 }

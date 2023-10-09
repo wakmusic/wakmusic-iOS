@@ -8,18 +8,21 @@
 
 import Foundation
 
-extension PlayState {
-    public struct PlayProgress {
-        public var currentProgress: Double = 0
-        public var endProgress: Double = 0
-        
-        public mutating func clear() {
-            currentProgress = 0
-            endProgress = 0
-        }
-
-        public mutating func resetCurrentProgress() {
-            currentProgress = 0
-        }
+public struct PlayProgress {
+    public var currentProgress: Double
+    public var endProgress: Double
+    
+    public init(currentProgress: Double = 0, endProgress: Double = 0) {
+        self.currentProgress = currentProgress
+        self.endProgress = endProgress
+    }
+    
+    public mutating func clear() {
+        currentProgress = 0
+        endProgress = 0
+    }
+    
+    public mutating func resetCurrentProgress() {
+        currentProgress = 0
     }
 }

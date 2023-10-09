@@ -27,7 +27,7 @@ public class PlayerViewController: UIViewController {
     var playerView: PlayerView!
     var miniPlayerView: MiniPlayerView!
     
-    lazy var youtubePlayerView = YouTubePlayerHostingView(player: playState.player).then {
+    lazy var youtubePlayerView = YouTubePlayerHostingView(player: playState.player ?? YouTubePlayer()).then {
         $0.isHidden = true
     }
     
@@ -100,7 +100,7 @@ private extension PlayerViewController {
     
     private func resetYouTubePlayerHostingView() {
         self.youtubePlayerView.removeFromSuperview()
-        self.youtubePlayerView = YouTubePlayerHostingView(player: self.playState.player)
+        self.youtubePlayerView = YouTubePlayerHostingView(player: self.playState.player ?? YouTubePlayer())
         self.youtubePlayerView.isHidden = true
         self.view.addSubview(self.youtubePlayerView)
         self.youtubePlayerView.snp.makeConstraints {
@@ -447,7 +447,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
             findCenterCellIndexPath { centerCellIndexPath in
                 if viewModel.lyricsDict.isEmpty { return }
                 let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
-                playState.player.seek(to: Double(start), allowSeekAhead: true)
+                playState.player?.seek(to: Double(start), allowSeekAhead: true)
                 viewModel.isLyricsScrolling = false
             }
         }
@@ -458,7 +458,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource, UISc
         findCenterCellIndexPath { centerCellIndexPath in
             if viewModel.lyricsDict.isEmpty { return }
             let start = viewModel.lyricsDict.keys.sorted()[centerCellIndexPath.row]
-            playState.player.seek(to: Double(start), allowSeekAhead: true)
+            playState.player?.seek(to: Double(start), allowSeekAhead: true)
             viewModel.isLyricsScrolling = false
         }
     }
