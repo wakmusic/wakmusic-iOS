@@ -54,6 +54,8 @@ public final class BeforeSearchContentViewController: BaseViewController,ViewCon
 extension BeforeSearchContentViewController {
     private func configureUI() {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.indicator.startAnimating()
