@@ -93,6 +93,7 @@ extension TextPopupViewController {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.3
         paragraphStyle.alignment = .center
+        paragraphStyle.lineBreakStrategy = .hangulWordPriority
 
         let contentAttributedString = NSMutableAttributedString(
             string: contentString,
