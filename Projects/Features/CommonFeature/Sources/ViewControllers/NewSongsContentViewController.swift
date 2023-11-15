@@ -90,14 +90,13 @@ extension NewSongsContentViewController {
                 guard let `self` = self else { return }
                 self.activityIncidator.stopAnimating()
                 self.refreshControl.endRefreshing()
-                let space: CGFloat = APP_HEIGHT() - 40 - 102 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
+                let space: CGFloat = APP_HEIGHT() - 48 - 40 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
                 let height: CGFloat = space / 3 * 2
                 let warningView: WarningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "데이터가 없습니다."
                 self.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
             })
-            .bind(to: tableView.rx.items) { [weak self] (tableView, index, model) -> UITableViewCell in
-                guard let self else { return UITableViewCell() }
+            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "NewSongsCell",
@@ -207,13 +206,6 @@ extension NewSongsContentViewController: SongCartViewDelegate {
         case .remove:
             return
         }
-    }
-}
-
-extension NewSongsContentViewController {
-    public func scrollToTop() {
-        guard !output.dataSource.value.isEmpty else { return }
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
 }
 
