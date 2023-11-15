@@ -34,7 +34,7 @@ class HomeNewSongCell: UICollectionViewCell {
 
 extension HomeNewSongCell {
     
-    func update(model: NewSongEntity) {
+    func update(model: NewSongsEntity) {
         
         let titleAttributedString = NSMutableAttributedString(
             string: model.title,

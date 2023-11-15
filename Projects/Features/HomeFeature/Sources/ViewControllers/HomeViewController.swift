@@ -30,6 +30,8 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     
     //최신음악
     @IBOutlet weak var latestSongLabel: UILabel!
+    @IBOutlet weak var latestArrowImageView: UIImageView!
+    @IBOutlet weak var latestSongsMoveButton: UIButton!
     @IBOutlet weak var latestSongAllButton: UIButton!
     @IBOutlet weak var latestSongWwgButton: UIButton!
     @IBOutlet weak var latestSongIseButton: UIButton!
@@ -37,7 +39,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     @IBOutlet weak var latestSongAcademyButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var latestSongEmptyLabel: UILabel!
-    
+
     private let blurImageView = UIImageView().then {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
@@ -53,6 +55,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
+    var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
     var viewModel: HomeViewModel!
@@ -68,10 +71,15 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         outputBind()
     }
     
-    public static func viewController(viewModel: HomeViewModel, playListDetailComponent :PlayListDetailComponent) -> HomeViewController {
+    public static func viewController(
+        viewModel: HomeViewModel,
+        playListDetailComponent :PlayListDetailComponent,
+        newSongsComponent: NewSongsComponent
+    ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playListDetailComponent = playListDetailComponent
+        viewController.newSongsComponent = newSongsComponent
         return viewController
     }
 }
@@ -84,6 +92,14 @@ extension HomeViewController {
 
         chartAllListenButton.rx.tap
             .bind(to: input.allListenTapped)
+            .disposed(by: disposeBag)
+        
+        latestSongsMoveButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let viewController = owner.newSongsComponent.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            })
             .disposed(by: disposeBag)
 
         Observable.merge(
@@ -345,7 +361,8 @@ extension HomeViewController {
                          .kern: -0.5]
         )
         latestSongLabel.attributedText = latestSongAttributedString
-        
+        latestArrowImageView.image = DesignSystemAsset.Home.homeArrowRight.image
+
         let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton, latestSongAcademyButton]
         
         for (model, button) in zip(NewSongGroupType.allCases, buttons) {

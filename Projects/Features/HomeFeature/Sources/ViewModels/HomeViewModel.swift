@@ -18,16 +18,16 @@ public final class HomeViewModel: ViewModelType {
     
     var disposeBag = DisposeBag()
     var fetchChartRankingUseCase: FetchChartRankingUseCase
-    var fetchNewSongUseCase: FetchNewSongUseCase
+    var fetchNewSongsUseCase: FetchNewSongsUseCase
     var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
     public init(
         fetchChartRankingUseCase: any FetchChartRankingUseCase,
-        fetchNewSongUseCase: any FetchNewSongUseCase,
+        fetchNewSongsUseCase: any FetchNewSongsUseCase,
         fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
     ){
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
-        self.fetchNewSongUseCase = fetchNewSongUseCase
+        self.fetchNewSongsUseCase = fetchNewSongsUseCase
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
@@ -41,24 +41,25 @@ public final class HomeViewModel: ViewModelType {
 
     public struct Output {
         var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
-        let newSongDataSource: BehaviorRelay<[NewSongEntity]>
+        let newSongDataSource: BehaviorRelay<[NewSongsEntity]>
         var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
         var songEntityOfAllChart: PublishSubject<[ChartRankingEntity]>
     }
     
     public func transform(from input: Input) -> Output {
         let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
-        let newSongDataSource: BehaviorRelay<[NewSongEntity]> = BehaviorRelay(value: [])
+        let newSongDataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
         let songEntityOfAllChart: PublishSubject<[ChartRankingEntity]> = PublishSubject()
         
+        let limit: Int = 10
         let chartAndNewSong = Observable.zip(
             self.fetchChartRankingUseCase
                 .execute(type: .hourly, limit: 100)
                 .catchAndReturn([])
                 .asObservable(),
-            self.fetchNewSongUseCase
-                .execute(type: .all)
+            self.fetchNewSongsUseCase
+                .execute(type: .all, page: 1, limit: limit)
                 .catchAndReturn([])
                 .asObservable()
         )
@@ -94,9 +95,9 @@ public final class HomeViewModel: ViewModelType {
         input.newSongTypeTapped
             .skip(1)
             .debug("✅ newSongTypeTapped")
-            .flatMap { [weak self] (type) -> Observable<[NewSongEntity]> in
+            .flatMap { [weak self] (type) -> Observable<[NewSongsEntity]> in
                 guard let `self` = self else { return Observable.empty() }
-                return self.fetchNewSongUseCase.execute(type: type)
+                return self.fetchNewSongsUseCase.execute(type: type, page: 1, limit: limit)
                     .catchAndReturn([])
                     .asObservable()
             }
@@ -105,7 +106,7 @@ public final class HomeViewModel: ViewModelType {
         
         input.refreshPulled
             .withLatestFrom(input.newSongTypeTapped)
-            .flatMap { [weak self] (type) -> Observable<(([ChartRankingEntity], [NewSongEntity]), [RecommendPlayListEntity])> in
+            .flatMap { [weak self] (type) -> Observable<(([ChartRankingEntity], [NewSongsEntity]), [RecommendPlayListEntity])> in
                 guard let self = self else{ return Observable.empty() }
                 
                 let chartAndNewSong = Observable.zip(
@@ -113,8 +114,8 @@ public final class HomeViewModel: ViewModelType {
                         .execute(type: .hourly, limit: 100)
                         .catchAndReturn([])
                         .asObservable(),
-                    self.fetchNewSongUseCase
-                        .execute(type: type)
+                    self.fetchNewSongsUseCase
+                        .execute(type: type, page: 1, limit: limit)
                         .catchAndReturn([])
                         .asObservable()
                 )
