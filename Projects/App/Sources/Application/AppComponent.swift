@@ -19,14 +19,11 @@ public final class AppComponent: BootstrapComponent {
         }
     }
     
-    
     var rootComponent: RootComponent {
         shared {
             RootComponent(parent: self)
         }
     }
-    
-
 }
 
 // MARK: - Tabbar
@@ -60,13 +57,12 @@ public extension AppComponent {
     var openSourceLicenseComponent: OpenSourceLicenseComponent {
         OpenSourceLicenseComponent(parent: self)
     }
+    
     var serviceInfoComponent: ServiceInfoComponent {
         ServiceInfoComponent(parent: self)
     }
     
     var permissionComponent: PermissionComponent {
-        shared {
-                PermissionComponent(parent: self)
-        }
+        PermissionComponent(parent: self)
     }
 }
