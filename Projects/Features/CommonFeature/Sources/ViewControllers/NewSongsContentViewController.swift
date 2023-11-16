@@ -28,6 +28,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     public var bottomSheetView: BottomSheetView!
     private var refreshControl = UIRefreshControl()
 
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()

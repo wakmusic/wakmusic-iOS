@@ -19,6 +19,8 @@ public final class NewSongsContentViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     private let fetchNewSongsUseCase: FetchNewSongsUseCase
     
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+
     public init(
         type: NewSongGroupType,
         fetchNewSongsUseCase: FetchNewSongsUseCase
@@ -57,7 +59,7 @@ public final class NewSongsContentViewModel: ViewModelType {
         input.pageID
             .flatMap { (pageID) -> Single<[NewSongsEntity]> in
                 return fetchNewSongsUseCase
-                        .execute(type: type, page: pageID, limit: 30)
+                        .execute(type: type, page: pageID, limit: 100)
                         .catchAndReturn([])
             }
             .asObservable()

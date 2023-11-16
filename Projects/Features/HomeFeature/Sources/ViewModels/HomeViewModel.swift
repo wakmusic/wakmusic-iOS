@@ -30,7 +30,6 @@ public final class HomeViewModel: ViewModelType {
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
-        DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
     public struct Input {
