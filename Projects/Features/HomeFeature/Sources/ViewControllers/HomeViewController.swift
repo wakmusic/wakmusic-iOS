@@ -67,6 +67,16 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         outputBind()
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
     public static func viewController(
         viewModel: HomeViewModel,
         playListDetailComponent: PlayListDetailComponent,
@@ -172,7 +182,8 @@ extension HomeViewController {
         output.newSongDataSource
             .skip(1)
             .map{ (model) in
-                return (model.count >= 10) ? Array(model[0..<10]) : Array(model[0..<model.count])
+                let max: Int = 10
+                return (model.count >= max) ? Array(model[0..<max]) : Array(model[0..<model.count])
             }
             .do(onNext: { [weak self] (model) in
                 self?.collectionView.contentOffset = .zero
@@ -347,5 +358,11 @@ extension HomeViewController {
         }else{
             scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
+    }
+}
+
+extension HomeViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
