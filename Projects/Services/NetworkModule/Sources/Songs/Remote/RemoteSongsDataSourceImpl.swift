@@ -13,12 +13,6 @@ public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, Re
             .map{$0.map{$0.toDomain()}}            
     }
     
-    public func fetchNewSong(type: NewSongGroupType) -> Single<[NewSongEntity]> {
-        request(.fetchNewSong(type: type))
-            .map([NewSongResponseDTO].self)
-            .map{$0.map{$0.toDomain()}}
-    }
-    
     public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
         request(.fetchLyrics(id: id))
             .map([LyricsResponseDTO].self)

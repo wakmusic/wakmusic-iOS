@@ -801,7 +801,6 @@ extension AppComponent: Registration {
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
-        localTable["fetchNewSongUseCase-any FetchNewSongUseCase"] = { self.fetchNewSongUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
         localTable["signInComponent-SignInComponent"] = { self.signInComponent as Any }
         localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
