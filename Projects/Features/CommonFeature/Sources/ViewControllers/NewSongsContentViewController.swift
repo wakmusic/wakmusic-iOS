@@ -1,39 +1,40 @@
+//
+//  NewSongsContentViewController.swift
+//  CommonFeature
+//
+//  Created by KTH on 2023/11/15.
+//  Copyright © 2023 yongbeomkwak. All rights reserved.
+//
+
 import UIKit
 import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import BaseFeature
-import CommonFeature
-import DataMappingModule
-import DomainModule
-import SnapKit
-import Then
 import NVActivityIndicatorView
+import DomainModule
 
-public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,SongCartViewType {
-    private let disposeBag = DisposeBag()
-    private var viewModel: ChartContentViewModel!
-
-    fileprivate lazy var input = ChartContentViewModel.Input()
-    fileprivate lazy var output = viewModel.transform(from: input)
-
+public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
-
+    
+    var viewModel: NewSongsContentViewModel!
+    fileprivate lazy var input = NewSongsContentViewModel.Input()
+    fileprivate lazy var output = viewModel.transform(from: input)
+    var disposeBag = DisposeBag()
+    
+    private var containSongsComponent: ContainSongsComponent!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var refreshControl = UIRefreshControl()
 
-    let playState = PlayState.shared
-    
-    private var containSongsComponent: ContainSongsComponent!
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
         outputBind()
+        inputBind()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -42,21 +43,36 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     }
 
     public static func viewController(
-        viewModel: ChartContentViewModel,
-        containSongsComponent:ContainSongsComponent
-    ) -> ChartContentViewController {
-        let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
+        viewModel: NewSongsContentViewModel,
+        containSongsComponent: ContainSongsComponent
+    ) -> NewSongsContentViewController {
+        let viewController = NewSongsContentViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
 
-extension ChartContentViewController {
-    private func bind() {
-        tableView.register(ChartContentTableViewCell.self, forCellReuseIdentifier: "chartContentTableViewCell")
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+extension NewSongsContentViewController {
+    private func inputBind() {
+        tableView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
         
+        tableView.rx.willDisplayCell
+            .map { $1 }
+            .withLatestFrom(output.dataSource, resultSelector: { (indexPath, datasource) -> (IndexPath, [NewSongsEntity]) in
+                return (indexPath, datasource)
+            })
+            .filter{ (indexPath, datasources) -> Bool in
+                return indexPath.item == datasources.count-1
+            }
+            .withLatestFrom(output.canLoadMore)
+            .filter{ $0 }
+            .map { _ in return () }
+            .bind(to: rx.loadMore)
+            .disposed(by: disposeBag)
+
         tableView.rx.itemSelected
             .map{ $0.row }
             .bind(to: input.songTapped)
@@ -75,23 +91,24 @@ extension ChartContentViewController {
                 guard let `self` = self else { return }
                 self.activityIncidator.stopAnimating()
                 self.refreshControl.endRefreshing()
-                let space: CGFloat = APP_HEIGHT() - 40 - 102 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
+                let space: CGFloat = APP_HEIGHT() - 48 - 40 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
                 let height: CGFloat = space / 3 * 2
                 let warningView: WarningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
-                warningView.text = "차트 데이터가 없습니다."
+                warningView.text = "데이터가 없습니다."
                 self.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
             })
-            .bind(to: tableView.rx.items) { [weak self] (tableView, index, model) -> UITableViewCell in
-                guard let self else { return UITableViewCell() }
+            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "chartContentTableViewCell",
+                    withIdentifier: "NewSongsCell",
                     for: indexPath
-                ) as? ChartContentTableViewCell else {
-                    return UITableViewCell() }
-                cell.update(model: model, index: index, type: self.viewModel.type)
+                ) as? NewSongsCell else {
+                    return UITableViewCell()
+                }
+                cell.update(model: model)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         output.indexOfSelectedSongs
             .skip(1)
@@ -118,49 +135,61 @@ extension ChartContentViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
-        output.groupPlaySongs
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else {return}
-                self.playState.loadAndAppendSongsToPlaylist(songs)
+        output.updateTime
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
     }
     
     private func configureUI() {
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.activityIncidator.type = .circleStrokeSpin
         self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIncidator.startAnimating()
+        self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.tableView.refreshControl = refreshControl
+        
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
     }
 }
 
-extension ChartContentViewController: UITableViewDelegate {
+extension NewSongsContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-
+    
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 102
+        return 80 + 22
     }
-
+    
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = PlayButtonForChartView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 102))
-        view.setUpdateTime(updateTime: output.updateTime)
+        let base = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 88+22))
+        
+        let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        return view
+        base.addSubview(view)
+        
+        let time = ChartUpdateTimeView(frame: CGRect(x: 0, y: view.frame.height, width: APP_WIDTH(), height: 22))
+        time.setUpdateTime(updateTime: self.output.updateTime.value)
+        base.addSubview(time)
+        
+        return base
     }
 }
 
-extension ChartContentViewController: PlayButtonForChartViewDelegate{
+extension NewSongsContentViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         input.groupPlayTapped.onNext(event)
     }
 }
 
-extension ChartContentViewController: SongCartViewDelegate {
+extension NewSongsContentViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         switch type {
         case let .allSelect(flag):
@@ -173,14 +202,15 @@ extension ChartContentViewController: SongCartViewDelegate {
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
+            
         case .addPlayList:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.appendSongsToPlaylist(songs)
+            PlayState.shared.appendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
             
         case .play:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.loadAndAppendSongsToPlaylist(songs)
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
             
         case .remove:
@@ -189,9 +219,11 @@ extension ChartContentViewController: SongCartViewDelegate {
     }
 }
 
-extension ChartContentViewController {
-    public func scrollToTop() {
-        guard !output.dataSource.value.isEmpty else { return }
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+extension Reactive where Base: NewSongsContentViewController{
+    var loadMore: Binder<Void> {
+        return Binder(base) { viewController, _ in
+            let pageID = viewController.input.pageID.value
+            viewController.input.pageID.accept(pageID + 1)
+        }
     }
 }

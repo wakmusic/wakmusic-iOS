@@ -30,14 +30,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     
     //최신음악
     @IBOutlet weak var latestSongLabel: UILabel!
-    @IBOutlet weak var latestSongAllButton: UIButton!
-    @IBOutlet weak var latestSongWwgButton: UIButton!
-    @IBOutlet weak var latestSongIseButton: UIButton!
-    @IBOutlet weak var latestSongGomButton: UIButton!
-    @IBOutlet weak var latestSongAcademyButton: UIButton!
+    @IBOutlet weak var latestArrowImageView: UIImageView!
+    @IBOutlet weak var latestSongsMoveButton: UIButton!
+    @IBOutlet weak var latestSongsPlayButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var latestSongEmptyLabel: UILabel!
-    
+
     private let blurImageView = UIImageView().then {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
@@ -53,6 +51,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
     private var refreshControl = UIRefreshControl()
     var playListDetailComponent: PlayListDetailComponent!
+    var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
     var viewModel: HomeViewModel!
@@ -68,10 +67,25 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         outputBind()
     }
     
-    public static func viewController(viewModel: HomeViewModel, playListDetailComponent :PlayListDetailComponent) -> HomeViewController {
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
+    public static func viewController(
+        viewModel: HomeViewModel,
+        playListDetailComponent: PlayListDetailComponent,
+        newSongsComponent: NewSongsComponent
+    ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playListDetailComponent = playListDetailComponent
+        viewController.newSongsComponent = newSongsComponent
         return viewController
     }
 }
@@ -83,77 +97,20 @@ extension HomeViewController {
             .disposed(by: disposeBag)
 
         chartAllListenButton.rx.tap
-            .bind(to: input.allListenTapped)
+            .bind(to: input.chartAllListenTapped)
             .disposed(by: disposeBag)
-
-        Observable.merge(
-            latestSongAllButton.rx.tap.map { _ -> NewSongGroupType in .all },
-            latestSongWwgButton.rx.tap.map { _ -> NewSongGroupType in .woowakgood },
-            latestSongIseButton.rx.tap.map { _ -> NewSongGroupType in .isedol },
-            latestSongGomButton.rx.tap.map { _ -> NewSongGroupType in .gomem },
-            latestSongAcademyButton.rx.tap.map { _ -> NewSongGroupType in .academy }
-        )
-        .withLatestFrom(input.newSongTypeTapped) { ($0, $1) }
-        .filter{ (currentSelectedType, previousType) in
-            guard currentSelectedType != previousType else { return false }
-            return true
-        }
-        .throttle(RxTimeInterval.seconds(1), latest: false, scheduler: MainScheduler.instance)
-        .do(onNext: { [weak self] (currentSelectedType, previousType) in
-            guard let `self` = self else { return }
-            
-            switch previousType {
-            case .all:
-                self.latestSongAllButton.isSelected = false
-            case .woowakgood:
-                self.latestSongWwgButton.isSelected = false
-            case .isedol:
-                self.latestSongIseButton.isSelected = false
-            case .gomem:
-                self.latestSongGomButton.isSelected = false
-            case .academy:
-                self.latestSongAcademyButton.isSelected = false
-            }
-
-            switch currentSelectedType {
-            case .all:
-                self.latestSongAllButton.isSelected = true
-                self.latestSongWwgButton.isEnabled = false
-                self.latestSongIseButton.isEnabled = false
-                self.latestSongGomButton.isEnabled = false
-                self.latestSongAcademyButton.isSelected = false
-            case .woowakgood:
-                self.latestSongAllButton.isEnabled = false
-                self.latestSongWwgButton.isSelected = true
-                self.latestSongIseButton.isEnabled = false
-                self.latestSongGomButton.isEnabled = false
-                self.latestSongAcademyButton.isSelected = false
-            case .isedol:
-                self.latestSongAllButton.isEnabled = false
-                self.latestSongWwgButton.isEnabled = false
-                self.latestSongIseButton.isSelected = true
-                self.latestSongGomButton.isEnabled = false
-                self.latestSongAcademyButton.isSelected = false
-            case .gomem:
-                self.latestSongAllButton.isEnabled = false
-                self.latestSongWwgButton.isEnabled = false
-                self.latestSongIseButton.isEnabled = false
-                self.latestSongGomButton.isSelected = true
-                self.latestSongAcademyButton.isSelected = false
-            case .academy:
-                self.latestSongAllButton.isEnabled = false
-                self.latestSongWwgButton.isEnabled = false
-                self.latestSongIseButton.isEnabled = false
-                self.latestSongGomButton.isSelected = false
-                self.latestSongAcademyButton.isSelected = true
-            }
-            self.activityIndicator.startAnimating()
-        })
-        .map { (currentSelectedType, _) -> NewSongGroupType in
-            return currentSelectedType
-        }
-        .bind(to: input.newSongTypeTapped)
-        .disposed(by: disposeBag)
+        
+        latestSongsMoveButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, _) in
+                let viewController = owner.newSongsComponent.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        latestSongsPlayButton.rx.tap
+            .bind(to: input.newSongsAllListenTapped)
+            .disposed(by: disposeBag)
         
         refreshControl.rx
             .controlEvent(.valueChanged)
@@ -224,15 +181,14 @@ extension HomeViewController {
         
         output.newSongDataSource
             .skip(1)
+            .map{ (model) in
+                let max: Int = 10
+                return (model.count >= max) ? Array(model[0..<max]) : Array(model[0..<model.count])
+            }
             .do(onNext: { [weak self] (model) in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
                 self?.activityIndicator.stopAnimating()
-                self?.latestSongAllButton.isEnabled = true
-                self?.latestSongWwgButton.isEnabled = true
-                self?.latestSongIseButton.isEnabled = true
-                self?.latestSongGomButton.isEnabled = true
-                self?.latestSongAcademyButton.isEnabled = true
                 self?.latestSongEmptyLabel.isHidden = !model.isEmpty
             })
             .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
@@ -278,23 +234,6 @@ extension HomeViewController {
                     self.recommendViewHeightConstraint?.constant = height
                     recommendView.dataSource = model
                 }
-            }).disposed(by: disposeBag)
-        
-        output.songEntityOfAllChart
-            .subscribe(onNext: { (songs) in
-                let songEntities: [SongEntity] = songs.map {
-                    return SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
-                        views: $0.views,
-                        last: $0.last,
-                        date: $0.date
-                    )
-                }
-                PlayState.shared.loadAndAppendSongsToPlaylist(songEntities)
             })
             .disposed(by: disposeBag)
     }
@@ -345,27 +284,16 @@ extension HomeViewController {
                          .kern: -0.5]
         )
         latestSongLabel.attributedText = latestSongAttributedString
+        latestArrowImageView.image = DesignSystemAsset.Home.homeArrowRight.image
+
+        let latestSongPlayAttributedString = NSMutableAttributedString(
+            string: "전체듣기",
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+                         .kern: -0.5]
+        )
+        latestSongsPlayButton.setAttributedTitle(latestSongPlayAttributedString, for: .normal)
         
-        let buttons: [UIButton] = [latestSongAllButton, latestSongWwgButton, latestSongIseButton, latestSongGomButton, latestSongAcademyButton]
-        
-        for (model, button) in zip(NewSongGroupType.allCases, buttons) {
-            let attributedString = NSMutableAttributedString(
-                string: model.display,
-                attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                             .kern: -0.5]
-            )
-            button.setAttributedTitle(attributedString, for: .normal)
-            
-            let selectedAttributedString = NSMutableAttributedString(
-                string: model.display,
-                attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 14),
-                             .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                             .kern: -0.5]
-            )
-            button.setAttributedTitle(selectedAttributedString, for: .selected)
-        }
-        latestSongAllButton.isSelected = true
         latestSongEmptyLabel.isHidden = true
         latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
         latestSongEmptyLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -430,5 +358,11 @@ extension HomeViewController {
         }else{
             scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
+    }
+}
+
+extension HomeViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -255,59 +255,39 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="w41-rM-Ron">
-                                                        <rect key="frame" x="142" y="0.0" width="231" height="51"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71V-cg-e0X">
-                                                                <rect key="frame" x="0.0" y="0.0" width="24" height="51"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="24" id="fBu-gh-6rW"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="전체"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IM6-VH-YKg">
-                                                                <rect key="frame" x="36" y="0.0" width="36" height="51"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="36" id="9vV-Nn-TRw"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="우왁굳"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mfx-m4-38A">
-                                                                <rect key="frame" x="84" y="0.0" width="36" height="51"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="36" id="Kqj-Cx-VZ7"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="이세돌"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cz2-tR-mZQ">
-                                                                <rect key="frame" x="132" y="0.0" width="24" height="51"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="24" id="fIS-Bb-Qzd"/>
-                                                                </constraints>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="고멤"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pNY-GS-QA0">
-                                                                <rect key="frame" x="168" y="0.0" width="63" height="51"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="아카데미"/>
-                                                            </button>
-                                                        </subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8xG-ie-ZK3">
+                                                        <rect key="frame" x="87.333333333333329" y="17.666666666666686" width="16" height="16"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="51" id="0d3-MT-4Ae"/>
+                                                            <constraint firstAttribute="width" constant="16" id="J3P-Lz-Fro"/>
+                                                            <constraint firstAttribute="height" constant="16" id="coF-ef-dyW"/>
                                                         </constraints>
-                                                    </stackView>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wDC-ic-77u">
+                                                        <rect key="frame" x="20" y="0.0" width="83.333333333333329" height="51"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IeT-0R-PxO">
+                                                        <rect key="frame" x="321" y="0.0" width="52" height="51"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="51" id="MMA-Gw-lIO"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" title="전체듣기"/>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstItem="w41-rM-Ron" firstAttribute="top" secondItem="ygv-Ds-VKT" secondAttribute="top" id="CVy-Fg-Cgx"/>
                                                     <constraint firstItem="P5p-0Q-HaW" firstAttribute="leading" secondItem="ygv-Ds-VKT" secondAttribute="leading" constant="20" id="Fcy-AE-EQ1"/>
+                                                    <constraint firstItem="wDC-ic-77u" firstAttribute="top" secondItem="P5p-0Q-HaW" secondAttribute="top" id="Ixg-p4-qdd"/>
+                                                    <constraint firstItem="8xG-ie-ZK3" firstAttribute="centerY" secondItem="P5p-0Q-HaW" secondAttribute="centerY" id="Uwa-7c-yL7"/>
                                                     <constraint firstAttribute="height" constant="56" id="W1z-zv-qzj"/>
-                                                    <constraint firstAttribute="trailing" secondItem="w41-rM-Ron" secondAttribute="trailing" constant="20" id="f9J-dV-KcQ"/>
+                                                    <constraint firstItem="IeT-0R-PxO" firstAttribute="centerY" secondItem="P5p-0Q-HaW" secondAttribute="centerY" id="XrM-Um-TZT"/>
+                                                    <constraint firstItem="8xG-ie-ZK3" firstAttribute="leading" secondItem="P5p-0Q-HaW" secondAttribute="trailing" constant="4" id="dwe-mA-lRu"/>
+                                                    <constraint firstItem="wDC-ic-77u" firstAttribute="leading" secondItem="P5p-0Q-HaW" secondAttribute="leading" id="gK8-Hd-gVx"/>
+                                                    <constraint firstItem="wDC-ic-77u" firstAttribute="bottom" secondItem="P5p-0Q-HaW" secondAttribute="bottom" id="gy0-ls-CmE"/>
                                                     <constraint firstItem="P5p-0Q-HaW" firstAttribute="top" secondItem="ygv-Ds-VKT" secondAttribute="top" id="muf-Pc-QGH"/>
+                                                    <constraint firstAttribute="trailing" secondItem="IeT-0R-PxO" secondAttribute="trailing" constant="20" id="xLP-uY-z42"/>
+                                                    <constraint firstItem="wDC-ic-77u" firstAttribute="trailing" secondItem="8xG-ie-ZK3" secondAttribute="trailing" id="zMw-ei-vBT"/>
                                                 </constraints>
                                             </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ONM-XL-Wa9">
@@ -449,13 +429,11 @@
                         <outlet property="chartMoreButton" destination="5ri-c7-NeA" id="82A-RU-zwg"/>
                         <outlet property="chartTitleLabel" destination="Ha5-D0-Yv1" id="A7L-vj-gqJ"/>
                         <outlet property="collectionView" destination="ONM-XL-Wa9" id="lVA-q2-zqY"/>
-                        <outlet property="latestSongAcademyButton" destination="pNY-GS-QA0" id="ehp-uh-cXu"/>
-                        <outlet property="latestSongAllButton" destination="71V-cg-e0X" id="dMZ-M9-LQ7"/>
+                        <outlet property="latestArrowImageView" destination="8xG-ie-ZK3" id="hdx-nR-nyt"/>
                         <outlet property="latestSongEmptyLabel" destination="4IF-tl-6xw" id="d61-tX-mdc"/>
-                        <outlet property="latestSongGomButton" destination="Cz2-tR-mZQ" id="a0U-ST-6m8"/>
-                        <outlet property="latestSongIseButton" destination="Mfx-m4-38A" id="9rJ-V9-UUN"/>
                         <outlet property="latestSongLabel" destination="P5p-0Q-HaW" id="n0f-ON-hbX"/>
-                        <outlet property="latestSongWwgButton" destination="IM6-VH-YKg" id="Qo8-eu-WYJ"/>
+                        <outlet property="latestSongsMoveButton" destination="wDC-ic-77u" id="FQ6-K8-r9m"/>
+                        <outlet property="latestSongsPlayButton" destination="IeT-0R-PxO" id="SvE-yZ-Nma"/>
                         <outlet property="scrollView" destination="QCv-HV-K1f" id="0I2-Gp-JtW"/>
                         <outlet property="stackView" destination="IJw-6l-kM9" id="W1D-Em-eoB"/>
                         <outlet property="tableView" destination="o0Z-O4-HnV" id="tBZ-Rd-MVX"/>

@@ -3,7 +3,7 @@ import DataMappingModule
 import DomainModule
 import ErrorModule
 
-public struct FetchNewSongUseCaseImpl: FetchNewSongUseCase {
+public struct FetchNewSongsUseCaseImpl: FetchNewSongsUseCase {
     private let songsRepository: any SongsRepository
 
     public init(
@@ -12,7 +12,7 @@ public struct FetchNewSongUseCaseImpl: FetchNewSongUseCase {
         self.songsRepository = songsRepository
     }
   
-    public func execute(type: NewSongGroupType) -> Single<[NewSongEntity]> {
-        songsRepository.fetchNewSong(type: type)
+    public func execute(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]> {
+        return songsRepository.fetchNewSongs(type: type, page: page, limit: limit)
     }
 }

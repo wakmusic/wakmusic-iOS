@@ -1,8 +1,8 @@
 //
-//  FetchNewSongTransfer.swift
+//  FetchNewSongsTransfer.swift
 //  NetworkModule
 //
-//  Created by KTH on 2023/02/20.
+//  Created by KTH on 2023/11/15.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
@@ -10,9 +10,9 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-public extension NewSongResponseDTO {
-    func toDomain() -> NewSongEntity {
-        NewSongEntity(
+public extension NewSongsResponseDTO {
+    func toDomain() -> NewSongsEntity {
+        return NewSongsEntity(
             id: id,
             title: title,
             artist: artist,
