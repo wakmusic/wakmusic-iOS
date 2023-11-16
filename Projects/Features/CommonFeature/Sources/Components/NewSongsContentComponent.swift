@@ -13,6 +13,7 @@ import DataMappingModule
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
+    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase { get }
     var containSongsComponent: ContainSongsComponent { get }
 }
 
@@ -21,9 +22,10 @@ public final class NewSongsContentComponent: Component<NewSongsContentDependency
         return NewSongsContentViewController.viewController(
             viewModel: .init(
                 type: type,
-                fetchNewSongsUseCase: dependency.fetchNewSongsUseCase
-            )
-            ,containSongsComponent:  dependency.containSongsComponent
+                fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
+                fetchChartUpdateTimeUseCase: dependency.fetchChartUpdateTimeUseCase
+            ),
+            containSongsComponent: dependency.containSongsComponent
         )
     }
 }

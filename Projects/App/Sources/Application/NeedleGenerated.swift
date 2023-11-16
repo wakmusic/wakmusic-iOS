@@ -767,6 +767,9 @@ private class NewSongsContentDependency93a05f20fa300c5bbec3Provider: NewSongsCon
     var fetchNewSongsUseCase: any FetchNewSongsUseCase {
         return appComponent.fetchNewSongsUseCase
     }
+    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
+        return appComponent.fetchChartUpdateTimeUseCase
+    }
     var containSongsComponent: ContainSongsComponent {
         return appComponent.containSongsComponent
     }
@@ -1169,6 +1172,7 @@ extension ProfilePopComponent: Registration {
 extension NewSongsContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\NewSongsContentDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
+        keyPathToName[\NewSongsContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
         keyPathToName[\NewSongsContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }

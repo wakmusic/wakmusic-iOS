@@ -17,7 +17,7 @@ import DomainModule
 public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
-
+    
     var viewModel: NewSongsContentViewModel!
     fileprivate lazy var input = NewSongsContentViewModel.Input()
     fileprivate lazy var output = viewModel.transform(from: input)
@@ -103,7 +103,8 @@ extension NewSongsContentViewController {
                     withIdentifier: "NewSongsCell",
                     for: indexPath
                 ) as? NewSongsCell else {
-                    return UITableViewCell() }
+                    return UITableViewCell()
+                }
                 cell.update(model: model)
                 return cell
             }
@@ -134,9 +135,10 @@ extension NewSongsContentViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
-        output.groupPlaySongs
-            .subscribe(onNext: { songs in
-                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+        output.updateTime
+            .filter { !$0.isEmpty }
+            .subscribe(onNext: { [weak self] _ in
+                self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
     }
@@ -163,13 +165,21 @@ extension NewSongsContentViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80
+        return 80 + 22
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let base = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 88+22))
+        
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        return view
+        base.addSubview(view)
+        
+        let time = ChartUpdateTimeView(frame: CGRect(x: 0, y: view.frame.height, width: APP_WIDTH(), height: 22))
+        time.setUpdateTime(updateTime: self.output.updateTime.value)
+        base.addSubview(time)
+        
+        return base
     }
 }
 

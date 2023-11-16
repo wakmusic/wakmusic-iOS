@@ -18,15 +18,18 @@ public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType
     private let disposeBag = DisposeBag()
     private let fetchNewSongsUseCase: FetchNewSongsUseCase
-    
+    private let fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
+
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public init(
         type: NewSongGroupType,
-        fetchNewSongsUseCase: FetchNewSongsUseCase
+        fetchNewSongsUseCase: FetchNewSongsUseCase,
+        fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
     ) {
         self.type = type
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
+        self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
     
     public struct Input {
@@ -42,14 +45,26 @@ public final class NewSongsContentViewModel: ViewModelType {
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
         var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
     }
     
     public func transform(from input: Input) -> Output {
         let output = Output()
         
-        let refresh = Observable.combineLatest(output.dataSource, input.pageID) { (dataSource, pageID) -> [NewSongsEntity] in
+        let chartUpdateTime = self.fetchChartUpdateTimeUseCase
+            .execute(type: .total)
+            .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
+            .asObservable()
+        
+        chartUpdateTime
+            .take(1)
+            .bind(to: output.updateTime)
+            .disposed(by: disposeBag)
+        
+        let refresh = Observable.combineLatest(
+            output.dataSource,
+            input.pageID
+        ) { (dataSource, pageID) -> [NewSongsEntity] in
             return pageID == 1 ? [] : dataSource
         }
         
@@ -59,8 +74,8 @@ public final class NewSongsContentViewModel: ViewModelType {
         input.pageID
             .flatMap { (pageID) -> Single<[NewSongsEntity]> in
                 return fetchNewSongsUseCase
-                        .execute(type: type, page: pageID, limit: 100)
-                        .catchAndReturn([])
+                    .execute(type: type, page: pageID, limit: 100)
+                    .catchAndReturn([])
             }
             .asObservable()
             .do(onNext: { (model) in
@@ -76,8 +91,13 @@ public final class NewSongsContentViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.refreshPulled
-            .map { _ in 1 }
-            .bind(to: input.pageID)
+            .do(onNext: { _ in
+                input.pageID.accept(1)
+            })
+            .flatMap{ _ -> Observable<String> in
+                return chartUpdateTime
+            }
+            .bind(to: output.updateTime)
             .disposed(by: disposeBag)
 
         input.songTapped
@@ -166,7 +186,9 @@ public final class NewSongsContentViewModel: ViewModelType {
                     return dataSource.shuffled()
                 }
             }
-            .bind(to: output.groupPlaySongs)
+            .subscribe(onNext: { (songs) in
+                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            })
             .disposed(by: disposeBag)
 
         return output
