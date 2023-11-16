@@ -79,7 +79,7 @@ extension ChartContentViewController {
                 let height: CGFloat = space / 3 * 2
                 let warningView: WarningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "차트 데이터가 없습니다."
-                self.tableView.tableFooterView = model.isEmpty ? warningView : nil
+                self.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
             })
             .bind(to: tableView.rx.items) { [weak self] (tableView, index, model) -> UITableViewCell in
                 guard let self else { return UITableViewCell() }
@@ -131,8 +131,8 @@ extension ChartContentViewController {
         self.activityIncidator.type = .circleStrokeSpin
         self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIncidator.startAnimating()
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.tableView.refreshControl = refreshControl
     }
 }

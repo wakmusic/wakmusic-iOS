@@ -27,7 +27,6 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var refreshControl = UIRefreshControl()
-    let playState = PlayState.shared
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,9 +133,8 @@ extension NewSongsContentViewController {
             .disposed(by: disposeBag)
         
         output.groupPlaySongs
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else { return }
-                self.playState.loadAndAppendSongsToPlaylist(songs)
+            .subscribe(onNext: { songs in
+                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             })
             .disposed(by: disposeBag)
     }
@@ -195,12 +193,12 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             
         case .addPlayList:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.appendSongsToPlaylist(songs)
+            PlayState.shared.appendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
             
         case .play:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.loadAndAppendSongsToPlaylist(songs)
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             self.input.allSongSelected.onNext(false)
             
         case .remove:
