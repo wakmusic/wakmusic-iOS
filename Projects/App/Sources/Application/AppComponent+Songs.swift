@@ -11,6 +11,7 @@ import DataModule
 import NetworkModule
 import SearchFeature
 import HomeFeature
+import CommonFeature
 
 public extension AppComponent {
     
@@ -28,6 +29,14 @@ public extension AppComponent {
     
     var homeComponent: HomeComponent {
         HomeComponent(parent: self)
+    }
+    
+    var newSongsComponent: NewSongsComponent {
+        NewSongsComponent(parent: self)
+    }
+
+    var newSongsContentComponent: NewSongsContentComponent {
+        NewSongsContentComponent(parent: self)
     }
 
     var remoteSongsDataSource: any RemoteSongsDataSource {
@@ -53,9 +62,9 @@ public extension AppComponent {
         }
     }
     
-    var fetchNewSongUseCase: any FetchNewSongUseCase {
+    var fetchNewSongsUseCase: any FetchNewSongsUseCase {
         shared {
-            FetchNewSongUseCaseImpl(songsRepository: songsRepository)
+            FetchNewSongsUseCaseImpl(songsRepository: songsRepository)
         }
     }
 }

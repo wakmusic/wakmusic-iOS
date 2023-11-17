@@ -14,32 +14,32 @@ import Utility
 import AVFAudio
 
 final public class PlayState {
-    public static let shared = PlayState()
+    public static let shared = PlayState(player: YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false)))
     
-    @Published public var player: YouTubePlayer
-    @Published public var state: YouTubePlayer.PlaybackState
+    @Published public var player: YouTubePlayer?
+    @Published public var state: YouTubePlayer.PlaybackState = .unstarted
     @Published public var currentSong: SongEntity?
     @Published public var progress: PlayProgress
     @Published public var playList: PlayList
-    @Published public var repeatMode: RepeatMode
-    @Published public var shuffleMode: ShuffleMode
-    @Published public var playerMode: PlayerMode
+    @Published public var repeatMode: RepeatMode = .none
+    @Published public var shuffleMode: ShuffleMode = .off
+    @Published public var playerMode: PlayerMode = .mini
 
     private var subscription = Set<AnyCancellable>()
     
-    init() {
+    public init(
+        player: YouTubePlayer?,
+        playList: PlayList = PlayList(),
+        playProgress: PlayProgress = PlayProgress())
+    {
         DEBUG_LOG("🚀:: \(Self.self) initialized")
-        playList = PlayList()
-        progress = PlayProgress()
-        state = .unstarted
-        repeatMode = .none
-        shuffleMode = .off
-        playerMode = .mini
-        player = YouTubePlayer(configuration: .init(autoPlay: false, showControls: false, showRelatedVideos: false))
+        self.player = player
+        self.playList = playList
+        self.progress = playProgress
         
-        playList.list = fetchPlayListFromLocalDB()
+        self.playList.list = fetchPlayListFromLocalDB()
         currentSong = playList.currentPlaySong
-        player.cue(source: .video(id: currentSong?.id ?? "")) // 곡이 있으면 .cued 없으면 .unstarted
+        self.player?.cue(source: .video(id: currentSong?.id ?? "")) // 곡이 있으면 .cued 없으면 .unstarted
         
         subscribePlayPublisher()
         subscribePlayListChanges()
@@ -52,17 +52,17 @@ final public class PlayState {
     }
     
     public func subscribePlayPublisher() {
-        player.playbackStatePublisher.sink { [weak self] state in
+        player?.playbackStatePublisher.sink { [weak self] state in
             guard let self = self else { return }
             self.state = state
         }.store(in: &subscription)
         
-        player.currentTimePublisher().sink { [weak self] currentTime in
+        player?.currentTimePublisher().sink { [weak self] currentTime in
             guard let self = self else { return }
             self.progress.currentProgress = currentTime
         }.store(in: &subscription)
         
-        player.durationPublisher.sink { [weak self] duration in
+        player?.durationPublisher.sink { [weak self] duration in
             guard let self = self else { return }
             self.progress.endProgress = duration
         }.store(in: &subscription)
@@ -71,14 +71,22 @@ final public class PlayState {
     /// 플레이리스트에 변경사항이 생겼을 때, 로컬 DB를 덮어씁니다.
     public func subscribePlayListChanges() {
         Publishers.Merge4(
-            playList.listAppended.dropFirst(),
-            playList.listRemoved.dropFirst(),
-            playList.listReordered.dropFirst(),
-            playList.currentSongChanged.dropFirst()
+            playList.listAppended,
+            playList.listRemoved,
+            playList.listReordered,
+            playList.currentPlayIndexChanged
         )
         .sink { [weak self] playListItems in
             guard let self else { return }
             self.updatePlayListChangesToLocalDB(playList: playListItems)
+        }.store(in: &subscription)
+        
+        playList.currentPlaySongChanged.sink { [weak self] song in
+            guard let self else { return }
+            self.currentSong = song
+            if let index = self.playList.currentPlayIndex {
+                loadInPlaylist(at: index)
+            }
         }.store(in: &subscription)
     }
     

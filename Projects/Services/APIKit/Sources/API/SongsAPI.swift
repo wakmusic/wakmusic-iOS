@@ -4,25 +4,33 @@ import ErrorModule
 import Foundation
 
 public enum SongsAPI {
-    case fetchSearchSong(type: SearchType,keyword: String)
-    case fetchNewSong(type: NewSongGroupType)
+    case fetchSearchSong(type: SearchType, keyword: String)
     case fetchLyrics(id: String)
+    case fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int)
 }
 
 extension SongsAPI: WMAPI {
-
     public var domain: WMDomain {
-        .songs
+        return .songs
+    }
+    
+    public var path: String {
+        switch self {
+        case .fetchNewSongs:
+            return "/\(WMDOMAIN_V2_SONGS())" + urlPath
+        default:
+            return domain.asURLString + urlPath
+        }
     }
 
     public var urlPath: String {
         switch self {
         case .fetchSearchSong:
             return "/search"
-        case let .fetchNewSong(type):
-            return "/new/\(type.apiKey)"
         case .fetchLyrics(id: let id):
             return "/lyrics/\(id)"
+        case let .fetchNewSongs(type, _, _):
+            return "/new/\(type.apiKey)"
         }
     }
         
@@ -39,8 +47,17 @@ extension SongsAPI: WMAPI {
                 "keyword": keyword
             ], encoding: URLEncoding.queryString)
             
-        case .fetchLyrics, .fetchNewSong:
+        case .fetchLyrics:
             return .requestPlain
+
+        case let .fetchNewSongs(_, page, limit):
+            return .requestParameters(
+                parameters: [
+                    "limit": limit,
+                    "start": (page == 1) ? 0 : (page - 1) * limit
+                ],
+                encoding: URLEncoding.queryString
+            )
         }
     }
     

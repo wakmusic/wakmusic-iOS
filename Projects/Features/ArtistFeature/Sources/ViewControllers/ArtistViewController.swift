@@ -27,9 +27,14 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-    
+
     public static func viewController(
         viewModel: ArtistViewModel,
         artistDetailComponent: ArtistDetailComponent
@@ -129,5 +134,11 @@ extension ArtistViewController {
             guard !output.dataSource.value.isEmpty else { return }
             self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
+    }
+}
+
+extension ArtistViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }

@@ -12,20 +12,16 @@ public final class AppComponent: BootstrapComponent {
     public func makeRootView() -> IntroViewController {
         rootComponent.makeView()
     }
+    
     public var keychain: any Keychain {
         shared {
             KeychainImpl()
         }
     }
+    
     var rootComponent: RootComponent {
         shared {
             RootComponent(parent: self)
-        }
-    }
-    
-    var permissionComponent: PermissionComponent {
-        shared {
-            PermissionComponent(parent: self)
         }
     }
 }
@@ -61,7 +57,12 @@ public extension AppComponent {
     var openSourceLicenseComponent: OpenSourceLicenseComponent {
         OpenSourceLicenseComponent(parent: self)
     }
+    
     var serviceInfoComponent: ServiceInfoComponent {
         ServiceInfoComponent(parent: self)
+    }
+    
+    var permissionComponent: PermissionComponent {
+        PermissionComponent(parent: self)
     }
 }

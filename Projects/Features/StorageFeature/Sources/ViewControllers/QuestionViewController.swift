@@ -14,6 +14,7 @@ import BaseFeature
 import DataMappingModule
 import MessageUI
 import CommonFeature
+import SafariServices
 
 public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
 
@@ -239,7 +240,7 @@ extension QuestionViewController {
                     )
                     imageViews[i].isHidden = i == index ? false : true
                     superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
-                    superViews[i].addShadow(offset: CGSize(width: 0, height: 2),color: colorFromRGB("080F34"),opacity: i == index ? 0.08 : 0)
+                    superViews[i].addShadow(offset: CGSize(width: 0, height: 2), color: colorFromRGB("080F34"), opacity: i == index ? 0.08 : 0)
                 }
             })
             .disposed(by: disposeBag)
@@ -247,26 +248,27 @@ extension QuestionViewController {
         nextButton.rx.tap
             .withLatestFrom(output.mailSource)
             .filter { $0 != .unknown }
-            .subscribe(onNext: { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                
-                if MFMailComposeViewController.canSendMail() {
-                    let compseVC = MFMailComposeViewController()
-                    compseVC.mailComposeDelegate = self
-                    compseVC.setToRecipients([$0.receiver])
-                    compseVC.setSubject($0.title)
-                    compseVC.setMessageBody($0.body + $0.suffix, isHTML: false)
-                    self.present(compseVC, animated: true, completion: nil)
-                        
-                }else {
-                    let vc = TextPopupViewController.viewController(
-                        text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
-                        cancelButtonIsHidden: true,
-                        confirmButtonText: "확인"
+            .subscribe(onNext: { [weak self] (source) in
+                guard let self = self else { return }
+                if source == .addSong {
+                    let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
+                    let textPopup = TextPopupViewController.viewController(
+                        text: "· 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘은수저’ 님에게 왁물원 채팅으로 부탁드립니다.\n· 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.",
+                        cancelButtonIsHidden: false,
+                        confirmButtonText: "다음",
+                        cancelButtonText: "충족 기준 보기",
+                        completion: {
+                            self.goToMail(source: source)
+                        },
+                        cancelCompletion: {
+                            guard let URL = URL(string: link) else { return }
+                            let safari = SFSafariViewController(url: URL)
+                            self.present(safari, animated: true)
+                        }
                     )
-                    self.showPanModal(content: vc)
+                    self.showPanModal(content: textPopup)
+                }else{
+                    self.goToMail(source: source)
                 }
             })
             .disposed(by: disposeBag)
@@ -288,6 +290,26 @@ extension QuestionViewController {
     }
 }
 
+extension QuestionViewController {
+    private func goToMail(source: InquiryType) {
+        if MFMailComposeViewController.canSendMail() {
+            let compseVC = MFMailComposeViewController()
+            compseVC.mailComposeDelegate = self
+            compseVC.setToRecipients([source.receiver])
+            compseVC.setSubject(source.title)
+            compseVC.setMessageBody(source.body + source.suffix, isHTML: false)
+            self.present(compseVC, animated: true, completion: nil)
+                
+        }else {
+            let vc = TextPopupViewController.viewController(
+                text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
+                cancelButtonIsHidden: true,
+                confirmButtonText: "확인"
+            )
+            self.showPanModal(content: vc)
+        }
+    }
+}
 
 extension QuestionViewController : MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {

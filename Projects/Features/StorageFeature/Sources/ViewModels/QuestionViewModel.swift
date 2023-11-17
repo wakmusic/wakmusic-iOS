@@ -52,7 +52,7 @@ public final class QuestionViewModel:ViewModelType {
                 switch result {
                 case let .success(result):
                     DEBUG_LOG("MFMailComposeResult: \(result)")
-                    return (result == .sent) ? ("소중한 의견 감사합니다.", true) : ("", false)
+                    return (result == .sent) ? ("문의가 등록되었습니다. 도움을 주셔서 감사합니다.", true) : ("", false)
                 case let .failure(error):
                     return (error.localizedDescription, false)
                 }
@@ -110,8 +110,6 @@ extension InquiryType {
             """
         case .addSong:
             return """
-                · 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘은수저’님에게 왁물원 채팅으로 부탁드립니다.
-                · 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.
                 \n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\n\n
             """
         case .modifySong:

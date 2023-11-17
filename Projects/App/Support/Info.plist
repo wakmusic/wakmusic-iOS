@@ -116,6 +116,8 @@
 		<string>$(WMDOMAIN_QNA)</string>
 		<key>WMDOMAIN_SONGS</key>
 		<string>$(WMDOMAIN_SONGS)</string>
+		<key>WMDOMAIN_V2_SONGS</key>
+		<string>$(WMDOMAIN_V2_SONGS)</string>
 		<key>WMDOMAIN_SUGGEST</key>
 		<string>$(WMDOMAIN_SUGGEST)</string>
 		<key>WMDOMAIN_USER</key>

@@ -15,20 +15,20 @@ extension PlayState {
     
     /// ⏯️ 현재 곡 재생
     public func play() {
-        self.player.play()
+        self.player?.play()
     }
     
     /// ⏸️ 일시정지
     public func pause() {
-        self.player.pause()
+        self.player?.pause()
     }
     
     /// ⏹️ 플레이어 닫기
     public func stop() {
-        self.player.stop() // stop만 하면 playbackState가 .cued로 들어감
+        self.player?.stop() // stop만 하면 playbackState가 .cued로 들어감
         self.currentSong = nil
         self.progress.resetCurrentProgress()
-        self.player.cue(source: .video(id: "")) // playbackState를 .unstarted로 바꿈
+        self.player?.cue(source: .video(id: "")) // playbackState를 .unstarted로 바꿈
         //self.playList.removeAll()
     }
     
@@ -37,7 +37,7 @@ extension PlayState {
         //requestPlaybackLog(current: song) // v2 api 완성 후 적용하기로 함.
         self.currentSong = song
         guard let currentSong = currentSong else { return }
-        self.player.load(source: .video(id: currentSong.id))
+        self.player?.load(source: .video(id: currentSong.id))
     }
     
     /// ▶️ 플레이리스트의 해당 위치의  곡 재생

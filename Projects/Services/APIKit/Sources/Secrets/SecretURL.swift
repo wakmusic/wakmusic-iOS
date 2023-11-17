@@ -8,96 +8,66 @@
 
 import Foundation
 
-//MARK: - BASE_URL
-public func BASE_URL() -> String {
+public func config(key: String) -> String {
     guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
         return ""
     }
+    return secrets[key] as? String ?? "not found key"
+}
+
+//MARK: - BASE_URL
+public func BASE_URL() -> String {
     #if DEBUG
-    return secrets["BASE_DEV_URL"] as? String ?? "not found key"
+    return config(key: "BASE_DEV_URL")
     #else
-    return secrets["BASE_PROD_URL"] as? String ?? "not found key"
+    return config(key: "BASE_PROD_URL")
     #endif
 }
 
 //MARK: - WAKENTER_BASE_URL
 public func WAKENTER_BASE_URL() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WAKENTER_BASE_URL"] as? String ?? "not found key"
+    return config(key: "WAKENTER_BASE_URL")
 }
 
 //MARK: - WMDomain
 public func WMDOMAIN_AUTH() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_AUTH"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_AUTH")
 }
 public func WMDOMAIN_CHARTS() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_CHARTS"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_CHARTS")
 }
 public func WMDOMAIN_SONGS() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_SONGS"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_SONGS")
 }
 public func WMDOMAIN_ARTIST() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_ARTIST"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_ARTIST")
 }
 public func WMDOMAIN_USER() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_USER"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_USER")
 }
 public func WMDOMAIN_PLAYLIST() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_PLAYLIST"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_PLAYLIST")
 }
 public func WMDOMAIN_LIKE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_LIKE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_LIKE")
 }
 public func WMDOMAIN_QNA() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_QNA"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_QNA")
 }
 public func WMDOMAIN_NOTICE() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_NOTICE"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_NOTICE")
 }
 public func WMDOMAIN_SUGGEST() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_SUGGEST"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_SUGGEST")
 }
 public func WMDOMAIN_APP() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_APP"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_APP")
 }
 public func WMDOMAIN_PLAY() -> String {
-    guard let secrets = Bundle.main.object(forInfoDictionaryKey: "Secrets") as? [String: Any] else {
-        return ""
-    }
-    return secrets["WMDOMAIN_PLAY"] as? String ?? "not found key"
+    return config(key: "WMDOMAIN_PLAY")
+}
+
+//MARK: - WMDomain V2
+public func WMDOMAIN_V2_SONGS() -> String {
+    return config(key: "WMDOMAIN_V2_SONGS")
 }

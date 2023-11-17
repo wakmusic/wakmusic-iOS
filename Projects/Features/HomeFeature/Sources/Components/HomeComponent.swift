@@ -14,9 +14,10 @@ import CommonFeature
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
-    var fetchNewSongUseCase: any FetchNewSongUseCase { get }
+    var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playListDetailComponent : PlayListDetailComponent {get}
+    var playListDetailComponent : PlayListDetailComponent { get }
+    var newSongsComponent: NewSongsComponent { get }
 }
 
 public final class HomeComponent: Component<HomeDependency> {
@@ -24,10 +25,11 @@ public final class HomeComponent: Component<HomeDependency> {
         return HomeViewController.viewController(
             viewModel: .init(
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
-                fetchNewSongUseCase: dependency.fetchNewSongUseCase,
+                fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
             ),
-            playListDetailComponent: dependency.playListDetailComponent
+            playListDetailComponent: dependency.playListDetailComponent,
+            newSongsComponent: dependency.newSongsComponent
         )
     }
 }

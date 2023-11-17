@@ -21,6 +21,7 @@ public extension UILabel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = lineSpacing
         paragraphStyle.lineHeightMultiple = lineHeightMultiple
+        paragraphStyle.lineBreakMode = .byTruncatingTail
         
         let attributedString = NSMutableAttributedString(string: labelText,
                                                          attributes: [
