@@ -115,18 +115,25 @@ private extension PlayerViewController {
         let input = PlayerViewModel.Input(
             viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map {_ in },
             closeButtonDidTapEvent: self.playerView.closeButton.tapPublisher(),
-            playButtonDidTapEvent: self.playerView.playButton.tapPublisher(),
+            playButtonDidTapEvent: Publishers.Merge(
+                self.playerView.playButton.tapPublisher(),
+                self.miniPlayerView.playButton.tapPublisher()
+            ).eraseToAnyPublisher(),
             prevButtonDidTapEvent: self.playerView.prevButton.rx.tap.asObservable(),
-            nextButtonDidTapEvent: self.playerView.nextButton.rx.tap.asObservable(),
+            nextButtonDidTapEvent: Observable.merge(
+                self.playerView.nextButton.rx.tap.asObservable(),
+                self.miniPlayerView.nextButton.rx.tap.asObservable()
+            ),
             sliderValueChangedEvent: self.playerView.playTimeSlider.rx.value.changed.asObservable(),
             repeatButtonDidTapEvent: self.playerView.repeatButton.tapPublisher(),
             shuffleButtonDidTapEvent: self.playerView.shuffleButton.tapPublisher(),
             likeButtonDidTapEvent: self.playerView.likeButton.tapPublisher(),
             addPlaylistButtonDidTapEvent: self.playerView.addPlayistButton.tapPublisher(),
-            playlistButtonDidTapEvent: self.playerView.playistButton.tapPublisher(),
-            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.tapPublisher(),
-            miniPlayButtonDidTapEvent: self.miniPlayerView.playButton.tapPublisher(),
-            miniCloseButtonDidTapEvent: self.miniPlayerView.closeButton.tapPublisher()
+            playlistButtonDidTapEvent: Publishers.Merge(
+                self.playerView.playistButton.tapPublisher(),
+                self.miniPlayerView.playlistButton.tapPublisher()
+            ).eraseToAnyPublisher(),
+            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.tapPublisher()
         )
         let output = self.viewModel.transform(from: input)
         
@@ -210,11 +217,6 @@ private extension PlayerViewController {
                 }
             )
             self.playerView.backgroundImageView.kf.setImage(
-                with: sdURL,
-                placeholder: placeholderImage,
-                options: transitionOptions
-            )
-            self.miniPlayerView.thumbnailImageView.kf.setImage(
                 with: sdURL,
                 placeholder: placeholderImage,
                 options: transitionOptions

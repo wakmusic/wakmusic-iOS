@@ -34,13 +34,6 @@ final class MiniPlayerView: UIView {
         $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
     }
     
-    internal lazy var thumbnailImageView = UIImageView().then {
-        $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
-        $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 4
-        $0.clipsToBounds = true
-    }
-    
     internal lazy var titleArtistLabelView: UIView = UIView()
     
     internal lazy var titleLabel = MarqueeLabel().then {
@@ -76,9 +69,18 @@ final class MiniPlayerView: UIView {
         $0.tintColor = .systemGray
     }
     
+    internal lazy var nextButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
+        $0.tintColor = .systemGray
+    }
+    
     internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.miniClose.image, for: .normal)
         $0.tintColor = .systemGray
+    }
+    
+    internal lazy var playlistButton = UIButton().then {
+        $0.setImage(DesignSystemAsset.Player.playList.image, for: .normal)
     }
     
     override init(frame: CGRect) {
@@ -99,12 +101,12 @@ private extension MiniPlayerView {
         self.configureBlur()
         self.configureContent()
         self.configurePlayTime()
-        self.configureThumbnail()
         self.configureTitleArtist()
         self.configureTitleLabel()
         self.configureArtistLabel()
         self.configurePlayButton()
-        self.configureCloseButton()
+        self.configureNextButton()
+        self.configurePlaylistButton()
     }
     
     private func configureSubViews() {
@@ -112,13 +114,13 @@ private extension MiniPlayerView {
         self.addSubview(contentView)
         self.contentView.addSubview(totalPlayTimeView)
         self.totalPlayTimeView.addSubview(currentPlayTimeView)
-        self.contentView.addSubview(thumbnailImageView)
         self.contentView.addSubview(titleArtistLabelView)
         self.titleArtistLabelView.addSubview(titleLabel)
         self.titleArtistLabelView.addSubview(artistLabel)
         self.contentView.addSubview(extendButton)
         self.contentView.addSubview(playButton)
-        self.contentView.addSubview(closeButton)
+        self.contentView.addSubview(nextButton)
+        self.contentView.addSubview(playlistButton)
     }
     
     private func configureBlur() {
@@ -149,22 +151,11 @@ private extension MiniPlayerView {
         }
     }
     
-    private func configureThumbnail() {
-        let height = 40
-        let width = height * 16 / 9
-        thumbnailImageView.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.left.equalToSuperview().offset(20)
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
-        }
-    }
-    
     private func configureTitleArtist() {
         titleArtistLabelView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(7)
             $0.bottom.equalToSuperview().offset(-7)
-            $0.left.equalTo(thumbnailImageView.snp.right).offset(8)
+            $0.left.equalToSuperview().offset(20)
             $0.right.equalTo(playButton.snp.left).offset(-12)
         }
     }
@@ -183,13 +174,21 @@ private extension MiniPlayerView {
     private func configurePlayButton() {
         playButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(closeButton.snp.left).offset(-20)
+            $0.right.equalTo(nextButton.snp.left).offset(-20)
             $0.width.height.equalTo(32)
         }
     }
     
-    private func configureCloseButton() {
-        closeButton.snp.makeConstraints {
+    private func configureNextButton() {
+        nextButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalTo(playlistButton.snp.left).offset(-20)
+            $0.width.height.equalTo(32)
+        }
+    }
+    
+    private func configurePlaylistButton() {
+        playlistButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().offset(-16)
             $0.width.height.equalTo(32)
