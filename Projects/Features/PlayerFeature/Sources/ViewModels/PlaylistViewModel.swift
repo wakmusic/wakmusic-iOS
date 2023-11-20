@@ -21,6 +21,7 @@ internal typealias PlayListSectionModel = SectionModel<Int, PlayListItem>
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
+        let viewWillAppearEvent: Observable<Void>
         let closeButtonDidTapEvent: AnyPublisher<Void, Never>
         let editButtonDidTapEvent: AnyPublisher<Void, Never>
         let repeatButtonDidTapEvent: AnyPublisher<Void, Never>
@@ -75,7 +76,6 @@ final class PlaylistViewModel: ViewModelType {
         bindProgress(output: output)
         bindRepeatMode(output: output)
         bindShuffleMode(output: output)
-        bindCountOfSongs(output: output)
         
         output.indexOfSelectedSongs
             .map { $0.count }
@@ -87,6 +87,12 @@ final class PlaylistViewModel: ViewModelType {
     }
     
     private func bindInput(input: Input, output: Output) {
+        input.viewWillAppearEvent.subscribe { [weak self] _ in
+            guard let self else { return }
+            let count = self.playState.playList.count
+            output.countOfSongs.send(count)
+        }.disposed(by: disposeBag)
+        
         input.closeButtonDidTapEvent.sink { _ in
             output.willClosePlaylist.send()
         }.store(in: &subscription)
@@ -300,14 +306,6 @@ final class PlaylistViewModel: ViewModelType {
     private func bindShuffleMode(output: Output) {
         playState.$shuffleMode.sink { shuffleMode in
             output.shuffleMode.send(shuffleMode)
-        }.store(in: &subscription)
-    }
-    
-    private func bindCountOfSongs(output: Output) {
-        playState.playList.listChanged.sink { [weak self] _ in
-            guard let self else { return }
-            let count = self.playState.playList.count
-            output.countOfSongs.send(count)
         }.store(in: &subscription)
     }
     
