@@ -24,10 +24,10 @@ class ServiceInfoCell: UITableViewCell {
         self.contentView.backgroundColor = .clear
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleStringLabel.setLineSpacing(kernValue: -0.5)
+        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         subTitleStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         subTitleStringLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        subTitleStringLabel.setLineSpacing(kernValue: -0.5)
+        subTitleStringLabel.setTextWithAttributes(kernValue: -0.5)
     }
 }
 

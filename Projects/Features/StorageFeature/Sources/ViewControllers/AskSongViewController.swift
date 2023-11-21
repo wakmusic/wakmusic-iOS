@@ -112,7 +112,7 @@ extension AskSongViewController {
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.text = viewModel.type == .add ? "노래 추가" : "노래 수정"
-        titleLabel.setLineSpacing(kernValue: -0.5)
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
         
         let style = NSMutableParagraphStyle()
         style.lineHeightMultiple = 1.35
@@ -161,7 +161,7 @@ extension AskSongViewController {
             descriptionLabels[i].text = title
             descriptionLabels[i].font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
             descriptionLabels[i].textColor = DesignSystemAsset.GrayColor.gray900.color
-            descriptionLabels[i].setLineSpacing(kernValue: -0.5)
+            descriptionLabels[i].setTextWithAttributes(kernValue: -0.5)
             
             if i < 3 {
                 textFields[i].attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes) //플레이스 홀더 설정

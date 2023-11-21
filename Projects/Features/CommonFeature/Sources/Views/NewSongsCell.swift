@@ -53,13 +53,13 @@ extension NewSongsCell {
         titleStringLabel.text = model.title
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        titleStringLabel.setLineSpacing(kernValue: -0.5)
+        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         
         artistLabel.text = model.artist
         artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        artistLabel.setLineSpacing(kernValue: -0.5)
-        
+        artistLabel.setTextWithAttributes(kernValue: -0.5)
+
         viewsLabel.text = model.views.addCommaToNumber() + "회"
         viewsLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
 

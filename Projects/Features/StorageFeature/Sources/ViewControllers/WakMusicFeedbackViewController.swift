@@ -51,14 +51,14 @@ extension WakMusicFeedbackViewController {
     private func configureUI(){
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleLabel.setLineSpacing(kernValue: -0.5)
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         descriptionLabel1.text = "문의하실 내용을 적어주세요."
         descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel1.setLineSpacing(kernValue: -0.5)
+        descriptionLabel1.setTextWithAttributes(kernValue: -0.5)
     
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)

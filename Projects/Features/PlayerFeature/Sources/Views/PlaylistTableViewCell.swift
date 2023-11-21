@@ -29,12 +29,17 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.clipsToBounds = true
     }
     
+    internal lazy var titleArtistStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
+        $0.axis = .vertical
+        $0.distribution = .fill
+    }
+    
     internal lazy var titleLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
         $0.text = "곡 제목"
-        $0.setLineHeight(lineHeight: 24)
+        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
+
         $0.textAlignment = .left
         $0.lineBreakMode = .byTruncatingTail
     }
@@ -42,9 +47,8 @@ internal class PlaylistTableViewCell: UITableViewCell {
     internal lazy var artistLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "아티스트명"
-        $0.setLineHeight(lineHeight: 18)
+        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5)
         $0.textAlignment = .left
         $0.lineBreakMode = .byTruncatingTail
     }
@@ -93,8 +97,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     private func configureContents() {
         self.backgroundColor = .clear
         self.contentView.addSubview(self.thumbnailImageView)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.artistLabel)
+        self.contentView.addSubview(self.titleArtistStackView)
         self.contentView.addSubview(self.playImageView)
         self.contentView.addSubview(self.waveStreamAnimationView)
         self.contentView.addSubview(self.superButton)
@@ -108,16 +111,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.height.equalTo(height)
         }
         
-        titleLabel.snp.makeConstraints {
+        titleArtistStackView.snp.makeConstraints {
+            $0.top.equalTo(thumbnailImageView.snp.top)
             $0.left.equalTo(thumbnailImageView.snp.right).offset(8)
             $0.right.equalTo(playImageView.snp.left).offset(-16)
-            $0.bottom.equalTo(contentView.snp.centerY)
-        }
-        
-        artistLabel.snp.makeConstraints {
-            $0.left.equalTo(thumbnailImageView.snp.right).offset(8)
-            $0.right.equalTo(playImageView.snp.left).offset(-16)
-            $0.top.equalTo(contentView.snp.centerY)
+            $0.bottom.equalTo(thumbnailImageView.snp.bottom)
         }
         
         playImageView.snp.makeConstraints {

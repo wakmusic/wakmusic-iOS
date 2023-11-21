@@ -36,19 +36,17 @@ public final class PlaylistView: UIView {
     internal lazy var titleLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "재생목록"
-        $0.setLineHeight(lineHeight: 24)
+        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
         $0.textAlignment = .center
     }
     
     internal lazy var countLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 18)
         $0.textColor = DesignSystemAsset.PrimaryColor.point.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.3)
-        $0.text = ""
+        $0.text = "0"
+        $0.setTextWithAttributes(lineHeight: 28, kernValue: -0.5)
         $0.textAlignment = .center
-        $0.setLineHeight(lineHeight: 28)
     }
     
     internal lazy var editButton = RectangleButton(type: .custom).then {

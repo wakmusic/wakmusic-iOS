@@ -42,7 +42,7 @@ extension WarningView {
     private func configureUI() {
         warningImageView.image = DesignSystemAsset.Search.warning.image
         warningLabelView.textColor = DesignSystemAsset.GrayColor.gray900.color
-        warningLabelView.setLineSpacing(kernValue: -0.5)
+        warningLabelView.setTextWithAttributes(kernValue: -0.5)
         warningLabelView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
     }
 }

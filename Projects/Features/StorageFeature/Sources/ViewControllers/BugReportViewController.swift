@@ -127,12 +127,12 @@ extension BugReportViewController {
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.text = "버그제보"
-        titleLabel.setLineSpacing(kernValue: -0.5)
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
 
         descriptionLabel1.text = "겪으신 버그에 대해 설명해 주세요."
         descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel1.textColor =  DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel1.setLineSpacing(kernValue: -0.5)
+        descriptionLabel1.setTextWithAttributes(kernValue: -0.5)
         
         baseLine1.backgroundColor = unPointColor
         baseLine2.backgroundColor = unPointColor
@@ -140,12 +140,12 @@ extension BugReportViewController {
         descriptionLabel2.text = "버그와 관련된 사진이나 영상을 첨부 해주세요."
         descriptionLabel2.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel2.textColor =  DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel2.setLineSpacing(kernValue: -0.5)
+        descriptionLabel2.setTextWithAttributes(kernValue: -0.5)
 
         descriptionLabel3.text = "왁물원 닉네임을 알려주세요."
         descriptionLabel3.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel3.textColor =  DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel3.setLineSpacing(kernValue: -0.5)
+        descriptionLabel3.setTextWithAttributes(kernValue: -0.5)
 
         scrollView.delegate = self
         textView.delegate = self
@@ -166,7 +166,7 @@ extension BugReportViewController {
         noticeLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         noticeLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         noticeImageView.image = DesignSystemAsset.Navigation.close.image
-        noticeLabel.setLineSpacing(kernValue: -0.5)
+        noticeLabel.setTextWithAttributes(kernValue: -0.5)
 
         textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         textField.attributedPlaceholder = NSAttributedString(string: placeHolder,attributes:placeHolderAttributes)
@@ -176,7 +176,7 @@ extension BugReportViewController {
         infoLabel.text = "닉네임을 알려주시면 피드백을 받으시는 데 도움이 됩니다."
         infoLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         infoLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        infoLabel.setLineSpacing(kernValue: -0.5)
+        infoLabel.setTextWithAttributes(kernValue: -0.5)
 
         self.completionButton.layer.cornerRadius = 12
         self.completionButton.clipsToBounds = true
