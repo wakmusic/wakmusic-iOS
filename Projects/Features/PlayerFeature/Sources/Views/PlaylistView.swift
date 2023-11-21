@@ -47,8 +47,8 @@ public final class PlaylistView: UIView {
         $0.textColor = DesignSystemAsset.PrimaryColor.point.color
         $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.3)
         $0.text = ""
-        $0.setLineHeight(lineHeight: 24)
         $0.textAlignment = .center
+        $0.setLineHeight(lineHeight: 28)
     }
     
     internal lazy var editButton = RectangleButton(type: .custom).then {
