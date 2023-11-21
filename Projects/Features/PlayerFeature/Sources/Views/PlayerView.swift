@@ -88,7 +88,7 @@ public final class PlayerView: UIView {
         let circleSize: CGFloat = 8.0
         let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
                                                                 height: circleSize),
-                                                   color: colorFromRGB(0x08DEF7),
+                                                   color: DesignSystemAsset.PrimaryColor.point.color,
                                                    padding: 20)
         $0.layer.cornerRadius = 1
         $0.setThumbImage(circleImage, for: .normal)
