@@ -161,7 +161,7 @@ private extension PlaylistViewController {
     private func bindCountOfSongs(output: PlaylistViewModel.Output) {
         output.countOfSongs.sink { [weak self] count in
             guard let self else { return }
-            self.playlistView.titleLabel.text = count == 0 ? "재생목록" : "재생목록 " + String(count)
+            self.playlistView.countLabel.text = count == 0 ? "" : String(count)
         }.store(in: &subscription)
     }
     
@@ -197,8 +197,7 @@ private extension PlaylistViewController {
 
         output.editState.sink { [weak self] isEditing in
             guard let self else { return }
-            let count = self.playState.playList.count
-            self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록 " + String(count)
+            self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
             self.playlistView.editButton.setTitle(isEditing ? "완료" : "편집", for: .normal)
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
