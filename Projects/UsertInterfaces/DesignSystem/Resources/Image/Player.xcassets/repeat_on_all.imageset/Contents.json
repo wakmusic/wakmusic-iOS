@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "repeat_on_all@2x.png",
+      "filename" : "ic_32_repeat_on_all-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "repeat_on_all@3x.png",
+      "filename" : "ic_32_repeat_on_all.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
