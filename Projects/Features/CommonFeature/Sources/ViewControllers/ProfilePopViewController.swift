@@ -50,7 +50,7 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
 extension ProfilePopViewController{
     
     private func configureUI(){
-        
+        saveButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
         saveButton.setAttributedTitle(
