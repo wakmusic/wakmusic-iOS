@@ -35,6 +35,7 @@ public class SongCartView: UIView {
     @IBOutlet weak var selectCountView: UIView!
     @IBOutlet weak var selectCountViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var selectCountLabel: UILabel!
+    @IBOutlet weak var stackContentView: UIView!
     @IBOutlet weak var bottomSpaceView: UIView!
     @IBOutlet weak var bottomSpaceViewHeight: NSLayoutConstraint!
     
@@ -199,6 +200,7 @@ public extension SongCartView {
             }
         }
         
+        stackContentView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         bottomSpaceView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         bottomSpaceViewHeight.constant = SAFEAREA_BOTTOM_HEIGHT()
         layoutIfNeeded()
