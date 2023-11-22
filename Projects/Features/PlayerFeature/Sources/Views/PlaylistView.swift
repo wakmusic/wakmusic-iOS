@@ -33,13 +33,15 @@ public final class PlaylistView: UIView {
         $0.spacing = 4
     }
     
-    internal lazy var titleLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "재생목록"
-        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
-        $0.textAlignment = .center
-    }
+//    internal lazy var titleLabel = UILabel().then {
+//        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
+//        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+//        $0.text = "재생목록"
+//        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
+//        $0.textAlignment = .center
+//    }
+    
+    lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5)
     
     internal lazy var countLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 18)
