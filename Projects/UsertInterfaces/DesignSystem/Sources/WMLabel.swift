@@ -25,7 +25,7 @@ public final class WMLabel: UILabel {
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple)
+        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple, alignment: alignment)
     }
     
     required init?(coder: NSCoder) {
