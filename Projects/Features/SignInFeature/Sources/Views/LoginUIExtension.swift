@@ -99,7 +99,7 @@ extension LoginViewController {
         versionLabel.text = "버전 정보 " + APP_VERSION()
         versionLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        versionLabel.setLineSpacing(kernValue: -0.5)
+        versionLabel.setTextWithAttributes(kernValue: -0.5)
         versionLabel.textAlignment = .center
     }
 }

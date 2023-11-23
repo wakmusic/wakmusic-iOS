@@ -20,11 +20,11 @@ public class OpenSourceLibraryCell: UITableViewCell {
         self.contentView.backgroundColor = .clear
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 15)
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleStringLabel.setLineSpacing(kernValue: -0.5)
+        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         titleStringLabel.numberOfLines = 0
         descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 13)
         descriptionLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        descriptionLabel.setLineSpacing(kernValue: -0.5)
+        descriptionLabel.setTextWithAttributes(kernValue: -0.5)
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
     }

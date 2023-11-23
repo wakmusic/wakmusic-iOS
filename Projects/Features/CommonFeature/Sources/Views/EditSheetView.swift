@@ -22,7 +22,7 @@ public enum EditSheetSelectType {
 }
 
 public class EditSheetView: UIView {
-
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var profileButton: UIButton!
@@ -99,7 +99,7 @@ public extension EditSheetView {
     }
 
     private func configureUI() {
-        
+        contentView.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         let titles: [String] = ["편집", "공유하기", "프로필 변경", "닉네임 수정"]
         
         let images: [UIImage] = [DesignSystemAsset.PlayListEdit.playlistEdit.image,

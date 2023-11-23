@@ -32,7 +32,7 @@ class RecentRecordTableViewCell: UITableViewCell {
         recentRemoveButton.setImage(DesignSystemAsset.Search.keywordRemove.image, for: .normal)
         recentLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         recentLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        recentLabel.setLineSpacing(kernValue: -0.5)
+        recentLabel.setTextWithAttributes(kernValue: -0.5)
     }
     
     @IBAction func pressRemoveAction(_ sender: Any) {

@@ -181,7 +181,7 @@ extension ArtistDetailHeaderViewController {
                 
         artistGroupLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         artistGroupLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        artistGroupLabel.setLineSpacing(kernValue: -0.5)
+        artistGroupLabel.setTextWithAttributes(kernValue: -0.5)
         
         artistIntroLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         artistIntroLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -189,13 +189,13 @@ extension ArtistDetailHeaderViewController {
 
         introTitleLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 14)
         introTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        introTitleLabel.setLineSpacing(kernValue: -0.5)
+        introTitleLabel.setTextWithAttributes(kernValue: -0.5)
 
         introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         introDescriptionLabel.textAlignment = .left
         introDescriptionLabel.lineBreakMode = .byWordWrapping
-        introDescriptionLabel.setLineSpacing(kernValue: -0.5)
+        introDescriptionLabel.setTextWithAttributes(kernValue: -0.5)
 
         scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
     }

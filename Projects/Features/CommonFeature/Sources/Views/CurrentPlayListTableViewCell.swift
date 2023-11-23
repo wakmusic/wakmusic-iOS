@@ -23,10 +23,10 @@ class CurrentPlayListTableViewCell: UITableViewCell {
         self.playListImageView.layer.cornerRadius = 4
         self.playListNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.playListNameLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.playListNameLabel.setLineSpacing(kernValue: -0.5)
+        self.playListNameLabel.setTextWithAttributes(kernValue: -0.5)
         self.playListCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.playListCountLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.playListCountLabel.setLineSpacing(kernValue: -0.5)
+        self.playListCountLabel.setTextWithAttributes(kernValue: -0.5)
     }
 }
 

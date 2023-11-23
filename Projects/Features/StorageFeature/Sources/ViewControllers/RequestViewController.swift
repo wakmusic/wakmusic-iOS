@@ -124,7 +124,7 @@ extension RequestViewController{
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.titleLabel.text = "건의사항"
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        self.titleLabel.setLineSpacing(kernValue: -0.5)
+        self.titleLabel.setTextWithAttributes(kernValue: -0.5)
         
         let buttons: [UIButton] = [self.questionButton, self.qnaButton, self.noticeButton, self.serviceButton, self.bombButton]
         let superViews: [UIView] = [self.questionSuperView, self.qnaSuperView, self.noticeSuperView, self.serviceSuperView, self.bombSuperView]
@@ -170,7 +170,7 @@ extension RequestViewController{
         
         descriptionLabel.text = "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈거다)라는 모토를 가슴에 새기고 일하고 있습니다."
         descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        descriptionLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
+        descriptionLabel.setTextWithAttributes(kernValue: -0.5, lineHeightMultiple: 1.26)
         
         let withDrawAttributedString = NSMutableAttributedString.init(string: "회원탈퇴")
         withDrawAttributedString.addAttributes(

@@ -34,15 +34,16 @@ final class MiniPlayerView: UIView {
         $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
     }
     
-    internal lazy var titleArtistLabelView: UIView = UIView()
+    internal lazy var titleArtistStackView: UIStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
+        $0.axis = .vertical
+        $0.distribution = .fill
+    }
     
     internal lazy var titleLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.44)
-        $0.text = "리와인드(RE:WIND)"
-        $0.setLineHeight(lineHeight: 24)
-        $0.lineBreakMode = .byTruncatingTail
+        $0.text = "제목"
+        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
         $0.leadingBuffer = 0
         $0.trailingBuffer = 35
         $0.fadeLength = 3
@@ -53,10 +54,8 @@ final class MiniPlayerView: UIView {
     internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.text = "이세계아이돌"
-        $0.setLineHeight(lineHeight: 18)
-        $0.lineBreakMode = .byTruncatingTail
+        $0.text = "아티스트"
+        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5)
         $0.leadingBuffer = 0
         $0.trailingBuffer = 20
         $0.fadeLength = 3
@@ -102,8 +101,6 @@ private extension MiniPlayerView {
         self.configureContent()
         self.configurePlayTime()
         self.configureTitleArtist()
-        self.configureTitleLabel()
-        self.configureArtistLabel()
         self.configurePlayButton()
         self.configureNextButton()
         self.configurePlaylistButton()
@@ -114,9 +111,7 @@ private extension MiniPlayerView {
         self.addSubview(contentView)
         self.contentView.addSubview(totalPlayTimeView)
         self.totalPlayTimeView.addSubview(currentPlayTimeView)
-        self.contentView.addSubview(titleArtistLabelView)
-        self.titleArtistLabelView.addSubview(titleLabel)
-        self.titleArtistLabelView.addSubview(artistLabel)
+        self.contentView.addSubview(titleArtistStackView)
         self.contentView.addSubview(extendButton)
         self.contentView.addSubview(playButton)
         self.contentView.addSubview(nextButton)
@@ -152,22 +147,11 @@ private extension MiniPlayerView {
     }
     
     private func configureTitleArtist() {
-        titleArtistLabelView.snp.makeConstraints {
+        titleArtistStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(7)
             $0.bottom.equalToSuperview().offset(-7)
             $0.left.equalToSuperview().offset(20)
             $0.right.equalTo(playButton.snp.left).offset(-12)
-        }
-    }
-    
-    private func configureTitleLabel() {
-        titleLabel.snp.makeConstraints {
-            $0.top.left.right.equalToSuperview()
-        }
-    }
-    private func configureArtistLabel() {
-        artistLabel.snp.makeConstraints {
-            $0.bottom.left.right.equalToSuperview()
         }
     }
     

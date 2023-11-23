@@ -54,7 +54,7 @@ extension NewSongsViewController {
         self.navigationTitleLabel.text = "최신 음악"
         self.navigationTitleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.navigationTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.navigationTitleLabel.setLineSpacing(kernValue: -0.5)
+        self.navigationTitleLabel.setTextWithAttributes(kernValue: -0.5)
     }
     
     private func configurePage() {

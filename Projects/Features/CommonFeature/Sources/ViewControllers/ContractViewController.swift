@@ -111,8 +111,8 @@ extension ContractViewController{
         titleLabel.text = type.title
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleLabel.setLineSpacing(kernValue: -0.5)
-        
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
+
         DispatchQueue.global(qos: .default).async {
             if let url = URL(string: self.type.url), let document = PDFDocument(url: url) {
                 DispatchQueue.main.async {

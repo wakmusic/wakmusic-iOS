@@ -44,11 +44,11 @@ class RecentRecordHeaderView: UIView {
         self.recentLabel.text = "최근 검색어"
         self.recentLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         self.recentLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.recentLabel.setLineSpacing(kernValue: -0.5)
+        self.recentLabel.setTextWithAttributes(kernValue: -0.5)
         
         self.removeAllLabel.text = "전체삭제"
         self.removeAllLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         self.removeAllLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
-        self.removeAllLabel.setLineSpacing(kernValue: -0.5)
+        self.removeAllLabel.setTextWithAttributes(kernValue: -0.5)
     }
 }

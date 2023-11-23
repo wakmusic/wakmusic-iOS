@@ -20,19 +20,34 @@ public final class PlaylistView: UIView {
     
     private lazy var contentView = UIView()
     
-    internal lazy var titleBarView: UIView = UIView()
+    internal lazy var titleBarView = UIView()
     
     internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
     }
     
-    internal lazy var titleLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.text = "재생목록"
-        $0.setLineHeight(lineHeight: 24)
+    internal lazy var titleCountStackView = UIStackView(arrangedSubviews: [titleLabel, countLabel]).then {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.spacing = 4
+    }
+    
+//    internal lazy var titleLabel = UILabel().then {
+//        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
+//        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+//        $0.text = "재생목록"
+//        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
+//        $0.textAlignment = .center
+//    }
+    
+    lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5)
+    
+    internal lazy var countLabel = UILabel().then {
+        $0.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 18)
+        $0.textColor = DesignSystemAsset.PrimaryColor.point.color
+        $0.text = "0"
+        $0.setTextWithAttributes(lineHeight: 28, kernValue: -0.5)
         $0.textAlignment = .center
     }
     
@@ -141,7 +156,7 @@ private extension PlaylistView {
         self.addSubview(contentView)
         contentView.addSubview(titleBarView)
         titleBarView.addSubview(closeButton)
-        titleBarView.addSubview(titleLabel)
+        titleBarView.addSubview(titleCountStackView)
         titleBarView.addSubview(editButton)
         contentView.addSubview(playlistTableView)
         contentView.addSubview(blurEffectView)
@@ -186,7 +201,7 @@ private extension PlaylistView {
             $0.centerY.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints {
+        titleCountStackView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
         }
         

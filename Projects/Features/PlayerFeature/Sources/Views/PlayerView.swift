@@ -39,27 +39,19 @@ public final class PlayerView: UIView {
         $0.tintColor = .systemGray
     }
     
-    internal lazy var titleLabel = MarqueeLabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
-        $0.setLineHeight(lineHeight: 24)
-        $0.lineBreakMode = .byTruncatingTail
-        $0.textAlignment = .center
-        $0.leadingBuffer = 0
-        $0.trailingBuffer = 35
-        $0.fadeLength = 3
-        $0.animationDelay = 1
-        $0.speed = .rate(30)
+    internal lazy var titleArtistStackView: UIStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
+        $0.axis = .vertical
+        $0.distribution = .fill
     }
+    
+    internal lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
     
     internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.alpha = 0.6
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.2)
-        $0.setLineHeight(lineHeight: 20)
-        $0.lineBreakMode = .byTruncatingTail
+        $0.text = "아티스트"
+        $0.setTextWithAttributes(lineHeight: 20, kernValue: -0.5)
         $0.textAlignment = .center
         $0.leadingBuffer = 0
         $0.trailingBuffer = 20
@@ -88,7 +80,7 @@ public final class PlayerView: UIView {
         let circleSize: CGFloat = 8.0
         let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
                                                                 height: circleSize),
-                                                   color: colorFromRGB(0x08DEF7),
+                                                   color: DesignSystemAsset.PrimaryColor.point.color,
                                                    padding: 20)
         $0.layer.cornerRadius = 1
         $0.setThumbImage(circleImage, for: .normal)
@@ -102,15 +94,15 @@ public final class PlayerView: UIView {
     internal lazy var currentPlayTimeLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.PrimaryColor.point.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "-:--"
+        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5, lineHeightMultiple: 1.26)
     }
     
     internal lazy var totalPlayTimeLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.textColor = DesignSystemAsset.GrayColor.gray400.color
-        $0.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 1.26)
         $0.text = "-:--"
+        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5, lineHeightMultiple: 1.26)
     }
     
     private lazy var buttonBarView: UIView = UIView()
@@ -156,14 +148,16 @@ public final class PlayerView: UIView {
     
     internal lazy var likeButton = LikeButton().then {
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.title = "좋아요"
+        $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.isLiked = false
     }
     
     internal lazy var viewsView = VerticalImageButton().then {
         $0.image = DesignSystemAsset.Player.views.image
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.title = "조회수"
+        $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
@@ -171,7 +165,7 @@ public final class PlayerView: UIView {
         $0.image = DesignSystemAsset.Player.playerMusicAdd.image
         $0.title = "노래담기"
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
@@ -179,7 +173,7 @@ public final class PlayerView: UIView {
         $0.image = DesignSystemAsset.Player.playList.image
         $0.title = "재생목록"
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.titleLabel.setLineSpacing(kernValue: -0.5, lineHeightMultiple: 0.98)
+        $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
     
@@ -231,8 +225,7 @@ private extension PlayerView {
         self.contentView.addSubview(bottomBarView)
         
         self.titleBarView.addSubview(closeButton)
-        self.titleBarView.addSubview(titleLabel)
-        self.titleBarView.addSubview(artistLabel)
+        self.titleBarView.addSubview(titleArtistStackView)
         
         self.playTimeView.addSubview(currentPlayTimeLabel)
         self.playTimeView.addSubview(totalPlayTimeLabel)
@@ -284,13 +277,10 @@ private extension PlayerView {
             $0.left.equalToSuperview().offset(20)
             $0.width.height.equalTo(32)
         }
-        titleLabel.snp.makeConstraints {
+        titleArtistStackView.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
             $0.top.equalToSuperview().offset(2)
-            $0.left.equalTo(closeButton.snp.right).offset(10)
-            $0.right.equalToSuperview().offset(-62)
-        }
-        artistLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.bottom.equalToSuperview().offset(-2)
             $0.left.equalTo(closeButton.snp.right).offset(10)
             $0.right.equalToSuperview().offset(-62)
         }
