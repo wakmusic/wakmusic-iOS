@@ -44,18 +44,7 @@ public final class PlayerView: UIView {
         $0.distribution = .fill
     }
     
-    internal lazy var titleLabel = MarqueeLabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 16)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "제목"
-        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
-        $0.textAlignment = .center
-        $0.leadingBuffer = 0
-        $0.trailingBuffer = 35
-        $0.fadeLength = 3
-        $0.animationDelay = 1
-        $0.speed = .rate(30)
-    }
+    internal lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
     
     internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
@@ -292,6 +281,8 @@ private extension PlayerView {
             $0.centerX.centerY.equalToSuperview()
             $0.top.equalToSuperview().offset(2)
             $0.bottom.equalToSuperview().offset(-2)
+            $0.left.equalTo(closeButton.snp.right).offset(10)
+            $0.right.equalToSuperview().offset(-62)
         }
     }
     private func configureThumbnail() {
