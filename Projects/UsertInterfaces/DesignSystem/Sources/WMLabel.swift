@@ -54,7 +54,7 @@ public final class WMFlowLabel: MarqueeLabel {
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple)
+        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple, alignment: alignment)
         self.leadingBuffer = leadingBuffer
         self.trailingBuffer = trailingBuffer
         self.animationDelay = animationDelay

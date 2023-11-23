@@ -58,7 +58,8 @@ public extension UILabel {
     func setTextWithAttributes(lineHeight: CGFloat? = nil,
                                kernValue: Double? = nil,
                                lineSpacing: CGFloat? = nil,
-                               lineHeightMultiple: CGFloat? = nil) {
+                               lineHeightMultiple: CGFloat? = nil,
+                               alignment: NSTextAlignment = .left) {
         guard let labelText = self.text else { return }
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -67,6 +68,7 @@ public extension UILabel {
         if let lineHeightMultiple { paragraphStyle.lineHeightMultiple = lineHeightMultiple }
         
         paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.alignment = alignment
         
         let style = NSMutableParagraphStyle()
         
