@@ -13,7 +13,7 @@ public final class WMFlowLabel: MarqueeLabel {
     public init(
         text: String = "",
         textColor: UIColor = .init(),
-        font: UIFont.WMFontSystem = .body1,
+        font: UIFont.WMFontSystem,
         alignment: NSTextAlignment = .left,
         lineHeight: CGFloat? = nil,
         kernValue: Double? = nil,
