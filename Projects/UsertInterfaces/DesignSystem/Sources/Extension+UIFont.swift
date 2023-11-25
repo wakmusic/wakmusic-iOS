@@ -163,11 +163,3 @@ public extension UIFont.WMFontSystem {
         }
     }
 }
-//
-//var font = UIFont.WMFontSystem.t1(weight: .medium).font
-//let height = UIFont.WMFontSystem.t1().lineHeight
-//
-//func test112() {
-//    font = .setFont(.t2(weight: .bold))
-//}
-

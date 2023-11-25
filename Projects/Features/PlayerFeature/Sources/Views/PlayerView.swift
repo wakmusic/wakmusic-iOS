@@ -44,7 +44,7 @@ public final class PlayerView: UIView {
         $0.distribution = .fill
     }
     
-    internal lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
+    internal lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
     
     internal lazy var artistLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
