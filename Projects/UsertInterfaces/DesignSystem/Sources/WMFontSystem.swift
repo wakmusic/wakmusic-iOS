@@ -31,108 +31,58 @@ public extension UIFont {
         case t7(weight: WMFontWeight = .medium)
         case t7_1(weight: WMFontWeight = .medium)
         case t8(weight: WMFontWeight = .medium)
-        
     }
     
     static func setFont(_ style: WMFontSystem) -> UIFont {
         return style.font
     }
-    
+}
+
+public extension UIFont.WMFontSystem.WMFontWeight {
+    var font: DesignSystemFontConvertible {
+        switch self {
+        case .light:
+            return DesignSystemFontFamily.Pretendard.light
+        case .medium:
+            return DesignSystemFontFamily.Pretendard.medium
+        case .bold:
+            return DesignSystemFontFamily.Pretendard.bold
+        }
+    }
 }
 
 public extension UIFont.WMFontSystem {
     var font: UIFont {
         switch self {
         case let .t1(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 24) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 24) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 24) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 24) ?? .init()
+
         case let .t2(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 22) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 22) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 22) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 22) ?? .init()
+            
         case let .t3(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 20) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 20) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 20) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 20) ?? .init()
+            
         case let .t4(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 18) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 18) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 18) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 18) ?? .init()
+            
         case let .t5(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 16) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 16) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 16) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 16) ?? .init()
+            
         case let .t6(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 14) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 14) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 14) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 14) ?? .init()
+
         case let .t6_1(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 14) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 14) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 14) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 14) ?? .init()
+            
         case let .t7(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 12) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 12) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 12) ?? .init()
+
         case let .t7_1(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 12) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 12) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 12) ?? .init()
+
         case let .t8(weight):
-            switch weight {
-            case .light:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.light, size: 11) ?? .init()
-            case .medium:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 11) ?? .init()
-            case .bold:
-                return UIFont(font: DesignSystemFontFamily.Pretendard.bold, size: 11) ?? .init()
-            }
+            return UIFont(font: weight.font, size: 11) ?? .init()
         }
     }
 }
