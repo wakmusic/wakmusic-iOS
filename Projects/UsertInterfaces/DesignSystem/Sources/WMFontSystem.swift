@@ -30,11 +30,11 @@ public extension UIFont {
         case t7_1(weight: WMFontWeight = .medium)
         case t8(weight: WMFontWeight = .medium)
         
-        var font: UIFont {
+        public var font: UIFont {
             return UIFont(font: weight.font, size: size) ?? .init()
         }
         
-        var lineHeight: CGFloat {
+        public var lineHeight: CGFloat {
             return height
         }
         
