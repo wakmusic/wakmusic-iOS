@@ -12,6 +12,7 @@ import Utility
 import DesignSystem
 import SnapKit
 import Then
+import MarqueeLabel
 
 final class MiniPlayerView: UIView {
     private lazy var blurEffectView = UIVisualEffectView().then {
@@ -37,9 +38,7 @@ final class MiniPlayerView: UIView {
         $0.axis = .vertical
         $0.distribution = .fill
     }
-    
-    lazy var titleLabel = WMFlow
-    
+        
     internal lazy var titleLabel = MarqueeLabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color

@@ -42,8 +42,16 @@ extension IntroViewController {
     private func inputBind() {
         input.fetchPermissionCheck.onNext(())
     }
+}
     
+extension IntroViewController {
     private func outputBind() {
+        permissionResult()
+        appInfoResult()
+        userInfoAndLottieEnded()
+    }
+
+    private func permissionResult() {
         output.permissionResult
             .do(onNext: { [weak self] (permission) in
                 guard let self = self else { return }
@@ -55,24 +63,23 @@ extension IntroViewController {
                 self.present(permission, animated: true)
             })
             .filter { return ($0 ?? false) == true }
-            .do(onNext: { [weak self] (_) in
-                guard let self = self else { return }
-                self.lottiePlay()
-                self.input.startLottieAnimation.onNext(())
-            })
             .map{ _ in () }
             .bind(to: input.fetchAppCheck)
             .disposed(by: disposeBag)
-                
+    }
+    
+    private func appInfoResult(){
         output.appInfoResult
             .withUnretained(self)
             .subscribe(onNext: { owner, result in
                 switch result {
                 case let .success(entity):
+                    owner.lottiePlay(specialLogo: entity.specialLogo)
+                    
                     var textPopupVc: TextPopupViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
                     let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
-
+                    
                     switch entity.flag {
                     case .normal:
                         owner.input.fetchUserInfoCheck.onNext(())
@@ -131,6 +138,7 @@ extension IntroViewController {
                     owner.showPanModal(content: textPopupVc)
 
                 case let .failure(error):
+                    owner.lottiePlay(specialLogo: false)
                     owner.showPanModal(
                         content: TextPopupViewController.viewController(
                             text: error.asWMError.errorDescription ?? "",
@@ -141,17 +149,20 @@ extension IntroViewController {
                 }
             })
             .disposed(by: disposeBag)
-        
+    }
+    
+    private func userInfoAndLottieEnded() {
         Observable.zip(
             output.userInfoResult,
-            output.endLottieAnimation
+            output.endedLottieAnimation
         ) { (result, _) -> Result<String, Error> in
             return result
         }
         .withUnretained(self)
         .subscribe(onNext: { (owner, result) in
             switch result{
-            case .success(_):
+            case let .success(suc):
+                DEBUG_LOG("success: \(suc)✅✅")
                 owner.showTabBar()
                 
             case .failure(let error):
@@ -177,7 +188,7 @@ extension IntroViewController {
         self.navigationController?.pushViewController(viewController, animated: false)
     }
     
-    private func lottiePlay() {
+    private func lottiePlay(specialLogo: Bool) {
         let animationView = LottieAnimationView(name: "Splash_Logo_Main", bundle: DesignSystemResources.bundle)
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
@@ -199,6 +210,9 @@ extension IntroViewController {
             $0.centerX.equalTo(self.logoContentView.snp.centerX)
             $0.centerY.equalTo(self.logoContentView.snp.centerY)
         }
-        animationView.play()
+
+        animationView.play { _ in
+            self.input.endedLottieAnimation.onNext(())
+        }
     }
 }
