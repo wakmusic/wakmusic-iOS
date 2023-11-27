@@ -15,15 +15,10 @@ import Utility
 internal class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
     static let lyricMaxWidth: CGFloat = (270 * APP_WIDTH())/375.0
-
-    private lazy var lyricsLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray500.color
-        $0.text = "가사"
-        $0.setTextWithAttributes(kernValue: -0.5)
+    
+    private lazy var lyricsLabel = WMLabel(text: "가사", textColor: DesignSystemAsset.GrayColor.gray500.color, font: .t6(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5).then {
         $0.numberOfLines = 0
         $0.preferredMaxLayoutWidth = LyricsTableViewCell.lyricMaxWidth
-        $0.textAlignment = .center
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

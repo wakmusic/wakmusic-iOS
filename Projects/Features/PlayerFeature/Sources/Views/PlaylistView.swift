@@ -41,7 +41,7 @@ public final class PlaylistView: UIView {
 //        $0.textAlignment = .center
 //    }
     
-    lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .header1, alignment: .center, lineHeight: 24, kernValue: -0.5)
+    lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: 24, kernValue: -0.5)
     
     internal lazy var countLabel = UILabel().then {
         $0.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 18)
