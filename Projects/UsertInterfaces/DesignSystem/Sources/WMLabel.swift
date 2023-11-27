@@ -11,7 +11,7 @@ import MarqueeLabel
 
 public final class WMLabel: UILabel {
     public init(
-        text: String = "",
+        text: String,
         textColor: UIColor = .init(),
         font: UIFont.WMFontSystem,
         alignment: NSTextAlignment = .left,
@@ -26,6 +26,17 @@ public final class WMLabel: UILabel {
         self.font = .setFont(font)
         self.textAlignment = alignment
         self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple, alignment: alignment)
+    }
+    
+    convenience init(
+        text: String,
+        textColor: UIColor = .init(),
+        font: UIFont.WMFontSystem,
+        alignment: NSTextAlignment = .left,
+        lineHeight: CGFloat? = nil,
+        kernValue: Double? = nil
+    ) {
+        self.init(text: text, textColor: textColor, font: font, alignment: alignment, lineHeight: lineHeight, kernValue: kernValue, lineSpacing: nil, lineHeightMultiple: nil)
     }
     
     required init?(coder: NSCoder) {

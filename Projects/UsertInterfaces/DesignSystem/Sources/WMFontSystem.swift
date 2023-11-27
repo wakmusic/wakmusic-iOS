@@ -15,15 +15,25 @@ protocol WMFontable {
 
 public extension UIFont {
     enum WMFontSystem: WMFontable {
+        /// size: 24 height: 36
         case t1(weight: WMFontWeight = .medium)
+        /// size: 22 height: 32
         case t2(weight: WMFontWeight = .medium)
+        /// size: 20 height: 32
         case t3(weight: WMFontWeight = .medium)
+        /// size: 18 height: 28
         case t4(weight: WMFontWeight = .medium)
+        /// size: 16 height: 24
         case t5(weight: WMFontWeight = .medium)
+        /// size: 14 height: 14
         case t6(weight: WMFontWeight = .medium)
+        /// size: 14 height: 20
         case t6_1(weight: WMFontWeight = .medium)
+        /// size: 12 height: 18
         case t7(weight: WMFontWeight = .medium)
+        /// size: 12 height: 14
         case t7_1(weight: WMFontWeight = .medium)
+        /// size: 11 height: 16
         case t8(weight: WMFontWeight = .medium)
     }
     
@@ -87,8 +97,8 @@ private extension UIFont.WMFontSystem {
         case .t5: return 24
         case .t6: return 20
         case .t6_1: return 20
-        case .t7_1: return 14
         case .t7: return 18
+        case .t7_1: return 14
         case .t8: return 16
         }
     }
