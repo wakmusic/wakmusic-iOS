@@ -36,6 +36,22 @@ public final class WMFlowLabel: MarqueeLabel {
         self.animationDelay = animationDelay
     }
     
+    convenience init(
+        text: String,
+        textColor: UIColor = .init(),
+        font: UIFont.WMFontSystem,
+        alignment: NSTextAlignment = .left,
+        lineHeight: CGFloat? = nil,
+        kernValue: Double? = nil,
+        leadingBuffer: CGFloat = 0,
+        trailingBuffer: CGFloat = 0,
+        animationDelay: CGFloat = 1,
+        animationSpeed: CGFloat = 30,
+        fadeLength: CGFloat = 3
+    ) {
+        self.init(text: text, textColor: textColor, font: font, alignment: alignment, lineHeight: lineHeight, kernValue: kernValue, lineSpacing: nil, lineHeightMultiple: nil, leadingBuffer: leadingBuffer, trailingBuffer: trailingBuffer, animationDelay: animationDelay, animationSpeed: animationSpeed, fadeLength: fadeLength)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
