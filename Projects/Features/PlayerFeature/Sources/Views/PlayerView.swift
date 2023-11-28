@@ -12,7 +12,6 @@ import Utility
 import DesignSystem
 import SnapKit
 import Then
-import MarqueeLabel
 
 public final class PlayerView: UIView {
     private lazy var backgroundView = UIView().then {
@@ -44,21 +43,9 @@ public final class PlayerView: UIView {
         $0.distribution = .fill
     }
     
-    internal lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
+    lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
     
-    internal lazy var artistLabel = MarqueeLabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.alpha = 0.6
-        $0.text = "아티스트"
-        $0.setTextWithAttributes(lineHeight: 20, kernValue: -0.5)
-        $0.textAlignment = .center
-        $0.leadingBuffer = 0
-        $0.trailingBuffer = 20
-        $0.fadeLength = 3
-        $0.animationDelay = 1
-        $0.speed = .rate(30)
-    }
+    lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6_1(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6_1().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20)
     
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
@@ -91,19 +78,9 @@ public final class PlayerView: UIView {
     
     private lazy var playTimeView: UIView = UIView()
     
-    internal lazy var currentPlayTimeLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.textColor = DesignSystemAsset.PrimaryColor.point.color
-        $0.text = "-:--"
-        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5, lineHeightMultiple: 1.26)
-    }
+    lazy var currentPlayTimeLabel = WMLabel(text: "-:--", textColor: DesignSystemAsset.PrimaryColor.point.color, font: .t7(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
     
-    internal lazy var totalPlayTimeLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray400.color
-        $0.text = "-:--"
-        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5, lineHeightMultiple: 1.26)
-    }
+    lazy var totalPlayTimeLabel = WMLabel(text: "-:--", textColor: DesignSystemAsset.GrayColor.gray400.color, font: .t7(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
     
     private lazy var buttonBarView: UIView = UIView()
     

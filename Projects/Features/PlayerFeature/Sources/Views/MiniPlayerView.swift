@@ -38,31 +38,9 @@ final class MiniPlayerView: UIView {
         $0.distribution = .fill
     }
     
-    lazy var titleLabel = WMFlow
+    lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35, animationDelay: 1, animationSpeed: 30, fadeLength: 3)
     
-    internal lazy var titleLabel = MarqueeLabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "제목"
-        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
-        $0.leadingBuffer = 0
-        $0.trailingBuffer = 35
-        $0.fadeLength = 3
-        $0.animationDelay = 1
-        $0.speed = .rate(30)
-    }
-    
-    internal lazy var artistLabel = MarqueeLabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "아티스트"
-        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5)
-        $0.leadingBuffer = 0
-        $0.trailingBuffer = 20
-        $0.fadeLength = 3
-        $0.animationDelay = 1
-        $0.speed = .rate(30)
-    }
+    lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20, animationDelay: 1, animationSpeed: 30, fadeLength: 3)
     
     internal lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)

@@ -34,22 +34,11 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.distribution = .fill
     }
     
-    internal lazy var titleLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.medium, size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "곡 제목"
-        $0.setTextWithAttributes(lineHeight: 24, kernValue: -0.5)
-
-        $0.textAlignment = .left
+    lazy var titleLabel = WMLabel(text: "곡 제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5).then {
         $0.lineBreakMode = .byTruncatingTail
     }
     
-    internal lazy var artistLabel = UILabel().then {
-        $0.font = .init(font: DesignSystemFontFamily.Pretendard.light, size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.text = "아티스트명"
-        $0.setTextWithAttributes(lineHeight: 18, kernValue: -0.5)
-        $0.textAlignment = .left
+    lazy var artistLabel = WMLabel(text: "아티스트명", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5).then {
         $0.lineBreakMode = .byTruncatingTail
     }
     
