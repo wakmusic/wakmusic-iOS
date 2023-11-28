@@ -25,7 +25,7 @@ public extension UIFont {
         case t4(weight: WMFontWeight = .medium)
         /// size: 16 height: 24
         case t5(weight: WMFontWeight = .medium)
-        /// size: 14 height: 14
+        /// size: 14 height: 24
         case t6(weight: WMFontWeight = .medium)
         /// size: 14 height: 20
         case t6_1(weight: WMFontWeight = .medium)
