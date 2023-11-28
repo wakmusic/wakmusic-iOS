@@ -14,15 +14,18 @@ public struct AppInfoEntity: Equatable {
         flag: AppInfoFlagType,
         title: String,
         description: String,
-        version: String
+        version: String,
+        specialLogo: Bool
     )
     {
         self.flag = flag
         self.title = title
         self.description = description
         self.version = version
+        self.specialLogo = specialLogo
     }
     
     public let flag: AppInfoFlagType
     public let title, description, version: String
+    public let specialLogo: Bool
 }
