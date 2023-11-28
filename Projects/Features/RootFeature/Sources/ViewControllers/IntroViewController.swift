@@ -190,14 +190,15 @@ extension IntroViewController {
     
     private func lottiePlay(specialLogo: Bool) {
         let animationView = LottieAnimationView(
-            name: specialLogo ? "Splash_Logo_Main" : "Splash_Logo_Main", // 로티 받으면 수정
+            name: specialLogo ? "Splash_Logo_Special" : "Splash_Logo_Main",
             bundle: DesignSystemResources.bundle
         )
         animationView.frame = self.logoContentView.bounds
         animationView.backgroundColor = .clear
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .playOnce
-
+        animationView.clipsToBounds = false
+        
         self.logoContentView.addSubview(animationView)
         
         let originWidth: CGFloat = 156.0
