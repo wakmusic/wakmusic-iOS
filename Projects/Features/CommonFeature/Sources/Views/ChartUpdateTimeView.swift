@@ -14,10 +14,8 @@ import SnapKit
 import Then
 
 public final class ChartUpdateTimeView: UIView {
-    private let updateTimeLabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray600.color
-    }
+    private let updateTimeLabel = WMLabel(text: "업데이트", textColor: DesignSystemAsset.GrayColor.gray600.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
+    
     private let updateTimeImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.check.image
     }
@@ -33,12 +31,7 @@ public final class ChartUpdateTimeView: UIView {
     }
 
     public func setUpdateTime(updateTime: String) {
-        let attributedString = NSMutableAttributedString(string: updateTime)
-        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                                        .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                                        .kern: -0.5],
-                                       range: NSRange(location: 0, length: attributedString.string.count))
-        updateTimeLabel.attributedText = attributedString
+        updateTimeLabel.text = updateTime
     }
 }
 
