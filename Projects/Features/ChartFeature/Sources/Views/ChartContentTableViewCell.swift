@@ -10,11 +10,9 @@ import CommonFeature
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI
-    private let rankingLabel = UILabel().then {
-        $0.textAlignment = .center
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-    }
+    
+    private let rankingLabel = WMLabel(text: "0", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5)
+    
     private let nonImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.non.image
     }
@@ -27,28 +25,21 @@ public final class ChartContentTableViewCell: UITableViewCell {
     private let decreaseRateImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.down.image
     }
-    private let newRateLabel = UILabel().then {
-        $0.textColor = DesignSystemAsset.PrimaryColor.new.color
-        $0.text = "NEW"
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 11)
-    }
-    private let rateLabel = UILabel().then {
-        $0.textAlignment = .center
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 11)
-    }
+    
+    private let newRateLabel = WMLabel(text: "NEW", textColor: DesignSystemAsset.PrimaryColor.new.color, font: .t8(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t8().lineHeight, kernValue: -0.5)
+    
+    private let rateLabel = WMLabel(text: "0", textColor: DesignSystemAsset.PrimaryColor.new.color, font: .t8(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t8().lineHeight, kernValue: -0.5)
+
     private let albumImageView = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
         $0.contentMode = .scaleAspectFill
     }
-    private let titleStringLabel = UILabel().then {
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-    }
-    private let groupStringLabel = UILabel().then {
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-    }
+    
+    private let titleStringLabel = WMLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5)
+    
+    private let groupStringLabel = WMLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
+    
     private let hitsLabel = UILabel().then {
         $0.textAlignment = .right
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
