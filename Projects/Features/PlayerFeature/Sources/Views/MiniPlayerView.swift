@@ -12,6 +12,7 @@ import Utility
 import DesignSystem
 import SnapKit
 import Then
+import MarqueeLabel
 
 final class MiniPlayerView: UIView {
     private lazy var blurEffectView = UIVisualEffectView().then {
@@ -37,7 +38,7 @@ final class MiniPlayerView: UIView {
         $0.axis = .vertical
         $0.distribution = .fill
     }
-    
+  
     lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35, animationDelay: 1, animationSpeed: 30, fadeLength: 3)
     
     lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20, animationDelay: 1, animationSpeed: 30, fadeLength: 3)

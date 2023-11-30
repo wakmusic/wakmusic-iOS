@@ -26,14 +26,14 @@ final public class IntroViewModel: ViewModelType {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
         var fetchAppCheck: PublishSubject<Void> = PublishSubject()
         var fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
-        var startLottieAnimation: PublishSubject<Void> = PublishSubject()
+        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         var permissionResult: PublishSubject<Bool?> = PublishSubject()
         var appInfoResult: PublishSubject<Result<AppInfoEntity, Error>> = PublishSubject()
         var userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
-        var endLottieAnimation: PublishSubject<Void> = PublishSubject()
+        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public init(
@@ -57,9 +57,8 @@ final public class IntroViewModel: ViewModelType {
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
         
-        input.startLottieAnimation
-            .delay(RxTimeInterval.milliseconds(1200), scheduler: MainScheduler.instance)
-            .bind(to: output.endLottieAnimation)
+        input.endedLottieAnimation
+            .bind(to: output.endedLottieAnimation)
             .disposed(by: disposeBag)
         
         input.fetchAppCheck
@@ -71,10 +70,12 @@ final public class IntroViewModel: ViewModelType {
                         if wmError == .offline {
                             return Single<AppInfoEntity>.create { single in
                                 single(.success(AppInfoEntity(
-                                    flag: .offline,
-                                    title: "",
-                                    description: wmError.errorDescription ?? "",
-                                    version: ""))
+                                        flag: .offline,
+                                        title: "",
+                                        description: wmError.errorDescription ?? "",
+                                        version: "",
+                                        specialLogo: false)
+                                    )
                                 )
                                 return Disposables.create()
                             }

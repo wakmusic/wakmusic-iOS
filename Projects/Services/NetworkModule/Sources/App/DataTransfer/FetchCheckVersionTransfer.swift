@@ -17,7 +17,8 @@ public extension AppInfoDTO {
             flag: flag,
             title: title ?? "",
             description: description ?? "",
-            version: version ?? ""
+            version: version ?? "",
+            specialLogo: specialLogo ?? false
         )
     }
 }
