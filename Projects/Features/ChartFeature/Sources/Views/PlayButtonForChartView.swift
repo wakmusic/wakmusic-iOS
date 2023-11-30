@@ -37,10 +37,9 @@ public final class PlayButtonForChartView: UIView {
                                                 range: NSRange(location: 0, length: attributedString.string.count))
         $0.setAttributedTitle(attributedString, for: .normal)
     }
-    private let updateTimeLabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray600.color
-    }
+    
+    private let updateTimeLabel = WMLabel(text: "업데이트", textColor: DesignSystemAsset.GrayColor.gray600.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
+
     private let updateTimeImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.check.image
     }
