@@ -199,6 +199,7 @@ extension IntroViewController {
         animationView.loopMode = .playOnce
         animationView.clipsToBounds = false
         
+        self.logoContentView.subviews.forEach { $0.removeFromSuperview() }
         self.logoContentView.addSubview(animationView)
         
         let originWidth: CGFloat = 156.0
