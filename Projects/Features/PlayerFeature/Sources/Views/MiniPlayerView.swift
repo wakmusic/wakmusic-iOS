@@ -131,14 +131,14 @@ private extension MiniPlayerView {
             $0.top.equalToSuperview().offset(7)
             $0.bottom.equalToSuperview().offset(-7)
             $0.left.equalToSuperview().offset(20)
-            $0.right.equalTo(playButton.snp.left).offset(-12)
+            $0.right.equalTo(playButton.snp.left).offset(-16)
         }
     }
     
     private func configurePlayButton() {
         playButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(nextButton.snp.left).offset(-20)
+            $0.right.equalTo(nextButton.snp.left).offset(-16)
             $0.width.height.equalTo(32)
         }
     }
@@ -146,7 +146,7 @@ private extension MiniPlayerView {
     private func configureNextButton() {
         nextButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalTo(playlistButton.snp.left).offset(-20)
+            $0.right.equalTo(playlistButton.snp.left).offset(-16)
             $0.width.height.equalTo(32)
         }
     }
@@ -154,7 +154,7 @@ private extension MiniPlayerView {
     private func configurePlaylistButton() {
         playlistButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().offset(-16)
+            $0.right.equalToSuperview().offset(-20)
             $0.width.height.equalTo(32)
         }
     }

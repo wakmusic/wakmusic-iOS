@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +24,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캐롤" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ur-ig-foP">
-                        <rect key="frame" x="16" y="31.666666666666671" width="80" height="17"/>
+                        <rect key="frame" x="12" y="5" width="84" height="70"/>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                         <color key="textColor" red="0.2784313725" green="0.3294117647" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -32,12 +32,13 @@
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="5ur-ig-foP" firstAttribute="centerY" secondItem="gZD-6H-uqh" secondAttribute="centerY" id="1eH-Cc-aTc"/>
                     <constraint firstItem="6bv-vR-KlZ" firstAttribute="height" secondItem="gZD-6H-uqh" secondAttribute="height" multiplier="48:80" id="7tX-Nc-nrS"/>
                     <constraint firstItem="6bv-vR-KlZ" firstAttribute="centerY" secondItem="gZD-6H-uqh" secondAttribute="centerY" id="DyU-PI-80b"/>
+                    <constraint firstItem="5ur-ig-foP" firstAttribute="top" secondItem="gZD-6H-uqh" secondAttribute="top" constant="5" id="EvW-Z0-1sE"/>
                     <constraint firstItem="6bv-vR-KlZ" firstAttribute="leading" secondItem="5ur-ig-foP" secondAttribute="trailing" constant="4" id="QU4-Cp-SEb"/>
-                    <constraint firstItem="5ur-ig-foP" firstAttribute="leading" secondItem="gZD-6H-uqh" secondAttribute="leading" constant="16" id="faK-47-EcZ"/>
+                    <constraint firstItem="5ur-ig-foP" firstAttribute="leading" secondItem="gZD-6H-uqh" secondAttribute="leading" constant="12" id="faK-47-EcZ"/>
                     <constraint firstAttribute="trailing" secondItem="6bv-vR-KlZ" secondAttribute="trailing" constant="16" id="uhj-gl-Dva"/>
+                    <constraint firstAttribute="bottom" secondItem="5ur-ig-foP" secondAttribute="bottom" constant="5" id="zDg-wn-GOK"/>
                 </constraints>
             </collectionViewCellContentView>
             <connections>

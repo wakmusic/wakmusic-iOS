@@ -35,7 +35,7 @@ public final class PlaylistView: UIView {
     
     lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5)
     
-    lazy var countLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t4(weight: .bold), alignment: .center, lineHeight: UIFont.WMFontSystem.t4().lineHeight, kernValue: -0.5)
+    lazy var countLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.PrimaryColor.point.color, font: .t4(weight: .bold), alignment: .center, lineHeight: UIFont.WMFontSystem.t4().lineHeight, kernValue: -0.5)
     
     internal lazy var editButton = RectangleButton(type: .custom).then {
         $0.setBackgroundColor(.clear, for: .normal)
@@ -72,7 +72,7 @@ public final class PlaylistView: UIView {
     internal lazy var miniPlayerStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
-        $0.spacing = (APP_WIDTH() < 375) ? 10 : 20
+        $0.spacing = (APP_WIDTH() < 375) ? 10 : 16
     }
     
     internal lazy var totalPlayTimeView = UIView().then {
@@ -236,7 +236,7 @@ private extension PlaylistView {
         
         miniPlayerContentView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 16))
+            $0.horizontalEdges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 20))
         }
         
         thumbnailImageView.snp.makeConstraints {
@@ -249,9 +249,7 @@ private extension PlaylistView {
         }
         
         miniPlayerStackView.snp.makeConstraints {
-            let spacing: CGFloat = (APP_WIDTH() < 375) ? 15 : 27
             $0.top.bottom.equalToSuperview()
-            $0.left.equalTo(thumbnailImageView.snp.right).offset(spacing)
             $0.right.equalToSuperview()
         }
         
@@ -260,7 +258,6 @@ private extension PlaylistView {
         miniPlayerStackView.addArrangedSubview(playButton)
         miniPlayerStackView.addArrangedSubview(nextButton)
         miniPlayerStackView.addArrangedSubview(shuffleButton)
-        
     }
     
     private func configreHomeIndicatorBackgroundView() {
