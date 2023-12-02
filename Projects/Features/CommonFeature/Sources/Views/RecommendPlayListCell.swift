@@ -36,12 +36,13 @@ extension RecommendPlayListCell {
     func update(model: RecommendPlayListEntity) {
         let attributedString = NSMutableAttributedString(
             string: model.title,
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14.2),
+            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
                          .kern: -0.5]
         )
         titleStringLabel.attributedText = attributedString
-
+        titleStringLabel.numberOfLines = 3
+        
         logoImageView.kf.setImage(
             with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.key,version: model.image_round_version).toURL,
             placeholder: nil,
