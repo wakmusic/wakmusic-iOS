@@ -62,11 +62,11 @@ extension EntireSectionHeader {
     private func configureUI() {
         self.categoryLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.categoryLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.categoryLabel.setLineSpacing(kernValue: -0.5)
+        self.categoryLabel.setTextWithAttributes(kernValue: -0.5)
         
         self.numberOfSongLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.numberOfSongLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-        self.numberOfSongLabel.setLineSpacing(kernValue: -0.5)
+        self.numberOfSongLabel.setTextWithAttributes(kernValue: -0.5)
 
         let attrTitle = NSAttributedString(
             string: "전체보기",

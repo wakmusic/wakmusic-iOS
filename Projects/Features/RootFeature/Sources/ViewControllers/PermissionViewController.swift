@@ -136,6 +136,7 @@ extension PermissionViewController {
                          .kern: -0.5]
         )
         self.confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
+        self.confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         
         self.borderViewWidthConstraint.constant = APP_WIDTH() < 375 ? (APP_WIDTH()-40.0) : 335.0
         self.view.layoutIfNeeded()

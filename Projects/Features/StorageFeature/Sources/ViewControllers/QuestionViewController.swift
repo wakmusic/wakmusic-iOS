@@ -87,14 +87,14 @@ extension QuestionViewController {
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.titleLabel.text = "문의하기"
-        self.titleLabel.setLineSpacing(kernValue: -0.5)
+        self.titleLabel.setTextWithAttributes(kernValue: -0.5)
 
         self.closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         self.descriptionLabel.text = "어떤 것 관련해서 문의주셨나요?"
         self.descriptionLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 20)
         self.descriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        self.descriptionLabel.setLineSpacing(kernValue: -0.5)
+        self.descriptionLabel.setTextWithAttributes(kernValue: -0.5)
 
         self.nextButton.layer.cornerRadius = 12
         self.nextButton.clipsToBounds = true

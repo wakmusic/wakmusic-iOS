@@ -298,7 +298,7 @@ extension HomeViewController {
         latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
         latestSongEmptyLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         latestSongEmptyLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        latestSongEmptyLabel.setLineSpacing(kernValue: -0.5)
+        latestSongEmptyLabel.setTextWithAttributes(kernValue: -0.5)
         latestSongEmptyLabel.textAlignment = .center
         scrollView.refreshControl = refreshControl
         scrollView.delegate = self

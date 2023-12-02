@@ -30,8 +30,6 @@ final class PlayerViewModel: ViewModelType {
         let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: AnyPublisher<Void, Never>
-        let miniPlayButtonDidTapEvent: AnyPublisher<Void, Never>
-        let miniCloseButtonDidTapEvent: AnyPublisher<Void, Never>
     }
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
@@ -112,7 +110,7 @@ final class PlayerViewModel: ViewModelType {
     }
     
     private func bindInput(input: Input, output: Output) {
-        input.playButtonDidTapEvent.merge(with: input.miniPlayButtonDidTapEvent).sink { [weak self] _ in
+        input.playButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
             let state = self.playState.state
             if state == .playing {
@@ -130,10 +128,6 @@ final class PlayerViewModel: ViewModelType {
             self?.playState.switchPlayerMode(to: .full)
         }.store(in: &subscription)
         
-        input.miniCloseButtonDidTapEvent.sink { [weak self] _ in
-            self?.playState.switchPlayerMode(to: .close)
-            self?.playState.stop()
-        }.store(in: &subscription)
         
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }

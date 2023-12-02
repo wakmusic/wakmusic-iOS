@@ -60,14 +60,14 @@ extension SuggestFunctionViewController {
     private func configureUI(){
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleLabel.setLineSpacing(kernValue: -0.5)
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
         
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         
         descriptionLabel1.text = "제안해 주고 싶은 기능에 대해 설명해 주세요."
         descriptionLabel1.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel1.textColor = DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel1.setLineSpacing(kernValue: -0.5)
+        descriptionLabel1.setTextWithAttributes(kernValue: -0.5)
                 
         textView.delegate = self
         textView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -82,7 +82,7 @@ extension SuggestFunctionViewController {
         descriptionLabel2.text = "어떤 플랫폼과 관련된 기능인가요?"
         descriptionLabel2.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         descriptionLabel2.textColor = DesignSystemAsset.GrayColor.gray900.color
-        descriptionLabel2.setLineSpacing(kernValue: -0.5)
+        descriptionLabel2.setTextWithAttributes(kernValue: -0.5)
 
         let superViews: [UIView] = [self.mobileAppSuperView, self.webSiteSuperView]
         let buttons: [UIButton] = [self.mobileAppButton, self.webSiteButton]

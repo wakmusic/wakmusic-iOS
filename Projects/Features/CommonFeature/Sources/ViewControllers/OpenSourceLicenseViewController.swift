@@ -112,7 +112,7 @@ extension OpenSourceLicenseViewController {
         titleStringLabel.text = "오픈소스 라이선스"
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        titleStringLabel.setLineSpacing(kernValue: -0.5)
+        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }

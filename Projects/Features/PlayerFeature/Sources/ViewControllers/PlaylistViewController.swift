@@ -129,6 +129,7 @@ private extension PlaylistViewController {
     
     private func bindViewModel() {
         let input = PlaylistViewModel.Input(
+            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             closeButtonDidTapEvent: playlistView.closeButton.tapPublisher,
             editButtonDidTapEvent: playlistView.editButton.tapPublisher,
             repeatButtonDidTapEvent: playlistView.repeatButton.tapPublisher,
@@ -145,6 +146,7 @@ private extension PlaylistViewController {
         )
         let output = self.viewModel.transform(from: input)
         
+        bindCountOfSongs(output: output)
         bindPlaylistTableView(output: output)
         bindSongCart(output: output)
         bindCloseButton(output: output)
@@ -154,6 +156,13 @@ private extension PlaylistViewController {
         bindShuffleMode(output: output)
         bindPlayButtonImages(output: output)
         bindwaveStreamAnimationView(output: output)
+    }
+    
+    private func bindCountOfSongs(output: PlaylistViewModel.Output) {
+        output.countOfSongs.sink { [weak self] count in
+            guard let self else { return }
+            self.playlistView.countLabel.text = count == 0 ? "" : String(count)
+        }.store(in: &subscription)
     }
     
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {

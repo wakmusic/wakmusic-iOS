@@ -84,8 +84,8 @@ Derived/
 ### Tuist managed dependencies ###
 Tuist/Dependencies
 
-### Tuist Signing ###
-Tuist/Signing
+### Tuist Master.key ###
+Tuist/master.key
 
 ### Secrets
 Secrets.xcconfig

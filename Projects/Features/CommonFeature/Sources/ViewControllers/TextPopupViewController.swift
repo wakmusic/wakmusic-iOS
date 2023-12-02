@@ -76,6 +76,7 @@ extension TextPopupViewController {
         )
         cancelButton.setAttributedTitle(cancelAttributedString, for: .normal)
 
+        confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         confirmButton.layer.cornerRadius = cancelButton.layer.cornerRadius
         confirmButton.clipsToBounds = true
 

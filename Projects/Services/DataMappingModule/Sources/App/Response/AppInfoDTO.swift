@@ -11,4 +11,5 @@ import Foundation
 public struct AppInfoDTO: Codable {
     public let flag: AppInfoFlagType
     public let title, description, version: String?
+    public let specialLogo: Bool?
 }
