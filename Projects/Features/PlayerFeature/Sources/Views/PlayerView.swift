@@ -45,7 +45,7 @@ public final class PlayerView: UIView {
     
     lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
     
-    lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6_1(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6_1().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20)
+    lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6), font: .t6_1(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6_1().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20)
     
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
