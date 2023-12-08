@@ -28,7 +28,7 @@ extension ArtistAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchArtistList:
-            return "/list"
+            return ""
         case .fetchArtistSongList:
             return "/albums"
         }
