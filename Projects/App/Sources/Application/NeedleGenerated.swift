@@ -286,6 +286,25 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
 private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class FaqDependency899aad15f17210a3af31Provider: FaqDependency {
+    var faqContentComponent: FaqContentComponent {
+        return appComponent.faqContentComponent
+    }
+    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
+        return appComponent.fetchFaqCategoriesUseCase
+    }
+    var fetchFaqUseCase: any FetchFaqUseCase {
+        return appComponent.fetchFaqUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->FaqComponent
+private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
     var suggestFunctionComponent: SuggestFunctionComponent {
         return appComponent.suggestFunctionComponent
@@ -383,31 +402,12 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
 private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return FavoriteDependency8f7fd37aeb6f0e5d0e30Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class QnaDependencybc3f0a2d4f873ad1b160Provider: QnaDependency {
-    var qnaContentComponent: QnaContentComponent {
-        return appComponent.qnaContentComponent
-    }
-    var fetchQnaCategoriesUseCase: any FetchQnaCategoriesUseCase {
-        return appComponent.fetchQnaCategoriesUseCase
-    }
-    var fetchQnaUseCase: any FetchQnaUseCase {
-        return appComponent.fetchQnaUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->QnaComponent
-private func factory49a98666675cb7a82038f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return QnaDependencybc3f0a2d4f873ad1b160Provider(appComponent: parent1(component) as! AppComponent)
-}
 private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
         return appComponent.withdrawUserInfoUseCase
     }
-    var qnaComponent: QnaComponent {
-        return appComponent.qnaComponent
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
     }
     var questionComponent: QuestionComponent {
         return appComponent.questionComponent
@@ -456,17 +456,6 @@ private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
 /// ^->AppComponent->NoticeComponent
 private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class QnaContentDependency68ed55648233d525d265Provider: QnaContentDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->QnaContentComponent
-private func factory1501f7005831c8411229e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return QnaContentDependency68ed55648233d525d265Provider()
 }
 private class BugReportDependencyeea5818852f336c35729Provider: BugReportDependency {
     var reportBugUseCase: any ReportBugUseCase {
@@ -868,12 +857,6 @@ extension AppComponent: Registration {
         localTable["noticeRepository-any NoticeRepository"] = { [unowned self] in self.noticeRepository as Any }
         localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { [unowned self] in self.fetchNoticeUseCase as Any }
         localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
-        localTable["qnaComponent-QnaComponent"] = { [unowned self] in self.qnaComponent as Any }
-        localTable["qnaContentComponent-QnaContentComponent"] = { [unowned self] in self.qnaContentComponent as Any }
-        localTable["remoteQnaDataSource-any RemoteQnaDataSource"] = { [unowned self] in self.remoteQnaDataSource as Any }
-        localTable["qnaRepository-any QnaRepository"] = { [unowned self] in self.qnaRepository as Any }
-        localTable["fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"] = { [unowned self] in self.fetchQnaCategoriesUseCase as Any }
-        localTable["fetchQnaUseCase-any FetchQnaUseCase"] = { [unowned self] in self.fetchQnaUseCase as Any }
         localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
         localTable["suggestFunctionComponent-SuggestFunctionComponent"] = { [unowned self] in self.suggestFunctionComponent as Any }
         localTable["wakMusicFeedbackComponent-WakMusicFeedbackComponent"] = { [unowned self] in self.wakMusicFeedbackComponent as Any }
@@ -885,6 +868,12 @@ extension AppComponent: Registration {
         localTable["suggestFunctionUseCase-any SuggestFunctionUseCase"] = { [unowned self] in self.suggestFunctionUseCase as Any }
         localTable["modifySongUseCase-any ModifySongUseCase"] = { [unowned self] in self.modifySongUseCase as Any }
         localTable["inquiryWeeklyChartUseCase-any InquiryWeeklyChartUseCase"] = { [unowned self] in self.inquiryWeeklyChartUseCase as Any }
+        localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
+        localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
+        localTable["remoteFaqDataSource-any RemoteFaqDataSource"] = { [unowned self] in self.remoteFaqDataSource as Any }
+        localTable["faqRepository-any FaqRepository"] = { [unowned self] in self.faqRepository as Any }
+        localTable["fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"] = { [unowned self] in self.fetchFaqCategoriesUseCase as Any }
+        localTable["fetchFaqUseCase-any FetchFaqUseCase"] = { [unowned self] in self.fetchFaqUseCase as Any }
         localTable["remoteAppDataSource-any RemoteAppDataSource"] = { [unowned self] in self.remoteAppDataSource as Any }
         localTable["appRepository-any AppRepository"] = { [unowned self] in self.appRepository as Any }
         localTable["fetchCheckAppUseCase-any FetchCheckAppUseCase"] = { [unowned self] in self.fetchCheckAppUseCase as Any }
@@ -988,6 +977,13 @@ extension StorageComponent: Registration {
         keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
     }
 }
+extension FaqComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\FaqDependency.faqContentComponent] = "faqContentComponent-FaqContentComponent"
+        keyPathToName[\FaqDependency.fetchFaqCategoriesUseCase] = "fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"
+        keyPathToName[\FaqDependency.fetchFaqUseCase] = "fetchFaqUseCase-any FetchFaqUseCase"
+    }
+}
 extension QuestionComponent: Registration {
     public func registerItems() {
         keyPathToName[\QuestionDependency.suggestFunctionComponent] = "suggestFunctionComponent-SuggestFunctionComponent"
@@ -1023,17 +1019,10 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.deleteFavoriteListUseCase] = "deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"
     }
 }
-extension QnaComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\QnaDependency.qnaContentComponent] = "qnaContentComponent-QnaContentComponent"
-        keyPathToName[\QnaDependency.fetchQnaCategoriesUseCase] = "fetchQnaCategoriesUseCase-any FetchQnaCategoriesUseCase"
-        keyPathToName[\QnaDependency.fetchQnaUseCase] = "fetchQnaUseCase-any FetchQnaUseCase"
-    }
-}
 extension RequestComponent: Registration {
     public func registerItems() {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
-        keyPathToName[\RequestDependency.qnaComponent] = "qnaComponent-QnaComponent"
+        keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
@@ -1051,11 +1040,6 @@ extension NoticeComponent: Registration {
         keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
     }
 }
-extension QnaContentComponent: Registration {
-    public func registerItems() {
-
-    }
-}
 extension BugReportComponent: Registration {
     public func registerItems() {
         keyPathToName[\BugReportDependency.reportBugUseCase] = "reportBugUseCase-any ReportBugUseCase"
@@ -1064,6 +1048,11 @@ extension BugReportComponent: Registration {
 extension WakMusicFeedbackComponent: Registration {
     public func registerItems() {
         keyPathToName[\WakMusicFeedbackDependency.inquiryWeeklyChartUseCase] = "inquiryWeeklyChartUseCase-any InquiryWeeklyChartUseCase"
+    }
+}
+extension FaqContentComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension RootComponent: Registration {
@@ -1207,17 +1196,17 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AskSongComponent", factory37544fa026b309cd68d7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SuggestFunctionComponent", factory63287bff3999ed1787ddf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->QnaComponent", factory49a98666675cb7a82038f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->QnaContentComponent", factory1501f7005831c8411229e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->WakMusicFeedbackComponent", factory32abe9db091bc43329a1f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)

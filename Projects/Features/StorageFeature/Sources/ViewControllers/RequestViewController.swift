@@ -49,7 +49,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
     
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = qnaComponent.makeView()
+        let vc = faqComponent.makeView()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -79,7 +79,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     
-    var qnaComponent:QnaComponent!
+    var faqComponent:FaqComponent!
     var questionComponent:QuestionComponent!
     var containSongsComponent: ContainSongsComponent!
     var noticeComponent: NoticeComponent!
@@ -101,7 +101,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     
     public static func viewController(
         viewModel:RequestViewModel,
-        qnaComponent: QnaComponent,
+        faqComponent: FaqComponent,
         questionComponent: QuestionComponent,
         containSongsComponent: ContainSongsComponent,
         noticeComponent: NoticeComponent,
@@ -109,7 +109,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.qnaComponent = qnaComponent
+        viewController.faqComponent = faqComponent
         viewController.questionComponent = questionComponent
         viewController.containSongsComponent = containSongsComponent
         viewController.noticeComponent = noticeComponent

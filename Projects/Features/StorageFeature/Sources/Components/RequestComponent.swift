@@ -13,7 +13,7 @@ import CommonFeature
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {get}
-    var qnaComponent: QnaComponent {get}
+    var faqComponent: FaqComponent {get}
     var questionComponent: QuestionComponent {get}
     var containSongsComponent: ContainSongsComponent {get}
     var noticeComponent: NoticeComponent {get}
@@ -26,7 +26,7 @@ public final class RequestComponent: Component<RequestDependency> {
             viewModel: .init(
                 withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase
             ),
-            qnaComponent:dependency.qnaComponent,
+            faqComponent:dependency.faqComponent,
             questionComponent: dependency.questionComponent,
             containSongsComponent: dependency.containSongsComponent,
             noticeComponent: dependency.noticeComponent,
