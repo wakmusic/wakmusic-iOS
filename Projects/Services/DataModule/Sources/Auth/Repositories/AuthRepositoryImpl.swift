@@ -31,10 +31,7 @@ public struct AuthRepositoryImpl: AuthRepository {
     public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> RxSwift.Single<DomainModule.NaverUserInfoEntity> {
         remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
     }
-    
-    public func withdrawUserInfo() -> Single<BaseEntity> {
-        remoteAuthDataSource.withdrawUserInfo()
-    }
+
     
     
     

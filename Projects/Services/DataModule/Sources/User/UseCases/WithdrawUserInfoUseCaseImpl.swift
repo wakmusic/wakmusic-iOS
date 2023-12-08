@@ -1,8 +1,8 @@
 //
-//  FetchArtistListUseCaseImpl.swift
+//  WithdrawUserInfoUseCaseImpl.swift
 //  DataModule
 //
-//  Created by KTH on 2023/02/08.
+//  Created by yongbeomkwak on 12/8/23.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
@@ -13,25 +13,20 @@ import DomainModule
 import ErrorModule
 
 public struct WithdrawUserInfoUseCaseImpl: WithdrawUserInfoUseCase {
-   
-    
-   
+  
 
-    private let authRepository: any AuthRepository
-    
-    public init(authRepository: any AuthRepository) {
-        self.authRepository = authRepository
+    private let userRepository: any UserRepository
+
+    public init(
+        userRepository: UserRepository
+    ) {
+        self.userRepository = userRepository
     }
     
     public func execute() -> Single<BaseEntity> {
-        authRepository.withdrawUserInfo()
+        userRepository.withdrawUserInfo()
     }
-    
     
 
    
-    
-    
-
-
 }

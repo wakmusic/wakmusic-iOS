@@ -18,11 +18,4 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map({$0.toDomain()})
     }
     
-
-    
-    public func withdrawUserInfo() -> Single<BaseEntity> {
-        request(.withdrawUserInfo)
-            .map(BaseResponseDTO.self)
-            .map{ $0.toDomain() }
-    }
 }

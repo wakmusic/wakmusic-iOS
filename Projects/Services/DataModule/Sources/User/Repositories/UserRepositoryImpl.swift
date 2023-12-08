@@ -16,6 +16,8 @@ import RxSwift
 public struct UserRepositoryImpl: UserRepository {
 
     
+
+    
  
    private let remoteUserDataSource: any RemoteUserDataSource
     
@@ -65,5 +67,9 @@ public struct UserRepositoryImpl: UserRepository {
     
     public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {
         remoteUserDataSource.deleteFavoriteList(ids: ids)
+    }
+    
+    public func withdrawUserInfo() -> Single<BaseEntity> {
+        remoteUserDataSource.withdrawUserInfo()
     }
 }

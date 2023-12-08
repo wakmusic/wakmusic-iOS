@@ -67,16 +67,5 @@ public extension AppComponent {
         }
     }
     
-    
-    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
         
-        shared {
-            WithdrawUserInfoUseCaseImpl(authRepository: authRepository)
-        }
-        
-    }
-    
-    
-  
-    
 }

@@ -101,4 +101,12 @@ public extension AppComponent {
             FetchUserInfoUseCaseImpl(userRepository: userRepository)
         }
     }
+    
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        
+        shared {
+            WithdrawUserInfoUseCaseImpl(userRepository: userRepository)
+        }
+        
+    }
 }
