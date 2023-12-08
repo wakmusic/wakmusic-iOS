@@ -14,6 +14,7 @@ public enum UserAPI {
     case editPlayListOrder(ids: [String])
     case deletePlayList(ids: [String])
     case deleteFavoriteList(ids: [String])
+    case fetchUserInfo
 }
 
 public struct RequsetProfileModel:Encodable {
@@ -66,6 +67,9 @@ extension UserAPI: WMAPI {
             return "/playlists/edit"
         case .deletePlayList:
             return "/playlists/delete"
+        
+        case .fetchUserInfo:
+            return "/profile"
         }
     }
         
@@ -73,7 +77,7 @@ extension UserAPI: WMAPI {
         switch self {
         case .setProfile, .setUserName:
             return .post
-        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs,.fetchUserInfo:
             return .get
         case .editFavoriteSongsOrder,.editPlayListOrder:
             return .patch
@@ -88,7 +92,7 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequsetProfileModel(image: image))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(username: name))
-        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs:
+        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs,.fetchUserInfo:
             return .requestPlain
         case .editFavoriteSongsOrder(ids: let ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songs: ids))

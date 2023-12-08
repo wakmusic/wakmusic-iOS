@@ -14,6 +14,8 @@ import DatabaseModule
 import RxSwift
 
 public struct UserRepositoryImpl: UserRepository {
+
+    
  
    private let remoteUserDataSource: any RemoteUserDataSource
     
@@ -21,6 +23,12 @@ public struct UserRepositoryImpl: UserRepository {
         remoteUserDataSource: RemoteUserDataSource
     ) {
         self.remoteUserDataSource = remoteUserDataSource
+    }
+    
+    
+    
+    public func fetchUserInfo() -> Single<UserInfoEntity> {
+        remoteUserDataSource.fetchUserInfo()
     }
     
     public func fetchProfileList() -> Single<[ProfileListEntity]> {
