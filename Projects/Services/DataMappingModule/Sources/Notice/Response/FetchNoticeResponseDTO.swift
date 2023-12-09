@@ -14,8 +14,8 @@ public struct FetchNoticeResponseDTO: Codable, Equatable {
     public let thumbnail: String?
     public let content: String?
     public let images: [String]
-    public let createAt, startAt, endAt: Double
-    public let category: FetchNoticeResponseDTO.Category?
+    public let createdAt, startAt, endAt: Double
+    public let category: String?
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
@@ -24,14 +24,8 @@ public struct FetchNoticeResponseDTO: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, category, title, images, thumbnail
         case content = "mainText"
-        case createAt
+        case createdAt
         case startAt
         case endAt
-    }
-}
-
-public extension FetchNoticeResponseDTO {
-    struct Category: Codable {
-        public let type, category: String
     }
 }

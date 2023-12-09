@@ -39,7 +39,7 @@ class NoticeListCell: UITableViewCell {
 extension NoticeListCell {
     func update(model: FetchNoticeEntity) {
         titleStringLabel.text = model.title
-        dayLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
-        timeLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "HH:mm")
+        dayLabel.text = (model.createdAt/1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
+        timeLabel.text = (model.createdAt/1000.0).unixTimeToDate.dateToString(format: "HH:mm")
     }
 }

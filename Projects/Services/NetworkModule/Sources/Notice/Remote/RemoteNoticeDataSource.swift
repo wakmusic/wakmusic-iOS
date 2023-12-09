@@ -14,5 +14,5 @@ import Foundation
 
 public protocol RemoteNoticeDataSource {
     func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]>
-    func fetchNoticeCategories() -> Single<[FetchNoticeCategoriesEntity]>
+    func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity>
 }

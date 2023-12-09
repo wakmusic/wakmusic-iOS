@@ -24,7 +24,7 @@ public struct ArtistListResponseDTO: Codable, Equatable {
 
     private enum CodingKeys: String, CodingKey {
         case ID = "artistId"
-        case title = "appTitle"
+        case title
         case group, image
         case name, short, description
         case color, youtube, twitch, instagram
@@ -40,17 +40,15 @@ public extension ArtistListResponseDTO {
     struct Image: Codable {
         public let round: Int
         public let square: Int
-        public let clear: Int
     }
     
     // MARK: - Color
     struct Color: Codable {
         public let background: [[String]]
-        public let card: [[String]]
     }
     
     // MARK: - Title
     struct Title: Codable {
-        public let app, web: String
+        public let app: String
     }
 }
