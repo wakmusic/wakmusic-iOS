@@ -15,7 +15,7 @@ public extension LikeResponseDTO {
     func toDomain() -> LikeEntity {
         LikeEntity(
             status: status ?? 200,
-            likes: likes
+            likes: like
         )
     }
 }
