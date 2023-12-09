@@ -66,8 +66,3 @@ public func WMDOMAIN_APP() -> String {
 public func WMDOMAIN_PLAY() -> String {
     return config(key: "WMDOMAIN_PLAY")
 }
-
-//MARK: - WMDomain V2
-public func WMDOMAIN_V2_SONGS() -> String {
-    return config(key: "WMDOMAIN_V2_SONGS")
-}

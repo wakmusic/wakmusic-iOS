@@ -13,15 +13,6 @@ extension SongsAPI: WMAPI {
     public var domain: WMDomain {
         return .songs
     }
-    
-    public var path: String {
-        switch self {
-        case .fetchNewSongs:
-            return "/\(WMDOMAIN_V2_SONGS())" + urlPath
-        default:
-            return domain.asURLString + urlPath
-        }
-    }
 
     public var urlPath: String {
         switch self {
