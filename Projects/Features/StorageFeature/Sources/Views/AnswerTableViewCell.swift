@@ -24,7 +24,7 @@ class AnswerTableViewCell: UITableViewCell {
 }
 
 extension AnswerTableViewCell{
-    public func update(model:QnaEntity){
+    public func update(model:FaqEntity){
         answerLabel.text = model.description
     }
 }

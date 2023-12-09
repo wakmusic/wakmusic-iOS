@@ -67,24 +67,5 @@ public extension AppComponent {
         }
     }
     
-    
-    
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         
-        shared {
-            FetchUserInfoUseCaseImpl(authRepository: authRepository)
-        }
-    }
-    
-    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
-        
-        shared {
-            WithdrawUserInfoUseCaseImpl(authRepository: authRepository)
-        }
-        
-    }
-    
-    
-  
-    
 }

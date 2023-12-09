@@ -21,4 +21,6 @@ public protocol UserRepository {
     func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
     func deletePlayList(ids: [String]) -> Single<BaseEntity>
     func deleteFavoriteList(ids: [String]) -> Single<BaseEntity>
+    func fetchUserInfo() -> Single<UserInfoEntity>
+    func withdrawUserInfo() -> Single<BaseEntity>
 }

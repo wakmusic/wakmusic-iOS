@@ -20,9 +20,9 @@ extension LikeAPI: WMAPI {
         case .fetchLikeNumOfSong(id: let id):
             return "/\(id)"
         case .addLikeSong(id: let id):
-            return "/\(id)/addLike"
+            return "/\(id)"
         case .cancelLikeSong(id: let id):
-            return "/\(id)/removeLike"
+            return "/\(id)"
         }
     }
         
@@ -30,8 +30,10 @@ extension LikeAPI: WMAPI {
         switch self {
         case .fetchLikeNumOfSong:
             return .get
-        case .addLikeSong,.cancelLikeSong:
+        case .addLikeSong:
             return .post
+        case .cancelLikeSong:
+            return .delete
         }
     }
     

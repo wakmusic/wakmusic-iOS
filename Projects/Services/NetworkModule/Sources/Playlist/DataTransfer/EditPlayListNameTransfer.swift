@@ -4,7 +4,7 @@ import Utility
 
 
 public extension EditPlayListNameResponseDTO {
-    func toDomain() -> EditPlayListNameEntity {
+    func toDomain(title: String) -> EditPlayListNameEntity {
         EditPlayListNameEntity(title: title, status: status)
     }
 }

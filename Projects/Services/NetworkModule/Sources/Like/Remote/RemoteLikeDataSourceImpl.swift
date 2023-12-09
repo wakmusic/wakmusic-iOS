@@ -8,9 +8,9 @@ import Foundation
 
 public final class RemoteLikeDataSourceImpl: BaseRemoteDataSource<LikeAPI>, RemoteLikeDataSource {
     
-    public func fetchLikeNumOfSong(id: String) -> Single<FavoriteSongEntity> {
+    public func fetchLikeNumOfSong(id: String) -> Single<LikeEntity> {
         request(.fetchLikeNumOfSong(id: id))
-            .map(FavoriteSongsResponseDTO.self)
+            .map(FetchLikeResponseDTO.self)
             .map({$0.toDomain()})
     }
     

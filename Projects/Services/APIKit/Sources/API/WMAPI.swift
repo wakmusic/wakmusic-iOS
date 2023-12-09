@@ -36,7 +36,7 @@ public enum WMDomain: String {
     case playlist
     case like
     case naver
-    case qna
+    case faq
     case notice
     case suggest
     case app
@@ -68,7 +68,7 @@ extension WMDomain {
             return WMDOMAIN_LIKE()
         case .naver:
             return "/v1/nid/me"
-        case .qna:
+        case .faq:
             return WMDOMAIN_QNA()
         case .notice:
             return WMDOMAIN_NOTICE()

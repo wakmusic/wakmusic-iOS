@@ -16,7 +16,7 @@ import KeychainModule
 
 final public class QnaContentViewModel:ViewModelType {
     var disposeBag = DisposeBag()
-    var dataSource:[QnaEntity]
+    var dataSource:[FaqEntity]
 
     public struct Input {
     }
@@ -25,7 +25,7 @@ final public class QnaContentViewModel:ViewModelType {
     }
 
     public init(
-        dataSource:[QnaEntity]
+        dataSource:[FaqEntity]
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.dataSource = dataSource

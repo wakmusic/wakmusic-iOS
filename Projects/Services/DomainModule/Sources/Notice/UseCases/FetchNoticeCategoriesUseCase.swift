@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchNoticeCategoriesUseCase {
-    func execute() -> Single<[FetchNoticeCategoriesEntity]>
+    func execute() -> Single<FetchNoticeCategoriesEntity>
 }

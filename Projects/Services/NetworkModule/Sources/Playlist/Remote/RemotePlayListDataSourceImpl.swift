@@ -7,16 +7,13 @@ import Foundation
 
 
 public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
-    
-
-    public func fetchRecommendPlayList() ->Single<[RecommendPlayListEntity]> {
+    public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {
         request(.fetchRecommendPlayList)
             .map([SingleRecommendPlayListResponseDTO].self)
             .map{$0.map{$0.toDomain()}}
-   
     }
     
-    public func fetchPlayListDetail(id: String,type:PlayListType) ->Single<PlayListDetailEntity> {
+    public func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
         request(.fetchPlayListDetail(id: id,type: type))
             .map(SinglePlayListDetailResponseDTO.self)
             .map({$0.toDomain()})
@@ -28,16 +25,16 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map({$0.toDomain()})
     }
     
-    public func editPlayList(key: String,songs: [String]) -> Single<BaseEntity> {
+    public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {
         request(.editPlayList(key: key,songs: songs))
             .map(BaseResponseDTO.self)
             .map({$0.toDomain()})
     }
     
-    public func editPlayListName(key: String,title:String) -> Single<EditPlayListNameEntity> {
-        request(.editPlayListName(key: key,title:title))
+    public func editPlayListName(key: String, title:String) -> Single<EditPlayListNameEntity> {
+        request(.editPlayListName(key: key, title:title))
             .map(EditPlayListNameResponseDTO.self)
-            .map({$0.toDomain()})
+            .map({$0.toDomain(title: title)})
     }
     
     public func deletePlayList(key: String) -> Single<BaseEntity> {
@@ -56,19 +53,11 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
         request(.addSongIntoPlayList(key: key, songs: songs))
             .map(AddSongResponseDTO.self)
             .map({$0.toDomain()})
-        
     }
     
-    public func removeSongs(key:String,songs:[String]) -> Single<BaseEntity> {
+    public func removeSongs(key:String, songs:[String]) -> Single<BaseEntity> {
         request(.removeSongs(key: key, songs: songs))
             .map(BaseResponseDTO.self)
             .map({$0.toDomain()})
     }
-   
-    
-    
-    
-  
-    
- 
 }

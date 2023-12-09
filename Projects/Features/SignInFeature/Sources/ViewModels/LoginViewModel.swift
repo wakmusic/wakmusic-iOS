@@ -80,15 +80,13 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
         fetchedWMToken
             .debug("🚚 fetchedWMToken")
-            .flatMap { _ -> Observable<AuthUserInfoEntity> in
+            .flatMap { _ -> Observable<UserInfoEntity> in
                 return self.fetchUserInfoUseCase.execute()
                     .catchAndReturn(
-                        AuthUserInfoEntity(
+                        UserInfoEntity(
                             id: "",
                             platform: "apple",
-                            displayName: "ifari",
-                            first_login_time: 0,
-                            first: false,
+                            name: "ifari",
                             profile: "panchi",
                             version: 1
                         )
@@ -100,9 +98,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     ID: AES256.encrypt(string: $0.id),
                     platform: $0.platform,
                     profile: $0.profile,
-                    displayName: AES256.encrypt(string: $0.displayName),
-                    firstLoginTime: $0.first_login_time,
-                    first: $0.first,
+                    name: AES256.encrypt(string: $0.name),
                     version: $0.version
                 )
             })

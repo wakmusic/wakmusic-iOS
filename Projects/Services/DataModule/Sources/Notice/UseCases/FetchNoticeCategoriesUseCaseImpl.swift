@@ -21,7 +21,7 @@ public struct FetchNoticeCategoriesUseCaseImpl: FetchNoticeCategoriesUseCase {
         self.noticeRepository = noticeRepository
     }
     
-    public func execute() -> Single<[FetchNoticeCategoriesEntity]> {
+    public func execute() -> Single<FetchNoticeCategoriesEntity> {
         noticeRepository.fetchNoticeCategories()
     }
 }

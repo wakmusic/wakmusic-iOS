@@ -20,9 +20,9 @@ public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, 
             .map { $0.map { $0.toDomain() }}
     }
     
-    public func fetchNoticeCategories() -> Single<[FetchNoticeCategoriesEntity]> {
+    public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         request(.fetchNoticeCategories)
-            .map([FetchNoticeCategoriesResponseDTO].self)
-            .map{ $0.map{ FetchNoticeCategoriesEntity(type: $0.type, category: $0.category) }}
+            .map(FetchNoticeCategoriesResponseDTO.self)
+            .map{ $0.toDomain() }
     }
 }

@@ -7,8 +7,6 @@ import KeychainModule
 public enum AuthAPI {
     case fetchToken(token: String, type: ProviderType)
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
-    case fetchUserInfo
-    case withdrawUserInfo
 }
 
 public struct AuthRequset:Encodable {
@@ -19,7 +17,7 @@ public struct AuthRequset:Encodable {
 extension AuthAPI: WMAPI {
     public var baseURL: URL {
         switch self {
-        case .fetchToken, .fetchUserInfo, .withdrawUserInfo:
+        case .fetchToken :
             return URL(string:BASE_URL())!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
@@ -28,7 +26,7 @@ extension AuthAPI: WMAPI {
         
     public var domain: WMDomain {
         switch  self {
-        case .fetchToken, .fetchUserInfo, .withdrawUserInfo:
+        case .fetchToken :
             return .auth
         case .fetchNaverUserInfo:
             return .naver
@@ -41,10 +39,6 @@ extension AuthAPI: WMAPI {
             return "/login/mobile"
         case .fetchNaverUserInfo:
             return ""
-        case .fetchUserInfo:
-            return "/"
-        case .withdrawUserInfo:
-            return "/remove"
         }
     }
 
@@ -54,10 +48,6 @@ extension AuthAPI: WMAPI {
             return .post
         case .fetchNaverUserInfo:
             return .get
-        case .fetchUserInfo:
-             return .get
-        case .withdrawUserInfo:
-            return .delete
         }
     }
     
@@ -74,15 +64,13 @@ extension AuthAPI: WMAPI {
         switch self {
         case .fetchToken(token: let id, type: let type):
             return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
-        case .fetchNaverUserInfo, .fetchUserInfo, .withdrawUserInfo:
+        case .fetchNaverUserInfo :
             return .requestPlain
         }
     }
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchUserInfo, .withdrawUserInfo:
-            return .accessToken
         default:
             return .none
         }

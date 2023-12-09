@@ -6,8 +6,8 @@ import Utility
 public extension FavoriteSongsResponseDTO {
     func toDomain() -> FavoriteSongEntity {
         FavoriteSongEntity(
-            likes: likes,
-            song: song.toDomain(),
+            like: like,
+            song: SongEntity(id: id, title: title, artist: artist, remix: remix, reaction: reaction, views: total?.views ?? 0, last: total?.last ?? 0, date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")),
             isSelected: false
         )
     }

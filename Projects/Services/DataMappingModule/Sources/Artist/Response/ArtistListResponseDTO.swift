@@ -10,8 +10,9 @@ import Foundation
 
 public struct ArtistListResponseDTO: Codable, Equatable {
     public let ID, name, short: String
-    public let title, description: String
-    public let color: [[String]]?
+    public let description: String
+    public let title: ArtistListResponseDTO.Title?
+    public let color: ArtistListResponseDTO.Color?
     public let youtube, twitch, instagram: String?
     public let graduated: Bool?
     public let group: ArtistListResponseDTO.Group?
@@ -23,7 +24,7 @@ public struct ArtistListResponseDTO: Codable, Equatable {
 
     private enum CodingKeys: String, CodingKey {
         case ID = "artistId"
-        case title = "appTitle"
+        case title
         case group, image
         case name, short, description
         case color, youtube, twitch, instagram
@@ -39,5 +40,15 @@ public extension ArtistListResponseDTO {
     struct Image: Codable {
         public let round: Int
         public let square: Int
+    }
+    
+    // MARK: - Color
+    struct Color: Codable {
+        public let background: [[String]]
+    }
+    
+    // MARK: - Title
+    struct Title: Codable {
+        public let app: String
     }
 }

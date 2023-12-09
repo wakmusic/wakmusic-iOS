@@ -27,7 +27,7 @@ public struct NoticeRepositoryImpl: NoticeRepository {
         remoteNoticeDataSource.fetchNotice(type: type)
     }
     
-    public func fetchNoticeCategories() -> Single<[FetchNoticeCategoriesEntity]> {
+    public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         remoteNoticeDataSource.fetchNoticeCategories()
     }
 }

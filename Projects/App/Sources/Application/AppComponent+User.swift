@@ -93,4 +93,20 @@ public extension AppComponent {
             DeleteFavoriteListUseCaseImpl(userRepository: userRepository)
         }
     }
+    
+    
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
+        
+        shared {
+            FetchUserInfoUseCaseImpl(userRepository: userRepository)
+        }
+    }
+    
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        
+        shared {
+            WithdrawUserInfoUseCaseImpl(userRepository: userRepository)
+        }
+        
+    }
 }

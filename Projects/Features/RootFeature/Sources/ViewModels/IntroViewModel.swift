@@ -109,7 +109,7 @@ final public class IntroViewModel: ViewModelType {
                 }
                 return true
             }
-            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
+            .flatMap { [weak self] _ -> Observable<UserInfoEntity> in
                 guard let `self` = self else { return Observable.empty() }
                 return self.fetchUserInfoUseCase.execute()
                     .asObservable()

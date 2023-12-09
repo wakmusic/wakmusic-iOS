@@ -55,6 +55,7 @@ extension PlayerViewModel {
             return
         }
         fetchFavoriteSongsUseCase.execute()
+            .debug("WWW")
             .catchAndReturn([])
             .map { $0.contains { $0.song.id == song.id } }
             .subscribe(onSuccess: { isLiked in

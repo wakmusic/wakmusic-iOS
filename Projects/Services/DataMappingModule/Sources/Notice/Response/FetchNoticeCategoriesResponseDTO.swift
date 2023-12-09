@@ -9,5 +9,5 @@
 import Foundation
 
 public struct FetchNoticeCategoriesResponseDTO: Codable {
-    public let type, category: String
+    public let categories: [String]?
 }

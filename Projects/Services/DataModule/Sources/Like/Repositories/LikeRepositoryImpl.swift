@@ -23,7 +23,7 @@ public struct LikeRepositoryImpl: LikeRepository {
         self.remoteLikeDataSource = remoteLikeDataSource
     }
     
-    public func fetchLikeNumOfSong(id: String) -> Single<FavoriteSongEntity> {
+    public func fetchLikeNumOfSong(id: String) -> Single<LikeEntity> {
         remoteLikeDataSource.fetchLikeNumOfSong(id: id)
     }
     

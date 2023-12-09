@@ -82,9 +82,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                 guard let self = self else {return Observable.empty()}
                 return self.fetchPlayListDetailUseCase.execute(id: self.id, type: self.type)
                     .catchAndReturn(
-                        
-                        PlayListDetailEntity(title: "", songs: [], public: true, key: "", image: "", image_square_version: 0, image_round_version: 0, version: 0)
-  
+                        PlayListDetailEntity(key: "", title: "", songs: [], image: "", image_square_version: 0, image_round_version: 0, version: 0)
                     )
                     .asObservable()
                     .do(onNext: { [weak self] (model) in
@@ -188,31 +186,24 @@ public final class PlayListDetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
                 
         input.tapRemoveSongs
-            .withLatestFrom(output.songEntityOfSelectedSongs){ $1 }
-            .withLatestFrom(output.dataSource) { ($0,$1) }
-            .map{ (ids: [SongEntity], dataSource: [PlayListDetailSectionModel]) -> [String] in
-                let remainDataSource = dataSource.first?.items.filter({ (song: SongEntity) in
-                    return !ids.contains(song)
-                })
-                .map { $0.id }
-                return remainDataSource ?? []
+            .withLatestFrom(output.songEntityOfSelectedSongs)
+            .map{ (entities: [SongEntity]) -> [String] in
+                return entities.map { $0.id }
             }
             .flatMap{ [weak self] (songs: [String]) -> Observable<BaseEntity> in
                 guard let self = self, let key = self.key else {
                     return Observable.empty()
                 }
-                return self.editPlayListUseCase.execute(key: key, songs: songs)
+                return self.removeSongsUseCase.execute(key: key, songs: songs)
                     .catch({ (error:Error) in
                         let wmError = error.asWMError
-                        
                         if wmError == .tokenExpired {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(status: 401, description: error.asWMError.errorDescription ?? "")))
                                 return Disposables.create {}
                             }
-                        }
-                        
-                        else {
+                            
+                        }else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
                                 return Disposables.create {}
@@ -222,7 +213,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                     .asObservable()
             }
             .subscribe(onNext: { (model) in
-                output.showErrorToast.accept((model.status == 200) ? BaseEntity(status: 200,description:"리스트에서 삭제되었습니다.") : model)
+                output.showErrorToast.accept((model.status == 200) ? BaseEntity(status: 200, description: "리스트에서 삭제되었습니다.") : model)
                 output.refreshPlayList.accept(())
                 output.indexOfSelectedSongs.accept([])
                 output.songEntityOfSelectedSongs.accept([])

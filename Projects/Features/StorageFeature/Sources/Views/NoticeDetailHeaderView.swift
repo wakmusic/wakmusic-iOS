@@ -71,8 +71,8 @@ extension NoticeDetailHeaderView {
     
     func update(model: FetchNoticeEntity) {
         titleStringLabel.text = model.title
-        dateLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
-        timeLabel.text = (model.createAt/1000.0).unixTimeToDate.dateToString(format: "HH:mm")
+        dateLabel.text = (model.createdAt/1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
+        timeLabel.text = (model.createdAt/1000.0).unixTimeToDate.dateToString(format: "HH:mm")
         contentStringLabel.text = model.content ?? "팬치들 스샷 참고하세요! 🥰"
     }
 }

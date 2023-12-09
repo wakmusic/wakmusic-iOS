@@ -46,7 +46,7 @@ final public class AfterLoginViewModel: ViewModelType {
         Utility.PreferenceManager.$userInfo
             .filter { $0 != nil }
             .take(1)
-            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
+            .flatMap { [weak self] _ -> Observable<UserInfoEntity> in
                 guard let self = self else { return Observable.empty() }
                 return self.fetchUserInfoUseCase.execute()
                     .asObservable()
@@ -56,9 +56,7 @@ final public class AfterLoginViewModel: ViewModelType {
                     ID: AES256.encrypt(string: $0.id),
                     platform: $0.platform,
                     profile: $0.profile,
-                    displayName: AES256.encrypt(string: $0.displayName),
-                    firstLoginTime: $0.first_login_time,
-                    first: $0.first,
+                    name: AES256.encrypt(string: $0.name),
                     version: $0.version
                 )
             }).disposed(by: disposeBag)
