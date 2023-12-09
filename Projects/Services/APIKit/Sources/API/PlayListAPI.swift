@@ -4,23 +4,22 @@ import DataMappingModule
 import ErrorModule
 import Foundation
 
-
-public struct AddSongRequest:Encodable {
-    var songs:[String]
+public struct AddSongRequest: Encodable {
+    var songIds: [String]
 }
 
-public struct CreatePlayListRequset:Encodable {
-    var title:String
-    var image:String
+public struct CreatePlayListRequset: Encodable {
+    var title: String
+    var image: String
 }
 
-public struct SongsKeyBody:Encodable {
-    var songs:[String]
-}
-public struct EditPlayListNameRequset:Encodable {
-    var title:String
+public struct SongsKeyBody: Encodable {
+    var songIds: [String]
 }
 
+public struct EditPlayListNameRequset: Encodable {
+    var title: String
+}
 
 public enum PlayListAPI {
     case fetchRecommendPlayList
@@ -58,11 +57,11 @@ extension PlayListAPI: WMAPI {
         case .deletePlayList(key: let key):
             return "/\(key)"
             
-        case .loadPlayList(key: let key):
-            return "/\(key)/addToMyPlaylist"
+        case .loadPlayList:
+            return "/copy"
             
         case .editPlayList(key: let key, _):
-            return "/\(key)/edit"
+            return "/\(key)/songs"
             
         case .editPlayListName(key: let key, _):
             return "/\(key)"
@@ -80,10 +79,10 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList, .fetchPlayListDetail:
             return .get
             
-        case .createPlayList, .loadPlayList, .addSongIntoPlayList:
+        case .createPlayList, .loadPlayList, .addSongIntoPlayList, .removeSongs:
             return .post
             
-        case .editPlayList, .editPlayListName, .removeSongs:
+        case .editPlayList, .editPlayListName:
             return .patch
             
         case .deletePlayList:
@@ -96,23 +95,26 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList:
             return .requestPlain
             
-        case .fetchPlayListDetail, .deletePlayList, .loadPlayList:
+        case .fetchPlayListDetail, .deletePlayList:
             return .requestPlain
+            
+        case let .loadPlayList(key):
+            return .requestJSONEncodable(["key": key])
             
         case .createPlayList(title: let title):
             return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
             
         case .editPlayList(_, songs: let songs):
-            return .requestJSONEncodable(SongsKeyBody(songs: songs))
+            return .requestJSONEncodable(SongsKeyBody(songIds: songs))
             
         case .editPlayListName(_, title: let title):
             return .requestJSONEncodable(EditPlayListNameRequset(title: title))
             
         case . addSongIntoPlayList(_, songs: let songs):
-            return .requestJSONEncodable(AddSongRequest(songs: songs))
+            return .requestJSONEncodable(AddSongRequest(songIds: songs))
             
         case .removeSongs(_, songs: let songs):
-            return .requestJSONEncodable(SongsKeyBody(songs: songs))
+            return .requestJSONEncodable(SongsKeyBody(songIds: songs))
         }
     }
             
