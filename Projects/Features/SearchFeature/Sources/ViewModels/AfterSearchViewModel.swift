@@ -43,20 +43,20 @@ public final class AfterSearchViewModel:ViewModelType {
                 // 네트워크 시작점을 포착하기 위한 구간
                 output.isFetchStart.onNext(())
             })
-            .flatMap { [weak self] (str:String) -> Observable<(([SongEntity], [SongEntity]), [SongEntity])> in
+            .flatMap { [weak self] (str:String) -> Observable<SearchResultEntity> in
                 guard let self = self else{
                     return Observable.empty()
                 }
-                let zip = Observable.zip(
-                    self.fetchSearchSongUseCase.execute(type: .title, keyword: str).asObservable().catchAndReturn([]),
-                    self.fetchSearchSongUseCase.execute(type: .artist, keyword: str).asObservable().catchAndReturn([])
-                )
-                let remix = self.fetchSearchSongUseCase.execute(type: .remix, keyword: str).asObservable().catchAndReturn([])
-                let result = Observable.zip(zip, remix)
-                return result
+                return self.fetchSearchSongUseCase
+                    .execute(keyword: str)
+                    .asObservable()
             }
-            .map{ (res, r3) in
-                let (r1, r2): ([SongEntity], [SongEntity]) = res
+            .map{ (res) in
+                
+                let r1 = res.song
+                let r2 = res.artist
+                let r3 = res.remix
+                
                 let limitCount: Int = 3
                 
                 let all: [SearchSectionModel] = [

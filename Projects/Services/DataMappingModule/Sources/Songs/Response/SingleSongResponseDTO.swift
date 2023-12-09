@@ -12,7 +12,7 @@ import Foundation
 public struct SingleSongResponseDTO: Decodable {
     public let id, title, artist, remix,reaction: String
     public let date, start, end: Int
-    public let total:SingleSongResponseDTO.Total
+    public let total:SingleSongResponseDTO.Total?
     
     enum CodingKeys: String, CodingKey {
         case title, artist, remix,reaction,date,start,end,total

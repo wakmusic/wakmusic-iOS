@@ -7,10 +7,10 @@ import Foundation
 
 
 public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, RemoteSongsDataSource {
-    public func fetchSearchSong(type: SearchType, keyword: String) -> Single<[SongEntity]> {
-        request(.fetchSearchSong(type: type, keyword: keyword))
-            .map([SingleSongResponseDTO].self)
-            .map{$0.map{$0.toDomain()}}            
+    public func fetchSearchSong(keyword: String) -> Single<SearchResultEntity> {
+        request(.fetchSearchSong(keyword: keyword))
+            .map(SearchResultResponseDTO.self)
+            .map({$0.toDomain()})
     }
     
     public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {

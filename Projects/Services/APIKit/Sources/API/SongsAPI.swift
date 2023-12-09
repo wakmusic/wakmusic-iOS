@@ -4,7 +4,7 @@ import ErrorModule
 import Foundation
 
 public enum SongsAPI {
-    case fetchSearchSong(type: SearchType, keyword: String)
+    case fetchSearchSong(keyword: String)
     case fetchLyrics(id: String)
     case fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int)
 }
@@ -17,7 +17,7 @@ extension SongsAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchSearchSong:
-            return "/search"
+            return "/search/all"
         case .fetchLyrics(id: let id):
             return "/lyrics/\(id)"
         case let .fetchNewSongs(type, _, _):
@@ -31,9 +31,8 @@ extension SongsAPI: WMAPI {
     
     public var task: Moya.Task {
         switch self {
-        case let .fetchSearchSong(type,keyword):
+        case let .fetchSearchSong(keyword):
             return .requestParameters(parameters: [
-                "type": type.rawValue,
                 "sort": "popular", //기본 인기순으로
                 "keyword": keyword
             ], encoding: URLEncoding.queryString)
