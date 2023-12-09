@@ -11,5 +11,5 @@ import RxSwift
 import DataMappingModule
 
 public protocol FetchLikeNumOfSongUseCase {
-    func execute(id:String) -> Single<FavoriteSongEntity>
+    func execute(id:String) -> Single<LikeEntity>
 }

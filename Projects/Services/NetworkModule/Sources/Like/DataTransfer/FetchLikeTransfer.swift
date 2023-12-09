@@ -19,3 +19,9 @@ public extension LikeResponseDTO {
         )
     }
 }
+
+public extension FetchLikeResponseDTO {
+    func toDomain() -> LikeEntity {
+        LikeEntity(status: 200, likes: like)
+    }
+}

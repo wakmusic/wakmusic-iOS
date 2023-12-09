@@ -13,7 +13,7 @@ import ErrorModule
 import DomainModule
 
 public protocol RemoteLikeDataSource {
-    func fetchLikeNumOfSong(id:String) -> Single<FavoriteSongEntity>
+    func fetchLikeNumOfSong(id:String) -> Single<LikeEntity>
     func addLikeSong(id:String) -> Single<LikeEntity>
     func cancelLikeSong(id:String) -> Single<LikeEntity>
   

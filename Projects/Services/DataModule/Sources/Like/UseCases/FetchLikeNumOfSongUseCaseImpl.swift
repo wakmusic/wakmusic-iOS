@@ -24,7 +24,7 @@ public struct FetchLikeNumOfSongUseCaseImpl: FetchLikeNumOfSongUseCase {
         self.likeRepository = likeRepository
     }
     
-    public func execute(id: String) -> Single<FavoriteSongEntity> {
+    public func execute(id: String) -> Single<LikeEntity> {
         likeRepository.fetchLikeNumOfSong(id: id)
     }
 
