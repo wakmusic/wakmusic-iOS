@@ -24,14 +24,14 @@ public struct EditPlayListNameRequset:Encodable {
 
 public enum PlayListAPI {
     case fetchRecommendPlayList
-    case fetchPlayListDetail(id:String,type:PlayListType)
-    case createPlayList(title:String)
-    case editPlayList(key:String,songs:[String])
-    case editPlayListName(key:String,title:String)
-    case deletePlayList(key:String)
-    case removeSongs(key:String,songs:[String])
-    case loadPlayList(key:String)
-    case addSongIntoPlayList(key:String,songs:[String])
+    case fetchPlayListDetail(id: String, type: PlayListType)
+    case createPlayList(title: String)
+    case editPlayList(key: String, songs: [String])
+    case editPlayListName(key: String, title: String)
+    case deletePlayList(key: String)
+    case removeSongs(key: String, songs: [String])
+    case loadPlayList(key: String)
+    case addSongIntoPlayList(key: String, songs: [String])
 }
 
 extension PlayListAPI: WMAPI {
@@ -43,6 +43,7 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList:
             return "/recommended"
+            
         case .fetchPlayListDetail(id: let id, type: let type):
             switch type {
             case .custom:
@@ -50,31 +51,41 @@ extension PlayListAPI: WMAPI {
             case .wmRecommend:
                 return "/recommended/\(id)"
             }
+            
         case .createPlayList:
             return "/create"
+            
         case .deletePlayList(key: let key):
-            return "/\(key)/delete"
+            return "/\(key)"
+            
         case .loadPlayList(key: let key):
             return "/\(key)/addToMyPlaylist"
-        case .editPlayList(key: let key,_):
+            
+        case .editPlayList(key: let key, _):
             return "/\(key)/edit"
-        case .editPlayListName(key: let key,_):
-            return "/\(key)/edit/title"
-        case .addSongIntoPlayList(key: let key,_):
+            
+        case .editPlayListName(key: let key, _):
+            return "/\(key)"
+            
+        case .addSongIntoPlayList(key: let key, _):
             return "/\(key)/songs/add"
-        case .removeSongs(key: let key,_):
+            
+        case .removeSongs(key: let key, _):
             return "/\(key)/songs/remove"
         }
     }
         
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlayList,.fetchPlayListDetail:
+        case .fetchRecommendPlayList, .fetchPlayListDetail:
             return .get
-        case .createPlayList,.loadPlayList,.addSongIntoPlayList:
+            
+        case .createPlayList, .loadPlayList, .addSongIntoPlayList:
             return .post
-        case .editPlayList,.editPlayListName,.removeSongs:
+            
+        case .editPlayList, .editPlayListName, .removeSongs:
             return .patch
+            
         case .deletePlayList:
             return .delete
         }
@@ -85,13 +96,13 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList:
             return .requestPlain
             
-        case .fetchPlayListDetail,.deletePlayList,.loadPlayList:
+        case .fetchPlayListDetail, .deletePlayList, .loadPlayList:
             return .requestPlain
             
         case .createPlayList(title: let title):
             return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
             
-        case .editPlayList(_,songs: let songs):
+        case .editPlayList(_, songs: let songs):
             return .requestJSONEncodable(SongsKeyBody(songs: songs))
             
         case .editPlayListName(_, title: let title):
@@ -107,10 +118,10 @@ extension PlayListAPI: WMAPI {
             
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlayList,.fetchPlayListDetail:
+        case .fetchRecommendPlayList, .fetchPlayListDetail:
             return .none
             
-        case .createPlayList,.editPlayList,.deletePlayList,.loadPlayList,.editPlayListName,.addSongIntoPlayList,.removeSongs:
+        case .createPlayList, .editPlayList, .deletePlayList, .loadPlayList, .editPlayListName, .addSongIntoPlayList, .removeSongs:
             return .accessToken
         }
     }

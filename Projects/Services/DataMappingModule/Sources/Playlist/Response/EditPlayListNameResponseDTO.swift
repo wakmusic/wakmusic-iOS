@@ -8,8 +8,6 @@
 
 import Foundation
 
-
 public struct EditPlayListNameResponseDTO: Decodable {
-    public let title: String
     public let status: Int
 }

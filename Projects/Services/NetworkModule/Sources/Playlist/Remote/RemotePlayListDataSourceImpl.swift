@@ -32,9 +32,9 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
     }
     
     public func editPlayListName(key: String, title:String) -> Single<EditPlayListNameEntity> {
-        request(.editPlayListName(key: key,title:title))
+        request(.editPlayListName(key: key, title:title))
             .map(EditPlayListNameResponseDTO.self)
-            .map({$0.toDomain()})
+            .map({$0.toDomain(title: title)})
     }
     
     public func deletePlayList(key: String) -> Single<BaseEntity> {
