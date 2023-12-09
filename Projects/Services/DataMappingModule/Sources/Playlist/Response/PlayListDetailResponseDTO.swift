@@ -8,21 +8,18 @@
 
 import Foundation
 
-
 public struct SinglePlayListDetailResponseDTO: Decodable {
+    public let key: String?
     public let title: String
     public let songs: [SingleSongResponseDTO]?
-    public let `public`: Bool?
-    public let key: String?
-    public let image:SinglePlayListDetailResponseDTO.Image
-    
+    public let image: SinglePlayListDetailResponseDTO.Image
 }
 
 extension SinglePlayListDetailResponseDTO {
     public struct Image: Codable {
-        public let round:Int?
-        public let square:Int?
-        public let name:String?
-        public let version:Int?
+        public let round: Int?
+        public let square: Int?
+        public let name: String?
+        public let version: Int?
     }
 }

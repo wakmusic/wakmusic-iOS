@@ -82,9 +82,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                 guard let self = self else {return Observable.empty()}
                 return self.fetchPlayListDetailUseCase.execute(id: self.id, type: self.type)
                     .catchAndReturn(
-                        
-                        PlayListDetailEntity(title: "", songs: [], public: true, key: "", image: "", image_square_version: 0, image_round_version: 0, version: 0)
-  
+                        PlayListDetailEntity(key: "", title: "", songs: [], image: "", image_square_version: 0, image_round_version: 0, version: 0)
                     )
                     .asObservable()
                     .do(onNext: { [weak self] (model) in
