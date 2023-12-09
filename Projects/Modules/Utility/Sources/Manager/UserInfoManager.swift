@@ -22,10 +22,10 @@ public struct UserInfo: Codable, Equatable {
 
 public extension UserInfo {
     func update(displayName: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: self.profile, name: name,version: self.version)
+        return UserInfo(ID: self.ID, platform: self.platform, profile: self.profile, name: displayName, version: self.version)
     }
     
     func update(profile: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, name: self.name,version:self.version)
+        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, name: self.name, version:self.version)
     }
 }
