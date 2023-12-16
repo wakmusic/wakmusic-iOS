@@ -197,6 +197,6 @@ extension ArtistDetailHeaderViewController {
         introDescriptionLabel.lineBreakMode = .byWordWrapping
         introDescriptionLabel.setTextWithAttributes(kernValue: -0.5)
 
-        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
+        scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -3)
     }
 }

@@ -202,7 +202,7 @@ private extension PlaylistView {
     
     private func configurePlaylist() {
         playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        playlistTableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()

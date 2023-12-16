@@ -132,7 +132,7 @@ extension ChartContentViewController {
         self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIncidator.startAnimating()
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
+        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.tableView.refreshControl = refreshControl
     }
 }

@@ -13,7 +13,7 @@ import Utility
 extension LoginViewController {
     public func configureUI() {
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
-        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         configureOAuthLogin()
         configureService()
     }
