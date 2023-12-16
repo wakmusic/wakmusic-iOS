@@ -136,7 +136,7 @@ extension PlayListDetailViewController{
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.backgroundColor = .clear
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         
         self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.type = .circleStrokeSpin

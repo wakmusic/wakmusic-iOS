@@ -44,7 +44,7 @@ extension FaqContentViewController{
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
         warningView.text = "자주 묻는 질문이 없습니다."
         tableView.tableFooterView = viewModel.dataSource.isEmpty ? warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         tableView.reloadData()
     }
     
@@ -61,7 +61,7 @@ extension FaqContentViewController:UITableViewDataSource{
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var data = viewModel.dataSource[section]
+        let data = viewModel.dataSource[section]
         var count:Int = 0
         
         if data.isOpen {

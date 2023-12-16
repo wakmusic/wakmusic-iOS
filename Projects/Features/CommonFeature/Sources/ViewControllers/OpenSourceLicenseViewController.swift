@@ -114,6 +114,6 @@ extension OpenSourceLicenseViewController {
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
     }
 }
