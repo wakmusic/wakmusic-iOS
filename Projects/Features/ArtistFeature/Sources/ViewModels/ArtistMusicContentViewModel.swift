@@ -66,8 +66,9 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             }
             .asObservable()
             .do(onNext: { (model) in
-                canLoadMore.accept(!model.isEmpty)
-//                DEBUG_LOG("page: \(input.pageID.value) called, nextPage exist: \(!model.isEmpty)")
+                let loadMore: Bool = model.count < 30 ? false : true
+                canLoadMore.accept(loadMore)
+                //DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(loadMore)")
             }, onError: { _ in
                 canLoadMore.accept(false)
             })
