@@ -70,17 +70,19 @@ public final class NewSongsContentViewModel: ViewModelType {
         
         let type: NewSongGroupType = self.type
         let fetchNewSongsUseCase = self.fetchNewSongsUseCase
-
+        let limit: Int = 100
+        
         input.pageID
             .flatMap { (pageID) -> Single<[NewSongsEntity]> in
                 return fetchNewSongsUseCase
-                    .execute(type: type, page: pageID, limit: 100)
+                    .execute(type: type, page: pageID, limit: limit)
                     .catchAndReturn([])
             }
             .asObservable()
             .do(onNext: { (model) in
-                output.canLoadMore.accept(!model.isEmpty)
-//                DEBUG_LOG("page: \(input.pageID.value) called, nextPage exist: \(!model.isEmpty)")
+                let canLoadMore: Bool = model.count < limit ? false : true
+                output.canLoadMore.accept(canLoadMore)
+                //DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
             }, onError: { _ in
                 output.canLoadMore.accept(false)
             })
