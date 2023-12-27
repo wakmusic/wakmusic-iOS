@@ -2,7 +2,7 @@ name: Caching with Tuist Dependencies
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "*" ]
 
@@ -33,13 +33,13 @@ jobs:
           # key에 저장  , 존재 유무를 steps.[step_id].outputs.cache-hit 으로  true or false로 던져줌
 
       - name: Install tuist
-       # if: steps.cache_dependencies.outputs.cache-hit != 'true'  
+        if: steps.cache_dependencies.outputs.cache-hit != 'true'  
         run: curl -Ls https://install.tuist.io | bash
 
         #if는 해당 값이 true면 이 동작을 실행하고 false이면 실핼하지 않는다.
 
       - name: Install dependencies
-       # if: steps.cache_dependencies.outputs.cache-hit != 'true'
+        if: steps.cache_dependencies.outputs.cache-hit != 'true'
         run: tuist fetch
 
     outputs:
