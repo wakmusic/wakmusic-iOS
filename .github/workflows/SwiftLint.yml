@@ -1,11 +1,6 @@
 name: SwiftLint
 
 on:
-  push:
-    paths:
-      - ".github/workflows/SwiftLint.yml"
-      - ".swiftlint.yml"
-      - "**/*.swift"
   pull_request:
     paths:
       - ".github/workflows/SwiftLint.yml"
@@ -15,7 +10,22 @@ on:
 jobs:
   swiftlint:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
+
       - name: GitHub Action for SwiftLint
         uses: norio-nomura/action-swiftlint@3.2.1
+
+      - name: Comment success result to PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ success() }}
+        with:
+          message: "## ✅ Successful finished SwiftLint"
+
+      - name: Comment failure result ot PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ failure() }}
+        with:
+          message: "## ❌ Error detected on SwiftLint"
