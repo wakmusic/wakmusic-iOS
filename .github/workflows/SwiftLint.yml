@@ -1,31 +1,31 @@
 name: SwiftLint
 
 on:
-  push:
-    paths:
-      - '.github/workflows/SwiftLint.yml'
-      - '.swiftlint.yml'
-      - '**/*.swift'
   pull_request:
     paths:
-      - '.github/workflows/SwiftLint.yml'
-      - '.swiftlint.yml'
-      - '**/*.swift'
+      - ".github/workflows/SwiftLint.yml"
+      - ".swiftlint.yml"
+      - "**/*.swift"
 
 jobs:
-  SwiftLint:
+  swiftlint:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
+
       - name: GitHub Action for SwiftLint
         uses: norio-nomura/action-swiftlint@3.2.1
-      - name: GitHub Action for SwiftLint with --strict
-        uses: norio-nomura/action-swiftlint@3.2.1
+
+      - name: Comment success result to PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ success() }}
         with:
-          args: --strict
-      - name: GitHub Action for SwiftLint (Only files changed in the PR)
-        uses: norio-nomura/action-swiftlint@3.2.1
-        env:
-          DIFF_BASE: ${{ github.base_ref }}
-      - name: GitHub Action for SwiftLint (Different working directory)
-        uses: norio-nomura/action-swiftlint@3.2.1
+          message: "## ✅ Successful finished SwiftLint"
+
+      - name: Comment failure result ot PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ failure() }}
+        with:
+          message: "## ❌ Error detected on SwiftLint"
