@@ -6,8 +6,8 @@ let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .framework,
     dependencies: [
-        .XCFramework.Realm,
-        .XCFramework.RealmSwift,
+        .Carthage.Realm,
+        .Carthage.RealmSwift,
         .SPM.NaverLogin,
         .SPM.RxSwift,
         .SPM.RxMoya,

@@ -4,6 +4,6 @@ import ProjectDescriptionHelpers
 let project = Project.makeModule(
     name: "DesignSystem",
     product: .framework,
-    dependencies: [],
+    dependencies: [.SPM.MarqueeLabel],
     resources: ["Resources/**"]
 )
