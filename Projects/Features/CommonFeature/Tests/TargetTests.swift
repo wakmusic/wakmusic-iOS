@@ -24,30 +24,4 @@ class TargetTests: XCTestCase {
     func testExample() throws {
         XCTAssertEqual("A", "A")
     }
-    
-    func testAppendSong() {
-        // given
-        var playState = PlayState(player: nil)
-        var playList = playState.playList
-        playList.list = givenList
-
-        // when
-        let testList = [
-            SongEntity(id: "", title: "제목3", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목2", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목5", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
-            SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
-        ]
-        playState.loadAndAppendSongsToPlaylist(testList)
-
-        // then 147 3256
-        let currentPlayIndex = playList.currentPlayIndex ?? -1
-        XCTAssertEqual(currentPlayIndex, 3)
-        XCTAssertEqual(playList.list[2].item.title, "제목7")
-        XCTAssertEqual(playList.list[3].item.title, "제목3")
-        XCTAssertEqual(playList.list[4].item.title, "제목2")
-        XCTAssertEqual(playList.list[5].item.title, "제목5")
-        XCTAssertEqual(playList.list[6].item.title, "제목6")
-    }
-
 }

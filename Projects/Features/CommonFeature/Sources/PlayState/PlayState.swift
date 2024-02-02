@@ -85,7 +85,7 @@ final public class PlayState {
             guard let self else { return }
             self.currentSong = song
             if let index = self.playList.currentPlayIndex {
-                loadInPlaylist(at: index)
+                self.loadInPlaylist(at: index)
             }
         }.store(in: &subscription)
     }
