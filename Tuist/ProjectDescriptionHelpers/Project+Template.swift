@@ -1,6 +1,7 @@
 import ProjectDescription
 import DependencyPlugin
 import Foundation
+import EnvironmentPlugin
 
 public extension Project {
     static func makeModule(
@@ -34,9 +35,9 @@ public extension Project {
         name: String,
         platform: Platform,
         product: Product,
-        organizationName: String = Environment.organizationName,
+        organizationName: String = env.organizationName,
         packages: [Package] = [],
-        deploymentTarget: DeploymentTarget? = Environment.deploymentTarget,
+        deploymentTarget: DeploymentTarget? = env.deploymentTarget,
         dependencies: [TargetDependency] = [],
         sources: SourceFilesList,
         resources: ResourceFileElements? = nil,
@@ -47,7 +48,7 @@ public extension Project {
         let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
         let scripts: [TargetScript] = isForDev ? [.swiftLint] : [.firebaseCrashlytics]
         let settings: Settings = .settings(
-            base: Environment.baseSetting,
+            base: env.baseSetting,
             configurations: [
                 .debug(name: .debug),
                 .release(name: .release)
@@ -72,7 +73,7 @@ public extension Project {
             platform: platform,
             product: .app,
             bundleId: "\(organizationName).\(name)DemoApp",
-            deploymentTarget: Environment.deploymentTarget,
+            deploymentTarget: env.deploymentTarget,
             infoPlist: .extendingDefault(with: [
                 "UIMainStoryboardFile": "",
                 "UILaunchStoryboardName": "LaunchScreen",
