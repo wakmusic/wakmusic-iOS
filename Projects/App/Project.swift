@@ -1,6 +1,5 @@
 import ProjectDescriptionHelpers
 import ProjectDescription
-import UtilityPlugin
 import Foundation
 
 let settinges: Settings =

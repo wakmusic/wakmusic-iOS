@@ -1,5 +1,5 @@
 import ProjectDescription
-import UtilityPlugin
+import DependencyPlugin
 import Foundation
 
 public extension Project {
