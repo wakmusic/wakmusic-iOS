@@ -1,10 +1,3 @@
-//
-//  ProjectEnvironment.swift
-//  UtilityPlugin
-//
-//  Created by yongbeomkwak on 2/17/24.
-//
-
 import Foundation
 import ProjectDescription
 
