@@ -9,7 +9,12 @@ public extension Project {
         name: String,
         options: Options = .options(),
         packages: [Package] = [],
-        settings: Settings = .settings(configurations: [.debug(name: ConfigurationName.debug)]),
+        settings: Settings = .settings(
+            base: env.baseSetting,
+            configurations: [
+                .debug(name: .debug),
+                .release(name: .release)
+            ], defaultSettings: .recommended),
         targets: [Target],
         fileHeaderTemplate: FileHeaderTemplate? = nil,
         additionalFiles: [FileElement] = [],
@@ -22,13 +27,14 @@ public extension Project {
             packages: packages,
             settings: settings,
             targets: targets,
-            schemes: targets.contains { $0.product == .app } ?
-            [.makeScheme(target: ConfigurationName.debug, name: name), .makeDemoScheme(target: ConfigurationName.debug, name: name)] :
-                [.makeScheme(target: ConfigurationName.debug, name: name)],
+            schemes: targets.contains { $0.product == .app } ? [.makeScheme(target: .debug, name: name)] : [.makeScheme(target: .debug, name: name)] , //TODO: 백튼님 여기 스킴 한번 검토 좀 
             fileHeaderTemplate: fileHeaderTemplate,
             additionalFiles: additionalFiles,
             resourceSynthesizers: resourceSynthesizers
         )
+        
+        
+        
     }
     
     @available(*, deprecated)
