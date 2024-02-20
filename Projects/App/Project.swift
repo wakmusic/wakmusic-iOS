@@ -18,6 +18,7 @@ let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrash
 
 
 let targets: [Target] = [
+    
     .init(
         name: env.name,
         platform: .iOS,
