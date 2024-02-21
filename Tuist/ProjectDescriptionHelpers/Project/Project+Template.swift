@@ -32,9 +32,6 @@ public extension Project {
             additionalFiles: additionalFiles,
             resourceSynthesizers: resourceSynthesizers
         )
-        
-        
-        
     }
     
     @available(*, deprecated)

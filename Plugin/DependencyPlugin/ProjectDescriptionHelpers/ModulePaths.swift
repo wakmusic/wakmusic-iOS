@@ -26,7 +26,6 @@ extension ModulePaths: MicroTargetPathConvertable {
     }
 }
 
-
 public extension ModulePaths {
     enum Feature: String, MicroTargetPathConvertable {
         case BaseFeature
@@ -69,7 +68,6 @@ public extension ModulePaths {
         case DesignSystem
     }
 }
-
 
 public enum MicroTargetType: String {
     case interface = "Interface"

@@ -29,7 +29,6 @@ public extension TargetDependency {
             )
         }
 
-
         static func module(
             target: ModulePaths.Module,
             type: MicroTargetType = .sources
