@@ -70,7 +70,6 @@ public extension ModulePaths {
     }
 }
 
-
 public enum MicroTargetType: String {
     case interface = "Interface"
     case sources = ""
