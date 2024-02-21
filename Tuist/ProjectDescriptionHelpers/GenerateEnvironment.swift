@@ -13,7 +13,11 @@ public let generateEnvironment = GenerateEnvironment(rawValue: environment) ?? .
 public extension GenerateEnvironment {
     var scripts: [TargetScript] {
         switch self {
-        case .ci, .cd:
+            
+        case .ci:
+            return []
+            
+        case .cd:
             return [.firebaseCrashlytics]
 
         case .dev:
