@@ -1,11 +1,15 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
-let project = Project.makeModule(
-    name: "StorageFeature",
-    product: .staticFramework,
-    dependencies: [
-        .Project.Features.SignInFeature
-    ]
-    , resources: ["Resources/**"]
-)
+let project = Project.module(name: ModulePaths.Feature.StorageFeature.rawValue, targets: [
+
+    .implements(
+        module: .feature(.StorageFeature),
+        product: .staticFramework,
+        spec: .init(resources: ["Resources/**"],
+                    dependencies: [.feature(target: .SignInFeature)]))
+    
+])
+
+

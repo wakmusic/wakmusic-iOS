@@ -4,6 +4,42 @@ import Foundation
 import EnvironmentPlugin
 
 public extension Project {
+    
+    static func module(
+        name: String,
+        options: Options = .options(),
+        packages: [Package] = [],
+        settings: Settings = .settings(
+            base: env.baseSetting,
+            configurations: [
+                .debug(name: .debug),
+                .release(name: .release)
+            ], defaultSettings: .recommended),
+        targets: [Target],
+        fileHeaderTemplate: FileHeaderTemplate? = nil,
+        additionalFiles: [FileElement] = [],
+        resourceSynthesizers: [ResourceSynthesizer] = .default
+    ) -> Project {
+        
+        #warning("백튼님 여기 데모(Example) 앱 도입할 때 , schemes 쪽 건드려야할 듯??")
+        
+        return Project(
+            name: name,
+            organizationName: env.organizationName,
+            options: options,
+            packages: packages,
+            settings: settings,
+            targets: targets,
+            schemes: targets.contains { $0.product == .app } ? [.makeScheme(target: .debug, name: name)] : [.makeScheme(target: .debug, name: name)] ,
+            fileHeaderTemplate: fileHeaderTemplate,
+            additionalFiles: additionalFiles,
+            resourceSynthesizers: resourceSynthesizers
+            
+            
+        )
+    }
+    
+    @available(*, deprecated)
     static func makeModule(
         name: String,
         platform: Platform = .iOS,
@@ -31,6 +67,7 @@ public extension Project {
 }
 
 public extension Project {
+    @available(*, deprecated)
     static func project(
         name: String,
         platform: Platform,
@@ -45,7 +82,7 @@ public extension Project {
         infoPlist: InfoPlist,
         hasDemoApp: Bool = false
     ) -> Project {
-        let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
+        let isForDev = (ProcessInfo.processInfo.environment["TUIST_ENV"] ?? "DEV") == "DEV" ? true : false
         let scripts: [TargetScript] = isForDev ? [.swiftLint] : [.firebaseCrashlytics]
         let settings: Settings = .settings(
             base: env.baseSetting,
