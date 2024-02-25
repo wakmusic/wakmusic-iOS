@@ -118,7 +118,7 @@ func registerToConfig(_ plugin: String) {
 
 // ✅ Entry Point
 
-print("Enter plugin Name ,⚠️  Do not include Plugin\nex) input: Dependency")
+print("Enter plugin Name\n⚠️  Do not include Plugin\nex) input: Dependency")
 let plugin = readLine()!
 
 generatePlugin(plugin)
