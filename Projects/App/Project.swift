@@ -1,72 +1,73 @@
 import ProjectDescriptionHelpers
 import ProjectDescription
-import UtilityPlugin
+import EnvironmentPlugin
 import Foundation
 
 let settinges: Settings =
-    .settings(base: Environment.baseSetting,
+    .settings(base: env.baseSetting,
               configurations: [
                 .debug(name: .debug),
                 .release(name: .release)
               ],
               defaultSettings: .recommended)
 
-let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
+
+let isForDev = (ProcessInfo.processInfo.environment["TUIST_ENV"] ?? "DEV") == "DEV" ? true : false
 
 let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrashlytics]
 
+
 let targets: [Target] = [
+    
     .init(
-        name: Environment.targetName,
+        name: env.name,
         platform: .iOS,
         product: .app,
-        productName: Environment.appName,
-        bundleId: "\(Environment.organizationName).\(Environment.beforeName)",
-        deploymentTarget: Environment.deploymentTarget,
+        productName: env.name,
+        bundleId: "\(env.organizationName).\(env.previousName)",
+        deploymentTarget: env.deploymentTarget,
         infoPlist: .file(path: "Support/Info.plist"),
         sources: ["Sources/**"],
         resources: ["Resources/**"],
-        entitlements: "Support/\(Environment.appName).entitlements",
+        entitlements: "Support/\(env.name).entitlements",
         scripts: scripts,
         dependencies: [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-          //  .SPM.Amplify,
-          //  .SPM.AWSCognitoAuthPlugin,
-          //  .SPM.AWSS3StoragePlugin,
         ],
-        settings: .settings(base: Environment.baseSetting,
+        settings: .settings(base: env.baseSetting,
                             configurations: [
                               .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
                               .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
                             ])
     ),
+    
     .init(
-        name: Environment.targetTestName,
+        name: "\(env.name)Tests",
         platform: .iOS,
         product: .unitTests,
-        bundleId: "\(Environment.organizationName).\(Environment.beforeName)Tests",
-        deploymentTarget: Environment.deploymentTarget,
+        bundleId: "\(env.organizationName).\(env.previousName)Tests",
+        deploymentTarget: env.deploymentTarget,
         infoPlist: .default,
         sources: ["Tests/**"],
         dependencies: [
-            .target(name: Environment.targetName)
+            .target(name: env.name)
         ]
     )
 ]
 
 let schemes: [Scheme] = [
     .init(
-      name: "\(Environment.targetName)-DEBUG",
+      name: "\(env.name)Tests-DEBUG",
       shared: true,
-      buildAction: .buildAction(targets: ["\(Environment.targetName)"]),
+      buildAction: .buildAction(targets: ["\(env.name)"]),
       testAction: TestAction.targets(
-          ["\(Environment.targetTestName)"],
+          ["\(env.name)"],
           configuration: .debug,
           options: TestActionOptions.options(
               coverage: true,
-              codeCoverageTargets: ["\(Environment.targetName)"]
+              codeCoverageTargets: ["\(env.name)"]
           )
       ),
       runAction: .runAction(configuration: .debug),
@@ -75,9 +76,9 @@ let schemes: [Scheme] = [
       analyzeAction: .analyzeAction(configuration: .debug)
     ),
     .init(
-      name: "\(Environment.targetName)-RELEASE",
+      name: "\(env.name)-RELEASE",
       shared: true,
-      buildAction: BuildAction(targets: ["\(Environment.targetName)"]),
+      buildAction: BuildAction(targets: ["\(env.name)"]),
       testAction: nil,
       runAction: .runAction(configuration: .release),
       archiveAction: .archiveAction(configuration: .release),
@@ -88,8 +89,8 @@ let schemes: [Scheme] = [
 
 let project: Project =
     .init(
-        name: Environment.targetName,
-        organizationName: Environment.organizationName,
+        name: env.name,
+        organizationName: env.organizationName,
         packages: [],
         //packages: [.Amplify],
         settings: settinges,
