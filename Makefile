@@ -15,6 +15,7 @@ reset:
 	rm -rf *.xcworkspace
 
 feature:
+	echo "\033[0;31m이 명령어는 deprecated 되었습니다. 'make module'을 사용해주세요! \033[0m"
 	python3 Scripts/generate_new_feature.py
 
 pg:
