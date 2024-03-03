@@ -1,44 +1,53 @@
-import Moya
-import DataMappingModule
-import ErrorModule
+//
+//  AppAPI.swift
+//  AppDomain
+//
+//  Created by KTH on 2024/03/04.
+//  Copyright © 2024 yongbeomkwak. All rights reserved.
+//
+
 import Foundation
+import Moya
+import BaseDomain
+import ErrorModule
 
 public enum AppAPI {
-    case checkVersion
+    case fetchAppCheck
 }
 
 extension AppAPI: WMAPI {
     public var domain: WMDomain {
-        .app
+        return WMDomain.app
     }
 
     public var urlPath: String {
         switch self {
-        case .checkVersion:
+        case .fetchAppCheck:
             return "/check"
         }
     }
-        
+
     public var method: Moya.Method {
         return .get
     }
-    
+
     public var task: Moya.Task {
         switch self {
-            
-        case .checkVersion:
-            return .requestParameters(parameters: [
-                "os": "ios",
-                "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-            ], encoding: URLEncoding.queryString)
-            
+        case .fetchAppCheck:
+            return .requestParameters(
+                parameters: [
+                    "os": "ios",
+                    "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+                ],
+                encoding: URLEncoding.queryString
+            )
         }
     }
-    
+
     public var jwtTokenType: JwtTokenType {
         return .none
     }
-    
+
     public var errorMap: [Int: WMError] {
         switch self {
         default:

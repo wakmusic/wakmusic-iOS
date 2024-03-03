@@ -12,10 +12,11 @@ public struct BaseResponseDTO: Codable {
     public let status: Int
 }
 
-public extension BaseResponseDTO {
-    func toDomain() -> BaseEntity {
-        BaseEntity(
-            status: status
-        )
-    }
-}
+#warning("어떤 문제인지 기존 모듈과 충돌함")
+/*
+ public extension BaseResponseDTO {
+ func toDomain() -> BaseEntity {
+ return BaseEntity(status: status)
+ }
+ }
+ */

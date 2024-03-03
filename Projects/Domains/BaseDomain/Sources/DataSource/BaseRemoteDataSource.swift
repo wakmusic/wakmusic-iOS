@@ -12,7 +12,7 @@ import Moya
 import RxMoya
 import RxSwift
 
-public class BaseRemoteDataSource<API: WMAPI> {
+open class BaseRemoteDataSource<API: WMAPI> {
     private let keychain: any Keychain
     private let provider: MoyaProvider<API>
     private let decoder = JSONDecoder()

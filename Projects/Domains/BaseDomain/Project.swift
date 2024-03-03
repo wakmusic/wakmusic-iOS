@@ -12,7 +12,9 @@ let project = Project.module(
                 dependencies: [.Project.Module.Utility,
                                .Project.Module.ErrorModule,
                                .Project.Module.KeychainModule,
-                               .Project.Module.ThirdPartyLib]
+                               .Project.Module.ThirdPartyLib,
+                               .domain(target: .BaseDomain, type: .interface)
+                ]
             )
         ),
         .interface(module: .domain(.BaseDomain)),
