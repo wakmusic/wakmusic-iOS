@@ -73,13 +73,12 @@ public struct TargetSpec: Configurable {
     }
 
     func toTarget(with name: String, product: Product? = nil) -> Target {
-        
         Target(
             name: name,
             destinations:destinations ,
             product: product ?? self.product,
             productName: productName,
-            bundleId: "\(env.organizationName).\(env.previousName)",
+            bundleId: "\(env.organizationName).\(name)",
             deploymentTargets: deploymentTargets,
             infoPlist: infoPlist,
             sources: sources,
