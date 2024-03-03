@@ -8,17 +8,15 @@ let project = Project.module(
         .implements(
             module: .domain(.AppDomain),
             product: .staticFramework,
-            spec: .init(
-                dependencies: [
-                    TargetDependency.domain(target: .BaseDomain),
-                    TargetDependency.domain(target: .AppDomain, type: .interface)
-                ]
-            )
+            dependencies: [
+                TargetDependency.domain(target: .BaseDomain),
+                TargetDependency.domain(target: .AppDomain, type: .interface)
+            ]
         ),
         .interface(module: .domain(.AppDomain)),
         .tests(
             module: .domain(.AppDomain),
-            dependencies: [.domain(target: .AppDomain, type: .interface)]
+            dependencies: [.domain(target: .AppDomain)]
         )
     ]
 )
