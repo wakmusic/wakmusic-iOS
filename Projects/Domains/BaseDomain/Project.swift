@@ -12,7 +12,6 @@ let project = Project.module(
                 .Project.Module.Utility,
                 .Project.Module.ErrorModule,
                 .Project.Module.KeychainModule,
-                .Project.Module.ThirdPartyLib,
                 TargetDependency.domain(target: .BaseDomain, type: .interface)
             ]
         ),
