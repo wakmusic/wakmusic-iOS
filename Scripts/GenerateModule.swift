@@ -9,6 +9,8 @@ signal(SIGINT, handleSIGINT)
 
 enum LayerType: String {
     case feature = "Feature"
+    case domain = "Domain"
+    @available(*, deprecated, message: "Service 레이어는 미래에 지워집니다. Service 레이어의 내용은 Domain 레이어로 이전될 예정입니다.")
     case service = "Service"
     case module = "Module"
     case userInterface = "UserInterface"
@@ -165,7 +167,7 @@ func updateFileContent(
 
 // MARK: - Starting point
 
-print("Enter layer name\n(Feature | Service | Module | UserInterface)", terminator: " : ")
+print("Enter layer name\n(Feature | Domain | Service | Module | UserInterface)", terminator: " : ")
 let layerInput = readLine()
 guard
     let layerInput,
