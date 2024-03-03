@@ -12,6 +12,7 @@ public enum ModulePaths {
     case service(Service)
     case module(Module)
     case userInterface(UserInterface)
+    case domain(Domain)
 }
 
 extension ModulePaths: MicroTargetPathConvertable {
@@ -20,7 +21,8 @@ extension ModulePaths: MicroTargetPathConvertable {
         case let .feature(module as any MicroTargetPathConvertable),
             let .module(module as any MicroTargetPathConvertable),
             let .service(module as any MicroTargetPathConvertable),
-            let .userInterface(module as any MicroTargetPathConvertable):
+            let .userInterface(module as any MicroTargetPathConvertable),
+            let .domain(module as any MicroTargetPathConvertable):
             return module.targetName(type: type)
         }
     }
@@ -39,6 +41,13 @@ public extension ModulePaths {
         case SearchFeature
         case SignInFeature
         case StorageFeature
+    }
+}
+
+public extension ModulePaths {
+    enum Domain: String, MicroTargetPathConvertable {
+        case BaseDomain
+        case AppDomain
     }
 }
 

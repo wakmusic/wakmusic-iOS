@@ -35,12 +35,15 @@ let targets: [Target] = [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
+            TargetDependency.domain(target: .BaseDomain)
         ],
-        settings: .settings(base: env.baseSetting,
-                            configurations: [
-                              .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
-                              .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
-                            ])
+        settings: .settings(
+            base: env.baseSetting,
+            configurations: [
+                .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
+                .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
+            ]
+        )
     ),
     
     .init(
