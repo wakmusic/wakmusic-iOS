@@ -19,3 +19,6 @@ feature:
 
 pg:
 	swift Scripts/GeneratePlugin.swift
+
+module:
+	swift Scripts/GenerateModule.swift
