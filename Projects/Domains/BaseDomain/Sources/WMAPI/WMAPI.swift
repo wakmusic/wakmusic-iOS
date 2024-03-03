@@ -22,7 +22,7 @@ public extension WMAPI {
     var baseURL: URL {
         URL(string: BASE_URL())!
     }
-    
+
     var path: String {
         domain.asURLString + urlPath
     }

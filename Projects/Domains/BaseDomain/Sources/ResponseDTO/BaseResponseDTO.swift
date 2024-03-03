@@ -11,3 +11,11 @@ import Foundation
 public struct BaseResponseDTO: Codable {
     public let status: Int
 }
+
+public extension BaseResponseDTO {
+    func toDomain() -> BaseEntity {
+        BaseEntity(
+            status: status
+        )
+    }
+}

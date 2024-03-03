@@ -15,7 +15,7 @@ public func config(key: String) -> String {
     return secrets[key] as? String ?? "not found key"
 }
 
-//MARK: - BASE_URL
+// MARK: - BASE_URL
 public func BASE_URL() -> String {
     #if DEBUG
     return config(key: "BASE_DEV_URL")
@@ -24,12 +24,12 @@ public func BASE_URL() -> String {
     #endif
 }
 
-//MARK: - WAKENTER_BASE_URL
+// MARK: - WAKENTER_BASE_URL
 public func WAKENTER_BASE_URL() -> String {
     return config(key: "WAKENTER_BASE_URL")
 }
 
-//MARK: - WMDomain
+// MARK: - WMDomain
 public func WMDOMAIN_AUTH() -> String {
     return config(key: "WMDOMAIN_AUTH")
 }
