@@ -9,7 +9,7 @@
 import Foundation
 import AppDomainInterface
 
-public struct FetchAppCheckResponseDTO: Codable {
+public struct FetchAppCheckResponseDTO: Decodable {
     public let flag: AppCheckFlagType
     public let title, description, version: String?
     public let specialLogo: Bool?

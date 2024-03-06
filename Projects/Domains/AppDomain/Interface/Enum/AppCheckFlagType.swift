@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum AppCheckFlagType: Int, Codable {
+public enum AppCheckFlagType: Int, Decodable {
     case normal = 1
     case event
     case update
