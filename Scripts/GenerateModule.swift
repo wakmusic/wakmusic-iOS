@@ -167,41 +167,41 @@ func updateFileContent(
 
 // MARK: - Starting point
 
-print("Enter layer name\n(Feature | Domain | Service | Module | UserInterface)", terminator: " : ")
+print("레이어 이름을 입력해주세요!\n(Feature | Domain | Service | Module | UserInterface)", terminator: " : ")
 let layerInput = readLine()
 guard
     let layerInput,
     !layerInput.isEmpty,
     let layerUnwrapping = LayerType(rawValue: layerInput)
 else {
-    print("Layer is empty or invalid")
+    print("입력이 비었거나 잘못되었어요!")
     exit(1)
 }
 let layer = layerUnwrapping
 print("Layer: \(layer.rawValue)\n")
 
-print("Enter module name", terminator: " : ")
+print("모듈 이름을 입력해주세요!", terminator: " : ")
 let moduleInput = readLine()
 guard let moduleNameUnwrapping = moduleInput, !moduleNameUnwrapping.isEmpty else {
-    print("Module name is empty")
+    print("모듈 이름이 비었어요!")
     exit(1)
 }
 var moduleName = moduleNameUnwrapping
-print("Module name: \(moduleName)\n")
+print("모듈 이름: \(moduleName)\n")
 
-print("This module has a 'Interface' Target? (y\\n, default = n)", terminator: " : ")
+print("'Interface' Target을 포함하나요? (y\\n, default = n)", terminator: " : ")
 let hasInterface = readLine()?.lowercased() == "y"
 
-print("This module has a 'Testing' Target? (y\\n, default = n)", terminator: " : ")
+print("'Testing' Target을 포함하나요? (y\\n, default = n)", terminator: " : ")
 let hasTesting = readLine()?.lowercased() == "y"
 
-print("This module has a 'UnitTests' Target? (y\\n, default = n)", terminator: " : ")
+print("'UnitTests' Target을 포함하나요? (y\\n, default = n)", terminator: " : ")
 let hasUnitTests = readLine()?.lowercased() == "y"
 
-print("This module has a 'UITests' Target? (y\\n, default = n)", terminator: " : ")
+print("'UITests' Target을 포함하나요? (y\\n, default = n)", terminator: " : ")
 let hasUITests = readLine()?.lowercased() == "y"
 
-print("This module has a 'Demo' Target? (y\\n, default = n)", terminator: " : ")
+print("'Demo' Target을 포함하나요? (y\\n, default = n)", terminator: " : ")
 let hasDemo = readLine()?.lowercased() == "y"
 
 print("")
@@ -210,11 +210,11 @@ registerModuleDependency()
 
 print("")
 print("------------------------------------------------------------------------------------------------------------------------")
-print("Layer: \(layer.rawValue)")
-print("Module name: \(moduleName)")
+print("레이어: \(layer.rawValue)")
+print("모듈 이름: \(moduleName)")
 print("interface: \(hasInterface), testing: \(hasTesting), unitTests: \(hasUnitTests), uiTests: \(hasUITests), demo: \(hasDemo)")
 print("------------------------------------------------------------------------------------------------------------------------")
-print("✅ Module is created successfully!")
+print("✅ 모듈을 성공적으로 생성했어요!")
 
 // MARK: - Bash
 protocol CommandExecuting {
