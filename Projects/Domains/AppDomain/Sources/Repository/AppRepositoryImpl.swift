@@ -10,7 +10,7 @@ import Foundation
 import AppDomainInterface
 import RxSwift
 
-public struct AppRepositoryImpl: AppRepository {
+public final class AppRepositoryImpl: AppRepository {
     private let remoteAppDataSource: any RemoteAppDataSource
 
     public init(
