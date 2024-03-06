@@ -12,8 +12,8 @@ import NetworkModule
 import AppDomain
 import AppDomainInterface
 
-//MARK: 변수명 주의
-// AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
+// MARK: 변수명 주의
+// AppComponent 내 변수 == Dependency 내 변수 이름 같아야함
 
 public extension AppComponent {
     var remoteAppDataSource: any RemoteAppDataSource {
@@ -26,7 +26,7 @@ public extension AppComponent {
             AppRepositoryImpl(remoteAppDataSource: remoteAppDataSource)
         }
     }
-    var fetchAppCheckUseCase: any FetchAppCheckUseCase{
+    var fetchAppCheckUseCase: any FetchAppCheckUseCase {
         shared {
             FetchAppCheckUseCaseImpl(appRepository: appRepository)
         }
