@@ -48,6 +48,15 @@ public extension ModulePaths {
     enum Domain: String, MicroTargetPathConvertable {
         case BaseDomain
         case AppDomain
+        case ArtistDomain
+        case AuthDomain
+        case ChartDomain
+        case FaqDomain
+        case LikeDomain
+        case NoticeDomain
+        case PlayListDomain
+        case SongsDomain
+        case UserDomain
     }
 }
 
