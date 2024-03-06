@@ -15,7 +15,7 @@ public struct AppCheckEntity: Equatable {
         description: String,
         version: String,
         specialLogo: Bool
-    ){
+    ) {
         self.flag = flag
         self.title = title
         self.description = description

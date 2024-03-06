@@ -15,6 +15,6 @@ public final class RemoteAppDataSourceImpl: BaseRemoteDataSource<AppAPI>, Remote
     public func fetchAppCheck() -> Single<AppCheckEntity> {
         request(.fetchAppCheck)
             .map(FetchAppCheckResponseDTO.self)
-            .map({$0.toDomain()})
+            .map { $0.toDomain() }
     }
 }
