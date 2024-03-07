@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer+Error
 
 public extension YouTubePlayer {
-    
     /// The YouTubePlayer Error
     enum Error: Swift.Error {
         /// Player setup failed with Error
@@ -25,13 +24,11 @@ public extension YouTubePlayer {
         /// The owner of the requested video does not allow it to be played in embedded players.
         case embeddedVideoPlayingNotAllowed
     }
-    
 }
 
 // MARK: - Error+init(errorCode:)
 
 extension YouTubePlayer.Error {
-    
     /// The ErrorCodes Dictionary
     private static let errorCodes: [Int: Self] = [
         2: .invalidSource,
@@ -40,7 +37,7 @@ extension YouTubePlayer.Error {
         101: .embeddedVideoPlayingNotAllowed,
         150: .embeddedVideoPlayingNotAllowed
     ]
-    
+
     /// Creates a new instance of `YouTubePlayer.Error` from a given error code
     /// - Parameters:
     ///   - errorCode: The error code integer value
@@ -55,5 +52,4 @@ extension YouTubePlayer.Error {
         // Initialize
         self = error
     }
-    
 }

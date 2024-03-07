@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol NoticeDependency: Dependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {get}
-    var noticeDetailComponent : NoticeDetailComponent {get}
+    var fetchNoticeUseCase: any FetchNoticeUseCase { get }
+    var noticeDetailComponent: NoticeDetailComponent { get }
 }
 
 public final class NoticeComponent: Component<NoticeDependency> {
-    public func makeView() -> NoticeViewController  {
+    public func makeView() -> NoticeViewController {
         return NoticeViewController.viewController(
             viewModel: .init(
                 fetchNoticeUseCase: dependency.fetchNoticeUseCase

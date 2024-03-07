@@ -24,14 +24,14 @@ public struct ChartRankingEntity: Equatable {
         self.date = date
         self.isSelected = isSelected
     }
-    
+
     public let id, title, artist, remix: String
     public let reaction: String
     public let views, last, increase: Int
     public let date: String
-    public var isSelected:Bool
-    
-    public static func == (lhs: ChartRankingEntity, rhs:  ChartRankingEntity) -> Bool {
+    public var isSelected: Bool
+
+    public static func == (lhs: ChartRankingEntity, rhs: ChartRankingEntity) -> Bool {
         lhs.id == rhs.id
     }
 }

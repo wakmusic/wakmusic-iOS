@@ -13,28 +13,28 @@ public class GlassmorphismView: UIView {
     // MARK: - Properties
     private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let backgroundView = UIView()
-    public override var backgroundColor: UIColor? {
+    override public var backgroundColor: UIColor? {
         get {
             return .clear
         }
         set {}
     }
-    
+
     // MARK: - init/deinit
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initialize()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.initialize()
     }
-    
-    public override func awakeFromNib() {
+
+    override public func awakeFromNib() {
         super.awakeFromNib()
     }
-    
+
     // MARK: - Public Method
     /// Customizes theme by changing base view's background color.
     /// .light and .dark is available.
@@ -50,14 +50,14 @@ public class GlassmorphismView: UIView {
             self.blurView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
         }
     }
-    
+
     /// Changes cornerRadius of the view.
     /// Default value is 20
     public func setCornerRadius(_ value: CGFloat) {
         self.backgroundView.layer.cornerRadius = value
         self.blurView.layer.cornerRadius = value
     }
-    
+
     /// Change distance of the view.
     /// Value can be set between 0 ~ 100 (default: 20)
     /// - parameters:
@@ -71,7 +71,7 @@ public class GlassmorphismView: UIView {
         }
         self.backgroundView.layer.shadowRadius = distance
     }
-    
+
     // MARK: - Private Method
     private func initialize() {
         // backgoundView(baseView) setting
@@ -84,7 +84,7 @@ public class GlassmorphismView: UIView {
         backgroundView.layer.shadowOffset = CGSize(width: 0, height: 0)
         backgroundView.layer.shadowOpacity = 0.2
         backgroundView.layer.shadowRadius = 20.0
-        
+
         // blurEffectView setting
         blurView.layer.masksToBounds = true
         blurView.layer.cornerRadius = 20
@@ -102,7 +102,7 @@ public class GlassmorphismView: UIView {
             blurView.widthAnchor.constraint(equalTo: self.widthAnchor)
         ])
     }
-    
+
     // MARK: - Theme
     public enum CHTheme {
         case light

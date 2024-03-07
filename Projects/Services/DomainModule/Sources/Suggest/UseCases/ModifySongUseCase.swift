@@ -6,15 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol ModifySongUseCase {
-    func execute(type: SuggestSongModifyType,
-                 userID: String,
-                 artist: String,
-                 songTitle: String,
-                 youtubeLink: String,
-                 content: String) -> Single<ModifySongEntity>
+    func execute(
+        type: SuggestSongModifyType,
+        userID: String,
+        artist: String,
+        songTitle: String,
+        youtubeLink: String,
+        content: String
+    ) -> Single<ModifySongEntity>
 }

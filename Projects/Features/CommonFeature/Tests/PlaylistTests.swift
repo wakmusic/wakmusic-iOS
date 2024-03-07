@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import XCTest
-import DomainModule
 import CommonFeature
+import DomainModule
+import XCTest
 
 final class PlaylistTests: XCTestCase {
     let givenList = [
@@ -20,7 +20,7 @@ final class PlaylistTests: XCTestCase {
         SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
         SongEntity(id: "", title: "제목7", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
     ].map { PlayListItem(item: $0) }
-    
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -28,7 +28,7 @@ final class PlaylistTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func testRemoveSong() {
         // given
         var playList = PlayList(list: givenList)
@@ -39,7 +39,7 @@ final class PlaylistTests: XCTestCase {
 
         // then
         var currentPlayIndex = playList.currentPlayIndex ?? -1
-        XCTAssertEqual(currentPlayIndex , 1)
+        XCTAssertEqual(currentPlayIndex, 1)
         XCTAssertEqual(playList.count, 3)
         XCTAssertEqual(playList.list[0].item.title, "제목1")
         XCTAssertEqual(playList.list[1].item.title, "제목4")
@@ -53,7 +53,7 @@ final class PlaylistTests: XCTestCase {
 
         // then
         currentPlayIndex = playList.currentPlayIndex ?? -1
-        XCTAssertEqual(currentPlayIndex , 0)
+        XCTAssertEqual(currentPlayIndex, 0)
         XCTAssertEqual(playList.count, 4)
         XCTAssertEqual(playList.list[0].item.title, "제목1")
         XCTAssertEqual(playList.list[1].item.title, "제목2")
@@ -63,7 +63,7 @@ final class PlaylistTests: XCTestCase {
         // given
         var playList = PlayList(list: givenList)
         playList.list[0].isPlaying = true
-        
+
         // when
         playList.reorderPlaylist(from: 2, to: 1)
 
@@ -78,5 +78,4 @@ final class PlaylistTests: XCTestCase {
         currentPlayIndex = playList.currentPlayIndex ?? -1
         XCTAssertEqual(currentPlayIndex, 6)
     }
-
 }

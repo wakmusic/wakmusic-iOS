@@ -16,38 +16,36 @@ public enum ScrollDirection {
 }
 
 public extension UIScrollView {
-    
     func scrollToView(view: UIView) {
         if let origin = view.superview {
-
             let childStartPoint = origin.convert(view.frame.origin, to: self)
             let bottomOffset = scrollBottomOffset()
 
-            if (childStartPoint.y > bottomOffset.y) {
+            if childStartPoint.y > bottomOffset.y {
                 setContentOffset(bottomOffset, animated: true)
 
-            }else {
+            } else {
                 setContentOffset(CGPoint(x: 0, y: childStartPoint.y), animated: true)
             }
         }
     }
-    
+
 //        func scrollToTop() {
 //            let topOffset = CGPoint(x: 0, y: -contentInset.top)
 //            setContentOffset(topOffset, animated: true)
 //        }
-//    
+//
 //        func scrollToBottom() {
 //            let bottomOffset = scrollBottomOffset()
 //            if(bottomOffset.y > 0) {
 //                setContentOffset(bottomOffset, animated: true)
 //            }
 //        }
-    
+
     private func scrollBottomOffset() -> CGPoint {
         return CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
     }
-    
+
     func scroll(to direction: ScrollDirection) {
         DispatchQueue.main.async {
             switch direction {
@@ -72,7 +70,7 @@ public extension UIScrollView {
 
     private func scrollToBottom() {
         let bottomOffset = CGPoint(x: 0, y: contentSize.height - bounds.size.height + contentInset.bottom)
-        if(bottomOffset.y > 0) {
+        if bottomOffset.y > 0 {
             setContentOffset(bottomOffset, animated: true)
         }
     }

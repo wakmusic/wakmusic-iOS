@@ -4,7 +4,6 @@ import WebKit
 // MARK: - YouTubePlayerWebView+WKNavigationDelegate
 
 extension YouTubePlayerWebView: WKNavigationDelegate {
-    
     /// WebView decide policy for NavigationAction
     /// - Parameters:
     ///   - webView: The WKWebView
@@ -61,7 +60,7 @@ extension YouTubePlayerWebView: WKNavigationDelegate {
         // Cancel navigation action
         decisionHandler(.cancel)
     }
-    
+
     /// Invoked when the web view's web content process is terminated.
     /// - Parameter webView: The web view whose underlying web content process was terminated.
     func webViewWebContentProcessDidTerminate(
@@ -72,13 +71,11 @@ extension YouTubePlayerWebView: WKNavigationDelegate {
             .webContentProcessDidTerminate
         )
     }
-    
 }
 
 // MARK: - YouTubePlayerWebView+validURLRegularExpressions
 
 private extension YouTubePlayerWebView {
-    
     /// The valid URL RegularExpressions
     /// Source: https://github.com/youtube/youtube-ios-player-helper/blob/ff5991e6e3188867fe2738aa92913a37127f8f1d/Classes/YTPlayerView.m#L59
     static let validURLRegularExpressions: [NSRegularExpression] = [
@@ -94,5 +91,4 @@ private extension YouTubePlayerWebView {
             options: .caseInsensitive
         )
     }
-    
 }

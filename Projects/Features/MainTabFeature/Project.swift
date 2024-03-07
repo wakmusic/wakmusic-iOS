@@ -12,6 +12,6 @@ let project = Project.makeModule(
         .Project.Features.ArtistFeature,
         .Project.Features.StorageFeature,
         .Project.Features.PlayerFeature,
-    ]
-    , resources: ["Resources/**"]
+    ],
+    resources: ["Resources/**"]
 )

@@ -6,30 +6,30 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
-import RxRelay
 import BaseFeature
 import DomainModule
+import Foundation
+import RxRelay
+import RxSwift
 import Utility
 
-public  final class SearchViewModel:ViewModelType {
+public final class SearchViewModel: ViewModelType {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    
-    public init(){
+
+    public init() {
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
     public struct Input {
-        let textString:BehaviorRelay<String> = BehaviorRelay(value: "")
+        let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public struct Output {
-        let isFoucused:BehaviorRelay<Bool> = BehaviorRelay(value:false)
+        let isFoucused: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
         return output

@@ -6,13 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import RxSwift
 
 public struct FetchLyricsUseCaseImpl: FetchLyricsUseCase {
-    
     private let songsRepository: any SongsRepository
 
     public init(
@@ -20,10 +19,8 @@ public struct FetchLyricsUseCaseImpl: FetchLyricsUseCase {
     ) {
         self.songsRepository = songsRepository
     }
-    
+
     public func execute(id: String) -> Single<[LyricsEntity]> {
         songsRepository.fetchLyrics(id: id)
     }
-
-  
 }

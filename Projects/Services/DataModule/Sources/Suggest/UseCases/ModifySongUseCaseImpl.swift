@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct ModifySongUseCaseImpl: ModifySongUseCase {
     private let suggestRepository: any SuggestRepository
@@ -20,7 +20,22 @@ public struct ModifySongUseCaseImpl: ModifySongUseCase {
     ) {
         self.suggestRepository = suggestRepository
     }
-    public func execute(type: SuggestSongModifyType, userID: String, artist: String, songTitle: String, youtubeLink: String, content: String) -> Single<ModifySongEntity> {
-        suggestRepository.modifySong(type: type, userID: userID, artist: artist, songTitle: songTitle, youtubeLink: youtubeLink, content: content)
+
+    public func execute(
+        type: SuggestSongModifyType,
+        userID: String,
+        artist: String,
+        songTitle: String,
+        youtubeLink: String,
+        content: String
+    ) -> Single<ModifySongEntity> {
+        suggestRepository.modifySong(
+            type: type,
+            userID: userID,
+            artist: artist,
+            songTitle: songTitle,
+            youtubeLink: youtubeLink,
+            content: content
+        )
     }
 }

@@ -10,10 +10,9 @@ import UIKit
 import Utility
 
 public class NoticeCollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet weak var contentImageView: UIImageView!
-    
-    public override func awakeFromNib() {
+
+    override public func awakeFromNib() {
         super.awakeFromNib()
         contentImageView.contentMode = .scaleAspectFill
         contentImageView.clipsToBounds = true

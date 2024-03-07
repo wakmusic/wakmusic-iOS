@@ -6,23 +6,22 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
-import DataModule
-import NetworkModule
 import CommonFeature
+import DataModule
+import DomainModule
+import NetworkModule
 import SignInFeature
 import StorageFeature
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
-
 public extension AppComponent {
-    var faqComponent:  FaqComponent {
+    var faqComponent: FaqComponent {
         FaqComponent(parent: self)
     }
-    
-    var faqContentComponent:  FaqContentComponent {
+
+    var faqContentComponent: FaqContentComponent {
         FaqContentComponent(parent: self)
     }
 
@@ -31,19 +30,19 @@ public extension AppComponent {
             RemoteFaqDataSourceImpl(keychain: keychain)
         }
     }
-    
+
     var faqRepository: any FaqRepository {
         shared {
             FaqRepositoryImpl(remoteFaqDataSource: remoteFaqDataSource)
         }
     }
-    
-    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase{
+
+    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
         shared {
             FetchFaqCategoriesUseCaseImpl(faqRepository: faqRepository)
         }
     }
-    
+
     var fetchFaqUseCase: any FetchFaqUseCase {
         shared {
             FetchFaqUseCaseImpl(faqRepository: faqRepository)

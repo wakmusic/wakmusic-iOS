@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer+State
 
 public extension YouTubePlayer {
-    
     /// The YouTubePlayer State
     enum State {
         /// Idle
@@ -13,13 +12,11 @@ public extension YouTubePlayer {
         /// Error
         case error(Error)
     }
-
 }
 
 // MARK: - Equatable
 
 extension YouTubePlayer.State: Equatable {
-    
     /// Returns a Boolean value indicating whether two `YouTubePlayer.State` are equal
     /// - Parameters:
     ///   - lhs: A `YouTubePlayer.State` to compare.
@@ -39,13 +36,11 @@ extension YouTubePlayer.State: Equatable {
             return false
         }
     }
-    
 }
 
 // MARK: - State+isIdle
 
 public extension YouTubePlayer.State {
-    
     /// Bool value if is `idle`
     var isIdle: Bool {
         switch self {
@@ -55,13 +50,11 @@ public extension YouTubePlayer.State {
             return false
         }
     }
-    
 }
 
 // MARK: - State+isReady
 
 public extension YouTubePlayer.State {
-    
     /// Bool value if is `ready`
     var isReady: Bool {
         switch self {
@@ -71,13 +64,11 @@ public extension YouTubePlayer.State {
             return false
         }
     }
-    
 }
 
 // MARK: - State+isError
 
 public extension YouTubePlayer.State {
-    
     /// Bool value if is `error`
     var isError: Bool {
         switch self {
@@ -87,21 +78,18 @@ public extension YouTubePlayer.State {
             return false
         }
     }
-    
 }
 
 // MARK: - State+error
 
 public extension YouTubePlayer.State {
-    
     /// The YouTubePlayer Error, if available
     var error: YouTubePlayer.Error? {
         switch self {
-        case .error(let error):
+        case let .error(error):
             return error
         default:
             return nil
         }
     }
-    
 }

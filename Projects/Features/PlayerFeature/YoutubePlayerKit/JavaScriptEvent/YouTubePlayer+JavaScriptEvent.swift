@@ -3,30 +3,25 @@ import Foundation
 // MARK: - YouTubePlayer+JavaScriptEvent
 
 extension YouTubePlayer {
-    
     /// A YouTubePlayer JavaScriptEvent
     struct JavaScriptEvent: Codable, Hashable {
-        
         /// The JavaScriptEvent Name
         let name: Name
-        
+
         /// The optional data payload
         let data: String?
-        
     }
-    
 }
 
 // MARK: - JavaScriptEvent+init(url:)
 
 extension YouTubePlayer.JavaScriptEvent {
-    
     /// The YouTubePlayer JavaScript Event callback URL scheme
     private static let eventCallbackURLScheme = "youtubeplayer"
-    
+
     /// The YouTubePlayer JavaScript Event data parameter name
     private static let eventCallbackDataParameterName = "data"
-    
+
     /// Creates a new instance of `YouTubePlayer.HTML.JavaScriptEvent.Resolved` from an URL, if available
     /// - Parameters:
     ///   - url: The URL
@@ -53,11 +48,10 @@ extension YouTubePlayer.JavaScriptEvent {
                 url: url,
                 resolvingAgainstBaseURL: false
             )?
-            .queryItems?
-            .first { $0.name == Self.eventCallbackDataParameterName }?
-            .value
-            .flatMap { $0 == "null" ? nil : $0 }
+                .queryItems?
+                .first { $0.name == Self.eventCallbackDataParameterName }?
+                .value
+                .flatMap { $0 == "null" ? nil : $0 }
         )
     }
-    
 }

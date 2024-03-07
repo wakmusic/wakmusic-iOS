@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct FetchNoticeCategoriesUseCaseImpl: FetchNoticeCategoriesUseCase {
     private let noticeRepository: any NoticeRepository
@@ -20,7 +20,7 @@ public struct FetchNoticeCategoriesUseCaseImpl: FetchNoticeCategoriesUseCase {
     ) {
         self.noticeRepository = noticeRepository
     }
-    
+
     public func execute() -> Single<FetchNoticeCategoriesEntity> {
         noticeRepository.fetchNoticeCategories()
     }

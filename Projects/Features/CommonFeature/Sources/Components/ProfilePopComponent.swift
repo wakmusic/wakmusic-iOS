@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol ProfilePopDependency: Dependency {
-    var fetchProfileListUseCase: any FetchProfileListUseCase {get}
-    var setProfileUseCase: any SetProfileUseCase {get}
+    var fetchProfileListUseCase: any FetchProfileListUseCase { get }
+    var setProfileUseCase: any SetProfileUseCase { get }
 }
 
 public final class ProfilePopComponent: Component<ProfilePopDependency> {
-    public func makeView() -> ProfilePopViewController  {
+    public func makeView() -> ProfilePopViewController {
         return ProfilePopViewController.viewController(
             viewModel: .init(
                 fetchProfileListUseCase: dependency.fetchProfileListUseCase,

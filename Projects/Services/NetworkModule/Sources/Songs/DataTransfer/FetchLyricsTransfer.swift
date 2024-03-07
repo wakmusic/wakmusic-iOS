@@ -6,11 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import DomainModule
 import DataMappingModule
+import DomainModule
+import Foundation
 import Utility
-
 
 public extension LyricsResponseDTO {
     func toDomain() -> LyricsEntity {

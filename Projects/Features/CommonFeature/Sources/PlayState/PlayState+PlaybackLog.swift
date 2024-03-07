@@ -8,21 +8,22 @@
 
 import Foundation
 
-extension PlayState {
-    public struct PlaybackLog: Codable {
+public extension PlayState {
+    struct PlaybackLog: Codable {
         public var os: String = "ios"
         public var prev: PlayState.PlaybackLog.Previous
         public var curr: PlayState.PlaybackLog.Current
     }
 }
 
-extension PlayState.PlaybackLog {
-    public struct Previous: Codable {
+public extension PlayState.PlaybackLog {
+    struct Previous: Codable {
         public var songId: String
         public var songLength: Int
         public var stoppedAt: Int
     }
-    public struct Current: Codable {
+
+    struct Current: Codable {
         public var songId: String
     }
 }

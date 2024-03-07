@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DataMappingModule
 import DomainModule
+import Foundation
 import Utility
 
 public extension PlaybackLogResponseDTO {
     func toDomain() -> PlaybackLogEntity {
         return PlaybackLogEntity(
-                id: songId,
-                title: title,
-                artist: artist
+            id: songId,
+            title: title,
+            artist: artist
         )
     }
 }

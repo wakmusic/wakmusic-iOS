@@ -10,16 +10,16 @@ import Foundation
 
 public struct PlayListBaseEntity: Equatable {
     public init(
-        status:Int,
-        key:String,
-        description:String = ""
+        status: Int,
+        key: String,
+        description: String = ""
     ) {
         self.status = status
         self.key = key
         self.description = description
     }
+
     public let status: Int
     public let key: String
-    public var description:String
-
+    public var description: String
 }

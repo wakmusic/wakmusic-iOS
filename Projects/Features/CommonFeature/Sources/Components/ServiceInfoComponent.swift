@@ -11,11 +11,10 @@ import NeedleFoundation
 
 public protocol ServiceInfoDependency: Dependency {
     var openSourceLicenseComponent: OpenSourceLicenseComponent { get }
-
 }
 
 public final class ServiceInfoComponent: Component<ServiceInfoDependency> {
-    public func makeView() -> ServiceInfoViewController  {
+    public func makeView() -> ServiceInfoViewController {
         return ServiceInfoViewController.viewController(
             viewModel: ServiceInfoViewModel(),
             openSourceLicenseComponent: dependency.openSourceLicenseComponent

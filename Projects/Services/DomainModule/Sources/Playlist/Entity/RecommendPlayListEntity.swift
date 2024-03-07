@@ -20,7 +20,7 @@ public struct RecommendPlayListEntity: Equatable {
         self.image_round_version = image_round_version
         self.image_sqaure_version = image_sqaure_version
     }
-    
-    public let key, title : String
-    public let image_round_version, image_sqaure_version : Int
+
+    public let key, title: String
+    public let image_round_version, image_sqaure_version: Int
 }

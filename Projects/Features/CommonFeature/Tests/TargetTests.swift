@@ -1,6 +1,6 @@
-import XCTest
 import CommonFeature
 import DomainModule
+import XCTest
 
 class TargetTests: XCTestCase {
     let givenList = [
@@ -12,7 +12,7 @@ class TargetTests: XCTestCase {
         SongEntity(id: "", title: "제목6", artist: "", remix: "", reaction: "", views: 0, last: 0, date: ""),
         SongEntity(id: "", title: "제목7", artist: "", remix: "", reaction: "", views: 0, last: 0, date: "")
     ].map { PlayListItem(item: $0) }
-    
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

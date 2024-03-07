@@ -25,9 +25,9 @@ open class BaseRemoteDataSource<API: WMAPI> {
         self.keychain = keychain
 
         #if DEBUG
-        self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
+            self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
         #else
-        self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
+            self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
         #endif
     }
 
@@ -37,7 +37,8 @@ open class BaseRemoteDataSource<API: WMAPI> {
             disposabels.append(
                 self.defaultRequest(api).subscribe(
                     onSuccess: { single(.success($0)) },
-                    onFailure: { single(.failure($0)) })
+                    onFailure: { single(.failure($0)) }
+                )
             )
             return Disposables.create(disposabels)
         }

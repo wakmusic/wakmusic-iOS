@@ -6,23 +6,22 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation 
-import RxSwift
-import RxRelay
-import RxCocoa
 import BaseFeature
-import DomainModule
-import Utility
 import CommonFeature
+import DomainModule
+import Foundation
+import RxCocoa
+import RxRelay
+import RxSwift
+import Utility
 
-public final class FavoriteViewModel:ViewModelType {
-    
+public final class FavoriteViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     var editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase!
     var deleteFavoriteListUseCase: DeleteFavoriteListUseCase!
     var tempDeleteLikeListIds: [String] = []
-    
+
     public struct Input {
         let likeListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
@@ -37,7 +36,7 @@ public final class FavoriteViewModel:ViewModelType {
     public struct Output {
         let state: BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
         let dataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
-        let backUpdataSource:BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedLikeLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
@@ -54,25 +53,25 @@ public final class FavoriteViewModel:ViewModelType {
         self.editFavoriteSongsOrderUseCase = editFavoriteSongsOrderUseCase
         self.deleteFavoriteListUseCase = deleteFavoriteListUseCase
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         Utility.PreferenceManager.$userInfo
             .skip(1)
             .filter { $0 != nil }
             .map { _ in () }
             .bind(to: input.likeListLoad)
             .disposed(by: disposeBag)
-        
+
         NotificationCenter.default.rx.notification(.likeListRefresh)
-            .map{ _ in () }
+            .map { _ in () }
             .bind(to: input.likeListLoad)
             .disposed(by: disposeBag)
-        
+
         input.likeListLoad
             .flatMap { [weak self] _ -> Observable<[FavoriteSongEntity]> in
-                guard let self = self else{ return Observable.empty() }
+                guard let self = self else { return Observable.empty() }
                 return self.fetchFavoriteSongsUseCase.execute()
                     .catchAndReturn([])
                     .asObservable()
@@ -80,36 +79,40 @@ public final class FavoriteViewModel:ViewModelType {
             .map { [FavoriteSectionModel(model: 0, items: $0)] }
             .bind(to: output.dataSource, output.backUpdataSource)
             .disposed(by: disposeBag)
-        
+
         input.itemSelected
-            .withLatestFrom(output.indexPathOfSelectedLikeLists, resultSelector: { (indexPath, selectedLikeLists) -> [IndexPath] in
-                if selectedLikeLists.contains(indexPath) {
-                    guard let removeTargetIndex = selectedLikeLists.firstIndex(where: { $0 == indexPath }) else { return selectedLikeLists }
-                    var newSelectedPlayLists = selectedLikeLists
-                    newSelectedPlayLists.remove(at: removeTargetIndex)
-                    return newSelectedPlayLists
-                    
-                }else{
-                    return selectedLikeLists + [indexPath]
+            .withLatestFrom(
+                output.indexPathOfSelectedLikeLists,
+                resultSelector: { indexPath, selectedLikeLists -> [IndexPath] in
+                    if selectedLikeLists.contains(indexPath) {
+                        guard let removeTargetIndex = selectedLikeLists.firstIndex(where: { $0 == indexPath })
+                        else { return selectedLikeLists }
+                        var newSelectedPlayLists = selectedLikeLists
+                        newSelectedPlayLists.remove(at: removeTargetIndex)
+                        return newSelectedPlayLists
+
+                    } else {
+                        return selectedLikeLists + [indexPath]
+                    }
                 }
-            })
+            )
             .map { $0.sorted { $0 < $1 } }
             .bind(to: output.indexPathOfSelectedLikeLists)
             .disposed(by: disposeBag)
-                
+
         input.itemMoved
             .withLatestFrom(output.dataSource) { ($0.sourceIndex, $0.destinationIndex, $1) }
             .withLatestFrom(output.indexPathOfSelectedLikeLists) { ($0.0, $0.1, $0.2, $1) }
-            .map { (sourceIndexPath, destinationIndexPath, dataSource, selectedLikeLists) -> [FavoriteSectionModel] in
-                //데이터 소스의 이동
+            .map { sourceIndexPath, destinationIndexPath, dataSource, selectedLikeLists -> [FavoriteSectionModel] in
+                // 데이터 소스의 이동
                 var newModel = dataSource.first?.items ?? []
                 let temp = newModel[sourceIndexPath.row]
                 newModel.remove(at: sourceIndexPath.row)
                 newModel.insert(temp, at: destinationIndexPath.row)
 
-                //선택 된 플레이리스트 인덱스 패스 변경
+                // 선택 된 플레이리스트 인덱스 패스 변경
                 var newSelectedPlayLists: [IndexPath] = []
-                for i in 0..<newModel.count {
+                for i in 0 ..< newModel.count {
                     if newModel[i].isSelected {
                         newSelectedPlayLists.append(IndexPath(row: i, section: 0))
                     }
@@ -118,20 +121,20 @@ public final class FavoriteViewModel:ViewModelType {
                     }
                 }
                 output.indexPathOfSelectedLikeLists.accept(newSelectedPlayLists.sorted { $0 < $1 })
-                
+
                 let sectionModel = [FavoriteSectionModel(model: 0, items: newModel)]
                 return sectionModel
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         input.allLikeListSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (flag, dataSource) -> [IndexPath] in
+            .map { flag, dataSource -> [IndexPath] in
                 if flag {
                     let itemCount = (dataSource.first?.items ?? []).count
-                    return Array(0..<itemCount).map { IndexPath(row: $0, section: 0) }
-                }else{
+                    return Array(0 ..< itemCount).map { IndexPath(row: $0, section: 0) }
+                } else {
                     return []
                 }
             }
@@ -141,41 +144,44 @@ public final class FavoriteViewModel:ViewModelType {
         input.runEditing
             .withLatestFrom(output.dataSource)
             .map { $0.first?.items.map { $0.song.id } ?? [] }
-            .filter{ !$0.isEmpty }
+            .filter { !$0.isEmpty }
             .do(onNext: { _ in
                 output.indexPathOfSelectedLikeLists.accept([])
             })
-            .filter{ (ids: [String]) -> Bool in
+            .filter { (ids: [String]) -> Bool in
                 let beforeIds: [String] = output.backUpdataSource.value.first?.items.map { $0.song.id } ?? []
                 let elementsEqual: Bool = beforeIds.elementsEqual(ids)
                 DEBUG_LOG(elementsEqual ? "❌ 변경된 내용이 없습니다." : "✅ 리스트가 변경되었습니다.")
                 return elementsEqual == false
             }
-            .flatMap{ [weak self] (ids: [String]) -> Observable<BaseEntity> in
-                guard let self = self else{
+            .flatMap { [weak self] (ids: [String]) -> Observable<BaseEntity> in
+                guard let self = self else {
                     return Observable.empty()
                 }
                 return self.editFavoriteSongsOrderUseCase.execute(ids: ids)
-                    .catch({ (error:Error) in
+                    .catch { (error: Error) in
                         let wmError = error.asWMError
-                        
+
                         if wmError == .tokenExpired {
                             return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
                                 return Disposables.create()
                             }
                         }
-                        
+
                         else {
-                            return Single<BaseEntity>.create{ single in
-                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(
+                                    status: 400,
+                                    description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!"
+                                )))
                                 return Disposables.create()
                             }
                         }
-                    })
+                    }
                     .asObservable()
             }
-            .filter{ (model) in
+            .filter { model in
                 guard model.status == 200 else {
                     output.showToast.accept(model)
                     return false
@@ -185,12 +191,12 @@ public final class FavoriteViewModel:ViewModelType {
             .withLatestFrom(output.dataSource)
             .bind(to: output.backUpdataSource)
             .disposed(by: disposeBag)
-        
-        //노래담기
+
+        // 노래담기
         input.addSongs
             .withLatestFrom(output.indexPathOfSelectedLikeLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (indexPathes, dataSource) -> [String] in
+            .map { indexPathes, dataSource -> [String] in
                 let ids = indexPathes.map {
                     dataSource[$0.section].items[$0.row].song.id
                 }
@@ -199,11 +205,11 @@ public final class FavoriteViewModel:ViewModelType {
             .bind(to: output.willAddSongList)
             .disposed(by: disposeBag)
 
-        //재생목록추가
-        input.addPlayList 
+        // 재생목록추가
+        input.addPlayList
             .withLatestFrom(output.indexPathOfSelectedLikeLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (indexPathes, dataSource) -> [SongEntity] in
+            .map { indexPathes, dataSource -> [SongEntity] in
                 let songs = indexPathes.map {
                     dataSource[$0.section].items[$0.row].song
                 }
@@ -211,67 +217,69 @@ public final class FavoriteViewModel:ViewModelType {
             }
             .bind(to: output.willAddPlayList)
             .disposed(by: disposeBag)
-        
+
         input.deleteLikeList
             .withLatestFrom(output.indexPathOfSelectedLikeLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (indexPathes, dataSource) -> [String] in
+            .map { indexPathes, dataSource -> [String] in
                 return indexPathes.map {
                     dataSource[$0.section].items[$0.row].song.id
                 }
             }
             .filter { !$0.isEmpty }
-            .flatMap({ [weak self] (ids) -> Observable<BaseEntity> in
+            .flatMap { [weak self] ids -> Observable<BaseEntity> in
                 guard let `self` = self else { return Observable.empty() }
                 self.tempDeleteLikeListIds = ids
                 return self.deleteFavoriteListUseCase.execute(ids: ids)
-                    .catch({ (error:Error) in
+                    .catch { (error: Error) in
                         let wmError = error.asWMError
-                        
+
                         if wmError == .tokenExpired {
                             return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401,description: wmError.errorDescription ?? "")))
+                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
                                 return Disposables.create()
                             }
                         }
-                        
+
                         else {
-                            return Single<BaseEntity>.create{ single in
-                                single(.success(BaseEntity(status: 400, description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")))
+                            return Single<BaseEntity>.create { single in
+                                single(.success(BaseEntity(
+                                    status: 400,
+                                    description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!"
+                                )))
                                 return Disposables.create()
                             }
                         }
-                    })
+                    }
                     .asObservable()
-            })
-            .do(onNext: { [weak self] (model) in
+            }
+            .do(onNext: { [weak self] model in
                 guard let `self` = self else { return }
                 output.state.accept(EditState(isEditing: false, force: true))
                 output.indexPathOfSelectedLikeLists.accept([])
 
                 if model.status == 200 {
-                    output.showToast.accept(BaseEntity(status: 200,description: "좋아요 리스트에서 삭제되었습니다."))
-                    //좋아요 삭제 시 > 노티피케이션
+                    output.showToast.accept(BaseEntity(status: 200, description: "좋아요 리스트에서 삭제되었습니다."))
+                    // 좋아요 삭제 시 > 노티피케이션
                     guard let currentSong: SongEntity = PlayState.shared.currentSong else { return }
                     let currentSongID: String = currentSong.id
                     if self.tempDeleteLikeListIds.contains(currentSongID) {
-                      
                         NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: currentSong)
                     }
-                }else{
+                } else {
                     output.showToast.accept(model)
                 }
             })
             .map { _ in () }
             .bind(to: input.likeListLoad)
             .disposed(by: disposeBag)
-        
+
         output.indexPathOfSelectedLikeLists
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (selectedLikeLists, dataSource) in
+            .map { selectedLikeLists, dataSource in
                 var newModel = dataSource
-                for i in 0..<newModel.count {
-                    for j in 0..<newModel[i].items.count {
+                for i in 0 ..< newModel.count {
+                    for j in 0 ..< newModel[i].items.count {
                         newModel[i].items[j].isSelected = false
                     }
                 }
@@ -282,7 +290,7 @@ public final class FavoriteViewModel:ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         return output
     }
 }

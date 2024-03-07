@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import UIKit
-import NeedleFoundation
-import DomainModule
 import CommonFeature
+import DomainModule
+import Foundation
+import NeedleFoundation
+import UIKit
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playListDetailComponent : PlayListDetailComponent { get }
+    var playListDetailComponent: PlayListDetailComponent { get }
     var newSongsComponent: NewSongsComponent { get }
 }
 

@@ -19,21 +19,19 @@ public class RealmManager: NSObject {
     }
 
     public func register() {
-                
-        //Realm DataBase Migration 하려면 아래의 schemaVersion을 +1 해줘야 합니다.
+        // Realm DataBase Migration 하려면 아래의 schemaVersion을 +1 해줘야 합니다.
         let config = Realm.Configuration(
             schemaVersion: 1,
-            migrationBlock: { (_, oldSchemaVersion) in
-                if oldSchemaVersion < 1 {
-                }
+            migrationBlock: { _, oldSchemaVersion in
+                if oldSchemaVersion < 1 {}
             }
         )
         Realm.Configuration.defaultConfiguration = config
-        
-        //init
+
+        // init
         do {
             realm = try Realm()
-        }catch {
+        } catch {
             DEBUG_LOG(error.localizedDescription)
         }
         DEBUG_LOG(Realm.Configuration.defaultConfiguration.fileURL ?? "")
@@ -44,11 +42,11 @@ public extension RealmManager {
     func addRealmDB<T>(model: T, update: Realm.UpdatePolicy = .all) {
         do {
             try self.realm.write {
-                if let object =  model as? Object {
+                if let object = model as? Object {
                     self.realm.add(object, update: update)
-                }else if let object =  model as? [Object] {
+                } else if let object = model as? [Object] {
                     self.realm.add(object, update: update)
-                }else{
+                } else {
                     DEBUG_LOG("❌ Object Casting Failed")
                 }
             }
@@ -56,8 +54,8 @@ public extension RealmManager {
             DEBUG_LOG(error.localizedDescription)
         }
     }
-    
-    func deleteRealmDB<T: Object>(model: Results<T>){
+
+    func deleteRealmDB<T: Object>(model: Results<T>) {
         do {
             try self.realm.write {
                 self.realm.delete(model)

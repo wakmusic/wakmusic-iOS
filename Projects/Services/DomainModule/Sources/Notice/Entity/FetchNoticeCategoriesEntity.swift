@@ -14,5 +14,6 @@ public struct FetchNoticeCategoriesEntity: Codable {
     ) {
         self.categories = categories
     }
+
     public let categories: [String]
 }

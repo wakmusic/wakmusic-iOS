@@ -6,14 +6,15 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
+import DomainModule
+import Foundation
 import KeychainModule
-//import Amplify
+import RxRelay
+import RxSwift
+import Utility
+
+// import Amplify
 import ErrorModule
 
 enum MediaDataType {
@@ -28,34 +29,34 @@ enum PublicNameOption: String {
     case `private` = "비공개"
 }
 
-public final class BugReportViewModel:ViewModelType {
+public final class BugReportViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var reportBugUseCase: ReportBugUseCase
-    
+
     public struct Input {
-        var publicNameOption:BehaviorRelay<PublicNameOption> = BehaviorRelay(value: .nonDetermined)
-        var bugContentString:PublishRelay<String> = PublishRelay()
-        var nickNameString:PublishRelay<String> = PublishRelay()
+        var publicNameOption: BehaviorRelay<PublicNameOption> = BehaviorRelay(value: .nonDetermined)
+        var bugContentString: PublishRelay<String> = PublishRelay()
+        var nickNameString: PublishRelay<String> = PublishRelay()
         var completionButtonTapped: PublishSubject<Void> = PublishSubject()
-        var dataSource:BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
-        var removeIndex:PublishRelay<Int> = PublishRelay()
+        var dataSource: BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
+        var removeIndex: PublishRelay<Int> = PublishRelay()
     }
 
     public struct Output {
         var enableCompleteButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         var showCollectionView: BehaviorRelay<Bool> = BehaviorRelay(value: true)
         var dataSource: BehaviorRelay<[MediaDataType]> = BehaviorRelay(value: [])
-        var result: PublishSubject<ReportBugEntity>  = PublishSubject()
+        var result: PublishSubject<ReportBugEntity> = PublishSubject()
     }
 
-    public init(reportBugUseCase: ReportBugUseCase){
+    public init(reportBugUseCase: ReportBugUseCase) {
         self.reportBugUseCase = reportBugUseCase
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
 
@@ -63,12 +64,12 @@ public final class BugReportViewModel:ViewModelType {
             input.publicNameOption,
             input.nickNameString,
             input.bugContentString
-        ){
+        ) {
             return ($0, $1, $2)
         }
 
         combineObservable
-            .map{ (option, nickName, content) -> Bool in
+            .map { option, nickName, content -> Bool in
                 switch option {
                 case .nonDetermined:
                     return false
@@ -83,29 +84,32 @@ public final class BugReportViewModel:ViewModelType {
 
         input.completionButtonTapped
             .withLatestFrom(input.dataSource)
-            .flatMap{ [weak self] (attaches) -> Observable<[String]> in
+            .flatMap { [weak self] attaches -> Observable<[String]> in
                 guard let self = self else { return Observable.empty() }
-                
+
                 if attaches.isEmpty {
                     return Observable.just([])
-                }else{
+                } else {
                     return AsyncStream<String> { [weak self] continuation in
                         guard let self = self else { return }
                         Task.detached {
-                            for i in 0..<attaches.count {
+                            for i in 0 ..< attaches.count {
                                 do {
 //                                    let url = try await self.uploadImage(media: attaches[i])
 //                                    continuation.yield(url.absoluteString)
-                                }catch {
+                                } catch {
                                     DEBUG_LOG(error.localizedDescription)
-                                    output.result.onNext(ReportBugEntity(status: 404, message: WMError.unknown.localizedDescription))
+                                    output.result.onNext(ReportBugEntity(
+                                        status: 404,
+                                        message: WMError.unknown.localizedDescription
+                                    ))
                                 }
                             }
                             continuation.finish()
                         }
                     }
                     .asObservable()
-                    .scan([]) { (pre, new) in
+                    .scan([]) { pre, new in
                         var result = pre
                         result.append(new)
                         return result
@@ -114,45 +118,53 @@ public final class BugReportViewModel:ViewModelType {
             }
             .debug("uploadImage")
             .withLatestFrom(combineObservable) { ($1.0, $1.1, $1.2, $0) }
-            .flatMap({ [weak self] (option, nickName, content, attaches) -> Observable<ReportBugEntity> in
+            .flatMap { [weak self] option, nickName, content, attaches -> Observable<ReportBugEntity> in
                 guard let self else { return Observable.empty() }
                 let userId = AES256.decrypt(encoded: Utility.PreferenceManager.userInfo?.ID ?? "")
                 return self.reportBugUseCase
-                    .execute(userID: userId, nickname: (option == .public) ? nickName : "", attaches: attaches, content: content)
+                    .execute(
+                        userID: userId,
+                        nickname: (option == .public) ? nickName : "",
+                        attaches: attaches,
+                        content: content
+                    )
                     .debug("reportBugUseCase")
-                    .catch({ (error:Error) in
+                    .catch { (error: Error) in
                         return Single<ReportBugEntity>.create { single in
-                            single(.success(ReportBugEntity(status: 404, message: error.asWMError.errorDescription ?? "")))
+                            single(.success(ReportBugEntity(
+                                status: 404,
+                                message: error.asWMError.errorDescription ?? ""
+                            )))
                             return Disposables.create {}
                         }
-                    })
-                    .asObservable()
-                    .map{ (model) -> ReportBugEntity in
-                        return ReportBugEntity(status: model.status ,message: model.message)
                     }
-            })
+                    .asObservable()
+                    .map { model -> ReportBugEntity in
+                        return ReportBugEntity(status: model.status, message: model.message)
+                    }
+            }
             .bind(to: output.result)
             .disposed(by: disposeBag)
-        
+
         input.dataSource
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         input.dataSource
-            .map({$0.isEmpty})
+            .map { $0.isEmpty }
             .bind(to: output.showCollectionView)
             .disposed(by: disposeBag)
-        
+
         input.removeIndex
-            .withLatestFrom(input.dataSource){($0,$1)}
-            .map{ (index,dataSource) -> [MediaDataType] in
+            .withLatestFrom(input.dataSource) { ($0, $1) }
+            .map { index, dataSource -> [MediaDataType] in
                 var next = dataSource
                 next.remove(at: index)
                 return next
             }
             .bind(to: input.dataSource)
             .disposed(by: disposeBag)
-        
+
         return output
     }
 }

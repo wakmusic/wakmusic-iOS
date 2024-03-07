@@ -7,11 +7,11 @@
 //
 
 import APIKit
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
 import Foundation
+import RxSwift
 
 public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, RemoteNoticeDataSource {
     public func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]> {
@@ -19,10 +19,10 @@ public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, 
             .map([FetchNoticeResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
-    
+
     public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         request(.fetchNoticeCategories)
             .map(FetchNoticeCategoriesResponseDTO.self)
-            .map{ $0.toDomain() }
+            .map { $0.toDomain() }
     }
 }

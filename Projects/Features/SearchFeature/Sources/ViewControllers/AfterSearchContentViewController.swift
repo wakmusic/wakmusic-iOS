@@ -6,73 +6,79 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
-import RxCocoa
-import RxSwift
-import RxDataSources
-import DesignSystem
 import BaseFeature
 import CommonFeature
+import DesignSystem
 import DomainModule
+import RxCocoa
+import RxDataSources
+import RxSwift
+import UIKit
+import Utility
 
 public final class AfterSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tableView: UITableView!
-    
-    var viewModel:AfterSearchContentViewModel!
+
+    var viewModel: AfterSearchContentViewModel!
     lazy var input = AfterSearchContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindRx()
         bindRxEvent()
         requestFromParent()
     }
-    
-    public static func viewController(viewModel:AfterSearchContentViewModel) -> AfterSearchContentViewController{
-        let viewController = AfterSearchContentViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
+
+    public static func viewController(viewModel: AfterSearchContentViewModel) -> AfterSearchContentViewController {
+        let viewController = AfterSearchContentViewController.viewController(
+            storyBoardName: "Search",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
-extension AfterSearchContentViewController{
-    private func bindRx(){
+extension AfterSearchContentViewController {
+    private func bindRx() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
-        
-        //xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
-        //다른 모듈 시 번들 변경 Bundle.module 사용 X
-        tableView.register(UINib(nibName:"SongListCell", bundle: CommonFeatureResources.bundle), forCellReuseIdentifier: "SongListCell")
-        
+
+        // xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
+        // 다른 모듈 시 번들 변경 Bundle.module 사용 X
+        tableView.register(
+            UINib(nibName: "SongListCell", bundle: CommonFeatureResources.bundle),
+            forCellReuseIdentifier: "SongListCell"
+        )
+
         output.dataSource
             .do(onNext: { [weak self] model in
                 guard let self = self else { return }
                 self.tableView.isHidden = false // 검색 완료 시 보여줌
-                
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT()/2))
+
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 2))
                 warningView.text = "검색결과가 없습니다."
-                
+
                 if self.viewModel.sectionType == .all {
                     let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
                     self.tableView.tableHeaderView = allSectionisEmpty ? warningView : nil
-                    
-                }else{
+
+                } else {
                     let isEmpty = model.first?.items.isEmpty ?? false
-                    self.tableView.tableHeaderView = isEmpty ?  warningView : nil
+                    self.tableView.tableHeaderView = isEmpty ? warningView : nil
                 }
             })
             .bind(to: tableView.rx.items(dataSource: createDatasource()))
             .disposed(by: disposeBag)
     }
-    
-    private func bindRxEvent(){
+
+    private func bindRxEvent() {
         tableView.rx.itemSelected
             .bind(to: input.indexPath)
             .disposed(by: disposeBag)
-        
+
         Utility.PreferenceManager.$startPage
             .skip(1)
             .subscribe(onNext: { [weak self] _ in
@@ -83,29 +89,29 @@ extension AfterSearchContentViewController{
                 parent.output.songEntityOfSelectedSongs.accept([])
             }).disposed(by: disposeBag)
     }
-    
-    func requestFromParent(){
+
+    func requestFromParent() {
         guard let parent = self.parent?.parent as? AfterSearchViewController else {
             return
         }
         let entities = parent.output.songEntityOfSelectedSongs.value
         let models = output.dataSource.value
-        
+
         let indexPaths = entities.map { entity -> IndexPath? in
             var indexPath: IndexPath?
 
-            models.enumerated().forEach { (section, model) in
-                if let row = model.items.firstIndex(where: { $0 == entity }){
+            models.enumerated().forEach { section, model in
+                if let row = model.items.firstIndex(where: { $0 == entity }) {
                     indexPath = IndexPath(row: row, section: section)
                 }
             }
             return indexPath
-        }.compactMap{ $0 }
-        
+        }.compactMap { $0 }
+
         input.mandatoryLoadIndexPath.accept(indexPaths)
     }
-    
-    private func configureUI(){
+
+    private func configureUI() {
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
@@ -113,56 +119,60 @@ extension AfterSearchContentViewController{
     }
 }
 
-extension AfterSearchContentViewController:UITableViewDelegate{
+extension AfterSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
+
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let songlistHeader = EntireSectionHeader()
 
-        if viewModel.sectionType != .all{
+        if viewModel.sectionType != .all {
             return nil
         }
-        
+
         let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
-        if allSectionisEmpty{
+        if allSectionisEmpty {
             return nil
         }
         songlistHeader.update(self.output.dataSource.value[section].model)
         songlistHeader.delegate = self
         return songlistHeader
     }
-    
+
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if viewModel.sectionType != .all{
+        if viewModel.sectionType != .all {
             return 0
         }
 
         let allSectionisEmpty: Bool = self.output.dataSource.value.map { $0.items }.flatMap { $0 }.isEmpty
-        if allSectionisEmpty{
+        if allSectionisEmpty {
             return 0
         }
         return 44
     }
 }
 
-extension AfterSearchContentViewController{
-    func createDatasource() -> RxTableViewSectionedReloadDataSource<SearchSectionModel>{
-        let datasource = RxTableViewSectionedReloadDataSource<SearchSectionModel>(configureCell: { (_, tableView, indexPath, model) -> UITableViewCell in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else{
-                return UITableViewCell()
+extension AfterSearchContentViewController {
+    func createDatasource() -> RxTableViewSectionedReloadDataSource<SearchSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<SearchSectionModel>(
+            configureCell: { _, tableView, indexPath, model -> UITableViewCell in
+                guard let cell = tableView
+                    .dequeueReusableCell(withIdentifier: "SongListCell", for: indexPath) as? SongListCell else {
+                    return UITableViewCell()
+                }
+                cell.update(model)
+                return cell
+            },
+            titleForHeaderInSection: { _, _ -> String? in
+                return nil
             }
-            cell.update(model)
-            return cell
-        }, titleForHeaderInSection: { (_, _) -> String? in
-            return nil
-        })
+        )
         return datasource
     }
 }
 
-extension AfterSearchContentViewController:EntireSectionHeaderDelegate{
+extension AfterSearchContentViewController: EntireSectionHeaderDelegate {
     func switchTapEvent(_ type: TabPosition) {
         guard let tabMan = parent?.parent as? AfterSearchViewController else {
             return

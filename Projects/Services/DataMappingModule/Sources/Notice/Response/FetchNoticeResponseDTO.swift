@@ -16,7 +16,7 @@ public struct FetchNoticeResponseDTO: Codable, Equatable {
     public let images: [String]
     public let createdAt, startAt, endAt: Double
     public let category: String?
-    
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }

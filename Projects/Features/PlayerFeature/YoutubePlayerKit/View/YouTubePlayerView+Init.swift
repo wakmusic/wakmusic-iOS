@@ -4,7 +4,6 @@ import SwiftUI
 // MARK: - Initializer with no Overlay
 
 public extension YouTubePlayerView where Overlay == EmptyView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameter player: The YouTubePlayer
     init(
@@ -14,13 +13,11 @@ public extension YouTubePlayerView where Overlay == EmptyView {
             EmptyView()
         }
     }
-    
 }
 
 // MARK: - Initializer with Placeholder Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -29,8 +26,7 @@ public extension YouTubePlayerView {
     init<PlaceholderOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        placeholderOverlay: @escaping () -> PlaceholderOverlay
+        @ViewBuilder placeholderOverlay: @escaping () -> PlaceholderOverlay
     ) where Overlay == _ConditionalContent<EmptyView, PlaceholderOverlay> {
         self.init(
             player,
@@ -43,14 +39,11 @@ public extension YouTubePlayerView {
             }
         }
     }
-    
 }
-
 
 // MARK: - Initializer with Idle, Ready and Error Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -61,12 +54,11 @@ public extension YouTubePlayerView {
     init<IdleOverlay: View, ReadyOverlay: View, ErrorOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        idleOverlay: @escaping () -> IdleOverlay,
-        @ViewBuilder
-        readyOverlay: @escaping () -> ReadyOverlay,
-        @ViewBuilder
-        errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
+        @ViewBuilder idleOverlay: @escaping () -> IdleOverlay,
+
+        @ViewBuilder readyOverlay: @escaping () -> ReadyOverlay,
+
+        @ViewBuilder errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<IdleOverlay, ReadyOverlay>, ErrorOverlay> {
         self.init(
             player,
@@ -77,18 +69,16 @@ public extension YouTubePlayerView {
                 idleOverlay()
             case .ready:
                 readyOverlay()
-            case .error(let playerError):
+            case let .error(playerError):
                 errorOverlay(playerError)
             }
         }
     }
-    
 }
 
 // MARK: - Initializer with Idle Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -97,8 +87,7 @@ public extension YouTubePlayerView {
     init<IdleOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        idleOverlay: @escaping () -> IdleOverlay
+        @ViewBuilder idleOverlay: @escaping () -> IdleOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<IdleOverlay, EmptyView>, EmptyView> {
         self.init(
             player,
@@ -114,13 +103,11 @@ public extension YouTubePlayerView {
             }
         }
     }
-    
 }
 
 // MARK: - Initializer with Idle and Ready Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -130,10 +117,9 @@ public extension YouTubePlayerView {
     init<IdleOverlay: View, ReadyOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        idleOverlay: @escaping () -> IdleOverlay,
-        @ViewBuilder
-        readyOverlay: @escaping () -> ReadyOverlay
+        @ViewBuilder idleOverlay: @escaping () -> IdleOverlay,
+
+        @ViewBuilder readyOverlay: @escaping () -> ReadyOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<IdleOverlay, ReadyOverlay>, EmptyView> {
         self.init(
             player,
@@ -149,13 +135,11 @@ public extension YouTubePlayerView {
             }
         }
     }
-    
 }
 
 // MARK: - Initializer with Ready Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -164,8 +148,7 @@ public extension YouTubePlayerView {
     init<ReadyOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        readyOverlay: @escaping () -> ReadyOverlay
+        @ViewBuilder readyOverlay: @escaping () -> ReadyOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<EmptyView, ReadyOverlay>, EmptyView> {
         self.init(
             player,
@@ -181,13 +164,11 @@ public extension YouTubePlayerView {
             }
         }
     }
-    
 }
 
 // MARK: - Initializer with Ready and Error Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -197,10 +178,9 @@ public extension YouTubePlayerView {
     init<ReadyOverlay: View, ErrorOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        readyOverlay: @escaping () -> ReadyOverlay,
-        @ViewBuilder
-        errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
+        @ViewBuilder readyOverlay: @escaping () -> ReadyOverlay,
+
+        @ViewBuilder errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<EmptyView, ReadyOverlay>, ErrorOverlay> {
         self.init(
             player,
@@ -211,18 +191,16 @@ public extension YouTubePlayerView {
                 EmptyView()
             case .ready:
                 readyOverlay()
-            case .error(let playerError):
+            case let .error(playerError):
                 errorOverlay(playerError)
             }
         }
     }
-    
 }
 
 // MARK: - Initializer with Error Overlay
 
 public extension YouTubePlayerView {
-    
     /// Creates a new instance of `YouTubePlayer.View`
     /// - Parameters:
     ///   - player: The YouTube Player
@@ -231,8 +209,7 @@ public extension YouTubePlayerView {
     init<ErrorOverlay: View>(
         _ player: YouTubePlayer,
         transaction: Transaction = .init(),
-        @ViewBuilder
-        errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
+        @ViewBuilder errorOverlay: @escaping (YouTubePlayer.Error) -> ErrorOverlay
     ) where Overlay == _ConditionalContent<_ConditionalContent<EmptyView, EmptyView>, ErrorOverlay> {
         self.init(
             player,
@@ -243,10 +220,9 @@ public extension YouTubePlayerView {
                 EmptyView()
             case .ready:
                 EmptyView()
-            case .error(let playerError):
+            case let .error(playerError):
                 errorOverlay(playerError)
             }
         }
     }
-    
 }

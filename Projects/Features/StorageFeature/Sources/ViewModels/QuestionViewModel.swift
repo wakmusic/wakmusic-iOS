@@ -6,18 +6,18 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
+import DomainModule
+import Foundation
 import KeychainModule
 import MessageUI
+import RxRelay
+import RxSwift
+import Utility
 
-public final class QuestionViewModel:ViewModelType {
+public final class QuestionViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    
+
     public struct Input {
         var selectedIndex: PublishSubject<Int> = PublishSubject()
         var mailComposeResult: PublishSubject<Result<MFMailComposeResult, Error>> = PublishSubject()
@@ -32,21 +32,21 @@ public final class QuestionViewModel:ViewModelType {
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) 소멸")
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         input.selectedIndex
             .map { (i: Int) -> InquiryType in
                 return InquiryType(rawValue: i) ?? .unknown
             }
             .bind(to: output.mailSource)
             .disposed(by: disposeBag)
-        
+
         input.mailComposeResult
             .map { (result: Result<MFMailComposeResult, Error>) -> (String, Bool) in
                 switch result {
@@ -80,7 +80,7 @@ extension InquiryType {
             return "contact@wakmusic.xyz"
         }
     }
-    
+
     var title: String {
         switch self {
         case .reportBug:
@@ -97,7 +97,7 @@ extension InquiryType {
             return ""
         }
     }
-    
+
     var body: String {
         switch self {
         case .reportBug:
@@ -125,7 +125,7 @@ extension InquiryType {
             return ""
         }
     }
-    
+
     var suffix: String {
         switch self {
         default:

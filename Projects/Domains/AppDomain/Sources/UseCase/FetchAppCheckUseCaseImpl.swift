@@ -6,9 +6,9 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
+import AppDomainInterface
 import Foundation
 import RxSwift
-import AppDomainInterface
 
 public struct FetchAppCheckUseCaseImpl: FetchAppCheckUseCase {
     private let appRepository: any AppRepository

@@ -6,18 +6,18 @@ import UIKit
 
 // MARK: - Public extensions
 extension Array {
-    // Returns an Optional that will be nil if index < count
+    /// Returns an Optional that will be nil if index < count
     subscript(safe index: Int) -> Element? {
         return indices.contains(index) ? self[index] : .none
     }
 }
 
-extension CGFloat {
-    public static let bottomSheetAutomatic: CGFloat = -123456789
+public extension CGFloat {
+    static let bottomSheetAutomatic: CGFloat = -123_456_789
 }
 
-extension Array where Element == CGFloat {
-    public static var bottomSheetDefault: [CGFloat] {
+public extension Array where Element == CGFloat {
+    static var bottomSheetDefault: [CGFloat] {
         let screenSize = UIScreen.main.bounds.size
 
         if screenSize.height <= 568 {
@@ -50,11 +50,11 @@ public final class BottomSheetView: UIView {
 
         var view: UIView {
             switch self {
-            case .color(let value):
+            case let .color(value):
                 let view = UIView()
                 view.backgroundColor = value
                 return view
-            case .visualEffect(let value):
+            case let .visualEffect(value):
                 return UIVisualEffectView(effect: value)
             }
         }
@@ -83,6 +83,7 @@ public final class BottomSheetView: UIView {
     private var bottomInset: CGFloat {
         return useSafeAreaInsets ? .safeAreaBottomInset : 0
     }
+
     private lazy var contentViewHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0)
 
     // MARK: - Init
@@ -108,13 +109,14 @@ public final class BottomSheetView: UIView {
         accessibilityViewIsModal = true
     }
 
+    @available(*, unavailable)
     public required init?(coder: NSCoder) {
         fatalError("Not implemented")
     }
 
     // MARK: - Overrides
 
-    public override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
     }
 
@@ -125,7 +127,12 @@ public final class BottomSheetView: UIView {
     /// - Parameters:
     ///   - view: the container for the bottom sheet view
     ///   - completion: a closure to be executed when the animation ends
-    public func present(in superview: UIView, targetIndex: Int = 0, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+    public func present(
+        in superview: UIView,
+        targetIndex: Int = 0,
+        animated: Bool = true,
+        completion: ((Bool) -> Void)? = nil
+    ) {
         guard
             self.superview != superview,
             let height = contentHeights[safe: targetIndex]
@@ -259,7 +266,10 @@ public final class BottomSheetView: UIView {
         if stretchOnResize {
             constraints.append(contentView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomInset))
         } else {
-            constraints.append(contentView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -bottomInset))
+            constraints.append(contentView.bottomAnchor.constraint(
+                lessThanOrEqualTo: bottomAnchor,
+                constant: -bottomInset
+            ))
         }
 
         NSLayoutConstraint.activate(constraints)
@@ -285,7 +295,12 @@ public final class BottomSheetView: UIView {
         contentViewHeightConstraint.constant = 0
 
         targetOffsets = contentHeights.map {
-            BottomSheetCalculator.offset(for: contentView, in: superview, height: $0, useSafeAreaInsets: useSafeAreaInsets)
+            BottomSheetCalculator.offset(
+                for: contentView,
+                in: superview,
+                height: $0,
+                useSafeAreaInsets: useSafeAreaInsets
+            )
         }.sorted(by: >)
 
         if let maxOffset = targetOffsets.max() {

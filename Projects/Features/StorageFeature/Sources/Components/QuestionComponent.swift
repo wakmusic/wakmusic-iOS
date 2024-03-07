@@ -6,15 +6,15 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol QuestionDependency: Dependency {
-    var suggestFunctionComponent: SuggestFunctionComponent {get}
-    var wakMusicFeedbackComponent: WakMusicFeedbackComponent {get}
-    var askSongComponent : AskSongComponent {get}
-    var bugReportComponent : BugReportComponent {get}
+    var suggestFunctionComponent: SuggestFunctionComponent { get }
+    var wakMusicFeedbackComponent: WakMusicFeedbackComponent { get }
+    var askSongComponent: AskSongComponent { get }
+    var bugReportComponent: BugReportComponent { get }
 }
 
 public final class QuestionComponent: Component<QuestionDependency> {

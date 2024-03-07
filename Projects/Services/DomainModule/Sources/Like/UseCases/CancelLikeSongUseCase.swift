@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol CancelLikeSongUseCase {
-    func execute(id:String) -> Single<LikeEntity>
+    func execute(id: String) -> Single<LikeEntity>
 }

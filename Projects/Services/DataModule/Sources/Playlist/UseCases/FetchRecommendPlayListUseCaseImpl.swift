@@ -6,16 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
-   
-    
-
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -23,10 +20,8 @@ public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
     ) {
         self.playListRepository = playListRepository
     }
-    
+
     public func execute() -> Single<[RecommendPlayListEntity]> {
         playListRepository.fetchRecommendPlayList()
     }
-
-   
 }

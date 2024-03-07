@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol SetUserNameUseCase {
-    func execute(name:String) -> Single<BaseEntity>
+    func execute(name: String) -> Single<BaseEntity>
 }

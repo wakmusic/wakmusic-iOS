@@ -6,14 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
+import UIKit
 import Utility
 
 class OpenSourceLicenseCell: UITableViewCell {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = .clear
@@ -31,7 +31,7 @@ class OpenSourceLicenseCell: UITableViewCell {
 }
 
 extension OpenSourceLicenseCell {
-    static public func getCellHeight(model: OpenSourceLicense) -> CGFloat {
+    public static func getCellHeight(model: OpenSourceLicense) -> CGFloat {
         let baseMargin: CGFloat = 71
         let titleAttributedString = NSAttributedString(
             string: model.title,
@@ -40,8 +40,8 @@ extension OpenSourceLicenseCell {
                 .kern: -0.5
             ]
         )
-        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: APP_WIDTH()-40)
-        
+        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: APP_WIDTH() - 40)
+
         let descriptionAttributedString = NSAttributedString(
             string: model.description,
             attributes: [
@@ -49,12 +49,12 @@ extension OpenSourceLicenseCell {
                 .kern: -0.5
             ]
         )
-        let descriptionHeight: CGFloat = descriptionAttributedString.height(containerWidth: APP_WIDTH()-40)
-        
+        let descriptionHeight: CGFloat = descriptionAttributedString.height(containerWidth: APP_WIDTH() - 40)
+
         return baseMargin + titleHeight + descriptionHeight
     }
-    
-    public func update(model: OpenSourceLicense){
+
+    public func update(model: OpenSourceLicense) {
         titleStringLabel.text = model.title
         descriptionLabel.text = model.description
     }

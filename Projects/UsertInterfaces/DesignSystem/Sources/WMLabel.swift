@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import MarqueeLabel
+import UIKit
 
 public final class WMLabel: UILabel {
     public init(
@@ -25,9 +25,15 @@ public final class WMLabel: UILabel {
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple, alignment: alignment)
+        self.setTextWithAttributes(
+            lineHeight: lineHeight,
+            kernValue: kernValue,
+            lineSpacing: lineSpacing,
+            lineHeightMultiple: lineHeightMultiple,
+            alignment: alignment
+        )
     }
-    
+
     convenience init(
         text: String,
         textColor: UIColor = .init(),
@@ -36,11 +42,20 @@ public final class WMLabel: UILabel {
         lineHeight: CGFloat? = nil,
         kernValue: Double? = nil
     ) {
-        self.init(text: text, textColor: textColor, font: font, alignment: alignment, lineHeight: lineHeight, kernValue: kernValue, lineSpacing: nil, lineHeightMultiple: nil)
+        self.init(
+            text: text,
+            textColor: textColor,
+            font: font,
+            alignment: alignment,
+            lineHeight: lineHeight,
+            kernValue: kernValue,
+            lineSpacing: nil,
+            lineHeightMultiple: nil
+        )
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

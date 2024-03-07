@@ -7,10 +7,10 @@
 //
 
 import DataMappingModule
-import ErrorModule
 import DomainModule
-import RxSwift
+import ErrorModule
 import Foundation
+import RxSwift
 
 public protocol RemoteNoticeDataSource {
     func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]>

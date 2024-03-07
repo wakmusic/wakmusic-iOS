@@ -6,15 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
-public protocol NoticeDetailDependency: Dependency {
-}
+public protocol NoticeDetailDependency: Dependency {}
 
 public final class NoticeDetailComponent: Component<NoticeDetailDependency> {
-    public func makeView(model: FetchNoticeEntity) -> NoticeDetailViewController  {
+    public func makeView(model: FetchNoticeEntity) -> NoticeDetailViewController {
         return NoticeDetailViewController.viewController(
             viewModel: .init(
                 model: model

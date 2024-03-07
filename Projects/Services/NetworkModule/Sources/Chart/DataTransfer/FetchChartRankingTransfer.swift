@@ -29,7 +29,7 @@ public extension SingleChartRankingResponseDTO {
             last = total?.last ?? 0
             increase = total?.increase ?? 0
         }
-        
+
         return ChartRankingEntity(
             id: id,
             title: title,

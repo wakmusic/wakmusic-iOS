@@ -7,20 +7,20 @@
 //
 
 import Foundation
-import RxSwift
 import RxCocoa
+import RxSwift
 import Utility
 
 public final class OpenSourceLicenseViewModel {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    
+
     public struct Input {}
     public struct Output {
         var dataSource: BehaviorRelay<[OpenSourceLicense]> = BehaviorRelay(value: [])
     }
-    
+
     init() {
         var dataSource: [OpenSourceLicense] = [
             OpenSourceLicense(
@@ -130,10 +130,10 @@ public final class OpenSourceLicenseViewModel {
             )
         ].sorted { $0.title < $1.title }
 
-        self.loadTextFileFromBundle(fileName: "ApacheLicense") { [weak self] (result) in
+        self.loadTextFileFromBundle(fileName: "ApacheLicense") { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(let contents):
+            case let .success(contents):
                 let apacheLicense = OpenSourceLicense(
                     type: .license,
                     title: "Apache License 2.0",
@@ -142,10 +142,10 @@ public final class OpenSourceLicenseViewModel {
                 )
                 dataSource.append(apacheLicense)
 
-                self.loadTextFileFromBundle(fileName: "MITLicense") { [weak self] (result) in
+                self.loadTextFileFromBundle(fileName: "MITLicense") { [weak self] result in
                     guard let self else { return }
                     switch result {
-                    case .success(let contents):
+                    case let .success(contents):
                         let mitLicense = OpenSourceLicense(
                             type: .license,
                             title: "MIT License (MIT)",
@@ -155,11 +155,11 @@ public final class OpenSourceLicenseViewModel {
                         dataSource.append(mitLicense)
                         self.output.dataSource.accept(dataSource)
 
-                    case .failure(let error):
+                    case let .failure(error):
                         DEBUG_LOG("파일 로드 에러: \(error)")
                     }
                 }
-            case .failure(let error):
+            case let .failure(error):
                 DEBUG_LOG("파일 로드 에러: \(error)")
             }
         }
@@ -167,7 +167,10 @@ public final class OpenSourceLicenseViewModel {
 }
 
 extension OpenSourceLicenseViewModel {
-    private func loadTextFileFromBundle(fileName: String, completionHandler: @escaping (Result<String, Error>) -> Void) {
+    private func loadTextFileFromBundle(
+        fileName: String,
+        completionHandler: @escaping (Result<String, Error>) -> Void
+    ) {
         DispatchQueue.global().async {
             if let fileURL = CommonFeatureResources.bundle.url(forResource: fileName, withExtension: "txt") {
                 do {
@@ -177,7 +180,11 @@ extension OpenSourceLicenseViewModel {
                     completionHandler(.failure(error))
                 }
             } else {
-                let error = NSError(domain: "com.example.app", code: 0, userInfo: [NSLocalizedDescriptionKey: "파일을 찾을 수 없습니다."])
+                let error = NSError(
+                    domain: "com.example.app",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "파일을 찾을 수 없습니다."]
+                )
                 completionHandler(.failure(error))
             }
         }

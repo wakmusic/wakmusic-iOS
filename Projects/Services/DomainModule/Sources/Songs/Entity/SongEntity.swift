@@ -22,14 +22,14 @@ public struct SongEntity: Equatable {
         self.date = date
         self.isSelected = isSelected
     }
-    
+
     public let id, title, artist, remix: String
     public let reaction: String
     public let views, last: Int
     public let date: String
     public var isSelected: Bool
-    
-    public static func == (lhs: SongEntity, rhs:  SongEntity) -> Bool {
+
+    public static func == (lhs: SongEntity, rhs: SongEntity) -> Bool {
         lhs.id == rhs.id
     }
 }

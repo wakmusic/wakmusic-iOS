@@ -6,28 +6,29 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import Foundation
-import RxSwift
-import RxCocoa
-import Utility
 import Kingfisher
+import RxCocoa
+import RxSwift
+import UIKit
+import Utility
 
 public final class ServiceInfoViewModel {
     let input = Input()
     let output = Output()
     var disposeBag = DisposeBag()
-    
+
     public struct Input {
         var requestCacheSize: PublishSubject<Void> = PublishSubject()
         var removeCache: PublishSubject<Void> = PublishSubject()
     }
+
     public struct Output {
         var dataSource: BehaviorRelay<[ServiceInfoGroup]> = BehaviorRelay(value: [])
         var cacheSizeString: PublishSubject<String> = PublishSubject()
         var showToast: PublishSubject<String> = PublishSubject()
     }
-    
+
     init() {
         let dataSource: [ServiceInfoGroup] = [
             ServiceInfoGroup(
@@ -62,11 +63,11 @@ public final class ServiceInfoViewModel {
             )
         ]
         output.dataSource.accept(dataSource)
-        
+
         input.requestCacheSize
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
-                owner.calculateMemorySize { (result) in
+            .subscribe(onNext: { owner, _ in
+                owner.calculateMemorySize { result in
                     switch result {
                     case let .success(sizeString):
                         owner.output.cacheSizeString.onNext(sizeString)
@@ -75,10 +76,10 @@ public final class ServiceInfoViewModel {
                     }
                 }
             }).disposed(by: disposeBag)
-        
+
         input.removeCache
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 ImageCache.default.clearDiskCache { () in
                     owner.output.showToast.onNext("캐시 데이터가 삭제되었습니다.")
                 }
@@ -88,9 +89,9 @@ public final class ServiceInfoViewModel {
 
 extension ServiceInfoViewModel {
     private func calculateMemorySize(completionHandler: @escaping (Result<String, Error>) -> Void) {
-        ImageCache.default.calculateDiskStorageSize { (result) in
+        ImageCache.default.calculateDiskStorageSize { result in
             switch result {
-            case .success(let size):
+            case let .success(size):
                 let sizeString = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
                 completionHandler(.success(sizeString))
             case let .failure(error):
@@ -108,13 +109,14 @@ public struct ServiceInfoGroup {
     let accessoryType: AccessoryType
 }
 
-extension ServiceInfoGroup{
-    public enum AccessoryType{
+public extension ServiceInfoGroup {
+    enum AccessoryType {
         case detail
         case onlyTitle
         case detailTitle
     }
-    public enum Identifier: String{
+
+    enum Identifier: String {
         case termsOfUse = "서비스 이용약관"
         case privacy = "개인정보 처리방침"
         case openSourceLicense = "오픈소스 라이선스"

@@ -6,67 +6,66 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import DesignSystem
-import RxSwift
-import Utility
 import BaseFeature
-import DataMappingModule
-import MessageUI
 import CommonFeature
+import DataMappingModule
+import DesignSystem
+import MessageUI
+import RxSwift
 import SafariServices
+import UIKit
+import Utility
 
-public final class QuestionViewController: BaseViewController,ViewControllerFromStoryBoard {
-
+public final class QuestionViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var bugReportSuperView: UIView!
     @IBOutlet weak var bugReportButton: UIButton!
     @IBOutlet weak var bugReportCheckImageView: UIImageView!
-    
+
     @IBOutlet weak var suggestFunctionSuperView: UIView!
     @IBOutlet weak var suggestFunctionButton: UIButton!
     @IBOutlet weak var suggestFunctionCheckImageView: UIImageView!
-    
+
     @IBOutlet weak var addSongSuperView: UIView!
     @IBOutlet weak var addSongButton: UIButton!
     @IBOutlet weak var addSongCheckImageView: UIImageView!
-    
+
     @IBOutlet weak var editSongSuperView: UIView!
     @IBOutlet weak var editSongButton: UIButton!
     @IBOutlet weak var editSongCheckImageView: UIImageView!
-    
+
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
     @IBOutlet weak var nextButton: UIButton!
-    
-    let selectedColor:UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let unSelectedTextColor:UIColor = DesignSystemAsset.GrayColor.gray900.color
-    let unSelectedColor:UIColor = DesignSystemAsset.GrayColor.gray200.color
+
+    let selectedColor: UIColor = DesignSystemAsset.PrimaryColor.decrease.color
+    let unSelectedTextColor: UIColor = DesignSystemAsset.GrayColor.gray900.color
+    let unSelectedColor: UIColor = DesignSystemAsset.GrayColor.gray200.color
     let disposeBag = DisposeBag()
-    var viewModel:QuestionViewModel!
+    var viewModel: QuestionViewModel!
     lazy var input = QuestionViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    
-    var suggestFunctionComponent:SuggestFunctionComponent!
+
+    var suggestFunctionComponent: SuggestFunctionComponent!
     var wakMusicFeedbackComponent: WakMusicFeedbackComponent!
     var askSongComponent: AskSongComponent!
     var bugReportComponent: BugReportComponent!
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) 소멸")
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindRx()
     }
-    
+
     public static func viewController(
-        viewModel:QuestionViewModel,
+        viewModel: QuestionViewModel,
         suggestFunctionComponent: SuggestFunctionComponent,
         wakMusicFeedbackComponent: WakMusicFeedbackComponent,
         askSongComponent: AskSongComponent,
@@ -83,14 +82,14 @@ public final class QuestionViewController: BaseViewController,ViewControllerFrom
 }
 
 extension QuestionViewController {
-    private func configureUI(){
+    private func configureUI() {
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.titleLabel.text = "문의하기"
         self.titleLabel.setTextWithAttributes(kernValue: -0.5)
 
         self.closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
-        
+
         self.descriptionLabel.text = "어떤 것 관련해서 문의주셨나요?"
         self.descriptionLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 20)
         self.descriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
@@ -111,33 +110,39 @@ extension QuestionViewController {
                 ]
             ), for: .normal
         )
-            
-        let superViews:[UIView] = [self.bugReportSuperView,
-                                   self.suggestFunctionSuperView,
-                                   self.addSongSuperView,
-                                   self.editSongSuperView,
-                                   self.wakMusicFeedbackSuperView]
-        
-        let buttons:[UIButton] = [self.bugReportButton,
-                                  self.suggestFunctionButton,
-                                  self.addSongButton,
-                                  self.editSongButton,
-                                  self.wakMusicFeedbackButton]
-        
-        let imageViews:[UIImageView] = [self.bugReportCheckImageView,
-                                        self.suggestFunctionCheckImageView,
-                                        self.addSongCheckImageView,
-                                        self.editSongCheckImageView,
-                                        self.wakMusicFeedbackCheckImageView]
-        
-        for i in 0..<superViews.count {
+
+        let superViews: [UIView] = [
+            self.bugReportSuperView,
+            self.suggestFunctionSuperView,
+            self.addSongSuperView,
+            self.editSongSuperView,
+            self.wakMusicFeedbackSuperView
+        ]
+
+        let buttons: [UIButton] = [
+            self.bugReportButton,
+            self.suggestFunctionButton,
+            self.addSongButton,
+            self.editSongButton,
+            self.wakMusicFeedbackButton
+        ]
+
+        let imageViews: [UIImageView] = [
+            self.bugReportCheckImageView,
+            self.suggestFunctionCheckImageView,
+            self.addSongCheckImageView,
+            self.editSongCheckImageView,
+            self.wakMusicFeedbackCheckImageView
+        ]
+
+        for i in 0 ..< superViews.count {
             superViews[i].layer.cornerRadius = 12
             superViews[i].layer.borderColor = unSelectedColor.cgColor
             superViews[i].layer.borderWidth = 1
             imageViews[i].image = DesignSystemAsset.Storage.checkBox.image
             imageViews[i].isHidden = true
-            
-            var title:String = ""
+
+            var title: String = ""
             switch i {
             case 0:
                 title = "버그 제보"
@@ -152,10 +157,10 @@ extension QuestionViewController {
             default:
                 return
             }
-            
+
             buttons[i].setAttributedTitle(
                 NSMutableAttributedString(
-                    string:title,
+                    string: title,
                     attributes: [
                         .font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
                         .foregroundColor: unSelectedTextColor,
@@ -165,8 +170,8 @@ extension QuestionViewController {
             )
         }
     }
-    
-    private func bindRx(){
+
+    private func bindRx() {
         closeButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true)
@@ -177,42 +182,48 @@ extension QuestionViewController {
             suggestFunctionButton.rx.tap.map { _ -> Int in 1 },
             addSongButton.rx.tap.map { _ -> Int in 2 },
             editSongButton.rx.tap.map { _ -> Int in 3 },
-            wakMusicFeedbackButton.rx.tap.map{ _ -> Int in 4 }
+            wakMusicFeedbackButton.rx.tap.map { _ -> Int in 4 }
         )
         .bind(to: input.selectedIndex)
         .disposed(by: disposeBag)
-        
+
         output.mailSource
             .filter { $0 != .unknown }
             .map { $0.rawValue }
             .subscribe(onNext: { [weak self] (index: Int) in
-                guard let self = self else{
+                guard let self = self else {
                     return
                 }
-                
+
                 if !self.nextButton.isEnabled {
                     self.nextButton.isEnabled = true
                 }
-                let superViews:[UIView] = [self.bugReportSuperView,
-                                           self.suggestFunctionSuperView,
-                                           self.addSongSuperView,
-                                           self.editSongSuperView,
-                                           self.wakMusicFeedbackSuperView]
-                
-                let buttons:[UIButton] = [self.bugReportButton,
-                                          self.suggestFunctionButton,
-                                          self.addSongButton,
-                                          self.editSongButton,
-                                          self.wakMusicFeedbackButton]
-                
-                let imageViews:[UIImageView] = [self.bugReportCheckImageView,
-                                                self.suggestFunctionCheckImageView,
-                                                self.addSongCheckImageView,
-                                                self.editSongCheckImageView,
-                                                self.wakMusicFeedbackCheckImageView]
+                let superViews: [UIView] = [
+                    self.bugReportSuperView,
+                    self.suggestFunctionSuperView,
+                    self.addSongSuperView,
+                    self.editSongSuperView,
+                    self.wakMusicFeedbackSuperView
+                ]
 
-                for i in 0..<superViews.count {
-                    var title:String = ""
+                let buttons: [UIButton] = [
+                    self.bugReportButton,
+                    self.suggestFunctionButton,
+                    self.addSongButton,
+                    self.editSongButton,
+                    self.wakMusicFeedbackButton
+                ]
+
+                let imageViews: [UIImageView] = [
+                    self.bugReportCheckImageView,
+                    self.suggestFunctionCheckImageView,
+                    self.addSongCheckImageView,
+                    self.editSongCheckImageView,
+                    self.wakMusicFeedbackCheckImageView
+                ]
+
+                for i in 0 ..< superViews.count {
+                    var title: String = ""
                     switch i {
                     case 0:
                         title = "버그 제보"
@@ -229,7 +240,7 @@ extension QuestionViewController {
                     }
                     buttons[i].setAttributedTitle(
                         NSMutableAttributedString(
-                            string:title,
+                            string: title,
                             attributes: [
                                 .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
                                     DesignSystemFontFamily.Pretendard.light.font(size: 16),
@@ -239,16 +250,21 @@ extension QuestionViewController {
                         ), for: .normal
                     )
                     imageViews[i].isHidden = i == index ? false : true
-                    superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor.cgColor
-                    superViews[i].addShadow(offset: CGSize(width: 0, height: 2), color: colorFromRGB("080F34"), opacity: i == index ? 0.08 : 0)
+                    superViews[i].layer.borderColor = i == index ? self.selectedColor.cgColor : self.unSelectedColor
+                        .cgColor
+                    superViews[i].addShadow(
+                        offset: CGSize(width: 0, height: 2),
+                        color: colorFromRGB("080F34"),
+                        opacity: i == index ? 0.08 : 0
+                    )
                 }
             })
             .disposed(by: disposeBag)
-        
+
         nextButton.rx.tap
             .withLatestFrom(output.mailSource)
             .filter { $0 != .unknown }
-            .subscribe(onNext: { [weak self] (source) in
+            .subscribe(onNext: { [weak self] source in
                 guard let self = self else { return }
                 if source == .addSong {
                     let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
@@ -267,21 +283,22 @@ extension QuestionViewController {
                         }
                     )
                     self.showPanModal(content: textPopup)
-                }else{
+                } else {
                     self.goToMail(source: source)
                 }
             })
             .disposed(by: disposeBag)
-        
+
         output.showToastWithDismiss
             .filter { !$0.0.isEmpty }
             .withUnretained(self)
-            .subscribe(onNext: { (owner, params) in
+            .subscribe(onNext: { owner, params in
                 let (text, toDismiss) = params
                 owner.showToast(
                     text: text,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: toDismiss ? (56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20) : (56 + 10 + 20)
+                    verticalOffset: toDismiss ? (56 + (PlayState.shared.playerMode == .close ? 0 : 56) + 20) :
+                        (56 + 10 + 20)
                 )
                 guard toDismiss else { return }
                 owner.dismiss(animated: true)
@@ -299,8 +316,8 @@ extension QuestionViewController {
             compseVC.setSubject(source.title)
             compseVC.setMessageBody(source.body + source.suffix, isHTML: false)
             self.present(compseVC, animated: true, completion: nil)
-                
-        }else {
+
+        } else {
             let vc = TextPopupViewController.viewController(
                 text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
                 cancelButtonIsHidden: true,
@@ -311,12 +328,16 @@ extension QuestionViewController {
     }
 }
 
-extension QuestionViewController : MFMailComposeViewControllerDelegate {
-    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+extension QuestionViewController: MFMailComposeViewControllerDelegate {
+    public func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: Error?
+    ) {
         controller.dismiss(animated: true) {
             if let error = error {
                 self.input.mailComposeResult.onNext(.failure(error))
-            }else{
+            } else {
                 self.input.mailComposeResult.onNext(.success(result))
             }
         }

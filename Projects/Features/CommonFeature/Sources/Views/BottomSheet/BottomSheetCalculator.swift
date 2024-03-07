@@ -10,7 +10,7 @@ extension CGFloat {
     }
 }
 
-struct BottomSheetCalculator {
+enum BottomSheetCalculator {
     /// Calculates offset for the given content view within its superview, taking preferred height into account.
     ///
     /// - Parameters:
@@ -81,7 +81,8 @@ struct BottomSheetCalculator {
         // We add a zero threshold at the end to make the BottomSheetView stop at its biggest height.
         let highestThreshold: CGFloat = 0
         // Calculate all the offsets in between
-        let thresholds = [lowestThreshold] + zip(targetOffsets.dropFirst(), targetOffsets).map { threshold($0, $1) } + [highestThreshold]
+        let thresholds = [lowestThreshold] + zip(targetOffsets.dropFirst(), targetOffsets)
+            .map { threshold($0, $1) } + [highestThreshold]
 
         // Calculate lower bounds
         let lowerOffsets = targetOffsets[currentTargetIndex...]
@@ -139,7 +140,7 @@ extension UIView {
     func systemLayoutHeightFitting(_ size: CGSize) -> CGFloat {
         let sizeToFit: CGSize
 
-        /// Consider preferredContentSize if it's a view of UIViewController
+        // Consider preferredContentSize if it's a view of UIViewController
         if let viewController = next as? UIViewController {
             sizeToFit = viewController.preferredContentSize
         } else {

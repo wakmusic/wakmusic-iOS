@@ -16,10 +16,9 @@ public struct PlayListEntity: Equatable {
         self.image_version = image_version
         self.isSelected = isSelected
     }
-    
+
     public let image_version: Int
     public let key, title, image: String
     public let songlist: [SongEntity]
     public var isSelected: Bool
-    
 }

@@ -1,8 +1,8 @@
-import Moya
-import KeychainModule
 import DataMappingModule
 import ErrorModule
 import Foundation
+import KeychainModule
+import Moya
 
 public struct AddSongRequest: Encodable {
     var songIds: [String]
@@ -42,88 +42,89 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList:
             return "/recommended"
-            
-        case .fetchPlayListDetail(id: let id, type: let type):
+
+        case let .fetchPlayListDetail(id: id, type: type):
             switch type {
             case .custom:
                 return "/\(id)"
             case .wmRecommend:
                 return "/recommended/\(id)"
             }
-            
+
         case .createPlayList:
             return "/create"
-            
-        case .deletePlayList(key: let key):
+
+        case let .deletePlayList(key: key):
             return "/\(key)"
-            
+
         case .loadPlayList:
             return "/copy"
-            
-        case .editPlayList(key: let key, _):
+
+        case let .editPlayList(key: key, _):
             return "/\(key)/songs"
-            
-        case .editPlayListName(key: let key, _):
+
+        case let .editPlayListName(key: key, _):
             return "/\(key)"
-            
-        case .addSongIntoPlayList(key: let key, _):
+
+        case let .addSongIntoPlayList(key: key, _):
             return "/\(key)/songs/add"
-            
-        case .removeSongs(key: let key, _):
+
+        case let .removeSongs(key: key, _):
             return "/\(key)/songs/remove"
         }
     }
-        
+
     public var method: Moya.Method {
         switch self {
         case .fetchRecommendPlayList, .fetchPlayListDetail:
             return .get
-            
+
         case .createPlayList, .loadPlayList, .addSongIntoPlayList, .removeSongs:
             return .post
-            
+
         case .editPlayList, .editPlayListName:
             return .patch
-            
+
         case .deletePlayList:
             return .delete
         }
     }
-           
+
     public var task: Moya.Task {
         switch self {
         case .fetchRecommendPlayList:
             return .requestPlain
-            
+
         case .fetchPlayListDetail, .deletePlayList:
             return .requestPlain
-            
+
         case let .loadPlayList(key):
             return .requestJSONEncodable(["key": key])
-            
-        case .createPlayList(title: let title):
-            return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1...11))))
-            
-        case .editPlayList(_, songs: let songs):
+
+        case let .createPlayList(title: title):
+            return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1 ... 11))))
+
+        case let .editPlayList(_, songs: songs):
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
-            
-        case .editPlayListName(_, title: let title):
+
+        case let .editPlayListName(_, title: title):
             return .requestJSONEncodable(EditPlayListNameRequset(title: title))
-            
-        case . addSongIntoPlayList(_, songs: let songs):
+
+        case let .addSongIntoPlayList(_, songs: songs):
             return .requestJSONEncodable(AddSongRequest(songIds: songs))
-            
-        case .removeSongs(_, songs: let songs):
+
+        case let .removeSongs(_, songs: songs):
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
         }
     }
-            
+
     public var jwtTokenType: JwtTokenType {
         switch self {
         case .fetchRecommendPlayList, .fetchPlayListDetail:
             return .none
-            
-        case .createPlayList, .editPlayList, .deletePlayList, .loadPlayList, .editPlayListName, .addSongIntoPlayList, .removeSongs:
+
+        case .createPlayList, .editPlayList, .deletePlayList, .loadPlayList, .editPlayListName, .addSongIntoPlayList,
+             .removeSongs:
             return .accessToken
         }
     }

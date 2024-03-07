@@ -2,7 +2,6 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-
 public extension SingleSongResponseDTO {
     func toDomain() -> SongEntity {
         SongEntity(
@@ -19,9 +18,11 @@ public extension SingleSongResponseDTO {
 }
 
 public extension SearchResultResponseDTO {
-    
     func toDomain() -> SearchResultEntity {
-        SearchResultEntity(song: song.map({$0.toDomain()}), artist: artist.map{$0.toDomain()}, remix: remix.map({$0.toDomain()}))
+        SearchResultEntity(
+            song: song.map { $0.toDomain() },
+            artist: artist.map { $0.toDomain() },
+            remix: remix.map { $0.toDomain() }
+        )
     }
-    
 }

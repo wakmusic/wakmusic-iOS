@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import RxDataSources
-import DomainModule
 
 public typealias SearchSectionModel = SectionModel<(TabPosition, Int), SongEntity>
 
-public enum TabPosition: Int{
+public enum TabPosition: Int {
     case all = 0
     case song
     case artist

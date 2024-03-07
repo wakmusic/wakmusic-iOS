@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol PostPlaybackLogUseCase {
     func execute(item: Data) -> Single<PlaybackLogEntity>

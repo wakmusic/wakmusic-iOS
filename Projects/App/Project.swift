@@ -1,24 +1,23 @@
-import ProjectDescriptionHelpers
-import ProjectDescription
 import EnvironmentPlugin
 import Foundation
+import ProjectDescription
+import ProjectDescriptionHelpers
 
 let settinges: Settings =
-    .settings(base: env.baseSetting,
-              configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-              ],
-              defaultSettings: .recommended)
-
+    .settings(
+        base: env.baseSetting,
+        configurations: [
+            .debug(name: .debug),
+            .release(name: .release)
+        ],
+        defaultSettings: .recommended
+    )
 
 let isForDev = (ProcessInfo.processInfo.environment["TUIST_ENV"] ?? "DEV") == "DEV" ? true : false
 
 let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrashlytics]
 
-
 let targets: [Target] = [
-    
     .init(
         name: env.name,
         platform: .iOS,
@@ -46,7 +45,7 @@ let targets: [Target] = [
             ]
         )
     ),
-    
+
     .init(
         name: "\(env.name)Tests",
         platform: .iOS,
@@ -63,31 +62,31 @@ let targets: [Target] = [
 
 let schemes: [Scheme] = [
     .init(
-      name: "\(env.name)Tests-DEBUG",
-      shared: true,
-      buildAction: .buildAction(targets: ["\(env.name)"]),
-      testAction: TestAction.targets(
-          ["\(env.name)"],
-          configuration: .debug,
-          options: TestActionOptions.options(
-              coverage: true,
-              codeCoverageTargets: ["\(env.name)"]
-          )
-      ),
-      runAction: .runAction(configuration: .debug),
-      archiveAction: .archiveAction(configuration: .debug),
-      profileAction: .profileAction(configuration: .debug),
-      analyzeAction: .analyzeAction(configuration: .debug)
+        name: "\(env.name)Tests-DEBUG",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.name)"]),
+        testAction: TestAction.targets(
+            ["\(env.name)"],
+            configuration: .debug,
+            options: TestActionOptions.options(
+                coverage: true,
+                codeCoverageTargets: ["\(env.name)"]
+            )
+        ),
+        runAction: .runAction(configuration: .debug),
+        archiveAction: .archiveAction(configuration: .debug),
+        profileAction: .profileAction(configuration: .debug),
+        analyzeAction: .analyzeAction(configuration: .debug)
     ),
     .init(
-      name: "\(env.name)-RELEASE",
-      shared: true,
-      buildAction: BuildAction(targets: ["\(env.name)"]),
-      testAction: nil,
-      runAction: .runAction(configuration: .release),
-      archiveAction: .archiveAction(configuration: .release),
-      profileAction: .profileAction(configuration: .release),
-      analyzeAction: .analyzeAction(configuration: .release)
+        name: "\(env.name)-RELEASE",
+        shared: true,
+        buildAction: BuildAction(targets: ["\(env.name)"]),
+        testAction: nil,
+        runAction: .runAction(configuration: .release),
+        archiveAction: .archiveAction(configuration: .release),
+        profileAction: .profileAction(configuration: .release),
+        analyzeAction: .analyzeAction(configuration: .release)
     )
 ]
 
@@ -96,7 +95,7 @@ let project: Project =
         name: env.name,
         organizationName: env.organizationName,
         packages: [],
-        //packages: [.Amplify],
+        // packages: [.Amplify],
         settings: settinges,
         targets: targets,
         schemes: schemes

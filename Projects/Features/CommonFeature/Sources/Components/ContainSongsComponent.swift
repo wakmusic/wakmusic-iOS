@@ -6,19 +6,25 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol ContainSongsDependency: Dependency {
-    var  multiPurposePopComponent :  MultiPurposePopComponent {get}
-    var  fetchPlayListUseCase : any FetchPlayListUseCase {get}
-    var  addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {get}
-    
+    var multiPurposePopComponent: MultiPurposePopComponent { get }
+    var fetchPlayListUseCase: any FetchPlayListUseCase { get }
+    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase { get }
 }
 
 public final class ContainSongsComponent: Component<ContainSongsDependency> {
-    public func makeView(songs:[String]) -> ContainSongsViewController  {
-        return ContainSongsViewController.viewController(multiPurposePopComponent: dependency.multiPurposePopComponent ,viewModel: .init(songs:songs,fetchPlayListUseCase: dependency.fetchPlayListUseCase,addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase ))
+    public func makeView(songs: [String]) -> ContainSongsViewController {
+        return ContainSongsViewController.viewController(
+            multiPurposePopComponent: dependency.multiPurposePopComponent,
+            viewModel: .init(
+                songs: songs,
+                fetchPlayListUseCase: dependency.fetchPlayListUseCase,
+                addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase
+            )
+        )
     }
 }

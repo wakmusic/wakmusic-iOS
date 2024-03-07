@@ -6,28 +6,28 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
-import DesignSystem
-import NaverThirdPartyLogin
-import RxSwift
-import RxRelay
 import AuthenticationServices
 import CommonFeature
+import DesignSystem
+import NaverThirdPartyLogin
+import RxRelay
+import RxSwift
 import SafariServices
+import UIKit
+import Utility
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var fakeView: UIView!
-    
+
     @IBOutlet weak var appLogoImageView: UIImageView!
     @IBOutlet weak var appNameLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    
+
     @IBOutlet weak var naverLoginButton: UIButton!
     @IBOutlet weak var naverImageVIew: UIImageView!
     @IBOutlet weak var naverSuperView: UIView!
-    
+
     @IBOutlet weak var googleImageView: UIImageView!
     @IBOutlet weak var googleSuperView: UIView!
     @IBOutlet weak var googleLoginButton: UIButton!
@@ -35,11 +35,11 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var appleImageView: UIImageView!
     @IBOutlet weak var appleSuperView: UIView!
     @IBOutlet weak var appleLoginButton: UIButton!
-    
+
     @IBOutlet weak var serviceButton: UIButton!
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
-    
+
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
 
@@ -49,28 +49,28 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     )
     private lazy var output = viewModel.transform(from: input)
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindRx()
         configureLogin()
     }
 
-    public static func viewController(viewModel:LoginViewModel) -> LoginViewController {
+    public static func viewController(viewModel: LoginViewModel) -> LoginViewController {
         let viewController = LoginViewController.viewController(storyBoardName: "SignIn", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
-extension LoginViewController{
-    private func bindRx(){
+extension LoginViewController {
+    private func bindRx() {
         output
             .showErrorToast
             .subscribe(onNext: { [weak self] (msg: String) in
-            guard let self = self else { return }
-            self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-        }).disposed(by: disposeBag)
+                guard let self = self else { return }
+                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            }).disposed(by: disposeBag)
     }
 
     private func configureLogin() {
@@ -85,19 +85,20 @@ extension LoginViewController{
         googleLoginButton.rx.tap.bind {
             GoogleLoginManager.shared.googleLoginRequest()
         }.disposed(by: disposeBag)
-        
+
         viewModel.getGoogleTokenToSafariDismiss
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { _ in
-                guard let safari = UIApplication.shared.windows.first?.rootViewController?.presentedViewController as? SFSafariViewController else{
+                guard let safari = UIApplication.shared.windows.first?.rootViewController?
+                    .presentedViewController as? SFSafariViewController else {
                     return
                 }
                 safari.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
-        
+
         serviceButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 let vc = ContractViewController.viewController(type: .service)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
@@ -105,7 +106,7 @@ extension LoginViewController{
 
         privacyButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 let vc = ContractViewController.viewController(type: .privacy)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
@@ -113,7 +114,7 @@ extension LoginViewController{
     }
 }
 
-public extension LoginViewController{
+public extension LoginViewController {
     func scrollToTop() {
         scrollView.setContentOffset(.zero, animated: true)
     }

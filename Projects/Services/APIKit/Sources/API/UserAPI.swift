@@ -1,8 +1,8 @@
-import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
 import KeychainModule
+import Moya
 
 public enum UserAPI {
     case fetchProfileList
@@ -18,24 +18,24 @@ public enum UserAPI {
     case withdrawUserInfo
 }
 
-public struct RequsetProfileModel:Encodable {
-    var type:String
+public struct RequsetProfileModel: Encodable {
+    var type: String
 }
 
-public struct RequsetUserNameModel:Encodable {
-    var name:String
+public struct RequsetUserNameModel: Encodable {
+    var name: String
 }
 
-public struct RequsetEditFavoriteSongs:Encodable {
-    var songIds:[String]
+public struct RequsetEditFavoriteSongs: Encodable {
+    var songIds: [String]
 }
 
-public struct RequsetEditPlayList:Encodable {
-    var playlistKeys:[String]
+public struct RequsetEditPlayList: Encodable {
+    var playlistKeys: [String]
 }
 
 public struct RequsetDeletePlayList: Encodable {
-    var playlistKeys:[String]
+    var playlistKeys: [String]
 }
 
 public struct RequestDeleteFavoriteList: Encodable {
@@ -43,7 +43,6 @@ public struct RequestDeleteFavoriteList: Encodable {
 }
 
 extension UserAPI: WMAPI {
-
     public var domain: WMDomain {
         .user
     }
@@ -68,43 +67,43 @@ extension UserAPI: WMAPI {
             return "/playlists"
         case .deletePlayList:
             return "/playlists/delete"
-        
+
         case .fetchUserInfo:
             return "/profile"
-            
+
         case .withdrawUserInfo:
             return "/remove"
         }
     }
-        
+
     public var method: Moya.Method {
         switch self {
-        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs,.fetchUserInfo:
+        case .fetchProfileList, .fetchPlayList, .fetchFavoriteSongs, .fetchUserInfo:
             return .get
-        case .setProfile,.setUserName:
+        case .setProfile, .setUserName:
             return .patch
-        case  .withdrawUserInfo:
+        case .withdrawUserInfo:
             return .delete
-        
-        case .editPlayListOrder,.editFavoriteSongsOrder:
+
+        case .editPlayListOrder, .editFavoriteSongsOrder:
             return .put
-            
+
         case .deletePlayList, .deleteFavoriteList:
             return .post
         }
     }
-    
+
     public var task: Moya.Task {
         switch self {
         case let .setProfile(type):
             return .requestJSONEncodable(RequsetProfileModel(type: type))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(name: name))
-        case .fetchProfileList, .fetchPlayList,.fetchFavoriteSongs,.fetchUserInfo,.withdrawUserInfo:
+        case .fetchProfileList, .fetchPlayList, .fetchFavoriteSongs, .fetchUserInfo, .withdrawUserInfo:
             return .requestPlain
-        case .editFavoriteSongsOrder(ids: let ids):
+        case let .editFavoriteSongsOrder(ids: ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songIds: ids))
-        case .editPlayListOrder(ids: let ids):
+        case let .editPlayListOrder(ids: ids):
             return .requestJSONEncodable(RequsetEditPlayList(playlistKeys: ids))
         case let .deletePlayList(ids):
             return .requestJSONEncodable(RequsetDeletePlayList(playlistKeys: ids))
@@ -112,16 +111,16 @@ extension UserAPI: WMAPI {
             return .requestJSONEncodable(RequestDeleteFavoriteList(songIds: ids))
         }
     }
-        
+
     public var jwtTokenType: JwtTokenType {
         switch self {
         case .fetchProfileList:
             return .none
-        default :
+        default:
             return .accessToken
         }
     }
-    
+
     public var errorMap: [Int: WMError] {
         switch self {
         default:

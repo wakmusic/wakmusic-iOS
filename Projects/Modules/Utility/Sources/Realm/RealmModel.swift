@@ -20,10 +20,10 @@ public final class PlayedLists: Object {
     @objc public dynamic var date: String = ""
     @objc public dynamic var lastPlayed: Bool = false
 
-    public override static func primaryKey() -> String? {
+    override public static func primaryKey() -> String? {
         return "id"
     }
-    
+
     public convenience init(
         id: String,
         title: String,

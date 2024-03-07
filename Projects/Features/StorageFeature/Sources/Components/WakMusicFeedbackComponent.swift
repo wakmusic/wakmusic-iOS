@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol WakMusicFeedbackDependency: Dependency {
     var inquiryWeeklyChartUseCase: any InquiryWeeklyChartUseCase { get }
@@ -16,6 +16,7 @@ public protocol WakMusicFeedbackDependency: Dependency {
 
 public final class WakMusicFeedbackComponent: Component<WakMusicFeedbackDependency> {
     public func makeView() -> WakMusicFeedbackViewController {
-        return WakMusicFeedbackViewController.viewController(viewModel: .init(inquiryWeeklyChartUseCase: dependency.inquiryWeeklyChartUseCase))
+        return WakMusicFeedbackViewController
+            .viewController(viewModel: .init(inquiryWeeklyChartUseCase: dependency.inquiryWeeklyChartUseCase))
     }
 }

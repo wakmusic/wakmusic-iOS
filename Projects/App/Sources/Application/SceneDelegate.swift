@@ -1,9 +1,9 @@
-import UIKit
-import RootFeature
-import Utility
-import NaverThirdPartyLogin
-import CommonFeature
 import Combine
+import CommonFeature
+import NaverThirdPartyLogin
+import RootFeature
+import UIKit
+import Utility
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -20,22 +20,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
+    func sceneDidDisconnect(_ scene: UIScene) {}
 
-    }
-    func sceneDidBecomeActive(_ scene: UIScene) {
+    func sceneDidBecomeActive(_ scene: UIScene) {}
 
-    }
-    func sceneWillResignActive(_ scene: UIScene) {
+    func sceneWillResignActive(_ scene: UIScene) {}
 
-    }
-    
     private var statePublisher: AnyCancellable?
-    
+
     func sceneWillEnterForeground(_ scene: UIScene) {
         statePublisher?.cancel()
     }
-                  
+
     func sceneDidEnterBackground(_ scene: UIScene) {
         let isPlayed = PlayState.shared.state
         statePublisher = PlayState.shared.$state.sink { state in
@@ -46,26 +42,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
-    
-    ///MARK: - Handling DeepLink
+
+    // MARK: - Handling DeepLink
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
-        
+
         let scheme: String = url.scheme ?? ""
         DEBUG_LOG("[openURLContexts] scheme: \(scheme), URL: \(url.absoluteString)")
-        
+
         switch scheme {
-        case GOOGLE_URL_SCHEME(): //구글
+        case GOOGLE_URL_SCHEME(): // 구글
             GoogleLoginManager.shared.getGoogleToken(url)
 
-        case NAVER_URL_SCHEME(): //네이버
+        case NAVER_URL_SCHEME(): // 네이버
             NaverThirdPartyLoginConnection.getSharedInstance().receiveAccessToken(url)
-            
+
         default: return
         }
     }
-    
-    ///MARK: - Handling UniversalLink
+
+    // MARK: - Handling UniversalLink
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
               let webpageURL = userActivity.webpageURL else {

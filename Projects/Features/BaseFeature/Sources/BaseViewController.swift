@@ -9,15 +9,13 @@
 import UIKit
 
 open class BaseViewController: UIViewController {
-
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         configureCommonUI()
     }
 }
 
 extension BaseViewController {
-    
     /// 1. 네비게이션 바 숨김, 2. 테이블 뷰를 사용한다면 섹션헤더 간격 0으로 설정
     private func configureCommonUI() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)

@@ -6,15 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
-public protocol NoticePopupDependency: Dependency {
-}
+public protocol NoticePopupDependency: Dependency {}
 
 public final class NoticePopupComponent: Component<NoticePopupDependency> {
-    public func makeView(model: [FetchNoticeEntity]) -> NoticePopupViewController  {
+    public func makeView(model: [FetchNoticeEntity]) -> NoticePopupViewController {
         return NoticePopupViewController.viewController(
             viewModel: .init(
                 fetchNoticeEntities: model

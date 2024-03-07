@@ -6,18 +6,18 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
-import CommonFeature
 
 public protocol AfterLoginDependency: Dependency {
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
-    var requestComponent: RequestComponent {get}
-    var profilePopComponent: ProfilePopComponent {get}
-    var myPlayListComponent: MyPlayListComponent {get}
-    var multiPurposePopComponent: MultiPurposePopComponent {get}
-    var favoriteComponent : FavoriteComponent {get}
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
+    var requestComponent: RequestComponent { get }
+    var profilePopComponent: ProfilePopComponent { get }
+    var myPlayListComponent: MyPlayListComponent { get }
+    var multiPurposePopComponent: MultiPurposePopComponent { get }
+    var favoriteComponent: FavoriteComponent { get }
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {

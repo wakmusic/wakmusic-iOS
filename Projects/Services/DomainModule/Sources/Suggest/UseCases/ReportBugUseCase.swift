@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol ReportBugUseCase {
     func execute(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity>

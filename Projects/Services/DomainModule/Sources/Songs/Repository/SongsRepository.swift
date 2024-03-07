@@ -1,7 +1,7 @@
-import RxSwift
 import DataMappingModule
 import ErrorModule
 import Foundation
+import RxSwift
 
 public protocol SongsRepository {
     func fetchSearchSong(keyword: String) -> Single<SearchResultEntity>

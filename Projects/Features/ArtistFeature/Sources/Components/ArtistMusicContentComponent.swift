@@ -6,11 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import UIKit
-import NeedleFoundation
 import ArtistDomainInterface
 import CommonFeature
+import DataMappingModule
+import DomainModule
+import Foundation
+import NeedleFoundation
 
 public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }

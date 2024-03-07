@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct FetchNoticeUseCaseImpl: FetchNoticeUseCase {
     private let noticeRepository: any NoticeRepository

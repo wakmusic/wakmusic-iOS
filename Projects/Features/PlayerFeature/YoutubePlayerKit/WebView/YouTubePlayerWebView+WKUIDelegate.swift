@@ -4,7 +4,6 @@ import WebKit
 // MARK: - YouTubePlayerWebView+WKUIDelegate
 
 extension YouTubePlayerWebView: WKUIDelegate {
-    
     /// WebView create WebView with configuration for navigation action
     /// - Parameters:
     ///   - webView: The WKWebView
@@ -25,5 +24,4 @@ extension YouTubePlayerWebView: WKUIDelegate {
         // Return nil as the URL has already been handled
         return nil
     }
-    
 }

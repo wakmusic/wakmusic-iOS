@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import ArtistDomainInterface
+import Foundation
 
 public struct ArtistListResponseDTO: Decodable, Equatable {
     public let artistId, name, short: String
@@ -43,9 +43,7 @@ public extension ArtistListResponseDTO {
             case korName = "kr"
         }
     }
-}
 
-public extension ArtistListResponseDTO {
     struct Image: Codable {
         public let round: Int
         public let square: Int

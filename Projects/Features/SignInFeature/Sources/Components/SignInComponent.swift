@@ -6,14 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol SignInDependency: Dependency {
-    var fetchTokenUseCase: any FetchTokenUseCase {get}
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {get}
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
+    var fetchTokenUseCase: any FetchTokenUseCase { get }
+    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase { get }
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
 }
 
 public final class SignInComponent: Component<SignInDependency> {
