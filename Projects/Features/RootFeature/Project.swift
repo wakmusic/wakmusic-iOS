@@ -10,9 +10,11 @@ let project = Project.module(
             product: .staticFramework,
             spec: .init(
                 resources: ["Resources/**"],
-                dependencies: [.feature(target: .BaseFeature),
-                               .feature(target: .MainTabFeature),
-                               .domain(target: .AppDomain, type: .interface)]
+                dependencies: [
+                    .feature(target: .BaseFeature),
+                    .feature(target: .MainTabFeature),
+                    .domain(target: .AppDomain, type: .interface)
+                ]
             )
         )
     ]
