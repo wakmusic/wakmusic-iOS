@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ArtistSongSortType: String, Decodable {
+public enum ArtistSongSortType: String {
     case new
     case popular
     case old
