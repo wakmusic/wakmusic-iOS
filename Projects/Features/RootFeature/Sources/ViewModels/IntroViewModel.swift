@@ -15,11 +15,11 @@ import BaseFeature
 import KeychainModule
 import ErrorModule
 import DataMappingModule
-
+import AppDomainInterface
 
 final public class IntroViewModel: ViewModelType {
     var fetchUserInfoUseCase : FetchUserInfoUseCase!
-    var fetchCheckAppUseCase: FetchCheckAppUseCase!
+    var fetchAppCheckUseCase: FetchAppCheckUseCase!
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -31,17 +31,17 @@ final public class IntroViewModel: ViewModelType {
 
     public struct Output {
         var permissionResult: PublishSubject<Bool?> = PublishSubject()
-        var appInfoResult: PublishSubject<Result<AppInfoEntity, Error>> = PublishSubject()
+        var appInfoResult: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
         var userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
         var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public init(
         fetchUserInfoUseCase: FetchUserInfoUseCase,
-        fetchCheckAppUseCase: FetchCheckAppUseCase
+        fetchAppCheckUseCase: FetchAppCheckUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
-        self.fetchCheckAppUseCase = fetchCheckAppUseCase
+        self.fetchAppCheckUseCase = fetchAppCheckUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
     
@@ -62,14 +62,14 @@ final public class IntroViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.fetchAppCheck
-            .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
+            .flatMap{ [weak self] _ -> Observable<AppCheckEntity> in
                 guard let self else { return Observable.empty() }
-                return self.fetchCheckAppUseCase.execute()
-                    .catch({ (error) -> Single<AppInfoEntity> in
+                return self.fetchAppCheckUseCase.execute()
+                    .catch({ (error) -> Single<AppCheckEntity> in
                         let wmError = error.asWMError
                         if wmError == .offline {
-                            return Single<AppInfoEntity>.create { single in
-                                single(.success(AppInfoEntity(
+                            return Single<AppCheckEntity>.create { single in
+                                single(.success(AppCheckEntity(
                                         flag: .offline,
                                         title: "",
                                         description: wmError.errorDescription ?? "",

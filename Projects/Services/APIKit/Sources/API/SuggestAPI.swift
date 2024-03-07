@@ -95,8 +95,7 @@ extension SuggestAPI: WMAPI {
             }()
             var parameters: [String: Any] = ["userId": userID,
                                              "detailContent": content,
-                                             "osVersion": "\(osName) \(versionString)",
-                                             "deviceModel": Device().modelName]
+                                             "osVersion": "\(osName) \(versionString)"]
             if !nickname.isEmpty {
                 parameters["nickname"] = nickname
             }
