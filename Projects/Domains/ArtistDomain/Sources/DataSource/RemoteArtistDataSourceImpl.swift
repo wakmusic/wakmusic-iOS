@@ -15,12 +15,12 @@ public final class RemoteArtistDataSourceImpl: BaseRemoteDataSource<ArtistAPI>, 
     public func fetchArtistList() -> Single<[ArtistListEntity]> {
         request(.fetchArtistList)
             .map([ArtistListResponseDTO].self)
-            .map { $0.map { $0.toDomain() }}
+            .map { $0.map { $0.toDomain() } }
     }
 
     public func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]> {
         request(.fetchArtistSongList(id: id, sort: sort, page: page))
             .map([ArtistSongListResponseDTO].self)
-            .map { $0.map { $0.toDomain() }}
+            .map { $0.map { $0.toDomain() } }
     }
 }
