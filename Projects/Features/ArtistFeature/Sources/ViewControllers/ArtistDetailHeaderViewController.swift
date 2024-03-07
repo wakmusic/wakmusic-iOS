@@ -56,7 +56,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 extension ArtistDetailHeaderViewController {
     func update(model: ArtistListEntity) {
         let artistName: String = model.name
-        let artistEngName: String = model.ID.capitalizingFirstLetter
+        let artistEngName: String = model.artistId.capitalizingFirstLetter
         let artistNameAttributedString = NSMutableAttributedString(
             string: artistName + " " + artistEngName,
             attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
@@ -120,7 +120,7 @@ extension ArtistDetailHeaderViewController {
         )
         self.introDescriptionLabel.attributedText = artistIntroDescriptionAttributedString
         
-        let originImageURLString: String = WMImageAPI.fetchArtistWithSquare(id: model.ID, version: model.imageSquareVersion).toString
+        let originImageURLString: String = WMImageAPI.fetchArtistWithSquare(id: model.artistId, version: model.imageSquareVersion).toString
         let encodedImageURLString: String = originImageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? originImageURLString
         artistImageView.kf.setImage(
             with: URL(string: encodedImageURLString),

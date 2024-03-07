@@ -39,7 +39,7 @@ class ArtistMusicCell: UITableViewCell {
     @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
         let songEntity: SongEntity = SongEntity(
-            id: song.ID,
+            id: song.songId,
             title: song.title,
             artist: song.artist,
             remix: song.remix,
@@ -80,7 +80,7 @@ extension ArtistMusicCell {
         )
         
         albumImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.ID).toString),
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.songId).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )

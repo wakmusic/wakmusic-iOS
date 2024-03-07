@@ -11,17 +11,17 @@ import ArtistDomainInterface
 import Utility
 
 public struct ArtistSongListResponseDTO: Decodable, Equatable {
-    public let ID, title, artist, remix: String
+    public let songId, title, artist, remix: String
     public let reaction: String
     public let date: Int
     public let total: ArtistSongListResponseDTO.Total?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.ID == rhs.ID
+        return lhs.songId == rhs.songId
     }
 
     enum CodingKeys: String, CodingKey {
-        case ID = "songId"
+        case songId
         case title, artist, remix, reaction, date, total
     }
 }
@@ -36,7 +36,7 @@ public extension ArtistSongListResponseDTO {
 public extension ArtistSongListResponseDTO {
     func toDomain() -> ArtistSongListEntity {
         ArtistSongListEntity(
-            ID: ID,
+            songId: songId,
             title: title,
             artist: artist,
             remix: remix,

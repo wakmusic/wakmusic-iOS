@@ -46,7 +46,7 @@ public final class ArtistViewModel: ViewModelType {
 
                 if model.count == 1 {
                     let hiddenItem: ArtistListEntity = ArtistListEntity(
-                        ID: "",
+                        artistId: "",
                         name: "",
                         short: "",
                         group: "",

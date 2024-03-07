@@ -31,7 +31,7 @@ extension ArtistListCell {
                          .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
                          .kern: -0.5]
         )
-        let originImageURLString: String = WMImageAPI.fetchArtistWithRound(id: model.ID, version: model.imageRoundVersion).toString
+        let originImageURLString: String = WMImageAPI.fetchArtistWithRound(id: model.artistId, version: model.imageRoundVersion).toString
         let encodedImageURLString: String = originImageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? originImageURLString
         
         artistLabel.attributedText = artistNameAttributedString
