@@ -9,7 +9,7 @@
 import RxSwift
 import ArtistDomainInterface
 
-public struct ArtistRepositoryImpl: ArtistRepository {
+public final class ArtistRepositoryImpl: ArtistRepository {
     private let remoteArtistDataSource: any RemoteArtistDataSource
 
     public init(
