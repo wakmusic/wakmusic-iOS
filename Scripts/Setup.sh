@@ -34,6 +34,13 @@ else
   tuist version
 fi
 
+if whice carthage > /dev/null; then
+  echo "✅ Carthage가 설치되어있어요."
+else
+  echo "❌ Carthage가 설치되어있지 않아요. Carthage 설치를 시작해요."
+  brew install carthage
+fi
+
 echo "✅ 개발 환경 기본 세팅을 완료했어요!"
 
 git config --local include.path ../.gitconfig
