@@ -7,7 +7,13 @@ let project = Project.module(
     targets: [
         .implements(
             module: .domain(.BaseDomain),
-            product: .staticFramework
+            product: .staticFramework,
+            spec: .init(
+                dependencies: [.Project.Module.Utility,
+                               .Project.Module.ErrorModule,
+                               .Project.Module.KeychainModule,
+                               .Project.Module.ThirdPartyLib]
+            )
         ),
         .interface(module: .domain(.BaseDomain)),
         .tests(
