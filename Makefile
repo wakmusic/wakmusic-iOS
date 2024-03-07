@@ -23,3 +23,6 @@ pg:
 
 module:
 	swift Scripts/GenerateModule.swift
+
+setup:
+	sh Scripts/Setup.sh
