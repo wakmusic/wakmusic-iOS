@@ -48,11 +48,14 @@ extension ArtistAPI: WMAPI {
         case .fetchArtistList:
             return .requestPlain
         case let .fetchArtistSongList(id, sort, page):
-            return .requestParameters(parameters: [
-                "id": id,
-                "sort": sort.rawValue,
-                "start": (page == 1) ? 0 : (page - 1) * 30
-            ], encoding: URLEncoding.queryString)
+            return .requestParameters(
+                parameters: [
+                    "id": id,
+                    "sort": sort.rawValue,
+                    "start": (page == 1) ? 0 : (page - 1) * 30
+                ], 
+                encoding: URLEncoding.queryString
+            )
         }
     }
 
