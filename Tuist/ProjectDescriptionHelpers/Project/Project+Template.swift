@@ -4,7 +4,6 @@ import Foundation
 import EnvironmentPlugin
 
 public extension Project {
-    
     static func module(
         name: String,
         options: Options = .options(),
@@ -14,15 +13,15 @@ public extension Project {
             configurations: [
                 .debug(name: .debug),
                 .release(name: .release)
-            ], defaultSettings: .recommended),
+            ], 
+            defaultSettings: .recommended
+        ),
         targets: [Target],
         fileHeaderTemplate: FileHeaderTemplate? = nil,
         additionalFiles: [FileElement] = [],
         resourceSynthesizers: [ResourceSynthesizer] = .default
     ) -> Project {
-        
         #warning("백튼님 여기 데모(Example) 앱 도입할 때 , schemes 쪽 건드려야할 듯??")
-        
         return Project(
             name: name,
             organizationName: env.organizationName,
@@ -34,8 +33,6 @@ public extension Project {
             fileHeaderTemplate: fileHeaderTemplate,
             additionalFiles: additionalFiles,
             resourceSynthesizers: resourceSynthesizers
-            
-            
         )
     }
     
