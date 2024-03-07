@@ -87,7 +87,16 @@ func registerModulePaths() {
 
 func makeDirectory(path: String) {
     do {
-        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+        if fileManager.fileExists(atPath: path) {
+            print("디렉토리를 생성하려는 곳에 이미 디렉토리가 존재해요, 덮어쓰기할까요?\n경로 : \(path)\n(y / n)")
+            let isOverwrite = readLine()?.lowercased() == "y"
+            if isOverwrite {
+                try fileManager.removeItem(atPath: path)
+                try fileManager.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+            }
+        } else {
+            try fileManager.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+        }
     } catch {
         fatalError("❌ failed to create directory: \(path)")
     }
