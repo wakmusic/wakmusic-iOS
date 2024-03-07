@@ -1,0 +1,40 @@
+name: Auto assign PR author
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  assign-pr-author:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get PR author
+        id: get-pr-author
+        run: echo "author=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
+
+      - name: Assign PR author
+        run: gh pr edit ${{ github.event.number }} --add-assignee ${{ steps.get-pr-author.outputs.author }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Comment success result to PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ success() }}
+        with:
+          message: |
+            ## ✅ Assign 자동 지정을 성공했어요!
+            @${{ steps.get-pr-author.outputs.author }}
+          allow-repeats: true
+
+      - name: Comment failure result to PR
+        uses: mshick/add-pr-comment@v2
+        if: ${{ failure() }}
+        with:
+          message: "## ❌ PR의 Assign 자동 지정을 실패했어요."
+          allow-repeats: true
