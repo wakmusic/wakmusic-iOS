@@ -11,8 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import DomainModule
-import DataMappingModule
+import ArtistDomainInterface
 
 public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     

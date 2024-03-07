@@ -8,7 +8,6 @@
 
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol FetchArtistSongListUseCase {
     func execute(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]>

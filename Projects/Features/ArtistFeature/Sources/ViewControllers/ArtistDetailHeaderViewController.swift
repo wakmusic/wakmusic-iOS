@@ -11,7 +11,7 @@ import Utility
 import DesignSystem
 import RxSwift
 import RxCocoa
-import DomainModule
+import ArtistDomainInterface
 
 class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStoryBoard {
 

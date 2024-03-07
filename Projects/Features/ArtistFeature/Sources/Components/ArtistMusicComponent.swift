@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 import NeedleFoundation
-import DomainModule
-import DataMappingModule
+import ArtistDomainInterface
 
 public protocol ArtistMusicDependency: Dependency {
     var artistMusicContentComponent: ArtistMusicContentComponent { get }

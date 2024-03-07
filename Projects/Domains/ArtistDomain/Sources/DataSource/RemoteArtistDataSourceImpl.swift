@@ -6,12 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import APIKit
-import RxSwift
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
+import RxSwift
+import BaseDomain
+import ArtistDomainInterface
 
 public final class RemoteArtistDataSourceImpl: BaseRemoteDataSource<ArtistAPI>, RemoteArtistDataSource {
     public func fetchArtistList() -> Single<[ArtistListEntity]> {

@@ -6,12 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
-import ErrorModule
-import NetworkModule
-import DatabaseModule
 import RxSwift
+import ArtistDomainInterface
 
 public struct ArtistRepositoryImpl: ArtistRepository {
     private let remoteArtistDataSource: any RemoteArtistDataSource

@@ -16,6 +16,7 @@ import CommonFeature
 import DataMappingModule
 import DomainModule
 import NVActivityIndicatorView
+import ArtistDomainInterface
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import ArtistDomainInterface
 
-public struct ArtistListResponseDTO: Codable, Equatable {
+public struct ArtistListResponseDTO: Decodable, Equatable {
     public let ID, name, short: String
     public let description: String
     public let title: ArtistListResponseDTO.Title?
@@ -50,5 +51,26 @@ public extension ArtistListResponseDTO {
     // MARK: - Title
     struct Title: Codable {
         public let app: String
+    }
+}
+
+public extension ArtistListResponseDTO {
+    func toDomain() -> ArtistListEntity {
+        ArtistListEntity(
+            ID: ID,
+            name: name,
+            short: short,
+            group: group?.kr ?? "",
+            title: title?.app ?? "",
+            description: description,
+            color: color?.background ?? [],
+            youtube: youtube ?? "",
+            twitch: twitch ?? "",
+            instagram: instagram ?? "",
+            imageRoundVersion: image?.round ?? 0,
+            imageSquareVersion: image?.square ?? 0,
+            graduated: graduated ?? false,
+            isHiddenItem: false
+        )
     }
 }

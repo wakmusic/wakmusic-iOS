@@ -10,9 +10,9 @@ import Kingfisher
 import Utility
 import DomainModule
 import DesignSystem
+import ArtistDomainInterface
 
 class ArtistListCell: UICollectionViewCell {
-
     @IBOutlet weak var artistImageView: UIImageView!
     @IBOutlet weak var artistLabel: UILabel!
     

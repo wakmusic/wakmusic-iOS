@@ -19,7 +19,7 @@ public struct ArtistSongListEntity: Equatable {
         views: Int,
         last: Int,
         isSelected: Bool
-    ){
+    ) {
         self.ID = ID
         self.title = title
         self.artist = artist
@@ -30,7 +30,7 @@ public struct ArtistSongListEntity: Equatable {
         self.last = last
         self.isSelected = isSelected
     }
-    
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
     }

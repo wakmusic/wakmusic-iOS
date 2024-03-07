@@ -7,9 +7,10 @@
 //
 
 import Moya
-import DataMappingModule
 import ErrorModule
 import Foundation
+import ArtistDomainInterface
+import BaseDomain
 
 public enum ArtistAPI {
     case fetchArtistList
@@ -18,13 +19,13 @@ public enum ArtistAPI {
 
 extension ArtistAPI: WMAPI {
     public var domain: WMDomain {
-        switch self{
+        switch self {
         case .fetchArtistList,
              .fetchArtistSongList:
             return .artist
         }
     }
-    
+
     public var urlPath: String {
         switch self {
         case .fetchArtistList:
@@ -33,7 +34,7 @@ extension ArtistAPI: WMAPI {
             return "/albums"
         }
     }
-    
+
     public var method: Moya.Method {
         switch self {
         case .fetchArtistList,
@@ -41,7 +42,7 @@ extension ArtistAPI: WMAPI {
             return .get
         }
     }
-    
+
     public var task: Moya.Task {
         switch self {
         case .fetchArtistList:
@@ -54,7 +55,7 @@ extension ArtistAPI: WMAPI {
             ], encoding: URLEncoding.queryString)
         }
     }
-    
+
     public var jwtTokenType: JwtTokenType {
         return .none
     }

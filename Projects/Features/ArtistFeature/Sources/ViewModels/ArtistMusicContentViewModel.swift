@@ -13,9 +13,9 @@ import BaseFeature
 import DomainModule
 import DataMappingModule
 import Utility
+import ArtistDomainInterface
 
 public final class ArtistMusicContentViewModel: ViewModelType {
-
     var fetchArtistSongListUseCase: FetchArtistSongListUseCase
     var type: ArtistSongSortType
     var model: ArtistListEntity?

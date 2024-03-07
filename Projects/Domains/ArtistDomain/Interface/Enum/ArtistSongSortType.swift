@@ -1,14 +1,14 @@
 //
-//  ArtistType.swift
-//  DataMappingModule
+//  ArtistSongSortType.swift
+//  ArtistDomainInterface
 //
-//  Created by KTH on 2023/02/01.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
+//  Created by KTH on 2024/03/07.
+//  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
 import Foundation
 
-public enum ArtistSongSortType: String, Codable {
+public enum ArtistSongSortType: String, Decodable {
     case new
     case popular
     case old

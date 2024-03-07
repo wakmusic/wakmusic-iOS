@@ -2,6 +2,8 @@
 
 import AppDomain
 import AppDomainInterface
+import ArtistDomain
+import ArtistDomainInterface
 import ArtistFeature
 import BaseFeature
 import ChartFeature
