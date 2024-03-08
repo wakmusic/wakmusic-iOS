@@ -26,3 +26,6 @@ module:
 
 setup:
 	sh Scripts/Setup.sh
+
+format:
+	swiftformat ./Projects --config .swiftformat
