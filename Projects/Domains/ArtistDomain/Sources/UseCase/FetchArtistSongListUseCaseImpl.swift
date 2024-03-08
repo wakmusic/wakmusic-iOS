@@ -8,12 +8,9 @@
 
 import Foundation
 import RxSwift
-import DataMappingModule
-import DomainModule
-import ErrorModule
+import ArtistDomainInterface
 
 public struct FetchArtistSongListUseCaseImpl: FetchArtistSongListUseCase {
-
     private let artistRepository: any ArtistRepository
 
     public init(

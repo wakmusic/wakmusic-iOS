@@ -12,9 +12,9 @@ import DesignSystem
 import Pageboy
 import Tabman
 import DomainModule
+import ArtistDomainInterface
 
 public class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var tabBarContentView: UIView!
     
     lazy var viewControllers: [UIViewController] = {

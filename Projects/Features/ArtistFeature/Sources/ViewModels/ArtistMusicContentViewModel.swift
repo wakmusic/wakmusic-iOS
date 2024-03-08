@@ -13,9 +13,9 @@ import BaseFeature
 import DomainModule
 import DataMappingModule
 import Utility
+import ArtistDomainInterface
 
 public final class ArtistMusicContentViewModel: ViewModelType {
-
     var fetchArtistSongListUseCase: FetchArtistSongListUseCase
     var type: ArtistSongSortType
     var model: ArtistListEntity?
@@ -45,7 +45,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        let ID: String = model?.ID ?? ""
+        let ID: String = model?.artistId ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
         
@@ -127,7 +127,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .map { (indexOfSelectedSongs, dataSource) in
                 return indexOfSelectedSongs.map {
                     SongEntity(
-                        id: dataSource[$0].ID,
+                        id: dataSource[$0].songId,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
                         remix: dataSource[$0].remix,

@@ -16,6 +16,7 @@ import CommonFeature
 import DataMappingModule
 import DomainModule
 import NVActivityIndicatorView
+import ArtistDomainInterface
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
@@ -181,7 +182,7 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
     public func pressPlay(_ event: PlayEvent) {
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
-                    id: $0.ID,
+                    id: $0.songId,
                     title: $0.title,
                     artist: $0.artist,
                     remix: $0.remix,

@@ -12,15 +12,15 @@ import RxCocoa
 import BaseFeature
 import DomainModule
 import Utility
+import ArtistDomainInterface
 
 public final class ArtistViewModel: ViewModelType {
-    
     var disposeBag = DisposeBag()
     var fetchArtistListUseCase: FetchArtistListUseCase
 
     public init(
         fetchArtistListUseCase: any FetchArtistListUseCase
-    ){
+    ) {
         self.fetchArtistListUseCase = fetchArtistListUseCase
     }
 
@@ -32,7 +32,6 @@ public final class ArtistViewModel: ViewModelType {
     }
     
     public func transform(from input: Input) -> Output {
-        
         let dataSource: BehaviorRelay<[ArtistListEntity]> = BehaviorRelay(value: [])
 
         fetchArtistListUseCase.execute()
@@ -47,7 +46,7 @@ public final class ArtistViewModel: ViewModelType {
 
                 if model.count == 1 {
                     let hiddenItem: ArtistListEntity = ArtistListEntity(
-                        ID: "",
+                        artistId: "",
                         name: "",
                         short: "",
                         group: "",

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import NeedleFoundation
-import DomainModule
+import ArtistDomainInterface
 
 public protocol ArtistDependency: Dependency {
     var fetchArtistListUseCase: any FetchArtistListUseCase { get }

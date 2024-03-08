@@ -6,13 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
-import DataModule
-import NetworkModule
 import ArtistFeature
+import ArtistDomain
+import ArtistDomainInterface
 
 public extension AppComponent {
-    
     //MARK: Artist
     var artistComponent: ArtistComponent {
         ArtistComponent(parent: self)
