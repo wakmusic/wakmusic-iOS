@@ -1,0 +1,55 @@
+name: Issue to PR label sync
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract issue number from PR title
+        id: extract-issue-number
+        run: |
+          sh .github/workflows/IssueToPRLabelSync/ExtractIssueNumber.sh >> $GITHUB_OUTPUT
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Check if issue number is found
+        id: check-issue-number
+        run: echo "valid_format=$(if [[ -n "${{ steps.extract-issue-number.outputs.issue_number }}" ]]; then echo "true"; else echo "false"; fi)" >> $GITHUB_OUTPUT
+
+      - name: Add label if valid issue format
+        if: steps.check-issue-number.outputs.valid_format == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.extract-issue-number.outputs.issue_number }}"
+          echo "Found Issue Number: $ISSUE_NUMBER"
+          gh issue view $ISSUE_NUMBER --json labels --template "{{range .labels}}'{{.name}}',{{end}}" \
+           | sed 's/.$//g' \
+           | xargs -I LABELS gh pr edit ${{ github.event.number }} --add-label "LABELS"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Skip if invalid issue format
+        if: steps.check-issue-number.outputs.valid_format == 'false'
+        run: echo "Invalid issue format. Skipping label addition."
+
+      - name: Comment success result to PR
+        uses: mshick/add-pr-comment@v2
+        if: steps.check-issue-number.outputs.valid_format == 'true'
+        with:
+          message: "## ✅ 이슈와 PR의 Labels 동기화를 성공했어요!"
+          allow-repeats: true
+
+      - name: Comment skip result to PR
+        uses: mshick/add-pr-comment@v2
+        if: steps.check-issue-number.outputs.valid_format == 'false'
+        with:
+          message: "## 🛠️ 이슈와 PR의 Labels 동기화를 스킵했어요."
+          allow-repeats: true
