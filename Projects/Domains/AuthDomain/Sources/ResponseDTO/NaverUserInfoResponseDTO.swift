@@ -22,4 +22,8 @@ public extension NaverUserInfoResponseDTO {
     struct Response: Codable {
         public let id, nickname: String
     }
+
+    func toDomain() -> NaverUserInfoEntity {
+        NaverUserInfoEntity(resultcode: resultcode, message: message, id: response.id, nickname: response.nickname)
+    }
 }
