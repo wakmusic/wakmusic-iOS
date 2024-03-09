@@ -4,13 +4,11 @@ import SwiftUI
 // MARK: - YouTubePlayer+PreferenceKey
 
 public extension YouTubePlayer {
-    
     /// A YouTubePlayer instance produced by a SwiftUI view
     struct PreferenceKey: SwiftUI.PreferenceKey {
-        
         /// The default value of the preference.
         public static var defaultValue: YouTubePlayer?
-        
+
         /// Combines a sequence of values by modifying the previously-accumulated
         /// value with the result of a closure that provides the next value.
         /// - Parameters:
@@ -22,7 +20,5 @@ public extension YouTubePlayer {
         ) {
             value = nextValue()
         }
-        
     }
-    
 }

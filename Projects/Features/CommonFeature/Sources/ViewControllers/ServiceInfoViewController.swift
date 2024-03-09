@@ -6,32 +6,32 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DesignSystem
+import Kingfisher
+import RxCocoa
+import RxSwift
 import UIKit
 import Utility
-import DesignSystem
-import RxSwift
-import RxCocoa
-import Kingfisher
 
 public class ServiceInfoViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    
+
     var openSourceLicenseComponent: OpenSourceLicenseComponent!
     var viewModel: ServiceInfoViewModel!
     var disposeBag: DisposeBag = DisposeBag()
-    
+
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindBtn()
         inputBind()
         outputBind()
     }
-    
+
     public static func viewController(
         viewModel: ServiceInfoViewModel,
         openSourceLicenseComponent: OpenSourceLicenseComponent
@@ -48,11 +48,11 @@ extension ServiceInfoViewController {
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
+
         tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(viewModel.output.dataSource) { ($0.0, $0.1, $1) }
-            .subscribe(onNext: { (owner, indexPath, dataSource) in
+            .subscribe(onNext: { owner, indexPath, dataSource in
                 owner.tableView.deselectRow(at: indexPath, animated: true)
                 let model = dataSource[indexPath.row]
                 switch model.identifier {
@@ -74,49 +74,50 @@ extension ServiceInfoViewController {
                 }
             }).disposed(by: disposeBag)
     }
-    
+
     private func outputBind() {
         viewModel.output
             .dataSource
-            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
+            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "ServiceInfoCell",
                     for: IndexPath(row: index, section: 0)
-                ) as? ServiceInfoCell else{
+                ) as? ServiceInfoCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
-        
+
         viewModel.output
             .cacheSizeString
             .withUnretained(self)
-            .subscribe(onNext: { (owner, sizeString) in
+            .subscribe(onNext: { owner, sizeString in
                 let popup = TextPopupViewController.viewController(
                     text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     completion: {
                         owner.viewModel.input.removeCache.onNext(())
-                })
+                    }
+                )
                 owner.showPanModal(content: popup)
             }).disposed(by: disposeBag)
 
         viewModel.output
             .showToast
             .withUnretained(self)
-            .subscribe(onNext: { (owner, message) in
+            .subscribe(onNext: { owner, message in
                 owner.showToast(
                     text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             }).disposed(by: disposeBag)
     }
-    
-    private func bindBtn(){
+
+    private func bindBtn() {
         backButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }).disposed(by: disposeBag)
     }

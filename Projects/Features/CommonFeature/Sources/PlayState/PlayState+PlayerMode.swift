@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension PlayState {
-    public func switchPlayerMode(to mode: PlayerMode) {
+public extension PlayState {
+    func switchPlayerMode(to mode: PlayerMode) {
         NotificationCenter.default.post(name: .updatePlayerMode, object: mode)
     }
 }

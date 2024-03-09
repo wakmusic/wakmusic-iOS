@@ -1,11 +1,11 @@
 import APIKit
-import UIKit
 import ErrorModule
 import Foundation
 import KeychainModule
-import RxSwift
 import Moya
 import RxMoya
+import RxSwift
+import UIKit
 import Utility
 
 public class BaseRemoteDataSource<API: WMAPI> {
@@ -21,9 +21,9 @@ public class BaseRemoteDataSource<API: WMAPI> {
         self.keychain = keychain
 
         #if DEBUG
-        self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
+            self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
         #else
-        self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
+            self.provider = provider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
         #endif
     }
 
@@ -33,7 +33,8 @@ public class BaseRemoteDataSource<API: WMAPI> {
             disposabels.append(
                 self.defaultRequest(api).subscribe(
                     onSuccess: { single(.success($0)) },
-                    onFailure: { single(.failure($0)) })
+                    onFailure: { single(.failure($0)) }
+                )
             )
             return Disposables.create(disposabels)
         }

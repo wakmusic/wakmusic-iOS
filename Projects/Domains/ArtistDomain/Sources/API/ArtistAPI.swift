@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Moya
-import ErrorModule
-import Foundation
 import ArtistDomainInterface
 import BaseDomain
+import ErrorModule
+import Foundation
+import Moya
 
 public enum ArtistAPI {
     case fetchArtistList
@@ -53,7 +53,7 @@ extension ArtistAPI: WMAPI {
                     "id": id,
                     "sort": sort.rawValue,
                     "start": (page == 1) ? 0 : (page - 1) * 30
-                ], 
+                ],
                 encoding: URLEncoding.queryString
             )
         }

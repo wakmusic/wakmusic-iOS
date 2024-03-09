@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer.JavaScriptEvent+Name
 
 extension YouTubePlayer.JavaScriptEvent {
-    
     /// The YouTubePlayer JavaScriptEvent Name
     enum Name: String, Codable, Hashable, CaseIterable {
         /// iFrame API is ready
@@ -21,5 +20,4 @@ extension YouTubePlayer.JavaScriptEvent {
         /// Error
         case onError
     }
-    
 }

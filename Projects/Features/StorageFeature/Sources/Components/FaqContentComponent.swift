@@ -6,13 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
-
 
 public final class FaqContentComponent: Component<EmptyDependency> {
-    public func makeView(dataSource:[FaqEntity]) -> FaqContentViewController {
+    public func makeView(dataSource: [FaqEntity]) -> FaqContentViewController {
         return FaqContentViewController.viewController(viewModel: .init(dataSource: dataSource))
     }
 }

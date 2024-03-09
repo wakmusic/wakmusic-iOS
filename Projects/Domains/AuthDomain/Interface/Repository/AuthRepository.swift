@@ -1,5 +1,5 @@
-import RxSwift
 import Foundation
+import RxSwift
 
 public protocol AuthRepository {
     func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity>

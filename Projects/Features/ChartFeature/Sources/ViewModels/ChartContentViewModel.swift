@@ -1,10 +1,10 @@
-import Foundation
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
-import Utility
 import DataMappingModule
+import DomainModule
+import Foundation
+import RxRelay
+import RxSwift
+import Utility
 
 public final class ChartContentViewModel: ViewModelType {
     public let type: ChartDateType
@@ -12,7 +12,7 @@ public final class ChartContentViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     private let fetchChartRankingUseCase: FetchChartRankingUseCase
     private let fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
-    
+
     public init(
         type: ChartDateType,
         fetchChartRankingUseCase: FetchChartRankingUseCase,
@@ -22,25 +22,25 @@ public final class ChartContentViewModel: ViewModelType {
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
-    
+
     public struct Input {
         var songTapped: PublishSubject<Int> = PublishSubject()
         var allSongSelected: PublishSubject<Bool> = PublishSubject()
         let groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
         var refreshPulled: PublishSubject<Void> = PublishSubject()
     }
-    
+
     public struct Output {
         var dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: []) 
+        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         let dataSourceForZip = Observable.zip(
             fetchChartUpdateTimeUseCase
                 .execute(type: type)
@@ -51,47 +51,46 @@ public final class ChartContentViewModel: ViewModelType {
                 .catchAndReturn([])
                 .asObservable()
         )
-        
+
         dataSourceForZip
-            .subscribe(onNext: { (time, data) in
+            .subscribe(onNext: { time, data in
                 output.updateTime.accept(time)
                 output.dataSource.accept(data)
             })
             .disposed(by: disposeBag)
 
         input.refreshPulled
-            .flatMap { (_) -> Observable<(String, [ChartRankingEntity])> in
+            .flatMap { _ -> Observable<(String, [ChartRankingEntity])> in
                 return dataSourceForZip
             }
-            .subscribe(onNext: { (time, data) in
+            .subscribe(onNext: { time, data in
                 output.updateTime.accept(time)
                 output.dataSource.accept(data)
             })
             .disposed(by: disposeBag)
 
         input.songTapped
-            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
                 if selectedSongs.contains(index) {
-                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
+                    else { return selectedSongs }
                     var newSelectedSongs = selectedSongs
                     newSelectedSongs.remove(at: removeTargetIndex)
                     return newSelectedSongs
-                    
-                }
-                else { return selectedSongs + [index] }
+                } else { return selectedSongs + [index] }
             })
             .map { $0.sorted { $0 < $1 } }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         input.allSongSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (flag, dataSource) -> [Int] in
-                return flag ? Array(0..<dataSource.count) : []
+            .map { flag, dataSource -> [Int] in
+                return flag ? Array(0 ..< dataSource.count) : []
             }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         Utility.PreferenceManager.$startPage
             .skip(1)
             .map { _ in [] }
@@ -100,7 +99,7 @@ public final class ChartContentViewModel: ViewModelType {
 
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (selectedSongs, dataSource) in
+            .map { selectedSongs, dataSource in
                 var newModel = dataSource
                 newModel.indices.forEach { newModel[$0].isSelected = false }
                 selectedSongs.forEach { i in
@@ -110,11 +109,11 @@ public final class ChartContentViewModel: ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-                
+
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (indexOfSelectedSongs, dataSource) -> [SongEntity] in
-                
+            .map { indexOfSelectedSongs, dataSource -> [SongEntity] in
+
                 return indexOfSelectedSongs.map {
                     SongEntity(
                         id: dataSource[$0].id,
@@ -130,10 +129,10 @@ public final class ChartContentViewModel: ViewModelType {
             }
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         input.groupPlayTapped
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (type, dataSource) -> (PlayEvent, [SongEntity]) in
+            .map { type, dataSource -> (PlayEvent, [SongEntity]) in
                 let songEntities: [SongEntity] = dataSource.map {
                     return SongEntity(
                         id: $0.id,
@@ -148,7 +147,7 @@ public final class ChartContentViewModel: ViewModelType {
                 }
                 return (type, songEntities)
             }
-            .map{ (type, dataSource) -> [SongEntity] in
+            .map { type, dataSource -> [SongEntity] in
                 switch type {
                 case .allPlay:
                     return dataSource

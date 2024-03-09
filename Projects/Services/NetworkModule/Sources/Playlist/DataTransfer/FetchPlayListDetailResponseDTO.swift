@@ -2,13 +2,12 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-
 public extension SinglePlayListDetailResponseDTO {
     func toDomain() -> PlayListDetailEntity {
         PlayListDetailEntity(
             key: key ?? "",
             title: title,
-            songs: songs?.map({$0.toDomain()}) ?? [],
+            songs: songs?.map { $0.toDomain() } ?? [],
             image: image.name ?? "",
             image_square_version: image.square ?? 0,
             image_round_version: image.round ?? 0,

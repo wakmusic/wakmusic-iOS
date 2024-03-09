@@ -1,6 +1,6 @@
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol NewSongsDependency: Dependency {
     var newSongsContentComponent: NewSongsContentComponent { get }

@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct ReportBugUseCaseImpl: ReportBugUseCase {
     private let suggestRepository: any SuggestRepository
@@ -20,7 +20,13 @@ public struct ReportBugUseCaseImpl: ReportBugUseCase {
     ) {
         self.suggestRepository = suggestRepository
     }
-    public func execute(userID: String, nickname: String, attaches: [String], content: String) -> Single<ReportBugEntity> {
+
+    public func execute(
+        userID: String,
+        nickname: String,
+        attaches: [String],
+        content: String
+    ) -> Single<ReportBugEntity> {
         suggestRepository.reportBug(userID: userID, nickname: nickname, attaches: attaches, content: content)
     }
 }

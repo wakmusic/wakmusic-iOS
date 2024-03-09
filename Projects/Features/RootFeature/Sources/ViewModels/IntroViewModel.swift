@@ -6,19 +6,19 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxCocoa
-import DomainModule
-import BaseFeature
-import KeychainModule
-import ErrorModule
-import DataMappingModule
 import AppDomainInterface
+import BaseFeature
+import DataMappingModule
+import DomainModule
+import ErrorModule
+import Foundation
+import KeychainModule
+import RxCocoa
+import RxSwift
+import Utility
 
-final public class IntroViewModel: ViewModelType {
-    var fetchUserInfoUseCase : FetchUserInfoUseCase!
+public final class IntroViewModel: ViewModelType {
+    var fetchUserInfoUseCase: FetchUserInfoUseCase!
     var fetchAppCheckUseCase: FetchAppCheckUseCase!
     var disposeBag = DisposeBag()
 
@@ -44,60 +44,63 @@ final public class IntroViewModel: ViewModelType {
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         Observable.combineLatest(
             input.fetchPermissionCheck,
             Utility.PreferenceManager.$appPermissionChecked
-        ) { (_, permission) -> Bool? in
+        ) { _, permission -> Bool? in
             return permission
         }
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
-        
+
         input.endedLottieAnimation
             .bind(to: output.endedLottieAnimation)
             .disposed(by: disposeBag)
-        
+
         input.fetchAppCheck
-            .flatMap{ [weak self] _ -> Observable<AppCheckEntity> in
+            .flatMap { [weak self] _ -> Observable<AppCheckEntity> in
                 guard let self else { return Observable.empty() }
                 return self.fetchAppCheckUseCase.execute()
-                    .catch({ (error) -> Single<AppCheckEntity> in
+                    .catch { error -> Single<AppCheckEntity> in
                         let wmError = error.asWMError
                         if wmError == .offline {
                             return Single<AppCheckEntity>.create { single in
-                                single(.success(AppCheckEntity(
-                                        flag: .offline,
-                                        title: "",
-                                        description: wmError.errorDescription ?? "",
-                                        version: "",
-                                        specialLogo: false)
+                                single(
+                                    .success(
+                                        AppCheckEntity(
+                                            flag: .offline,
+                                            title: "",
+                                            description: wmError.errorDescription ?? "",
+                                            version: "",
+                                            specialLogo: false
+                                        )
                                     )
                                 )
                                 return Disposables.create()
                             }
-                        }else{
+                        } else {
                             return Single.error(error)
                         }
-                    })
+                    }
                     .asObservable()
             }
             .debug("✅ Intro > fetchCheckAppUseCase")
-            .subscribe(onNext: { (model) in
+            .subscribe(onNext: { model in
                 output.appInfoResult.onNext(.success(model))
-            }, onError: { (error) in
+            }, onError: { error in
                 output.appInfoResult.onNext(.failure(error))
             })
             .disposed(by: disposeBag)
-        
+
         input.fetchUserInfoCheck
             .withLatestFrom(Utility.PreferenceManager.$userInfo)
-            .filter{ (userInfo) in
+            .filter { userInfo in
                 guard userInfo != nil else {
-                    ///비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
+                    // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
                     let keychain = KeychainImpl()
                     let accessToken = keychain.load(type: .accessToken)
                     if !accessToken.isEmpty {
@@ -117,7 +120,7 @@ final public class IntroViewModel: ViewModelType {
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(onNext: { _ in
                 output.userInfoResult.onNext(.success(""))
-            }, onError: { (error) in
+            }, onError: { error in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired || asWMError == .notFound {
                     let keychain = KeychainImpl()
@@ -127,7 +130,7 @@ final public class IntroViewModel: ViewModelType {
                 }
                 output.userInfoResult.onNext(.failure(error))
             }).disposed(by: disposeBag)
-        
+
         return output
     }
 }

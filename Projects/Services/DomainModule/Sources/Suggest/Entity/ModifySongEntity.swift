@@ -16,7 +16,7 @@ public struct ModifySongEntity: Codable {
         self.status = status
         self.message = message
     }
-    
+
     public let status: Int?
     public let message: String?
 }

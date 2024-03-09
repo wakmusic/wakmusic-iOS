@@ -6,15 +6,15 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
+import Combine
+import CommonFeature
+import DomainModule
 import Foundation
 import RxCocoa
 import RxSwift
 import Utility
-import BaseFeature
-import DomainModule
-import Combine
 import YouTubePlayerKit
-import CommonFeature
 
 final class PlayerViewModel: ViewModelType {
     struct Input {
@@ -31,6 +31,7 @@ final class PlayerViewModel: ViewModelType {
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: AnyPublisher<Void, Never>
     }
+
     struct Output {
         var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
         var titleText = CurrentValueSubject<String, Never>("")
@@ -46,7 +47,7 @@ final class PlayerViewModel: ViewModelType {
         var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         var likeState = CurrentValueSubject<Bool, Never>(false)
         var didPlay = PublishRelay<Bool>()
-        //var didClose = PublishRelay<Bool>()
+        /// var didClose = PublishRelay<Bool>()
         var didPrev = PublishRelay<Bool>()
         var didNext = PublishRelay<Bool>()
         var lyricsDidChangedEvent = PassthroughSubject<Bool, Never>()
@@ -54,24 +55,24 @@ final class PlayerViewModel: ViewModelType {
         var showToastMessage = PassthroughSubject<String, Never>()
         var showConfirmModal = PassthroughSubject<String, Never>()
         var showContainSongsViewController = PassthroughSubject<String, Never>()
-        
-        var showTokenModal = PassthroughSubject<String,Never>()
+
+        var showTokenModal = PassthroughSubject<String, Never>()
     }
-    
+
     var fetchLyricsUseCase: FetchLyricsUseCase!
     var addLikeSongUseCase: AddLikeSongUseCase!
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     var postPlaybackLogUseCase: PostPlaybackLogUseCase!
-    
+
     let disposeBag = DisposeBag()
     private let playState = PlayState.shared
     private var subscription = Set<AnyCancellable>()
-    internal var lyricsDict = [Float : String]()
+    internal var lyricsDict = [Float: String]()
     internal var sortedLyrics = [String]()
     internal var isLyricsScrolling = false
-    
+
     init(
         fetchLyricsUseCase: FetchLyricsUseCase,
         addLikeSongUseCase: AddLikeSongUseCase,
@@ -88,14 +89,14 @@ final class PlayerViewModel: ViewModelType {
         self.postPlaybackLogUseCase = postPlaybackLogUseCase
         DEBUG_LOG("✅ PlayerViewModel 생성")
     }
-    
+
     deinit {
         DEBUG_LOG("❌ PlayerViewModel deinit")
     }
-    
+
     func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         bindInput(input: input, output: output)
         bindPlayStateChanged(output: output)
         bindCurrentSongChanged(output: output)
@@ -105,40 +106,39 @@ final class PlayerViewModel: ViewModelType {
         bindLoginStateChanged(output: output)
         bindCurrentSongLikeStateChanged(output: output)
         bindRequestPlaybackLog()
-        
+
         return output
     }
-    
+
     private func bindInput(input: Input, output: Output) {
         input.playButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
             let state = self.playState.state
             if state == .playing {
                 self.playState.pause()
-            }else{
+            } else {
                 self.playState.play()
             }
         }.store(in: &subscription)
-        
+
         input.closeButtonDidTapEvent.sink { [weak self] _ in
             self?.playState.switchPlayerMode(to: .mini)
         }.store(in: &subscription)
-        
+
         input.miniExtendButtonDidTapEvent.sink { [weak self] _ in
             self?.playState.switchPlayerMode(to: .full)
         }.store(in: &subscription)
-        
-        
+
         input.repeatButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
             self.playState.repeatMode.rotate()
         }.store(in: &subscription)
-        
+
         input.shuffleButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
             self.playState.shuffleMode.toggle()
         }.store(in: &subscription)
-        
+
         input.prevButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
             switch self.playState.shuffleMode {
@@ -148,7 +148,7 @@ final class PlayerViewModel: ViewModelType {
                 self.playState.shufflePlay()
             }
         }.disposed(by: disposeBag)
-        
+
         input.nextButtonDidTapEvent.subscribe { [weak self] _ in
             guard let self else { return }
             switch self.playState.shuffleMode {
@@ -158,12 +158,12 @@ final class PlayerViewModel: ViewModelType {
                 self.playState.shufflePlay()
             }
         }.disposed(by: disposeBag)
-        
+
         input.sliderValueChangedEvent.subscribe { [weak self] value in
             guard let self else { return }
             self.playState.player?.seek(to: Double(value), allowSeekAhead: true)
         }.disposed(by: disposeBag)
-        
+
         input.likeButtonDidTapEvent
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .map {
@@ -173,7 +173,7 @@ final class PlayerViewModel: ViewModelType {
                 guard let self else { return }
                 guard let currentSong = self.playState.currentSong else { return }
                 let alreadyLiked = output.likeState.value
-                
+
                 if !isLoggedIn {
                     output.showConfirmModal.send("로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?")
                     return
@@ -183,9 +183,9 @@ final class PlayerViewModel: ViewModelType {
                 } else {
                     self.addLikeSong(for: currentSong, output: output)
                 }
-                
+
             }.store(in: &subscription)
-        
+
         input.addPlaylistButtonDidTapEvent
             .map {
                 Utility.PreferenceManager.userInfo != nil
@@ -199,12 +199,12 @@ final class PlayerViewModel: ViewModelType {
                     output.showContainSongsViewController.send(currentSong.id)
                 }
             }.store(in: &subscription)
-        
+
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
         }.store(in: &subscription)
     }
-    
+
     private func bindLoginStateChanged(output: Output) {
         Utility.PreferenceManager.$userInfo
             .skip(1)
@@ -215,7 +215,7 @@ final class PlayerViewModel: ViewModelType {
                 self.fetchLikeCount(for: currentSong, output: output)
             }.disposed(by: disposeBag)
     }
-    
+
     private func bindPlayStateChanged(output: Output) {
         playState.$state.sink { [weak self] state in
             guard let self else { return }
@@ -225,7 +225,7 @@ final class PlayerViewModel: ViewModelType {
             }
         }.store(in: &subscription)
     }
-    
+
     private func bindCurrentSongChanged(output: Output) {
         playState.$currentSong.sink { [weak self] song in
             self?.handleCurrentSongChanged(song: song, output: output)
@@ -236,7 +236,7 @@ final class PlayerViewModel: ViewModelType {
             }
         }.store(in: &subscription)
     }
-    
+
     private func bindCurrentSongLikeStateChanged(output: Output) {
         NotificationCenter.default.publisher(for: .updateCurrentSongLikeState, object: nil)
             .compactMap { notification in
@@ -248,43 +248,43 @@ final class PlayerViewModel: ViewModelType {
                 self.fetchLikeState(for: currentSong, output: output)
             }.store(in: &subscription)
     }
-    
+
     private func bindRequestPlaybackLog() {
         NotificationCenter.default.publisher(for: .requestPlaybackLog, object: nil)
             .compactMap { notification in
                 return notification.object as? PlayState.PlaybackLog
             }
             .filter { !$0.prev.songId.isEmpty && $0.prev.songLength > 0 }
-            .sink { [weak self] (item) in
+            .sink { [weak self] item in
                 guard let self else { return }
                 do {
                     let jsonData = try JSONEncoder().encode(item)
                     self.postPlaybackLog(item: jsonData)
-                }catch {
+                } catch {
                     DEBUG_LOG("🎤: \(error.localizedDescription)")
                 }
             }.store(in: &subscription)
     }
-    
+
     private func bindProgress(output: Output) {
         playState.$progress.sink { [weak self] progress in
             guard let self else { return }
             self.handleProgress(progress: progress, output: output)
         }.store(in: &subscription)
     }
-    
+
     private func bindRepeatMode(output: Output) {
         playState.$repeatMode.sink { repeatMode in
             output.repeatMode.send(repeatMode)
         }.store(in: &subscription)
     }
-    
+
     private func bindShuffleMode(output: Output) {
         playState.$shuffleMode.sink { shuffleMode in
             output.shuffleMode.send(shuffleMode)
         }.store(in: &subscription)
     }
-    
+
     private func handlePlaybackEnded() {
         if playState.shuffleMode.isOn {
             handleShuffleWithRepeatOnce()
@@ -299,7 +299,7 @@ final class PlayerViewModel: ViewModelType {
             }
         }
     }
-    
+
     private func handleShuffleWithRepeatOnce() {
         if playState.repeatMode == .repeatOnce {
             playState.play()
@@ -307,17 +307,17 @@ final class PlayerViewModel: ViewModelType {
             playState.shufflePlay()
         }
     }
-    
+
     private func handleNoneRepeat() {
         if !playState.playList.isLast {
             playState.forward()
         }
     }
-    
+
     private func handleCurrentSongChanged(song: SongEntity?, output: Output) {
         lyricsDict.removeAll()
         sortedLyrics.removeAll()
-        
+
         if let song = song {
             let thumbnailSDURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
             let thumbnailHDURL = Utility.WMImageAPI.fetchYoutubeThumbnailHD(id: song.id).toString
@@ -335,16 +335,14 @@ final class PlayerViewModel: ViewModelType {
             output.likeCountText.send("좋아요")
             output.likeState.send(false)
         }
-        
+
         output.lyricsDidChangedEvent.send(true)
-        
     }
-    
+
     private func handleProgress(progress: PlayProgress, output: Output) {
         output.playTimeText.send(self.formatTime(progress.currentProgress))
         output.totalTimeText.send(self.formatTime(progress.endProgress))
         output.playTimeValue.send(Float(progress.currentProgress))
         output.totalTimeValue.send(Float(progress.endProgress))
     }
-    
 }

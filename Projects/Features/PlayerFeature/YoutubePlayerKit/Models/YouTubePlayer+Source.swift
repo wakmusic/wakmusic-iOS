@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer+Source
 
 public extension YouTubePlayer {
-    
     /// The YouTubePlayer Source
     enum Source: Hashable {
         /// Video
@@ -25,29 +24,25 @@ public extension YouTubePlayer {
             startSeconds: Int? = nil
         )
     }
-    
 }
 
 // MARK: - Identifiable
 
 extension YouTubePlayer.Source: Identifiable {
-    
     /// The stable identity of the entity associated with this instance
     public var id: String {
         switch self {
-        case .video(let id, _, _),
-             .playlist(let id, _, _),
-             .channel(let id, _, _):
+        case let .video(id, _, _),
+             let .playlist(id, _, _),
+             let .channel(id, _, _):
             return id
         }
     }
-    
 }
 
 // MARK: - Source+url
 
 public extension YouTubePlayer.Source {
-    
     /// Creats `YouTubePlayer.Source` from a given URL string, if available
     /// - Parameter url: The URL string
     static func url(
@@ -123,28 +118,23 @@ public extension YouTubePlayer.Source {
         // Otherwise return nil
         return nil
     }
-    
 }
 
 // MARK: - Sequence<URLQueryItem>+subscribt
 
 private extension Sequence where Element == URLQueryItem {
-    
     /// Retrieve a URLQueryItem value by a given name, if available
     subscript(_ name: String) -> String? {
         self.first { $0.name == name }?.value
     }
-    
 }
 
 // MARK: - Collection+Safe
 
 private extension Collection {
-    
     /// Retrieve an Element at the specified index if it is withing bounds, otherwise return nil.
     /// - Parameter index: The Index
     subscript(safe index: Index) -> Element? {
         self.indices.contains(index) ? self[index] : nil
     }
-    
 }

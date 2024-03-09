@@ -1,55 +1,94 @@
-import UIKit
-import SnapKit
-import Then
+import CommonFeature
+import DataMappingModule
 import DesignSystem
 import DomainModule
-import DataMappingModule
 import Kingfisher
+import SnapKit
+import Then
+import UIKit
 import Utility
-import CommonFeature
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI
-    
-    private let rankingLabel = WMLabel(text: "0", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5)
-    
+
+    private let rankingLabel = WMLabel(
+        text: "0",
+        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
+
     private let nonImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.non.image
     }
+
     private let blowUpImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.blowup.image
     }
+
     private let increaseRateImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.up.image
     }
+
     private let decreaseRateImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.down.image
     }
-    
-    private let newRateLabel = WMLabel(text: "NEW", textColor: DesignSystemAsset.PrimaryColor.new.color, font: .t8(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t8().lineHeight, kernValue: -0.5)
-    
-    private let rateLabel = WMLabel(text: "0", textColor: DesignSystemAsset.PrimaryColor.new.color, font: .t8(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t8().lineHeight, kernValue: -0.5)
+
+    private let newRateLabel = WMLabel(
+        text: "NEW",
+        textColor: DesignSystemAsset.PrimaryColor.new.color,
+        font: .t8(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t8().lineHeight,
+        kernValue: -0.5
+    )
+
+    private let rateLabel = WMLabel(
+        text: "0",
+        textColor: DesignSystemAsset.PrimaryColor.new.color,
+        font: .t8(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t8().lineHeight,
+        kernValue: -0.5
+    )
 
     private let albumImageView = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
         $0.contentMode = .scaleAspectFill
     }
-    
-    private let titleStringLabel = WMLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t6(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5)
-    
-    private let groupStringLabel = WMLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t7(weight: .light), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
-    
+
+    private let titleStringLabel = WMLabel(
+        text: "제목",
+        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        font: .t6(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    )
+
+    private let groupStringLabel = WMLabel(
+        text: "아티스트",
+        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        font: .t7(weight: .light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    )
+
     private let hitsLabel = UILabel().then {
         $0.textAlignment = .right
         $0.textColor = DesignSystemAsset.GrayColor.gray900.color
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
+
     private let thumbnailToPlayButton = UIButton(type: .system).then {
         $0.backgroundColor = UIColor.clear
     }
-                     
-    // MARK: -Property
+
+    // MARK: - Property
     private var model: ChartRankingEntity?
 
     // MARK: - Life Cycle
@@ -69,7 +108,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func prepareForReuse() {
+    override public func prepareForReuse() {
         super.prepareForReuse()
         rateLabel.isHidden = false
         newRateLabel.isHidden = false
@@ -100,7 +139,7 @@ extension ChartContentTableViewCell {
             contentView.addSubview($0)
         }
     }
-    
+
     private func setRankingLayout() {
         rankingLabel.snp.makeConstraints {
             $0.top.equalTo(10)
@@ -146,7 +185,7 @@ extension ChartContentTableViewCell {
             $0.right.equalTo(-20)
         }
     }
-    
+
     private func setLayout() {
         titleStringLabel.snp.makeConstraints {
             $0.height.equalTo(24)
@@ -164,7 +203,7 @@ extension ChartContentTableViewCell {
             $0.edges.equalTo(albumImageView)
         }
     }
-    
+
     private func addTarget() {
         thumbnailToPlayButton.addTarget(self, action: #selector(thumbnailToPlayButtonAction), for: .touchUpInside)
     }
@@ -180,6 +219,7 @@ extension ChartContentTableViewCell {
         decreaseRateImageView.isHidden = true
         rateLabel.isHidden = true
     }
+
     private func higherThanBefore(ranking: Int) {
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.increase.color
         rateLabel.text = "\(ranking)"
@@ -190,6 +230,7 @@ extension ChartContentTableViewCell {
         increaseRateImageView.isHidden = false
         decreaseRateImageView.isHidden = true
     }
+
     private func lowerThanBefore(ranking: Int) {
         let minusBeforeRanking = "\(ranking)"
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -201,6 +242,7 @@ extension ChartContentTableViewCell {
         increaseRateImageView.isHidden = true
         decreaseRateImageView.isHidden = false
     }
+
     private func sameAsBefore() {
         rateLabel.isHidden = true
         newRateLabel.isHidden = true
@@ -210,6 +252,7 @@ extension ChartContentTableViewCell {
         increaseRateImageView.isHidden = true
         decreaseRateImageView.isHidden = true
     }
+
     private func blowThenBefore() {
         rateLabel.isHidden = true
         newRateLabel.isHidden = true
@@ -226,7 +269,7 @@ extension ChartContentTableViewCell {
     public func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
         self.model = model
         self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : .clear
-        
+
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
@@ -256,7 +299,7 @@ extension ChartContentTableViewCell {
             text: "\(index + 1)",
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         )
-        
+
         if model.last == 0 {
             newThenBefore()
             return()
@@ -274,7 +317,7 @@ extension ChartContentTableViewCell {
             return()
         }
     }
-    
+
     private func getAttributedString(
         text: String,
         font: UIFont
@@ -289,7 +332,7 @@ extension ChartContentTableViewCell {
         )
         return attributedString
     }
-            
+
     @objc private func thumbnailToPlayButtonAction() {
         guard let song = self.model else { return }
         let songEntity: SongEntity = SongEntity(

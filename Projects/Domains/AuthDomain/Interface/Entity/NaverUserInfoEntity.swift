@@ -12,18 +12,21 @@ public struct NaverUserInfoEntity: Equatable {
     public init(
         resultcode: String,
         message: String,
-        id:String,
-        nickname:String
+        id: String,
+        nickname: String
     ) {
         self.resultcode = resultcode
         self.message = message
         self.id = id
         self.nickname = nickname
     }
-    
-    public let resultcode, message ,id, nickname : String
 
-    public static func == (lhs: NaverUserInfoEntity, rhs: NaverUserInfoEntity) -> Bool  {
+    public let resultcode, message, id, nickname: String
+
+    public static func == (
+        lhs: NaverUserInfoEntity,
+        rhs: NaverUserInfoEntity
+    ) -> Bool {
         lhs.id == rhs.id
     }
 }

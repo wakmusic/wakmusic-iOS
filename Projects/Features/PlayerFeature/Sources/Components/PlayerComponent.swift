@@ -1,11 +1,11 @@
-import Foundation
 import CommonFeature
 import DomainModule
+import Foundation
 import NeedleFoundation
 
 public protocol PlayerDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }
-    var addLikeSongUseCase: any AddLikeSongUseCase {get }
+    var addLikeSongUseCase: any AddLikeSongUseCase { get }
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }

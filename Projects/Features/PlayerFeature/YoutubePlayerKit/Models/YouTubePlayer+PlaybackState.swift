@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer+PlaybackState
 
 public extension YouTubePlayer {
-    
     /// The YouTubePlayer PlaybackState
     enum PlaybackState: Int, Codable, Hashable, CaseIterable {
         /// Unstarted
@@ -19,5 +18,4 @@ public extension YouTubePlayer {
         /// Video cued
         case cued = 5
     }
-    
 }

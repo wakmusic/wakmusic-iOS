@@ -6,15 +6,15 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
+import UIKit
 import Utility
 
 public class OpenSourceLibraryCell: UITableViewCell {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    
-    public override func awakeFromNib() {
+
+    override public func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
@@ -30,8 +30,8 @@ public class OpenSourceLibraryCell: UITableViewCell {
     }
 }
 
-extension OpenSourceLibraryCell {
-    static public func getCellHeight(model: OpenSourceLicense) -> CGFloat {
+public extension OpenSourceLibraryCell {
+    static func getCellHeight(model: OpenSourceLicense) -> CGFloat {
         let baseMargin: CGFloat = 25
         let titleAttributedString = NSAttributedString(
             string: model.title,
@@ -40,8 +40,8 @@ extension OpenSourceLibraryCell {
                 .kern: -0.5
             ]
         )
-        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: APP_WIDTH()-40)
-        
+        let titleHeight: CGFloat = titleAttributedString.height(containerWidth: APP_WIDTH() - 40)
+
         let descriptionAttributedString = NSAttributedString(
             string: model.description,
             attributes: [
@@ -49,12 +49,12 @@ extension OpenSourceLibraryCell {
                 .kern: -0.5
             ]
         )
-        let descriptionHeight: CGFloat = descriptionAttributedString.height(containerWidth: APP_WIDTH()-50)
-        
+        let descriptionHeight: CGFloat = descriptionAttributedString.height(containerWidth: APP_WIDTH() - 50)
+
         return baseMargin + titleHeight + descriptionHeight
     }
-    
-    public func update(model: OpenSourceLicense){
+
+    func update(model: OpenSourceLicense) {
         titleStringLabel.text = model.title
         descriptionLabel.text = model.description
     }

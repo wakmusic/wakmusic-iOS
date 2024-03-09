@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import Moya
 import KeychainModule
+import Moya
 
 public struct JwtPlugin: PluginType {
     private let keychain: any Keychain
@@ -21,7 +21,7 @@ public struct JwtPlugin: PluginType {
         _ request: URLRequest,
         target: TargetType
     ) -> URLRequest {
-        guard let jwtTokenType  = (target as? JwtAuthorizable)?.jwtTokenType,
+        guard let jwtTokenType = (target as? JwtAuthorizable)?.jwtTokenType,
               jwtTokenType != .none
         else { return request }
         var req = request

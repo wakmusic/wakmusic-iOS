@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DomainModule
+import Foundation
 import RxSwift
 import Utility
 
@@ -32,7 +32,7 @@ extension PlayerViewModel {
                 output.lyricsDidChangedEvent.send(true)
             }.disposed(by: self.disposeBag)
     }
-    
+
     /// 좋아요 수 가져오기
     func fetchLikeCount(for song: SongEntity, output: Output) {
         fetchLikeNumOfSongUseCase.execute(id: song.id)
@@ -46,7 +46,7 @@ extension PlayerViewModel {
                 output.likeCountText.send("좋아요")
             }.disposed(by: self.disposeBag)
     }
-    
+
     /// 좋아요 상태 가져오기
     func fetchLikeState(for song: SongEntity, output: Output) {
         guard Utility.PreferenceManager.userInfo != nil else {
@@ -63,22 +63,25 @@ extension PlayerViewModel {
             })
             .disposed(by: self.disposeBag)
     }
-    
+
     /// 좋아요 취소
     func cancelLikeSong(for song: SongEntity, output: Output) {
         self.cancelLikeSongUseCase.execute(id: song.id)
-            .catch{ error in
+            .catch { error in
                 let wmError = error.asWMError
-                
+
                 if wmError == .tokenExpired {
                     return Single<LikeEntity>.create { single in
                         single(.success(LikeEntity(status: 401, likes: 0, description: wmError.errorDescription ?? "")))
                         return Disposables.create()
                     }
-                }
-                else {
+                } else {
                     return Single<LikeEntity>.create { single in
-                        single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
+                        single(.success(LikeEntity(
+                            status: 0,
+                            likes: 0,
+                            description: error.asWMError.errorDescription ?? ""
+                        )))
                         return Disposables.create()
                     }
                 }
@@ -90,39 +93,43 @@ extension PlayerViewModel {
                     likeEntity.description
                 )
             }
-            .subscribe(onSuccess: { (status, likeCountText, description) in
-                
+            .subscribe(onSuccess: { status, likeCountText, description in
+
                 if status == 200 {
                     output.likeState.send(false)
                     output.likeCountText.send(likeCountText)
                     NotificationCenter.default.post(name: .likeListRefresh, object: nil)
                 }
-                
+
                 else if status == 401 {
                     output.showTokenModal.send(description)
                 }
-                
+
                 else {
                     output.showToastMessage.send(description)
                 }
             })
             .disposed(by: disposeBag)
     }
-    
+
     /// 좋아요 추가
     func addLikeSong(for song: SongEntity, output: Output) {
         self.addLikeSongUseCase.execute(id: song.id)
-            .catch{ error in
+            .catch { error in
                 let wmError = error.asWMError
-                
+
                 if wmError == .tokenExpired {
                     return Single<LikeEntity>.create { single in
                         single(.success(LikeEntity(status: 401, likes: 0, description: wmError.errorDescription ?? "")))
                         return Disposables.create()
                     }
-                }else {
+                } else {
                     return Single<LikeEntity>.create { single in
-                        single(.success(LikeEntity(status: 0, likes: 0, description: error.asWMError.errorDescription ?? "")))
+                        single(.success(LikeEntity(
+                            status: 0,
+                            likes: 0,
+                            description: error.asWMError.errorDescription ?? ""
+                        )))
                         return Disposables.create()
                     }
                 }
@@ -134,20 +141,20 @@ extension PlayerViewModel {
                     likeEntity.description
                 )
             }
-            .subscribe(onSuccess: { (status, likeCountText, description) in
+            .subscribe(onSuccess: { status, likeCountText, description in
                 if status == 200 {
                     output.likeState.send(true)
                     output.likeCountText.send(likeCountText)
                     NotificationCenter.default.post(name: .likeListRefresh, object: nil)
-                }else if status == 401 {
+                } else if status == 401 {
                     output.showTokenModal.send(description)
-                }else {
+                } else {
                     output.showToastMessage.send(description)
                 }
             })
             .disposed(by: self.disposeBag)
     }
-    
+
     /// 재생 로그 전송
     func postPlaybackLog(item: Data) {
         self.postPlaybackLogUseCase

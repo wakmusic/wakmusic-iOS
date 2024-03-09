@@ -6,22 +6,22 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
-import CommonFeature
 
 public protocol AfterSearchDependency: Dependency {
-    var afterSearchContentComponent: AfterSearchContentComponent {get}
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {get}
-    var containSongsComponent: ContainSongsComponent {get}
+    var afterSearchContentComponent: AfterSearchContentComponent { get }
+    var fetchSearchSongUseCase: any FetchSearchSongUseCase { get }
+    var containSongsComponent: ContainSongsComponent { get }
 }
 
 public final class AfterSearchComponent: Component<AfterSearchDependency> {
     public func makeView() -> AfterSearchViewController {
         return AfterSearchViewController.viewController(
             afterSearchContentComponent: dependency.afterSearchContentComponent,
-            containSongsComponent:dependency.containSongsComponent,
+            containSongsComponent: dependency.containSongsComponent,
             viewModel: .init(fetchSearchSongUseCase: dependency.fetchSearchSongUseCase)
         )
     }

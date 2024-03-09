@@ -1,7 +1,7 @@
-import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
+import Moya
 
 public enum ChartAPI {
     case fetchChartRanking(type: ChartDateType, limit: Int)
@@ -17,7 +17,7 @@ extension ChartAPI: WMAPI {
         switch self {
         case .fetchChartRanking:
             return "/"
-        case let.fetchChartUpdateTime(type):
+        case let .fetchChartUpdateTime(type):
             return "/updated/\(type.rawValue)"
         }
     }

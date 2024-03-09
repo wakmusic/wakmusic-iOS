@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayerWebView+Event
 
 extension YouTubePlayerWebView {
-    
     /// A YouTubePlayerWebView Event
     enum Event {
         /// Received JavaScriptEvent from YouTubePlayer
@@ -13,6 +12,4 @@ extension YouTubePlayerWebView {
         /// Web content process did terminate
         case webContentProcessDidTerminate
     }
-    
 }
-

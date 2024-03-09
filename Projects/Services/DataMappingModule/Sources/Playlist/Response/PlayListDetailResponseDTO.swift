@@ -15,8 +15,8 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let image: SinglePlayListDetailResponseDTO.Image
 }
 
-extension SinglePlayListDetailResponseDTO {
-    public struct Image: Codable {
+public extension SinglePlayListDetailResponseDTO {
+    struct Image: Codable {
         public let round: Int?
         public let square: Int?
         public let name: String?

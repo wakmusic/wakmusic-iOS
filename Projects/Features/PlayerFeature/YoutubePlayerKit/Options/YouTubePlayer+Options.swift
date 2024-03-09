@@ -3,21 +3,16 @@ import Foundation
 // MARK: - YouTubePlayer+Options
 
 extension YouTubePlayer {
-    
     /// The YouTubePlayer Options
     struct Options: Hashable {
-        
         /// The JSON string representation
         let json: String
-        
     }
-    
 }
 
 // MARK: - Options+CodingKeys
 
 private extension YouTubePlayer.Options {
-    
     /// The CodingKeys
     enum CodingKeys: String {
         case width
@@ -26,13 +21,11 @@ private extension YouTubePlayer.Options {
         case videoId
         case playerVars
     }
-    
 }
 
 // MARK: - Options+init
 
 extension YouTubePlayer.Options {
-    
     /// Creates a new instance of `YouTubePlayer.Options`
     /// - Parameters:
     ///   - playerSource: The optional YouTubePlayer Source
@@ -66,7 +59,7 @@ extension YouTubePlayer.Options {
         ]
         // Switch on Source
         switch playerSource {
-        case .video(let id, let startSeconds, _):
+        case let .video(id, startSeconds, _):
             // Set video id
             configuration[CodingKeys.videoId.rawValue] = id
             // Check if a start seconds are available
@@ -76,7 +69,7 @@ extension YouTubePlayer.Options {
                     YouTubePlayer.Configuration.CodingKeys.startTime.rawValue
                 ] = startSeconds
             }
-        case .playlist(let id, _, _):
+        case let .playlist(id, _, _):
             // Set playlist
             playerConfiguration[
                 YouTubePlayer.Configuration.CodingKeys.listType.rawValue
@@ -85,7 +78,7 @@ extension YouTubePlayer.Options {
             playerConfiguration[
                 YouTubePlayer.Configuration.CodingKeys.list.rawValue
             ] = id
-        case .channel(let name, _, _):
+        case let .channel(name, _, _):
             // Set user uploads
             playerConfiguration[
                 YouTubePlayer.Configuration.CodingKeys.listType.rawValue
@@ -110,5 +103,4 @@ extension YouTubePlayer.Options {
         // Make JSON string from Configuration
         self.json = try configuration.jsonString()
     }
-    
 }

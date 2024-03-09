@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DataMappingModule
 import DomainModule
+import Foundation
 import Utility
 
 public extension FetchProfileListResponseDTO {
     func toDomain() -> ProfileListEntity {
-        ProfileListEntity(type: type ?? "unknown",
-                          version:  version,
-                          isSelected: false
-                         
+        ProfileListEntity(
+            type: type ?? "unknown",
+            version: version,
+            isSelected: false
         )
     }
 }

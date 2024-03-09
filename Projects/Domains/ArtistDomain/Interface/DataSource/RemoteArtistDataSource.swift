@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import RxSwift
 import Foundation
+import RxSwift
 
 public protocol RemoteArtistDataSource {
     func fetchArtistList() -> Single<[ArtistListEntity]>

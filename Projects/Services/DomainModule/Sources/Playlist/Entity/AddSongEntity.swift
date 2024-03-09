@@ -8,9 +8,7 @@
 
 import Foundation
 
-
 public struct AddSongEntity: Equatable {
-    
     public init(
         status: Int,
         added_songs_length: Int,
@@ -23,9 +21,8 @@ public struct AddSongEntity: Equatable {
         self.description = description
     }
 
-    
     public let status: Int
     public let added_songs_length: Int
     public let duplicated: Bool
-    public let description:String
+    public let description: String
 }

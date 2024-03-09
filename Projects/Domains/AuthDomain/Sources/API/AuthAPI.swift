@@ -1,8 +1,8 @@
-import Moya
-import Foundation
-import ErrorModule
-import BaseDomain
 import AuthDomainInterface
+import BaseDomain
+import ErrorModule
+import Foundation
+import Moya
 
 public enum AuthAPI {
     case fetchToken(token: String, type: ProviderType)
@@ -25,7 +25,7 @@ extension AuthAPI: WMAPI {
     }
 
     public var domain: WMDomain {
-        switch  self {
+        switch self {
         case .fetchToken:
             return .auth
         case .fetchNaverUserInfo:
@@ -62,7 +62,7 @@ extension AuthAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchToken(id, type):
+        case let .fetchToken(token: id, type: type):
             return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
         case .fetchNaverUserInfo:
             return .requestPlain

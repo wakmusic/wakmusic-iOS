@@ -6,21 +6,21 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import NeedleFoundation
 import CommonFeature
 import DomainModule
+import Foundation
+import NeedleFoundation
 
 public protocol MyPlayListDependency: Dependency {
-    var multiPurposePopComponent:  MultiPurposePopComponent {get}
-    var playListDetailComponent:  PlayListDetailComponent {get}
-    var fetchPlayListUseCase: any FetchPlayListUseCase {get}
-    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {get}
-    var deletePlayListUseCase: any DeletePlayListUseCase {get}
+    var multiPurposePopComponent: MultiPurposePopComponent { get }
+    var playListDetailComponent: PlayListDetailComponent { get }
+    var fetchPlayListUseCase: any FetchPlayListUseCase { get }
+    var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
+    var deletePlayListUseCase: any DeletePlayListUseCase { get }
 }
 
 public final class MyPlayListComponent: Component<MyPlayListDependency> {
-    public func makeView() -> MyPlayListViewController{
+    public func makeView() -> MyPlayListViewController {
         return MyPlayListViewController.viewController(
             viewModel: .init(
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,

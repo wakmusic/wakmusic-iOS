@@ -6,6 +6,6 @@ let project = Project.makeModule(
     product: .staticFramework,
     dependencies: [
         .Project.Features.PlayerFeature
-    ]
-    , resources: ["Resources/**"]
+    ],
+    resources: ["Resources/**"]
 )

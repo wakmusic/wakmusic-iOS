@@ -6,22 +6,24 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
 
 public protocol FaqDependency: Dependency {
-    
-
-    var faqContentComponent : FaqContentComponent {get}
-    var fetchFaqCategoriesUseCase : any FetchFaqCategoriesUseCase {get}
-    var fetchFaqUseCase : any FetchFaqUseCase {get}
-    
-
+    var faqContentComponent: FaqContentComponent { get }
+    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase { get }
+    var fetchFaqUseCase: any FetchFaqUseCase { get }
 }
 
 public final class FaqComponent: Component<FaqDependency> {
     public func makeView() -> FaqViewController {
-        return FaqViewController.viewController(viewModel: .init(fetchFaqCategoriesUseCase: dependency.fetchFaqCategoriesUseCase,fetchQnaUseCase: dependency.fetchFaqUseCase), faqContentComponent: dependency.faqContentComponent)
+        return FaqViewController.viewController(
+            viewModel: .init(
+                fetchFaqCategoriesUseCase: dependency.fetchFaqCategoriesUseCase,
+                fetchQnaUseCase: dependency.fetchFaqUseCase
+            ),
+            faqContentComponent: dependency.faqContentComponent
+        )
     }
 }

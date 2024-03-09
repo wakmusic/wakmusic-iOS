@@ -6,21 +6,21 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomain
+import AuthDomainInterface
 import CommonFeature
 import SignInFeature
 import StorageFeature
-import AuthDomain
-import AuthDomainInterface
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
-    var signInComponent : SignInComponent {
+    var signInComponent: SignInComponent {
         SignInComponent(parent: self)
     }
 
-    var storageComponent : StorageComponent {
+    var storageComponent: StorageComponent {
         StorageComponent(parent: self)
     }
 
@@ -31,7 +31,7 @@ public extension AppComponent {
     var requestComponent: RequestComponent {
         RequestComponent(parent: self)
     }
-    
+
     var remoteAuthDataSource: any RemoteAuthDataSource {
         shared {
             RemoteAuthDataSourceImpl(keychain: keychain)
@@ -43,13 +43,13 @@ public extension AppComponent {
             AuthRepositoryImpl(remoteAuthDataSource: remoteAuthDataSource)
         }
     }
-    
+
     var fetchTokenUseCase: any FetchTokenUseCase {
         shared {
             FetchTokenUseCaseImpl(authRepository: authRepository)
         }
     }
-    
+
     var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
         shared {
             FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)

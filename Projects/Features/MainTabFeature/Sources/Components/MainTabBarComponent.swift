@@ -1,15 +1,15 @@
-import Foundation
-import HomeFeature
-import StorageFeature
-import SearchFeature
 import ArtistFeature
 import ChartFeature
 import CommonFeature
-import NeedleFoundation
 import DomainModule
+import Foundation
+import HomeFeature
+import NeedleFoundation
+import SearchFeature
+import StorageFeature
 
 public protocol MainTabBarDependency: Dependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {get}
+    var fetchNoticeUseCase: any FetchNoticeUseCase { get }
     var homeComponent: HomeComponent { get }
     var chartComponent: ChartComponent { get }
     var searchComponent: SearchComponent { get }

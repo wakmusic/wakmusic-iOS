@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DataMappingModule
 import ErrorModule
+import Foundation
 import RxSwift
 
 public protocol FetchNewSongsUseCase {

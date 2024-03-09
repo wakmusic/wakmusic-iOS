@@ -12,6 +12,7 @@ public struct FaqEntity: Equatable {
         self.description = description
         self.isOpen = isOpen
     }
-    public let category,question,description:String
-    public var isOpen:Bool
+
+    public let category, question, description: String
+    public var isOpen: Bool
 }

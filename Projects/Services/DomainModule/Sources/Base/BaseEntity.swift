@@ -16,7 +16,7 @@ public struct BaseEntity {
         self.status = status
         self.description = description
     }
-    
+
     public let status: Int
     public var description: String = ""
 }

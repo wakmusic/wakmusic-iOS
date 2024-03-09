@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
-import Utility
 import DataMappingModule
+import DomainModule
+import Foundation
+import RxRelay
+import RxSwift
+import Utility
 
 public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType
@@ -31,7 +31,7 @@ public final class NewSongsContentViewModel: ViewModelType {
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
         self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
-    
+
     public struct Input {
         var pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
         var songTapped: PublishSubject<Int> = PublishSubject()
@@ -39,7 +39,7 @@ public final class NewSongsContentViewModel: ViewModelType {
         var groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
         var refreshPulled: PublishSubject<Void> = PublishSubject()
     }
-    
+
     public struct Output {
         var dataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
         var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -47,84 +47,85 @@ public final class NewSongsContentViewModel: ViewModelType {
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         let chartUpdateTime = self.fetchChartUpdateTimeUseCase
             .execute(type: .total)
             .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
             .asObservable()
-        
+
         chartUpdateTime
             .take(1)
             .bind(to: output.updateTime)
             .disposed(by: disposeBag)
-        
+
         let refresh = Observable.combineLatest(
             output.dataSource,
             input.pageID
-        ) { (dataSource, pageID) -> [NewSongsEntity] in
+        ) { dataSource, pageID -> [NewSongsEntity] in
             return pageID == 1 ? [] : dataSource
         }
-        
+
         let type: NewSongGroupType = self.type
         let fetchNewSongsUseCase = self.fetchNewSongsUseCase
         let limit: Int = 100
-        
+
         input.pageID
-            .flatMap { (pageID) -> Single<[NewSongsEntity]> in
+            .flatMap { pageID -> Single<[NewSongsEntity]> in
                 return fetchNewSongsUseCase
                     .execute(type: type, page: pageID, limit: limit)
                     .catchAndReturn([])
             }
             .asObservable()
-            .do(onNext: { (model) in
+            .do(onNext: { model in
                 let canLoadMore: Bool = model.count < limit ? false : true
                 output.canLoadMore.accept(canLoadMore)
-                //DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
+                // DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
             }, onError: { _ in
                 output.canLoadMore.accept(false)
             })
-            .withLatestFrom(refresh, resultSelector: { (newModels, datasources) -> [NewSongsEntity] in
+            .withLatestFrom(refresh, resultSelector: { newModels, datasources -> [NewSongsEntity] in
                 return datasources + newModels
             })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         input.refreshPulled
             .do(onNext: { _ in
                 input.pageID.accept(1)
             })
-            .flatMap{ _ -> Observable<String> in
+            .flatMap { _ -> Observable<String> in
                 return chartUpdateTime
             }
             .bind(to: output.updateTime)
             .disposed(by: disposeBag)
 
         input.songTapped
-            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { (index, selectedSongs) -> [Int] in
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
                 if selectedSongs.contains(index) {
-                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index }) else { return selectedSongs }
+                    guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
+                    else { return selectedSongs }
                     var newSelectedSongs = selectedSongs
                     newSelectedSongs.remove(at: removeTargetIndex)
                     return newSelectedSongs
-                }else {
+                } else {
                     return selectedSongs + [index]
                 }
             })
             .map { $0.sorted { $0 < $1 } }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         input.allSongSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (flag, dataSource) -> [Int] in
-                return flag ? Array(0..<dataSource.count) : []
+            .map { flag, dataSource -> [Int] in
+                return flag ? Array(0 ..< dataSource.count) : []
             }
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         Utility.PreferenceManager.$startPage
             .skip(1)
             .map { _ in [] }
@@ -133,7 +134,7 @@ public final class NewSongsContentViewModel: ViewModelType {
 
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (selectedSongs, dataSource) in
+            .map { selectedSongs, dataSource in
                 var newModel = dataSource
                 newModel.indices.forEach { newModel[$0].isSelected = false }
                 selectedSongs.forEach { i in
@@ -143,10 +144,10 @@ public final class NewSongsContentViewModel: ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-                
+
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (indexOfSelectedSongs, dataSource) -> [SongEntity] in
+            .map { indexOfSelectedSongs, dataSource -> [SongEntity] in
                 return indexOfSelectedSongs.map {
                     SongEntity(
                         id: dataSource[$0].id,
@@ -162,10 +163,10 @@ public final class NewSongsContentViewModel: ViewModelType {
             }
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
-        
+
         input.groupPlayTapped
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map{ (type, dataSource) -> (PlayEvent, [SongEntity]) in
+            .map { type, dataSource -> (PlayEvent, [SongEntity]) in
                 let songEntities: [SongEntity] = dataSource.map {
                     return SongEntity(
                         id: $0.id,
@@ -180,7 +181,7 @@ public final class NewSongsContentViewModel: ViewModelType {
                 }
                 return (type, songEntities)
             }
-            .map{ (type, dataSource) -> [SongEntity] in
+            .map { type, dataSource -> [SongEntity] in
                 switch type {
                 case .allPlay:
                     return dataSource
@@ -188,7 +189,7 @@ public final class NewSongsContentViewModel: ViewModelType {
                     return dataSource.shuffled()
                 }
             }
-            .subscribe(onNext: { (songs) in
+            .subscribe(onNext: { songs in
                 PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             })
             .disposed(by: disposeBag)

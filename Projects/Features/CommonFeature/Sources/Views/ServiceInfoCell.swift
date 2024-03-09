@@ -6,17 +6,16 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
+import UIKit
 import Utility
 
 class ServiceInfoCell: UITableViewCell {
-
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var subTitleStringLabel: UILabel!
     @IBOutlet weak var arrowImageView: UIImageView!
     @IBOutlet weak var stackViewTrailingConstraint: NSLayoutConstraint!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         arrowImageView.image = DesignSystemAsset.Navigation.serviceInfoArrowRight.image
@@ -31,11 +30,12 @@ class ServiceInfoCell: UITableViewCell {
     }
 }
 
-extension ServiceInfoCell{
+extension ServiceInfoCell {
     public func update(model: ServiceInfoGroup) {
         titleStringLabel.text = model.name
         subTitleStringLabel.text = model.subName
-        subTitleStringLabel.font = (model.identifier == .versionInfomation) ? DesignSystemFontFamily.SCoreDream._3Light.font(size: 12) : DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        subTitleStringLabel.font = (model.identifier == .versionInfomation) ? DesignSystemFontFamily.SCoreDream._3Light
+            .font(size: 12) : DesignSystemFontFamily.Pretendard.light.font(size: 12)
         arrowImageView.isHidden = model.accessoryType == .onlyTitle
         stackViewTrailingConstraint.constant = (model.accessoryType == .onlyTitle) ? 24 : 18
         selectionStyle = (model.identifier == .versionInfomation) ? .none : .default

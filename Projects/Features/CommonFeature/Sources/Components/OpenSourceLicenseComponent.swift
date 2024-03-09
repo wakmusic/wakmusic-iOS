@@ -9,11 +9,10 @@
 import Foundation
 import NeedleFoundation
 
-public protocol OpenSourceLicenseDependency: Dependency {
-}
+public protocol OpenSourceLicenseDependency: Dependency {}
 
 public final class OpenSourceLicenseComponent: Component<OpenSourceLicenseDependency> {
-    public func makeView() -> OpenSourceLicenseViewController  {
+    public func makeView() -> OpenSourceLicenseViewController {
         return OpenSourceLicenseViewController.viewController(
             viewModel: OpenSourceLicenseViewModel()
         )

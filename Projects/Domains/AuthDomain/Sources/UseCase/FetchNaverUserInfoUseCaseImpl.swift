@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import Foundation
 import RxSwift
-import AuthDomainInterface
 
 public struct FetchNaverUserInfoUseCaseImpl: FetchNaverUserInfoUseCase {
     private let authRepository: any AuthRepository

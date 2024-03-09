@@ -10,7 +10,7 @@ public struct FavoriteSongEntity: Equatable {
         self.song = song
         self.isSelected = isSelected
     }
-    
+
     public let like: Int
     public let song: SongEntity
     public var isSelected: Bool

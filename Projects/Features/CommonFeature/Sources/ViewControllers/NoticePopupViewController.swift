@@ -6,15 +6,15 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
+import DesignSystem
+import DomainModule
 import PanModal
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
-import DesignSystem
-import RxSwift
-import RxCocoa
-import DomainModule
+import UIKit
+import Utility
 
 public protocol NoticePopupViewControllerDelegate: AnyObject {
     func noticeTapped(model: FetchNoticeEntity)
@@ -26,7 +26,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var pageCountLabel: UILabel!
     @IBOutlet weak var ignoreButton: UIButton!
     @IBOutlet weak var confirmButton: UIButton!
-    
+
     public weak var delegate: NoticePopupViewControllerDelegate?
     var viewModel: NoticePopupViewModel!
     var disposeBag = DisposeBag()
@@ -34,13 +34,13 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
     }
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bind()
     }
-    
+
     public static func viewController(
         viewModel: NoticePopupViewModel
     ) -> NoticePopupViewController {
@@ -48,19 +48,19 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         viewController.viewModel = viewModel
         return viewController
     }
-    
-    @IBAction func ignoreButtonAction(_ sender: Any) {        
+
+    @IBAction func ignoreButtonAction(_ sender: Any) {
         let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
         let currentNoticeIds: [Int] = viewModel.output.ids.value
-        
+
         if savedIgoredNoticeIds.isEmpty {
             Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
-        }else{
+        } else {
             Utility.PreferenceManager.ignoredNoticeIDs = savedIgoredNoticeIds + currentNoticeIds
         }
         dismiss(animated: true)
     }
-    
+
     @IBAction func confirmButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
@@ -70,11 +70,11 @@ extension NoticePopupViewController {
     private func bind() {
         viewModel.output
             .dataSource
-            .do(onNext: { [weak self] (model) in
+            .do(onNext: { [weak self] model in
                 self?.pageCountLabel.text = "1/\(model.count)"
                 self?.pageCountView.isHidden = model.count <= 1
             })
-            .bind(to: collectionView.rx.items) { (collectionView, row, model) -> UICollectionViewCell in
+            .bind(to: collectionView.rx.items) { collectionView, row, model -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "NoticeCollectionViewCell",
                     for: IndexPath(row: row, section: 0)
@@ -83,47 +83,63 @@ extension NoticePopupViewController {
                 return cell
             }
             .disposed(by: disposeBag)
-        
+
         collectionView.rx.itemSelected
             .withUnretained(self)
-            .subscribe(onNext:{ (owner, indexPath) in
+            .subscribe(onNext: { owner, indexPath in
                 owner.dismiss(animated: true) {
                     owner.delegate?.noticeTapped(model: owner.viewModel.fetchNoticeEntities[indexPath.row])
                 }
             }).disposed(by: disposeBag)
     }
-    
+
     private func configureUI() {
         self.view.backgroundColor = .white
-        
+
         let ignoreButtonAttributedString = NSMutableAttributedString.init(string: "다시보지 않기")
-        ignoreButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                    .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                                                    .kern: -0.5],
-                                                   range: NSRange(location: 0, length: ignoreButtonAttributedString.string.count))
+        ignoreButtonAttributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5
+            ],
+            range: NSRange(
+                location: 0,
+                length: ignoreButtonAttributedString.string.count
+            )
+        )
         ignoreButton.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
         ignoreButton.layer.cornerRadius = 12
         ignoreButton.setAttributedTitle(ignoreButtonAttributedString, for: .normal)
 
-
         let confirmButtonAttributedString = NSMutableAttributedString.init(string: "닫기")
-        confirmButtonAttributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                                                     .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                                                     .kern: -0.5],
-                                                    range: NSRange(location: 0, length: confirmButtonAttributedString.string.count))
+        confirmButtonAttributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5
+            ],
+            range: NSRange(
+                location: 0,
+                length: confirmButtonAttributedString.string.count
+            )
+        )
         confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         confirmButton.layer.cornerRadius = 12
         confirmButton.setAttributedTitle(confirmButtonAttributedString, for: .normal)
-        
+
         pageCountView.layer.cornerRadius = 12
         pageCountView.backgroundColor = DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.2)
         pageCountView.clipsToBounds = true
         pageCountView.isHidden = true
-        
+
         pageCountLabel.textColor = DesignSystemAsset.GrayColor.gray25.color
         pageCountLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 14)
-        
-        collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: Bundle.module), forCellWithReuseIdentifier: "NoticeCollectionViewCell")
+
+        collectionView.register(
+            UINib(nibName: "NoticeCollectionViewCell", bundle: Bundle.module),
+            forCellWithReuseIdentifier: "NoticeCollectionViewCell"
+        )
         collectionView.isPagingEnabled = true
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         collectionView.bounces = false
@@ -133,29 +149,38 @@ extension NoticePopupViewController {
 extension NoticePopupViewController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let i = Int(scrollView.contentOffset.x / APP_WIDTH())
-        self.pageCountLabel.text = "\(i+1)/\(viewModel.output.dataSource.value.count)"
+        self.pageCountLabel.text = "\(i + 1)/\(viewModel.output.dataSource.value.count)"
     }
 }
 
 extension NoticePopupViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         return CGSize(width: APP_WIDTH(), height: APP_WIDTH())
     }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return 0
     }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return 0
     }
 }
 
 extension NoticePopupViewController: PanModalPresentable {
-
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
@@ -164,12 +189,12 @@ extension NoticePopupViewController: PanModalPresentable {
     }
 
     public var panScrollable: UIScrollView? {
-      return nil
+        return nil
     }
 
     public var longFormHeight: PanModalHeight {
         return PanModalHeight.contentHeight(APP_WIDTH() + 20 + 56 + 20)
-     }
+    }
 
     public var cornerRadius: CGFloat {
         return 24.0

@@ -1,14 +1,14 @@
-import UIKit
+import AppDomainInterface
+import DomainModule
 import MainTabFeature
 import NeedleFoundation
-import DomainModule
-import AppDomainInterface
+import UIKit
 
 public protocol RootDependency: Dependency {
     var mainContainerComponent: MainContainerComponent { get }
     var permissionComponent: PermissionComponent { get }
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {get}
-    var fetchAppCheckUseCase: any FetchAppCheckUseCase {get}
+    var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
+    var fetchAppCheckUseCase: any FetchAppCheckUseCase { get }
 }
 
 public final class RootComponent: Component<RootDependency> {

@@ -6,17 +6,16 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
+import DomainModule
+import Foundation
 import KeychainModule
 import NaverThirdPartyLogin
+import RxRelay
+import RxSwift
+import Utility
 
-final public class RequestViewModel:ViewModelType {
-
+public final class RequestViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var withDrawUserInfoUseCase: WithdrawUserInfoUseCase
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
@@ -35,18 +34,18 @@ final public class RequestViewModel:ViewModelType {
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-     
+
         input.pressWithdraw
             .debug("pressWithdraw")
-            .flatMap{ [weak self] () -> Observable<BaseEntity> in
+            .flatMap { [weak self] () -> Observable<BaseEntity> in
                 guard let self = self else {
                     return Observable.empty()
                 }
                 return self.withDrawUserInfoUseCase.execute()
-                    .catch{ (error) in
+                    .catch { error in
                         return Single<BaseEntity>.create { single in
                             single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
                             return Disposables.create {}
@@ -55,11 +54,11 @@ final public class RequestViewModel:ViewModelType {
             }
             .do(onNext: { _ in
                 let platform = Utility.PreferenceManager.userInfo?.platform
-                
+
                 if platform == "naver" {
                     self.naverLoginInstance?.requestDeleteToken()
                 }
-                
+
                 let keychain = KeychainImpl()
                 keychain.delete(type: .accessToken)
                 Utility.PreferenceManager.userInfo = nil

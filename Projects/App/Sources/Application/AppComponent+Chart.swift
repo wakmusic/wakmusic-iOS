@@ -1,8 +1,8 @@
-import DomainModule
-import DataModule
-import NetworkModule
 import ChartFeature
 import CommonFeature
+import DataModule
+import DomainModule
+import NetworkModule
 
 public extension AppComponent {
     var chartComponent: ChartComponent {
@@ -37,4 +37,3 @@ public extension AppComponent {
         }
     }
 }
- 

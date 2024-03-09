@@ -1,7 +1,7 @@
+import AuthDomainInterface
+import BaseDomain
 import Foundation
 import RxSwift
-import BaseDomain
-import AuthDomainInterface
 
 public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
     public func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity> {

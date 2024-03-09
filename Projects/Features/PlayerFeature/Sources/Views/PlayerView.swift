@@ -6,54 +6,73 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import SwiftUI
-import Utility
 import DesignSystem
 import SnapKit
+import SwiftUI
 import Then
+import UIKit
+import Utility
 
 public final class PlayerView: UIView {
     private lazy var backgroundView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
-    
+
     private lazy var blurEffectView = UIVisualEffectView().then {
         $0.effect = UIBlurEffect(style: .regular)
     }
-    
+
     internal lazy var backgroundImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         $0.contentMode = .scaleToFill
         $0.layer.opacity = 0.6
         $0.clipsToBounds = true
     }
-    
+
     private lazy var contentView: UIView = UIView()
-    
+
     private lazy var titleBarView: UIView = UIView()
-    
+
     internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
-    internal lazy var titleArtistStackView: UIStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
-        $0.axis = .vertical
-        $0.distribution = .fill
-    }
-    
-    lazy var titleLabel = WMFlowLabel(text: "제목", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 35)
-    
-    lazy var artistLabel = WMFlowLabel(text: "아티스트", textColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6), font: .t6_1(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6_1().lineHeight, kernValue: -0.5, leadingBuffer: 0, trailingBuffer: 20)
-    
+
+    internal lazy var titleArtistStackView: UIStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel])
+        .then {
+            $0.axis = .vertical
+            $0.distribution = .fill
+        }
+
+    lazy var titleLabel = WMFlowLabel(
+        text: "제목",
+        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5,
+        leadingBuffer: 0,
+        trailingBuffer: 35
+    )
+
+    lazy var artistLabel = WMFlowLabel(
+        text: "아티스트",
+        textColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+        font: .t6_1(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6_1().lineHeight,
+        kernValue: -0.5,
+        leadingBuffer: 0,
+        trailingBuffer: 20
+    )
+
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailLarge.image
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
-    
+
     internal lazy var lyricsTableView = UITableView(frame: .zero, style: .plain).then {
         $0.register(LyricsTableViewCell.self, forCellReuseIdentifier: LyricsTableViewCell.identifier)
         $0.separatorStyle = .none
@@ -62,28 +81,46 @@ public final class PlayerView: UIView {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         $0.showsVerticalScrollIndicator = false
     }
-    
+
     internal lazy var playTimeSlider = CustomSlider().then {
         let circleSize: CGFloat = 8.0
-        let circleImage: UIImage? = makeCircleWith(size: CGSize(width: circleSize,
-                                                                height: circleSize),
-                                                   color: DesignSystemAsset.PrimaryColor.point.color,
-                                                   padding: 20)
+        let circleImage: UIImage? = makeCircleWith(
+            size: CGSize(
+                width: circleSize,
+                height: circleSize
+            ),
+            color: DesignSystemAsset.PrimaryColor.point.color,
+            padding: 20
+        )
         $0.layer.cornerRadius = 1
         $0.setThumbImage(circleImage, for: .normal)
         $0.setThumbImage(circleImage, for: .highlighted)
         $0.maximumTrackTintColor = DesignSystemAsset.GrayColor.gray300.color // 슬라이더 안지나갔을때 컬러 값
         $0.minimumTrackTintColor = DesignSystemAsset.PrimaryColor.point.color
     }
-    
+
     private lazy var playTimeView: UIView = UIView()
-    
-    lazy var currentPlayTimeLabel = WMLabel(text: "-:--", textColor: DesignSystemAsset.PrimaryColor.point.color, font: .t7(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
-    
-    lazy var totalPlayTimeLabel = WMLabel(text: "-:--", textColor: DesignSystemAsset.GrayColor.gray400.color, font: .t7(weight: .medium), alignment: .left, lineHeight: UIFont.WMFontSystem.t7().lineHeight, kernValue: -0.5)
-    
+
+    lazy var currentPlayTimeLabel = WMLabel(
+        text: "-:--",
+        textColor: DesignSystemAsset.PrimaryColor.point.color,
+        font: .t7(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    )
+
+    lazy var totalPlayTimeLabel = WMLabel(
+        text: "-:--",
+        textColor: DesignSystemAsset.GrayColor.gray400.color,
+        font: .t7(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    )
+
     private lazy var buttonBarView: UIView = UIView()
-    
+
     internal lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.tintColor = .systemGray
@@ -92,44 +129,44 @@ public final class PlayerView: UIView {
         $0.layer.shadowOffset = CGSize(width: 0, height: 8)
         $0.layer.shadowRadius = 40
     }
-    
+
     internal lazy var prevButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var nextButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var repeatButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var shuffleButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     private lazy var bottomBarView: UIView = UIView().then {
         $0.backgroundColor = .white
     }
-    
+
     private lazy var bottomBarStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 12
         $0.distribution = .fillEqually
     }
-    
+
     internal lazy var likeButton = LikeButton().then {
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
         $0.title = "좋아요"
         $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.isLiked = false
     }
-    
+
     internal lazy var viewsView = VerticalImageButton().then {
         $0.image = DesignSystemAsset.Player.views.image
         $0.titleLabel.font = UIFont(font: DesignSystemFontFamily.Pretendard.medium, size: 12)
@@ -137,7 +174,7 @@ public final class PlayerView: UIView {
         $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
-    
+
     internal lazy var addPlayistButton = VerticalImageButton().then {
         $0.image = DesignSystemAsset.Player.playerMusicAdd.image
         $0.title = "노래담기"
@@ -145,7 +182,7 @@ public final class PlayerView: UIView {
         $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
-    
+
     internal lazy var playistButton = VerticalImageButton().then {
         $0.image = DesignSystemAsset.Player.playList.image
         $0.title = "재생목록"
@@ -153,21 +190,18 @@ public final class PlayerView: UIView {
         $0.titleLabel.setTextWithAttributes(lineHeight: 14, kernValue: -0.5, lineHeightMultiple: 0.98)
         $0.titleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
     }
-    
-    
+
     private var firstSpacing: CGFloat = 0
     private var secondSpacing: CGFloat = 0
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
 }
 
 private extension PlayerView {
@@ -185,14 +219,14 @@ private extension PlayerView {
         self.configureButtonBar()
         self.configureBottomBar()
     }
-    
+
     private func configureSubViews() {
         self.addSubview(backgroundView)
         self.addSubview(contentView)
-        
+
         self.backgroundView.addSubview(backgroundImageView)
         self.backgroundImageView.addSubview(blurEffectView)
-        
+
         self.contentView.addSubview(titleBarView)
         self.contentView.addSubview(thumbnailImageView)
         self.contentView.addSubview(lyricsTableView)
@@ -200,28 +234,27 @@ private extension PlayerView {
         self.contentView.addSubview(playTimeView)
         self.contentView.addSubview(buttonBarView)
         self.contentView.addSubview(bottomBarView)
-        
+
         self.titleBarView.addSubview(closeButton)
         self.titleBarView.addSubview(titleArtistStackView)
-        
+
         self.playTimeView.addSubview(currentPlayTimeLabel)
         self.playTimeView.addSubview(totalPlayTimeLabel)
-        
+
         self.buttonBarView.addSubview(playButton)
         self.buttonBarView.addSubview(prevButton)
         self.buttonBarView.addSubview(nextButton)
         self.buttonBarView.addSubview(repeatButton)
         self.buttonBarView.addSubview(shuffleButton)
-        
+
         self.bottomBarView.addSubview(bottomBarStackView)
-        
+
         self.bottomBarStackView.addArrangedSubview(likeButton)
         self.bottomBarStackView.addArrangedSubview(viewsView)
         self.bottomBarStackView.addArrangedSubview(addPlayistButton)
         self.bottomBarStackView.addArrangedSubview(playistButton)
-        
     }
-    
+
     private func configureBackground() {
         let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         backgroundView.snp.makeConstraints {
@@ -236,6 +269,7 @@ private extension PlayerView {
             $0.edges.equalToSuperview()
         }
     }
+
     private func configureContent() {
         let safeAreaBottomInset: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
         contentView.snp.makeConstraints {
@@ -244,6 +278,7 @@ private extension PlayerView {
             $0.horizontalEdges.equalToSuperview()
         }
     }
+
     private func configureTitleBar() {
         titleBarView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
@@ -262,6 +297,7 @@ private extension PlayerView {
             $0.right.equalToSuperview().offset(-62)
         }
     }
+
     private func configureThumbnail() {
         let width = Utility.APP_WIDTH() - 25 - 25
         let height = width * 9 / 16
@@ -273,10 +309,21 @@ private extension PlayerView {
         }
         thumbnailImageView.backgroundColor = .white
     }
+
     private func configureLyrics() {
         let isIPhoneXOrAbove = Utility.APP_HEIGHT() >= 812 // iPhone X 이상 기종
-        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
-        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: lyricsTableView.frame.width, height: isIPhoneXOrAbove ? 48 : 24))
+        self.lyricsTableView.tableHeaderView = UIView(frame: CGRect(
+            x: 0,
+            y: 0,
+            width: lyricsTableView.frame.width,
+            height: isIPhoneXOrAbove ? 48 : 24
+        ))
+        self.lyricsTableView.tableFooterView = UIView(frame: CGRect(
+            x: 0,
+            y: 0,
+            width: lyricsTableView.frame.width,
+            height: isIPhoneXOrAbove ? 48 : 24
+        ))
         lyricsTableView.snp.makeConstraints {
             $0.top.equalTo(thumbnailImageView.snp.bottom).offset(firstSpacing)
             $0.centerX.equalTo(self.snp.centerX)
@@ -284,12 +331,19 @@ private extension PlayerView {
             $0.height.equalTo(isIPhoneXOrAbove ? 120 : 72)
         }
     }
+
     private func configurePlayTimeSlider() {
         playTimeSlider.snp.makeConstraints {
             $0.top.equalTo(lyricsTableView.snp.bottom).offset(firstSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(
+                top: 0,
+                left: 20,
+                bottom: 0,
+                right: 20
+            ))
         }
     }
+
     private func configurePlayTime() {
         playTimeView.snp.makeConstraints {
             $0.top.equalTo(playTimeSlider.snp.bottom).offset(-16)
@@ -305,11 +359,17 @@ private extension PlayerView {
             $0.right.equalToSuperview()
         }
     }
+
     private func configureButtonBar() {
         buttonBarView.snp.makeConstraints {
             $0.height.equalTo(80)
             $0.top.equalTo(playTimeView.snp.bottom).offset(secondSpacing)
-            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+            $0.horizontalEdges.equalTo(self.snp.horizontalEdges).inset(UIEdgeInsets(
+                top: 0,
+                left: 20,
+                bottom: 0,
+                right: 20
+            ))
         }
         playButton.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -337,6 +397,7 @@ private extension PlayerView {
             $0.width.height.equalTo(32)
         }
     }
+
     private func configureBottomBar() {
         bottomBarView.snp.makeConstraints {
             $0.bottom.horizontalEdges.equalToSuperview()
@@ -347,13 +408,13 @@ private extension PlayerView {
             $0.horizontalEdges.equalToSuperview().inset(22)
         }
     }
-    
+
     private func updateSpacing() {
         let x = specialValue()
         firstSpacing = x * 4 + 4
         secondSpacing = x * 4 - 4
     }
-    
+
     private func specialValue() -> CGFloat {
         let window: UIWindow? = UIApplication.shared.windows.first
         let top: CGFloat = window?.safeAreaInsets.top ?? 0
@@ -364,13 +425,13 @@ private extension PlayerView {
         let safeAreaheight: CGFloat = Utility.APP_HEIGHT() - top - bottom
         var x: CGFloat = 0
         if Utility.SAFEAREA_BOTTOM_HEIGHT() > 0 {
-            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 334 - 18) / 20)
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16 / 9) - 334 - 18) / 20)
         } else {
-            x = ((safeAreaheight - (safeAreaWidth - 50) / (16/9) - 286 - 18) / 20)
+            x = ((safeAreaheight - (safeAreaWidth - 50) / (16 / 9) - 286 - 18) / 20)
         }
         return CGFloat(floorf(Float(x)))
     }
-    
+
 //    private func makeCircleWith(size: CGSize, color: UIColor) -> UIImage? {
 //        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
 //        let context = UIGraphicsGetCurrentContext()
@@ -383,11 +444,11 @@ private extension PlayerView {
 //        UIGraphicsEndImageContext()
 //        return image
 //    }
-    
+
     private func makeCircleWith(size: CGSize, color: UIColor, padding: CGFloat = 0.0) -> UIImage? {
         let rendererSize = CGSize(width: size.width, height: size.height + padding * 2)
         let renderer = UIGraphicsImageRenderer(size: rendererSize)
-        let image = renderer.image { (context) in
+        let image = renderer.image { context in
             let circleRect = CGRect(x: 0, y: padding, width: size.width, height: size.height)
             let path = UIBezierPath(ovalIn: circleRect)
             context.cgContext.setFillColor(color.cgColor)

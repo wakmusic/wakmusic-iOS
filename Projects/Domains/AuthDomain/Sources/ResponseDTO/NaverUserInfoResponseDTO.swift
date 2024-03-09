@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import AuthDomainInterface
+import Foundation
 
 public struct NaverUserInfoResponseDTO: Decodable, Equatable {
     public let resultcode, message: String
@@ -21,16 +21,5 @@ public struct NaverUserInfoResponseDTO: Decodable, Equatable {
 public extension NaverUserInfoResponseDTO {
     struct Response: Codable {
         public let id, nickname: String
-    }
-}
-
-public extension NaverUserInfoResponseDTO {
-    func toDomain() -> NaverUserInfoEntity {
-        NaverUserInfoEntity(
-            resultcode: resultcode,
-            message: message,
-            id: response.id,
-            nickname: response.nickname
-        )
     }
 }

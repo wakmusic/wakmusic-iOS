@@ -1,5 +1,5 @@
-import RxSwift
 import Foundation
+import RxSwift
 
 public protocol RemoteAuthDataSource {
     func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity>

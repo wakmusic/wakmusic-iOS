@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol InquiryWeeklyChartUseCase {
     func execute(userID: String, content: String) -> Single<InquiryWeeklyChartEntity>

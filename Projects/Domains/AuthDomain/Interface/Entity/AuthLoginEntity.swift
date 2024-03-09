@@ -14,6 +14,6 @@ public struct AuthLoginEntity: Equatable {
     ) {
         self.token = token
     }
-    
-    public let token: String    
+
+    public let token: String
 }

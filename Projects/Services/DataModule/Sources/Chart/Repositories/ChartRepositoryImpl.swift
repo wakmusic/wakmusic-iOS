@@ -1,9 +1,9 @@
+import DatabaseModule
 import DataMappingModule
-import Foundation
 import DomainModule
 import ErrorModule
+import Foundation
 import NetworkModule
-import DatabaseModule
 import RxSwift
 
 public struct ChartRepositoryImpl: ChartRepository {
@@ -14,14 +14,14 @@ public struct ChartRepositoryImpl: ChartRepository {
     ) {
         self.remoteChartDataSource = remoteChartDataSource
     }
-    
+
     public func fetchChartRanking(
         type: ChartDateType,
         limit: Int
     ) -> Single<[ChartRankingEntity]> {
         remoteChartDataSource.fetchChartRanking(type: type, limit: limit)
     }
-    
+
     public func fetchChartUpdateTime(type: ChartDateType) -> Single<String> {
         remoteChartDataSource.fetchChartUpdateTime(type: type)
             .map {

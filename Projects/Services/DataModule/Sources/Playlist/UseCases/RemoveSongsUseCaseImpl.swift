@@ -6,15 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
-public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase{
-    
-
+public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase {
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -22,14 +20,8 @@ public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase{
     ) {
         self.playListRepository = playListRepository
     }
-    
-    public func execute(key: String,songs: [String]) -> Single<BaseEntity> {
-        
-     
-        return playListRepository.removeSongs(key: key,songs: songs)
-    }
-    
-    
 
-   
+    public func execute(key: String, songs: [String]) -> Single<BaseEntity> {
+        return playListRepository.removeSongs(key: key, songs: songs)
+    }
 }

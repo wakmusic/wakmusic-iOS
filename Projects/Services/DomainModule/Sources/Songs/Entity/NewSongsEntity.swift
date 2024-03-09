@@ -30,14 +30,14 @@ public struct NewSongsEntity: Equatable {
         self.date = date
         self.isSelected = isSelected
     }
-    
+
     public let id, title, artist, remix: String
     public let reaction: String
     public let views, last: Int
     public let date: Int
     public var isSelected: Bool
-    
-    public static func == (lhs: NewSongsEntity, rhs:  NewSongsEntity) -> Bool {
+
+    public static func == (lhs: NewSongsEntity, rhs: NewSongsEntity) -> Bool {
         lhs.id == rhs.id
     }
 }

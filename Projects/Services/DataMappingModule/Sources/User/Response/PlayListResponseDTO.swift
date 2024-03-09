@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PlayListResponseDTO: Decodable{
+public struct PlayListResponseDTO: Decodable {
     public let title: String
     public let key: String?
     public let user: PlayListResponseDTO.User
@@ -17,20 +17,20 @@ public struct PlayListResponseDTO: Decodable{
     public var isSelected: Bool?
 
     public struct User: Codable {
-        public let displayName:String
-        public let profile:Profile
+        public let displayName: String
+        public let profile: Profile
     }
 
     public struct Profile: Codable {
-        public let type:String
-        public let version:Int
+        public let type: String
+        public let version: Int
     }
-    
+
     public struct Image: Codable {
-        public let name:String
-        public let version:Int
+        public let name: String
+        public let version: Int
     }
-    
+
     public struct Song: Codable {
         public let songId: String
         public let title: String
@@ -42,7 +42,7 @@ public struct PlayListResponseDTO: Decodable{
     }
 }
 
-public extension PlayListResponseDTO.Song{
+public extension PlayListResponseDTO.Song {
     struct Total: Codable {
         public let views: Int
         public let increase: Int

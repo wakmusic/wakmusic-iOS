@@ -3,19 +3,18 @@ import Foundation
 // MARK: - YouTubePlayer+handle(webViewEvent:)
 
 extension YouTubePlayer {
-    
     /// Handle a YouTubePlayerWebView Event
     /// - Parameter webViewEvent: The YouTubePlayerWebView Event
     func handle(
         webViewEvent: YouTubePlayerWebView.Event
     ) {
         switch webViewEvent {
-        case .receivedJavaScriptEvent(let javaScriptEvent):
+        case let .receivedJavaScriptEvent(javaScriptEvent):
             // Handle JavaScriptEvent
             self.handle(
                 javaScriptEvent: javaScriptEvent
             )
-        case .frameChanged(let frame):
+        case let .frameChanged(frame):
             // Initialize parameters
             let parameters = [
                 frame.size.width,
@@ -34,13 +33,11 @@ extension YouTubePlayer {
             )
         }
     }
-    
 }
 
 // MARK: - YouTubePlayer+handle(javaScriptEvent:)
 
 private extension YouTubePlayer {
-    
     /// Handle incoming JavaScriptEvent
     /// - Parameter javaScriptEvent: The YouTubePlayer JavaScriptEvent
     func handle(
@@ -66,7 +63,7 @@ private extension YouTubePlayer {
             // Retrieve the current PlaybackRate
             self.getPlaybackRate { [weak self] result in
                 // Verify PlaybackRate is available
-                guard case .success(let playbackRate) = result else {
+                guard case let .success(playbackRate) = result else {
                     // Otherwise ignore the error and return out of function
                     return
                 }
@@ -76,7 +73,7 @@ private extension YouTubePlayer {
             // Retrieve the current PlaybackState
             self.getPlaybackState { [weak self] result in
                 // Verify PlaybackState is available
-                guard case .success(let playbackState) = result else {
+                guard case let .success(playbackState) = result else {
                     // Otherwise ignore the error and return out of function
                     return
                 }
@@ -124,5 +121,4 @@ private extension YouTubePlayer {
                 .map { self.playerStateSubject.send($0) }
         }
     }
-    
 }

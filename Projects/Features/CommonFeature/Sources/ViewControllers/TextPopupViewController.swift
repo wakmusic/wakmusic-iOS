@@ -1,9 +1,9 @@
+import DesignSystem
+import PanModal
 import UIKit
 import Utility
-import PanModal
-import DesignSystem
-public final class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
 
+public final class TextPopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var confirmButton: UIButton!
@@ -15,12 +15,12 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var allowsDragAndTapToDismiss: Bool = true
     var cancelButtonText: String = ""
     var confirmButtonText: String = ""
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
     }
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         configureUI()
@@ -30,11 +30,11 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         text: String = "",
         cancelButtonIsHidden: Bool,
         allowsDragAndTapToDismiss: Bool = true,
-        confirmButtonText:String = "확인",
-        cancelButtonText:String = "취소",
+        confirmButtonText: String = "확인",
+        cancelButtonText: String = "취소",
         completion: (() -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
-        
+
     ) -> TextPopupViewController {
         let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
         viewController.contentString = text
@@ -59,9 +59,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
 }
 
 extension TextPopupViewController {
-
     private func configureUI() {
-
         // 취소
         cancelButton.layer.cornerRadius = 12
         cancelButton.clipsToBounds = true
@@ -72,7 +70,8 @@ extension TextPopupViewController {
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                .kern: -0.5]
+                .kern: -0.5
+            ]
         )
         cancelButton.setAttributedTitle(cancelAttributedString, for: .normal)
 
@@ -86,7 +85,8 @@ extension TextPopupViewController {
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                .kern: -0.5]
+                .kern: -0.5
+            ]
         )
         confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
 
@@ -102,15 +102,15 @@ extension TextPopupViewController {
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                 .kern: -0.5,
-                .paragraphStyle: paragraphStyle]
+                .paragraphStyle: paragraphStyle
+            ]
         )
         contentLabel.attributedText = contentAttributedString
     }
 }
 
 extension TextPopupViewController: PanModalPresentable {
-
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
@@ -119,7 +119,7 @@ extension TextPopupViewController: PanModalPresentable {
     }
 
     public var panScrollable: UIScrollView? {
-      return nil
+        return nil
     }
 
     public var longFormHeight: PanModalHeight {
@@ -133,13 +133,14 @@ extension TextPopupViewController: PanModalPresentable {
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
                 .kern: -0.5,
-                .paragraphStyle: paragraphStyle]
+                .paragraphStyle: paragraphStyle
+            ]
         )
 
-        let contentHeight: CGFloat = contentAttributedString.height(containerWidth: APP_WIDTH()-40)
+        let contentHeight: CGFloat = contentAttributedString.height(containerWidth: APP_WIDTH() - 40)
         let spacingHeight: CGFloat = 60 + 52 + 56 + 10
         return .contentHeight(spacingHeight + contentHeight)
-     }
+    }
 
     public var cornerRadius: CGFloat {
         return 24.0
@@ -152,7 +153,7 @@ extension TextPopupViewController: PanModalPresentable {
     public var showDragIndicator: Bool {
         return false
     }
-    
+
     public var allowsDragToDismiss: Bool {
         return allowsDragAndTapToDismiss
     }

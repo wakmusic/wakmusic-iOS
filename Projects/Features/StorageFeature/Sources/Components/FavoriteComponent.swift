@@ -6,17 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
+import DomainModule
 import Foundation
 import NeedleFoundation
 import SignInFeature
-import DomainModule
-import CommonFeature
 
 public protocol FavoriteDependency: Dependency {
-    var containSongsComponent: ContainSongsComponent {get}
-    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {get}
-    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {get}
-    var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase {get}
+    var containSongsComponent: ContainSongsComponent { get }
+    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
+    var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
+    var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {

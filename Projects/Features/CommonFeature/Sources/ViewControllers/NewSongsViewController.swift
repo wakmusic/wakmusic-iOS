@@ -6,12 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
+import DesignSystem
+import Pageboy
+import Tabman
 import UIKit
 import Utility
-import DesignSystem
-import Tabman
-import Pageboy
-import DataMappingModule
 
 public class NewSongsViewController: TabmanViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
@@ -28,7 +28,7 @@ public class NewSongsViewController: TabmanViewController, ViewControllerFromSto
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configurePage()
@@ -41,7 +41,7 @@ public class NewSongsViewController: TabmanViewController, ViewControllerFromSto
         viewController.newSongsContentComponent = newSongsContentComponent
         return viewController
     }
-    
+
     @IBAction func backButtonAction(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -56,27 +56,27 @@ extension NewSongsViewController {
         self.navigationTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.navigationTitleLabel.setTextWithAttributes(kernValue: -0.5)
     }
-    
+
     private func configurePage() {
         self.dataSource = self
         let bar = TMBar.ButtonBar()
-        
+
         // 배경색
         bar.backgroundView.style = .clear
-        
+
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
-        
+
         // 버튼 글씨 커스텀
-        bar.buttons.customize { (button) in
+        bar.buttons.customize { button in
             button.tintColor = DesignSystemAsset.GrayColor.gray400.color
             button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
-        
+
         // indicator
         bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
@@ -101,18 +101,21 @@ extension NewSongsViewController: PageboyViewControllerDataSource, TMBarDataSour
             return TMBarItem(title: NewSongGroupType.academy.display)
         default:
             let title = "Page \(index)"
-           return TMBarItem(title: title)
+            return TMBarItem(title: title)
         }
     }
 
     public func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
         return viewControllers.count
     }
-    
-    public func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
+
+    public func viewController(
+        for pageboyViewController: PageboyViewController,
+        at index: PageboyViewController.PageIndex
+    ) -> UIViewController? {
         return viewControllers[index]
     }
-    
+
     public func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
         return nil
     }

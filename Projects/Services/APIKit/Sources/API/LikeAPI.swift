@@ -1,13 +1,13 @@
-import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
 import KeychainModule
+import Moya
 
 public enum LikeAPI {
-    case fetchLikeNumOfSong(id:String)
-    case addLikeSong(id:String)
-    case cancelLikeSong(id:String)
+    case fetchLikeNumOfSong(id: String)
+    case addLikeSong(id: String)
+    case cancelLikeSong(id: String)
 }
 
 extension LikeAPI: WMAPI {
@@ -17,15 +17,15 @@ extension LikeAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case .fetchLikeNumOfSong(id: let id):
+        case let .fetchLikeNumOfSong(id: id):
             return "/\(id)"
-        case .addLikeSong(id: let id):
+        case let .addLikeSong(id: id):
             return "/\(id)"
-        case .cancelLikeSong(id: let id):
+        case let .cancelLikeSong(id: id):
             return "/\(id)"
         }
     }
-        
+
     public var method: Moya.Method {
         switch self {
         case .fetchLikeNumOfSong:
@@ -36,20 +36,20 @@ extension LikeAPI: WMAPI {
             return .delete
         }
     }
-    
+
     public var task: Moya.Task {
         return .requestPlain
     }
-        
+
     public var jwtTokenType: JwtTokenType {
         switch self {
         case .fetchLikeNumOfSong:
             return .none
-        case .addLikeSong,.cancelLikeSong:
+        case .addLikeSong, .cancelLikeSong:
             return .accessToken
         }
     }
-    
+
     public var errorMap: [Int: WMError] {
         switch self {
         default:

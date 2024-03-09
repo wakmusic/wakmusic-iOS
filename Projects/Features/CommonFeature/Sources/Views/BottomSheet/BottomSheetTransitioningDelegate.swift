@@ -99,7 +99,8 @@ extension BottomSheetTransitioningDelegate: UIViewControllerTransitioningDelegat
         return presentationController
     }
 
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController)
+        -> UIViewControllerAnimatedTransitioning? {
         presentationController?.transitionState = .dismissing
         return presentationController
     }

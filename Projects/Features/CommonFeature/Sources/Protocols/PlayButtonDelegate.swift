@@ -6,10 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DomainModule
+import Foundation
 
-public protocol PlayButtonDelegate:AnyObject {
-    
-    func play(model:SongEntity)
+public protocol PlayButtonDelegate: AnyObject {
+    func play(model: SongEntity)
 }

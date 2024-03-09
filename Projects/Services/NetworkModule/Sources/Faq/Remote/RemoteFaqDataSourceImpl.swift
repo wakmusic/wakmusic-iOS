@@ -1,21 +1,20 @@
 import APIKit
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
 import Foundation
-
+import RxSwift
 
 public final class RemoteFaqDataSourceImpl: BaseRemoteDataSource<FaqAPI>, RemoteFaqDataSource {
     public func fetchCategories() -> Single<FaqCategoryEntity> {
-       return request(.fetchFaqCategories)
+        return request(.fetchFaqCategories)
             .map(FaqCategoryResponseDTO.self)
-            .map({$0.toDomain()})
+            .map { $0.toDomain() }
     }
-    
+
     public func fetchQna() -> Single<[FaqEntity]> {
         return request(.fetchFaq)
             .map([FaqResponseDTO].self)
-            .map({$0.map({$0.toDomain()})})
+            .map { $0.map { $0.toDomain() } }
     }
 }

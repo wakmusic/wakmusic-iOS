@@ -6,14 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import CryptoSwift
+import Foundation
 
-public final class AES256 {
-    //키값 32바이트: AES256(24bytes: AES192, 16bytes: AES128)
+public enum AES256 {
+    /// 키값 32바이트: AES256(24bytes: AES192, 16bytes: AES128)
     private static let SECRET_KEY = "01234567890123450123456789012345"
     private static let IV = "0123456789012345"
- 
+
     public static func encrypt(string: String) -> String {
         guard !string.isEmpty else { return "" }
         guard let result = try? getAESObject()?.encrypt(string.bytes).toBase64() else {
@@ -21,7 +21,7 @@ public final class AES256 {
         }
         return result
     }
- 
+
     public static func decrypt(encoded: String) -> String {
         guard !encoded.isEmpty else {
             return ""
@@ -35,7 +35,7 @@ public final class AES256 {
         }
         return String(bytes: decode, encoding: .utf8) ?? ""
     }
- 
+
     private static func getAESObject() -> AES? {
         let keyDecodes: [UInt8] = Array(SECRET_KEY.utf8)
         let ivDecodes: [UInt8] = Array(IV.utf8)

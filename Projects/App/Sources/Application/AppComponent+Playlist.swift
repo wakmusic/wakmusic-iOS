@@ -6,94 +6,92 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
+import CommonFeature
 import DataModule
+import DomainModule
 import NetworkModule
 import SearchFeature
-import CommonFeature
 import StorageFeature
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
-// 
+//
 
 public extension AppComponent {
-    
-    var beforeSearchComponent : BeforeSearchComponent {
+    var beforeSearchComponent: BeforeSearchComponent {
         BeforeSearchComponent(parent: self)
     }
-    
+
     var playListDetailComponent: PlayListDetailComponent {
         PlayListDetailComponent(parent: self)
     }
-    
+
     var multiPurposePopComponent: MultiPurposePopComponent {
         MultiPurposePopComponent(parent: self)
     }
-    
+
     var myPlayListComponent: MyPlayListComponent {
-        MyPlayListComponent(parent:self)
+        MyPlayListComponent(parent: self)
     }
-    
+
     var containSongsComponent: ContainSongsComponent {
         ContainSongsComponent(parent: self)
     }
-    
+
     var remotePlayListDataSource: any RemotePlayListDataSource {
         shared {
             RemotePlayListDataSourceImpl(keychain: keychain)
         }
     }
-    
+
     var playListRepository: any PlayListRepository {
         shared {
-            PlayListRepositoryImpl(remotePlayListDataSource:remotePlayListDataSource)
+            PlayListRepositoryImpl(remotePlayListDataSource: remotePlayListDataSource)
         }
     }
-    
+
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         shared {
-          FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
+            FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
-        
         shared {
-          FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+            FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var createPlayListUseCase: any CreatePlayListUseCase {
         shared {
             CreatePlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var editPlayListUseCase: any EditPlayListUseCase {
         shared {
             EditPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var editPlayListNameUseCase: any EditPlayListNameUseCase {
         shared {
             EditPlayListNameUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var loadPlayListUseCase: any LoadPlayListUseCase {
         shared {
             LoadPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
         shared {
             AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var removeSongsUseCase: any RemoveSongsUseCase {
         shared {
             RemoveSongsUseCaseImpl(playListRepository: playListRepository)

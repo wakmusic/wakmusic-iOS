@@ -1,8 +1,8 @@
-import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
 import KeychainModule
+import Moya
 
 public enum FaqAPI {
     case fetchFaqCategories
@@ -10,7 +10,6 @@ public enum FaqAPI {
 }
 
 extension FaqAPI: WMAPI {
-
     public var domain: WMDomain {
         .faq
     }
@@ -23,25 +22,25 @@ extension FaqAPI: WMAPI {
             return ""
         }
     }
-        
+
     public var method: Moya.Method {
         switch self {
-        case .fetchFaqCategories,.fetchFaq:
+        case .fetchFaqCategories, .fetchFaq:
             return .get
         }
     }
-    
+
     public var task: Moya.Task {
         switch self {
-        case .fetchFaqCategories,.fetchFaq:
+        case .fetchFaqCategories, .fetchFaq:
             return .requestPlain
         }
     }
-        
+
     public var jwtTokenType: JwtTokenType {
         return .none
     }
-    
+
     public var errorMap: [Int: WMError] {
         switch self {
         default:

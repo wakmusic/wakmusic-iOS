@@ -1,6 +1,6 @@
+import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
-import DependencyPlugin
 
 let project = Project.module(
     name: ModulePaths.Feature.SignInFeature.rawValue,

@@ -6,18 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {
-   
-    
-   
-    
-
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -25,10 +20,8 @@ public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {
     ) {
         self.playListRepository = playListRepository
     }
-    
-    public func execute(title:String) -> Single<PlayListBaseEntity> {
+
+    public func execute(title: String) -> Single<PlayListBaseEntity> {
         playListRepository.createPlayList(title: title)
     }
-
-   
 }

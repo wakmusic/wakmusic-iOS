@@ -1,14 +1,13 @@
+import BaseFeature
+import CommonFeature
+import DesignSystem
+import Lottie
+import MainTabFeature
+import RxSwift
 import UIKit
 import Utility
-import DesignSystem
-import BaseFeature
-import MainTabFeature
-import CommonFeature
-import Lottie
-import RxSwift
 
 open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var logoContentView: UIView!
 
     var mainContainerComponent: MainContainerComponent!
@@ -19,12 +18,12 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         outputBind()
         inputBind()
     }
-    
+
     public static func viewController(
         mainContainerComponent: MainContainerComponent,
         permissionComponent: PermissionComponent,
@@ -43,7 +42,7 @@ extension IntroViewController {
         input.fetchPermissionCheck.onNext(())
     }
 }
-    
+
 extension IntroViewController {
     private func outputBind() {
         permissionResult()
@@ -53,7 +52,7 @@ extension IntroViewController {
 
     private func permissionResult() {
         output.permissionResult
-            .do(onNext: { [weak self] (permission) in
+            .do(onNext: { [weak self] permission in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
                 guard show else { return }
@@ -63,28 +62,28 @@ extension IntroViewController {
                 self.present(permission, animated: true)
             })
             .filter { return ($0 ?? false) == true }
-            .map{ _ in () }
+            .map { _ in () }
             .bind(to: input.fetchAppCheck)
             .disposed(by: disposeBag)
     }
-    
-    private func appInfoResult(){
+
+    private func appInfoResult() {
         output.appInfoResult
             .withUnretained(self)
             .subscribe(onNext: { owner, result in
                 switch result {
                 case let .success(entity):
                     owner.lottiePlay(specialLogo: entity.specialLogo)
-                    
+
                     var textPopupVc: TextPopupViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
                     let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
-                    
+
                     switch entity.flag {
                     case .normal:
                         owner.input.fetchUserInfoCheck.onNext(())
                         return
-                        
+
                     case .offline:
                         owner.showPanModal(
                             content: TextPopupViewController.viewController(
@@ -98,10 +97,10 @@ extension IntroViewController {
                             )
                         )
                         return
-                        
+
                     case .event:
                         textPopupVc = TextPopupViewController.viewController(
-                            text:"\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
+                            text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
                             allowsDragAndTapToDismiss: false,
                             completion: {
@@ -111,7 +110,7 @@ extension IntroViewController {
 
                     case .update:
                         textPopupVc = TextPopupViewController.viewController(
-                            text:"\(updateTitle)\n\(updateMessage)",
+                            text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
                             allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
@@ -126,7 +125,7 @@ extension IntroViewController {
 
                     case .forceUpdate:
                         textPopupVc = TextPopupViewController.viewController(
-                            text:"\(updateTitle)\n\(updateMessage)",
+                            text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: true,
                             allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
@@ -150,22 +149,22 @@ extension IntroViewController {
             })
             .disposed(by: disposeBag)
     }
-    
+
     private func userInfoAndLottieEnded() {
         Observable.zip(
             output.userInfoResult,
             output.endedLottieAnimation
-        ) { (result, _) -> Result<String, Error> in
+        ) { result, _ -> Result<String, Error> in
             return result
         }
         .withUnretained(self)
-        .subscribe(onNext: { (owner, result) in
-            switch result{
+        .subscribe(onNext: { owner, result in
+            switch result {
             case let .success(suc):
                 DEBUG_LOG("success: \(suc)✅✅")
                 owner.showTabBar()
-                
-            case .failure(let error):
+
+            case let .failure(error):
                 owner.showPanModal(
                     content: TextPopupViewController.viewController(
                         text: error.asWMError.errorDescription ?? "",
@@ -187,7 +186,7 @@ extension IntroViewController {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
-    
+
     private func lottiePlay(specialLogo: Bool) {
         let animationView = LottieAnimationView(
             name: specialLogo ? "Splash_Logo_Special" : "Splash_Logo_Main",
@@ -198,13 +197,13 @@ extension IntroViewController {
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .playOnce
         animationView.clipsToBounds = false
-        
+
         self.logoContentView.subviews.forEach { $0.removeFromSuperview() }
         self.logoContentView.addSubview(animationView)
-        
+
         let originWidth: CGFloat = 156.0
         let originHeight: CGFloat = 160.0
-        let rate: CGFloat = originHeight/max(1.0, originWidth)
+        let rate: CGFloat = originHeight / max(1.0, originWidth)
 
         let width: CGFloat = (156.0 * APP_WIDTH()) / 375.0
         let height: CGFloat = width * rate

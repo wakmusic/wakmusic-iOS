@@ -6,12 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
-import RxCocoa
 import BaseFeature
-import DomainModule
 import DataMappingModule
+import DomainModule
+import Foundation
+import RxCocoa
+import RxSwift
 import Utility
 
 public class NoticePopupViewModel {
@@ -19,23 +19,22 @@ public class NoticePopupViewModel {
     let output = Output()
     var disposeBag = DisposeBag()
     var fetchNoticeEntities: [FetchNoticeEntity]
-    
-    public struct Input {
-    }
+
+    public struct Input {}
 
     public struct Output {
         var dataSource: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         var ids: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
     }
-    
+
     public init(
         fetchNoticeEntities: [FetchNoticeEntity]
-    ){
+    ) {
         self.fetchNoticeEntities = fetchNoticeEntities
-        
+
         let images: [String] = self.fetchNoticeEntities.map { $0.thumbnail ?? "" }.filter { !$0.isEmpty }
         output.dataSource.accept(images)
-        
+
         let ids: [Int] = self.fetchNoticeEntities.map { $0.id }
         output.ids.accept(ids)
     }

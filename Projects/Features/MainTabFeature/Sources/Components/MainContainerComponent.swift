@@ -1,7 +1,7 @@
 import Foundation
-import UIKit
-import PlayerFeature
 import NeedleFoundation
+import PlayerFeature
+import UIKit
 
 public protocol MainContainerDependency: Dependency {
     var bottomTabBarComponent: BottomTabBarComponent { get }

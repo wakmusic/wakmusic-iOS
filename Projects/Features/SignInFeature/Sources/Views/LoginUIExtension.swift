@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
+import UIKit
 import Utility
 
 extension LoginViewController {
@@ -19,22 +19,24 @@ extension LoginViewController {
     }
 
     private func configureOAuthLogin() {
-        let loginAttributedString:[NSMutableAttributedString] = [
+        let loginAttributedString: [NSMutableAttributedString] = [
             NSMutableAttributedString.init(string: "네이버로 로그인하기"),
             NSMutableAttributedString.init(string: "구글로 로그인하기"),
             NSMutableAttributedString.init(string: "애플로 로그인하기")
         ]
-        
-        for attr in loginAttributedString{
-            attr.addAttributes([
-                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                .kern: -0.5],
+
+        for attr in loginAttributedString {
+            attr.addAttributes(
+                [
+                    .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                    .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                    .kern: -0.5
+                ],
                 range: NSRange(location: 0, length: attr.string.count)
             )
         }
 
-        let superViewArr:[UIView] = [naverSuperView,googleSuperView,appleSuperView]
+        let superViewArr: [UIView] = [naverSuperView, googleSuperView, appleSuperView]
         for sv in superViewArr {
             sv.backgroundColor = .white.withAlphaComponent(0.4)
             sv.layer.cornerRadius = 12
@@ -49,40 +51,46 @@ extension LoginViewController {
         appleImageView.image = DesignSystemAsset.Signup.apple.image
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
     }
-    
+
     private func configureService() {
         let appAttributedString = NSMutableAttributedString
             .init(string: "왁타버스 뮤직")
-        
-        appAttributedString.addAttributes([
-            .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
-            .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-            .kern: -0.5],
+
+        appAttributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ],
             range: NSRange(location: 0, length: appAttributedString.string.count)
         )
         appNameLabel.attributedText = appAttributedString
-        
+
         let descriptionAttributedString = NSMutableAttributedString
             .init(string: "페이지를 이용하기 위해 로그인이 필요합니다.")
-        
-        descriptionAttributedString.addAttributes([
-            .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-            .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-            .kern: -0.5],
+
+        descriptionAttributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .kern: -0.5
+            ],
             range: NSRange(location: 0, length: descriptionAttributedString.string.count)
         )
         descriptionLabel.attributedText = descriptionAttributedString
-        
+
         let servicePrivacyButtons: [UIButton] = [serviceButton, privacyButton]
-        let termsAttributedString:[NSMutableAttributedString] = [
+        let termsAttributedString: [NSMutableAttributedString] = [
             NSMutableAttributedString.init(string: "서비스 이용약관"),
             NSMutableAttributedString.init(string: "개인정보처리방침")
         ]
-        for attr in termsAttributedString{
-            attr.addAttributes([
-                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                .kern: -0.5],
+        for attr in termsAttributedString {
+            attr.addAttributes(
+                [
+                    .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                    .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                    .kern: -0.5
+                ],
                 range: NSRange(location: 0, length: attr.string.count)
             )
         }
@@ -95,7 +103,7 @@ extension LoginViewController {
             btn.layer.borderWidth = 1
             btn.clipsToBounds = true
         }
-        
+
         versionLabel.text = "버전 정보 " + APP_VERSION()
         versionLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)

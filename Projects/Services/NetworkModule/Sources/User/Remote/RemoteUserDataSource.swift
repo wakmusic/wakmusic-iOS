@@ -1,20 +1,19 @@
 import DataMappingModule
-import ErrorModule
 import DomainModule
-import RxSwift
+import ErrorModule
 import Foundation
+import RxSwift
 
 public protocol RemoteUserDataSource {
     func fetchProfileList() -> Single<[ProfileListEntity]>
-    func setProfile(image:String) -> Single<BaseEntity>
-    func setUserName(name:String) -> Single<BaseEntity>
+    func setProfile(image: String) -> Single<BaseEntity>
+    func setUserName(name: String) -> Single<BaseEntity>
     func fetchPlayList() -> Single<[PlayListEntity]>
     func fetchFavoriteSong() -> Single<[FavoriteSongEntity]>
-    func editFavoriteSongsOrder(ids:[String]) -> Single<BaseEntity>
-    func editPlayListOrder(ids:[String]) -> Single<BaseEntity>
+    func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity>
+    func editPlayListOrder(ids: [String]) -> Single<BaseEntity>
     func deletePlayList(ids: [String]) -> Single<BaseEntity>
     func deleteFavoriteList(ids: [String]) -> Single<BaseEntity>
     func fetchUserInfo() -> Single<UserInfoEntity>
     func withdrawUserInfo() -> Single<BaseEntity>
-    
 }

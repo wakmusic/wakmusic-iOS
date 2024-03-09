@@ -1,8 +1,8 @@
 import DataMappingModule
-import ErrorModule
 import DomainModule
-import RxSwift
+import ErrorModule
 import Foundation
+import RxSwift
 
 public protocol RemotePlayDataSource {
     func postPlaybackLog(item: Data) -> Single<PlaybackLogEntity>

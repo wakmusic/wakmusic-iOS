@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import AuthDomainInterface
+import Foundation
 
 public struct AuthLoginResponseDTO: Decodable, Equatable {
     public let token: String

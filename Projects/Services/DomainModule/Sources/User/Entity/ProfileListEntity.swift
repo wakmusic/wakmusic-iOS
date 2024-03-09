@@ -18,7 +18,7 @@ public struct ProfileListEntity: Equatable {
         self.version = version
         self.isSelected = false
     }
-    
+
     public let type: String
     public var isSelected: Bool
     public var version: Int
