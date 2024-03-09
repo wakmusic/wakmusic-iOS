@@ -35,8 +35,9 @@ let targets: [Target] = [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
             .Project.Service.Data,
-            TargetDependency.domain(target: .AppDomain),
-            TargetDependency.domain(target: .ArtistDomain)
+            .domain(target: .AppDomain),
+            .domain(target: .ArtistDomain),
+            .domain(target: .AuthDomain)
         ],
         settings: .settings(
             base: env.baseSetting,
