@@ -9,6 +9,7 @@
 import Foundation
 import NeedleFoundation
 import DomainModule
+import AuthDomainInterface
 
 public protocol SignInDependency: Dependency {
     var fetchTokenUseCase: any FetchTokenUseCase {get}

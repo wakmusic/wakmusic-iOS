@@ -5,6 +5,8 @@ import AppDomainInterface
 import ArtistDomain
 import ArtistDomainInterface
 import ArtistFeature
+import AuthDomain
+import AuthDomainInterface
 import BaseFeature
 import ChartFeature
 import CommonFeature

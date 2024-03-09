@@ -6,35 +6,21 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
-import ErrorModule
-import NetworkModule
-import DatabaseModule
 import RxSwift
+import AuthDomainInterface
 
-public struct AuthRepositoryImpl: AuthRepository {
-   
-    
-  
+public final class AuthRepositoryImpl: AuthRepository {
     private let remoteAuthDataSource: any RemoteAuthDataSource
-    
+
     public init(remoteAuthDataSource: RemoteAuthDataSource) {
         self.remoteAuthDataSource = remoteAuthDataSource
     }
-    
-    
+
     public func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity> {
         remoteAuthDataSource.fetchToken(token: token, type: type)
     }
-    
-    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> RxSwift.Single<DomainModule.NaverUserInfoEntity> {
+
+    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
         remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
     }
-
-    
-    
-    
-    
-   
 }

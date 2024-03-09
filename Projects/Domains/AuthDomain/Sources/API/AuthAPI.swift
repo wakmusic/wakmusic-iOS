@@ -1,15 +1,15 @@
 import Moya
-import DataMappingModule
-import ErrorModule
 import Foundation
-import KeychainModule
+import ErrorModule
+import BaseDomain
+import AuthDomainInterface
 
 public enum AuthAPI {
     case fetchToken(token: String, type: ProviderType)
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
 }
 
-public struct AuthRequset:Encodable {
+public struct AuthRequset: Encodable {
     var token: String
     var provider: String
 }
@@ -17,16 +17,16 @@ public struct AuthRequset:Encodable {
 extension AuthAPI: WMAPI {
     public var baseURL: URL {
         switch self {
-        case .fetchToken :
-            return URL(string:BASE_URL())!
+        case .fetchToken:
+            return URL(string: BASE_URL())!
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
     }
-        
+
     public var domain: WMDomain {
         switch  self {
-        case .fetchToken :
+        case .fetchToken:
             return .auth
         case .fetchNaverUserInfo:
             return .naver
@@ -50,10 +50,10 @@ extension AuthAPI: WMAPI {
             return .get
         }
     }
-    
-    public var headers: [String : String]? {
+
+    public var headers: [String: String]? {
         switch self {
-        case .fetchNaverUserInfo(tokenType: let tokenType, accessToken: let accessToken):
+        case let .fetchNaverUserInfo(tokenType, accessToken):
             return ["Authorization": "\(tokenType) \(accessToken)"]
         default:
             return ["Content-Type": "application/json"]
@@ -62,9 +62,9 @@ extension AuthAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchToken(token: let id, type: let type):
+        case let .fetchToken(id, type):
             return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
-        case .fetchNaverUserInfo :
+        case .fetchNaverUserInfo:
             return .requestPlain
         }
     }

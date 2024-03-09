@@ -9,13 +9,13 @@
 import RxSwift
 import RxRelay
 import BaseFeature
-import DomainModule
 import Utility
 import NaverThirdPartyLogin
 import KeychainModule
 import CryptoSwift
 import AuthenticationServices
-import DataMappingModule
+import DomainModule
+import AuthDomainInterface
 
 public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let disposeBag = DisposeBag()

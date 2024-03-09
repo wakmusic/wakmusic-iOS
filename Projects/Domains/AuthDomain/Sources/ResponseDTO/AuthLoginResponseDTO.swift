@@ -7,10 +7,20 @@
 //
 
 import Foundation
+import AuthDomainInterface
 
-public struct AuthLoginResponseDTO: Codable, Equatable {
-    public let token:String
+public struct AuthLoginResponseDTO: Decodable, Equatable {
+    public let token: String
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.token == rhs.token
+    }
+}
+
+public extension AuthLoginResponseDTO {
+    func toDomain() -> AuthLoginEntity {
+        AuthLoginEntity(
+            token: token
+        )
     }
 }
