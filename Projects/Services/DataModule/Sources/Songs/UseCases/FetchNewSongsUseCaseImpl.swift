@@ -1,7 +1,7 @@
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import RxSwift
 
 public struct FetchNewSongsUseCaseImpl: FetchNewSongsUseCase {
     private let songsRepository: any SongsRepository
@@ -11,7 +11,7 @@ public struct FetchNewSongsUseCaseImpl: FetchNewSongsUseCase {
     ) {
         self.songsRepository = songsRepository
     }
-  
+
     public func execute(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]> {
         return songsRepository.fetchNewSongs(type: type, page: page, limit: limit)
     }

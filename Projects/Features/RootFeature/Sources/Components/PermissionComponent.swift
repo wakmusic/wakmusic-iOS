@@ -6,11 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import NeedleFoundation
+import UIKit
 
-public protocol PermissionDependency: Dependency {
-}
+public protocol PermissionDependency: Dependency {}
 
 public final class PermissionComponent: Component<PermissionDependency> {
     public func makeView() -> PermissionViewController {

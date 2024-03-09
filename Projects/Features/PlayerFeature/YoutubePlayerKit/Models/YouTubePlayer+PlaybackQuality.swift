@@ -3,7 +3,6 @@ import Foundation
 // MARK: - YouTubePlayer+PlaybackQuality
 
 public extension YouTubePlayer {
-    
     /// The YouTubePlayer PlaybackQuality
     enum PlaybackQuality: String, Codable, Hashable, CaseIterable {
         /// Automatic
@@ -21,5 +20,4 @@ public extension YouTubePlayer {
         /// High resolution
         case highResolution = "highres"
     }
-    
 }

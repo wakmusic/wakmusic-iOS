@@ -22,7 +22,7 @@ public struct GoogleGetTokenEntity: Codable {
         self.scope = scope
         self.refreshToken = refreshToken
     }
-    
+
     public let accessToken: String
     public let expiresIn: Int
     public let tokenType: String

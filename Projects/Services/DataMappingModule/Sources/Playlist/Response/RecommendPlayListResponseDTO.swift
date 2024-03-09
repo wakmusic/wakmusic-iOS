@@ -8,14 +8,13 @@
 
 import Foundation
 
-
 public struct SingleRecommendPlayListResponseDTO: Decodable {
     public let key, title: String
     public let image: SingleRecommendPlayListResponseDTO.Image
 }
 
-extension SingleRecommendPlayListResponseDTO {
-    public struct Image: Codable {
+public extension SingleRecommendPlayListResponseDTO {
+    struct Image: Codable {
         public let round: Int
         public let square: Int
     }

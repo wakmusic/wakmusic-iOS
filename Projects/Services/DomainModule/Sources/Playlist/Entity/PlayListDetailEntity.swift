@@ -26,10 +26,9 @@ public struct PlayListDetailEntity: Equatable {
         self.image_square_version = image_square_version
         self.version = version
     }
-    
-    public let key, title : String
+
+    public let key, title: String
     public let songs: [SongEntity]
     public let image: String
-    public let image_round_version, image_square_version, version :Int
-    
+    public let image_round_version, image_square_version, version: Int
 }

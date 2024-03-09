@@ -6,39 +6,38 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
+import DesignSystem
+import DomainModule
+import NVActivityIndicatorView
+import RxCocoa
+import RxDataSources
+import RxSwift
 import UIKit
 import Utility
-import RxSwift
-import RxCocoa
-import DesignSystem
-import RxDataSources
-import DomainModule
-import CommonFeature
-import NVActivityIndicatorView
 
 typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, String>
 
 public class NoticeDetailViewController: UIViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    
+
     var viewModel: NoticeDetailViewModel!
     var disposeBag = DisposeBag()
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         outputBind()
         inputBind()
     }
-    
+
     public static func viewController(
         viewModel: NoticeDetailViewModel
     ) -> NoticeDetailViewController {
@@ -46,7 +45,7 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
         viewController.viewModel = viewModel
         return viewController
     }
-    
+
     @IBAction func closeButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
@@ -56,12 +55,12 @@ extension NoticeDetailViewController {
     private func inputBind() {
         viewModel.input.fetchNoticeDetail.onNext(())
     }
-    
+
     private func outputBind() {
         viewModel.output.dataSource
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
             .disposed(by: disposeBag)
-        
+
         viewModel.output.imageSizes
             .skip(1)
             .subscribe(onNext: { [weak self] _ in
@@ -69,48 +68,60 @@ extension NoticeDetailViewController {
             })
             .disposed(by: disposeBag)
     }
-    
+
     private func createDataSource() -> RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel> {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel>(configureCell: { (_, collectionView, indexPath, item) -> UICollectionViewCell in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoticeCollectionViewCell", for: indexPath) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
-            cell.update(model: item)
-            return cell
-            
-        }, configureSupplementaryView: { (dataSource, collectionView, elementKind, indexPath) -> UICollectionReusableView in
-            switch elementKind {
-            case UICollectionView.elementKindSectionHeader:
-                if let header = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind,
-                                                                                      withReuseIdentifier: "NoticeDetailHeaderView",
-                                                                                      for: indexPath) as? NoticeDetailHeaderView {
-                    header.update(model: dataSource[indexPath.section].model)
-                    return header
+        let dataSource = RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel>(
+            configureCell: { _, collectionView, indexPath, item -> UICollectionViewCell in
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "NoticeCollectionViewCell",
+                    for: indexPath
+                ) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                cell.update(model: item)
+                return cell
 
-                } else { return UICollectionReusableView() }
+            },
+            configureSupplementaryView: { dataSource, collectionView, elementKind, indexPath -> UICollectionReusableView in
+                switch elementKind {
+                case UICollectionView.elementKindSectionHeader:
+                    if let header = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: elementKind,
+                        withReuseIdentifier: "NoticeDetailHeaderView",
+                        for: indexPath
+                    ) as? NoticeDetailHeaderView {
+                        header.update(model: dataSource[indexPath.section].model)
+                        return header
 
-            default:
-                return UICollectionReusableView()
+                    } else { return UICollectionReusableView() }
+
+                default:
+                    return UICollectionReusableView()
+                }
             }
-        })
+        )
         return dataSource
     }
 
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
-        
+
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                         .kern: -0.5]
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ]
         )
         self.titleStringLabel.attributedText = attributedString
-        
-        collectionView.register(UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
-                                forCellWithReuseIdentifier: "NoticeCollectionViewCell")
+
+        collectionView.register(
+            UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
+            forCellWithReuseIdentifier: "NoticeCollectionViewCell"
+        )
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         collectionView.bounces = false
-        
+
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.indicator.startAnimating()
@@ -118,33 +129,47 @@ extension NoticeDetailViewController {
 }
 
 extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
         let width: CGFloat = APP_WIDTH()
         let height: CGFloat = (imageSize.height * width) / max(1.0, imageSize.width)
         return CGSize(width: width, height: height)
     }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
         let sideSpace: CGFloat = 20
         return UIEdgeInsets(top: sideSpace, left: 0, bottom: 0, right: 0)
     }
-    
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return 20
     }
-    
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return 20
     }
-    
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               referenceSizeForHeaderInSection section: Int) -> CGSize{
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         let model: FetchNoticeEntity = viewModel.output.dataSource.value[section].model
         return CGSize(width: APP_WIDTH(), height: NoticeDetailHeaderView.getCellHeight(model: model))
     }

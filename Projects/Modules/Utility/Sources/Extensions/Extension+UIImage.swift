@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 public extension UIImage {
-
     /// 메인 탭바의 상단에 들어갈 라인을 이미지로 그리고 반환합니다.
     /// - Parameter color: 컬러 값
     /// - Returns: 라인 이미지

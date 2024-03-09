@@ -14,7 +14,7 @@ public struct UserInfo: Codable, Equatable {
     public let profile: String
     public let name: String
     public let version: Int
-    
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
     }
@@ -22,10 +22,16 @@ public struct UserInfo: Codable, Equatable {
 
 public extension UserInfo {
     func update(displayName: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: self.profile, name: displayName, version: self.version)
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: self.profile,
+            name: displayName,
+            version: self.version
+        )
     }
-    
+
     func update(profile: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, name: self.name, version:self.version)
+        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, name: self.name, version: self.version)
     }
 }

@@ -6,16 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct AddLikeSongUseCaseImpl: AddLikeSongUseCase {
-   
-    
-
     private let likeRepository: any LikeRepository
 
     public init(
@@ -23,9 +20,8 @@ public struct AddLikeSongUseCaseImpl: AddLikeSongUseCase {
     ) {
         self.likeRepository = likeRepository
     }
-    
+
     public func execute(id: String) -> Single<LikeEntity> {
         likeRepository.addLikeSong(id: id)
     }
-
 }

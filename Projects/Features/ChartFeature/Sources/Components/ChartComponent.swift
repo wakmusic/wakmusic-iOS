@@ -1,12 +1,10 @@
-import Foundation
 import CommonFeature
-import NeedleFoundation
 import DomainModule
-
+import Foundation
+import NeedleFoundation
 
 public protocol ChartDependency: Dependency {
     var chartContentComponent: ChartContentComponent { get }
-    
 }
 
 public final class ChartComponent: Component<ChartDependency> {

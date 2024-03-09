@@ -11,7 +11,7 @@ import Foundation
 public enum NoticeType: String {
     case all
     case currently
-    
+
     public var addPathString: String {
         switch self {
         case .all:

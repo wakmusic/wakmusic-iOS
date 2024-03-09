@@ -8,22 +8,17 @@
 
 import Foundation
 
-public struct NaverUserInfoResponseDTO: Codable,Equatable{
-    
+public struct NaverUserInfoResponseDTO: Codable, Equatable {
     public static func == (lhs: NaverUserInfoResponseDTO, rhs: NaverUserInfoResponseDTO) -> Bool {
         lhs.response.id == rhs.response.id
     }
-    
- 
+
     public let resultcode, message: String
     public let response: Response
 }
-
 
 public extension NaverUserInfoResponseDTO {
     struct Response: Codable {
         public let id, nickname: String
     }
 }
-
-

@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import DataMappingModule
 import DomainModule
+import Foundation
 
 public extension SuggestFunctionResponseDTO {
     func toDomain() -> SuggestFunctionEntity {

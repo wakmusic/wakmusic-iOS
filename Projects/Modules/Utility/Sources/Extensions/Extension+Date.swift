@@ -7,14 +7,14 @@ public extension Date {
     func changeDateFormatForChart() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM월 dd일 a hh시"
-        dateFormatter.locale = Locale(identifier:"ko_KR")
+        dateFormatter.locale = Locale(identifier: "ko_KR")
         return dateFormatter.string(from: self)
     }
-    
+
     func dateToString(format: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
-        dateFormatter.locale = Locale(identifier:"ko_KR")
+        dateFormatter.locale = Locale(identifier: "ko_KR")
         return dateFormatter.string(from: self)
     }
 }

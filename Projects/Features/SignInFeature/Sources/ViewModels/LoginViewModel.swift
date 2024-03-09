@@ -6,16 +6,16 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import RxSwift
-import RxRelay
-import BaseFeature
-import DomainModule
-import Utility
-import NaverThirdPartyLogin
-import KeychainModule
-import CryptoSwift
 import AuthenticationServices
+import BaseFeature
+import CryptoSwift
 import DataMappingModule
+import DomainModule
+import KeychainModule
+import NaverThirdPartyLogin
+import RxRelay
+import RxSwift
+import Utility
 
 public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let disposeBag = DisposeBag()
@@ -45,7 +45,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchTokenUseCase: FetchTokenUseCase,
         fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase,
         fetchUserInfoUseCase: FetchUserInfoUseCase
-    ){
+    ) {
         super.init()
         self.googleLoginManager.googleOAuthLoginDelegate = self
         self.naverLoginInstance?.delegate = self
@@ -57,13 +57,13 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     public func transform(from input: Input) -> Output {
         let showErrorToast = PublishRelay<String>()
         inputTransfrom(input: input)
-        
+
         // MARK: (Naver, Google, Apple)Token WMToken으로 치환
         oauthToken
             .debug("🚚 oauthToken")
-            .filter{ !$0.1.isEmpty }
+            .filter { !$0.1.isEmpty }
             .withUnretained(self)
-            .flatMap { (viewModel, id) -> Observable<AuthLoginEntity> in
+            .flatMap { viewModel, id -> Observable<AuthLoginEntity> in
                 let (providerType, token) = id
                 return viewModel.fetchTokenUseCase.execute(token: token, type: providerType)
                     .catchAndReturn(AuthLoginEntity(token: ""))
@@ -119,7 +119,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             guard let self = self else { return }
             let appleIdProvider = ASAuthorizationAppleIDProvider()
             let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName,.email]
+            request.requestedScopes = [.fullName, .email]
             let auth = ASAuthorizationController(authorizationRequests: [request])
             auth.delegate = self
             auth.presentationContextProvider = self
@@ -154,25 +154,28 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
         guard let accessToken = naverLoginInstance?.accessToken else { return }
         oauthToken.accept((.naver, accessToken))
     }
-    
+
     public func oauth20ConnectionDidFinishDeleteToken() {
         DEBUG_LOG("네이버 로그아웃")
     }
-    
+
     public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         isErrorString.accept(error.localizedDescription)
     }
 }
 
 // MARK: - AppleLoginDelegate
-extension LoginViewModel: ASAuthorizationControllerDelegate,ASAuthorizationControllerPresentationContextProviding {
+extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return UIApplication.shared.windows.last!
     }
 
-    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    public func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
-           let rawData =  credential.identityToken {
+           let rawData = credential.identityToken {
             let token = String(decoding: rawData, as: UTF8.self)
             oauthToken.accept((.apple, token))
         }

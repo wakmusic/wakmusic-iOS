@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import KeychainModule
+import UIKit
 
 public func APP_WIDTH() -> CGFloat {
     return UIScreen.main.bounds.size.width
@@ -45,23 +45,23 @@ public func OS_VERSION() -> String {
 public func OS_NAME() -> String {
     let osName: String = {
         #if os(iOS)
-        #if targetEnvironment(macCatalyst)
-        return "macOS(Catalyst)"
-        #else
-        return "iOS"
-        #endif
+            #if targetEnvironment(macCatalyst)
+                return "macOS(Catalyst)"
+            #else
+                return "iOS"
+            #endif
         #elseif os(watchOS)
-        return "watchOS"
+            return "watchOS"
         #elseif os(tvOS)
-        return "tvOS"
+            return "tvOS"
         #elseif os(macOS)
-        return "macOS"
+            return "macOS"
         #elseif os(Linux)
-        return "Linux"
+            return "Linux"
         #elseif os(Windows)
-        return "Windows"
+            return "Windows"
         #else
-        return "Unknown"
+            return "Unknown"
         #endif
     }()
     return osName
@@ -69,17 +69,23 @@ public func OS_NAME() -> String {
 
 // use: colorFromRGB(0xffffff)
 public func colorFromRGB(_ rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {
-    return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                   green: CGFloat((rgbValue & 0xFF00) >> 8) / 255.0,
-                   blue: CGFloat(rgbValue & 0xFF) / 255.0, alpha: alpha)
+    return UIColor(
+        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((rgbValue & 0xFF00) >> 8) / 255.0,
+        blue: CGFloat(rgbValue & 0xFF) / 255.0,
+        alpha: alpha
+    )
 }
 
 // use: colorFromRGB("ffffff")
 public func colorFromRGB(_ hexString: String, alpha: CGFloat = 1.0) -> UIColor {
     let hexToInt = UInt32(Float64("0x" + hexString) ?? 0)
-    return UIColor(red: CGFloat((hexToInt & 0xFF0000) >> 16) / 255.0,
-                   green: CGFloat((hexToInt & 0xFF00) >> 8) / 255.0,
-                   blue: CGFloat(hexToInt & 0xFF) / 255.0, alpha: alpha)
+    return UIColor(
+        red: CGFloat((hexToInt & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((hexToInt & 0xFF00) >> 8) / 255.0,
+        blue: CGFloat(hexToInt & 0xFF) / 255.0,
+        alpha: alpha
+    )
 }
 
 public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #function, line: Int = #line) {
@@ -90,7 +96,7 @@ public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #func
     #endif
 }
 
-public func LOGOUT(){
+public func LOGOUT() {
     let keychain = KeychainImpl()
     keychain.delete(type: .accessToken)
     Utility.PreferenceManager.userInfo = nil

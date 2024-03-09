@@ -6,107 +6,100 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
-import DataModule
-import NetworkModule
 import CommonFeature
+import DataModule
+import DomainModule
+import NetworkModule
 import SignInFeature
 import StorageFeature
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
-
 public extension AppComponent {
-    
-    var profilePopComponent:  ProfilePopComponent {
+    var profilePopComponent: ProfilePopComponent {
         ProfilePopComponent(parent: self)
     }
-    
-    var favoriteComponent:  FavoriteComponent {
+
+    var favoriteComponent: FavoriteComponent {
         FavoriteComponent(parent: self)
     }
-    
+
     var remoteUserDataSource: any RemoteUserDataSource {
         shared {
             RemoteUserDataSourceImpl(keychain: keychain)
         }
     }
-      
+
     var userRepository: any UserRepository {
         shared {
             UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)
         }
     }
-    
-    var fetchProfileListUseCase: any FetchProfileListUseCase{
+
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
         shared {
             FetchProfileListUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var setProfileUseCase: any SetProfileUseCase {
         shared {
             SetProfileUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var setUserNameUseCase: any SetUserNameUseCase {
-        shared{
+        shared {
             SetUserNameUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         shared {
             FetchPlayListUseCaseImpl(userRepository: userRepository)
         }
-        
     }
-    
+
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         shared {
             FetchFavoriteSongsUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase {
         shared {
             EditFavoriteSongsOrderUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
         shared {
             EditPlayListOrderUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var deletePlayListUseCase: any DeletePlayListUseCase {
         shared {
             DeletePlayListUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase {
         shared {
             DeleteFavoriteListUseCaseImpl(userRepository: userRepository)
         }
     }
-    
-    
+
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
-        
         shared {
             FetchUserInfoUseCaseImpl(userRepository: userRepository)
         }
     }
-    
+
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
-        
         shared {
             WithdrawUserInfoUseCaseImpl(userRepository: userRepository)
         }
-        
     }
 }

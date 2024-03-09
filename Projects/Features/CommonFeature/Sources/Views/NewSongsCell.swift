@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import DomainModule
 import DesignSystem
+import DomainModule
+import UIKit
 import Utility
 
 class NewSongsCell: UITableViewCell {
@@ -16,19 +16,19 @@ class NewSongsCell: UITableViewCell {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var viewsLabel: UILabel!
-    
+
     var model: NewSongsEntity?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         albumImageView.clipsToBounds = true
         albumImageView.layer.cornerRadius = 4
         albumImageView.contentMode = .scaleAspectFill
     }
-    
+
     @IBAction func playButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
         let songEntity: SongEntity = SongEntity(
@@ -48,13 +48,14 @@ class NewSongsCell: UITableViewCell {
 extension NewSongsCell {
     func update(model: NewSongsEntity) {
         self.model = model
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : DesignSystemAsset.GrayColor.gray100.color
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200
+            .color : DesignSystemAsset.GrayColor.gray100.color
 
         titleStringLabel.text = model.title
         titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         titleStringLabel.setTextWithAttributes(kernValue: -0.5)
-        
+
         artistLabel.text = model.artist
         artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)

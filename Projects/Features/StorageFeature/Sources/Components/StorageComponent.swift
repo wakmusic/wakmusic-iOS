@@ -11,12 +11,15 @@ import NeedleFoundation
 import SignInFeature
 
 public protocol StorageDependency: Dependency {
-    var  signInComponent : SignInComponent {get}
-    var  afterLoginComponent : AfterLoginComponent {get}
+    var signInComponent: SignInComponent { get }
+    var afterLoginComponent: AfterLoginComponent { get }
 }
 
 public final class StorageComponent: Component<StorageDependency> {
     public func makeView() -> StorageViewController {
-        return StorageViewController.viewController(signInComponent: dependency.signInComponent,afterLoginComponent: dependency.afterLoginComponent)
+        return StorageViewController.viewController(
+            signInComponent: dependency.signInComponent,
+            afterLoginComponent: dependency.afterLoginComponent
+        )
     }
 }

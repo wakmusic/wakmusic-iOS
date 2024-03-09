@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol SuggestFunctionUseCase {
     func execute(type: SuggestPlatformType, userID: String, content: String) -> Single<SuggestFunctionEntity>

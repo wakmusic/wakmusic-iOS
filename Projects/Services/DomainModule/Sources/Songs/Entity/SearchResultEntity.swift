@@ -8,16 +8,12 @@
 
 import Foundation
 
-
 public struct SearchResultEntity: Equatable {
- 
-
     public init(song: [SongEntity], artist: [SongEntity], remix: [SongEntity]) {
         self.song = song
         self.artist = artist
         self.remix = remix
     }
-    
-    public let song, artist, remix: [SongEntity]
 
+    public let song, artist, remix: [SongEntity]
 }

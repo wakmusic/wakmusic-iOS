@@ -6,37 +6,51 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import UIKit
-import Utility
 import DesignSystem
+import Foundation
 import SnapKit
 import Then
+import UIKit
+import Utility
 
 public final class PlaylistView: UIView {
     private lazy var backgroundView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
     }
-    
+
     private lazy var contentView = UIView()
-    
+
     internal lazy var titleBarView = UIView()
-    
+
     internal lazy var closeButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var titleCountStackView = UIStackView(arrangedSubviews: [titleLabel, countLabel]).then {
         $0.axis = .horizontal
         $0.distribution = .fill
         $0.spacing = 4
     }
-    
-    lazy var titleLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.GrayColor.gray900.color, font: .t5(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t5().lineHeight, kernValue: -0.5)
-    
-    lazy var countLabel = WMLabel(text: "재생목록", textColor: DesignSystemAsset.PrimaryColor.point.color, font: .t4(weight: .bold), alignment: .center, lineHeight: UIFont.WMFontSystem.t4().lineHeight, kernValue: -0.5)
-    
+
+    lazy var titleLabel = WMLabel(
+        text: "재생목록",
+        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
+
+    lazy var countLabel = WMLabel(
+        text: "재생목록",
+        textColor: DesignSystemAsset.PrimaryColor.point.color,
+        font: .t4(weight: .bold),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t4().lineHeight,
+        kernValue: -0.5
+    )
+
     internal lazy var editButton = RectangleButton(type: .custom).then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: false)
@@ -45,7 +59,7 @@ public final class PlaylistView: UIView {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 4
     }
-    
+
     internal lazy var playlistTableView = UITableView().then {
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         $0.separatorStyle = .none
@@ -54,71 +68,72 @@ public final class PlaylistView: UIView {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         $0.showsVerticalScrollIndicator = true
     }
-    
+
     private lazy var blurEffectView = UIVisualEffectView().then {
         $0.effect = UIBlurEffect(style: .regular)
     }
-    
+
     private lazy var homeIndicatorBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
-    
+
     internal lazy var miniPlayerView = UIView().then {
         $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
-    
+
     internal lazy var miniPlayerContentView = UIView()
-    
+
     internal lazy var miniPlayerStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
         $0.spacing = (APP_WIDTH() < 375) ? 10 : 16
     }
-    
+
     internal lazy var totalPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
     }
+
     internal lazy var currentPlayTimeView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
     }
-    
+
     internal lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-    
+
     internal lazy var repeatButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var prevButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var nextButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     internal lazy var shuffleButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
         $0.tintColor = .systemGray
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -136,7 +151,7 @@ private extension PlaylistView {
         self.configureMiniPlayer()
         self.configreHomeIndicatorBackgroundView()
     }
-    
+
     private func configureSubViews() {
         self.addSubview(backgroundView)
         self.addSubview(contentView)
@@ -159,14 +174,14 @@ private extension PlaylistView {
         miniPlayerView.addSubview(nextButton)
         miniPlayerView.addSubview(shuffleButton)
     }
-    
+
     private func configureBackground() {
         backgroundView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
         }
     }
-    
+
     private func configureContent() {
         contentView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Utility.STATUS_BAR_HEGHIT())
@@ -174,32 +189,31 @@ private extension PlaylistView {
             $0.horizontalEdges.equalToSuperview()
         }
     }
-    
+
     private func configureTitleBar() {
         titleBarView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
             $0.height.equalTo(48)
         }
-        
+
         closeButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.left.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()
         }
-        
+
         titleCountStackView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
         }
-        
+
         editButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
             $0.right.equalToSuperview().offset(-20)
             $0.centerY.equalToSuperview()
         }
-        
     }
-    
+
     private func configurePlaylist() {
         playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
@@ -209,36 +223,36 @@ private extension PlaylistView {
             $0.bottom.equalToSuperview()
         }
     }
-    
+
     private func configureBlur() {
         blurEffectView.snp.makeConstraints {
             $0.height.equalTo(56 + SAFEAREA_BOTTOM_HEIGHT())
             $0.bottom.left.right.equalToSuperview()
         }
     }
-    
+
     private func configureMiniPlayer() {
         miniPlayerView.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
         }
-        
+
         totalPlayTimeView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.top.left.right.equalToSuperview()
         }
-        
+
         currentPlayTimeView.snp.makeConstraints {
             $0.top.left.bottom.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0)
         }
-        
+
         miniPlayerContentView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 20))
         }
-        
+
         thumbnailImageView.snp.makeConstraints {
             let height = 40
             let width = height * 16 / 9
@@ -247,19 +261,19 @@ private extension PlaylistView {
             $0.width.equalTo(width)
             $0.height.equalTo(height)
         }
-        
+
         miniPlayerStackView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.right.equalToSuperview()
         }
-        
+
         miniPlayerStackView.addArrangedSubview(repeatButton)
         miniPlayerStackView.addArrangedSubview(prevButton)
         miniPlayerStackView.addArrangedSubview(playButton)
         miniPlayerStackView.addArrangedSubview(nextButton)
         miniPlayerStackView.addArrangedSubview(shuffleButton)
     }
-    
+
     private func configreHomeIndicatorBackgroundView() {
         homeIndicatorBackgroundView.snp.makeConstraints {
             $0.height.equalTo(SAFEAREA_BOTTOM_HEIGHT())

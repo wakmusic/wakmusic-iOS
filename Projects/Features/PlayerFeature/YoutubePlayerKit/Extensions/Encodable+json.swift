@@ -3,7 +3,6 @@ import Foundation
 // MARK: - Encodable+json
 
 extension Encodable {
-    
     /// Make JSON Dictionary
     /// - Parameter encoder: The JSONEncoder. Default value `.init()`
     func json(
@@ -15,8 +14,8 @@ extension Encodable {
         let jsonData = try encoder.encode(self)
         // Serialize to JSON object
         let jsonObject = try JSONSerialization.jsonObject(
-           with: jsonData,
-           options: .allowFragments
+            with: jsonData,
+            options: .allowFragments
         )
         // Verify JSON object can be casted to a Dictionary
         guard let jsonDictionary = jsonObject as? [String: Any] else {
@@ -32,13 +31,11 @@ extension Encodable {
         // Return JSON Dictionary
         return jsonDictionary
     }
-    
 }
 
 // MARK: - Encodable+jsonString
 
 extension Encodable {
-    
     /// Make JSON String
     /// - Parameters:
     ///   - encoder: The JSONEncoder. Default value `.init()`
@@ -51,5 +48,4 @@ extension Encodable {
             .json(encoder: encoder)
             .jsonString(options: options)
     }
-    
 }

@@ -18,10 +18,10 @@ public struct PlaybackLogEntity: Equatable {
         self.title = title
         self.artist = artist
     }
-    
+
     public let id, title, artist: String
-    
-    public static func == (lhs: PlaybackLogEntity, rhs:  PlaybackLogEntity) -> Bool {
+
+    public static func == (lhs: PlaybackLogEntity, rhs: PlaybackLogEntity) -> Bool {
         lhs.id == rhs.id
     }
 }

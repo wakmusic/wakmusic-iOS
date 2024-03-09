@@ -6,15 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct SetProfileUseCaseImpl: SetProfileUseCase {
-  
-
     private let userRepository: any UserRepository
 
     public init(
@@ -22,11 +20,8 @@ public struct SetProfileUseCaseImpl: SetProfileUseCase {
     ) {
         self.userRepository = userRepository
     }
-    
+
     public func execute(image: String) -> Single<BaseEntity> {
         userRepository.setProfile(image: image)
     }
-    
-
-   
 }

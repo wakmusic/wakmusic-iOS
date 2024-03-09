@@ -4,23 +4,22 @@ import Foundation
 
 /// A YouTubePlayerAPI Error
 public struct YouTubePlayerAPIError: Error {
-    
     // MARK: Properties
-    
+
     /// The JavaScript that has been executed and caused the Error
     public let javaScript: String
-    
+
     /// The optional JavaScript response object
     public let javaScriptResponse: Any?
-    
+
     /// The optional underlying Error
     public let underlyingError: Error?
-    
+
     /// The optional error reason message
     public let reason: String?
-    
+
     // MARK: Initializer
-    
+
     /// Creates a new instance of `YouTubePlayerAPIError`
     /// - Parameters:
     ///   - javaScript: The JavaScript that has been executed and caused the Error
@@ -38,5 +37,4 @@ public struct YouTubePlayerAPIError: Error {
         self.underlyingError = underlyingError
         self.reason = reason
     }
-    
 }

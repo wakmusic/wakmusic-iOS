@@ -6,31 +6,29 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxRelay
-import DomainModule
 import BaseFeature
+import DomainModule
+import Foundation
 import KeychainModule
+import RxRelay
+import RxSwift
+import Utility
 
-final public class QnaContentViewModel:ViewModelType {
+public final class QnaContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var dataSource:[FaqEntity]
+    var dataSource: [FaqEntity]
 
-    public struct Input {
-    }
+    public struct Input {}
 
-    public struct Output {
-    }
+    public struct Output {}
 
     public init(
-        dataSource:[FaqEntity]
+        dataSource: [FaqEntity]
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.dataSource = dataSource
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
         return output

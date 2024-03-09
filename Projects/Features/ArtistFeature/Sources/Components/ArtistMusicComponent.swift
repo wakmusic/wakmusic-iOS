@@ -6,10 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import UIKit
-import NeedleFoundation
 import ArtistDomainInterface
+import DataMappingModule
+import DomainModule
+import Foundation
+import NeedleFoundation
 
 public protocol ArtistMusicDependency: Dependency {
     var artistMusicContentComponent: ArtistMusicContentComponent { get }

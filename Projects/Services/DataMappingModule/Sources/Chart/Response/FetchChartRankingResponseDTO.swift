@@ -16,8 +16,8 @@ public struct SingleChartRankingResponseDTO: Codable, Equatable {
     }
 }
 
-extension SingleChartRankingResponseDTO{
-    public struct ChartInfo: Codable {
+public extension SingleChartRankingResponseDTO {
+    struct ChartInfo: Codable {
         public let views, last: Int
         public let increase: Int?
     }

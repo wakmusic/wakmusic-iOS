@@ -34,11 +34,9 @@ public protocol BottomSheetPresentationControllerDelegate: AnyObject {
 }
 
 final class BottomSheetPresentationController: UIPresentationController {
-
     // MARK: - Internal properties
 
     var transitionState: TransitionState?
-
 
     // MARK: - Private properties
 
@@ -231,7 +229,7 @@ extension BottomSheetPresentationController: BottomSheetViewDismissalDelegate {
         dismissAction = action
 
         switch action {
-        case .drag(let velocity):
+        case let .drag(velocity):
             dismiss(with: velocity)
         case .tap:
             dismiss(with: .zero)

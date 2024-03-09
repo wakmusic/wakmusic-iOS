@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
+import UIKit
 
 protocol Likeable {
     var isLiked: Bool { get set }
@@ -20,16 +20,14 @@ class LikeButton: VerticalImageButton, Likeable {
             setImage()
         }
     }
-    
+
     private func setColor() {
         let color = isLiked ? DesignSystemAsset.PrimaryColor.increase.color : DesignSystemAsset.GrayColor.gray400.color
         self.titleLabel.textColor = color
     }
-    
+
     private func setImage() {
         let image = isLiked ? DesignSystemAsset.Player.likeOn.image : DesignSystemAsset.Player.likeOff.image
         self.image = image
     }
-
-    
 }

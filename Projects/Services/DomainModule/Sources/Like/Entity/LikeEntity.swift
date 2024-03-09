@@ -18,7 +18,7 @@ public struct LikeEntity {
         self.likes = likes
         self.description = description
     }
-    
+
     public let status: Int
     public let likes: Int
     public var description: String = ""

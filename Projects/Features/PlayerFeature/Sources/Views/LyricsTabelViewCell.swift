@@ -6,17 +6,24 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
 import SnapKit
 import Then
+import UIKit
 import Utility
 
 internal class LyricsTableViewCell: UITableViewCell {
     static let identifier = "LyricsTableViewCell"
-    static let lyricMaxWidth: CGFloat = (270 * APP_WIDTH())/375.0
-    
-    private lazy var lyricsLabel = WMLabel(text: "가사", textColor: DesignSystemAsset.GrayColor.gray500.color, font: .t6(weight: .medium), alignment: .center, lineHeight: UIFont.WMFontSystem.t6().lineHeight, kernValue: -0.5).then {
+    static let lyricMaxWidth: CGFloat = (270 * APP_WIDTH()) / 375.0
+
+    private lazy var lyricsLabel = WMLabel(
+        text: "가사",
+        textColor: DesignSystemAsset.GrayColor.gray500.color,
+        font: .t6(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = 0
         $0.preferredMaxLayoutWidth = LyricsTableViewCell.lyricMaxWidth
     }
@@ -26,10 +33,11 @@ internal class LyricsTableViewCell: UITableViewCell {
         configureContents()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("")
     }
-    
+
     private func configureContents() {
         self.backgroundColor = .clear
         self.contentView.addSubview(self.lyricsLabel)
@@ -38,19 +46,20 @@ internal class LyricsTableViewCell: UITableViewCell {
             $0.centerY.equalTo(contentView.snp.centerY)
         }
     }
-    
+
     override func prepareForReuse() {
         highlight(false)
     }
-    
+
     internal func setLyrics(text: String) {
         self.lyricsLabel.text = text
     }
-    
+
     internal func highlight(_ isCurrent: Bool) {
-        lyricsLabel.textColor = isCurrent ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor.gray500.color
+        lyricsLabel.textColor = isCurrent ? DesignSystemAsset.PrimaryColor.point.color : DesignSystemAsset.GrayColor
+            .gray500.color
     }
-    
+
     static func getCellHeight(lyric: String) -> CGFloat {
         let textHeight: CGFloat = lyric.heightConstraintAt(
             width: LyricsTableViewCell.lyricMaxWidth,

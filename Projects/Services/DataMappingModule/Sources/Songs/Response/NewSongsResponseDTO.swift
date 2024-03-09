@@ -13,11 +13,11 @@ public struct NewSongsResponseDTO: Decodable {
     public let remix, reaction: String
     public let date: Int
     public let total: NewSongsResponseDTO.Total?
-    
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "songId"
         case title, artist, remix, reaction, date, total

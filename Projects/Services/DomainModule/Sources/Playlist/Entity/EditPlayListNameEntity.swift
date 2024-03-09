@@ -12,14 +12,13 @@ public struct EditPlayListNameEntity: Equatable {
     public init(
         title: String,
         status: Int,
-        description:String = ""
+        description: String = ""
     ) {
         self.title = title
-        self.status =  status
+        self.status = status
         self.description = description
-        
-   
     }
-    public let  status:Int
-    public let  title,description : String
+
+    public let status: Int
+    public let title, description: String
 }

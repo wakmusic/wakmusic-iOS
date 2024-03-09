@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
 import DataModule
+import DomainModule
 import NetworkModule
 
 public extension AppComponent {
@@ -16,16 +16,16 @@ public extension AppComponent {
             RemotePlayDataSourceImpl(keychain: keychain)
         }
     }
-    
+
     var playRepository: any PlayRepository {
         shared {
-            PlayRepositoryImpl(remotePlayDataSource:remotePlayDataSource)
+            PlayRepositoryImpl(remotePlayDataSource: remotePlayDataSource)
         }
     }
-    
+
     var postPlaybackLogUseCase: any PostPlaybackLogUseCase {
         shared {
-          PostPlaybackLogUseCaseImpl(playRepository: playRepository)
+            PostPlaybackLogUseCaseImpl(playRepository: playRepository)
         }
     }
 }

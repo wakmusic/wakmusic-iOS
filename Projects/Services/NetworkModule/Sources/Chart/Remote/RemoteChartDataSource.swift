@@ -1,8 +1,8 @@
 import DataMappingModule
-import ErrorModule
 import DomainModule
-import RxSwift
+import ErrorModule
 import Foundation
+import RxSwift
 
 public protocol RemoteChartDataSource {
     func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]>

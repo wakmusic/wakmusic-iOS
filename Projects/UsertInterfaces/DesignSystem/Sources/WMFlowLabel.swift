@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import MarqueeLabel
+import UIKit
 
 public final class WMFlowLabel: MarqueeLabel {
     public init(
@@ -30,12 +30,18 @@ public final class WMFlowLabel: MarqueeLabel {
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        self.setTextWithAttributes(lineHeight: lineHeight, kernValue: kernValue, lineSpacing: lineSpacing, lineHeightMultiple: lineHeightMultiple, alignment: alignment)
+        self.setTextWithAttributes(
+            lineHeight: lineHeight,
+            kernValue: kernValue,
+            lineSpacing: lineSpacing,
+            lineHeightMultiple: lineHeightMultiple,
+            alignment: alignment
+        )
         self.leadingBuffer = leadingBuffer
         self.trailingBuffer = trailingBuffer
         self.animationDelay = animationDelay
     }
-    
+
     convenience init(
         text: String,
         textColor: UIColor = .init(),
@@ -49,9 +55,24 @@ public final class WMFlowLabel: MarqueeLabel {
         animationSpeed: CGFloat = 30,
         fadeLength: CGFloat = 3
     ) {
-        self.init(text: text, textColor: textColor, font: font, alignment: alignment, lineHeight: lineHeight, kernValue: kernValue, lineSpacing: nil, lineHeightMultiple: nil, leadingBuffer: leadingBuffer, trailingBuffer: trailingBuffer, animationDelay: animationDelay, animationSpeed: animationSpeed, fadeLength: fadeLength)
+        self.init(
+            text: text,
+            textColor: textColor,
+            font: font,
+            alignment: alignment,
+            lineHeight: lineHeight,
+            kernValue: kernValue,
+            lineSpacing: nil,
+            lineHeightMultiple: nil,
+            leadingBuffer: leadingBuffer,
+            trailingBuffer: trailingBuffer,
+            animationDelay: animationDelay,
+            animationSpeed: animationSpeed,
+            fadeLength: fadeLength
+        )
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

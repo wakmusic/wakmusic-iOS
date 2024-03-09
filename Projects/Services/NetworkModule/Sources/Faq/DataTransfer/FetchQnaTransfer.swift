@@ -2,7 +2,6 @@ import DataMappingModule
 import DomainModule
 import Utility
 
-
 public extension FaqResponseDTO {
     func toDomain() -> FaqEntity {
         FaqEntity(

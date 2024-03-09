@@ -7,7 +7,6 @@ import CoreGraphics
 /// Model defining a certain area of a BottomSheetView.
 ///
 protocol TranslationTarget {
-
     /// An offset which a BottomSheetView can transition to
     var targetOffset: CGFloat { get }
 
@@ -97,7 +96,7 @@ struct LimitTarget: TranslationTarget {
         switch behavior {
         case .linear:
             return offset
-        case .rubberBand(let radius):
+        case let .rubberBand(radius):
             let distance = offset - bound
             let newOffset = radius * (1 - exp(-abs(distance) / radius))
 
@@ -116,7 +115,7 @@ struct LimitTarget: TranslationTarget {
         switch behavior {
         case .linear:
             return velocity
-        case .rubberBand(let radius):
+        case let .rubberBand(radius):
             let distance = offset - bound
             let constant = exp(-abs(distance) / radius)
 

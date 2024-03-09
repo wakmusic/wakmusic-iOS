@@ -6,13 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
-import CommonFeature
 
-public protocol AfterSearchComponentDependency: Dependency {
-}
+public protocol AfterSearchComponentDependency: Dependency {}
 
 public final class AfterSearchContentComponent: Component<AfterSearchComponentDependency> {
     public func makeView(
@@ -20,7 +19,7 @@ public final class AfterSearchContentComponent: Component<AfterSearchComponentDe
         dataSource: [SearchSectionModel]
     ) -> AfterSearchContentViewController {
         return AfterSearchContentViewController.viewController(
-            viewModel:.init(
+            viewModel: .init(
                 type: type,
                 dataSource: dataSource
             )

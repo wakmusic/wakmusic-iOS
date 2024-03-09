@@ -6,24 +6,23 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import ArtistFeature
+import BaseFeature
+import ChartFeature
+import CommonFeature
+import DesignSystem
+import DomainModule
+import HomeFeature
+import RxCocoa
+import RxSwift
+import SearchFeature
+import SnapKit
+import StorageFeature
 import UIKit
 import Utility
-import DesignSystem
-import SnapKit
-import BaseFeature
-import HomeFeature
-import SearchFeature
-import ArtistFeature
-import ChartFeature
-import StorageFeature
-import CommonFeature
-import RxSwift
-import RxCocoa
-import DomainModule
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
-
-    @IBOutlet weak public var contentView: UIView!
+    @IBOutlet public weak var contentView: UIView!
 
     private lazy var viewControllers: [UIViewController] = {
         return [
@@ -39,7 +38,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var previousIndex: Int?
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     private var disposeBag: DisposeBag = DisposeBag()
-    
+
     private var homeComponent: HomeComponent!
     private var chartComponent: ChartComponent!
     private var searchComponent: SearchComponent!
@@ -48,19 +47,19 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeComponent: NoticeComponent!
     private var noticeDetailComponent: NoticeDetailComponent!
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bind()
     }
-    
-    public override func viewDidAppear(_ animated: Bool) {
+
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
-    public override func viewDidDisappear(_ animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
@@ -96,50 +95,50 @@ extension MainTabBarViewController {
             .dataSource
             .filter { !$0.isEmpty }
             .withUnretained(self)
-            .subscribe(onNext: { (owner, model) in
+            .subscribe(onNext: { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
                 owner.showPanModal(content: viewController)
             }).disposed(by: disposeBag)
     }
-    
+
     private func configureUI() {
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
         add(asChildViewController: viewControllers[startPage])
     }
-    
+
     func updateContent(previous: Int, current: Int) {
         Utility.PreferenceManager.startPage = current
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
-        
+
         self.previousIndex = previous
         self.selectedIndex = current
     }
-    
+
     func forceUpdateContent(for index: Int) {
         Utility.PreferenceManager.startPage = index
 
-        if let previous = self.previousIndex{
+        if let previous = self.previousIndex {
             remove(asChildViewController: viewControllers[previous])
         }
         add(asChildViewController: viewControllers[index])
-        
+
         self.previousIndex = self.selectedIndex
         self.selectedIndex = index
     }
-    
+
     func equalHandleTapped(for index: Int) {
         guard let navigationController = self.viewControllers[index] as? UINavigationController else { return }
         if let home = navigationController.viewControllers.first as? HomeViewController {
             home.equalHandleTapped()
-        }else if let chart = navigationController.viewControllers.first as? ChartViewController {
+        } else if let chart = navigationController.viewControllers.first as? ChartViewController {
             chart.equalHandleTapped()
-        }else if let search = navigationController.viewControllers.first as? SearchViewController {
+        } else if let search = navigationController.viewControllers.first as? SearchViewController {
             search.equalHandleTapped()
-        }else if let artist = navigationController.viewControllers.first as? ArtistViewController {
+        } else if let artist = navigationController.viewControllers.first as? ArtistViewController {
             artist.equalHandleTapped()
-        }else if let storage = navigationController.viewControllers.first as? StorageViewController {
+        } else if let storage = navigationController.viewControllers.first as? StorageViewController {
             storage.equalHandleTapped()
         }
     }

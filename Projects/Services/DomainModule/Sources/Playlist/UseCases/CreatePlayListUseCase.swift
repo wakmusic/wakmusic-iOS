@@ -1,7 +1,7 @@
+import DataMappingModule
 import Foundation
 import RxSwift
-import DataMappingModule
 
 public protocol CreatePlayListUseCase {
-    func execute(title:String) -> Single<PlayListBaseEntity>
+    func execute(title: String) -> Single<PlayListBaseEntity>
 }

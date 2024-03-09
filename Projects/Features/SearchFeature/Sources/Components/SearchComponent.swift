@@ -10,7 +10,7 @@ import Foundation
 import NeedleFoundation
 
 public protocol SearchDependency: Dependency {
-    var beforeSearchComponent:  BeforeSearchComponent { get }
+    var beforeSearchComponent: BeforeSearchComponent { get }
     var afterSearchComponent: AfterSearchComponent { get }
 }
 

@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Moya
 import DataMappingModule
 import ErrorModule
+import Foundation
+import Moya
 
 public enum NoticeAPI {
     case fetchNotice(type: NoticeType)
@@ -18,13 +18,13 @@ public enum NoticeAPI {
 
 extension NoticeAPI: WMAPI {
     public var domain: WMDomain {
-        switch self{
+        switch self {
         case .fetchNotice,
              .fetchNoticeCategories:
             return .notice
         }
     }
-    
+
     public var urlPath: String {
         switch self {
         case let .fetchNotice(type):
@@ -33,7 +33,7 @@ extension NoticeAPI: WMAPI {
             return "/categories"
         }
     }
-    
+
     public var method: Moya.Method {
         switch self {
         case .fetchNotice,
@@ -41,13 +41,16 @@ extension NoticeAPI: WMAPI {
             return .get
         }
     }
-    
+
     public var task: Moya.Task {
         switch self {
         case .fetchNotice:
             return .requestParameters(
-                parameters: ["os": "ios",
-                             "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""],
+                parameters: [
+                    "os": "ios",
+                    "version": Bundle.main
+                        .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+                ],
                 encoding: URLEncoding.queryString
             )
         case .fetchNoticeCategories:

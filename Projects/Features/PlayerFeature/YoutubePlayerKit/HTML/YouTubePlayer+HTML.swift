@@ -3,21 +3,16 @@ import Foundation
 // MARK: - YouTubePlayer+HTML
 
 extension YouTubePlayer {
-    
     /// The YouTubePlayer HTML
     struct HTML: Hashable {
-        
         /// The HTML contents
         let contents: String
-        
     }
-    
 }
 
 // MARK: - HTML+init
 
 extension YouTubePlayer.HTML {
-    
     /// Creates a new instance of `YouTubePlayer.HTML` or throws an error
     /// - Parameters:
     ///   - options: The YouTubePlayer Options
@@ -52,5 +47,4 @@ extension YouTubePlayer.HTML {
         // Initialize HTML contents
         self.contents = htmlContents
     }
-    
 }

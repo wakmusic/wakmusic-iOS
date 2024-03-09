@@ -16,5 +16,3 @@ public struct FaqResponseDTO: Decodable {
         case question, description, category
     }
 }
-
-

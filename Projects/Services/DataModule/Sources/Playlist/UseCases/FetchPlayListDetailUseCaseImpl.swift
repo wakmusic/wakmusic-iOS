@@ -6,18 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
-public struct FetchPlayListDetailUseCaseImpl: FetchPlayListDetailUseCase{
-   
-    
-   
-    
-
+public struct FetchPlayListDetailUseCaseImpl: FetchPlayListDetailUseCase {
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -25,11 +20,8 @@ public struct FetchPlayListDetailUseCaseImpl: FetchPlayListDetailUseCase{
     ) {
         self.playListRepository = playListRepository
     }
-    
-    public func execute(id: String,type:PlayListType) -> Single<PlayListDetailEntity> {
+
+    public func execute(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
         playListRepository.fetchPlayListDetail(id: id, type: type)
     }
-    
-    
-   
 }

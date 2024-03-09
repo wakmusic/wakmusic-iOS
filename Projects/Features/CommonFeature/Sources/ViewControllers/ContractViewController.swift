@@ -6,30 +6,30 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
-import RxSwift
-import PDFKit
 import DesignSystem
 import NVActivityIndicatorView
+import PDFKit
+import RxSwift
+import UIKit
+import Utility
 
-public enum ContractType{
+public enum ContractType {
     case privacy
     case service
 }
 
-extension ContractType{
-    var title:String{
-        switch self{
+extension ContractType {
+    var title: String {
+        switch self {
         case .privacy:
             return "개인정보처리방침"
         case .service:
             return "서비스 이용약관"
         }
     }
-    
-    var url:String {
-        switch self{
+
+    var url: String {
+        switch self {
         case .privacy:
             return "\(BASE_IMAGE_URL())/static/document/privacy.pdf"
         case .service:
@@ -44,16 +44,16 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
-    
+
     var type: ContractType = .privacy
     var disposeBag = DisposeBag()
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindRx()
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) deinit")
     }
@@ -65,20 +65,20 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     }
 }
 
-extension ContractViewController{
-    private func bindRx(){
+extension ContractViewController {
+    private func bindRx() {
         Observable.merge(
             closeButton.rx.tap.map { _ in () },
             confirmButton.rx.tap.map { _ in () }
         )
         .withUnretained(self)
-        .subscribe(onNext: { (owner, _) in
+        .subscribe(onNext: { owner, _ in
             owner.dismiss(animated: true)
         })
         .disposed(by: disposeBag)
     }
-    
-    private func loadPdf(document:PDFDocument){
+
+    private func loadPdf(document: PDFDocument) {
         let pdfView = PDFView(frame: self.fakeView.bounds)
         pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         pdfView.autoScales = true
@@ -88,26 +88,27 @@ extension ContractViewController{
         self.fakeView.addSubview(pdfView)
         activityIndicator.stopAnimating()
     }
-    
-    private func configureUI(){
+
+    private func configureUI() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
+
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
-        
+
         confirmButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
         confirmButton.layer.cornerRadius = 12
         confirmButton.clipsToBounds = true
         confirmButton.setAttributedTitle(NSMutableAttributedString(
             string: "확인",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                         .kern: -0.5
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .kern: -0.5
             ]
         ), for: .normal)
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
-        
+
         titleLabel.text = type.title
         titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)

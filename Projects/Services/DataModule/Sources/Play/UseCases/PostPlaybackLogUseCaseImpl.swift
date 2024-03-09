@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
 import Foundation
+import RxSwift
 
-public struct PostPlaybackLogUseCaseImpl: PostPlaybackLogUseCase {    
+public struct PostPlaybackLogUseCaseImpl: PostPlaybackLogUseCase {
     private let playRepository: any PlayRepository
 
     public init(
@@ -20,7 +20,7 @@ public struct PostPlaybackLogUseCaseImpl: PostPlaybackLogUseCase {
     ) {
         self.playRepository = playRepository
     }
-    
+
     public func execute(item: Data) -> Single<PlaybackLogEntity> {
         playRepository.postPlaybackLog(item: item)
     }

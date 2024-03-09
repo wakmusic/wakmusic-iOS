@@ -9,13 +9,12 @@
 import Foundation
 
 public struct UserInfoEntity: Equatable {
-    
     public init(
-        id:String,
-        platform:String,
-        name:String,
-        profile:String,
-        version:Int
+        id: String,
+        platform: String,
+        name: String,
+        profile: String,
+        version: Int
 
     ) {
         self.id = id
@@ -24,13 +23,11 @@ public struct UserInfoEntity: Equatable {
         self.profile = profile
         self.version = version
     }
-    
-    public let id, platform, name,profile:String
-    public let version:Int
-    
-    
+
+    public let id, platform, name, profile: String
+    public let version: Int
+
     public static func == (lhs: UserInfoEntity, rhs: UserInfoEntity) -> Bool {
         lhs.id == rhs.id
     }
-   
 }

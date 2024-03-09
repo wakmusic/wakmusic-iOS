@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import ArtistDomainInterface
+import Foundation
 import Utility
 
 public struct ArtistSongListResponseDTO: Decodable, Equatable {

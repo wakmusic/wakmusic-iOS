@@ -6,17 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
-public struct EditPlayListOrderUseCaseImpl:EditPlayListOrderUseCase {
-   
-    
-    
-
+public struct EditPlayListOrderUseCaseImpl: EditPlayListOrderUseCase {
     private let userRepository: any UserRepository
 
     public init(
@@ -24,13 +20,8 @@ public struct EditPlayListOrderUseCaseImpl:EditPlayListOrderUseCase {
     ) {
         self.userRepository = userRepository
     }
-    
+
     public func execute(ids: [String]) -> Single<BaseEntity> {
         userRepository.editPlayListOrder(ids: ids)
     }
- 
- 
-    
-
-   
 }

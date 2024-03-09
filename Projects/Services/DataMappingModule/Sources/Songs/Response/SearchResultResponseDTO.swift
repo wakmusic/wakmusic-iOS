@@ -11,7 +11,7 @@ import Foundation
 public struct SearchResultResponseDTO: Decodable {
     public let song: [SingleSongResponseDTO]
     public let artist: [SingleSongResponseDTO]
-    public let remix: [SingleSongResponseDTO
+    public let remix: [
+        SingleSongResponseDTO
     ]
-
 }

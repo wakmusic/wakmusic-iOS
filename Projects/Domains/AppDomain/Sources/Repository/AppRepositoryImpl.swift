@@ -6,8 +6,8 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import AppDomainInterface
+import Foundation
 import RxSwift
 
 public final class AppRepositoryImpl: AppRepository {

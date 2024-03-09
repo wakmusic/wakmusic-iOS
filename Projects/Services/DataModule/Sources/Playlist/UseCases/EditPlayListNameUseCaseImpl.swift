@@ -6,15 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct EditPlayListNameUseCaseImpl: EditPlayListNameUseCase {
-    
-
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -22,12 +20,8 @@ public struct EditPlayListNameUseCaseImpl: EditPlayListNameUseCase {
     ) {
         self.playListRepository = playListRepository
     }
-    
-    public func execute(key: String,title:String) -> Single<EditPlayListNameEntity> {
+
+    public func execute(key: String, title: String) -> Single<EditPlayListNameEntity> {
         playListRepository.editPlayListName(key: key, title: title)
     }
-    
-    
-
-   
 }

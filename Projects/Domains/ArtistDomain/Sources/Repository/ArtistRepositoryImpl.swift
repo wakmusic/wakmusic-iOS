@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import RxSwift
 import ArtistDomainInterface
+import RxSwift
 
 public final class ArtistRepositoryImpl: ArtistRepository {
     private let remoteArtistDataSource: any RemoteArtistDataSource

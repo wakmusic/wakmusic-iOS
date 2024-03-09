@@ -6,31 +6,30 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
+import CommonFeature
 import DataModule
+import DomainModule
+import HomeFeature
 import NetworkModule
 import SearchFeature
-import HomeFeature
-import CommonFeature
 
 public extension AppComponent {
-    
     var searchComponent: SearchComponent {
         SearchComponent(parent: self)
     }
-    
+
     var afterSearchComponent: AfterSearchComponent {
         AfterSearchComponent(parent: self)
     }
-    
+
     var afterSearchContentComponent: AfterSearchContentComponent {
         AfterSearchContentComponent(parent: self)
     }
-    
+
     var homeComponent: HomeComponent {
         HomeComponent(parent: self)
     }
-    
+
     var newSongsComponent: NewSongsComponent {
         NewSongsComponent(parent: self)
     }
@@ -44,24 +43,25 @@ public extension AppComponent {
             RemoteSongsDataSourceImpl(keychain: keychain)
         }
     }
+
     var songsRepository: any SongsRepository {
         shared {
-            SongsRepositoryImpl(remoteSongsDataSource:remoteSongsDataSource)
+            SongsRepositoryImpl(remoteSongsDataSource: remoteSongsDataSource)
         }
     }
-    
+
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
         shared {
-           FetchSearchSongUseCaseImpl(songsRepository: songsRepository)
+            FetchSearchSongUseCaseImpl(songsRepository: songsRepository)
         }
     }
+
     var fetchLyricsUseCase: any FetchLyricsUseCase {
-        
         shared {
             FetchLyricsUseCaseImpl(songsRepository: songsRepository)
         }
     }
-    
+
     var fetchNewSongsUseCase: any FetchNewSongsUseCase {
         shared {
             FetchNewSongsUseCaseImpl(songsRepository: songsRepository)

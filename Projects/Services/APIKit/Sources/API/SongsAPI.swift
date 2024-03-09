@@ -1,7 +1,7 @@
-import Moya
 import DataMappingModule
 import ErrorModule
 import Foundation
+import Moya
 
 public enum SongsAPI {
     case fetchSearchSong(keyword: String)
@@ -18,25 +18,25 @@ extension SongsAPI: WMAPI {
         switch self {
         case .fetchSearchSong:
             return "/search/all"
-        case .fetchLyrics(id: let id):
+        case let .fetchLyrics(id: id):
             return "/lyrics/\(id)"
         case let .fetchNewSongs(type, _, _):
             return "/new/\(type.apiKey)"
         }
     }
-        
+
     public var method: Moya.Method {
         return .get
     }
-    
+
     public var task: Moya.Task {
         switch self {
         case let .fetchSearchSong(keyword):
             return .requestParameters(parameters: [
-                "sort": "popular", //기본 인기순으로
+                "sort": "popular", // 기본 인기순으로
                 "keyword": keyword
             ], encoding: URLEncoding.queryString)
-            
+
         case .fetchLyrics:
             return .requestPlain
 
@@ -50,11 +50,11 @@ extension SongsAPI: WMAPI {
             )
         }
     }
-    
+
     public var jwtTokenType: JwtTokenType {
         return .none
     }
-    
+
     public var errorMap: [Int: WMError] {
         switch self {
         default:

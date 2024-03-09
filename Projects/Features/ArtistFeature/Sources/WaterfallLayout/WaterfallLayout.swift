@@ -3,67 +3,103 @@ import UIKit
 public protocol WaterfallLayoutDelegate: AnyObject {
     // MARK: - Required
     func collectionViewLayout(for section: Int) -> WaterfallLayout.Layout
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize
 
     // MARK: - Optional
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        minimumInteritemSpacingFor section: Int) -> CGFloat?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        minimumLineSpacingFor section: Int) -> CGFloat?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        sectionInsetFor section: Int) -> UIEdgeInsets?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        headerHeightFor section: Int) -> CGFloat?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        headerInsetFor section: Int) -> UIEdgeInsets?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        footerHeightFor section: Int) -> CGFloat?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        footerInsetFor section: Int) -> UIEdgeInsets?
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: WaterfallLayout,
-                        estimatedSizeForItemAt indexPath: IndexPath) -> CGSize?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        minimumInteritemSpacingFor section: Int
+    ) -> CGFloat?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        minimumLineSpacingFor section: Int
+    ) -> CGFloat?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        sectionInsetFor section: Int
+    ) -> UIEdgeInsets?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        headerHeightFor section: Int
+    ) -> CGFloat?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        headerInsetFor section: Int
+    ) -> UIEdgeInsets?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        footerHeightFor section: Int
+    ) -> CGFloat?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        footerInsetFor section: Int
+    ) -> UIEdgeInsets?
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        estimatedSizeForItemAt indexPath: IndexPath
+    ) -> CGSize?
 }
 
-extension WaterfallLayoutDelegate {
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               minimumInteritemSpacingFor section: Int) -> CGFloat? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               minimumLineSpacingFor section: Int) -> CGFloat? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               sectionInsetFor section: Int) -> UIEdgeInsets? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               headerHeightFor section: Int) -> CGFloat? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               headerInsetFor section: Int) -> UIEdgeInsets? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               footerHeightFor section: Int) -> CGFloat? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               footerInsetFor section: Int) -> UIEdgeInsets? { return nil }
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout: WaterfallLayout,
-                               estimatedSizeForItemAt indexPath: IndexPath) -> CGSize? { return nil }
+public extension WaterfallLayoutDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        minimumInteritemSpacingFor section: Int
+    ) -> CGFloat? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        minimumLineSpacingFor section: Int
+    ) -> CGFloat? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        sectionInsetFor section: Int
+    ) -> UIEdgeInsets? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        headerHeightFor section: Int
+    ) -> CGFloat? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        headerInsetFor section: Int
+    ) -> UIEdgeInsets? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        footerHeightFor section: Int
+    ) -> CGFloat? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        footerInsetFor section: Int
+    ) -> UIEdgeInsets? { return nil }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout: WaterfallLayout,
+        estimatedSizeForItemAt indexPath: IndexPath
+    ) -> CGSize? { return nil }
 }
 
 public class WaterfallLayout: UICollectionViewLayout {
-    public static let automaticSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
-                                                     height: .greatestFiniteMagnitude)
+    public static let automaticSize: CGSize = CGSize(
+        width: CGFloat.greatestFiniteMagnitude,
+        height: .greatestFiniteMagnitude
+    )
 
     public enum DistributionMethod {
         case equal
@@ -82,7 +118,7 @@ public class WaterfallLayout: UICollectionViewLayout {
         }
     }
 
-    public struct Const {
+    public enum Const {
         static let minimumLineSpacing: CGFloat = 10.0
         static let minimumInteritemSpacing: CGFloat = 10.0
         static let sectionInset: UIEdgeInsets = .zero
@@ -134,7 +170,7 @@ public class WaterfallLayout: UICollectionViewLayout {
 
     public weak var delegate: WaterfallLayoutDelegate?
 
-    public override func prepare() {
+    override public func prepare() {
         super.prepare()
         cleaunup()
 
@@ -144,21 +180,21 @@ public class WaterfallLayout: UICollectionViewLayout {
         let numberOfSections = collectionView.numberOfSections
         if numberOfSections == 0 { return }
 
-        (0..<numberOfSections).forEach { section in
+        (0 ..< numberOfSections).forEach { section in
             let columnCount = delegate.collectionViewLayout(for: section).column
             columnHeights.append(Array(repeating: 0.0, count: columnCount))
         }
 
         var position: CGFloat = 0.0
-        (0..<numberOfSections).forEach { section in
+        (0 ..< numberOfSections).forEach { section in
             layoutHeader(position: &position, collectionView: collectionView, delegate: delegate, section: section)
             layoutItems(position: position, collectionView: collectionView, delegate: delegate, section: section)
             layoutFooter(position: &position, collectionView: collectionView, delegate: delegate, section: section)
         }
     }
 
-    public override var collectionViewContentSize: CGSize {
-        guard let collectionView = collectionView, collectionView.numberOfSections > 0  else {
+    override public var collectionViewContentSize: CGSize {
+        guard let collectionView = collectionView, collectionView.numberOfSections > 0 else {
             return .zero
         }
         var contentSize = collectionView.bounds.size
@@ -166,7 +202,7 @@ public class WaterfallLayout: UICollectionViewLayout {
         return contentSize
     }
 
-    public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    override public func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         if indexPath.section >= sectionItemAttributes.count {
             return nil
         }
@@ -176,16 +212,18 @@ public class WaterfallLayout: UICollectionViewLayout {
         return sectionItemAttributes[indexPath.section][indexPath.item]
     }
 
-    public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override public func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         return allItemAttributes.filter { rect.intersects($0.frame) }
     }
 
-    public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return newBounds.width != (collectionView?.bounds ?? .zero).width
     }
 
-    override public func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                                withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+    override public func shouldInvalidateLayout(
+        forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+        withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes
+    ) -> Bool {
         if let delegate = delegate {
             // For .waterfall mode, disabling shouldInvalidateLayout will prevent infinite loop to occur due to unstable constraints.
             // e.g. UIImageView causes AL constraints to be updated due to content hugging that causes infinite UI update.
@@ -197,9 +235,15 @@ public class WaterfallLayout: UICollectionViewLayout {
         return cachedItemSizes[originalAttributes.indexPath] != preferredAttributes.size
     }
 
-    override public func invalidationContext(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
-                                             withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
-        let context = super.invalidationContext(forPreferredLayoutAttributes: preferredAttributes, withOriginalAttributes: originalAttributes)
+    override public func invalidationContext(
+        forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes,
+        withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes
+    )
+        -> UICollectionViewLayoutInvalidationContext {
+        let context = super.invalidationContext(
+            forPreferredLayoutAttributes: preferredAttributes,
+            withOriginalAttributes: originalAttributes
+        )
 
         guard collectionView != nil else { return context }
 
@@ -224,7 +268,12 @@ public class WaterfallLayout: UICollectionViewLayout {
         if old != new { invalidateLayout() }
     }
 
-    private func layoutHeader(position: inout CGFloat, collectionView: UICollectionView, delegate: WaterfallLayoutDelegate, section: Int) {
+    private func layoutHeader(
+        position: inout CGFloat,
+        collectionView: UICollectionView,
+        delegate: WaterfallLayoutDelegate,
+        section: Int
+    ) {
         let columnCount = delegate.collectionViewLayout(for: section).column
         let headerHeight = self.headerHeight(for: section)
         let headerInset = self.headerInset(for: section)
@@ -232,7 +281,10 @@ public class WaterfallLayout: UICollectionViewLayout {
         position += headerInset.top
 
         if headerHeight > 0 {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: [section, 0])
+            let attributes = UICollectionViewLayoutAttributes(
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                with: [section, 0]
+            )
             attributes.frame = CGRect(
                 x: headerInset.left,
                 y: position,
@@ -249,20 +301,21 @@ public class WaterfallLayout: UICollectionViewLayout {
         columnHeights[section] = Array(repeating: position, count: columnCount)
     }
 
-    private func pickColumn(itemIndex: Int,
-                            delegate: WaterfallLayoutDelegate,
-                            section: Int) -> Int {
-
+    private func pickColumn(
+        itemIndex: Int,
+        delegate: WaterfallLayoutDelegate,
+        section: Int
+    ) -> Int {
         let layout = delegate.collectionViewLayout(for: section)
         switch layout {
         case .flow:
             let columnCount = delegate.collectionViewLayout(for: section).column
             return itemIndex % columnCount
-        case .waterfall(_, let distributionMethod):
+        case let .waterfall(_, distributionMethod):
             if distributionMethod == .balanced {
                 var minIndex: Int = 0
                 var minValue = CGFloat.greatestFiniteMagnitude
-                columnHeights[section].enumerated().forEach { (index, element) in
+                columnHeights[section].enumerated().forEach { index, element in
                     if element < minValue {
                         minIndex = index
                         minValue = element
@@ -276,7 +329,12 @@ public class WaterfallLayout: UICollectionViewLayout {
         }
     }
 
-    private func layoutItems(position: CGFloat, collectionView: UICollectionView, delegate: WaterfallLayoutDelegate, section: Int) {
+    private func layoutItems(
+        position: CGFloat,
+        collectionView: UICollectionView,
+        delegate: WaterfallLayoutDelegate,
+        section: Int
+    ) {
         let sectionInset = self.sectionInset(for: section)
         let minimumInteritemSpacing = self.minimumInteritemSpacing(for: section)
         let minimumLineSpacing = self.minimumInteritemSpacing(for: section)
@@ -289,7 +347,7 @@ public class WaterfallLayout: UICollectionViewLayout {
 
         var itemAttributes: [UICollectionViewLayoutAttributes] = []
 
-        (0..<itemCount).forEach { index in
+        (0 ..< itemCount).forEach { index in
             let indexPath: IndexPath = [section, index]
             let columnIndex = pickColumn(itemIndex: index, delegate: delegate, section: section)
 
@@ -300,7 +358,8 @@ public class WaterfallLayout: UICollectionViewLayout {
                 itemHeight = (cachedItemSizes[indexPath] ?? estimatedSizeForItemAt(indexPath)).height
             } else {
                 cachedItemSizes[indexPath] = itemSize
-                itemHeight = itemSize.height > 0 && itemSize.width > 0 ? floor(itemSize.height * itemWidth / itemSize.width) : 0.0
+                itemHeight = itemSize.height > 0 && itemSize
+                    .width > 0 ? floor(itemSize.height * itemWidth / itemSize.width) : 0.0
             }
 
             let offsetY: CGFloat
@@ -323,7 +382,8 @@ public class WaterfallLayout: UICollectionViewLayout {
             columnHeights[section][columnIndex] = attributes.frame.maxY + minimumInteritemSpacing
 
             if case .flow = layout, index % columnCount == columnCount - 1 {
-                let maxHeight = columnHeights[section].enumerated().sorted { $0.element > $1.element }.first?.element ?? 0.0
+                let maxHeight = columnHeights[section].enumerated().sorted { $0.element > $1.element }.first?
+                    .element ?? 0.0
                 columnHeights[section] = Array(repeating: maxHeight, count: columnCount)
             }
         }
@@ -331,13 +391,19 @@ public class WaterfallLayout: UICollectionViewLayout {
         sectionItemAttributes.append(itemAttributes)
     }
 
-    private func layoutFooter(position: inout CGFloat, collectionView: UICollectionView, delegate: WaterfallLayoutDelegate, section: Int) {
+    private func layoutFooter(
+        position: inout CGFloat,
+        collectionView: UICollectionView,
+        delegate: WaterfallLayoutDelegate,
+        section: Int
+    ) {
         let sectionInset = self.sectionInset(for: section)
         let minimumInteritemSpacing = self.minimumInteritemSpacing(for: section)
         let columnCount = delegate.collectionViewLayout(for: section).column
-        let longestColumnIndex = columnHeights[section].enumerated().sorted { $0.element > $1.element }.first?.offset ?? 0
+        let longestColumnIndex = columnHeights[section].enumerated().sorted { $0.element > $1.element }.first?
+            .offset ?? 0
 
-        if columnHeights[section].count > 0 {
+        if !columnHeights[section].isEmpty {
             position = columnHeights[section][longestColumnIndex] - minimumInteritemSpacing + sectionInset.bottom
         } else {
             position = 0.0
@@ -347,8 +413,16 @@ public class WaterfallLayout: UICollectionViewLayout {
         position += footerInset.top
 
         if footerHeight > 0.0 {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: [section, 0])
-            attributes.frame = CGRect(x: footerInset.left, y: position, width: collectionView.bounds.width - (footerInset.left + footerInset.right), height: footerHeight)
+            let attributes = UICollectionViewLayoutAttributes(
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                with: [section, 0]
+            )
+            attributes.frame = CGRect(
+                x: footerInset.left,
+                y: position,
+                width: collectionView.bounds.width - (footerInset.left + footerInset.right),
+                height: footerHeight
+            )
             footersAttribute[section] = attributes
             allItemAttributes.append(attributes)
             position = attributes.frame.maxY + footerInset.bottom
@@ -357,34 +431,45 @@ public class WaterfallLayout: UICollectionViewLayout {
     }
 
     private func minimumInteritemSpacing(for section: Int) -> CGFloat {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, minimumInteritemSpacingFor: section) } ?? minimumInteritemSpacing
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, minimumInteritemSpacingFor: section) } ??
+            minimumInteritemSpacing
     }
 
     private func minimumLineSpacing(for section: Int) -> CGFloat {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, minimumLineSpacingFor: section) } ?? minimumLineSpacing
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, minimumLineSpacingFor: section) } ??
+            minimumLineSpacing
     }
 
     private func sectionInset(for section: Int) -> UIEdgeInsets {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, sectionInsetFor: section) } ?? sectionInset
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, sectionInsetFor: section) } ?? sectionInset
     }
 
     private func headerHeight(for section: Int) -> CGFloat {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, headerHeightFor: section) } ?? headerHeight
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, headerHeightFor: section) } ?? headerHeight
     }
 
     private func headerInset(for section: Int) -> UIEdgeInsets {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, headerInsetFor: section) } ?? headerInset
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, headerInsetFor: section) } ?? headerInset
     }
 
     private func footerHeight(for section: Int) -> CGFloat {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, footerHeightFor: section) } ?? footerHeight
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, footerHeightFor: section) } ?? footerHeight
     }
 
     private func footerInset(for section: Int) -> UIEdgeInsets {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, footerInsetFor: section) } ?? footerInset
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, footerInsetFor: section) } ?? footerInset
     }
 
     private func estimatedSizeForItemAt(_ indexPath: IndexPath) -> CGSize {
-        return collectionView.flatMap { delegate?.collectionView($0, layout: self, estimatedSizeForItemAt: indexPath) } ?? estimatedItemSize
+        return collectionView
+            .flatMap { delegate?.collectionView($0, layout: self, estimatedSizeForItemAt: indexPath) } ??
+            estimatedItemSize
     }
 }

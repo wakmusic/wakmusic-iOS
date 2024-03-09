@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import ArtistDomainInterface
 import Foundation
 import RxSwift
-import ArtistDomainInterface
 
 public struct FetchArtistListUseCaseImpl: FetchArtistListUseCase {
     private let artistRepository: any ArtistRepository

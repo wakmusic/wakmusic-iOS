@@ -6,18 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
-import DataModule
-import NetworkModule
 import CommonFeature
+import DataModule
+import DomainModule
+import NetworkModule
 import StorageFeature
 
 public extension AppComponent {
-    
     var noticePopupComponent: NoticePopupComponent {
         NoticePopupComponent(parent: self)
     }
-    
+
     var noticeComponent: NoticeComponent {
         NoticeComponent(parent: self)
     }
@@ -25,26 +24,26 @@ public extension AppComponent {
     var noticeDetailComponent: NoticeDetailComponent {
         NoticeDetailComponent(parent: self)
     }
-    
+
     var remoteNoticeDataSource: any RemoteNoticeDataSource {
         shared {
             RemoteNoticeDataSourceImpl(keychain: keychain)
         }
     }
-      
+
     var noticeRepository: any NoticeRepository {
         shared {
             NoticeRepositoryImpl(remoteNoticeDataSource: remoteNoticeDataSource)
         }
     }
-    
-    var fetchNoticeUseCase: any FetchNoticeUseCase{
+
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
         shared {
             FetchNoticeUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
 
-    var fetchNoticeCategoriesUseCase: any FetchNoticeCategoriesUseCase{
+    var fetchNoticeCategoriesUseCase: any FetchNoticeCategoriesUseCase {
         shared {
             FetchNoticeCategoriesUseCaseImpl(noticeRepository: noticeRepository)
         }

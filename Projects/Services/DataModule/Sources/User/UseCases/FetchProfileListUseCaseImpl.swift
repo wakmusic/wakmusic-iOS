@@ -6,14 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct FetchProfileListUseCaseImpl: FetchProfileListUseCase {
-   
     private let userRepository: any UserRepository
 
     public init(
@@ -21,7 +20,7 @@ public struct FetchProfileListUseCaseImpl: FetchProfileListUseCase {
     ) {
         self.userRepository = userRepository
     }
-    
+
     public func execute() -> Single<[ProfileListEntity]> {
         userRepository.fetchProfileList()
     }

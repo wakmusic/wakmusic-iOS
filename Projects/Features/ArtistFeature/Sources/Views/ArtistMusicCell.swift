@@ -6,12 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
+import ArtistDomainInterface
+import CommonFeature
 import DesignSystem
 import DomainModule
-import CommonFeature
-import ArtistDomainInterface
+import UIKit
+import Utility
 
 class ArtistMusicCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!
@@ -19,23 +19,23 @@ class ArtistMusicCell: UITableViewCell {
     @IBOutlet weak var groupStringLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var thumbnailToPlayButton: UIButton!
-    
+
     private var model: ArtistSongListEntity?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
-        
+
         albumImageView.layer.cornerRadius = 4
         albumImageView.contentMode = .scaleAspectFill
-        
+
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
-    
+
     @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
         let songEntity: SongEntity = SongEntity(
@@ -59,33 +59,33 @@ extension ArtistMusicCell {
         let height: CGFloat = (width * 40.0) / 72.0
         return base + height
     }
-    
+
     func update(model: ArtistSongListEntity) {
         self.model = model
         self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
-        
+
         titleStringLabel.attributedText = getAttributedString(
             text: model.title,
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         )
-        
+
         groupStringLabel.attributedText = getAttributedString(
             text: model.artist,
             font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
         )
-        
+
         releaseDateLabel.attributedText = getAttributedString(
             text: model.date,
             font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
         )
-        
+
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.songId).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
     }
-    
+
     private func getAttributedString(
         text: String,
         font: UIFont

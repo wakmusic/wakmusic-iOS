@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
-import RxCocoa
+import ArtistDomainInterface
 import BaseFeature
 import DomainModule
+import Foundation
+import RxCocoa
+import RxSwift
 import Utility
-import ArtistDomainInterface
 
 public final class ArtistViewModel: ViewModelType {
     var disposeBag = DisposeBag()
@@ -24,20 +24,19 @@ public final class ArtistViewModel: ViewModelType {
         self.fetchArtistListUseCase = fetchArtistListUseCase
     }
 
-    public struct Input {
-    }
+    public struct Input {}
 
     public struct Output {
         let dataSource: BehaviorRelay<[ArtistListEntity]>
     }
-    
+
     public func transform(from input: Input) -> Output {
         let dataSource: BehaviorRelay<[ArtistListEntity]> = BehaviorRelay(value: [])
 
         fetchArtistListUseCase.execute()
             .catchAndReturn([])
             .asObservable()
-            .map{ (model) -> [ArtistListEntity] in
+            .map { model -> [ArtistListEntity] in
                 guard !model.isEmpty else {
                     DEBUG_LOG("데이터가 없습니다.")
                     return model
@@ -64,7 +63,7 @@ public final class ArtistViewModel: ViewModelType {
                     newModel.append(hiddenItem)
                     return newModel
 
-                }else {
+                } else {
                     newModel.swapAt(0, 1)
                 }
                 return newModel

@@ -6,17 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import DataMappingModule
 import DomainModule
 import ErrorModule
+import Foundation
+import RxSwift
 
 public struct EditFavoriteSongsOrderUseCaseImpl: EditFavoriteSongsOrderUseCase {
-    
-    
-  
-
     private let userRepository: any UserRepository
 
     public init(
@@ -24,12 +20,8 @@ public struct EditFavoriteSongsOrderUseCaseImpl: EditFavoriteSongsOrderUseCase {
     ) {
         self.userRepository = userRepository
     }
-    
-    public func execute(ids:[String]) -> Single<BaseEntity> {
+
+    public func execute(ids: [String]) -> Single<BaseEntity> {
         userRepository.editFavoriteSongsOrder(ids: ids)
     }
- 
-    
-
-   
 }

@@ -6,23 +6,23 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
-import Utility
-import RxSwift
 import RxCocoa
+import RxSwift
 import SafariServices
+import UIKit
+import Utility
 
 public class OpenSourceLicenseViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    
+
     var viewModel: OpenSourceLicenseViewModel!
     var disposeBag: DisposeBag = DisposeBag()
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         inputBind()
@@ -33,22 +33,25 @@ public class OpenSourceLicenseViewController: UIViewController, ViewControllerFr
     public static func viewController(
         viewModel: OpenSourceLicenseViewModel
     ) -> OpenSourceLicenseViewController {
-        let viewController = OpenSourceLicenseViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = OpenSourceLicenseViewController.viewController(
+            storyBoardName: "CommonUI",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
-extension OpenSourceLicenseViewController{
+extension OpenSourceLicenseViewController {
     private func inputBind() {
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
+
         tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(viewModel.output.dataSource) { ($0.0, $0.1, $1) }
-            .subscribe(onNext: { (owner, indexPath, dataSource) in
+            .subscribe(onNext: { owner, indexPath, dataSource in
                 owner.tableView.deselectRow(at: indexPath, animated: true)
                 let model = dataSource[indexPath.row]
                 guard let URL = URL(string: model.link) else { return }
@@ -56,17 +59,17 @@ extension OpenSourceLicenseViewController{
                 owner.present(safari, animated: true)
             }).disposed(by: disposeBag)
     }
-    
+
     private func outputBind() {
         viewModel.output
             .dataSource
-            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
+            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 switch model.type {
                 case .library:
                     guard let cell = tableView.dequeueReusableCell(
                         withIdentifier: "OpenSourceLibraryCell",
                         for: IndexPath(row: index, section: 0)
-                    ) as? OpenSourceLibraryCell else{
+                    ) as? OpenSourceLibraryCell else {
                         return UITableViewCell()
                     }
                     cell.update(model: model)
@@ -75,7 +78,7 @@ extension OpenSourceLicenseViewController{
                     guard let cell = tableView.dequeueReusableCell(
                         withIdentifier: "OpenSourceLicenseCell",
                         for: IndexPath(row: index, section: 0)
-                    ) as? OpenSourceLicenseCell else{
+                    ) as? OpenSourceLicenseCell else {
                         return UITableViewCell()
                     }
                     cell.update(model: model)
@@ -83,11 +86,11 @@ extension OpenSourceLicenseViewController{
                 }
             }.disposed(by: disposeBag)
     }
-    
-    private func bindBtn(){
+
+    private func bindBtn() {
         backButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }).disposed(by: disposeBag)
     }

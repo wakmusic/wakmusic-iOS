@@ -5,7 +5,7 @@ import Utility
 public extension PlayListResponseDTO {
     func toDomain() -> PlayListEntity {
         PlayListEntity(
-            key: key ??  "",
+            key: key ?? "",
             title: title,
             image: image.name,
             songlist: songs.map {

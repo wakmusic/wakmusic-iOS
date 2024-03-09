@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DataMappingModule
+import DomainModule
 import Foundation
 import NeedleFoundation
-import DomainModule
-import DataMappingModule
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }

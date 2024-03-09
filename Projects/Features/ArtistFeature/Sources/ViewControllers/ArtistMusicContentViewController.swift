@@ -6,26 +6,26 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
-import Utility
-import DesignSystem
-import RxSwift
-import RxCocoa
+import ArtistDomainInterface
 import BaseFeature
 import CommonFeature
 import DataMappingModule
+import DesignSystem
 import DomainModule
 import NVActivityIndicatorView
-import ArtistDomainInterface
+import RxCocoa
+import RxSwift
+import UIKit
+import Utility
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
-    
+
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     var containSongsComponent: ContainSongsComponent!
-    
+
     private var viewModel: ArtistMusicContentViewModel!
     lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
     lazy var output = viewModel.transform(from: input)
@@ -33,23 +33,26 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 
     deinit { DEBUG_LOG("\(Self.self) Deinit") }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         inputBind()
         outputBind()
     }
-    
-    public override func viewWillDisappear(_ animated: Bool) {
+
+    override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.input.allSongSelected.onNext(false)
     }
-    
+
     public static func viewController(
         viewModel: ArtistMusicContentViewModel,
         containSongsComponent: ContainSongsComponent
     ) -> ArtistMusicContentViewController {
-        let viewController = ArtistMusicContentViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        let viewController = ArtistMusicContentViewController.viewController(
+            storyBoardName: "Artist",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         viewController.containSongsComponent = containSongsComponent
         return viewController
@@ -61,17 +64,20 @@ extension ArtistMusicContentViewController {
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
+
         tableView.rx.willDisplayCell
             .map { $1 }
-            .withLatestFrom(output.dataSource, resultSelector: { (indexPath, datasource) -> (IndexPath, [ArtistSongListEntity]) in
-                return (indexPath, datasource)
-            })
-            .filter{ (indexPath, datasources) -> Bool in
-                return indexPath.item == datasources.count-1
+            .withLatestFrom(
+                output.dataSource,
+                resultSelector: { indexPath, datasource -> (IndexPath, [ArtistSongListEntity]) in
+                    return (indexPath, datasource)
+                }
+            )
+            .filter { indexPath, datasources -> Bool in
+                return indexPath.item == datasources.count - 1
             }
             .withLatestFrom(output.canLoadMore)
-            .filter{ $0 }
+            .filter { $0 }
             .map { _ in return () }
             .bind(to: rx.loadMore)
             .disposed(by: disposeBag)
@@ -81,35 +87,36 @@ extension ArtistMusicContentViewController {
             .bind(to: input.songTapped)
             .disposed(by: disposeBag)
     }
-    
+
     private func outputBind() {
         output.dataSource
             .skip(1)
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
-            .do(onNext: { [weak self] (dataSource, songs) in
+            .do(onNext: { [weak self] dataSource, songs in
                 guard let `self` = self else { return }
                 self.activityIndidator.stopAnimating()
-                
+
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
             })
             .map { $0.0 }
-            .bind(to: tableView.rx.items) { (tableView, index, model) -> UITableViewCell in
+            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else{
+                guard let cell = tableView
+                    .dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
-        
+
         output.indexOfSelectedSongs
             .skip(1)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] (songs, dataSource) in
+            .subscribe(onNext: { [weak self] songs, dataSource in
                 guard let self = self else { return }
                 switch songs.isEmpty {
-                case true :
+                case true:
                     self.hideSongCart()
                 case false:
                     self.showSongCart(
@@ -123,7 +130,7 @@ extension ArtistMusicContentViewController {
                 }
             }).disposed(by: disposeBag)
     }
-    
+
     private func configureUI() {
         self.activityIndidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndidator.type = .circleStrokeSpin
@@ -139,7 +146,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
-            
+
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsComponent.makeView(songs: songs)
@@ -166,7 +173,7 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
+
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 80
     }
@@ -178,18 +185,18 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
     }
 }
 
-extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
+extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func pressPlay(_ event: PlayEvent) {
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
-                    id: $0.songId,
-                    title: $0.title,
-                    artist: $0.artist,
-                    remix: $0.remix,
-                    reaction: $0.reaction,
-                    views: $0.views,
-                    last: $0.last,
-                    date: $0.date
+                id: $0.songId,
+                title: $0.title,
+                artist: $0.artist,
+                remix: $0.remix,
+                reaction: $0.reaction,
+                views: $0.views,
+                last: $0.last,
+                date: $0.date
             )
         }
         switch event {
@@ -203,7 +210,7 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate{
     }
 }
 
-extension Reactive where Base: ArtistMusicContentViewController{
+extension Reactive where Base: ArtistMusicContentViewController {
     var refresh: Binder<Void> {
         return Binder(base) { viewController, _ in
             viewController.input.pageID.accept(1)

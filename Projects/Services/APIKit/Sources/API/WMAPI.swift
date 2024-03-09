@@ -1,7 +1,7 @@
-import Moya
-import Foundation
 import ErrorModule
+import Foundation
 import KeychainModule
+import Moya
 
 public protocol WMAPI: TargetType, JwtAuthorizable {
     var domain: WMDomain { get }
@@ -13,7 +13,7 @@ public extension WMAPI {
     var baseURL: URL {
         URL(string: BASE_URL())!
     }
-    
+
     var path: String {
         domain.asURLString + urlPath
     }
