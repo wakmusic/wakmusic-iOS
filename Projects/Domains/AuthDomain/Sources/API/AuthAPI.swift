@@ -1,7 +1,7 @@
-import DataMappingModule
+import AuthDomainInterface
+import BaseDomain
 import ErrorModule
 import Foundation
-import KeychainModule
 import Moya
 
 public enum AuthAPI {
@@ -53,7 +53,7 @@ extension AuthAPI: WMAPI {
 
     public var headers: [String: String]? {
         switch self {
-        case let .fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken):
+        case let .fetchNaverUserInfo(tokenType, accessToken):
             return ["Authorization": "\(tokenType) \(accessToken)"]
         default:
             return ["Content-Type": "application/json"]

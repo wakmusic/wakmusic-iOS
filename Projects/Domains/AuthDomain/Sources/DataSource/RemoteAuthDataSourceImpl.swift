@@ -1,7 +1,5 @@
-import APIKit
-import DataMappingModule
-import DomainModule
-import ErrorModule
+import AuthDomainInterface
+import BaseDomain
 import Foundation
 import RxSwift
 
@@ -12,8 +10,7 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> RxSwift
-        .Single<DomainModule.NaverUserInfoEntity> {
+    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
         request(.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken))
             .map(NaverUserInfoResponseDTO.self)
             .map { $0.toDomain() }

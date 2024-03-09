@@ -6,10 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomain
+import AuthDomainInterface
 import CommonFeature
-import DataModule
-import DomainModule
-import NetworkModule
 import SignInFeature
 import StorageFeature
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ProviderType: String, Codable {
+public enum ProviderType: String {
     case naver
     case apple
     case google

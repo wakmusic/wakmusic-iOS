@@ -1,9 +1,7 @@
-import DataMappingModule
-import ErrorModule
 import Foundation
 import RxSwift
 
-public protocol AuthRepository {
+public protocol RemoteAuthDataSource {
     func fetchToken(token: String, type: ProviderType) -> Single<AuthLoginEntity>
     func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity>
 }
