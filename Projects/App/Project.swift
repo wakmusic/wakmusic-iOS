@@ -36,7 +36,8 @@ let targets: [Target] = [
             .Project.Service.Data,
             .domain(target: .AppDomain),
             .domain(target: .ArtistDomain),
-            .domain(target: .AuthDomain)
+            .domain(target: .AuthDomain),
+            .domain(target: .ChartDomain)
         ],
         settings: .settings(
             base: env.baseSetting,
