@@ -29,7 +29,10 @@ if which tuist > /dev/null; then
   echo "✅ Tuist가 설치되어있어요."
 else
   echo "❌ Tuist가 설치되어있지 않아요. Tuist 설치를 시작해요."
-  brew install mise
+  curl https://mise.run | sh
+  echo 'eval "$(~/.local/bin/mise activate --shims zsh)"' >> ~/.zshrc
+  source ~/.zshrc
+
   mise install tuist
   tuist version
 fi
