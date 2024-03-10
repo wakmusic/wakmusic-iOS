@@ -15,6 +15,10 @@ let project = Project.module(
                     .domain(target: .ArtistDomain, type: .interface)
                 ]
             )
-        )
+        ),
+        .tests(module: .feature(.ArtistFeature), dependencies: [
+            .feature(target: .ArtistFeature),
+            .domain(target: .ArtistDomain, type: .testing)
+        ])
     ]
 )
