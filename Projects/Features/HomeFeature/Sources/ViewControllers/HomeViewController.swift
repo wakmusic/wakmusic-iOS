@@ -11,6 +11,8 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import PlayListDomainInterface
+import SongsDomainInterface
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!

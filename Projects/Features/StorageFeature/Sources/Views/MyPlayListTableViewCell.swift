@@ -7,10 +7,10 @@
 //
 
 import DesignSystem
-import DomainModule
 import Kingfisher
 import UIKit
 import Utility
+import UserDomainInterface
 
 public protocol MyPlayListTableViewCellDelegate: AnyObject {
     func buttonTapped(type: MyPlayListTableViewCellDelegateConstant)

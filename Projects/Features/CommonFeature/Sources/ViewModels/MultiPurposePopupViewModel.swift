@@ -7,12 +7,13 @@
 //
 
 import BaseFeature
-import DataMappingModule
-import DomainModule
 import Foundation
 import RxRelay
 import RxSwift
 import Utility
+import PlayListDomainInterface
+import UserDomainInterface
+import BaseDomainInterface
 
 public final class MultiPurposePopupViewModel: ViewModelType {
     var type: PurposeType

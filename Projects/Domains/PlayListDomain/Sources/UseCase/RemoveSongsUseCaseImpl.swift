@@ -9,6 +9,7 @@
 import PlayListDomainInterface
 import Foundation
 import RxSwift
+import BaseDomainInterface
 
 public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase {
     private let playListRepository: any PlayListRepository

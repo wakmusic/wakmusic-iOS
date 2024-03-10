@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import UIKit
 import Utility
+import UserDomainInterface
 
 class CurrentPlayListTableViewCell: UITableViewCell {
     @IBOutlet weak var playListImageView: UIImageView!

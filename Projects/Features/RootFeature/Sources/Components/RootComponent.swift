@@ -1,5 +1,5 @@
 import AppDomainInterface
-import DomainModule
+import UserDomainInterface
 import MainTabFeature
 import NeedleFoundation
 import UIKit

@@ -7,12 +7,12 @@
 //
 
 import BaseFeature
-import DomainModule
 import Foundation
 import RxDataSources
 import RxRelay
 import RxSwift
 import Utility
+import SongsDomainInterface
 
 public final class AfterSearchContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()

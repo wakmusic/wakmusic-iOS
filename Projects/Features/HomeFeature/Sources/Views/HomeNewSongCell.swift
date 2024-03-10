@@ -11,6 +11,7 @@ import DomainModule
 import Kingfisher
 import UIKit
 import Utility
+import SongsDomainInterface
 
 class HomeNewSongCell: UICollectionViewCell {
     @IBOutlet weak var albumImageView: UIImageView!

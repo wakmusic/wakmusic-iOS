@@ -8,12 +8,14 @@
 
 import BaseFeature
 import CommonFeature
-import DomainModule
 import Foundation
 import RxCocoa
 import RxRelay
 import RxSwift
 import Utility
+import UserDomainInterface
+import SongsDomainInterface
+import BaseDomainInterface
 
 public final class MyPlayListViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!

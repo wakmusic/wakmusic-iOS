@@ -2,12 +2,12 @@ import ArtistFeature
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
 import PlayerFeature
 import RxSwift
 import SnapKit
 import UIKit
 import Utility
+import SongsDomainInterface
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var containerView: UIView!

@@ -7,11 +7,11 @@
 //
 
 import BaseFeature
-import DataMappingModule
-import DomainModule
+import UserDomainInterface
+import BaseDomainInterface
 import Foundation
-import RxCocoa
 import RxSwift
+import RxRelay
 import Utility
 
 public final class ProfilePopViewModel {

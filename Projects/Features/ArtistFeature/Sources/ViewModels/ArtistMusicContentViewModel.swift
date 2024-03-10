@@ -8,8 +8,7 @@
 
 import ArtistDomainInterface
 import BaseFeature
-import DataMappingModule
-import DomainModule
+import SongsDomainInterface
 import Foundation
 import RxCocoa
 import RxSwift

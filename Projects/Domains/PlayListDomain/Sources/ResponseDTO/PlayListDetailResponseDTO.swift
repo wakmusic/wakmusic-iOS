@@ -10,6 +10,7 @@ import Foundation
 import Utility
 import SongsDomain
 import PlayListDomainInterface
+import SongsDomainInterface
 
 public struct SinglePlayListDetailResponseDTO: Decodable {
     public let key: String?

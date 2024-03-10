@@ -3,6 +3,8 @@ import DomainModule
 import Foundation
 import NeedleFoundation
 import LikeDomainInterface
+import SongsDomainInterface
+import UserDomainInterface
 
 public protocol PlayerDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }

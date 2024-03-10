@@ -7,7 +7,7 @@
 //
 
 import DesignSystem
-import DomainModule
+import UserDomainInterface
 import NVActivityIndicatorView
 import PanModal
 import RxCocoa

@@ -15,6 +15,8 @@ import RxCocoa
 import RxSwift
 import Utility
 import ChartDomainInterface
+import SongsDomainInterface
+import PlayListDomainInterface
 
 public final class HomeViewModel: ViewModelType {
     var disposeBag = DisposeBag()

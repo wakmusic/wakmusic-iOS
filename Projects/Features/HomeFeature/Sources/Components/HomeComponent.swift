@@ -12,6 +12,8 @@ import Foundation
 import NeedleFoundation
 import UIKit
 import ChartDomainInterface
+import SongsDomainInterface
+import PlayListDomainInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }

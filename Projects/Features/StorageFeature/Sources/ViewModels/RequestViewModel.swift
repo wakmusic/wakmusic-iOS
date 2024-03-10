@@ -7,7 +7,8 @@
 //
 
 import BaseFeature
-import DomainModule
+import UserDomainInterface
+import BaseDomainInterface
 import Foundation
 import KeychainModule
 import NaverThirdPartyLogin

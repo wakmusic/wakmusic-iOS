@@ -8,7 +8,8 @@
 
 import CommonFeature
 import DataModule
-import DomainModule
+import UserDomain
+import UserDomainInterface
 import NetworkModule
 import SignInFeature
 import StorageFeature

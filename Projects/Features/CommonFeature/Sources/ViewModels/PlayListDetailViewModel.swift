@@ -7,14 +7,15 @@
 //
 
 import BaseFeature
-import DataMappingModule
-import DomainModule
 import ErrorModule
 import Foundation
-import RxCocoa
 import RxRelay
+import RxCocoa
 import RxSwift
 import Utility
+import PlayListDomainInterface
+import SongsDomainInterface
+import BaseDomainInterface
 
 struct PlayListHeaderInfo {
     var title: String

@@ -7,7 +7,7 @@
 //
 
 import DesignSystem
-import DomainModule
+import PlayListDomainInterface
 import Kingfisher
 import UIKit
 import Utility

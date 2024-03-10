@@ -9,7 +9,7 @@
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
+import PlayListDomainInterface
 import NeedleFoundation
 import NVActivityIndicatorView
 import RxCocoa

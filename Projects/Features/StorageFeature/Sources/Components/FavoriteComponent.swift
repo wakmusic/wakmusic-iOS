@@ -7,7 +7,7 @@
 //
 
 import CommonFeature
-import DomainModule
+import UserDomainInterface
 import Foundation
 import NeedleFoundation
 import SignInFeature

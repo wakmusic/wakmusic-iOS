@@ -6,6 +6,7 @@ import RxRelay
 import RxSwift
 import Utility
 import ChartDomainInterface
+import SongsDomainInterface
 
 public final class ChartContentViewModel: ViewModelType {
     public let type: ChartDateType

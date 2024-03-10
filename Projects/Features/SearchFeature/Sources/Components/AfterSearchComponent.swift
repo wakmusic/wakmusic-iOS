@@ -7,7 +7,7 @@
 //
 
 import CommonFeature
-import DomainModule
+import SongsDomainInterface
 import Foundation
 import NeedleFoundation
 

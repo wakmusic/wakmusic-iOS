@@ -8,7 +8,9 @@
 
 import BaseFeature
 import CommonFeature
-import DomainModule
+import UserDomainInterface
+import SongsDomainInterface
+import BaseDomainInterface
 import Foundation
 import RxCocoa
 import RxRelay

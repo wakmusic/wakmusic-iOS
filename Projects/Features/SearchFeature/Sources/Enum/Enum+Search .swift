@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
 import Foundation
 import RxDataSources
+import SongsDomainInterface
 
 public typealias SearchSectionModel = SectionModel<(TabPosition, Int), SongEntity>
 

@@ -8,6 +8,7 @@ import Then
 import UIKit
 import Utility
 import ChartDomainInterface
+import SongsDomainInterface
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI

@@ -7,7 +7,7 @@
 //
 
 import DesignSystem
-import DomainModule
+import SongsDomainInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift

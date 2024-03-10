@@ -7,7 +7,7 @@
 //
 
 import BaseFeature
-import DomainModule
+import SongsDomainInterface
 import Foundation
 import RxRelay
 import RxSwift

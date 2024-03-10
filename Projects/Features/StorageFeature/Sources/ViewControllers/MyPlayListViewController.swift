@@ -9,7 +9,8 @@
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
+import UserDomainInterface
+import SongsDomainInterface
 import NVActivityIndicatorView
 import PanModal
 import RxCocoa

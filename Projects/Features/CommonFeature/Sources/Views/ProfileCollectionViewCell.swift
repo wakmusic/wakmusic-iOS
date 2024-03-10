@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import UIKit
 import Utility
+import UserDomainInterface
 
 public enum FanType: String {
     case panchi

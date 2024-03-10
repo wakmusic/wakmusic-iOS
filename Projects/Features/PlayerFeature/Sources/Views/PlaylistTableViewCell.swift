@@ -14,6 +14,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import SongsDomainInterface
 
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)

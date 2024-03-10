@@ -7,7 +7,6 @@
 //
 import BaseFeature
 import DesignSystem
-import DomainModule
 import Kingfisher
 import NVActivityIndicatorView
 import PanModal
@@ -17,6 +16,7 @@ import RxRelay
 import RxSwift
 import UIKit
 import Utility
+import SongsDomainInterface
 
 public class PlayListDetailViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType,
     EditSheetViewType {

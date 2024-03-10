@@ -9,7 +9,9 @@
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
+import UserDomainInterface
+import BaseDomainInterface
+import SongsDomainInterface
 import NVActivityIndicatorView
 import RxDataSources
 import RxRelay
