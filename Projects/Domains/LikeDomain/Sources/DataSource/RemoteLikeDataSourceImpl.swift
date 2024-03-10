@@ -1,9 +1,7 @@
-import APIKit
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
 import RxSwift
+import BaseDomain
+import LikeDomainInterface
 
 public final class RemoteLikeDataSourceImpl: BaseRemoteDataSource<LikeAPI>, RemoteLikeDataSource {
     public func fetchLikeNumOfSong(id: String) -> Single<LikeEntity> {

@@ -21,6 +21,8 @@ import FaqDomainInterface
 import Foundation
 import HomeFeature
 import KeychainModule
+import LikeDomain
+import LikeDomainInterface
 import MainTabFeature
 import NeedleFoundation
 import NetworkModule

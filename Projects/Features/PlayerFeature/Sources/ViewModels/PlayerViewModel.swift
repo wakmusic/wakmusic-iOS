@@ -15,6 +15,7 @@ import RxCocoa
 import RxSwift
 import Utility
 import YouTubePlayerKit
+import LikeDomainInterface
 
 final class PlayerViewModel: ViewModelType {
     struct Input {

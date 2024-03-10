@@ -1,15 +1,18 @@
 //
-//  FetchLikeTransfer.swift
-//  NetworkModuleTests
+//  LikeResponseDTO.swift
+//  DataMappingModuleTests
 //
 //  Created by YoungK on 2023/04/03.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
 import Foundation
-import Utility
+import LikeDomainInterface
+
+public struct LikeResponseDTO: Decodable {
+    public let status: Int?
+    public let like: Int
+}
 
 public extension LikeResponseDTO {
     func toDomain() -> LikeEntity {
@@ -17,11 +20,5 @@ public extension LikeResponseDTO {
             status: status ?? 200,
             likes: like
         )
-    }
-}
-
-public extension FetchLikeResponseDTO {
-    func toDomain() -> LikeEntity {
-        LikeEntity(status: 200, likes: like)
     }
 }

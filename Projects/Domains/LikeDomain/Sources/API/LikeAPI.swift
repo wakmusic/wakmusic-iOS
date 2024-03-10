@@ -1,8 +1,8 @@
-import DataMappingModule
 import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
+import BaseDomain
 
 public enum LikeAPI {
     case fetchLikeNumOfSong(id: String)

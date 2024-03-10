@@ -6,14 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DatabaseModule
-import DataMappingModule
-import DomainModule
 import ErrorModule
-import NetworkModule
+import LikeDomainInterface
 import RxSwift
 
-public struct LikeRepositoryImpl: LikeRepository {
+public final class LikeRepositoryImpl: LikeRepository {
     private let remoteLikeDataSource: any RemoteLikeDataSource
 
     public init(
