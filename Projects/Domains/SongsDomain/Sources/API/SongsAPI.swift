@@ -1,7 +1,8 @@
-import DataMappingModule
 import ErrorModule
 import Foundation
 import Moya
+import BaseDomain
+import SongsDomainInterface
 
 public enum SongsAPI {
     case fetchSearchSong(keyword: String)

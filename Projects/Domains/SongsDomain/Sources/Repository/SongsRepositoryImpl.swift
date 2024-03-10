@@ -1,11 +1,7 @@
-import DatabaseModule
-import DataMappingModule
-import DomainModule
-import ErrorModule
-import NetworkModule
 import RxSwift
+import SongsDomainInterface
 
-public struct SongsRepositoryImpl: SongsRepository {
+public final class SongsRepositoryImpl: SongsRepository {
     private let remoteSongsDataSource: any RemoteSongsDataSource
 
     public init(

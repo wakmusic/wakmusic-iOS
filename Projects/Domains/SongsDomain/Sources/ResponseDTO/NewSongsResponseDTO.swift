@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SongsDomainInterface
 
 public struct NewSongsResponseDTO: Decodable {
     public let id, title, artist: String
@@ -28,5 +29,20 @@ public extension NewSongsResponseDTO {
     struct Total: Codable {
         public let views: Int
         public let last: Int
+    }
+}
+
+public extension NewSongsResponseDTO {
+    func toDomain() -> NewSongsEntity {
+        return NewSongsEntity(
+            id: id,
+            title: title,
+            artist: artist,
+            remix: remix,
+            reaction: reaction,
+            views: total?.views ?? 0,
+            last: total?.last ?? 0,
+            date: date
+        )
     }
 }

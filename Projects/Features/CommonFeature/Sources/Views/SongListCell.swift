@@ -7,11 +7,11 @@
 //
 
 import DesignSystem
-import DomainModule
 import Kingfisher
 import SnapKit
 import UIKit
 import Utility
+import SongsDomainInterface
 
 public class SongListCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!

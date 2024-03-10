@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Utility
 
 public struct SinglePlayListDetailResponseDTO: Decodable {
     public let key: String?
@@ -16,10 +17,29 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
 }
 
 public extension SinglePlayListDetailResponseDTO {
-    struct Image: Codable {
+    struct Image: Decodable {
         public let round: Int?
         public let square: Int?
         public let name: String?
         public let version: Int?
+    }
+}
+
+#warning("임시코드")
+public struct SingleSongResponseDTO: Decodable {
+    public let id, title, artist, remix, reaction: String
+    public let date, start, end: Int
+    public let total: SingleSongResponseDTO.Total?
+
+    enum CodingKeys: String, CodingKey {
+        case title, artist, remix, reaction, date, start, end, total
+        case id = "songId"
+    }
+}
+
+public extension SingleSongResponseDTO {
+    struct Total: Decodable {
+        public let views, last: Int
+        public let increase: Int?
     }
 }

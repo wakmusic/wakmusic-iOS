@@ -1,7 +1,5 @@
-import APIKit
-import DataMappingModule
-import DomainModule
-import ErrorModule
+import BaseDomain
+import SongsDomainInterface
 import Foundation
 import RxSwift
 

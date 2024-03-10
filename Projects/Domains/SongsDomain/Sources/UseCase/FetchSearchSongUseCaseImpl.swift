@@ -1,7 +1,5 @@
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import RxSwift
+import SongsDomainInterface
 
 public struct FetchSearchSongUseCaseImpl: FetchSearchSongUseCase {
     private let songsRepository: any SongsRepository

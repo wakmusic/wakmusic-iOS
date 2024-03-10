@@ -40,7 +40,8 @@ let targets: [Target] = [
             .domain(target: .ChartDomain),
             .domain(target: .FaqDomain),
             .domain(target: .LikeDomain),
-            .domain(target: .NoticeDomain)
+            .domain(target: .NoticeDomain),
+            .domain(target: .SongsDomain)
         ],
         settings: .settings(
             base: env.baseSetting,

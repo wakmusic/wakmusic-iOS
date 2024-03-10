@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import DataMappingModule
 
 public struct PlayListDetailEntity: Equatable {
     public init(

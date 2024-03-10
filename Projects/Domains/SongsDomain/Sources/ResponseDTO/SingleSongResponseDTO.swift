@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SongsDomainInterface
+import Utility
 
 public struct SingleSongResponseDTO: Decodable {
     public let id, title, artist, remix, reaction: String
@@ -20,8 +22,23 @@ public struct SingleSongResponseDTO: Decodable {
 }
 
 public extension SingleSongResponseDTO {
-    struct Total: Codable {
+    struct Total: Decodable {
         public let views, last: Int
         public let increase: Int?
+    }
+}
+
+public extension SingleSongResponseDTO {
+    func toDomain() -> SongEntity {
+        SongEntity(
+            id: id,
+            title: title,
+            artist: artist,
+            remix: remix,
+            reaction: reaction,
+            views: total?.views ?? 0,
+            last: total?.last ?? 0,
+            date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
+        )
     }
 }

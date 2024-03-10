@@ -9,8 +9,7 @@
 import Foundation
 import NeedleFoundation
 import ChartDomainInterface
-import DomainModule
-import DataMappingModule
+import SongsDomainInterface
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
