@@ -35,6 +35,7 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
+    @available(*, deprecated)
     public static func viewController(
         viewModel: ArtistViewModel,
         artistDetailComponent: ArtistDetailComponent
