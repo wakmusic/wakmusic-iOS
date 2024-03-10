@@ -13,7 +13,8 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .SignInFeature),
                     .domain(target: .FaqDomain, type: .interface),
-                    .domain(target: .NoticeDomain, type: .interface)
+                    .domain(target: .NoticeDomain, type: .interface),
+                    .domain(target: .PlayListDomain, type: .interface)
                 ]
             )
         )

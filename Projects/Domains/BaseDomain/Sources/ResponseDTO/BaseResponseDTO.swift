@@ -7,16 +7,15 @@
 //
 
 import Foundation
+import BaseDomainInterface
 
 public struct BaseResponseDTO: Codable {
     public let status: Int
 }
 
-#warning("어떤 문제인지 기존 모듈과 충돌함")
-/*
  public extension BaseResponseDTO {
- func toDomain() -> BaseEntity {
- return BaseEntity(status: status)
+     func toDomain() -> BaseEntity {
+         return BaseEntity(status: status)
+     }
  }
- }
- */
+ 
