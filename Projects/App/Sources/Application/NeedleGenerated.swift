@@ -16,6 +16,8 @@ import DataMappingModule
 import DataModule
 import DesignSystem
 import DomainModule
+import FaqDomain
+import FaqDomainInterface
 import Foundation
 import HomeFeature
 import KeychainModule

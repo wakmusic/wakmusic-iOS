@@ -6,10 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
 import Foundation
 import RxSwift
 
-public protocol FetchFaqCategoriesUseCase {
-    func execute() -> Single<FaqCategoryEntity>
+public protocol FetchFaqUseCase {
+    func execute() -> Single<[FaqEntity]>
 }

@@ -6,13 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
+import FaqDomainInterface
 import RxSwift
 
-public struct FetchFaqUseCaseImpl: FetchFaqUseCase {
+public struct FetchFaqCategoriesUseCaseImpl: FetchFaqCategoriesUseCase {
     private let faqRepository: any FaqRepository
 
     public init(
@@ -21,7 +19,7 @@ public struct FetchFaqUseCaseImpl: FetchFaqUseCase {
         self.faqRepository = faqRepository
     }
 
-    public func execute() -> Single<[FaqEntity]> {
-        faqRepository.fetchQna()
+    public func execute() -> Single<FaqCategoryEntity> {
+        faqRepository.fetchQnaCategories()
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FaqDomainInterface
 
 public struct FaqResponseDTO: Decodable {
     public let question, description: String
@@ -14,5 +15,16 @@ public struct FaqResponseDTO: Decodable {
 
     private enum CodingKeys: String, CodingKey {
         case question, description, category
+    }
+}
+
+public extension FaqResponseDTO {
+    func toDomain() -> FaqEntity {
+        FaqEntity(
+            category: category,
+            question: question,
+            description: description,
+            isOpen: false
+        )
     }
 }

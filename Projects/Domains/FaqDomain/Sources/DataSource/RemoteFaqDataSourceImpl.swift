@@ -1,9 +1,7 @@
-import APIKit
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
 import RxSwift
+import BaseDomain
+import FaqDomainInterface
 
 public final class RemoteFaqDataSourceImpl: BaseRemoteDataSource<FaqAPI>, RemoteFaqDataSource {
     public func fetchCategories() -> Single<FaqCategoryEntity> {
