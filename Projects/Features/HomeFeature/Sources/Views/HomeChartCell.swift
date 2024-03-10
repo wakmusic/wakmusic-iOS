@@ -12,6 +12,7 @@ import Kingfisher
 import SnapKit
 import UIKit
 import Utility
+import ChartDomainInterface
 
 class HomeChartCell: UITableViewCell {
     @IBOutlet weak var rankLabel: UILabel!

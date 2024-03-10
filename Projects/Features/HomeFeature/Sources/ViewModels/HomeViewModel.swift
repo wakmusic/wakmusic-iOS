@@ -14,6 +14,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 import Utility
+import ChartDomainInterface
 
 public final class HomeViewModel: ViewModelType {
     var disposeBag = DisposeBag()

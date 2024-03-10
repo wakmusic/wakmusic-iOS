@@ -13,6 +13,7 @@ import Foundation
 import RxRelay
 import RxSwift
 import Utility
+import ChartDomainInterface
 
 public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType

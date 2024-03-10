@@ -1,10 +1,6 @@
-import DatabaseModule
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
-import NetworkModule
 import RxSwift
+import ChartDomainInterface
 
 public struct ChartRepositoryImpl: ChartRepository {
     private let remoteChartDataSource: any RemoteChartDataSource

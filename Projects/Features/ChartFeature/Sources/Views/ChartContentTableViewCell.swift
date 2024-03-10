@@ -7,6 +7,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import ChartDomainInterface
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI

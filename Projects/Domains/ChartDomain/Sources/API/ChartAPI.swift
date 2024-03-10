@@ -1,4 +1,5 @@
-import DataMappingModule
+import BaseDomain
+import ChartDomainInterface
 import ErrorModule
 import Foundation
 import Moya

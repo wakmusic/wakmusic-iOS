@@ -1,6 +1,4 @@
-import Combine
-import DataMappingModule
-import ErrorModule
+import Foundation
 import RxSwift
 
 public protocol FetchChartRankingUseCase {
