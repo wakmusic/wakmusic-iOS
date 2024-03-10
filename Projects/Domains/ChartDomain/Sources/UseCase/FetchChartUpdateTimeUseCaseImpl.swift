@@ -1,7 +1,5 @@
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import RxSwift
+import ChartDomainInterface
 
 public struct FetchChartUpdateTimeUseCaseImpl: FetchChartUpdateTimeUseCase {
     private let chartRepository: any ChartRepository

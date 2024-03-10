@@ -8,6 +8,8 @@ import ArtistFeature
 import AuthDomain
 import AuthDomainInterface
 import BaseFeature
+import ChartDomain
+import ChartDomainInterface
 import ChartFeature
 import CommonFeature
 import DataMappingModule

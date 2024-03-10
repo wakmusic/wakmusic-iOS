@@ -1,8 +1,7 @@
 import ChartFeature
 import CommonFeature
-import DataModule
-import DomainModule
-import NetworkModule
+import ChartDomain
+import ChartDomainInterface
 
 public extension AppComponent {
     var chartComponent: ChartComponent {

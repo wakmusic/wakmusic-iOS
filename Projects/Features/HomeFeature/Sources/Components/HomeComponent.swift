@@ -11,6 +11,7 @@ import DomainModule
 import Foundation
 import NeedleFoundation
 import UIKit
+import ChartDomainInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }

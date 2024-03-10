@@ -1,9 +1,8 @@
-import APIKit
-import DataMappingModule
-import DomainModule
 import ErrorModule
 import Foundation
 import RxSwift
+import BaseDomain
+import ChartDomainInterface
 
 public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, RemoteChartDataSource {
     public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]> {

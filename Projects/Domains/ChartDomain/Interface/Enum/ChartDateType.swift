@@ -1,6 +1,6 @@
 import Foundation
 
-public enum ChartDateType: String, Codable {
+public enum ChartDateType: String {
     case monthly
     case weekly
     case daily
