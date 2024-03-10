@@ -1,4 +1,3 @@
-import ErrorModule
 import Foundation
 import RxSwift
 import BaseDomain
