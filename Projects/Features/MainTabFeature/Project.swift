@@ -1,17 +1,26 @@
+import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.makeModule(
-    name: "MainTabFeature",
-    product: .staticFramework,
-    dependencies: [
-        .Project.Features.BaseFeature,
-        .Project.Features.HomeFeature,
-        .Project.Features.ChartFeature,
-        .Project.Features.SearchFeature,
-        .Project.Features.ArtistFeature,
-        .Project.Features.StorageFeature,
-        .Project.Features.PlayerFeature,
-    ],
-    resources: ["Resources/**"]
+let project = Project.module(
+    name: ModulePaths.Feature.MainTabFeature.rawValue,
+    targets: [
+        .implements(
+            module: .feature(.MainTabFeature),
+            product: .staticFramework,
+            spec: .init(
+                resources: ["Resources/**"],
+                dependencies: [
+                    .feature(target: .BaseFeature),
+                    .feature(target: .HomeFeature),
+                    .feature(target: .ChartFeature),
+                    .feature(target: .SearchFeature),
+                    .feature(target: .ArtistFeature),
+                    .feature(target: .StorageFeature),
+                    .feature(target: .PlayerFeature),
+                    .domain(target: .NoticeDomain, type: .interface)
+                ]
+            )
+        )
+    ]
 )

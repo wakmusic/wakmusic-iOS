@@ -11,7 +11,7 @@ import BaseFeature
 import ChartFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
+import NoticeDomainInterface
 import HomeFeature
 import RxCocoa
 import RxSwift

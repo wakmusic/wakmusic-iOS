@@ -7,8 +7,7 @@
 //
 
 import BaseFeature
-import DataMappingModule
-import DomainModule
+import NoticeDomainInterface
 import Foundation
 import Kingfisher
 import RxCocoa

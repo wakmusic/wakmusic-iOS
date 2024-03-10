@@ -6,7 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
+import NoticeDomainInterface
 import Foundation
 import NeedleFoundation
 

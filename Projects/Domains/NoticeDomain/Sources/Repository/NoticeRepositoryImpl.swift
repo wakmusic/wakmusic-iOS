@@ -6,15 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DatabaseModule
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
-import NetworkModule
 import RxSwift
+import NoticeDomainInterface
 
-public struct NoticeRepositoryImpl: NoticeRepository {
+public final class NoticeRepositoryImpl: NoticeRepository {
     private let remoteNoticeDataSource: any RemoteNoticeDataSource
 
     public init(

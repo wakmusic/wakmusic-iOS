@@ -26,6 +26,8 @@ import LikeDomainInterface
 import MainTabFeature
 import NeedleFoundation
 import NetworkModule
+import NoticeDomain
+import NoticeDomainInterface
 import PanModal
 import PlayerFeature
 import RootFeature

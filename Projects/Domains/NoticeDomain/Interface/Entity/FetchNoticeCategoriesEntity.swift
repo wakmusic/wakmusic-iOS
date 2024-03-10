@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct FetchNoticeCategoriesEntity: Codable {
+public struct FetchNoticeCategoriesEntity {
     public init (
         categories: [String]
     ) {
