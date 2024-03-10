@@ -7,8 +7,15 @@
 //
 
 import Foundation
+import LikeDomainInterface
 
-public struct FetchLikeResponseDTO: Codable {
+public struct FetchLikeResponseDTO: Decodable {
     public let songId: String
     public let like: Int
+}
+
+public extension FetchLikeResponseDTO {
+    func toDomain() -> LikeEntity {
+        LikeEntity(status: 200, likes: like)
+    }
 }

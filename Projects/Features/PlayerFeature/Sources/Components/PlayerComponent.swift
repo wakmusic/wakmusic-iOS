@@ -2,6 +2,7 @@ import CommonFeature
 import DomainModule
 import Foundation
 import NeedleFoundation
+import LikeDomainInterface
 
 public protocol PlayerDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }

@@ -6,10 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
 import Foundation
 import RxSwift
 
-public protocol FetchLikeNumOfSongUseCase {
+public protocol CancelLikeSongUseCase {
     func execute(id: String) -> Single<LikeEntity>
 }

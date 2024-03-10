@@ -6,9 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
-import ErrorModule
+import LikeDomainInterface
 import Foundation
 import RxSwift
 

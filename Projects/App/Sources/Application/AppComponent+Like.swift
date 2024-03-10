@@ -7,11 +7,10 @@
 //
 
 import CommonFeature
-import DataModule
-import DomainModule
-import NetworkModule
 import SignInFeature
 import StorageFeature
+import LikeDomain
+import LikeDomainInterface
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
