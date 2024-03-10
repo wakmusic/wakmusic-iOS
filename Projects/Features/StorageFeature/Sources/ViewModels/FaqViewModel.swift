@@ -7,7 +7,7 @@
 //
 
 import BaseFeature
-import DomainModule
+import FaqDomainInterface
 import Foundation
 import KeychainModule
 import RxRelay

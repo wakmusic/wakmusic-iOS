@@ -7,7 +7,7 @@
 //
 
 import DesignSystem
-import DomainModule
+import FaqDomainInterface
 import UIKit
 
 class QuestionTableViewCell: UITableViewCell {

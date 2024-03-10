@@ -6,14 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DatabaseModule
-import DataMappingModule
-import DomainModule
-import ErrorModule
-import NetworkModule
+import FaqDomainInterface
 import RxSwift
 
-public struct FaqRepositoryImpl: FaqRepository {
+public final class FaqRepositoryImpl: FaqRepository {
     private let remoteFaqDataSource: any RemoteFaqDataSource
 
     public init(

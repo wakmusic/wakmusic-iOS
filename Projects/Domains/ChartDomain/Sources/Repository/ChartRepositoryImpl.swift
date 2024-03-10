@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import ChartDomainInterface
 
-public struct ChartRepositoryImpl: ChartRepository {
+public final class ChartRepositoryImpl: ChartRepository {
     private let remoteChartDataSource: any RemoteChartDataSource
 
     public init(
