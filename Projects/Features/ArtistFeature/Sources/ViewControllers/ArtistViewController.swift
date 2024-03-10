@@ -20,9 +20,6 @@ public final class ArtistViewController:
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
-    private var viewModel: ArtistViewModel!
-    private lazy var input = ArtistViewModel.Input()
-    private lazy var output = viewModel.transform(from: input)
     var artistDetailComponent: ArtistDetailComponent!
     public var disposeBag: DisposeBag = DisposeBag()
 
@@ -86,17 +83,6 @@ public final class ArtistViewController:
             .disposed(by: disposeBag)
     }
 
-    @available(*, deprecated)
-    public static func viewController(
-        viewModel: ArtistViewModel,
-        artistDetailComponent: ArtistDetailComponent
-    ) -> ArtistViewController {
-        let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
-        viewController.viewModel = viewModel
-        viewController.artistDetailComponent = artistDetailComponent
-        return viewController
-    }
-
     public static func viewController(
         reactor: ArtistReactor,
         artistDetailComponent: ArtistDetailComponent
@@ -109,42 +95,6 @@ public final class ArtistViewController:
 }
 
 extension ArtistViewController {
-    @available(*, deprecated, message: "'bindRx()' is deprecated. This will replace 'bind(:)'")
-    private func bindRx() {
-        output.dataSource
-            .skip(1)
-            .do(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-            })
-            .bind(to: collectionView.rx.items) { collectionView, index, model -> UICollectionViewCell in
-                let indexPath = IndexPath(item: index, section: 0)
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "ArtistListCell",
-                    for: indexPath
-                ) as? ArtistListCell else {
-                    return UICollectionViewCell()
-                }
-                cell.update(model: model)
-                return cell
-            }.disposed(by: disposeBag)
-
-        collectionView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .do(onNext: { [weak self] indexPath, _ in
-                guard let `self` = self,
-                      let cell = self.collectionView.cellForItem(at: indexPath) as? ArtistListCell else { return }
-                cell.animateSizeDownToUp(timeInterval: 0.3)
-            })
-            .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
-            .map { $0.1[$0.0.row] }
-            .subscribe(onNext: { [weak self] model in
-                guard let `self` = self else { return }
-                let viewController = self.artistDetailComponent.makeView(model: model)
-                self.navigationController?.pushViewController(viewController, animated: true)
-            }).disposed(by: disposeBag)
-    }
-
     private func configureUI() {
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
