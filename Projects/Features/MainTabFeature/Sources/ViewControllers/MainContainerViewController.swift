@@ -2,10 +2,10 @@ import ArtistFeature
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
 import PlayerFeature
 import RxSwift
 import SnapKit
+import SongsDomainInterface
 import UIKit
 import Utility
 

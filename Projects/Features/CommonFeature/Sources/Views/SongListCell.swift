@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import Kingfisher
 import SnapKit
+import SongsDomainInterface
 import UIKit
 import Utility
 

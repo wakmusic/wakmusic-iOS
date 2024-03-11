@@ -1,5 +1,5 @@
-import Foundation
 import ChartDomainInterface
+import Foundation
 import Utility
 
 public struct SingleChartRankingResponseDTO: Decodable, Equatable {

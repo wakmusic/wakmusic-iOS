@@ -7,9 +7,9 @@
 //
 
 import CommonFeature
-import DomainModule
 import Foundation
 import NeedleFoundation
+import UserDomainInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }

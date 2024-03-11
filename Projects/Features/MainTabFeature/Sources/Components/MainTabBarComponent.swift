@@ -1,10 +1,10 @@
 import ArtistFeature
 import ChartFeature
 import CommonFeature
-import NoticeDomainInterface
 import Foundation
 import HomeFeature
 import NeedleFoundation
+import NoticeDomainInterface
 import SearchFeature
 import StorageFeature
 

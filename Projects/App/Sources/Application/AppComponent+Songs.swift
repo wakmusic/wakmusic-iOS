@@ -7,11 +7,10 @@
 //
 
 import CommonFeature
-import DataModule
-import DomainModule
 import HomeFeature
-import NetworkModule
 import SearchFeature
+import SongsDomain
+import SongsDomainInterface
 
 public extension AppComponent {
     var searchComponent: SearchComponent {

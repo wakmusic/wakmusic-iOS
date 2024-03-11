@@ -6,11 +6,11 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomain
+import ErrorModule
 import Foundation
 import Moya
-import BaseDomain
 import NoticeDomainInterface
-import ErrorModule
 
 public enum NoticeAPI {
     case fetchNotice(type: NoticeType)

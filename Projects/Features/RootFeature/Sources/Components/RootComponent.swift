@@ -1,8 +1,8 @@
 import AppDomainInterface
-import DomainModule
 import MainTabFeature
 import NeedleFoundation
 import UIKit
+import UserDomainInterface
 
 public protocol RootDependency: Dependency {
     var mainContainerComponent: MainContainerComponent { get }

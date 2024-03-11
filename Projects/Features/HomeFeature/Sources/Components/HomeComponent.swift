@@ -6,12 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import ChartDomainInterface
 import CommonFeature
 import DomainModule
 import Foundation
 import NeedleFoundation
+import PlayListDomainInterface
+import SongsDomainInterface
 import UIKit
-import ChartDomainInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }

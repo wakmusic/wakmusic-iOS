@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RxSwift
 import LikeDomainInterface
+import RxSwift
 
 public struct AddLikeSongUseCaseImpl: AddLikeSongUseCase {
     private let likeRepository: any LikeRepository

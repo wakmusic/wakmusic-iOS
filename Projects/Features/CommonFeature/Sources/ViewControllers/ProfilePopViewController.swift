@@ -7,13 +7,13 @@
 //
 
 import DesignSystem
-import DomainModule
 import NVActivityIndicatorView
 import PanModal
 import RxCocoa
 import RxRelay
 import RxSwift
 import UIKit
+import UserDomainInterface
 import Utility
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {

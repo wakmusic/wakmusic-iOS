@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import BaseDomain
+import Foundation
 import NoticeDomainInterface
+import RxSwift
 
 public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, RemoteNoticeDataSource {
     public func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]> {

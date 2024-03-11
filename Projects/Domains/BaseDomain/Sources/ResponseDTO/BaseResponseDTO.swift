@@ -6,17 +6,15 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import Foundation
 
 public struct BaseResponseDTO: Codable {
     public let status: Int
 }
 
-#warning("어떤 문제인지 기존 모듈과 충돌함")
-/*
- public extension BaseResponseDTO {
- func toDomain() -> BaseEntity {
- return BaseEntity(status: status)
- }
- }
- */
+public extension BaseResponseDTO {
+    func toDomain() -> BaseEntity {
+        return BaseEntity(status: status)
+    }
+}

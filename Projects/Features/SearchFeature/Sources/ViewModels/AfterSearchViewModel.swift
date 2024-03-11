@@ -7,10 +7,10 @@
 //
 
 import BaseFeature
-import DomainModule
 import Foundation
 import RxRelay
 import RxSwift
+import SongsDomainInterface
 import Utility
 
 public final class AfterSearchViewModel: ViewModelType {

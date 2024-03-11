@@ -7,6 +7,7 @@
 //
 
 import DesignSystem
+import NoticeDomainInterface
 import PanModal
 import RxCocoa
 import RxSwift
@@ -14,7 +15,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import NoticeDomainInterface
 
 public protocol NoticePopupViewControllerDelegate: AnyObject {
     func noticeTapped(model: FetchNoticeEntity)

@@ -7,11 +7,12 @@
 //
 
 import BaseFeature
-import DomainModule
 import ErrorModule
 import Foundation
+import PlayListDomainInterface
 import RxRelay
 import RxSwift
+import UserDomainInterface
 
 public final class ContainSongsViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!

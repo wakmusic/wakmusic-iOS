@@ -8,9 +8,10 @@
 
 import DomainModule
 import Foundation
-import RxSwift
-import Utility
 import LikeDomainInterface
+import RxSwift
+import SongsDomainInterface
+import Utility
 
 // MARK: - 뷰모델 내 API를 사용하는 함수들을 모아놓은 곳입니다.
 extension PlayerViewModel {

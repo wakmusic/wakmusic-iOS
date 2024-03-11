@@ -8,8 +8,8 @@
 
 import AVFAudio
 import Combine
-import DomainModule
 import Foundation
+import SongsDomainInterface
 import Utility
 import YouTubePlayerKit
 

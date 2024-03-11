@@ -7,8 +7,8 @@
 //
 
 import Combine
-import DomainModule
 import Foundation
+import SongsDomainInterface
 
 public struct PlayListItem: Equatable {
     public var item: SongEntity

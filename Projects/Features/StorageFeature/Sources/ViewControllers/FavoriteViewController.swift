@@ -6,15 +6,17 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
 import NVActivityIndicatorView
 import RxDataSources
 import RxRelay
 import RxSwift
+import SongsDomainInterface
 import UIKit
+import UserDomainInterface
 import Utility
 
 public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>

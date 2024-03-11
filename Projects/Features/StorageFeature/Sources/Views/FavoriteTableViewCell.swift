@@ -8,8 +8,9 @@
 
 import CommonFeature
 import DesignSystem
-import DomainModule
+import SongsDomainInterface
 import UIKit
+import UserDomainInterface
 import Utility
 
 public protocol FavoriteTableViewCellDelegate: AnyObject {

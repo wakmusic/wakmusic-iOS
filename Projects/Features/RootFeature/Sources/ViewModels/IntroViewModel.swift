@@ -8,13 +8,13 @@
 
 import AppDomainInterface
 import BaseFeature
-import DataMappingModule
 import DomainModule
 import ErrorModule
 import Foundation
 import KeychainModule
 import RxCocoa
 import RxSwift
+import UserDomainInterface
 import Utility
 
 public final class IntroViewModel: ViewModelType {

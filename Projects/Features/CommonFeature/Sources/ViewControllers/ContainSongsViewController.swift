@@ -8,8 +8,8 @@
 
 import BaseFeature
 import DesignSystem
-import DomainModule
 import NVActivityIndicatorView
+import PlayListDomainInterface
 import RxSwift
 import UIKit
 import Utility

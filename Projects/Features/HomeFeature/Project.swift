@@ -12,7 +12,8 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .PlayerFeature),
-                    .domain(target: .ChartDomain, type: .interface)
+                    .domain(target: .ChartDomain, type: .interface),
+                    .domain(target: .SongsDomain, type: .interface)
                 ]
             )
         )

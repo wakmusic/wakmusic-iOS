@@ -9,7 +9,7 @@
 import ArtistDomainInterface
 import CommonFeature
 import DesignSystem
-import DomainModule
+import SongsDomainInterface
 import UIKit
 import Utility
 

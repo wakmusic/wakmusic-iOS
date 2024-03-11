@@ -1,5 +1,5 @@
-import Foundation
 import FaqDomainInterface
+import Foundation
 
 public struct FaqCategoryResponseDTO: Decodable, Equatable {
     public let categories: [String]

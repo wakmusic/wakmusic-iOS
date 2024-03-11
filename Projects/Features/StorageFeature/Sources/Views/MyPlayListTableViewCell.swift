@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import Kingfisher
 import UIKit
+import UserDomainInterface
 import Utility
 
 public protocol MyPlayListTableViewCellDelegate: AnyObject {

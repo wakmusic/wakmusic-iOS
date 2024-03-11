@@ -7,9 +7,9 @@
 //
 
 import CommonFeature
-import DomainModule
 import Foundation
 import NeedleFoundation
+import SongsDomainInterface
 
 public protocol AfterSearchDependency: Dependency {
     var afterSearchContentComponent: AfterSearchContentComponent { get }

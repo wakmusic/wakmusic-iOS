@@ -1,8 +1,8 @@
+import BaseDomain
 import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
-import BaseDomain
 
 public enum FaqAPI {
     case fetchFaqCategories

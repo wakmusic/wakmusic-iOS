@@ -1,11 +1,11 @@
 import BaseFeature
-import DataMappingModule
+import ChartDomainInterface
 import DomainModule
 import Foundation
 import RxRelay
 import RxSwift
+import SongsDomainInterface
 import Utility
-import ChartDomainInterface
 
 public final class ChartContentViewModel: ViewModelType {
     public let type: ChartDateType

@@ -1,7 +1,7 @@
-import Foundation
-import RxSwift
 import BaseDomain
 import FaqDomainInterface
+import Foundation
+import RxSwift
 
 public final class RemoteFaqDataSourceImpl: BaseRemoteDataSource<FaqAPI>, RemoteFaqDataSource {
     public func fetchCategories() -> Single<FaqCategoryEntity> {

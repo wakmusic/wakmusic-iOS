@@ -11,11 +11,13 @@ import Combine
 import CommonFeature
 import DomainModule
 import Foundation
+import LikeDomainInterface
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
+import UserDomainInterface
 import Utility
 import YouTubePlayerKit
-import LikeDomainInterface
 
 final class PlayerViewModel: ViewModelType {
     struct Input {

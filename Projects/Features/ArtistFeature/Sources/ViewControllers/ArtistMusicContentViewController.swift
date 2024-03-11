@@ -9,12 +9,11 @@
 import ArtistDomainInterface
 import BaseFeature
 import CommonFeature
-import DataMappingModule
 import DesignSystem
-import DomainModule
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import UIKit
 import Utility
 

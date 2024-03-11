@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RxSwift
 import NoticeDomainInterface
+import RxSwift
 
 public final class NoticeRepositoryImpl: NoticeRepository {
     private let remoteNoticeDataSource: any RemoteNoticeDataSource

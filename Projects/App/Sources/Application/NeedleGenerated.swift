@@ -29,6 +29,8 @@ import NetworkModule
 import NoticeDomain
 import NoticeDomainInterface
 import PanModal
+import PlayListDomain
+import PlayListDomainInterface
 import PlayerFeature
 import RootFeature
 import RxCocoa
@@ -37,8 +39,12 @@ import RxSwift
 import SearchFeature
 import SignInFeature
 import SnapKit
+import SongsDomain
+import SongsDomainInterface
 import StorageFeature
 import UIKit
+import UserDomain
+import UserDomainInterface
 import Utility
 
 // swiftlint:disable unused_declaration

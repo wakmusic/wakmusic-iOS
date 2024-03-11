@@ -7,7 +7,6 @@
 //
 
 import ArtistDomainInterface
-import DataMappingModule
 import DesignSystem
 import DomainModule
 import RxCocoa

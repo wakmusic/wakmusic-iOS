@@ -8,10 +8,10 @@
 
 import BaseFeature
 import Foundation
+import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import Utility
-import NoticeDomainInterface
 
 public class NoticePopupViewModel {
     let input = Input()

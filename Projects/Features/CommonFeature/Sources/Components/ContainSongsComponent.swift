@@ -9,6 +9,8 @@
 import DomainModule
 import Foundation
 import NeedleFoundation
+import PlayListDomainInterface
+import UserDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopComponent: MultiPurposePopComponent { get }

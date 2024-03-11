@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import ChartDomainInterface
 import DesignSystem
 import DomainModule
 import Kingfisher
 import SnapKit
 import UIKit
 import Utility
-import ChartDomainInterface
 
 class HomeChartCell: UITableViewCell {
     @IBOutlet weak var rankLabel: UILabel!

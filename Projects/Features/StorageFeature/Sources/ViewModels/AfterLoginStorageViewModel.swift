@@ -8,12 +8,12 @@
 
 import BaseFeature
 import CommonFeature
-import DomainModule
 import Foundation
 import KeychainModule
 import NaverThirdPartyLogin
 import RxRelay
 import RxSwift
+import UserDomainInterface
 import Utility
 
 public final class AfterLoginViewModel: ViewModelType {

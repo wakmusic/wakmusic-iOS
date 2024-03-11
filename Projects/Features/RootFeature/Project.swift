@@ -13,7 +13,8 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .BaseFeature),
                     .feature(target: .MainTabFeature),
-                    .domain(target: .AppDomain, type: .interface)
+                    .domain(target: .AppDomain, type: .interface),
+                    .domain(target: .UserDomain, type: .interface)
                 ]
             )
         )

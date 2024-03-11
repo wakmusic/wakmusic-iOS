@@ -7,8 +7,8 @@
 //
 
 import DesignSystem
-import DomainModule
 import UIKit
+import UserDomainInterface
 import Utility
 
 class CurrentPlayListTableViewCell: UITableViewCell {

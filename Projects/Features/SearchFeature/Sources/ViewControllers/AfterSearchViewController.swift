@@ -8,10 +8,10 @@
 
 import CommonFeature
 import DesignSystem
-import DomainModule
 import NVActivityIndicatorView
 import Pageboy
 import RxSwift
+import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility

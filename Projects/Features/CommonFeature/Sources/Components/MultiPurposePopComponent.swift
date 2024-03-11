@@ -6,9 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
 import Foundation
 import NeedleFoundation
+import PlayListDomainInterface
+import UserDomainInterface
 
 public protocol MultiPurposePopDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }

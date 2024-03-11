@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
 import DesignSystem
 import Pageboy
+import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility

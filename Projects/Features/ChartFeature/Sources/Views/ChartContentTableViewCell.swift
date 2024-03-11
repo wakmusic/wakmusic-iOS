@@ -1,13 +1,13 @@
+import ChartDomainInterface
 import CommonFeature
-import DataMappingModule
 import DesignSystem
 import DomainModule
 import Kingfisher
 import SnapKit
+import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import ChartDomainInterface
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI

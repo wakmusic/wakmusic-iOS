@@ -11,7 +11,8 @@ let project = Project.module(
             spec: .init(
                 dependencies: [
                     .feature(target: .CommonFeature),
-                    .domain(target: .LikeDomain, type: .interface)
+                    .domain(target: .LikeDomain, type: .interface),
+                    .domain(target: .SongsDomain, type: .interface)
                 ]
             )
         )
