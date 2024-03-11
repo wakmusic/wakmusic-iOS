@@ -7,9 +7,9 @@
 //
 import DesignSystem
 import DomainModule
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public protocol PlayListCellDelegate: AnyObject {
     func buttonTapped(type: PlayListCellDelegateConstant)

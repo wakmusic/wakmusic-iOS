@@ -5,14 +5,14 @@ import DesignSystem
 import DomainModule
 import NVActivityIndicatorView
 import PanModal
+import PlayListDomainInterface
 import RxCocoa
 import RxSwift
 import SnapKit
+import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import PlayListDomainInterface
-import SongsDomainInterface
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!

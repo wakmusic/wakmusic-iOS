@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import NoticeDomainInterface
 import Foundation
+import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import Utility

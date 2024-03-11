@@ -15,8 +15,8 @@ import Foundation
 import KeychainModule
 import RxCocoa
 import RxSwift
-import Utility
 import UserDomainInterface
+import Utility
 
 public final class IntroViewModel: ViewModelType {
     var fetchUserInfoUseCase: FetchUserInfoUseCase!

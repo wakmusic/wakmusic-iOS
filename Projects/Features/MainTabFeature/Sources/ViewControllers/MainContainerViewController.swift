@@ -5,9 +5,9 @@ import DesignSystem
 import PlayerFeature
 import RxSwift
 import SnapKit
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var containerView: UIView!

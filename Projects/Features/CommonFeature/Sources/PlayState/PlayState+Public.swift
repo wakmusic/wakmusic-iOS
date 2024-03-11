@@ -7,10 +7,10 @@
 //
 
 import Foundation
+import SongsDomainInterface
 import UIKit
 import Utility
 import YouTubePlayerKit
-import SongsDomainInterface
 
 public extension PlayState {
     /// 주어진 곡들을 재생목록에 추가하고 재생합니다.

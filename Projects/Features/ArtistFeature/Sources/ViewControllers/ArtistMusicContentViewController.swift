@@ -13,9 +13,9 @@ import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!

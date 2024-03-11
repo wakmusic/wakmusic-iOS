@@ -7,12 +7,12 @@
 //
 
 import BaseFeature
+import FaqDomainInterface
 import Foundation
 import KeychainModule
 import RxRelay
 import RxSwift
 import Utility
-import FaqDomainInterface
 
 public final class QnaContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()

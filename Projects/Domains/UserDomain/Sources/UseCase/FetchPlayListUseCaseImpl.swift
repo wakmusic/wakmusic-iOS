@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UserDomainInterface
 import Foundation
 import RxSwift
+import UserDomainInterface
 
 public struct FetchPlayListUseCaseImpl: FetchPlayListUseCase {
     private let userRepository: any UserRepository

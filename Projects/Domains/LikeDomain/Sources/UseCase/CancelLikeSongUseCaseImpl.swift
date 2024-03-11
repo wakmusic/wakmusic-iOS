@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import LikeDomainInterface
 import Foundation
+import LikeDomainInterface
 import RxSwift
 
 public struct CancelLikeSongUseCaseImpl: CancelLikeSongUseCase {

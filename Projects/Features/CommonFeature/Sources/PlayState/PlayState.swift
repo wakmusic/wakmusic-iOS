@@ -9,9 +9,9 @@
 import AVFAudio
 import Combine
 import Foundation
+import SongsDomainInterface
 import Utility
 import YouTubePlayerKit
-import SongsDomainInterface
 
 public final class PlayState {
     public static let shared = PlayState(player: YouTubePlayer(configuration: .init(

@@ -7,12 +7,12 @@
 //
 
 import BaseFeature
+import ChartDomainInterface
 import Foundation
 import RxRelay
 import RxSwift
-import Utility
-import ChartDomainInterface
 import SongsDomainInterface
+import Utility
 
 public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType

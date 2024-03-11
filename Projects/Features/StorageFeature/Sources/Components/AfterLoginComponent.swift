@@ -7,9 +7,9 @@
 //
 
 import CommonFeature
-import UserDomainInterface
 import Foundation
 import NeedleFoundation
+import UserDomainInterface
 
 public protocol AfterLoginDependency: Dependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }

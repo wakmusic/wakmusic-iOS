@@ -11,10 +11,10 @@ import DesignSystem
 import NVActivityIndicatorView
 import Pageboy
 import RxSwift
+import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tabBarView: UIView!

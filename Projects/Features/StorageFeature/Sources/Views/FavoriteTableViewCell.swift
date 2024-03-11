@@ -8,10 +8,10 @@
 
 import CommonFeature
 import DesignSystem
-import UIKit
-import Utility
 import SongsDomainInterface
+import UIKit
 import UserDomainInterface
+import Utility
 
 public protocol FavoriteTableViewCellDelegate: AnyObject {
     func buttonTapped(type: FavoriteTableViewCellDelegateConstant)

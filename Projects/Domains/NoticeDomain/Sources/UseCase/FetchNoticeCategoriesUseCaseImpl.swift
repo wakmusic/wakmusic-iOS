@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RxSwift
 import NoticeDomainInterface
+import RxSwift
 
 public struct FetchNoticeCategoriesUseCaseImpl: FetchNoticeCategoriesUseCase {
     private let noticeRepository: any NoticeRepository

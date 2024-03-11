@@ -9,9 +9,9 @@
 import ArtistDomainInterface
 import CommonFeature
 import DesignSystem
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 class ArtistMusicCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!

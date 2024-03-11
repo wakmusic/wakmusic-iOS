@@ -8,10 +8,10 @@
 
 import ArtistDomainInterface
 import BaseFeature
-import SongsDomainInterface
 import Foundation
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import Utility
 
 public final class ArtistMusicContentViewModel: ViewModelType {

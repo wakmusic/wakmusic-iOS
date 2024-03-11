@@ -9,9 +9,9 @@
 import DesignSystem
 import Kingfisher
 import SnapKit
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public class SongListCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!

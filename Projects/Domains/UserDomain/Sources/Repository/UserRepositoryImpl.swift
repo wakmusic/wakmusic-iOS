@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import ErrorModule
 import RxSwift
 import UserDomainInterface
-import BaseDomainInterface
 
 public final class UserRepositoryImpl: UserRepository {
     private let remoteUserDataSource: any RemoteUserDataSource

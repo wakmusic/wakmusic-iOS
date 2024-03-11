@@ -6,10 +6,10 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import UserDomainInterface
+import BaseDomainInterface
 import Foundation
 import RxSwift
-import BaseDomainInterface
+import UserDomainInterface
 
 public struct SetProfileUseCaseImpl: SetProfileUseCase {
     private let userRepository: any UserRepository

@@ -1,8 +1,8 @@
-import Foundation
-import RxSwift
 import BaseDomain
-import PlayListDomainInterface
 import BaseDomainInterface
+import Foundation
+import PlayListDomainInterface
+import RxSwift
 
 public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
     public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {

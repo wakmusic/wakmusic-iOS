@@ -7,9 +7,9 @@
 //
 
 import CommonFeature
-import StorageFeature
 import NoticeDomain
 import NoticeDomainInterface
+import StorageFeature
 
 public extension AppComponent {
     var noticePopupComponent: NoticePopupComponent {

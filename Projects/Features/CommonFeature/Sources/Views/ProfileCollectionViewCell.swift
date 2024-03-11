@@ -8,8 +8,8 @@
 
 import DesignSystem
 import UIKit
-import Utility
 import UserDomainInterface
+import Utility
 
 public enum FanType: String {
     case panchi

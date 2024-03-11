@@ -1,7 +1,7 @@
+import BaseDomain
 import ErrorModule
 import Foundation
 import Moya
-import BaseDomain
 import SongsDomainInterface
 
 public enum SongsAPI {

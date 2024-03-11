@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UserDomainInterface
 import SongsDomainInterface
+import UserDomainInterface
 
 public struct PlayListResponseDTO: Decodable {
     public let title: String

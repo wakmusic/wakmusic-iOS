@@ -8,10 +8,10 @@
 
 import DesignSystem
 import Pageboy
+import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public class NewSongsViewController: TabmanViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!

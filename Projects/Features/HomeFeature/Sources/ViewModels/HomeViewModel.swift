@@ -7,16 +7,16 @@
 //
 
 import BaseFeature
+import ChartDomainInterface
 import CommonFeature
 import DataMappingModule
 import DomainModule
 import Foundation
+import PlayListDomainInterface
 import RxCocoa
 import RxSwift
-import Utility
-import ChartDomainInterface
 import SongsDomainInterface
-import PlayListDomainInterface
+import Utility
 
 public final class HomeViewModel: ViewModelType {
     var disposeBag = DisposeBag()

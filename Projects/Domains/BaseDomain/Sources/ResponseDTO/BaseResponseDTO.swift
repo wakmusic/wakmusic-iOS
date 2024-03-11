@@ -6,8 +6,8 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
 import BaseDomainInterface
+import Foundation
 
 public struct BaseResponseDTO: Codable {
     public let status: Int

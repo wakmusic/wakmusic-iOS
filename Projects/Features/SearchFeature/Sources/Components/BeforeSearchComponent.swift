@@ -7,9 +7,9 @@
 //
 
 import CommonFeature
-import PlayListDomainInterface
 import Foundation
 import NeedleFoundation
+import PlayListDomainInterface
 
 public protocol BeforeSearchDependency: Dependency {
     var playListDetailComponent: PlayListDetailComponent { get }

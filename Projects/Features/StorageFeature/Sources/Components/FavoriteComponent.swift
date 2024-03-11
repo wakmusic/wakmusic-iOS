@@ -7,10 +7,10 @@
 //
 
 import CommonFeature
-import UserDomainInterface
 import Foundation
 import NeedleFoundation
 import SignInFeature
+import UserDomainInterface
 
 public protocol FavoriteDependency: Dependency {
     var containSongsComponent: ContainSongsComponent { get }

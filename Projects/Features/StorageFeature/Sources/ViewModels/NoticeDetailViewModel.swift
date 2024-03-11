@@ -7,9 +7,9 @@
 //
 
 import BaseFeature
-import NoticeDomainInterface
 import Foundation
 import Kingfisher
+import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import Utility

@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import Foundation
 import RxSwift
-import BaseDomainInterface
 
 public protocol UserRepository {
     func fetchProfileList() -> Single<[ProfileListEntity]>

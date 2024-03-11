@@ -9,10 +9,10 @@
 import BaseFeature
 import DomainModule
 import Foundation
+import PlayListDomainInterface
 import RxRelay
 import RxSwift
 import Utility
-import PlayListDomainInterface
 
 public final class BeforeSearchContentViewModel: ViewModelType {
     let input = Input()

@@ -16,8 +16,8 @@ import NaverThirdPartyLogin
 import RxCocoa
 import RxRelay
 import RxSwift
-import Utility
 import UserDomainInterface
+import Utility
 
 public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let disposeBag = DisposeBag()

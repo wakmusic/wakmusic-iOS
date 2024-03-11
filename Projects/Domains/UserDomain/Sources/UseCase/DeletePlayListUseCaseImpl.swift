@@ -7,9 +7,9 @@
 //
 
 import BaseDomainInterface
-import UserDomainInterface
 import Foundation
 import RxSwift
+import UserDomainInterface
 
 public struct DeletePlayListUseCaseImpl: DeletePlayListUseCase {
     private let userRepository: any UserRepository

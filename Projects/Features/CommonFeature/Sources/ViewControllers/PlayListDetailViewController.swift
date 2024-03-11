@@ -14,9 +14,9 @@ import RxCocoa
 import RxDataSources
 import RxRelay
 import RxSwift
+import SongsDomainInterface
 import UIKit
 import Utility
-import SongsDomainInterface
 
 public class PlayListDetailViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType,
     EditSheetViewType {

@@ -7,10 +7,10 @@
 //
 
 import DesignSystem
-import SongsDomainInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import UIKit
 import Utility
 

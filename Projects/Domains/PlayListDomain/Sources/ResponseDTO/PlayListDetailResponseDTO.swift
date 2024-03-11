@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import Utility
-import SongsDomain
 import PlayListDomainInterface
+import SongsDomain
 import SongsDomainInterface
+import Utility
 
 public struct SinglePlayListDetailResponseDTO: Decodable {
     public let key: String?
@@ -33,7 +33,7 @@ public extension SinglePlayListDetailResponseDTO {
         PlayListDetailEntity(
             key: key ?? "",
             title: title,
-            songs: (songs ?? []).map { (dto) in
+            songs: (songs ?? []).map { dto in
                 return SongEntity(
                     id: dto.id,
                     title: dto.title,

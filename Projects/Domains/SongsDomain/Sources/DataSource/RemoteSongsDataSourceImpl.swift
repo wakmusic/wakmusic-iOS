@@ -1,7 +1,7 @@
 import BaseDomain
-import SongsDomainInterface
 import Foundation
 import RxSwift
+import SongsDomainInterface
 
 public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, RemoteSongsDataSource {
     public func fetchSearchSong(keyword: String) -> Single<SearchResultEntity> {

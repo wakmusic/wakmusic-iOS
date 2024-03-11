@@ -6,16 +6,16 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import BaseFeature
 import CommonFeature
 import Foundation
 import RxCocoa
 import RxRelay
 import RxSwift
-import Utility
-import UserDomainInterface
 import SongsDomainInterface
-import BaseDomainInterface
+import UserDomainInterface
+import Utility
 
 public final class MyPlayListViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!

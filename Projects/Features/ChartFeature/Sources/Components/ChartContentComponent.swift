@@ -1,9 +1,9 @@
+import ChartDomainInterface
 import CommonFeature
 import DataMappingModule
 import DomainModule
 import Foundation
 import NeedleFoundation
-import ChartDomainInterface
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }

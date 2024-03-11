@@ -6,14 +6,14 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseDomainInterface
 import BaseFeature
 import Foundation
+import PlayListDomainInterface
 import RxRelay
 import RxSwift
-import Utility
-import PlayListDomainInterface
 import UserDomainInterface
-import BaseDomainInterface
+import Utility
 
 public final class MultiPurposePopupViewModel: ViewModelType {
     var type: PurposeType

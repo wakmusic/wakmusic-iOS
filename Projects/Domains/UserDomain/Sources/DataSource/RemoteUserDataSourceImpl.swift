@@ -1,8 +1,8 @@
 import BaseDomain
-import UserDomainInterface
+import BaseDomainInterface
 import Foundation
 import RxSwift
-import BaseDomainInterface
+import UserDomainInterface
 
 public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, RemoteUserDataSource {
     public func fetchUserInfo() -> Single<UserInfoEntity> {

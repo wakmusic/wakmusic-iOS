@@ -1,5 +1,5 @@
-import RxSwift
 import ChartDomainInterface
+import RxSwift
 
 public struct FetchChartRankingUseCaseImpl: FetchChartRankingUseCase {
     private let chartRepository: any ChartRepository

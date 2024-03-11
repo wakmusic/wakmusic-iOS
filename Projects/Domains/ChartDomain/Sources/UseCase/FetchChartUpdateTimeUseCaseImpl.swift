@@ -1,5 +1,5 @@
-import RxSwift
 import ChartDomainInterface
+import RxSwift
 
 public struct FetchChartUpdateTimeUseCaseImpl: FetchChartUpdateTimeUseCase {
     private let chartRepository: any ChartRepository

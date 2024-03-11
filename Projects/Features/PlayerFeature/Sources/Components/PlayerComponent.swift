@@ -1,8 +1,8 @@
 import CommonFeature
 import DomainModule
 import Foundation
-import NeedleFoundation
 import LikeDomainInterface
+import NeedleFoundation
 import SongsDomainInterface
 import UserDomainInterface
 

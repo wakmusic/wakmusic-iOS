@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UserDomainInterface
 import SongsDomainInterface
+import UserDomainInterface
 
 public struct FavoriteSongsResponseDTO: Decodable {
     public let like: Int

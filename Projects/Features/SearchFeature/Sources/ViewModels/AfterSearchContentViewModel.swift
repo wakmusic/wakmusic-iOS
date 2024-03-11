@@ -11,8 +11,8 @@ import Foundation
 import RxDataSources
 import RxRelay
 import RxSwift
-import Utility
 import SongsDomainInterface
+import Utility
 
 public final class AfterSearchContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()

@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import NoticeDomainInterface
 import Foundation
 import NeedleFoundation
+import NoticeDomainInterface
 
 public protocol NoticeDetailDependency: Dependency {}
 
