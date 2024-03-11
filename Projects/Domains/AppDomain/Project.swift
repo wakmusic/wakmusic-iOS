@@ -5,12 +5,17 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Domain.AppDomain.rawValue,
     targets: [
-        .interface(module: .domain(.AppDomain)),
+        .interface(
+            module: .domain(.AppDomain),
+            dependencies: [
+                .domain(target: .BaseDomain, type: .interface)
+            ]
+        ),
         .implements(
             module: .domain(.AppDomain),
             dependencies: [
-                TargetDependency.domain(target: .BaseDomain),
-                TargetDependency.domain(target: .AppDomain, type: .interface)
+                .domain(target: .BaseDomain),
+                .domain(target: .AppDomain, type: .interface)
             ]
         ),
         .tests(

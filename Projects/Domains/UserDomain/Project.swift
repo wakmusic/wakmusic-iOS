@@ -8,6 +8,7 @@ let project = Project.module(
         .interface(
             module: .domain(.UserDomain),
             dependencies: [
+                .domain(target: .BaseDomain, type: .interface),
                 .domain(target: .SongsDomain, type: .interface)
             ]
         ),
