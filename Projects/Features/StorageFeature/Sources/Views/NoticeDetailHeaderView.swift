@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import UIKit
 import Utility
+import NoticeDomainInterface
 
 class NoticeDetailHeaderView: UICollectionReusableView {
     @IBOutlet weak var titleStringLabel: UILabel!

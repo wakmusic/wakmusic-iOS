@@ -6,8 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
+import NoticeDomainInterface
 import Foundation
 import RxCocoa
 import RxSwift

@@ -7,9 +7,9 @@
 //
 
 import DesignSystem
-import DomainModule
 import UIKit
 import Utility
+import NoticeDomainInterface
 
 class NoticeListCell: UITableViewCell {
     @IBOutlet weak var titleStringLabel: UILabel!

@@ -8,7 +8,7 @@
 
 import CommonFeature
 import DesignSystem
-import DomainModule
+import NoticeDomainInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxDataSources

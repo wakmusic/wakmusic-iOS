@@ -1,7 +1,7 @@
 import ArtistFeature
 import ChartFeature
 import CommonFeature
-import DomainModule
+import NoticeDomainInterface
 import Foundation
 import HomeFeature
 import NeedleFoundation

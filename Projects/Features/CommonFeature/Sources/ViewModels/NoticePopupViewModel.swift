@@ -7,12 +7,11 @@
 //
 
 import BaseFeature
-import DataMappingModule
-import DomainModule
 import Foundation
 import RxCocoa
 import RxSwift
 import Utility
+import NoticeDomainInterface
 
 public class NoticePopupViewModel {
     let input = Input()

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import NoticeDomainInterface
 
-public struct FetchNoticeResponseDTO: Codable, Equatable {
+public struct FetchNoticeResponseDTO: Decodable, Equatable {
     public let id: Int
     public let title: String
     public let thumbnail: String?
@@ -27,5 +28,21 @@ public struct FetchNoticeResponseDTO: Codable, Equatable {
         case createdAt
         case startAt
         case endAt
+    }
+}
+
+public extension FetchNoticeResponseDTO {
+    func toDomain() -> FetchNoticeEntity {
+        FetchNoticeEntity(
+            id: id,
+            category: category ?? "",
+            title: title,
+            thumbnail: thumbnail,
+            content: content,
+            images: images,
+            createdAt: createdAt,
+            startAt: startAt,
+            endAt: endAt
+        )
     }
 }

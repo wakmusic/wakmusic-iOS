@@ -12,7 +12,8 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .SignInFeature),
-                    .domain(target: .FaqDomain, type: .interface)
+                    .domain(target: .FaqDomain, type: .interface),
+                    .domain(target: .NoticeDomain, type: .interface)
                 ]
             )
         )

@@ -1,18 +1,16 @@
 //
-//  FetchNoticeUseCaseImpl.swift
+//  FetchNoticeCategoriesUseCaseImpl.swift
 //  DataModule
 //
 //  Created by KTH on 2023/04/08.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DataMappingModule
-import DomainModule
-import ErrorModule
 import Foundation
 import RxSwift
+import NoticeDomainInterface
 
-public struct FetchNoticeUseCaseImpl: FetchNoticeUseCase {
+public struct FetchNoticeCategoriesUseCaseImpl: FetchNoticeCategoriesUseCase {
     private let noticeRepository: any NoticeRepository
 
     public init(
@@ -21,7 +19,7 @@ public struct FetchNoticeUseCaseImpl: FetchNoticeUseCase {
         self.noticeRepository = noticeRepository
     }
 
-    public func execute(type: NoticeType) -> Single<[FetchNoticeEntity]> {
-        noticeRepository.fetchNotice(type: type)
+    public func execute() -> Single<FetchNoticeCategoriesEntity> {
+        noticeRepository.fetchNoticeCategories()
     }
 }
