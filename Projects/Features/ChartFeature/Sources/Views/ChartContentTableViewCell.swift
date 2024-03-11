@@ -1,6 +1,5 @@
 import ChartDomainInterface
 import CommonFeature
-import DataMappingModule
 import DesignSystem
 import DomainModule
 import Kingfisher

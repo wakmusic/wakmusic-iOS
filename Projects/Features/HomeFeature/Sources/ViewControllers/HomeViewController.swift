@@ -1,6 +1,5 @@
 import BaseFeature
 import CommonFeature
-import DataMappingModule
 import DesignSystem
 import DomainModule
 import NVActivityIndicatorView

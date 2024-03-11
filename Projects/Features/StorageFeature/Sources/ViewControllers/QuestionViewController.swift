@@ -8,7 +8,6 @@
 
 import BaseFeature
 import CommonFeature
-import DataMappingModule
 import DesignSystem
 import MessageUI
 import RxSwift
