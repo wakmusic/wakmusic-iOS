@@ -13,9 +13,8 @@ public struct BaseResponseDTO: Codable {
     public let status: Int
 }
 
- public extension BaseResponseDTO {
-     func toDomain() -> BaseEntity {
-         return BaseEntity(status: status)
-     }
- }
- 
+public extension BaseResponseDTO {
+    func toDomain() -> BaseEntity {
+        return BaseEntity(status: status)
+    }
+}
