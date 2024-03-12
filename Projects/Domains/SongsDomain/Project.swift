@@ -5,7 +5,12 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Domain.SongsDomain.rawValue,
     targets: [
-        .interface(module: .domain(.SongsDomain)),
+        .interface(
+            module: .domain(.SongsDomain),
+            dependencies: [
+                .domain(target: .BaseDomain, type: .interface)
+            ]
+        ),
         .implements(
             module: .domain(.SongsDomain),
             dependencies: [

@@ -5,7 +5,12 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Domain.NoticeDomain.rawValue,
     targets: [
-        .interface(module: .domain(.NoticeDomain)),
+        .interface(
+            module: .domain(.NoticeDomain),
+            dependencies: [
+                .domain(target: .BaseDomain, type: .interface)
+            ]
+        ),
         .implements(
             module: .domain(.NoticeDomain),
             dependencies: [

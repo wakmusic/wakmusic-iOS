@@ -5,7 +5,12 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Domain.AuthDomain.rawValue,
     targets: [
-        .interface(module: .domain(.AuthDomain)),
+        .interface(
+            module: .domain(.AuthDomain),
+            dependencies: [
+                .domain(target: .BaseDomain, type: .interface)
+            ]
+        ),
         .implements(
             module: .domain(.AuthDomain),
             dependencies: [
