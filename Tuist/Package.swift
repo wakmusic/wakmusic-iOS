@@ -22,6 +22,7 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/cbpowell/MarqueeLabel.git", from: "4.3.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.7.0"),
-        .package(url: "https://github.com/ninjaprox/NVActivityIndicatorView.git", from: "5.1.1")
+        .package(url: "https://github.com/ninjaprox/NVActivityIndicatorView.git", from: "5.1.1"),
+        .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.2.0")
     ]
 )

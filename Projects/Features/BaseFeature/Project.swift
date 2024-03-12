@@ -8,6 +8,7 @@ let project = Project.makeModule(
         .Project.Service.Domain,
         .Project.Module.FeatureThirdPartyLib,
         .Project.UserInterfaces.DesignSystem,
-        .Project.Module.Utility
+        .Project.Module.Utility,
+        .SPM.ReactorKit
     ]
 )

@@ -27,6 +27,7 @@ public extension TargetDependency.SPM {
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
     static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
     static let NVActivityIndicatorView = TargetDependency.external(name: "NVActivityIndicatorView")
+    static let ReactorKit = TargetDependency.external(name: "ReactorKit")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
