@@ -31,25 +31,7 @@ public final class ArtistReactor: Reactor {
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return fetchArtistListUseCase.execute()
-                .catchAndReturn([])
-                .asObservable()
-                .map { [weak self] artistList in
-                    guard let self, !artistList.isEmpty else {
-                        DEBUG_LOG("데이터가 없습니다.")
-                        return artistList
-                    }
-                    var newArtistList = artistList
-
-                    if newArtistList.count == 1 {
-                        let hiddenItem: ArtistListEntity = self.makeHiddenArtistEntity()
-                        newArtistList.append(hiddenItem)
-                    } else {
-                        newArtistList.swapAt(0, 1)
-                    }
-                    return newArtistList
-                }
-                .map(Mutation.updateArtistList)
+            return viewDidLoad()
 
         default:
             return .empty()
@@ -66,6 +48,33 @@ public final class ArtistReactor: Reactor {
     }
 }
 
+// MARK: - Mutate
+private extension ArtistReactor {
+    func viewDidLoad() -> Observable<Mutation> {
+        return fetchArtistListUseCase.execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map { [weak self] artistList in
+                guard let self, !artistList.isEmpty else {
+                    DEBUG_LOG("데이터가 없습니다.")
+                    return artistList
+                }
+                var newArtistList = artistList
+
+                // Waterfall Grid UI가 기본적으로 왼쪽부터 쌓이게 되기에 첫번째 Cell을 hide 시킵니다
+                if newArtistList.count == 1 {
+                    let hiddenItem: ArtistListEntity = self.makeHiddenArtistEntity()
+                    newArtistList.append(hiddenItem)
+                } else {
+                    newArtistList.swapAt(0, 1)
+                }
+                return newArtistList
+            }
+            .map(Mutation.updateArtistList)
+    }
+}
+
+// MARK: - Reusable
 private extension ArtistReactor {
     func makeHiddenArtistEntity() -> ArtistListEntity {
         ArtistListEntity(
