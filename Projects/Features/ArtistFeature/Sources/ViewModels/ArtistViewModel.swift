@@ -14,6 +14,11 @@ import RxCocoa
 import RxSwift
 import Utility
 
+@available(
+    *,
+    deprecated,
+    message: "'ArtistViewModel' is deprecated. This will remove in a future. use instead of 'ArtistReactor'."
+)
 public final class ArtistViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var fetchArtistListUseCase: FetchArtistListUseCase

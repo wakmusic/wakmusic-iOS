@@ -18,8 +18,9 @@ public protocol ArtistDependency: Dependency {
 
 public final class ArtistComponent: Component<ArtistDependency> {
     public func makeView() -> ArtistViewController {
+        let reactor = ArtistReactor(fetchArtistListUseCase: dependency.fetchArtistListUseCase)
         return ArtistViewController.viewController(
-            viewModel: ArtistViewModel(fetchArtistListUseCase: dependency.fetchArtistListUseCase),
+            reactor: reactor,
             artistDetailComponent: dependency.artistDetailComponent
         )
     }

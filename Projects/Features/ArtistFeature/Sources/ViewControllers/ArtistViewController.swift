@@ -4,12 +4,19 @@ import DomainModule
 import NeedleFoundation
 import NVActivityIndicatorView
 import PDFKit
+import ReactorKit
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
 
-public final class ArtistViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
+public final class ArtistViewController:
+    BaseViewController,
+    ViewControllerFromStoryBoard,
+    EqualHandleTappedType,
+    StoryboardView {
+    public typealias Reactor = ArtistReactor
+
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -17,12 +24,11 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
     private lazy var input = ArtistViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
     var artistDetailComponent: ArtistDetailComponent!
-    var disposeBag: DisposeBag = DisposeBag()
+    public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindRx()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -35,6 +41,52 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
+    public func bind(reactor: ArtistReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: ArtistReactor) {
+        reactor.action.onNext(Reactor.Action.viewDidLoad)
+        // Storyboard 기반이기에 바로 viewDidLoad로 onNext, 만약 codebase로 전환 시 `methodInvoked(#selector(viewDidLoad))` 로 옵저빙
+
+        collectionView.rx.itemSelected
+            .withLatestFrom(reactor.state.map(\.artistList)) { ($0, $1) }
+            .do(onNext: { [collectionView] indexPath, _ in
+                guard let cell = collectionView?.cellForItem(at: indexPath) as? ArtistListCell else { return }
+                cell.animateSizeDownToUp(timeInterval: 0.3)
+            })
+            .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
+            .map { $0.1[$0.0.row] }
+            .bind(with: self) { owner, artist in
+                let viewController = owner.artistDetailComponent.makeView(model: artist)
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func bindState(reactor: ArtistReactor) {
+        let sharedState = reactor.state.share(replay: 1)
+
+        sharedState.map(\.artistList)
+            .do(onNext: { [activityIndicator] _ in
+                activityIndicator?.stopAnimating()
+            })
+            .bind(to: collectionView.rx.items) { collectionView, index, artist in
+                let indexPath = IndexPath(item: index, section: 0)
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArtistListCell",
+                    for: indexPath
+                ) as? ArtistListCell else {
+                    return UICollectionViewCell()
+                }
+                cell.update(model: artist)
+                return cell
+            }
+            .disposed(by: disposeBag)
+    }
+
+    @available(*, deprecated)
     public static func viewController(
         viewModel: ArtistViewModel,
         artistDetailComponent: ArtistDetailComponent
@@ -44,9 +96,20 @@ public final class ArtistViewController: BaseViewController, ViewControllerFromS
         viewController.artistDetailComponent = artistDetailComponent
         return viewController
     }
+
+    public static func viewController(
+        reactor: ArtistReactor,
+        artistDetailComponent: ArtistDetailComponent
+    ) -> ArtistViewController {
+        let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
+        viewController.reactor = reactor
+        viewController.artistDetailComponent = artistDetailComponent
+        return viewController
+    }
 }
 
 extension ArtistViewController {
+    @available(*, deprecated, message: "'bindRx()' is deprecated. This will replace 'bind(:)'")
     private func bindRx() {
         output.dataSource
             .skip(1)
@@ -137,7 +200,7 @@ public extension ArtistViewController {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         } else {
-            guard !output.dataSource.value.isEmpty else { return }
+            guard reactor?.currentState.artistList.isEmpty == false else { return }
             self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
     }
