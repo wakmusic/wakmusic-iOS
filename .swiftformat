@@ -1,5 +1,5 @@
 
---exclude fastlane,Tuist,Dependencies,Carthage
+--exclude fastlane,Tuist,Dependencies,Carthage,**/NeedleGenerated.swift
 
 # options
 --maxwidth 120
