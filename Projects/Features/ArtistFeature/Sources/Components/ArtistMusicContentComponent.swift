@@ -8,7 +8,6 @@
 
 import ArtistDomainInterface
 import CommonFeature
-import DomainModule
 import Foundation
 import NeedleFoundation
 

@@ -7,7 +7,6 @@
 //
 
 import BaseFeature
-import DomainModule
 import Foundation
 import PlayListDomainInterface
 import RxRelay

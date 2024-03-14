@@ -9,7 +9,6 @@
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
 import RxCocoa
 import RxDataSources
 import RxSwift

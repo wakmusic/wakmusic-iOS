@@ -1,6 +1,5 @@
 import CommonFeature
 import DesignSystem
-import DomainModule
 import Pageboy
 import Tabman
 import UIKit

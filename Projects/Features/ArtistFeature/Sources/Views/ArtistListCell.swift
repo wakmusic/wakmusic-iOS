@@ -7,7 +7,6 @@
 
 import ArtistDomainInterface
 import DesignSystem
-import DomainModule
 import Kingfisher
 import UIKit
 import Utility

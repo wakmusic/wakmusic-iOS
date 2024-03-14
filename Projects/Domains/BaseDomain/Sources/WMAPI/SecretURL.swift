@@ -24,11 +24,6 @@ public func BASE_URL() -> String {
     #endif
 }
 
-// MARK: - WAKENTER_BASE_URL
-public func WAKENTER_BASE_URL() -> String {
-    return config(key: "WAKENTER_BASE_URL")
-}
-
 // MARK: - WMDomain
 public func WMDOMAIN_AUTH() -> String {
     return config(key: "WMDOMAIN_AUTH")
@@ -66,14 +61,6 @@ public func WMDOMAIN_NOTICE() -> String {
     return config(key: "WMDOMAIN_NOTICE")
 }
 
-public func WMDOMAIN_SUGGEST() -> String {
-    return config(key: "WMDOMAIN_SUGGEST")
-}
-
 public func WMDOMAIN_APP() -> String {
     return config(key: "WMDOMAIN_APP")
-}
-
-public func WMDOMAIN_PLAY() -> String {
-    return config(key: "WMDOMAIN_PLAY")
 }

@@ -9,7 +9,6 @@
 import CommonFeature
 import FaqDomain
 import FaqDomainInterface
-import NetworkModule
 import SignInFeature
 import StorageFeature
 
@@ -17,6 +16,10 @@ import StorageFeature
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
+    var questionComponent: QuestionComponent {
+        QuestionComponent(parent: self)
+    }
+
     var faqComponent: FaqComponent {
         FaqComponent(parent: self)
     }

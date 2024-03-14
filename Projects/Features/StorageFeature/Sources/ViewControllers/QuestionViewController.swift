@@ -48,11 +48,6 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     lazy var input = QuestionViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
-    var suggestFunctionComponent: SuggestFunctionComponent!
-    var wakMusicFeedbackComponent: WakMusicFeedbackComponent!
-    var askSongComponent: AskSongComponent!
-    var bugReportComponent: BugReportComponent!
-
     deinit {
         DEBUG_LOG("❌ \(Self.self) 소멸")
     }
@@ -64,18 +59,10 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     }
 
     public static func viewController(
-        viewModel: QuestionViewModel,
-        suggestFunctionComponent: SuggestFunctionComponent,
-        wakMusicFeedbackComponent: WakMusicFeedbackComponent,
-        askSongComponent: AskSongComponent,
-        bugReportComponent: BugReportComponent
+        viewModel: QuestionViewModel
     ) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.suggestFunctionComponent = suggestFunctionComponent
-        viewController.wakMusicFeedbackComponent = wakMusicFeedbackComponent
-        viewController.askSongComponent = askSongComponent
-        viewController.bugReportComponent = bugReportComponent
         return viewController
     }
 }

@@ -8,7 +8,6 @@
 
 import AppDomainInterface
 import BaseFeature
-import DomainModule
 import ErrorModule
 import Foundation
 import KeychainModule

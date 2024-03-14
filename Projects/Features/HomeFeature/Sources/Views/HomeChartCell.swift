@@ -8,7 +8,6 @@
 
 import ChartDomainInterface
 import DesignSystem
-import DomainModule
 import Kingfisher
 import SnapKit
 import UIKit

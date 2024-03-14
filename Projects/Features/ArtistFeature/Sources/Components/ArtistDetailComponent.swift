@@ -7,7 +7,6 @@
 //
 
 import ArtistDomainInterface
-import DomainModule
 import Foundation
 import NeedleFoundation
 

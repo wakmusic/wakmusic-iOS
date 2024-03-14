@@ -33,7 +33,6 @@ public extension PlayState {
 
     /// ▶️ 해당 곡 새로 재생
     func load(at song: SongEntity) {
-        // requestPlaybackLog(current: song) // v2 api 완성 후 적용하기로 함.
         self.currentSong = song
         guard let currentSong = currentSong else { return }
         self.player?.load(source: .video(id: currentSong.id))
@@ -77,27 +76,5 @@ public extension PlayState {
         self.playList.changeCurrentPlayIndex(to: 0)
         guard let firstItem = self.playList.first else { return }
         load(at: firstItem)
-    }
-
-    /// 🎤 재생 로그 전송
-    func requestPlaybackLog(current: SongEntity) {
-        guard Utility.PreferenceManager.userInfo != nil else {
-            return
-        }
-        let logItem = PlayState.PlaybackLog(
-            prev: PlayState.PlaybackLog.Previous(
-                songId: self.currentSong?.id ?? "",
-                songLength: Int(
-                    self.progress
-                        .endProgress
-                ),
-                stoppedAt: Int(
-                    self.progress
-                        .currentProgress
-                )
-            ),
-            curr: PlayState.PlaybackLog.Current(songId: current.id)
-        )
-        NotificationCenter.default.post(name: .requestPlaybackLog, object: logItem)
     }
 }

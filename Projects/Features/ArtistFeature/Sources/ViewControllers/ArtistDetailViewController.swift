@@ -8,7 +8,6 @@
 
 import ArtistDomainInterface
 import DesignSystem
-import DomainModule
 import RxCocoa
 import RxSwift
 import UIKit

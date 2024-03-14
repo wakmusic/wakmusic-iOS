@@ -1,7 +1,6 @@
 import BaseFeature
 import CommonFeature
 import DesignSystem
-import DomainModule
 import NeedleFoundation
 import PanModal
 import RxCocoa

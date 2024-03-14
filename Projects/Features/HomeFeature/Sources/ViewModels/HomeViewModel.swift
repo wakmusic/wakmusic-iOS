@@ -9,7 +9,6 @@
 import BaseFeature
 import ChartDomainInterface
 import CommonFeature
-import DomainModule
 import Foundation
 import PlayListDomainInterface
 import RxCocoa

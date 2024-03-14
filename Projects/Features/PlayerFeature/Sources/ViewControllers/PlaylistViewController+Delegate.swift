@@ -8,7 +8,6 @@
 
 import CommonFeature
 import DesignSystem
-import DomainModule
 import UIKit
 import Utility
 

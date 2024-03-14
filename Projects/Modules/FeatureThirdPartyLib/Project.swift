@@ -17,6 +17,7 @@ let project = Project.makeModule(
         .SPM.Then,
         .SPM.Kingfisher,
         .SPM.Tabman,
+        .SPM.ReactorKit,
         .SPM.RxDataSources,
         .SPM.RxKeyboard,
         .SPM.SwiftEntryKit,
