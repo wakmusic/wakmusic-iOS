@@ -1,6 +1,5 @@
 import BaseFeature
 import ChartDomainInterface
-import DomainModule
 import Foundation
 import RxRelay
 import RxSwift

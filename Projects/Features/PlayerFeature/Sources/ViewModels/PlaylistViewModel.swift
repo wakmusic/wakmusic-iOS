@@ -9,7 +9,6 @@
 import BaseFeature
 import Combine
 import CommonFeature
-import DomainModule
 import Foundation
 import RxDataSources
 import RxRelay

@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import DomainModule
 import Foundation
 import LikeDomainInterface
 import RxSwift
@@ -155,22 +154,5 @@ extension PlayerViewModel {
                 }
             })
             .disposed(by: self.disposeBag)
-    }
-
-    /// 재생 로그 전송
-    func postPlaybackLog(item: Data) {
-        self.postPlaybackLogUseCase
-            .execute(item: item)
-            .catch { _ in
-                return Single<PlaybackLogEntity>.create { single in
-                    single(.success(PlaybackLogEntity(id: "", title: "", artist: "")))
-                    return Disposables.create()
-                }
-            }
-            .asObservable()
-            .subscribe(onNext: { (entity: PlaybackLogEntity) in
-                DEBUG_LOG("🎤: \(entity)")
-            })
-            .disposed(by: disposeBag)
     }
 }

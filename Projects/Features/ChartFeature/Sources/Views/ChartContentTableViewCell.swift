@@ -1,7 +1,6 @@
 import ChartDomainInterface
 import CommonFeature
 import DesignSystem
-import DomainModule
 import Kingfisher
 import SnapKit
 import SongsDomainInterface

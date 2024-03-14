@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 import DesignSystem
-import DomainModule
 import SongsDomainInterface
 import UIKit
 import Utility

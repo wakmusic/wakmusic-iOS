@@ -7,7 +7,6 @@
 //
 
 import DesignSystem
-import DomainModule
 import Kingfisher
 import Lottie
 import SnapKit

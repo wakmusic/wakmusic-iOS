@@ -9,7 +9,6 @@
 import BaseFeature
 import Combine
 import CommonFeature
-import DomainModule
 import Foundation
 import LikeDomainInterface
 import RxCocoa
@@ -67,7 +66,6 @@ final class PlayerViewModel: ViewModelType {
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
-    var postPlaybackLogUseCase: PostPlaybackLogUseCase!
 
     let disposeBag = DisposeBag()
     private let playState = PlayState.shared
@@ -81,15 +79,13 @@ final class PlayerViewModel: ViewModelType {
         addLikeSongUseCase: AddLikeSongUseCase,
         cancelLikeSongUseCase: CancelLikeSongUseCase,
         fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase,
-        fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase,
-        postPlaybackLogUseCase: PostPlaybackLogUseCase
+        fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase
     ) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
-        self.postPlaybackLogUseCase = postPlaybackLogUseCase
         DEBUG_LOG("✅ PlayerViewModel 생성")
     }
 
@@ -108,7 +104,6 @@ final class PlayerViewModel: ViewModelType {
         bindShuffleMode(output: output)
         bindLoginStateChanged(output: output)
         bindCurrentSongLikeStateChanged(output: output)
-        bindRequestPlaybackLog()
 
         return output
     }
@@ -249,23 +244,6 @@ final class PlayerViewModel: ViewModelType {
                 guard let self else { return }
                 self.fetchLikeCount(for: currentSong, output: output)
                 self.fetchLikeState(for: currentSong, output: output)
-            }.store(in: &subscription)
-    }
-
-    private func bindRequestPlaybackLog() {
-        NotificationCenter.default.publisher(for: .requestPlaybackLog, object: nil)
-            .compactMap { notification in
-                return notification.object as? PlayState.PlaybackLog
-            }
-            .filter { !$0.prev.songId.isEmpty && $0.prev.songLength > 0 }
-            .sink { [weak self] item in
-                guard let self else { return }
-                do {
-                    let jsonData = try JSONEncoder().encode(item)
-                    self.postPlaybackLog(item: jsonData)
-                } catch {
-                    DEBUG_LOG("🎤: \(error.localizedDescription)")
-                }
             }.store(in: &subscription)
     }
 

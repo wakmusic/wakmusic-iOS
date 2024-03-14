@@ -7,7 +7,6 @@
 //
 
 import BaseFeature
-import DomainModule
 import Foundation
 import RxRelay
 import RxSwift

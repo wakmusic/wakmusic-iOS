@@ -31,15 +31,6 @@ public extension TargetDependency.Project.Module {
     static let ErrorModule = TargetDependency.module(name: "ErrorModule")
 }
 
-public extension TargetDependency.Project.Service {
-    static let APIKit = TargetDependency.service(name: "APIKit")
-    static let Data = TargetDependency.service(name: "DataModule")
-    static let Domain = TargetDependency.service(name: "DomainModule")
-    static let DatabaseModule = TargetDependency.service(name: "DatabaseModule")
-    static let DataMappingModule = TargetDependency.service(name: "DataMappingModule")
-    static let NetworkModule = TargetDependency.service(name: "NetworkModule")
-}
-
 public extension TargetDependency.Project.UserInterfaces {
     static let DesignSystem = TargetDependency.ui(name: "DesignSystem")
 }

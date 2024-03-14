@@ -9,7 +9,6 @@
 import Combine
 import CommonFeature
 import DesignSystem
-import DomainModule
 import Foundation
 import Kingfisher
 import RxDataSources

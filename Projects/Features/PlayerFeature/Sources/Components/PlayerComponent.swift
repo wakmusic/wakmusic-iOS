@@ -1,5 +1,4 @@
 import CommonFeature
-import DomainModule
 import Foundation
 import LikeDomainInterface
 import NeedleFoundation
@@ -12,7 +11,6 @@ public protocol PlayerDependency: Dependency {
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
-    var postPlaybackLogUseCase: any PostPlaybackLogUseCase { get }
     var playlistComponent: PlaylistComponent { get }
     var containSongsComponent: ContainSongsComponent { get }
 }
@@ -25,8 +23,7 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 addLikeSongUseCase: dependency.addLikeSongUseCase,
                 cancelLikeSongUseCase: dependency.cancelLikeSongUseCase,
                 fetchLikeNumOfSongUseCase: dependency.fetchLikeNumOfSongUseCase,
-                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
-                postPlaybackLogUseCase: dependency.postPlaybackLogUseCase
+                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase
             ),
             playlistComponent: dependency.playlistComponent,
             containSongsComponent: dependency.containSongsComponent
