@@ -66,14 +66,6 @@ public func WMDOMAIN_NOTICE() -> String {
     return config(key: "WMDOMAIN_NOTICE")
 }
 
-public func WMDOMAIN_SUGGEST() -> String {
-    return config(key: "WMDOMAIN_SUGGEST")
-}
-
 public func WMDOMAIN_APP() -> String {
     return config(key: "WMDOMAIN_APP")
-}
-
-public func WMDOMAIN_PLAY() -> String {
-    return config(key: "WMDOMAIN_PLAY")
 }

@@ -47,9 +47,7 @@ public enum WMDomain: String {
     case naver
     case faq
     case notice
-    case suggest
     case app
-    case play
 }
 
 extension WMDomain {
@@ -81,12 +79,8 @@ extension WMDomain {
             return WMDOMAIN_QNA()
         case .notice:
             return WMDOMAIN_NOTICE()
-        case .suggest:
-            return WMDOMAIN_SUGGEST()
         case .app:
             return WMDOMAIN_APP()
-        case .play:
-            return WMDOMAIN_PLAY()
         }
     }
 }
