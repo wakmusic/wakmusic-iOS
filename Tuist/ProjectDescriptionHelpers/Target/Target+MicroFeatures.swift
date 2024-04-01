@@ -105,25 +105,33 @@ public extension Target {
     static func tests(module: ModulePaths, spec: TargetSpec) -> Target {
         spec.with {
             $0.sources = .unitTests
+            $0.dependencies += [.SPM.Quick, .SPM.Nimble]
         }
         .toTarget(with: module.targetName(type: .unitTest), product: .unitTests)
     }
 
     static func tests(module: ModulePaths, dependencies: [TargetDependency] = []) -> Target {
-        TargetSpec(sources: .unitTests, dependencies: dependencies)
-            .toTarget(with: module.targetName(type: .unitTest), product: .unitTests)
+        TargetSpec(
+            sources: .unitTests,
+            dependencies: dependencies + [.SPM.Quick, .SPM.Nimble]
+        )
+        .toTarget(with: module.targetName(type: .unitTest), product: .unitTests)
     }
 
     static func tests(name: String, spec: TargetSpec) -> Target {
         spec.with {
             $0.sources = .unitTests
+            $0.dependencies += [.SPM.Quick, .SPM.Nimble]
         }
         .toTarget(with: "\(name)Tests", product: .unitTests)
     }
 
     static func tests(name: String, dependencies: [TargetDependency] = []) -> Target {
-        TargetSpec(sources: .unitTests, dependencies: dependencies)
-            .toTarget(with: "\(name)Tests", product: .unitTests)
+        TargetSpec(
+            sources: .unitTests,
+            dependencies: dependencies + [.SPM.Quick, .SPM.Nimble]
+        )
+        .toTarget(with: "\(name)Tests", product: .unitTests)
     }
 }
 
