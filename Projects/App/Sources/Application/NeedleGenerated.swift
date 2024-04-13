@@ -338,6 +338,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var requestComponent: RequestComponent {
         return appComponent.requestComponent
     }
@@ -454,6 +457,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     }
     var fetchAppCheckUseCase: any FetchAppCheckUseCase {
         return appComponent.fetchAppCheckUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -952,6 +958,7 @@ extension MyPlayListComponent: Registration {
 extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+        keyPathToName[\AfterLoginDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
@@ -1000,6 +1007,7 @@ extension RootComponent: Registration {
         keyPathToName[\RootDependency.permissionComponent] = "permissionComponent-PermissionComponent"
         keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
         keyPathToName[\RootDependency.fetchAppCheckUseCase] = "fetchAppCheckUseCase-any FetchAppCheckUseCase"
+        keyPathToName[\RootDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 extension PermissionComponent: Registration {

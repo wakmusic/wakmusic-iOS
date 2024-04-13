@@ -47,12 +47,12 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase,
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ) {
-        super.init()
-        self.googleLoginManager.googleOAuthLoginDelegate = self
-        self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        super.init()
+        self.googleLoginManager.googleOAuthLoginDelegate = self
+        self.naverLoginInstance?.delegate = self
     }
 
     public func transform(from input: Input) -> Output {
