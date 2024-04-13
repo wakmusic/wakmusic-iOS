@@ -394,6 +394,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
         return appComponent.withdrawUserInfoUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var faqComponent: FaqComponent {
         return appComponent.faqComponent
     }
@@ -775,6 +778,7 @@ extension AppComponent: Registration {
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
         localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
         localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
+        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { [unowned self] in self.checkIsExistAccessTokenUseCase as Any }
         localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
         localTable["likeRepository-any LikeRepository"] = { [unowned self] in self.likeRepository as Any }
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
@@ -978,6 +982,7 @@ extension FavoriteComponent: Registration {
 extension RequestComponent: Registration {
     public func registerItems() {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"

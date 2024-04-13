@@ -70,4 +70,10 @@ public extension AppComponent {
             LogoutUseCaseImpl(authRepository: authRepository)
         }
     }
+
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase {
+        shared {
+            CheckIsExistAccessTokenUseCaseImpl(authRepository: authRepository)
+        }
+    }
 }

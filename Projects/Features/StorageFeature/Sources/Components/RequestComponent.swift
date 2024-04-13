@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import CommonFeature
 import Foundation
 import NeedleFoundation
@@ -13,6 +14,7 @@ import UserDomainInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
     var faqComponent: FaqComponent { get }
     var questionComponent: QuestionComponent { get }
     var containSongsComponent: ContainSongsComponent { get }
@@ -24,7 +26,8 @@ public final class RequestComponent: Component<RequestDependency> {
     public func makeView() -> RequestViewController {
         return RequestViewController.viewController(
             viewModel: .init(
-                withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase
+                withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase,
+                logoutUseCase: dependency.logoutUseCase
             ),
             faqComponent: dependency.faqComponent,
             questionComponent: dependency.questionComponent,

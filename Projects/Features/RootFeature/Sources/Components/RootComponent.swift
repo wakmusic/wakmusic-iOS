@@ -11,6 +11,7 @@ public protocol RootDependency: Dependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
     var fetchAppCheckUseCase: any FetchAppCheckUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase { get }
 }
 
 public final class RootComponent: Component<RootDependency> {
@@ -21,7 +22,8 @@ public final class RootComponent: Component<RootDependency> {
             viewModel: IntroViewModel(
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,
                 fetchAppCheckUseCase: dependency.fetchAppCheckUseCase,
-                logoutUseCase: dependency.logoutUseCase
+                logoutUseCase: dependency.logoutUseCase,
+                checkIsExistAccessTokenUseCase: dependency.checkIsExistAccessTokenUseCase
             )
         )
     }

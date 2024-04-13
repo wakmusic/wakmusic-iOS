@@ -36,4 +36,9 @@ public final class AuthRepositoryImpl: AuthRepository {
             return Disposables.create()
         }
     }
+
+    public func checkIsExistAccessToken() -> Single<Bool> {
+        let isExistAccessToken = localAuthDataSource.checkIsExistAccessToken()
+        return .just(isExistAccessToken)
+    }
 }

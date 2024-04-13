@@ -21,6 +21,7 @@ public final class IntroViewModel: ViewModelType {
     var fetchUserInfoUseCase: FetchUserInfoUseCase
     var fetchAppCheckUseCase: FetchAppCheckUseCase
     private let logoutUseCase: any LogoutUseCase
+    private let checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -40,11 +41,13 @@ public final class IntroViewModel: ViewModelType {
     public init(
         fetchUserInfoUseCase: FetchUserInfoUseCase,
         fetchAppCheckUseCase: FetchAppCheckUseCase,
-        logoutUseCase: any LogoutUseCase
+        logoutUseCase: any LogoutUseCase,
+        checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
         self.logoutUseCase = logoutUseCase
+        self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
@@ -101,11 +104,20 @@ public final class IntroViewModel: ViewModelType {
 
         input.fetchUserInfoCheck
             .withLatestFrom(Utility.PreferenceManager.$userInfo)
-            .flatMap { [logoutUseCase] userInfo in
+            .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo in
                 guard userInfo != nil else {
                     // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
-                    return logoutUseCase.execute()
-                        .andThen(Observable.just(false))
+                    return checkIsExistAccessTokenUseCase.execute()
+                        .asObservable()
+                        .flatMap { isExist in
+                            if isExist {
+                                return logoutUseCase.execute()
+                                    .andThen(Observable.just(false))
+                            } else {
+                                return Observable.just(false)
+                            }
+                        }
+                        .asObservable()
                 }
                 return Observable.just(true)
             }
