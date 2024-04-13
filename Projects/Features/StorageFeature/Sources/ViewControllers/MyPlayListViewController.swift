@@ -195,16 +195,21 @@ extension MyPlayListViewController {
                     return
                 }
 
-                if result.status == 401 {
-                    LOGOUT()
-                }
-
                 self.showToast(
                     text: result.description,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
             })
             .disposed(by: disposeBag)
+
+        output.onLogout.bind(with: self) { owner, error in
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+            owner.showToast(
+                text: error.localizedDescription,
+                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+            )
+        }
+        .disposed(by: disposeBag)
     }
 
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
