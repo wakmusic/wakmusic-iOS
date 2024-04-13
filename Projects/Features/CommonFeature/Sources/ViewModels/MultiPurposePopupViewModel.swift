@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
@@ -24,6 +25,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var loadPlayListUseCase: LoadPlayListUseCase!
     var setUserNameUseCase: SetUserNameUseCase!
     var editPlayListNameUseCase: EditPlayListNameUseCase!
+    private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
         let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -34,6 +36,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         let isFoucused: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let result: PublishSubject<BaseEntity> = PublishSubject()
         let newPlayListKey: PublishSubject<String> = PublishSubject()
+        let onLogout: PublishRelay<Error>
     }
 
     public init(
@@ -42,7 +45,8 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         createPlayListUseCase: CreatePlayListUseCase,
         loadPlayListUseCase: LoadPlayListUseCase,
         setUserNameUseCase: SetUserNameUseCase,
-        editPlayListNameUseCase: EditPlayListNameUseCase
+        editPlayListNameUseCase: EditPlayListNameUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
@@ -50,6 +54,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         self.loadPlayListUseCase = loadPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
         self.editPlayListNameUseCase = editPlayListNameUseCase
+        self.logoutUseCase = logoutUseCase
     }
 
     deinit {
@@ -57,11 +62,15 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     }
 
     public func transform(from input: Input) -> Output {
-        var output = Output()
+        let logoutRelay = PublishRelay<Error>()
+
+        var output = Output(
+            onLogout: logoutRelay
+        )
 
         input.pressConfirm
             .withLatestFrom(input.textString)
-            .subscribe(onNext: { [weak self] (text: String) in
+            .subscribe(onNext: { [weak self, logoutUseCase] (text: String) in
                 guard let self = self else {
                     return
                 }
@@ -71,14 +80,9 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                         .catch { (error: Error) in
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 401,
-                                        key: "",
-                                        description: wmError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create()
-                                }
+                                logoutRelay.accept(error)
+                                return logoutUseCase.execute()
+                                    .andThen(.never())
                             } else {
                                 return Single<PlayListBaseEntity>.create { single in
                                     single(.success(PlayListBaseEntity(
@@ -111,13 +115,9 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                         .catch { error in
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
-                                return Single<BaseEntity>.create { single in
-                                    single(.success(BaseEntity(
-                                        status: 401,
-                                        description: wmError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create()
-                                }
+                                logoutRelay.accept(error)
+                                return logoutUseCase.execute()
+                                    .andThen(.never())
                             } else {
                                 return Single<BaseEntity>.create { single in
                                     single(.success(BaseEntity(
@@ -144,14 +144,9 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                         .catch { (error: Error) in
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 401,
-                                        key: "",
-                                        description: wmError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create()
-                                }
+                                logoutRelay.accept(error)
+                                return logoutUseCase.execute()
+                                    .andThen(.never())
                             } else {
                                 return Single<PlayListBaseEntity>.create { single in
                                     single(.success(PlayListBaseEntity(
@@ -183,14 +178,9 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                         .catch { (error: Error) in
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
-                                return Single<EditPlayListNameEntity>.create { single in
-                                    single(.success(EditPlayListNameEntity(
-                                        title: "",
-                                        status: 401,
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create()
-                                }
+                                logoutRelay.accept(error)
+                                return logoutUseCase.execute()
+                                    .andThen(.never())
                             } else {
                                 return Single<EditPlayListNameEntity>.create { single in
                                     single(.success(EditPlayListNameEntity(

@@ -582,6 +582,9 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
         return appComponent.addSongIntoPlayListUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -616,6 +619,9 @@ private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurpos
     }
     var editPlayListNameUseCase: any EditPlayListNameUseCase {
         return appComponent.editPlayListNameUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -742,10 +748,12 @@ extension AppComponent: Registration {
         localTable["storageComponent-StorageComponent"] = { [unowned self] in self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { [unowned self] in self.afterLoginComponent as Any }
         localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
+        localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
         localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
+        localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
         localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
         localTable["likeRepository-any LikeRepository"] = { [unowned self] in self.likeRepository as Any }
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
@@ -1026,6 +1034,7 @@ extension ContainSongsComponent: Registration {
         keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\ContainSongsDependency.addSongIntoPlayListUseCase] = "addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"
+        keyPathToName[\ContainSongsDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 extension ServiceInfoComponent: Registration {
@@ -1039,6 +1048,7 @@ extension MultiPurposePopComponent: Registration {
         keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
         keyPathToName[\MultiPurposePopDependency.editPlayListNameUseCase] = "editPlayListNameUseCase-any EditPlayListNameUseCase"
+        keyPathToName[\MultiPurposePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 extension NewSongsComponent: Registration {
