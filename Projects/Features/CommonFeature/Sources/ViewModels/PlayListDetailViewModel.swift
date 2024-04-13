@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import ErrorModule
@@ -31,6 +32,7 @@ public final class PlayListDetailViewModel: ViewModelType {
     var fetchPlayListDetailUseCase: FetchPlayListDetailUseCase!
     var editPlayListUseCase: EditPlayListUseCase!
     var removeSongsUseCase: RemoveSongsUseCase!
+    private let logoutUseCase: any LogoutUseCase
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -55,6 +57,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         let refreshPlayList: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
         let showErrorToast: PublishRelay<BaseEntity> = PublishRelay()
+        let onLogout: PublishRelay<Error>
     }
 
     public init(
@@ -62,13 +65,15 @@ public final class PlayListDetailViewModel: ViewModelType {
         type: PlayListType,
         fetchPlayListDetailUseCase: FetchPlayListDetailUseCase,
         editPlayListUseCase: EditPlayListUseCase,
-        removeSongsUseCase: RemoveSongsUseCase
+        removeSongsUseCase: RemoveSongsUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.id = id
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
         self.editPlayListUseCase = editPlayListUseCase
         self.removeSongsUseCase = removeSongsUseCase
+        self.logoutUseCase = logoutUseCase
     }
 
     deinit {
@@ -76,7 +81,9 @@ public final class PlayListDetailViewModel: ViewModelType {
     }
 
     public func transform(from input: Input) -> Output {
-        let output = Output()
+        let logoutRelay = PublishRelay<Error>()
+
+        let output = Output(onLogout: logoutRelay)
 
         output.refreshPlayList
             .flatMap { [weak self] () -> Observable<PlayListDetailEntity> in
@@ -139,17 +146,13 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.editPlayListUseCase.execute(key: key, songs: songs)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(
-                                    status: 401,
-                                    description: error.asWMError.errorDescription ?? ""
-                                )))
-                                return Disposables.create {}
-                            }
+                            logoutRelay.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
                         }
 
                         else {
@@ -212,17 +215,12 @@ public final class PlayListDetailViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.removeSongsUseCase.execute(key: key, songs: songs)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(
-                                    status: 401,
-                                    description: error.asWMError.errorDescription ?? ""
-                                )))
-                                return Disposables.create {}
-                            }
-
+                            logoutRelay.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
                         } else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(

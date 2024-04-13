@@ -655,6 +655,9 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var removeSongsUseCase: any RemoveSongsUseCase {
         return appComponent.removeSongsUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var multiPurposePopComponent: MultiPurposePopComponent {
         return appComponent.multiPurposePopComponent
     }
@@ -1061,6 +1064,7 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
         keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
         keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
+        keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
