@@ -95,10 +95,3 @@ public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #func
         print("[\(fileName)] \(funcName)(\(line)): \(msg)")
     #endif
 }
-
-public func LOGOUT() {
-    let keychain = KeychainImpl()
-    keychain.delete(type: .accessToken)
-    Utility.PreferenceManager.userInfo = nil
-    NotificationCenter.default.post(name: .movedTab, object: 4)
-}
