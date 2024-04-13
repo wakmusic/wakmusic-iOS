@@ -143,6 +143,9 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
@@ -870,6 +873,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.cancelLikeSongUseCase] = "cancelLikeSongUseCase-any CancelLikeSongUseCase"
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
         keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
+        keyPathToName[\PlayerDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
         keyPathToName[\PlayerDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
