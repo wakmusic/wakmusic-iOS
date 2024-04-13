@@ -702,6 +702,9 @@ private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDepend
     var setProfileUseCase: any SetProfileUseCase {
         return appComponent.setProfileUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1083,6 +1086,7 @@ extension ProfilePopComponent: Registration {
     public func registerItems() {
         keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
         keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
+        keyPathToName[\ProfilePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 extension NewSongsContentComponent: Registration {
