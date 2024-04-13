@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
@@ -15,6 +16,7 @@ public protocol ContainSongsDependency: Dependency {
     var multiPurposePopComponent: MultiPurposePopComponent { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
 }
 
 public final class ContainSongsComponent: Component<ContainSongsDependency> {
@@ -24,7 +26,8 @@ public final class ContainSongsComponent: Component<ContainSongsDependency> {
             viewModel: .init(
                 songs: songs,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
-                addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase
+                addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase,
+                logoutUseCase: dependency.logoutUseCase
             )
         )
     }

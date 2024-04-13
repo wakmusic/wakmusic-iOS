@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseFeature
 import ErrorModule
 import Foundation
@@ -17,6 +18,7 @@ import UserDomainInterface
 public final class ContainSongsViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
     var addSongIntoPlayListUseCase: AddSongIntoPlayListUseCase!
+    private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
 
@@ -29,20 +31,29 @@ public final class ContainSongsViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
         let showToastMessage: PublishSubject<AddSongEntity> = PublishSubject()
+        let onLogout: PublishRelay<Error>
+
+        init(onLogout: PublishRelay<Error> = PublishRelay()) {
+            self.onLogout = onLogout
+        }
     }
 
     init(
         songs: [String],
         fetchPlayListUseCase: FetchPlayListUseCase!,
-        addSongIntoPlayListUseCase: AddSongIntoPlayListUseCase!
+        addSongIntoPlayListUseCase: AddSongIntoPlayListUseCase!,
+        logoutUseCase: LogoutUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlayListUseCase = addSongIntoPlayListUseCase
+        self.logoutUseCase = logoutUseCase
         self.songs = songs
     }
 
     public func transform(from input: Input) -> Output {
-        let output = Output()
+        let logoutRelay = PublishRelay<Error>()
+
+        let output = Output(onLogout: logoutRelay)
 
         input.playListLoad
             .flatMap { [weak self] () -> Observable<[PlayListEntity]> in
@@ -51,18 +62,15 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
-                            let model = AddSongEntity(
-                                status: 401,
-                                added_songs_length: 0,
-                                duplicated: false,
-                                description: wmError.errorDescription ?? ""
-                            )
-                            output.showToastMessage.onNext(model)
+                            logoutRelay.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
+                        } else {
+                            return Observable.never()
                         }
-                        return Observable.just([])
                     }
             }
             .bind(to: output.dataSource)
@@ -79,15 +87,8 @@ public final class ContainSongsViewModel: ViewModelType {
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
-                            return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(
-                                    status: 401,
-                                    added_songs_length: 0,
-                                    duplicated: false,
-                                    description: wmError.errorDescription ?? ""
-                                )))
-                                return Disposables.create()
-                            }
+                            logoutRelay.accept(wmError)
+                            return Single.never()
                         } else if wmError == .badRequest {
                             return Single<AddSongEntity>.create { single in
                                 single(.success(AddSongEntity(

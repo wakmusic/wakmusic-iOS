@@ -112,18 +112,22 @@ extension ContainSongsViewController {
                 guard let self = self else { return }
                 self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 
-                if result.status == 401 {
-                    LOGOUT()
-                    PlayState.shared.switchPlayerMode(to: .mini)
-                    self.dismiss(animated: true) { [weak self] in
-                        guard let self else { return }
-                        self.delegate?.tokenExpired()
-                    }
-                } else {
-                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                    self.dismiss(animated: true)
-                }
+                NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                self.dismiss(animated: true)
             })
+            .disposed(by: disposeBag)
+
+        output.onLogout
+            .bind(with: self) { owner, error in
+                let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                owner.showToast(text: error.localizedDescription, font: toastFont)
+                NotificationCenter.default.post(name: .movedTab, object: 4)
+
+                PlayState.shared.switchPlayerMode(to: .mini)
+                owner.dismiss(animated: true) {
+                    owner.delegate?.tokenExpired()
+                }
+            }
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx.notification(.playListRefresh)
