@@ -32,6 +32,12 @@ public extension AppComponent {
         RequestComponent(parent: self)
     }
 
+    var localAuthDataSource: any LocalAuthDataSource {
+        shared {
+            LocalAuthDataSourceImpl(keychain: keychain)
+        }
+    }
+
     var remoteAuthDataSource: any RemoteAuthDataSource {
         shared {
             RemoteAuthDataSourceImpl(keychain: keychain)
@@ -40,7 +46,10 @@ public extension AppComponent {
 
     var authRepository: any AuthRepository {
         shared {
-            AuthRepositoryImpl(remoteAuthDataSource: remoteAuthDataSource)
+            AuthRepositoryImpl(
+                localAuthDataSource: localAuthDataSource,
+                remoteAuthDataSource: remoteAuthDataSource
+            )
         }
     }
 
@@ -53,6 +62,12 @@ public extension AppComponent {
     var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
         shared {
             FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
+        }
+    }
+
+    var logoutUseCase: any LogoutUseCase {
+        shared {
+            LogoutUseCaseImpl(authRepository: authRepository)
         }
     }
 }

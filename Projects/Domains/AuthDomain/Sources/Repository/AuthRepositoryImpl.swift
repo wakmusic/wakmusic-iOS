@@ -10,9 +10,14 @@ import AuthDomainInterface
 import RxSwift
 
 public final class AuthRepositoryImpl: AuthRepository {
+    private let localAuthDataSource: any LocalAuthDataSource
     private let remoteAuthDataSource: any RemoteAuthDataSource
 
-    public init(remoteAuthDataSource: RemoteAuthDataSource) {
+    public init(
+        localAuthDataSource: any LocalAuthDataSource,
+        remoteAuthDataSource: any RemoteAuthDataSource
+    ) {
+        self.localAuthDataSource = localAuthDataSource
         self.remoteAuthDataSource = remoteAuthDataSource
     }
 
@@ -22,5 +27,13 @@ public final class AuthRepositoryImpl: AuthRepository {
 
     public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
         remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
+    }
+
+    public func logout() -> Completable {
+        Completable.create { [localAuthDataSource] observer in
+            localAuthDataSource.logout()
+            observer(.completed)
+            return Disposables.create()
+        }
     }
 }
