@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
@@ -19,6 +20,7 @@ import Utility
 public final class RequestViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var withDrawUserInfoUseCase: WithdrawUserInfoUseCase
+    private let logoutUseCase: any LogoutUseCase
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
@@ -30,9 +32,11 @@ public final class RequestViewModel: ViewModelType {
     }
 
     public init(
-        withDrawUserInfoUseCase: WithdrawUserInfoUseCase
+        withDrawUserInfoUseCase: WithdrawUserInfoUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
+        self.logoutUseCase = logoutUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
@@ -41,29 +45,24 @@ public final class RequestViewModel: ViewModelType {
 
         input.pressWithdraw
             .debug("pressWithdraw")
-            .flatMap { [weak self] () -> Observable<BaseEntity> in
-                guard let self = self else {
-                    return Observable.empty()
-                }
-                return self.withDrawUserInfoUseCase.execute()
+            .flatMap { [withDrawUserInfoUseCase] () -> Observable<BaseEntity> in
+                return withDrawUserInfoUseCase.execute()
                     .catch { error in
-                        return Single<BaseEntity>.create { single in
-                            single(.success(BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")))
-                            return Disposables.create {}
-                        }
-                    }.asObservable()
+                        let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
+                        return Single<BaseEntity>.just(baseEntity)
+                    }
+                    .asObservable()
             }
-            .do(onNext: { _ in
+            .flatMap { [naverLoginInstance, logoutUseCase] entity in
                 let platform = Utility.PreferenceManager.userInfo?.platform
 
                 if platform == "naver" {
-                    self.naverLoginInstance?.requestDeleteToken()
+                    naverLoginInstance?.requestDeleteToken()
                 }
 
-                let keychain = KeychainImpl()
-                keychain.delete(type: .accessToken)
-                Utility.PreferenceManager.userInfo = nil
-            })
+                return logoutUseCase.execute()
+                    .andThen(Single.just(entity))
+            }
             .bind(to: output.withDrawResult)
             .disposed(by: disposeBag)
 

@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseFeature
 import CommonFeature
 import Foundation
@@ -19,6 +20,7 @@ import Utility
 public final class AfterLoginViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var fetchUserInfoUseCase: FetchUserInfoUseCase!
+    private let logoutUseCase: any LogoutUseCase
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     public struct Input {
@@ -32,9 +34,11 @@ public final class AfterLoginViewModel: ViewModelType {
     }
 
     public init(
-        fetchUserInfoUseCase: FetchUserInfoUseCase
+        fetchUserInfoUseCase: FetchUserInfoUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        self.logoutUseCase = logoutUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
@@ -60,20 +64,24 @@ public final class AfterLoginViewModel: ViewModelType {
                 )
             }).disposed(by: disposeBag)
 
-        input.pressLogOut.subscribe(onNext: { [weak self] in
-            guard let self = self else {
-                return
-            }
-            let platform = Utility.PreferenceManager.userInfo?.platform
+        input.pressLogOut
+            .compactMap { PreferenceManager.userInfo?.platform }
+            .flatMap { [naverLoginInstance, logoutUseCase] platform in
+                switch platform {
+                case "naver":
+                    naverLoginInstance?.resetToken()
+                    return Observable.just(())
 
-            if platform == "naver" {
-                self.naverLoginInstance?.resetToken()
-            } else if platform == "apple" {
-            } else {}
-            let keychain = KeychainImpl()
-            keychain.delete(type: .accessToken)
-            Utility.PreferenceManager.userInfo = nil
-        }).disposed(by: disposeBag)
+                case "apple":
+                    return logoutUseCase.execute()
+                        .andThen(Observable.just(()))
+
+                default:
+                    return Observable.just(())
+                }
+            }
+            .bind {}
+            .disposed(by: disposeBag)
 
         return output
     }

@@ -21,9 +21,9 @@ import Utility
 public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let disposeBag = DisposeBag()
 
-    private var fetchTokenUseCase: FetchTokenUseCase!
-    private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase!
-    private var fetchUserInfoUseCase: FetchUserInfoUseCase!
+    private var fetchTokenUseCase: FetchTokenUseCase
+    private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase
+    private var fetchUserInfoUseCase: FetchUserInfoUseCase
 
     let googleLoginManager = GoogleLoginManager.shared
     let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
@@ -47,12 +47,12 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase,
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ) {
-        super.init()
-        self.googleLoginManager.googleOAuthLoginDelegate = self
-        self.naverLoginInstance?.delegate = self
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        super.init()
+        self.googleLoginManager.googleOAuthLoginDelegate = self
+        self.naverLoginInstance?.delegate = self
     }
 
     public func transform(from input: Input) -> Output {
@@ -63,26 +63,13 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         oauthToken
             .debug("🚚 oauthToken")
             .filter { !$0.1.isEmpty }
-            .withUnretained(self)
-            .flatMap { viewModel, id -> Observable<AuthLoginEntity> in
-                let (providerType, token) = id
-                return viewModel.fetchTokenUseCase.execute(token: token, type: providerType)
+            .flatMap { [fetchTokenUseCase] provider, token in
+                fetchTokenUseCase.execute(token: token, type: provider)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
-            .map { $0.token }
-            .filter { !$0.isEmpty }
-            .do(onNext: {
-                self.keychain.save(type: .accessToken, value: $0)
-            })
-            .bind(to: fetchedWMToken)
-            .disposed(by: disposeBag)
-
-        // MARK: WM 로그인 이후 얻은 토큰으로 유저 정보 조회 및 저장
-        fetchedWMToken
-            .debug("🚚 fetchedWMToken")
-            .flatMap { _ -> Observable<UserInfoEntity> in
-                return self.fetchUserInfoUseCase.execute()
+            .flatMap { [fetchUserInfoUseCase] _ in
+                fetchUserInfoUseCase.execute()
                     .catchAndReturn(
                         UserInfoEntity(
                             id: "",
@@ -94,7 +81,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     )
                     .asObservable()
             }
-            .subscribe(onNext: {
+            .bind {
                 PreferenceManager.shared.setUserInfo(
                     ID: AES256.encrypt(string: $0.id),
                     platform: $0.platform,
@@ -102,7 +89,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     name: AES256.encrypt(string: $0.name),
                     version: $0.version
                 )
-            })
+            }
             .disposed(by: disposeBag)
 
         return Output(showErrorToast: showErrorToast)

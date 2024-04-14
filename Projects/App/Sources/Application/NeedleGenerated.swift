@@ -338,6 +338,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var requestComponent: RequestComponent {
         return appComponent.requestComponent
     }
@@ -390,6 +393,9 @@ private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: Needle
 private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
         return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
     }
     var faqComponent: FaqComponent {
         return appComponent.faqComponent
@@ -454,6 +460,12 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     }
     var fetchAppCheckUseCase: any FetchAppCheckUseCase {
         return appComponent.fetchAppCheckUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase {
+        return appComponent.checkIsExistAccessTokenUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -769,6 +781,7 @@ extension AppComponent: Registration {
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
         localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
         localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
+        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { [unowned self] in self.checkIsExistAccessTokenUseCase as Any }
         localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
         localTable["likeRepository-any LikeRepository"] = { [unowned self] in self.likeRepository as Any }
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
@@ -952,6 +965,7 @@ extension MyPlayListComponent: Registration {
 extension AfterLoginComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
+        keyPathToName[\AfterLoginDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
@@ -971,6 +985,7 @@ extension FavoriteComponent: Registration {
 extension RequestComponent: Registration {
     public func registerItems() {
         keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
@@ -1000,6 +1015,8 @@ extension RootComponent: Registration {
         keyPathToName[\RootDependency.permissionComponent] = "permissionComponent-PermissionComponent"
         keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
         keyPathToName[\RootDependency.fetchAppCheckUseCase] = "fetchAppCheckUseCase-any FetchAppCheckUseCase"
+        keyPathToName[\RootDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\RootDependency.checkIsExistAccessTokenUseCase] = "checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"
     }
 }
 extension PermissionComponent: Registration {

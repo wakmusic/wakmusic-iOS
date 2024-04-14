@@ -7,6 +7,7 @@
 //
 
 import AppDomainInterface
+import AuthDomainInterface
 import BaseFeature
 import ErrorModule
 import Foundation
@@ -17,8 +18,10 @@ import UserDomainInterface
 import Utility
 
 public final class IntroViewModel: ViewModelType {
-    var fetchUserInfoUseCase: FetchUserInfoUseCase!
-    var fetchAppCheckUseCase: FetchAppCheckUseCase!
+    var fetchUserInfoUseCase: FetchUserInfoUseCase
+    var fetchAppCheckUseCase: FetchAppCheckUseCase
+    private let logoutUseCase: any LogoutUseCase
+    private let checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -37,10 +40,14 @@ public final class IntroViewModel: ViewModelType {
 
     public init(
         fetchUserInfoUseCase: FetchUserInfoUseCase,
-        fetchAppCheckUseCase: FetchAppCheckUseCase
+        fetchAppCheckUseCase: FetchAppCheckUseCase,
+        logoutUseCase: any LogoutUseCase,
+        checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
+        self.logoutUseCase = logoutUseCase
+        self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
@@ -97,35 +104,41 @@ public final class IntroViewModel: ViewModelType {
 
         input.fetchUserInfoCheck
             .withLatestFrom(Utility.PreferenceManager.$userInfo)
-            .filter { userInfo in
+            .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo in
                 guard userInfo != nil else {
                     // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
-                    let keychain = KeychainImpl()
-                    let accessToken = keychain.load(type: .accessToken)
-                    if !accessToken.isEmpty {
-                        DEBUG_LOG("💡 비로그인 상태입니다. 엑세스 토큰을 삭제합니다.")
-                        keychain.delete(type: .accessToken)
-                    }
-                    output.userInfoResult.onNext(.success(""))
-                    return false
+                    return checkIsExistAccessTokenUseCase.execute()
+                        .asObservable()
+                        .flatMap { isExist in
+                            output.userInfoResult.onNext(.success(""))
+                            if isExist {
+                                return logoutUseCase.execute()
+                                    .andThen(Observable.just(false))
+                            } else {
+                                return Observable.just(false)
+                            }
+                        }
+                        .asObservable()
                 }
-                return true
+                return Observable.just(true)
             }
-            .flatMap { [weak self] _ -> Observable<UserInfoEntity> in
-                guard let `self` = self else { return Observable.empty() }
-                return self.fetchUserInfoUseCase.execute()
+            .filter { $0 }
+            .flatMap { [fetchUserInfoUseCase] _ -> Observable<UserInfoEntity> in
+                return fetchUserInfoUseCase.execute()
                     .asObservable()
             }
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(onNext: { _ in
                 output.userInfoResult.onNext(.success(""))
-            }, onError: { error in
+            }, onError: { [logoutUseCase, disposeBag] error in
                 let asWMError = error.asWMError
                 if asWMError == .tokenExpired || asWMError == .notFound {
-                    let keychain = KeychainImpl()
-                    keychain.delete(type: .accessToken)
-                    Utility.PreferenceManager.userInfo = nil
-                    Utility.PreferenceManager.startPage = 4
+                    logoutUseCase.execute()
+                        .andThen(Observable.just(()))
+                        .bind {
+                            Utility.PreferenceManager.startPage = 4
+                        }
+                        .disposed(by: disposeBag)
                 }
                 output.userInfoResult.onNext(.failure(error))
             }).disposed(by: disposeBag)

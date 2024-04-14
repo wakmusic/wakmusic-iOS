@@ -1,4 +1,5 @@
 import AppDomainInterface
+import AuthDomainInterface
 import MainTabFeature
 import NeedleFoundation
 import UIKit
@@ -9,6 +10,8 @@ public protocol RootDependency: Dependency {
     var permissionComponent: PermissionComponent { get }
     var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
     var fetchAppCheckUseCase: any FetchAppCheckUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase { get }
 }
 
 public final class RootComponent: Component<RootDependency> {
@@ -18,7 +21,9 @@ public final class RootComponent: Component<RootDependency> {
             permissionComponent: dependency.permissionComponent,
             viewModel: IntroViewModel(
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,
-                fetchAppCheckUseCase: dependency.fetchAppCheckUseCase
+                fetchAppCheckUseCase: dependency.fetchAppCheckUseCase,
+                logoutUseCase: dependency.logoutUseCase,
+                checkIsExistAccessTokenUseCase: dependency.checkIsExistAccessTokenUseCase
             )
         )
     }

@@ -16,4 +16,9 @@ public final class LocalAuthDataSourceImpl: LocalAuthDataSource {
         keychain.delete(type: .accessExpiresIn)
         PreferenceManager.userInfo = nil
     }
+
+    public func checkIsExistAccessToken() -> Bool {
+        let isEmptyAccessToken = keychain.load(type: .accessToken).isEmpty
+        return !isEmptyAccessToken
+    }
 }
