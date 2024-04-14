@@ -31,6 +31,7 @@ public class PlayerViewController: UIViewController {
         $0.isHidden = true
     }
 
+    private let logoutHandlerSubject = PassthroughSubject<Void, Never>()
     internal var playlistComponent: PlaylistComponent!
     internal var containSongsComponent: ContainSongsComponent!
 
@@ -138,7 +139,8 @@ private extension PlayerViewController {
                 self.playerView.playistButton.tapPublisher(),
                 self.miniPlayerView.playlistButton.tapPublisher()
             ).eraseToAnyPublisher(),
-            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.tapPublisher()
+            miniExtendButtonDidTapEvent: self.miniPlayerView.extendButton.tapPublisher(),
+            logoutHandlerEvent: self.logoutHandlerSubject.eraseToAnyPublisher()
         )
         let output = self.viewModel.transform(from: input)
 
@@ -169,7 +171,7 @@ private extension PlayerViewController {
                     text: message,
                     cancelButtonIsHidden: true,
                     completion: {
-                        LOGOUT()
+                        self?.logoutHandlerSubject.send(())
                         self?.playState.switchPlayerMode(to: .mini)
                     }
                 )
@@ -392,6 +394,13 @@ private extension PlayerViewController {
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true)
         }.store(in: &subscription)
+    }
+
+    private func bindOnLogout(output: PlayerViewModel.Output) {
+        output.onLogout.sink { _ in
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+        }
+        .store(in: &subscription)
     }
 
     private func updateLyricsHighlight(index: Int) {

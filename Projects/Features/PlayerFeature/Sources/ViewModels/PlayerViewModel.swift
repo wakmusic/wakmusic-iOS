@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseFeature
 import Combine
 import CommonFeature
@@ -32,6 +33,7 @@ final class PlayerViewModel: ViewModelType {
         let addPlaylistButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistButtonDidTapEvent: AnyPublisher<Void, Never>
         let miniExtendButtonDidTapEvent: AnyPublisher<Void, Never>
+        let logoutHandlerEvent: AnyPublisher<Void, Never>
     }
 
     struct Output {
@@ -59,6 +61,7 @@ final class PlayerViewModel: ViewModelType {
         var showContainSongsViewController = PassthroughSubject<String, Never>()
 
         var showTokenModal = PassthroughSubject<String, Never>()
+        var onLogout = PassthroughSubject<Void, Never>()
     }
 
     var fetchLyricsUseCase: FetchLyricsUseCase!
@@ -66,6 +69,7 @@ final class PlayerViewModel: ViewModelType {
     var cancelLikeSongUseCase: CancelLikeSongUseCase!
     var fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase!
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
+    private let logoutUseCase: any LogoutUseCase
 
     let disposeBag = DisposeBag()
     private let playState = PlayState.shared
@@ -79,13 +83,15 @@ final class PlayerViewModel: ViewModelType {
         addLikeSongUseCase: AddLikeSongUseCase,
         cancelLikeSongUseCase: CancelLikeSongUseCase,
         fetchLikeNumOfSongUseCase: FetchLikeNumOfSongUseCase,
-        fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase
+        fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.fetchLyricsUseCase = fetchLyricsUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
         self.fetchLikeNumOfSongUseCase = fetchLikeNumOfSongUseCase
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
+        self.logoutUseCase = logoutUseCase
         DEBUG_LOG("✅ PlayerViewModel 생성")
     }
 
@@ -201,6 +207,17 @@ final class PlayerViewModel: ViewModelType {
         input.playlistButtonDidTapEvent.sink { _ in
             output.willShowPlaylist.send(true)
         }.store(in: &subscription)
+
+        input.logoutHandlerEvent
+            .sink { [logoutUseCase, disposeBag] in
+                logoutUseCase.execute()
+                    .andThen(Observable.just(()))
+                    .bind { _ in
+                        output.onLogout.send(())
+                    }
+                    .disposed(by: disposeBag)
+            }
+            .store(in: &subscription)
     }
 
     private func bindLoginStateChanged(output: Output) {

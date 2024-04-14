@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import CommonFeature
@@ -21,6 +22,7 @@ public final class MyPlayListViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
     var editPlayListOrderUseCase: EditPlayListOrderUseCase!
     var deletePlayListUseCase: DeletePlayListUseCase!
+    private let logoutUseCase: any LogoutUseCase
     var disposeBag = DisposeBag()
 
     public struct Input {
@@ -40,16 +42,19 @@ public final class MyPlayListViewModel: ViewModelType {
         let indexPathOfSelectedPlayLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<BaseEntity> = PublishRelay()
+        let onLogout: PublishRelay<Error> = .init()
     }
 
     init(
         fetchPlayListUseCase: FetchPlayListUseCase,
         editPlayListOrderUseCase: EditPlayListOrderUseCase,
-        deletePlayListUseCase: DeletePlayListUseCase
+        deletePlayListUseCase: DeletePlayListUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
+        self.logoutUseCase = logoutUseCase
         DEBUG_LOG("✅ \(Self.self) 생성")
     }
 
@@ -160,13 +165,12 @@ public final class MyPlayListViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.editPlayListOrderUseCase.execute(ids: ids)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
-                                return Disposables.create()
-                            }
+                            output.onLogout.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
                         } else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(
@@ -214,13 +218,12 @@ public final class MyPlayListViewModel: ViewModelType {
             .flatMap { [weak self] ids -> Observable<BaseEntity> in
                 guard let `self` = self else { return Observable.empty() }
                 return self.deletePlayListUseCase.execute(ids: ids)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
-                                return Disposables.create()
-                            }
+                            output.onLogout.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
                         } else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(status: 400, description: "존재하지 않는 리스트입니다.")))

@@ -152,18 +152,7 @@ extension ProfilePopViewController {
 
                 if result.status == 200 {
                     self.dismiss(animated: true)
-                }
-
-                else if result.status == 401 {
-                    LOGOUT()
-                    self.dismiss(animated: true)
-                    self.showToast(
-                        text: result.description,
-                        font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                    )
-                }
-
-                else {
+                } else {
                     self.showToast(
                         text: result.description,
                         font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
@@ -181,6 +170,16 @@ extension ProfilePopViewController {
                 self.panModalTransition(to: .longForm)
                 self.view.layoutIfNeeded()
             }).disposed(by: disposeBag)
+
+        viewModel.output.onLogout
+            .bind(with: self) { owner, error in
+                let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                owner.showToast(text: error.localizedDescription, font: toastFont)
+                NotificationCenter.default.post(name: .movedTab, object: 4)
+
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

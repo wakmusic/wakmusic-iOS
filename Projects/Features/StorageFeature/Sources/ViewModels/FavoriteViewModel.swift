@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import CommonFeature
@@ -22,6 +23,7 @@ public final class FavoriteViewModel: ViewModelType {
     var fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase!
     var editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase!
     var deleteFavoriteListUseCase: DeleteFavoriteListUseCase!
+    private let logoutUseCase: any LogoutUseCase
     var tempDeleteLikeListIds: [String] = []
 
     public struct Input {
@@ -43,17 +45,20 @@ public final class FavoriteViewModel: ViewModelType {
         let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishRelay<BaseEntity> = PublishRelay()
+        let onLogout: PublishRelay<Error> = PublishRelay()
     }
 
     init(
         fetchFavoriteSongsUseCase: FetchFavoriteSongsUseCase,
         editFavoriteSongsOrderUseCase: EditFavoriteSongsOrderUseCase,
-        deleteFavoriteListUseCase: DeleteFavoriteListUseCase
+        deleteFavoriteListUseCase: DeleteFavoriteListUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
         self.editFavoriteSongsOrderUseCase = editFavoriteSongsOrderUseCase
         self.deleteFavoriteListUseCase = deleteFavoriteListUseCase
+        self.logoutUseCase = logoutUseCase
     }
 
     public func transform(from input: Input) -> Output {
@@ -161,14 +166,13 @@ public final class FavoriteViewModel: ViewModelType {
                     return Observable.empty()
                 }
                 return self.editFavoriteSongsOrderUseCase.execute(ids: ids)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
-                                return Disposables.create()
-                            }
+                            output.onLogout.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
                         }
 
                         else {
@@ -233,17 +237,14 @@ public final class FavoriteViewModel: ViewModelType {
                 guard let `self` = self else { return Observable.empty() }
                 self.tempDeleteLikeListIds = ids
                 return self.deleteFavoriteListUseCase.execute(ids: ids)
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(status: 401, description: wmError.errorDescription ?? "")))
-                                return Disposables.create()
-                            }
-                        }
-
-                        else {
+                            output.onLogout.accept(wmError)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
+                        } else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(
                                     status: 400,

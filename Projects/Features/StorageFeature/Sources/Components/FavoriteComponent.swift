@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import CommonFeature
 import Foundation
 import NeedleFoundation
@@ -17,6 +18,7 @@ public protocol FavoriteDependency: Dependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
@@ -25,7 +27,8 @@ public final class FavoriteComponent: Component<FavoriteDependency> {
             viewModel: .init(
                 fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
                 editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase,
-                deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase
+                deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
+                logoutUseCase: dependency.logoutUseCase
             ),
             containSongsComponent: dependency.containSongsComponent
         )

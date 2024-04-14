@@ -1,3 +1,4 @@
+import AuthDomainInterface
 import CommonFeature
 import Foundation
 import LikeDomainInterface
@@ -11,6 +12,7 @@ public protocol PlayerDependency: Dependency {
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
     var playlistComponent: PlaylistComponent { get }
     var containSongsComponent: ContainSongsComponent { get }
 }
@@ -23,7 +25,8 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 addLikeSongUseCase: dependency.addLikeSongUseCase,
                 cancelLikeSongUseCase: dependency.cancelLikeSongUseCase,
                 fetchLikeNumOfSongUseCase: dependency.fetchLikeNumOfSongUseCase,
-                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase
+                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
+                logoutUseCase: dependency.logoutUseCase
             ),
             playlistComponent: dependency.playlistComponent,
             containSongsComponent: dependency.containSongsComponent

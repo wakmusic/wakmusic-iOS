@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
@@ -16,6 +17,7 @@ public protocol MultiPurposePopDependency: Dependency {
     var loadPlayListUseCase: any LoadPlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
     var editPlayListNameUseCase: any EditPlayListNameUseCase { get }
+    var logoutUseCase: any LogoutUseCase { get }
 }
 
 public final class MultiPurposePopComponent: Component<MultiPurposePopDependency> {
@@ -31,7 +33,8 @@ public final class MultiPurposePopComponent: Component<MultiPurposePopDependency
                 createPlayListUseCase: dependency.createPlayListUseCase,
                 loadPlayListUseCase: dependency.loadPlayListUseCase,
                 setUserNameUseCase: dependency.setUserNameUseCase,
-                editPlayListNameUseCase: dependency.editPlayListNameUseCase
+                editPlayListNameUseCase: dependency.editPlayListNameUseCase,
+                logoutUseCase: dependency.logoutUseCase
             ),
             completion: completion
         )

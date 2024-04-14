@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
@@ -21,6 +22,7 @@ public final class ProfilePopViewModel {
 
     var fetchProfileListUseCase: FetchProfileListUseCase
     var setProfileUseCase: SetProfileUseCase
+    private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
         var setProfileRequest: PublishSubject<String> = PublishSubject()
@@ -31,14 +33,17 @@ public final class ProfilePopViewModel {
         var setProfileResult: PublishSubject<BaseEntity> = PublishSubject()
         var dataSource: BehaviorRelay<[ProfileListEntity]> = BehaviorRelay(value: [])
         var collectionViewHeight: PublishRelay<CGFloat> = PublishRelay()
+        let onLogout: PublishRelay<Error> = PublishRelay()
     }
 
     public init(
         fetchProfileListUseCase: any FetchProfileListUseCase,
-        setProfileUseCase: any SetProfileUseCase
+        setProfileUseCase: any SetProfileUseCase,
+        logoutUseCas: any LogoutUseCase
     ) {
         self.fetchProfileListUseCase = fetchProfileListUseCase
         self.setProfileUseCase = setProfileUseCase
+        self.logoutUseCase = logoutUseCas
 
         fetchProfileListUseCase.execute()
             .asObservable()
@@ -80,21 +85,15 @@ public final class ProfilePopViewModel {
             .flatMap { [weak self] id -> Observable<BaseEntity> in
                 guard let self = self else { return Observable.empty() }
                 return self.setProfileUseCase.execute(image: id)
-                    .catch { error in
+                    .catch { [output, logoutUseCase] error in
 
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(
-                                    status: 401,
-                                    description: error.asWMError.errorDescription ?? ""
-                                )))
-                                return Disposables.create {}
-                            }
-                        }
-
-                        else {
+                            output.onLogout.accept(error)
+                            return logoutUseCase.execute()
+                                .andThen(.never())
+                        } else {
                             return Single<BaseEntity>.create { single in
                                 single(.success(BaseEntity(
                                     status: 0,

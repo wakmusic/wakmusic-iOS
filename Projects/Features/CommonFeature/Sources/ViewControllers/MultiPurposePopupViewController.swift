@@ -354,18 +354,21 @@ extension MultiPurposePopupViewController {
                     text: description,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 )
-
-            } else if res.status == 401 {
-                self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-                LOGOUT()
-                if self.viewModel.type == .edit || self.viewModel.type == .creation {
-                    self.delegate?.didTokenExpired()
-                }
-
             } else {
                 self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             }
         })
+        .disposed(by: disposeBag)
+
+        output.onLogout.bind(with: self) { owner, error in
+            let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
+            owner.showToast(text: error.localizedDescription, font: toastFont)
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+
+            if owner.viewModel.type == .edit || owner.viewModel.type == .creation {
+                owner.delegate?.didTokenExpired()
+            }
+        }
         .disposed(by: disposeBag)
 
         saveButton.rx.tap.subscribe(onNext: { [weak self] in

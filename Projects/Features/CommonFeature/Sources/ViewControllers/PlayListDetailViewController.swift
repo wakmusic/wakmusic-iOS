@@ -325,15 +325,18 @@ extension PlayListDetailViewController {
                 guard let self = self else { return }
                 self.showToast(text: $0.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 
-                if $0.status == 401 {
-                    LOGOUT()
-                    self.navigationController?.popViewController(animated: true)
-
-                } else {
-                    self.input.state.accept(EditState(isEditing: false, force: true))
-                }
+                self.input.state.accept(EditState(isEditing: false, force: true))
             })
             .disposed(by: disposeBag)
+
+        output.onLogout.bind(with: self) { owner, error in
+            let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
+            owner.showToast(text: error.localizedDescription, font: toastFont)
+            NotificationCenter.default.post(name: .movedTab, object: 4)
+
+            owner.navigationController?.popViewController(animated: true)
+        }
+        .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
