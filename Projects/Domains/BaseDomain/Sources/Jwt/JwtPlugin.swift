@@ -22,12 +22,13 @@ public struct JwtPlugin: PluginType {
         target: TargetType
     ) -> URLRequest {
         guard let jwtTokenType = (target as? JwtAuthorizable)?.jwtTokenType,
-              jwtTokenType != .none
+              jwtTokenType != .none,
+              let keychainType = jwtTokenTypeToKeychainType(jwtTokenType: jwtTokenType)
         else { return request }
         var req = request
-        let token = "\(getToken(type: .accessToken))"
+        let token = "\(getToken(type: keychainType))"
 
-        req.addValue(token, forHTTPHeaderField: jwtTokenType.rawValue)
+        req.addValue(token, forHTTPHeaderField: jwtTokenType.headerKey)
         return req
     }
 
@@ -47,14 +48,34 @@ public struct JwtPlugin: PluginType {
 }
 
 private extension JwtPlugin {
+    func jwtTokenTypeToKeychainType(jwtTokenType: JwtTokenType) -> KeychainType? {
+        switch jwtTokenType {
+        case .accessToken:
+            return .accessToken
+        case .refreshToken:
+            return .refreshToken
+        default:
+            return nil
+        }
+    }
+
     func getToken(type: KeychainType) -> String {
         switch type {
         case .accessToken:
-            return "Bearer \(keychain.load(type: .accessToken))"
+            return "bearer \(keychain.load(type: .accessToken))"
+
+        case .refreshToken:
+            return "bearer \(keychain.load(type: .refreshToken))"
+        default:
+            return ""
         }
     }
 
     func saveToken(token: TokenDTO) {
         keychain.save(type: .accessToken, value: token.accessToken)
+        if let refreshToken = token.refreshToken {
+            keychain.save(type: .refreshToken, value: refreshToken)
+        }
+        keychain.save(type: .accessExpiresIn, value: "\(token.expiresIn)")
     }
 }
