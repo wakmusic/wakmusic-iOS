@@ -464,6 +464,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var logoutUseCase: any LogoutUseCase {
         return appComponent.logoutUseCase
     }
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase {
+        return appComponent.checkIsExistAccessTokenUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1013,6 +1016,7 @@ extension RootComponent: Registration {
         keyPathToName[\RootDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
         keyPathToName[\RootDependency.fetchAppCheckUseCase] = "fetchAppCheckUseCase-any FetchAppCheckUseCase"
         keyPathToName[\RootDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\RootDependency.checkIsExistAccessTokenUseCase] = "checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"
     }
 }
 extension PermissionComponent: Registration {
