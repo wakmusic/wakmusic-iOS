@@ -110,6 +110,7 @@ public final class IntroViewModel: ViewModelType {
                     return checkIsExistAccessTokenUseCase.execute()
                         .asObservable()
                         .flatMap { isExist in
+                            output.userInfoResult.onNext(.success(""))
                             if isExist {
                                 return logoutUseCase.execute()
                                     .andThen(Observable.just(false))
