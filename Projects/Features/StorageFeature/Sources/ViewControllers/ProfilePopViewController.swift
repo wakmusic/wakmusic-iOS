@@ -40,7 +40,7 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     }
 
     public static func viewController(viewModel: ProfilePopViewModel) -> ProfilePopViewController {
-        let viewController = ProfilePopViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = ProfilePopViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
     }

@@ -483,6 +483,25 @@ private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
 private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
+        return appComponent.fetchProfileListUseCase
+    }
+    var setProfileUseCase: any SetProfileUseCase {
+        return appComponent.setProfileUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ProfilePopComponent
+private func factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfilePopDependency081172e20caa75abdb54Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
         return appComponent.mainContainerComponent
@@ -734,25 +753,6 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 /// ^->AppComponent->PlayListDetailComponent
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
-    var fetchProfileListUseCase: any FetchProfileListUseCase {
-        return appComponent.fetchProfileListUseCase
-    }
-    var setProfileUseCase: any SetProfileUseCase {
-        return appComponent.setProfileUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->ProfilePopComponent
-private func factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ProfilePopDependency081172e20caa75abdb54Provider(appComponent: parent1(component) as! AppComponent)
 }
 
 #else
@@ -1024,6 +1024,13 @@ extension FaqContentComponent: Registration {
 
     }
 }
+extension ProfilePopComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
+        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
+        keyPathToName[\ProfilePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+    }
+}
 extension RootComponent: Registration {
     public func registerItems() {
         keyPathToName[\RootDependency.mainContainerComponent] = "mainContainerComponent-MainContainerComponent"
@@ -1118,13 +1125,6 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
-extension ProfilePopComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
-        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
-        keyPathToName[\ProfilePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-    }
-}
 
 
 #endif
@@ -1166,6 +1166,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
@@ -1179,7 +1180,6 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
 }
 #endif
 
