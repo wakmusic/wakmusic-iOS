@@ -172,7 +172,7 @@ extension OpenSourceLicenseViewModel {
         completionHandler: @escaping (Result<String, Error>) -> Void
     ) {
         DispatchQueue.global().async {
-            if let fileURL = CommonFeatureResources.bundle.url(forResource: fileName, withExtension: "txt") {
+            if let fileURL = StorageFeatureResources.bundle.url(forResource: fileName, withExtension: "txt") {
                 do {
                     let contents = try String(contentsOf: fileURL, encoding: .utf8)
                     completionHandler(.success(contents))

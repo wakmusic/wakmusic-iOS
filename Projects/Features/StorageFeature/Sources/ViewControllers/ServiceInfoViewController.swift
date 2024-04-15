@@ -6,6 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
+import CommonFeature
 import DesignSystem
 import Kingfisher
 import RxCocoa
@@ -36,7 +38,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
         viewModel: ServiceInfoViewModel,
         openSourceLicenseComponent: OpenSourceLicenseComponent
     ) -> ServiceInfoViewController {
-        let viewController = ServiceInfoViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = ServiceInfoViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.openSourceLicenseComponent = openSourceLicenseComponent
         return viewController

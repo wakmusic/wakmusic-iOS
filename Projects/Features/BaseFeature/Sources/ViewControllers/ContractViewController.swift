@@ -10,6 +10,7 @@ import DesignSystem
 import NVActivityIndicatorView
 import PDFKit
 import RxSwift
+import RxCocoa
 import UIKit
 import Utility
 
@@ -59,7 +60,7 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     }
 
     public static func viewController(type: ContractType) -> ContractViewController {
-        let viewController = ContractViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = ContractViewController.viewController(storyBoardName: "Base", bundle: Bundle.module)
         viewController.type = type
         return viewController
     }
