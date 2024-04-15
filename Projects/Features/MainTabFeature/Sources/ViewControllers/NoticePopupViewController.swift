@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
 import DesignSystem
 import NoticeDomainInterface
 import PanModal
@@ -138,7 +139,7 @@ extension NoticePopupViewController {
         pageCountLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 14)
 
         collectionView.register(
-            UINib(nibName: "NoticeCollectionViewCell", bundle: Bundle.module),
+            UINib(nibName: "NoticeCollectionViewCell", bundle: BaseFeatureResources.bundle),
             forCellWithReuseIdentifier: "NoticeCollectionViewCell"
         )
         collectionView.isPagingEnabled = true
