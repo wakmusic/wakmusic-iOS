@@ -126,7 +126,7 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
         containSongsComponent: ContainSongsComponent
     ) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(
-            storyBoardName: "CommonUI",
+            storyBoardName: "Base",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel

@@ -499,7 +499,7 @@
         <!--Play List Detail View Controller-->
         <scene sceneID="ayf-SC-cqt">
             <objects>
-                <viewController storyboardIdentifier="PlayListDetailViewController" id="LFa-37-kKd" customClass="PlayListDetailViewController" customModule="CommonFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayListDetailViewController" id="LFa-37-kKd" customClass="PlayListDetailViewController" customModule="BaseFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eCL-In-med">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -621,7 +621,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="nxE-f6-0ll" customClass="PlayListTableViewCell" customModule="CommonFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlayListTableViewCell" id="nxE-f6-0ll" customClass="PlayListTableViewCell" customModule="BaseFeature">
                                         <rect key="frame" x="0.0" y="216.66666666666663" width="393" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nxE-f6-0ll" id="Ybs-lU-2Rd">
