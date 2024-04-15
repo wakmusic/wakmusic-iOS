@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa
@@ -47,7 +48,7 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
         containSongsComponent: ContainSongsComponent
     ) -> NewSongsContentViewController {
         let viewController = NewSongsContentViewController.viewController(
-            storyBoardName: "CommonUI",
+            storyBoardName: "Home",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel

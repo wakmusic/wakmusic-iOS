@@ -7,6 +7,7 @@
 //
 
 import BaseFeature
+import CommonFeature
 import ChartDomainInterface
 import Foundation
 import RxRelay

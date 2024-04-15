@@ -37,7 +37,7 @@ public class NewSongsViewController: TabmanViewController, ViewControllerFromSto
     public static func viewController(
         newSongsContentComponent: NewSongsContentComponent
     ) -> NewSongsViewController {
-        let viewController = NewSongsViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = NewSongsViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.newSongsContentComponent = newSongsContentComponent
         return viewController
     }

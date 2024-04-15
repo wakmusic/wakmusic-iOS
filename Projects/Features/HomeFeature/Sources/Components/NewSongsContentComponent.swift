@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import CommonFeature
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
