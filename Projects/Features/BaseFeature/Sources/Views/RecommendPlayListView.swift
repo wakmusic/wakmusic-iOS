@@ -48,7 +48,7 @@ public extension RecommendPlayListView {
 
         // xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         collectionView.register(
-            UINib(nibName: "RecommendPlayListCell", bundle: Bundle.module),
+            UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
             forCellWithReuseIdentifier: "RecommendPlayListCell"
         )
         collectionView.dataSource = self
