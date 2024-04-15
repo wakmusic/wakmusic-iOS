@@ -8,7 +8,6 @@
 
 import AuthDomainInterface
 import BaseDomainInterface
-import BaseFeature
 import ErrorModule
 import Foundation
 import PlayListDomainInterface

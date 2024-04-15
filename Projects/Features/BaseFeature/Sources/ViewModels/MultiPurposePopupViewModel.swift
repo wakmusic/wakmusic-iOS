@@ -8,7 +8,6 @@
 
 import AuthDomainInterface
 import BaseDomainInterface
-import BaseFeature
 import Foundation
 import PlayListDomainInterface
 import RxRelay

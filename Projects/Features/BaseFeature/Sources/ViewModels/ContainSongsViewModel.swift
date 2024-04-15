@@ -7,7 +7,6 @@
 //
 
 import AuthDomainInterface
-import BaseFeature
 import ErrorModule
 import Foundation
 import PlayListDomainInterface
