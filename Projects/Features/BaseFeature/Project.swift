@@ -9,6 +9,7 @@ let project = Project.module(
             module: .feature(.BaseFeature),
             product: .staticFramework,
             spec: .init(
+                resources: ["Resources/**"],
                 dependencies: [
                     .domain(target: .BaseDomain, type: .interface),
                     .Project.Module.FeatureThirdPartyLib,
