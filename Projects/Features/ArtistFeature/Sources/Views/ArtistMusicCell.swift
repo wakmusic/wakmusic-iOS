@@ -7,7 +7,7 @@
 //
 
 import ArtistDomainInterface
-import CommonFeature
+import BaseFeature
 import DesignSystem
 import SongsDomainInterface
 import UIKit

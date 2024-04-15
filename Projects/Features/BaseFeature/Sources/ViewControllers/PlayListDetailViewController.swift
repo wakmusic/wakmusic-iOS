@@ -5,7 +5,7 @@
 //  Created by yongbeomkwak on 2023/01/15.
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
-import BaseFeature
+
 import DesignSystem
 import Kingfisher
 import NVActivityIndicatorView
@@ -228,7 +228,7 @@ extension PlayListDetailViewController {
     private func bindRx() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
         tableView.register(
-            UINib(nibName: "SongListCell", bundle: CommonFeatureResources.bundle),
+            UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
             forCellReuseIdentifier: "SongListCell"
         )
 

@@ -1,6 +1,5 @@
 import ArtistFeature
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import PlayerFeature
 import RxSwift

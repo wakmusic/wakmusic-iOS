@@ -12,6 +12,8 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .domain(target: .BaseDomain, type: .interface),
+                    .domain(target: .PlayListDomain, type: .interface),
+                    .domain(target: .UserDomain, type: .interface),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
                     .Project.Module.Utility

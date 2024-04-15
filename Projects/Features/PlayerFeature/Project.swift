@@ -10,7 +10,7 @@ let project = Project.module(
             product: .staticFramework,
             spec: .init(
                 dependencies: [
-                    .feature(target: .CommonFeature),
+                    .feature(target: .BaseFeature),
                     .domain(target: .LikeDomain, type: .interface),
                     .domain(target: .SongsDomain, type: .interface)
                 ]

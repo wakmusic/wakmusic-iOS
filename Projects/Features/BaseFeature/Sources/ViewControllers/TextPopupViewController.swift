@@ -36,7 +36,7 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         cancelCompletion: (() -> Void)? = nil
 
     ) -> TextPopupViewController {
-        let viewController = TextPopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = TextPopupViewController.viewController(storyBoardName: "Base", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
         viewController.allowsDragAndTapToDismiss = allowsDragAndTapToDismiss

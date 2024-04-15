@@ -125,7 +125,7 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
         completion: ((String) -> Void)? = nil
     ) -> MultiPurposePopupViewController {
         let viewController = MultiPurposePopupViewController.viewController(
-            storyBoardName: "CommonUI",
+            storyBoardName: "Base",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel

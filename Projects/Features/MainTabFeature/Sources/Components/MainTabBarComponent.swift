@@ -1,6 +1,6 @@
 import ArtistFeature
 import ChartFeature
-import CommonFeature
+import BaseFeature
 import Foundation
 import HomeFeature
 import NeedleFoundation

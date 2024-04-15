@@ -6,7 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import CommonFeature
+import BaseFeature
 import DesignSystem
 import NoticeDomainInterface
 import NVActivityIndicatorView
@@ -116,7 +116,7 @@ extension NoticeDetailViewController {
         self.titleStringLabel.attributedText = attributedString
 
         collectionView.register(
-            UINib(nibName: "NoticeCollectionViewCell", bundle: CommonFeatureResources.bundle),
+            UINib(nibName: "NoticeCollectionViewCell", bundle: BaseFeatureResources.bundle),
             forCellWithReuseIdentifier: "NoticeCollectionViewCell"
         )
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)

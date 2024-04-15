@@ -47,7 +47,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
-            storyBoardName: "CommonUI",
+            storyBoardName: "Base",
             bundle: Bundle.module
         )
         viewController.multiPurposePopComponent = multiPurposePopComponent

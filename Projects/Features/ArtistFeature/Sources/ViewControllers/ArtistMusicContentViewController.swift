@@ -8,7 +8,6 @@
 
 import ArtistDomainInterface
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa

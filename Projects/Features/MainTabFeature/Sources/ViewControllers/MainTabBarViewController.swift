@@ -9,7 +9,6 @@
 import ArtistFeature
 import BaseFeature
 import ChartFeature
-import CommonFeature
 import DesignSystem
 import HomeFeature
 import NoticeDomainInterface

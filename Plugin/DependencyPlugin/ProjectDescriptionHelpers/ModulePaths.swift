@@ -34,7 +34,6 @@ public extension ModulePaths {
         case BaseFeature
         case ArtistFeature
         case ChartFeature
-        case CommonFeature
         case HomeFeature
         case MainTabFeature
         case PlayerFeature

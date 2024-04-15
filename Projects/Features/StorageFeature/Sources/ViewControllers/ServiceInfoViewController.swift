@@ -7,7 +7,6 @@
 //
 
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import Kingfisher
 import RxCocoa

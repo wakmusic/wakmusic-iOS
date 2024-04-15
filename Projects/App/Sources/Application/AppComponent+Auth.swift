@@ -8,7 +8,7 @@
 
 import AuthDomain
 import AuthDomainInterface
-import CommonFeature
+import BaseFeature
 import SignInFeature
 import StorageFeature
 

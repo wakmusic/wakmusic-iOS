@@ -7,7 +7,7 @@
 //
 
 import Combine
-import CommonFeature
+import BaseFeature
 import DesignSystem
 import Foundation
 import Kingfisher
@@ -32,8 +32,8 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
 
     internal var containSongsComponent: ContainSongsComponent!
 
-    public var songCartView: CommonFeature.SongCartView!
-    public var bottomSheetView: CommonFeature.BottomSheetView!
+    public var songCartView: BaseFeature.SongCartView!
+    public var bottomSheetView: BaseFeature.BottomSheetView!
 
     private var panGestureRecognizer: UIPanGestureRecognizer!
 

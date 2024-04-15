@@ -12,7 +12,7 @@ let project = Project.module(
             spec: .init(
                 resources: ["Resources/**"],
                 dependencies: [
-                    .feature(target: .CommonFeature),
+                    .feature(target: .BaseFeature),
                     .feature(target: .PlaylistFeature, type: .interface)
                 ]
             )

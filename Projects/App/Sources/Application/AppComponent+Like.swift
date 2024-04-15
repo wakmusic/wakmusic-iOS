@@ -6,7 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import CommonFeature
+import BaseFeature
 import LikeDomain
 import LikeDomainInterface
 import SignInFeature

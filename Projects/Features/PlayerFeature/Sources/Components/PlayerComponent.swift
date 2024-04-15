@@ -1,5 +1,5 @@
 import AuthDomainInterface
-import CommonFeature
+import BaseFeature
 import Foundation
 import LikeDomainInterface
 import NeedleFoundation

@@ -8,7 +8,6 @@
 
 import BaseFeature
 import ChartDomainInterface
-import CommonFeature
 import Foundation
 import PlayListDomainInterface
 import RxCocoa

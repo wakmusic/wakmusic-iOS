@@ -1,5 +1,5 @@
 import Combine
-import CommonFeature
+import BaseFeature
 import NaverThirdPartyLogin
 import RootFeature
 import UIKit

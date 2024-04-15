@@ -7,7 +7,6 @@
 //
 
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import RxCocoa
 import RxDataSources
@@ -48,7 +47,7 @@ extension AfterSearchContentViewController {
         // xib로 만든 UI를 컬렉션 뷰에서 사용하기 위해서는 등록이 필요
         // 다른 모듈 시 번들 변경 Bundle.module 사용 X
         tableView.register(
-            UINib(nibName: "SongListCell", bundle: CommonFeatureResources.bundle),
+            UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
             forCellReuseIdentifier: "SongListCell"
         )
 

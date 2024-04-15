@@ -7,7 +7,7 @@
 //
 
 import ArtistDomainInterface
-import CommonFeature
+import BaseFeature
 import Foundation
 import NeedleFoundation
 
