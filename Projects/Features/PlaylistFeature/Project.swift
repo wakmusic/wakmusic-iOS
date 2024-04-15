@@ -16,7 +16,7 @@ let project = Project.module(
                     .feature(target: .PlaylistFeature, type: .interface)
                 ]
             )
-           ),
+        ),
         .testing(module: .feature(.PlaylistFeature), dependencies: [
             .feature(target: .PlaylistFeature, type: .interface)
         ]),
