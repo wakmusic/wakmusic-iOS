@@ -15,6 +15,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import CommonFeature
 
 public protocol NoticePopupViewControllerDelegate: AnyObject {
     func noticeTapped(model: FetchNoticeEntity)
@@ -44,7 +45,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     public static func viewController(
         viewModel: NoticePopupViewModel
     ) -> NoticePopupViewController {
-        let viewController = NoticePopupViewController.viewController(storyBoardName: "CommonUI", bundle: Bundle.module)
+        let viewController = NoticePopupViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
     }

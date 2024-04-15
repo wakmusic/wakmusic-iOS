@@ -7,6 +7,7 @@
 //
 
 import CommonFeature
+import MainTabFeature
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
