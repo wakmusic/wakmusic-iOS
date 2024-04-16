@@ -7,6 +7,7 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import KeychainModule
 import Pageboy
@@ -15,7 +16,6 @@ import RxSwift
 import Tabman
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public final class AfterLoginViewController: TabmanViewController, ViewControllerFromStoryBoard, EditSheetViewType {
     @IBOutlet weak var profileLabel: UILabel!

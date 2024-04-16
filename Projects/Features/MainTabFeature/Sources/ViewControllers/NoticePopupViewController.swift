@@ -16,7 +16,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import BaseFeature
 
 public protocol NoticePopupViewControllerDelegate: AnyObject {
     func noticeTapped(model: FetchNoticeEntity)

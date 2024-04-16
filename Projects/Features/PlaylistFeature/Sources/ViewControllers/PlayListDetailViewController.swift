@@ -6,6 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
 import NVActivityIndicatorView
@@ -17,8 +19,6 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
-import BaseFeature
-import BaseFeatureInterface
 
 public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
@@ -100,7 +100,8 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
         guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
             type: .edit,
             key: viewModel.key!,
-            completion: nil) as?  MultiPurposePopupViewController else {
+            completion: nil
+        ) as? MultiPurposePopupViewController else {
             return
         }
         multiPurposePopVc.delegate = self
@@ -144,8 +145,6 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
         return viewController
     }
 }
-
-
 
 extension PlayListDetailViewController {
     private func configureUI() {
@@ -530,7 +529,8 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
             guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
                 type: .share,
                 key: viewModel.key ?? "",
-                completion: nil) as?  MultiPurposePopupViewController else {
+                completion: nil
+            ) as? MultiPurposePopupViewController else {
                 return
             }
             self.showEntryKitModal(content: multiPurposePopVc, height: 296)

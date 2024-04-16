@@ -1,5 +1,5 @@
-import ChartDomainInterface
 import BaseFeature
+import ChartDomainInterface
 import Foundation
 import NeedleFoundation
 

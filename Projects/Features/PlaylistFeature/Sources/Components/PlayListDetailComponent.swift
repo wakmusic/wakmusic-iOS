@@ -7,13 +7,13 @@
 //
 
 import AuthDomainInterface
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
-import BaseFeature
 import PlaylistFeatureInterface
 import UIKit
-import BaseFeatureInterface
 
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
@@ -27,7 +27,6 @@ public protocol PlayListDetailDependency: Dependency {
 }
 
 public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistFactory {
-
     public func makeView(id: String, isCustom: Bool) -> UIViewController {
         return PlayListDetailViewController.viewController(
             viewModel: PlayListDetailViewModel(
@@ -42,5 +41,4 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
             containSongsComponent: dependency.containSongsComponent
         )
     }
-
 }

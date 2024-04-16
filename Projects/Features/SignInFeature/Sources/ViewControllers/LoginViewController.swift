@@ -7,6 +7,7 @@
 //
 
 import AuthenticationServices
+import BaseFeature
 import DesignSystem
 import NaverThirdPartyLogin
 import RxRelay
@@ -14,7 +15,6 @@ import RxSwift
 import SafariServices
 import UIKit
 import Utility
-import BaseFeature
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var scrollView: UIScrollView!

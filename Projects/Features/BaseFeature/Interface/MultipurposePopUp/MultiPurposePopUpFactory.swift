@@ -3,7 +3,9 @@
 import UIKit
 
 public protocol MultiPurposePopUpFactory {
-    func makeView(type: PurposeType,
-                  key: String,
-                  completion: ((String) -> Void)?) -> UIViewController
+    func makeView(
+        type: PurposeType,
+        key: String,
+        completion: ((String) -> Void)?
+    ) -> UIViewController
 }

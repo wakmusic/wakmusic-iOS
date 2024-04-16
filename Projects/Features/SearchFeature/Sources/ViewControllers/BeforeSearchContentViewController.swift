@@ -11,11 +11,11 @@ import DesignSystem
 import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import PlaylistFeatureInterface
 
 protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
@@ -26,7 +26,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     weak var delegate: BeforeSearchContentViewDelegate?
-    
+
     var playlistFactory: PlaylistFactory!
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
@@ -191,7 +191,8 @@ extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
         lazy var playListDetailVc = playlistFactory.makeView(
             id: model.key,
-            isCustom: false)
+            isCustom: false
+        )
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

@@ -7,13 +7,13 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import PlayListDomain
 import PlayListDomainInterface
+import PlaylistFeature
+import PlaylistFeatureInterface
 import SearchFeature
 import StorageFeature
-import PlaylistFeatureInterface
-import PlaylistFeature
-import BaseFeatureInterface
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함

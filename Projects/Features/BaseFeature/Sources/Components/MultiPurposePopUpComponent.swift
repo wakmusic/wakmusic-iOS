@@ -7,12 +7,12 @@
 //
 
 import AuthDomainInterface
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
-import UserDomainInterface
-import BaseFeatureInterface
 import UIKit
+import UserDomainInterface
 
 public protocol MultiPurposePopUpDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }
@@ -26,7 +26,8 @@ public final class MultiPurposePopUpComponent: Component<MultiPurposePopUpDepend
     public func makeView(
         type: PurposeType,
         key: String,
-        completion: ((String) -> Void)?) -> UIViewController {
+        completion: ((String) -> Void)?
+    ) -> UIViewController {
         return MultiPurposePopupViewController.viewController(
             viewModel: .init(
                 type: type,

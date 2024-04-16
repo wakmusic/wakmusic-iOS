@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa
@@ -14,9 +15,6 @@ import RxSwift
 import SwiftEntryKit
 import UIKit
 import Utility
-import BaseFeatureInterface
-
-
 
 public protocol MultiPurposePopupViewDelegate: AnyObject {
     func didTokenExpired()

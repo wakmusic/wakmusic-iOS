@@ -8,11 +8,11 @@
 
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import UserDomainInterface
 import PlaylistFeatureInterface
-import BaseFeatureInterface
+import UserDomainInterface
 
 public protocol MyPlayListDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }

@@ -7,9 +7,11 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import PanModal
+import PlaylistFeatureInterface
 import RxCocoa
 import RxDataSources
 import RxRelay
@@ -18,8 +20,6 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import BaseFeatureInterface
-import PlaylistFeatureInterface
 
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 

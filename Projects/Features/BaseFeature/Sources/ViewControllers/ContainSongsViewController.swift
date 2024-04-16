@@ -6,13 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import PlayListDomainInterface
 import RxSwift
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public protocol ContainSongsViewDelegate: AnyObject {
     func tokenExpired()
@@ -181,7 +181,8 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
             type: .creation,
             key: "",
-            completion: nil) as?  MultiPurposePopupViewController else {
+            completion: nil
+        ) as? MultiPurposePopupViewController else {
             return
         }
         self.showEntryKitModal(content: multiPurposePopVc, height: 296)

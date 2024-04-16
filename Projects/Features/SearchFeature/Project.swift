@@ -14,7 +14,6 @@ let project = Project.module(
                     .feature(target: .PlayerFeature),
                     .feature(target: .PlaylistFeature, type: .interface),
                     .domain(target: .SongsDomain, type: .interface),
-                    
                 ]
             )
         )

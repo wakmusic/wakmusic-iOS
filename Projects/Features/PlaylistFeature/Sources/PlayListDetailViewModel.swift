@@ -8,6 +8,7 @@
 
 import AuthDomainInterface
 import BaseDomainInterface
+import BaseFeature
 import ErrorModule
 import Foundation
 import PlayListDomainInterface
@@ -16,7 +17,6 @@ import RxRelay
 import RxSwift
 import SongsDomainInterface
 import Utility
-import BaseFeature
 
 struct PlayListHeaderInfo {
     var title: String

@@ -7,14 +7,13 @@
 //
 
 import AuthDomainInterface
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import UserDomainInterface
-import BaseFeatureInterface
 
 public protocol ContainSongsDependency: Dependency {
-    
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase { get }

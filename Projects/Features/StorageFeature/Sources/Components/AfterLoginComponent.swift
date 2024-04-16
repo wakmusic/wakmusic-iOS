@@ -8,10 +8,10 @@
 
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
-import BaseFeatureInterface
 
 public protocol AfterLoginDependency: Dependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
