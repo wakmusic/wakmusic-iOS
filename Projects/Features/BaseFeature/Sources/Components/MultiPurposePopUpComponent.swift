@@ -11,8 +11,10 @@ import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import UserDomainInterface
+import BaseFeatureInterface
+import UIKit
 
-public protocol MultiPurposePopDependency: Dependency {
+public protocol MultiPurposePopUpDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }
     var loadPlayListUseCase: any LoadPlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
@@ -20,12 +22,11 @@ public protocol MultiPurposePopDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
 }
 
-public final class MultiPurposePopComponent: Component<MultiPurposePopDependency> {
+public final class MultiPurposePopUpComponent: Component<MultiPurposePopUpDependency>, MultiPurposePopUpFactory {
     public func makeView(
         type: PurposeType,
-        key: String = "",
-        completion: ((String) -> Void)? = nil
-    ) -> MultiPurposePopupViewController {
+        key: String,
+        completion: ((String) -> Void)?) -> UIViewController {
         return MultiPurposePopupViewController.viewController(
             viewModel: .init(
                 type: type,

@@ -17,6 +17,10 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
+import BaseFeature
+import BaseFeatureInterface
+
+public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
 public class PlayListDetailViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType,
     EditSheetViewType {
@@ -37,7 +41,7 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
     var viewModel: PlayListDetailViewModel!
     lazy var input = PlayListDetailViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    var multiPurposePopComponent: MultiPurposePopComponent!
+    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     var containSongsComponent: ContainSongsComponent!
 
     public var editSheetView: EditSheetView!
@@ -93,7 +97,12 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
     }
 
     @IBAction func pressEditNameAction(_ sender: UIButton) {
-        let multiPurposePopVc = multiPurposePopComponent.makeView(type: .edit, key: viewModel.key!)
+        guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
+            type: .edit,
+            key: viewModel.key!,
+            completion: nil) as?  MultiPurposePopupViewController else {
+            return
+        }
         multiPurposePopVc.delegate = self
         self.showEntryKitModal(content: multiPurposePopVc, height: 296)
     }
@@ -122,21 +131,21 @@ public class PlayListDetailViewController: BaseViewController, ViewControllerFro
 
     public static func viewController(
         viewModel: PlayListDetailViewModel,
-        multiPurposePopComponent: MultiPurposePopComponent,
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
         containSongsComponent: ContainSongsComponent
     ) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(
-            storyBoardName: "Base",
+            storyBoardName: "Playlist",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
-        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.containSongsComponent = containSongsComponent
         return viewController
     }
 }
 
-public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
+
 
 extension PlayListDetailViewController {
     private func configureUI() {
@@ -518,8 +527,13 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
             input.state.accept(EditState(isEditing: true, force: false))
 
         case .share:
-            let vc = multiPurposePopComponent.makeView(type: .share, key: viewModel?.key ?? "")
-            self.showEntryKitModal(content: vc, height: 296)
+            guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
+                type: .share,
+                key: viewModel.key ?? "",
+                completion: nil) as?  MultiPurposePopupViewController else {
+                return
+            }
+            self.showEntryKitModal(content: multiPurposePopVc, height: 296)
 
         case .profile:
             return

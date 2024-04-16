@@ -11,10 +11,12 @@ import BaseFeature
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
+import PlaylistFeatureInterface
+import BaseFeatureInterface
 
 public protocol MyPlayListDependency: Dependency {
-    var multiPurposePopComponent: MultiPurposePopComponent { get }
-    var playListDetailComponent: PlayListDetailComponent { get }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var playlistFactory: any PlaylistFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
@@ -30,8 +32,8 @@ public final class MyPlayListComponent: Component<MyPlayListDependency> {
                 deletePlayListUseCase: dependency.deletePlayListUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            multiPurposePopComponent: dependency.multiPurposePopComponent,
-            playListDetailComponent: dependency.playListDetailComponent
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            playlistFactory: dependency.playlistFactory
         )
     }
 }

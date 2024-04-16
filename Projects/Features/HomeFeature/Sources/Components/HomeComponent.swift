@@ -13,12 +13,13 @@ import NeedleFoundation
 import PlayListDomainInterface
 import SongsDomainInterface
 import UIKit
+import PlaylistFeatureInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playListDetailComponent: PlayListDetailComponent { get }
+    var playlistFactory: any PlaylistFactory { get }
     var newSongsComponent: NewSongsComponent { get }
 }
 
@@ -30,7 +31,7 @@ public final class HomeComponent: Component<HomeDependency> {
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
             ),
-            playListDetailComponent: dependency.playListDetailComponent,
+            playlistFactory: dependency.playlistFactory,
             newSongsComponent: dependency.newSongsComponent
         )
     }

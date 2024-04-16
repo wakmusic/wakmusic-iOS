@@ -11,6 +11,9 @@ import PlayListDomain
 import PlayListDomainInterface
 import SearchFeature
 import StorageFeature
+import PlaylistFeatureInterface
+import PlaylistFeature
+import BaseFeatureInterface
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
@@ -20,12 +23,8 @@ public extension AppComponent {
         BeforeSearchComponent(parent: self)
     }
 
-    var playListDetailComponent: PlayListDetailComponent {
+    var playlistFactory: any PlaylistFactory {
         PlayListDetailComponent(parent: self)
-    }
-
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        MultiPurposePopComponent(parent: self)
     }
 
     var myPlayListComponent: MyPlayListComponent {

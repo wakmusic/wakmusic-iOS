@@ -5,7 +5,9 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.PlaylistFeature.rawValue,
     targets: [
-        .interface(module: .feature(.PlaylistFeature)),
+        .interface(module: .feature(.PlaylistFeature),dependencies: [
+            .feature(target: .BaseFeature, type: .interface)
+        ]),
         .implements(
             module: .feature(.PlaylistFeature),
             product: .staticFramework,

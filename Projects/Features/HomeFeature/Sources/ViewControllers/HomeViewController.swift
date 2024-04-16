@@ -10,6 +10,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import PlaylistFeatureInterface
 
 public final class HomeViewController: BaseViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     @IBOutlet weak var topSpaceConstraint: NSLayoutConstraint!
@@ -51,7 +52,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
-    var playListDetailComponent: PlayListDetailComponent!
+    var playlistFactory: PlaylistFactory!
     var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
@@ -80,12 +81,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 
     public static func viewController(
         viewModel: HomeViewModel,
-        playListDetailComponent: PlayListDetailComponent,
+        playlistFactory: PlaylistFactory,
         newSongsComponent: NewSongsComponent
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.playListDetailComponent = playListDetailComponent
+        viewController.playlistFactory = playlistFactory
         viewController.newSongsComponent = newSongsComponent
         return viewController
     }
@@ -371,7 +372,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        let playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
+        let playListDetailVc = playlistFactory.makeView(id: model.key, isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

@@ -10,16 +10,17 @@ import BaseFeature
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
+import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
-    var playListDetailComponent: PlayListDetailComponent { get }
+    var playlistFactory: any PlaylistFactory { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> BeforeSearchContentViewController {
         return BeforeSearchContentViewController.viewController(
-            recommendPlayListDetailComponent: dependency.playListDetailComponent,
+            playlistFactory: dependency.playlistFactory,
             viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
         )
     }

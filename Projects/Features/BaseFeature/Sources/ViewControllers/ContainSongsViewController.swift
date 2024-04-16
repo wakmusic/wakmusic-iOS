@@ -12,6 +12,7 @@ import PlayListDomainInterface
 import RxSwift
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public protocol ContainSongsViewDelegate: AnyObject {
     func tokenExpired()
@@ -25,7 +26,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var songCountLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
 
-    var multiPurposePopComponent: MultiPurposePopComponent!
+    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -42,14 +43,14 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     }
 
     public static func viewController(
-        multiPurposePopComponent: MultiPurposePopComponent,
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
             storyBoardName: "Base",
             bundle: Bundle.module
         )
-        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -177,9 +178,13 @@ extension ContainSongsViewController: UITableViewDelegate {
 
 extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     public func action() {
-        let vc = multiPurposePopComponent.makeView(type: .creation)
-        vc.delegate = self
-        self.showEntryKitModal(content: vc, height: 296)
+        guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
+            type: .creation,
+            key: "",
+            completion: nil) as?  MultiPurposePopupViewController else {
+            return
+        }
+        self.showEntryKitModal(content: multiPurposePopVc, height: 296)
     }
 }
 

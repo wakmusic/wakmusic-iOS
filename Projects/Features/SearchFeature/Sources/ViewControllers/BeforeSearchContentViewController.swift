@@ -15,6 +15,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import PlaylistFeatureInterface
 
 protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
@@ -25,7 +26,8 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     weak var delegate: BeforeSearchContentViewDelegate?
-    var playListDetailComponent: PlayListDetailComponent!
+    
+    var playlistFactory: PlaylistFactory!
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
 
@@ -39,14 +41,14 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     }
 
     public static func viewController(
-        recommendPlayListDetailComponent: PlayListDetailComponent,
+        playlistFactory: PlaylistFactory,
         viewModel: BeforeSearchContentViewModel
     ) -> BeforeSearchContentViewController {
         let viewController = BeforeSearchContentViewController.viewController(
             storyBoardName: "Search",
             bundle: Bundle.module
         )
-        viewController.playListDetailComponent = recommendPlayListDetailComponent
+        viewController.playlistFactory = playlistFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -187,7 +189,9 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        lazy var playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
+        lazy var playListDetailVc = playlistFactory.makeView(
+            id: model.key,
+            isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

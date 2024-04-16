@@ -11,9 +11,11 @@ import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import UserDomainInterface
+import BaseFeatureInterface
 
 public protocol ContainSongsDependency: Dependency {
-    var multiPurposePopComponent: MultiPurposePopComponent { get }
+    
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
@@ -22,7 +24,7 @@ public protocol ContainSongsDependency: Dependency {
 public final class ContainSongsComponent: Component<ContainSongsDependency> {
     public func makeView(songs: [String]) -> ContainSongsViewController {
         return ContainSongsViewController.viewController(
-            multiPurposePopComponent: dependency.multiPurposePopComponent,
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             viewModel: .init(
                 songs: songs,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,

@@ -14,6 +14,7 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import BaseFeatureInterface
 
 public final class MultiPurposePopupViewModel: ViewModelType {
     var type: PurposeType
