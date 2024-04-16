@@ -26,7 +26,7 @@ public protocol PlayListDetailDependency: Dependency {
     var containSongsComponent: ContainSongsComponent { get }
 }
 
-public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistFactory {
+public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistDetailFactory {
     public func makeView(id: String, isCustom: Bool) -> UIViewController {
         return PlayListDetailViewController.viewController(
             viewModel: PlayListDetailViewModel(

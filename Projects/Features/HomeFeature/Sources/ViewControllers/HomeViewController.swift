@@ -52,7 +52,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
-    var playlistFactory: PlaylistFactory!
+    var playlistDetailFactory: PlaylistDetailFactory!
     var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
@@ -81,12 +81,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 
     public static func viewController(
         viewModel: HomeViewModel,
-        playlistFactory: PlaylistFactory,
+        playlistDetailFactory: PlaylistDetailFactory,
         newSongsComponent: NewSongsComponent
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.playlistFactory = playlistFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
         return viewController
     }
@@ -372,7 +372,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        let playListDetailVc = playlistFactory.makeView(id: model.key, isCustom: false)
+        let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

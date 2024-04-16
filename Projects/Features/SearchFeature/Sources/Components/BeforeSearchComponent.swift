@@ -13,14 +13,14 @@ import PlayListDomainInterface
 import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
-    var playlistFactory: any PlaylistFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> BeforeSearchContentViewController {
         return BeforeSearchContentViewController.viewController(
-            playlistFactory: dependency.playlistFactory,
+            playlistDetailFactory: dependency.playlistDetailFactory,
             viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
         )
     }

@@ -1,6 +1,6 @@
 import BaseFeatureInterface
 import UIKit
 
-public protocol PlaylistFactory {
+public protocol PlaylistDetailFactory {
     func makeView(id: String, isCustom: Bool) -> UIViewController
 }

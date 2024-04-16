@@ -16,7 +16,7 @@ import UserDomainInterface
 
 public protocol MyPlayListDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
-    var playlistFactory: any PlaylistFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
@@ -33,7 +33,7 @@ public final class MyPlayListComponent: Component<MyPlayListDependency> {
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            playlistFactory: dependency.playlistFactory
+            playlistDetailFactory: dependency.playlistDetailFactory
         )
     }
 }

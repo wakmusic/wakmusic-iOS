@@ -19,7 +19,7 @@ public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playlistFactory: any PlaylistFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var newSongsComponent: NewSongsComponent { get }
 }
 
@@ -31,7 +31,7 @@ public final class HomeComponent: Component<HomeDependency> {
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
             ),
-            playlistFactory: dependency.playlistFactory,
+            playlistDetailFactory: dependency.playlistDetailFactory,
             newSongsComponent: dependency.newSongsComponent
         )
     }

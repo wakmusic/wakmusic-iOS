@@ -27,7 +27,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
 
     weak var delegate: BeforeSearchContentViewDelegate?
 
-    var playlistFactory: PlaylistFactory!
+    var playlistDetailFactory: PlaylistDetailFactory!
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
 
@@ -41,14 +41,14 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     }
 
     public static func viewController(
-        playlistFactory: PlaylistFactory,
+        playlistDetailFactory: PlaylistDetailFactory,
         viewModel: BeforeSearchContentViewModel
     ) -> BeforeSearchContentViewController {
         let viewController = BeforeSearchContentViewController.viewController(
             storyBoardName: "Search",
             bundle: Bundle.module
         )
-        viewController.playlistFactory = playlistFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -189,7 +189,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        lazy var playListDetailVc = playlistFactory.makeView(
+        lazy var playListDetailVc = playlistDetailFactory.makeView(
             id: model.key,
             isCustom: false
         )

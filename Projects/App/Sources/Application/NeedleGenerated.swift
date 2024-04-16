@@ -357,8 +357,8 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
         return appComponent.multiPurposePopUpFactory
     }
-    var playlistFactory: any PlaylistFactory {
-        return appComponent.playlistFactory
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
@@ -606,8 +606,8 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
     }
-    var playlistFactory: any PlaylistFactory {
-        return appComponent.playlistFactory
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var newSongsComponent: NewSongsComponent {
         return appComponent.newSongsComponent
@@ -687,8 +687,8 @@ private func factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5(_ component: Needle
     return SearchDependencya86903a2c751a4f762e8Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDependency {
-    var playlistFactory: any PlaylistFactory {
-        return appComponent.playlistFactory
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
@@ -783,7 +783,7 @@ extension AppComponent: Registration {
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { [unowned self] in self.beforeSearchComponent as Any }
-        localTable["playlistFactory-any PlaylistFactory"] = { [unowned self] in self.playlistFactory as Any }
+        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
         localTable["containSongsComponent-ContainSongsComponent"] = { [unowned self] in self.containSongsComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
@@ -970,7 +970,7 @@ extension QuestionComponent: Registration {
 extension MyPlayListComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyPlayListDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
-        keyPathToName[\MyPlayListDependency.playlistFactory] = "playlistFactory-any PlaylistFactory"
+        keyPathToName[\MyPlayListDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
@@ -1068,7 +1068,7 @@ extension HomeComponent: Registration {
         keyPathToName[\HomeDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\HomeDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
         keyPathToName[\HomeDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
-        keyPathToName[\HomeDependency.playlistFactory] = "playlistFactory-any PlaylistFactory"
+        keyPathToName[\HomeDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\HomeDependency.newSongsComponent] = "newSongsComponent-NewSongsComponent"
     }
 }
@@ -1099,7 +1099,7 @@ extension SearchComponent: Registration {
 }
 extension BeforeSearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\BeforeSearchDependency.playlistFactory] = "playlistFactory-any PlaylistFactory"
+        keyPathToName[\BeforeSearchDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
     }
 }

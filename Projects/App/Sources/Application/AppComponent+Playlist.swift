@@ -23,7 +23,7 @@ public extension AppComponent {
         BeforeSearchComponent(parent: self)
     }
 
-    var playlistFactory: any PlaylistFactory {
+    var playlistDetailFactory: any PlaylistDetailFactory {
         PlayListDetailComponent(parent: self)
     }
 

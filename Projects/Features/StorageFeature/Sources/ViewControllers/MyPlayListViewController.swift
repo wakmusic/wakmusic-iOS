@@ -29,7 +29,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     private var refreshControl = UIRefreshControl()
     var multiPurposePopUpFactory: MultiPurposePopUpFactory!
-    var playlistFactory: PlaylistFactory!
+    var playlistDetailFactory: PlaylistDetailFactory!
     var viewModel: MyPlayListViewModel!
 
     lazy var input = MyPlayListViewModel.Input()
@@ -51,12 +51,12 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MyPlayListViewModel,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
-        playlistFactory: PlaylistFactory
+        playlistDetailFactory: PlaylistDetailFactory
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.playlistFactory = playlistFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         return viewController
     }
 }
@@ -81,7 +81,7 @@ extension MyPlayListViewController {
 
                 } else {
                     let id: String = dataSource[indexPath.section].items[indexPath.row].key
-                    let vc = self.playlistFactory.makeView(id: id, isCustom: true)
+                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             })
