@@ -18,13 +18,6 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-struct PlayListHeaderInfo {
-    var title: String
-    var songCount: String
-    var image: String
-    var version: Int
-}
-
 public final class PlayListDetailViewModel: ViewModelType {
     var type: PlayListType!
     var id: String!
@@ -49,7 +42,7 @@ public final class PlayListDetailViewModel: ViewModelType {
     }
 
     public struct Output {
-        let headerInfo: PublishRelay<PlayListHeaderInfo> = PublishRelay()
+        let headerInfo: PublishRelay<PlayListHeader> = PublishRelay()
         let dataSource: BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource: BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
@@ -104,7 +97,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                     .do(onNext: { [weak self] model in
                         guard let self = self else { return }
                         output.headerInfo.accept(
-                            PlayListHeaderInfo(
+                            PlayListHeader(
                                 title: model.title,
                                 songCount: "\(model.songs.count)곡",
                                 image: self.type == .wmRecommend ?
@@ -122,7 +115,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         input.playListNameLoad
             .skip(1)
             .withLatestFrom(output.headerInfo) { ($0, $1) }
-            .map { PlayListHeaderInfo(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
+            .map { PlayListHeader(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
             }
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)
