@@ -18,6 +18,7 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
+
 public final class PlayListDetailViewModel: ViewModelType {
     var type: PlayListType!
     var id: String!
@@ -29,7 +30,6 @@ public final class PlayListDetailViewModel: ViewModelType {
     var disposeBag = DisposeBag()
 
     public struct Input {
-        let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
         let itemMoved: PublishSubject<ItemMovedEvent> = PublishSubject()
         let playListNameLoad: BehaviorRelay<String> = BehaviorRelay(value: "")
         let cancelEdit: PublishSubject<Void> = PublishSubject()
