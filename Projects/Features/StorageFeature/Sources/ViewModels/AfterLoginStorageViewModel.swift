@@ -8,7 +8,6 @@
 
 import AuthDomainInterface
 import BaseFeature
-import CommonFeature
 import Foundation
 import KeychainModule
 import NaverThirdPartyLogin

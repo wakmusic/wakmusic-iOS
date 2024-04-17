@@ -1,4 +1,4 @@
-import CommonFeature
+import BaseFeature
 import Foundation
 import KeychainModule
 import MainTabFeature

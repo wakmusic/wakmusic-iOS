@@ -7,11 +7,11 @@
 //
 
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import UIKit
@@ -26,7 +26,8 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     weak var delegate: BeforeSearchContentViewDelegate?
-    var playListDetailComponent: PlayListDetailComponent!
+
+    var playlistDetailFactory: PlaylistDetailFactory!
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
 
@@ -40,14 +41,14 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     }
 
     public static func viewController(
-        recommendPlayListDetailComponent: PlayListDetailComponent,
+        playlistDetailFactory: PlaylistDetailFactory,
         viewModel: BeforeSearchContentViewModel
     ) -> BeforeSearchContentViewController {
         let viewController = BeforeSearchContentViewController.viewController(
             storyBoardName: "Search",
             bundle: Bundle.module
         )
-        viewController.playListDetailComponent = recommendPlayListDetailComponent
+        viewController.playlistDetailFactory = playlistDetailFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -188,7 +189,10 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        lazy var playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
+        lazy var playListDetailVc = playlistDetailFactory.makeView(
+            id: model.key,
+            isCustom: false
+        )
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

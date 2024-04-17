@@ -1,7 +1,7 @@
+import BaseFeature
 import ChartDomain
 import ChartDomainInterface
 import ChartFeature
-import CommonFeature
 
 public extension AppComponent {
     var chartComponent: ChartComponent {

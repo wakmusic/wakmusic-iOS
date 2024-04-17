@@ -33,6 +33,7 @@ let targets: [Target] = [
         dependencies: [
             .Project.Features.RootFeature,
             .Project.Module.ThirdPartyLib,
+            .feature(target: .PlaylistFeature),
             .domain(target: .AppDomain),
             .domain(target: .ArtistDomain),
             .domain(target: .AuthDomain),

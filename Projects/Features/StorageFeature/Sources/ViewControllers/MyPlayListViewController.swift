@@ -7,10 +7,11 @@
 //
 
 import BaseFeature
-import CommonFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import PanModal
+import PlaylistFeatureInterface
 import RxCocoa
 import RxDataSources
 import RxRelay
@@ -27,8 +28,8 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     private var refreshControl = UIRefreshControl()
-    var multiPurposePopComponent: MultiPurposePopComponent!
-    var playListDetailComponent: PlayListDetailComponent!
+    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    var playlistDetailFactory: PlaylistDetailFactory!
     var viewModel: MyPlayListViewModel!
 
     lazy var input = MyPlayListViewModel.Input()
@@ -49,13 +50,13 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     public static func viewController(
         viewModel: MyPlayListViewModel,
-        multiPurposePopComponent: MultiPurposePopComponent,
-        playListDetailComponent: PlayListDetailComponent
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        playlistDetailFactory: PlaylistDetailFactory
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.multiPurposePopComponent = multiPurposePopComponent
-        viewController.playListDetailComponent = playListDetailComponent
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         return viewController
     }
 }
@@ -68,10 +69,8 @@ extension MyPlayListViewController {
             .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
-            .debug()
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
-            .debug()
             .subscribe(onNext: { [weak self] indexPath, dataSource, state in
                 guard let self = self else { return }
 
@@ -82,7 +81,7 @@ extension MyPlayListViewController {
 
                 } else {
                     let id: String = dataSource[indexPath.section].items[indexPath.row].key
-                    let vc = self.playListDetailComponent.makeView(id: id, type: .custom)
+                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             })
@@ -324,7 +323,8 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
             parent.hideEditSheet()
             parent.profileButton.isSelected = false
         }
-        let vc = multiPurposePopComponent.makeView(type: type)
+        let vc = multiPurposePopUpFactory
+            .makeView(type: type, key: "", completion: nil)
         self.showEntryKitModal(content: vc, height: 296)
     }
 }

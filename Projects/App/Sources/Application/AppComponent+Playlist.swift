@@ -6,9 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import CommonFeature
+import BaseFeature
+import BaseFeatureInterface
 import PlayListDomain
 import PlayListDomainInterface
+import PlaylistFeature
+import PlaylistFeatureInterface
 import SearchFeature
 import StorageFeature
 
@@ -20,12 +23,8 @@ public extension AppComponent {
         BeforeSearchComponent(parent: self)
     }
 
-    var playListDetailComponent: PlayListDetailComponent {
+    var playlistDetailFactory: any PlaylistDetailFactory {
         PlayListDetailComponent(parent: self)
-    }
-
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        MultiPurposePopComponent(parent: self)
     }
 
     var myPlayListComponent: MyPlayListComponent {

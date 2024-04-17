@@ -8,11 +8,10 @@ import ArtistFeature
 import AuthDomain
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import ChartDomain
 import ChartDomainInterface
 import ChartFeature
-import CommonFeature
-import DesignSystem
 import FaqDomain
 import FaqDomainInterface
 import Foundation
@@ -24,24 +23,20 @@ import MainTabFeature
 import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
-import PanModal
 import PlayListDomain
 import PlayListDomainInterface
 import PlayerFeature
+import PlaylistFeature
+import PlaylistFeatureInterface
 import RootFeature
-import RxCocoa
-import RxKeyboard
-import RxSwift
 import SearchFeature
 import SignInFeature
-import SnapKit
 import SongsDomain
 import SongsDomainInterface
 import StorageFeature
 import UIKit
 import UserDomain
 import UserDomainInterface
-import Utility
 
 // swiftlint:disable unused_declaration
 private let needleDependenciesHash : String? = nil
@@ -228,6 +223,45 @@ private class MainContainerDependencyd9d908a1d0cf8937bbadProvider: MainContainer
 private func factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MainContainerDependencyd9d908a1d0cf8937bbadProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->NoticePopupComponent
+private func factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticePopupDependency579e3504f53119c2eef1Provider()
+}
+private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDetailDependency {
+    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
+        return appComponent.fetchPlayListDetailUseCase
+    }
+    var editPlayListUseCase: any EditPlayListUseCase {
+        return appComponent.editPlayListUseCase
+    }
+    var removeSongsUseCase: any RemoveSongsUseCase {
+        return appComponent.removeSongsUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
+        return appComponent.multiPurposePopUpFactory
+    }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->PlayListDetailComponent
+private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
     var chartContentComponent: ChartContentComponent {
         return appComponent.chartContentComponent
@@ -259,6 +293,19 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 /// ^->AppComponent->ChartContentComponent
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ServiceInfoComponent
+private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInComponent: SignInComponent {
@@ -307,11 +354,11 @@ private func factoryedad1813a36115eec11ee3b0c44298fc1c149afb(_ component: Needle
     return QuestionDependencyf7010567c2d88e76d191Provider()
 }
 private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        return appComponent.multiPurposePopComponent
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
+        return appComponent.multiPurposePopUpFactory
     }
-    var playListDetailComponent: PlayListDetailComponent {
-        return appComponent.playListDetailComponent
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
@@ -350,8 +397,8 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var myPlayListComponent: MyPlayListComponent {
         return appComponent.myPlayListComponent
     }
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        return appComponent.multiPurposePopComponent
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
+        return appComponent.multiPurposePopUpFactory
     }
     var favoriteComponent: FavoriteComponent {
         return appComponent.favoriteComponent
@@ -432,6 +479,17 @@ private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDe
 private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NoticeDetailDependency714af3aed40eaebda420Provider()
 }
+private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OpenSourceLicenseComponent
+private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
+}
 private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase {
         return appComponent.fetchNoticeUseCase
@@ -447,6 +505,25 @@ private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
 /// ^->AppComponent->NoticeComponent
 private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
+        return appComponent.fetchProfileListUseCase
+    }
+    var setProfileUseCase: any SetProfileUseCase {
+        return appComponent.setProfileUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ProfilePopComponent
+private func factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfilePopDependency081172e20caa75abdb54Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var mainContainerComponent: MainContainerComponent {
@@ -506,6 +583,19 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
 private func factoryda2925fd76da866a652af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SignInDependency5dda0dd015447272446cProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class NewSongsDependencyee634cc0cae21fc2a9e3Provider: NewSongsDependency {
+    var newSongsContentComponent: NewSongsContentComponent {
+        return appComponent.newSongsContentComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NewSongsComponent
+private func factory379179b05dd24ff979edf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NewSongsDependencyee634cc0cae21fc2a9e3Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase {
         return appComponent.fetchChartRankingUseCase
@@ -516,8 +606,8 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
     }
-    var playListDetailComponent: PlayListDetailComponent {
-        return appComponent.playListDetailComponent
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var newSongsComponent: NewSongsComponent {
         return appComponent.newSongsComponent
@@ -530,6 +620,25 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
 /// ^->AppComponent->HomeComponent
 private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class NewSongsContentDependency93a05f20fa300c5bbec3Provider: NewSongsContentDependency {
+    var fetchNewSongsUseCase: any FetchNewSongsUseCase {
+        return appComponent.fetchNewSongsUseCase
+    }
+    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
+        return appComponent.fetchChartUpdateTimeUseCase
+    }
+    var containSongsComponent: ContainSongsComponent {
+        return appComponent.containSongsComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NewSongsContentComponent
+private func factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NewSongsContentDependency93a05f20fa300c5bbec3Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
     var afterSearchContentComponent: AfterSearchContentComponent {
@@ -578,8 +687,8 @@ private func factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5(_ component: Needle
     return SearchDependencya86903a2c751a4f762e8Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDependency {
-    var playListDetailComponent: PlayListDetailComponent {
-        return appComponent.playListDetailComponent
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        return appComponent.playlistDetailFactory
     }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
@@ -594,8 +703,8 @@ private func factory9bb852337d5550979293f47b58f8f304c97af4d5(_ component: Needle
     return BeforeSearchDependencyebdecb1d478a4766488dProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDependency {
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        return appComponent.multiPurposePopComponent
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
+        return appComponent.multiPurposePopUpFactory
     }
     var fetchPlayListUseCase: any FetchPlayListUseCase {
         return appComponent.fetchPlayListUseCase
@@ -615,20 +724,7 @@ private class ContainSongsDependencydbd9ae8a072db3a22630Provider: ContainSongsDe
 private func factory4d4f4455414271fee232f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ContainSongsDependencydbd9ae8a072db3a22630Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {
-        return appComponent.openSourceLicenseComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->ServiceInfoComponent
-private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
-}
-private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurposePopDependency {
+private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurposePopUpDependency {
     var createPlayListUseCase: any CreatePlayListUseCase {
         return appComponent.createPlayListUseCase
     }
@@ -649,110 +745,9 @@ private class MultiPurposePopDependency30141c7a9a9e67e148afProvider: MultiPurpos
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->MultiPurposePopComponent
-private func factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return MultiPurposePopDependency30141c7a9a9e67e148afProvider(appComponent: parent1(component) as! AppComponent)
-}
-private class NewSongsDependencyee634cc0cae21fc2a9e3Provider: NewSongsDependency {
-    var newSongsContentComponent: NewSongsContentComponent {
-        return appComponent.newSongsContentComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->NewSongsComponent
-private func factory379179b05dd24ff979edf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NewSongsDependencyee634cc0cae21fc2a9e3Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDetailDependency {
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
-        return appComponent.fetchPlayListDetailUseCase
-    }
-    var editPlayListUseCase: any EditPlayListUseCase {
-        return appComponent.editPlayListUseCase
-    }
-    var removeSongsUseCase: any RemoveSongsUseCase {
-        return appComponent.removeSongsUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        return appComponent.multiPurposePopComponent
-    }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->PlayListDetailComponent
-private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->OpenSourceLicenseComponent
-private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
-}
-private class NoticePopupDependency579e3504f53119c2eef1Provider: NoticePopupDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->NoticePopupComponent
-private func factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticePopupDependency579e3504f53119c2eef1Provider()
-}
-private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
-    var fetchProfileListUseCase: any FetchProfileListUseCase {
-        return appComponent.fetchProfileListUseCase
-    }
-    var setProfileUseCase: any SetProfileUseCase {
-        return appComponent.setProfileUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->ProfilePopComponent
-private func factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ProfilePopDependency081172e20caa75abdb54Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class NewSongsContentDependency93a05f20fa300c5bbec3Provider: NewSongsContentDependency {
-    var fetchNewSongsUseCase: any FetchNewSongsUseCase {
-        return appComponent.fetchNewSongsUseCase
-    }
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
-        return appComponent.fetchChartUpdateTimeUseCase
-    }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->NewSongsContentComponent
-private func factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NewSongsContentDependency93a05f20fa300c5bbec3Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->MultiPurposePopUpComponent
+private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
 
 #else
@@ -788,8 +783,7 @@ extension AppComponent: Registration {
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { [unowned self] in self.beforeSearchComponent as Any }
-        localTable["playListDetailComponent-PlayListDetailComponent"] = { [unowned self] in self.playListDetailComponent as Any }
-        localTable["multiPurposePopComponent-MultiPurposePopComponent"] = { [unowned self] in self.multiPurposePopComponent as Any }
+        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
         localTable["containSongsComponent-ContainSongsComponent"] = { [unowned self] in self.containSongsComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
@@ -840,6 +834,7 @@ extension AppComponent: Registration {
         localTable["noticeRepository-any NoticeRepository"] = { [unowned self] in self.noticeRepository as Any }
         localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { [unowned self] in self.fetchNoticeUseCase as Any }
         localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
+        localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { [unowned self] in self.multiPurposePopUpFactory as Any }
         localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
         localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
         localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
@@ -922,6 +917,21 @@ extension MainContainerComponent: Registration {
         keyPathToName[\MainContainerDependency.playerComponent] = "playerComponent-PlayerComponent"
     }
 }
+extension NoticePopupComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension PlayListDetailComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
+        keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
+        keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
+        keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\PlayListDetailDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
+        keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+    }
+}
 extension ChartComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartDependency.chartContentComponent] = "chartContentComponent-ChartContentComponent"
@@ -932,6 +942,11 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
         keyPathToName[\ChartContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+    }
+}
+extension ServiceInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
     }
 }
 extension StorageComponent: Registration {
@@ -954,8 +969,8 @@ extension QuestionComponent: Registration {
 }
 extension MyPlayListComponent: Registration {
     public func registerItems() {
-        keyPathToName[\MyPlayListDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
-        keyPathToName[\MyPlayListDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\MyPlayListDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
+        keyPathToName[\MyPlayListDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\MyPlayListDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\MyPlayListDependency.editPlayListOrderUseCase] = "editPlayListOrderUseCase-any EditPlayListOrderUseCase"
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
@@ -969,7 +984,7 @@ extension AfterLoginComponent: Registration {
         keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
         keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
-        keyPathToName[\AfterLoginDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\AfterLoginDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\AfterLoginDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
     }
 }
@@ -998,6 +1013,11 @@ extension NoticeDetailComponent: Registration {
 
     }
 }
+extension OpenSourceLicenseComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension NoticeComponent: Registration {
     public func registerItems() {
         keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
@@ -1007,6 +1027,13 @@ extension NoticeComponent: Registration {
 extension FaqContentComponent: Registration {
     public func registerItems() {
 
+    }
+}
+extension ProfilePopComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
+        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
+        keyPathToName[\ProfilePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 extension RootComponent: Registration {
@@ -1031,13 +1058,25 @@ extension SignInComponent: Registration {
         keyPathToName[\SignInDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
+extension NewSongsComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NewSongsDependency.newSongsContentComponent] = "newSongsContentComponent-NewSongsContentComponent"
+    }
+}
 extension HomeComponent: Registration {
     public func registerItems() {
         keyPathToName[\HomeDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\HomeDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
         keyPathToName[\HomeDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
-        keyPathToName[\HomeDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\HomeDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\HomeDependency.newSongsComponent] = "newSongsComponent-NewSongsComponent"
+    }
+}
+extension NewSongsContentComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NewSongsContentDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
+        keyPathToName[\NewSongsContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
+        keyPathToName[\NewSongsContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
     }
 }
 extension AfterSearchComponent: Registration {
@@ -1060,69 +1099,25 @@ extension SearchComponent: Registration {
 }
 extension BeforeSearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\BeforeSearchDependency.playListDetailComponent] = "playListDetailComponent-PlayListDetailComponent"
+        keyPathToName[\BeforeSearchDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
     }
 }
 extension ContainSongsComponent: Registration {
     public func registerItems() {
-        keyPathToName[\ContainSongsDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
+        keyPathToName[\ContainSongsDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\ContainSongsDependency.fetchPlayListUseCase] = "fetchPlayListUseCase-any FetchPlayListUseCase"
         keyPathToName[\ContainSongsDependency.addSongIntoPlayListUseCase] = "addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"
         keyPathToName[\ContainSongsDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
-extension ServiceInfoComponent: Registration {
+extension MultiPurposePopUpComponent: Registration {
     public func registerItems() {
-        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
-    }
-}
-extension MultiPurposePopComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\MultiPurposePopDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
-        keyPathToName[\MultiPurposePopDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
-        keyPathToName[\MultiPurposePopDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
-        keyPathToName[\MultiPurposePopDependency.editPlayListNameUseCase] = "editPlayListNameUseCase-any EditPlayListNameUseCase"
-        keyPathToName[\MultiPurposePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-    }
-}
-extension NewSongsComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\NewSongsDependency.newSongsContentComponent] = "newSongsContentComponent-NewSongsContentComponent"
-    }
-}
-extension PlayListDetailComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
-        keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any EditPlayListUseCase"
-        keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
-        keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-        keyPathToName[\PlayListDetailDependency.multiPurposePopComponent] = "multiPurposePopComponent-MultiPurposePopComponent"
-        keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
-    }
-}
-extension OpenSourceLicenseComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension NoticePopupComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension ProfilePopComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\ProfilePopDependency.fetchProfileListUseCase] = "fetchProfileListUseCase-any FetchProfileListUseCase"
-        keyPathToName[\ProfilePopDependency.setProfileUseCase] = "setProfileUseCase-any SetProfileUseCase"
-        keyPathToName[\ProfilePopDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-    }
-}
-extension NewSongsContentComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\NewSongsContentDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
-        keyPathToName[\NewSongsContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
-        keyPathToName[\NewSongsContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\MultiPurposePopUpDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.editPlayListNameUseCase] = "editPlayListNameUseCase-any EditPlayListNameUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
 
@@ -1151,8 +1146,11 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ee3b0c44298fc1c149afb)
@@ -1161,25 +1159,22 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignInComponent", factoryda2925fd76da866a652af47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NewSongsComponent", factory379179b05dd24ff979edf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->MultiPurposePopComponent", factory972fcba2860fcb8ad7b8f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->NewSongsComponent", factory379179b05dd24ff979edf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
 }
 #endif
 

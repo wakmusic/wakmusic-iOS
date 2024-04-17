@@ -7,7 +7,7 @@
 //
 
 import AuthDomainInterface
-import CommonFeature
+import BaseFeature
 import Foundation
 import NeedleFoundation
 import SignInFeature

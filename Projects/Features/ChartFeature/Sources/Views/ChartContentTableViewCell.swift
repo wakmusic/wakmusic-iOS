@@ -1,5 +1,5 @@
+import BaseFeature
 import ChartDomainInterface
-import CommonFeature
 import DesignSystem
 import Kingfisher
 import SnapKit

@@ -6,7 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import CommonFeature
+import BaseFeature
+import MainTabFeature
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature

@@ -7,7 +7,7 @@
 //
 
 import BaseFeature
-import CommonFeature
+import BaseFeatureInterface
 import DesignSystem
 import KeychainModule
 import Pageboy
@@ -55,7 +55,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     var requestComponent: RequestComponent!
     var profilePopComponent: ProfilePopComponent!
     var myPlayListComponent: MyPlayListComponent!
-    var multiPurposePopComponent: MultiPurposePopComponent!
+    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     var favoriteComponent: FavoriteComponent!
 
     var viewModel: AfterLoginViewModel!
@@ -107,7 +107,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         requestComponent: RequestComponent,
         profilePopComponent: ProfilePopComponent,
         myPlayListComponent: MyPlayListComponent,
-        multiPurposePopComponent: MultiPurposePopComponent,
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
         favoriteComponent: FavoriteComponent
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
@@ -115,7 +115,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.requestComponent = requestComponent
         viewController.profilePopComponent = profilePopComponent
         viewController.myPlayListComponent = myPlayListComponent
-        viewController.multiPurposePopComponent = multiPurposePopComponent
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.favoriteComponent = favoriteComponent
         viewController.viewControllers = [myPlayListComponent.makeView(), favoriteComponent.makeView()]
         return viewController
@@ -294,7 +294,7 @@ extension AfterLoginViewController: EditSheetViewDelegate {
             let profile = self.profilePopComponent.makeView()
             self.showPanModal(content: profile)
         case .nickname:
-            let nickname = self.multiPurposePopComponent.makeView(type: .nickname)
+            let nickname = self.multiPurposePopUpFactory.makeView(type: .nickname, key: "", completion: nil)
             self.showEntryKitModal(content: nickname, height: 296)
         default:
             return

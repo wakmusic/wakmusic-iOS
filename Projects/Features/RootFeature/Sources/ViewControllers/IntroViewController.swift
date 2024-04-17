@@ -1,5 +1,4 @@
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import Lottie
 import MainTabFeature

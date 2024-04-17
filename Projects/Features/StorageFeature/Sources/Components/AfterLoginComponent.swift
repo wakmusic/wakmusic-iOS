@@ -7,7 +7,8 @@
 //
 
 import AuthDomainInterface
-import CommonFeature
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
@@ -18,7 +19,7 @@ public protocol AfterLoginDependency: Dependency {
     var requestComponent: RequestComponent { get }
     var profilePopComponent: ProfilePopComponent { get }
     var myPlayListComponent: MyPlayListComponent { get }
-    var multiPurposePopComponent: MultiPurposePopComponent { get }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var favoriteComponent: FavoriteComponent { get }
 }
 
@@ -32,7 +33,7 @@ public final class AfterLoginComponent: Component<AfterLoginDependency> {
             requestComponent: dependency.requestComponent,
             profilePopComponent: dependency.profilePopComponent,
             myPlayListComponent: dependency.myPlayListComponent,
-            multiPurposePopComponent: dependency.multiPurposePopComponent,
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             favoriteComponent: dependency.favoriteComponent
         )
     }

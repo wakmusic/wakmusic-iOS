@@ -8,7 +8,6 @@
 
 import BaseFeature
 import Combine
-import CommonFeature
 import Foundation
 import RxDataSources
 import RxRelay

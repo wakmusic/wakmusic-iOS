@@ -1,9 +1,9 @@
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import NVActivityIndicatorView
 import PanModal
 import PlayListDomainInterface
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -52,7 +52,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
-    var playListDetailComponent: PlayListDetailComponent!
+    var playlistDetailFactory: PlaylistDetailFactory!
     var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
@@ -81,12 +81,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 
     public static func viewController(
         viewModel: HomeViewModel,
-        playListDetailComponent: PlayListDetailComponent,
+        playlistDetailFactory: PlaylistDetailFactory,
         newSongsComponent: NewSongsComponent
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.playListDetailComponent = playListDetailComponent
+        viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
         return viewController
     }
@@ -372,7 +372,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
-        let playListDetailVc = playListDetailComponent.makeView(id: model.key, type: .wmRecommend)
+        let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }

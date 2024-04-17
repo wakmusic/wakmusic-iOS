@@ -6,7 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import CommonFeature
+import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import UIKit
 

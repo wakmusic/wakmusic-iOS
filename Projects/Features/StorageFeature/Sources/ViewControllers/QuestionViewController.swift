@@ -7,7 +7,6 @@
 //
 
 import BaseFeature
-import CommonFeature
 import DesignSystem
 import MessageUI
 import RxSwift

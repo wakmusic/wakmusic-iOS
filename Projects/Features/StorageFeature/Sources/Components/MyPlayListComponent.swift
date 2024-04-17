@@ -7,14 +7,16 @@
 //
 
 import AuthDomainInterface
-import CommonFeature
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
+import PlaylistFeatureInterface
 import UserDomainInterface
 
 public protocol MyPlayListDependency: Dependency {
-    var multiPurposePopComponent: MultiPurposePopComponent { get }
-    var playListDetailComponent: PlayListDetailComponent { get }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
@@ -30,8 +32,8 @@ public final class MyPlayListComponent: Component<MyPlayListDependency> {
                 deletePlayListUseCase: dependency.deletePlayListUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            multiPurposePopComponent: dependency.multiPurposePopComponent,
-            playListDetailComponent: dependency.playListDetailComponent
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            playlistDetailFactory: dependency.playlistDetailFactory
         )
     }
 }

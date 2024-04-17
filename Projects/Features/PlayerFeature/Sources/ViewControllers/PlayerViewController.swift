@@ -6,8 +6,8 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
 import Combine
-import CommonFeature
 import DesignSystem
 import Kingfisher
 import PanModal

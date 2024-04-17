@@ -7,7 +7,7 @@
 //
 
 import AuthenticationServices
-import CommonFeature
+import BaseFeature
 import DesignSystem
 import NaverThirdPartyLogin
 import RxRelay

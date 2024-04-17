@@ -6,11 +6,12 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import BaseFeature
 import ChartDomainInterface
-import CommonFeature
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
+import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit
 
@@ -18,7 +19,7 @@ public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playListDetailComponent: PlayListDetailComponent { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var newSongsComponent: NewSongsComponent { get }
 }
 
@@ -30,7 +31,7 @@ public final class HomeComponent: Component<HomeDependency> {
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
             ),
-            playListDetailComponent: dependency.playListDetailComponent,
+            playlistDetailFactory: dependency.playlistDetailFactory,
             newSongsComponent: dependency.newSongsComponent
         )
     }

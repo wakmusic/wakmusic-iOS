@@ -1,4 +1,4 @@
-import CommonFeature
+import BaseFeature
 import DesignSystem
 import Pageboy
 import Tabman
