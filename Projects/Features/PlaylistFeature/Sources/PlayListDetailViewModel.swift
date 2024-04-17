@@ -18,7 +18,6 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-
 public final class PlayListDetailViewModel: ViewModelType {
     var type: PlayListType!
     var id: String!
