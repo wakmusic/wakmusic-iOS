@@ -37,24 +37,19 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     }
 
     public struct Output {
-        var canLoadMore: BehaviorRelay<Bool>
-        var dataSource: BehaviorRelay<[ArtistSongListEntity]>
-        let indexOfSelectedSongs: BehaviorRelay<[Int]>
-        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]>
+        var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        var dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
+        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
+        let output = Output()
         let ID: String = model?.artistId ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
-
-        let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
-        let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
-        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-
         let refresh = Observable
-            .combineLatest(dataSource, input.pageID) { dataSource, pageID -> [ArtistSongListEntity] in
+            .combineLatest(output.dataSource, input.pageID) { dataSource, pageID -> [ArtistSongListEntity] in
                 return pageID == 1 ? [] : dataSource
             }
 
@@ -67,19 +62,19 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .asObservable()
             .do(onNext: { model in
                 let loadMore: Bool = model.count < 30 ? false : true
-                canLoadMore.accept(loadMore)
+                output.canLoadMore.accept(loadMore)
                 // DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(loadMore)")
             }, onError: { _ in
-                canLoadMore.accept(false)
+                output.canLoadMore.accept(false)
             })
             .withLatestFrom(refresh, resultSelector: { newModels, datasources -> [ArtistSongListEntity] in
                 return datasources + newModels
             })
-            .bind(to: dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
         input.songTapped
-            .withLatestFrom(indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
+            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
                 if selectedSongs.contains(index) {
                     guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
                     else { return selectedSongs }
@@ -92,25 +87,25 @@ public final class ArtistMusicContentViewModel: ViewModelType {
                 }
             })
             .map { $0.sorted { $0 < $1 } }
-            .bind(to: indexOfSelectedSongs)
+            .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
 
         input.allSongSelected
-            .withLatestFrom(dataSource) { ($0, $1) }
+            .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { flag, dataSource -> [Int] in
                 return flag ? Array(0 ..< dataSource.count) : []
             }
-            .bind(to: indexOfSelectedSongs)
+            .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
 
         Utility.PreferenceManager.$startPage
             .skip(1)
             .map { _ in [] }
-            .bind(to: indexOfSelectedSongs)
+            .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
 
-        indexOfSelectedSongs
-            .withLatestFrom(dataSource) { ($0, $1) }
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { selectedSongs, dataSource in
                 var newModel = dataSource
                 newModel.indices.forEach { newModel[$0].isSelected = false }
@@ -120,11 +115,11 @@ public final class ArtistMusicContentViewModel: ViewModelType {
                 }
                 return newModel
             }
-            .bind(to: dataSource)
+            .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
-        indexOfSelectedSongs
-            .withLatestFrom(dataSource) { ($0, $1) }
+        output.indexOfSelectedSongs
+            .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { indexOfSelectedSongs, dataSource in
                 return indexOfSelectedSongs.map {
                     SongEntity(
@@ -139,14 +134,9 @@ public final class ArtistMusicContentViewModel: ViewModelType {
                     )
                 }
             }
-            .bind(to: songEntityOfSelectedSongs)
+            .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
 
-        return Output(
-            canLoadMore: canLoadMore,
-            dataSource: dataSource,
-            indexOfSelectedSongs: indexOfSelectedSongs,
-            songEntityOfSelectedSongs: songEntityOfSelectedSongs
-        )
+        return output
     }
 }

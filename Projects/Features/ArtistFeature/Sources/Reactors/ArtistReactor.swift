@@ -32,9 +32,6 @@ public final class ArtistReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
-
-        default:
-            return .empty()
         }
     }
 
@@ -64,7 +61,7 @@ private extension ArtistReactor {
                 // Waterfall Grid UI가 기본적으로 왼쪽부터 쌓이게 되기에 첫번째 Cell을 hide 시킵니다
                 if newArtistList.count == 1 {
                     let hiddenItem: ArtistListEntity = self.makeHiddenArtistEntity()
-                    newArtistList.append(hiddenItem)
+                    newArtistList.insert(hiddenItem, at: 0)
                 } else {
                     newArtistList.swapAt(0, 1)
                 }
