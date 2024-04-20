@@ -10,10 +10,10 @@ open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController, St
     ViewControllerFromStoryBoard {
     public var disposeBag = DisposeBag()
 
-    @available(*, unavailable)
-    public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    @available(*, unavailable)
+//    public required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
 
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,7 @@ open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController, St
         configureNavigation()
     }
 
-    public func bind(reactor: R) {
+    open func bind(reactor: R) {
         bindState(reactor: reactor)
         bindAction(reactor: reactor)
     }

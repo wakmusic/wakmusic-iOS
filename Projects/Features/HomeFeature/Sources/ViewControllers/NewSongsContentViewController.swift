@@ -201,7 +201,7 @@ extension NewSongsContentViewController: UITableViewDelegate {
 }
 
 extension NewSongsContentViewController: PlayButtonGroupViewDelegate {
-    public func pressPlay(_ event: PlayEvent) {
+    public func play(_ event: PlayEvent) {
         input.groupPlayTapped.onNext(event)
     }
 }

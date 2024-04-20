@@ -29,14 +29,13 @@ public protocol PlayListDetailDependency: Dependency {
 public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistDetailFactory {
     public func makeView(id: String, isCustom: Bool) -> UIViewController {
         return PlayListDetailViewController.viewController(
-            viewModel: PlayListDetailViewModel(
-                id: id,
+            reactor: PlaylistDetailReactor(
+                key: id,
                 type: isCustom ? .custom : .wmRecommend,
                 fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
                 editPlayListUseCase: dependency.editPlayListUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
-                logoutUseCase: dependency.logoutUseCase
-            ),
+                logoutUseCase: dependency.logoutUseCase),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             containSongsComponent: dependency.containSongsComponent
         )
