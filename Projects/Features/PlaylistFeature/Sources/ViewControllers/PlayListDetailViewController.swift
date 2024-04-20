@@ -4,6 +4,7 @@ import DesignSystem
 import Kingfisher
 import NVActivityIndicatorView
 import PanModal
+import ReactorKit
 import RxCocoa
 import RxDataSources
 import RxRelay
@@ -11,19 +12,16 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
-import ReactorKit
 
 public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
-
-//TODO: 커스텀 플리 확인
+// TODO: 커스텀 플리 확인
 
 public class PlayListDetailViewController: BaseStoryboardReactorViewController<PlaylistDetailReactor>,
     SongCartViewType,
     EditSheetViewType {
-    
     typealias Reactor = PlaylistDetailReactor
-    
+
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var completeButton: UIButton!
@@ -44,15 +42,11 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
     public var bottomSheetView: BottomSheetView!
 
     let playState = PlayState.shared
-    
-
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
-    
     deinit {
         DEBUG_LOG("\(Self.self) deinit")
     }
@@ -66,26 +60,27 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
             storyBoardName: "Playlist",
             bundle: Bundle.module
         )
-        
+
         viewController.reactor = reactor
-        
+
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.containSongsComponent = containSongsComponent
 
         return viewController
     }
-    public override func configureUI() {
+
+    override public func configureUI() {
         super.configureUI()
-        
+
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        
-       tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        
+
+        tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+
         view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
-        
+
         completeButton.isHidden = true
         editStateLabel.isHidden = true
 
@@ -93,7 +88,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
 
         completeButton.titleLabel?.text = "완료"
-         completeButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
+        completeButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         completeButton.layer.cornerRadius = 4
         completeButton.layer.borderColor = DesignSystemAsset.PrimaryColor.point.color.cgColor
         completeButton.layer.borderWidth = 1
@@ -105,7 +100,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
         playListCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
         playListCountLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-                    .withAlphaComponent(0.6) // opacity 60%
+            .withAlphaComponent(0.6) // opacity 60%
         playListCountLabel.setTextWithAttributes(kernValue: -0.5)
 
         playListNameLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 20)
@@ -118,26 +113,25 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         playListImage.layer.cornerRadius = 12
         moreButton.isHidden = reactor?.type == .wmRecommend
         editPlayListNameButton.isHidden = true
-        
     }
-    public override func bind(reactor: PlaylistDetailReactor) {
+
+    override public func bind(reactor: PlaylistDetailReactor) {
         super.bind(reactor: reactor)
-        
+
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        
+
         tableView.register(
-                   UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
-                   forCellReuseIdentifier: "SongListCell"
+            UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
+            forCellReuseIdentifier: "SongListCell"
         )
-        
     }
-    
-    public override func bindState(reactor: PlaylistDetailReactor) {
+
+    override public func bindState(reactor: PlaylistDetailReactor) {
         super.bindState(reactor: reactor)
-        
+
         let currentState = reactor.state
-        
+
         currentState.map(\.dataSource)
             .do(onNext: { [weak self] model in
                 self?.activityIndicator.stopAnimating()
@@ -145,15 +139,15 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 warningView.text = "리스트에 곡이 없습니다."
                 let items = model.first?.items ?? []
                 self?.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
-                       x: 0,
-                       y: 0,
-                       width: APP_WIDTH(),
-                       height: 56
-                   ))
+                    x: 0,
+                    y: 0,
+                    width: APP_WIDTH(),
+                    height: 56
+                ))
             })
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
-        
+
         currentState.map(\.header)
             .do(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -162,79 +156,76 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 self.tableView.tableHeaderView?.frame = newFrame
             })
             .subscribe(onNext: { [weak self] model in
-                
-                guard let self else {return}
-                
+
+                guard let self else { return }
+
                 self.playListImage.kf.setImage(
                     with: self.reactor?.type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(
-                      id: model.image,
-                      version: model.version
-                  ).toURL : WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL,
-                  placeholder: nil,
-                  options: [.transition(.fade(0.2))]
-              )
-              self.playListCountLabel.text = model.songCount
-              self.playListNameLabel.text = model.title
-              self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
-                
-                
+                        id: model.image,
+                        version: model.version
+                    ).toURL : WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL,
+                    placeholder: nil,
+                    options: [.transition(.fade(0.2))]
+                )
+                self.playListCountLabel.text = model.songCount
+                self.playListNameLabel.text = model.title
+                self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+
             })
             .disposed(by: disposeBag)
-        
-        
     }
-    public override func bindAction(reactor: PlaylistDetailReactor) {
-        super.bindAction(reactor: reactor)
-        
-        reactor.action.onNext(.viewDidLoad)
 
+    override public func bindAction(reactor: PlaylistDetailReactor) {
+        super.bindAction(reactor: reactor)
+
+        reactor.action.onNext(.viewDidLoad)
     }
 }
 
 extension PlayListDetailViewController {
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel> {
-            let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(
-                configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
-                    guard let self = self , let reactor = self.reactor else { return UITableViewCell() }
+        let datasource = RxTableViewSectionedReloadDataSource<PlayListDetailSectionModel>(
+            configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
+                guard let self = self, let reactor = self.reactor else { return UITableViewCell() }
 
-                    let isEditing = reactor.currentState.isEditing
-                    
-                    switch reactor.type {
-                    case .custom:
-                        guard let cell = tableView.dequeueReusableCell(
-                            withIdentifier: "PlayListTableViewCell",
-                            for: IndexPath(row: indexPath.row, section: 0)
-                        ) as? PlayListTableViewCell else {
-                            return UITableViewCell()
-                        }
-                        cell.update(model,isEditing, index: indexPath.row)
-                        cell.delegate = self
-                        return cell
+                let isEditing = reactor.currentState.isEditing
 
-                    case .wmRecommend:
-                        guard let cell = tableView.dequeueReusableCell(
-                            withIdentifier: "SongListCell",
-                            for: IndexPath(row: indexPath.row, section: 0)
-                        ) as? SongListCell else {
-                            return UITableViewCell()
-                        }
-                        cell.update(model)
-                        return cell
-
-                    case .none:
+                switch reactor.type {
+                case .custom:
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: "PlayListTableViewCell",
+                        for: IndexPath(row: indexPath.row, section: 0)
+                    ) as? PlayListTableViewCell else {
                         return UITableViewCell()
                     }
+                    cell.update(model, isEditing, index: indexPath.row)
+                    cell.delegate = self
+                    return cell
 
-                },
-                canEditRowAtIndexPath: { _, _ -> Bool in
-                    return true
-                },
-                canMoveRowAtIndexPath: { _, _ -> Bool in
-                    return true
+                case .wmRecommend:
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: "SongListCell",
+                        for: IndexPath(row: indexPath.row, section: 0)
+                    ) as? SongListCell else {
+                        return UITableViewCell()
+                    }
+                    cell.update(model)
+                    return cell
+
+                case .none:
+                    return UITableViewCell()
                 }
-            )
-            return datasource
-        }
+
+            },
+            canEditRowAtIndexPath: { _, _ -> Bool in
+                return true
+            },
+            canMoveRowAtIndexPath: { _, _ -> Bool in
+                return true
+            }
+        )
+        return datasource
+    }
 }
 
 extension PlayListDetailViewController: UITableViewDelegate {
@@ -265,22 +256,13 @@ extension PlayListDetailViewController: UITableViewDelegate {
 }
 
 extension PlayListDetailViewController: PlayListCellDelegate {
-    public func buttonTapped(type: PlayListCellDelegateConstant) {
-        
-    }
-    
+    public func buttonTapped(type: PlayListCellDelegateConstant) {}
 }
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
-    public func play(_ event: BaseFeature.PlayEvent) {
-        
-    }
-
+    public func play(_ event: BaseFeature.PlayEvent) {}
 }
 
 extension PlayListDetailViewController: PlayButtonDelegate {
-    public func play(model: SongEntity) {
-        
-    }
-    
+    public func play(model: SongEntity) {}
 }

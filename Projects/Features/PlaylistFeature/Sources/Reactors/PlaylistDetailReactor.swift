@@ -74,33 +74,29 @@ public final class PlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return fetchData()
-        case .itemMoved((let sourceIndex, let destinationIndex)):
+        case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-            
+
         case .tapEdit:
             return .just(Mutation.beginEdit)
-  
+
         case .completeEdit:
             return .just(.saveData)
-            
-            
         }
     }
 
-
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
-        
         case let .updateOrder(data):
             newState.dataSource = data
-            
+
         case let .updateData(metadata):
             newState.backupDataSource = metadata.list
             newState.dataSource = metadata.list
             newState.header = metadata.header
-            
+
         case .beginEdit:
             newState.isEditing = true
         case .saveData:
@@ -148,7 +144,7 @@ private extension PlaylistDetailReactor {
             }
             .map(Mutation.updateData)
     }
-    
+
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         var tmp = currentState.dataSource
         let target = tmp[src]
@@ -156,20 +152,17 @@ private extension PlaylistDetailReactor {
         tmp.insert(target, at: dest)
         return .just(.updateOrder(tmp))
     }
+
     func saveData() -> Observable<Mutation> {
-        
-        let dataSource = currentState.dataSource[0].items.map{$0.id}
-        let backupDataSource = currentState.backupDataSource[0].items.map{$0.id}
-        
+        let dataSource = currentState.dataSource[0].items.map { $0.id }
+        let backupDataSource = currentState.backupDataSource[0].items.map { $0.id }
+
         if dataSource.elementsEqual(backupDataSource) {
             return .empty()
         }
-        
-        
+
         self.editPlayListUseCase.execute(key: key, songs: dataSource)
-        
+
         return .empty()
     }
-    
-
 }

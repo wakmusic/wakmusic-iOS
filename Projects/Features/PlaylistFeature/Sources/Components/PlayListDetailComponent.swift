@@ -35,7 +35,8 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
                 fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
                 editPlayListUseCase: dependency.editPlayListUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
-                logoutUseCase: dependency.logoutUseCase),
+                logoutUseCase: dependency.logoutUseCase
+            ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             containSongsComponent: dependency.containSongsComponent
         )
