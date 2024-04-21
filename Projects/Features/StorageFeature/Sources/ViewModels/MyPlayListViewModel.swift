@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AnalyticsLogManager
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
@@ -168,6 +169,7 @@ public final class MyPlayListViewModel: ViewModelType {
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             output.onLogout.accept(wmError)
+                            AnalyticsLogManager.setUserID(userID: nil)
                             return logoutUseCase.execute()
                                 .andThen(.never())
                         } else {
@@ -221,6 +223,7 @@ public final class MyPlayListViewModel: ViewModelType {
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             output.onLogout.accept(wmError)
+                            AnalyticsLogManager.setUserID(userID: nil)
                             return logoutUseCase.execute()
                                 .andThen(.never())
                         } else {

@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AnalyticsLogManager
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
@@ -60,6 +61,7 @@ public final class RequestViewModel: ViewModelType {
                     naverLoginInstance?.requestDeleteToken()
                 }
 
+                AnalyticsLogManager.setUserID(userID: nil)
                 return logoutUseCase.execute()
                     .andThen(Single.just(entity))
             }

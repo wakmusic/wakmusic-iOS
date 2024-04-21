@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AnalyticsLogManager
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
@@ -91,6 +92,7 @@ public final class ProfilePopViewModel {
 
                         if wmError == .tokenExpired {
                             output.onLogout.accept(error)
+                            AnalyticsLogManager.setUserID(userID: nil)
                             return logoutUseCase.execute()
                                 .andThen(.never())
                         } else {
