@@ -16,6 +16,7 @@ let project = Project.module(
                     .domain(target: .BaseDomain, type: .interface),
                     .domain(target: .PlayListDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
+                    .module(target: .AnalyticsLogManager),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
                     .Project.Module.Utility
