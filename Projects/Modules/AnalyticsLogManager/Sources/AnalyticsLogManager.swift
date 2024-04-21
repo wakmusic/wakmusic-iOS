@@ -10,18 +10,29 @@ fileprivate extension OSLog {
 }
 
 private extension AnalyticsLogManager {
-    static func log(_ message: Any, level: Level) {
+    static func log(
+        _ message: Any,
+        level: Level,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
         #if DEBUG
-            let logger = Logger(subsystem: OSLog.subSystem, category: level.category)
-            let logMessage = "[\(level.symbol) \(level.category)] > \(message)"
-            switch level {
-            case .debug:
-                logger.debug("\(logMessage)")
-            case .analytics:
-                logger.info("\(logMessage)")
-            case .error:
-                logger.error("\(logMessage)")
-            }
+        let logger = Logger(subsystem: OSLog.subSystem, category: level.category)
+
+        let fileName = file.components(separatedBy: "/").last ?? "unknown.swift"
+        let functionName = function.components(separatedBy: "(").first ?? "unknown"
+        let footerMessage = "\(fileName) \(functionName):\(line)"
+
+        let logMessage = "[\(level.symbol) \(level.category)] > \(message)\n-> \(footerMessage)"
+        switch level {
+        case .debug:
+            logger.debug("\(logMessage)")
+        case .analytics:
+            logger.info("\(logMessage)")
+        case .error:
+            logger.error("\(logMessage)")
+        }
         #endif
     }
 }
@@ -59,11 +70,24 @@ public extension AnalyticsLogManager {
         Analytics.setDefaultEventParameters(params)
     }
 
-    static func debug(_ message: Any) {
-        AnalyticsLogManager.log(message, level: .debug)
+    static func debug(
+        _ message: Any,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        AnalyticsLogManager.log(
+            message,
+            level: .debug,
+            file: file,
+            function: function,
+            line: line
+        )
     }
 
-    static func analytics(_ log: any AnalyticsLog) {
+    static func analytics(
+        _ log: any AnalyticsLog
+    ) {
         #if RELEASE
             Analytics.logEvent(log.name, parameters: log.params)
         #endif
@@ -74,7 +98,18 @@ public extension AnalyticsLogManager {
         AnalyticsLogManager.log(message, level: .analytics)
     }
 
-    static func error(_ message: Any) {
-        AnalyticsLogManager.log(message, level: .error)
+    static func error(
+        _ message: Any,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        AnalyticsLogManager.log(
+            message,
+            level: .error,
+            file: file,
+            function: function,
+            line: line
+        )
     }
 }
