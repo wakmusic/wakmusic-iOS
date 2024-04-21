@@ -31,7 +31,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     }
 
     public struct Input {
-        var pageID: BehaviorRelay<Int>
+        var pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
         var songTapped: PublishSubject<Int> = PublishSubject()
         var allSongSelected: PublishSubject<Bool> = PublishSubject()
     }
@@ -39,8 +39,8 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     public struct Output {
         var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
         var dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
-        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        var indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        var songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
@@ -48,6 +48,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         let ID: String = model?.artistId ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
+
         let refresh = Observable
             .combineLatest(output.dataSource, input.pageID) { dataSource, pageID -> [ArtistSongListEntity] in
                 return pageID == 1 ? [] : dataSource
