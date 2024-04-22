@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LogManager
 import RxSwift
 
 public extension PreferenceManager {
@@ -60,5 +61,10 @@ public extension PreferenceManager {
             version: version
         )
         Utility.PreferenceManager.userInfo = userInfo
+    }
+
+    static func clear() {
+        LogManager.setUserID(userID: nil)
+        PreferenceManager.userInfo = nil
     }
 }

@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import AnalyticsLogManager
 import AuthDomainInterface
 import BaseFeature
 import Combine
@@ -213,7 +212,6 @@ final class PlayerViewModel: ViewModelType {
                 logoutUseCase.execute()
                     .andThen(Observable.just(()))
                     .bind { _ in
-                        AnalyticsLogManager.setUserID(userID: nil)
                         output.onLogout.send(())
                     }
                     .disposed(by: disposeBag)

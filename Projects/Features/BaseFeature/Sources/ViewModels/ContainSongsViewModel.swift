@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import AnalyticsLogManager
 import AuthDomainInterface
 import ErrorModule
 import Foundation
@@ -66,7 +65,6 @@ public final class ContainSongsViewModel: ViewModelType {
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
-                            AnalyticsLogManager.setUserID(userID: nil)
                             return logoutUseCase.execute()
                                 .andThen(.never())
                         } else {

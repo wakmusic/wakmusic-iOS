@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import AnalyticsLogManager
 import AppDomainInterface
 import AuthDomainInterface
 import BaseFeature
@@ -113,7 +112,6 @@ public final class IntroViewModel: ViewModelType {
                         .flatMap { isExist in
                             output.userInfoResult.onNext(.success(""))
                             if isExist {
-                                AnalyticsLogManager.setUserID(userID: nil)
                                 return logoutUseCase.execute()
                                     .andThen(Observable.just(false))
                             } else {
@@ -138,7 +136,6 @@ public final class IntroViewModel: ViewModelType {
                     logoutUseCase.execute()
                         .andThen(Observable.just(()))
                         .bind {
-                            AnalyticsLogManager.setUserID(userID: nil)
                             Utility.PreferenceManager.startPage = 4
                         }
                         .disposed(by: disposeBag)

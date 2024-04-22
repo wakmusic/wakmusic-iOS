@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import AnalyticsLogManager
 import AuthDomainInterface
 import BaseFeature
 import Foundation
@@ -67,7 +66,6 @@ public final class AfterLoginViewModel: ViewModelType {
         input.pressLogOut
             .compactMap { PreferenceManager.userInfo?.platform }
             .flatMap { [naverLoginInstance, logoutUseCase] platform in
-                AnalyticsLogManager.setUserID(userID: nil)
                 switch platform {
                 case "naver":
                     naverLoginInstance?.resetToken()

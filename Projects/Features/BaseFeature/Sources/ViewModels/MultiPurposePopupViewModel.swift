@@ -6,7 +6,6 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import AnalyticsLogManager
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeatureInterface
@@ -82,7 +81,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
                                 logoutRelay.accept(error)
-                                AnalyticsLogManager.setUserID(userID: nil)
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
@@ -118,7 +116,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
                                 logoutRelay.accept(error)
-                                AnalyticsLogManager.setUserID(userID: nil)
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
@@ -148,7 +145,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
                                 logoutRelay.accept(error)
-                                AnalyticsLogManager.setUserID(userID: nil)
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
@@ -183,7 +179,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {
                                 logoutRelay.accept(error)
-                                AnalyticsLogManager.setUserID(userID: nil)
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
