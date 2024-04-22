@@ -63,7 +63,7 @@ public extension PreferenceManager {
         Utility.PreferenceManager.userInfo = userInfo
     }
 
-    static func clear() {
+    static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
         PreferenceManager.userInfo = nil
     }
