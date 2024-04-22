@@ -62,7 +62,7 @@ public extension ModulePaths {
 
 public extension ModulePaths {
     enum Module: String, MicroTargetPathConvertable {
-        case AnalyticsLogManager
+        case LogManager
         case ErrorModule
         case FeatureThirdPartyLib
         case KeychainModule

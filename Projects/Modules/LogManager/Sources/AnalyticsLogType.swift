@@ -1,11 +1,11 @@
 import Foundation
 
-public protocol AnalyticsLog {
+public protocol AnalyticsLogType {
     var name: String { get }
     var params: [String: Any] { get }
 }
 
-public extension AnalyticsLog {
+public extension AnalyticsLogType {
     var name: String {
         Mirror(reflecting: self)
             .children

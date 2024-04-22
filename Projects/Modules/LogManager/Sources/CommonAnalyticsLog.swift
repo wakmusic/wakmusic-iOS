@@ -1,5 +1,5 @@
 import Foundation
 
-public enum CommonAnalyticsLog: AnalyticsLog {
+public enum CommonAnalyticsLog: AnalyticsLogType {
     case viewPage(pageName: String)
 }

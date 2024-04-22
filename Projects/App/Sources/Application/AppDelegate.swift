@@ -1,9 +1,9 @@
-import AnalyticsLogManager
 import AVKit
 import BaseFeature
 import FirebaseAnalytics
 import FirebaseCore
 import FirebaseCrashlytics
+import LogManager
 import NaverThirdPartyLogin
 import RealmSwift
 import RootFeature
@@ -26,9 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         setAnalyticsDefaultParameters()
         if let userID = PreferenceManager.userInfo?.ID {
-            AnalyticsLogManager.setUserID(userID: AES256.decrypt(encoded: userID))
+            LogManager.setUserID(userID: AES256.decrypt(encoded: userID))
         } else {
-            AnalyticsLogManager.setUserID(userID: nil)
+            LogManager.setUserID(userID: nil)
         }
 
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             currentLocale.languageCode ?? "unknown"
         }
 
-        AnalyticsLogManager.setDefaultParameters(params: [
+        LogManager.setDefaultParameters(params: [
             "platform": platform,
             "os": os,
             "device": device,
