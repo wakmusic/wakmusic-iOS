@@ -25,6 +25,7 @@ let package = Package(
         .package(url: "https://github.com/ninjaprox/NVActivityIndicatorView.git", from: "5.1.1"),
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.2.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "7.5.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "13.2.1")
+        .package(url: "https://github.com/Quick/Nimble.git", from: "13.2.1"),
+        .package(url: "https://github.com/krzysztofzablocki/Inject.git", from: "1.4.0")
     ]
 )
