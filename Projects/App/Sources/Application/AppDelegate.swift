@@ -1,7 +1,9 @@
 import AVKit
+import BaseFeature
 import FirebaseAnalytics
 import FirebaseCore
 import FirebaseCrashlytics
+import LogManager
 import NaverThirdPartyLogin
 import RealmSwift
 import RootFeature
@@ -13,7 +15,7 @@ import Utility
 // import AWSS3StoragePlugin
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -22,6 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
+        setAnalyticsDefaultParameters()
+        if let userID = PreferenceManager.userInfo?.ID {
+            LogManager.setUserID(userID: AES256.decrypt(encoded: userID))
+        } else {
+            LogManager.setUserID(userID: nil)
+        }
+
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
         // configure NaverThirdPartyLoginConnection
@@ -63,4 +72,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
+}
+
+private extension AppDelegate {
+    func setAnalyticsDefaultParameters() {
+        let platform = "iOS"
+        let os = "iOS \(UIDevice.current.systemVersion)"
+        let device = Device().modelName
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+
+        let currentLocale = Locale.current
+        let region = if #available(iOS 16.0, *) {
+            currentLocale.region?.identifier ?? ""
+        } else {
+            currentLocale.regionCode ?? "unknown"
+        }
+        let language = if #available(iOS 16.0, *) {
+            currentLocale.language.languageCode?.identifier ?? "unknown"
+        } else {
+            currentLocale.languageCode ?? "unknown"
+        }
+
+        LogManager.setDefaultParameters(params: [
+            "platform": platform,
+            "os": os,
+            "device": device,
+            "version": version,
+            "region": region,
+            "language": language
+        ])
+    }
 }
