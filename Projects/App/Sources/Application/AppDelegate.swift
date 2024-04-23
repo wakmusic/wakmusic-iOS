@@ -103,3 +103,38 @@ private extension AppDelegate {
         ])
     }
 }
+
+#if DEBUG
+    extension UIWindow {
+        override open func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+            super.motionEnded(motion, with: event)
+            switch motion {
+            case .motionShake:
+                guard let topViewController = if #available(iOS 15.0, *) {
+                    UIApplication.shared.connectedScenes
+                        .compactMap { $0 as? UIWindowScene }
+                        .filter { $0.activationState == .foregroundActive }
+                        .first?
+                        .keyWindow?
+                        .rootViewController
+                } else {
+                    UIApplication.shared.connectedScenes
+                        .compactMap { $0 as? UIWindowScene }
+                        .filter { $0.activationState == .foregroundActive }
+                        .first?
+                        .windows
+                        .first(where: \.isKeyWindow)?
+                        .rootViewController
+                } else { break }
+                if let nav = topViewController as? UINavigationController {
+                    nav.visibleViewController?.present(LogHistoryViewController(), animated: true)
+                } else {
+                    topViewController.present(LogHistoryViewController(), animated: true)
+                }
+
+            default:
+                break
+            }
+        }
+    }
+#endif
