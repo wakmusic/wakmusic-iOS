@@ -11,6 +11,7 @@ import AuthenticationServices
 import BaseFeature
 import CryptoSwift
 import KeychainModule
+import LogManager
 import NaverThirdPartyLogin
 import RxCocoa
 import RxRelay
@@ -82,6 +83,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     .asObservable()
             }
             .bind {
+                LogManager.setUserID(userID: $0.id)
                 PreferenceManager.shared.setUserInfo(
                     ID: AES256.encrypt(string: $0.id),
                     platform: $0.platform,
