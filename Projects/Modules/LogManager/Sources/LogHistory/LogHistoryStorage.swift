@@ -1,14 +1,14 @@
 #if DEBUG
-import Foundation
+    import Foundation
 
-final class LogHistoryStorage {
-    static let shared = LogHistoryStorage()
+    final class LogHistoryStorage {
+        static let shared = LogHistoryStorage()
 
-    private(set) var logHistory: [any AnalyticsLogType] = []
+        private(set) var logHistory: [any AnalyticsLogType] = []
 
-    func appendHistory(log: any AnalyticsLogType) {
-        logHistory.append(log)
+        func appendHistory(log: any AnalyticsLogType) {
+            logHistory.append(log)
+        }
     }
-}
 
 #endif
