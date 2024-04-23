@@ -15,7 +15,7 @@ import Utility
 // import AWSS3StoragePlugin
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -72,8 +72,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
+}
 
-    private func setAnalyticsDefaultParameters() {
+private extension AppDelegate {
+    func setAnalyticsDefaultParameters() {
         let platform = "iOS"
         let os = "iOS \(UIDevice.current.systemVersion)"
         let device = Device().modelName
