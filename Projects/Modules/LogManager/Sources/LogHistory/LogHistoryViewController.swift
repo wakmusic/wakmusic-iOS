@@ -50,6 +50,8 @@
             snapshot.appendItems(logs, toSection: 0)
 
             logHistoryTableViewDiffableDataSource.apply(snapshot, animatingDifferences: true)
+
+            navigationItem.title = "애널리틱스 히스토리"
         }
     }
 
