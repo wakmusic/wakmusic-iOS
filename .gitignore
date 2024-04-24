@@ -85,6 +85,7 @@ Derived/
 
 ### Tuist managed dependencies ###
 Tuist/Dependencies
+*.resolved
 
 ### Tuist Master.key ###
 Tuist/master.key
