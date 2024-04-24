@@ -10,10 +10,7 @@ public extension Project {
         packages: [Package] = [],
         settings: Settings = .settings(
             base: env.baseSetting,
-            configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-            ], 
+            configurations: .default, 
             defaultSettings: .recommended
         ),
         targets: [Target],
