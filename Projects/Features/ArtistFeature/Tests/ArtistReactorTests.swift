@@ -19,7 +19,7 @@ final class ArtistReactorTests: XCTestCase {
         sut = nil
     }
 
-    func test_when_viewDidLoad_action_and_artist_count_is_1_then_append_hidden_item() {
+    func test_when_viewDidLoad_action_and_artist_count_is_1_then_insert_hidden_item() {
         // Given
         let dummyArtistList = [makeTwoDummyArtistList().first!]
         fetchArtistListUseCase.handler = {
@@ -59,20 +59,20 @@ final class ArtistReactorTests: XCTestCase {
     private func makeTwoDummyArtistList() -> [ArtistListEntity] {
         [
             ArtistListEntity(
-                artistId: "1",
-                name: "name",
-                short: "short",
-                group: "group",
-                title: "title",
-                description: "description",
-                color: [["ffffff"]],
-                youtube: "https://youtube.com",
-                twitch: "twitch",
-                instagram: "insta",
-                imageRoundVersion: 1,
-                imageSquareVersion: 1,
+                artistId: "",
+                name: "",
+                short: "",
+                group: "",
+                title: "",
+                description: "",
+                color: [],
+                youtube: "",
+                twitch: "",
+                instagram: "",
+                imageRoundVersion: 0,
+                imageSquareVersion: 0,
                 graduated: false,
-                isHiddenItem: false
+                isHiddenItem: true
             ),
             ArtistListEntity(
                 artistId: "2",
