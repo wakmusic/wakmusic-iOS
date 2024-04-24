@@ -25,7 +25,7 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     var containSongsComponent: ContainSongsComponent!
 
     private var viewModel: ArtistMusicContentViewModel!
-    lazy var input = ArtistMusicContentViewModel.Input(pageID: BehaviorRelay(value: 1))
+    lazy var input = ArtistMusicContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 

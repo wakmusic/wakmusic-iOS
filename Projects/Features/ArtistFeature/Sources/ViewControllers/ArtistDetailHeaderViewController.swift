@@ -164,7 +164,7 @@ private extension ArtistDetailHeaderViewController {
         descriptionBackView.isHidden = !descriptionFrontView.isHidden
 
         UIView.transition(
-            with: self.descriptionView,
+            with: descriptionView,
             duration: 0.3,
             options: descriptionFrontView.isHidden ? .transitionFlipFromRight : .transitionFlipFromLeft,
             animations: nil,

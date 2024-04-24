@@ -31,16 +31,16 @@ public final class ArtistMusicContentViewModel: ViewModelType {
     }
 
     public struct Input {
-        var pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
-        var songTapped: PublishSubject<Int> = PublishSubject()
-        var allSongSelected: PublishSubject<Bool> = PublishSubject()
+        let pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
+        let songTapped: PublishSubject<Int> = PublishSubject()
+        let allSongSelected: PublishSubject<Bool> = PublishSubject()
     }
 
     public struct Output {
-        var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
-        var dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
-        var indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-        var songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        let dataSource: BehaviorRelay<[ArtistSongListEntity]> = BehaviorRelay(value: [])
+        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
