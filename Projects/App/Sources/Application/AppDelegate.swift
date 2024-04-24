@@ -129,9 +129,10 @@ private extension AppDelegate {
                 }
                 guard let topViewController else { break }
                 let logHistoryViewController = UINavigationController(rootViewController: LogHistoryViewController())
-                if let nav = topViewController as? UINavigationController {
+                if let nav = topViewController as? UINavigationController,
+                   !(nav.visibleViewController is LogHistoryViewController) {
                     nav.visibleViewController?.present(logHistoryViewController, animated: true)
-                } else {
+                } else if !(topViewController is LogHistoryViewController) {
                     topViewController.present(logHistoryViewController, animated: true)
                 }
 
