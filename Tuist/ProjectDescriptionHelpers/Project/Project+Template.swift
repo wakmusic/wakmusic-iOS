@@ -21,7 +21,6 @@ public extension Project {
         additionalFiles: [FileElement] = [],
         resourceSynthesizers: [ResourceSynthesizer] = .default
     ) -> Project {
-        #warning("백튼님 여기 데모(Example) 앱 도입할 때 , schemes 쪽 건드려야할 듯??")
         return Project(
             name: name,
             organizationName: env.organizationName,
@@ -29,7 +28,9 @@ public extension Project {
             packages: packages,
             settings: settings,
             targets: targets,
-            schemes: targets.contains { $0.product == .app } ? [.makeScheme(target: .debug, name: name)] : [.makeScheme(target: .debug, name: name)] ,
+            schemes: targets.contains { $0.product == .app } ?
+                [.makeScheme(target: .debug, name: name), .makeDemoScheme(target: .debug, name: name)] :
+                [.makeScheme(target: .debug, name: name)],
             fileHeaderTemplate: fileHeaderTemplate,
             additionalFiles: additionalFiles,
             resourceSynthesizers: resourceSynthesizers
