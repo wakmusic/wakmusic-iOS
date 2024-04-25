@@ -10,10 +10,7 @@ public extension Project {
         packages: [Package] = [],
         settings: Settings = .settings(
             base: env.baseSetting,
-            configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-            ], 
+            configurations: .default, 
             defaultSettings: .recommended
         ),
         targets: [Target],
@@ -21,7 +18,6 @@ public extension Project {
         additionalFiles: [FileElement] = [],
         resourceSynthesizers: [ResourceSynthesizer] = .default
     ) -> Project {
-        #warning("백튼님 여기 데모(Example) 앱 도입할 때 , schemes 쪽 건드려야할 듯??")
         return Project(
             name: name,
             organizationName: env.organizationName,
@@ -29,7 +25,9 @@ public extension Project {
             packages: packages,
             settings: settings,
             targets: targets,
-            schemes: targets.contains { $0.product == .app } ? [.makeScheme(target: .debug, name: name)] : [.makeScheme(target: .debug, name: name)] ,
+            schemes: targets.contains { $0.product == .app } ?
+                [.makeScheme(target: .debug, name: name), .makeDemoScheme(target: .debug, name: name)] :
+                [.makeScheme(target: .debug, name: name)],
             fileHeaderTemplate: fileHeaderTemplate,
             additionalFiles: additionalFiles,
             resourceSynthesizers: resourceSynthesizers
@@ -179,11 +177,11 @@ extension Scheme {
         return Scheme(
             name: name,
             shared: true,
-            buildAction: .buildAction(targets: ["\(name)DemoApp"]),
+            buildAction: .buildAction(targets: ["\(name)Demo"]),
             testAction: .targets(
                 ["\(name)Tests"],
                 configuration: target,
-                options: .options(coverage: true, codeCoverageTargets: ["\(name)DemoApp"])
+                options: .options(coverage: true, codeCoverageTargets: ["\(name)Demo"])
             ),
             runAction: .runAction(configuration: target),
             archiveAction: .archiveAction(configuration: target),

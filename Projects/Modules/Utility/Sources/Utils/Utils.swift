@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import KeychainModule
 import UIKit
 
 public func APP_WIDTH() -> CGFloat {

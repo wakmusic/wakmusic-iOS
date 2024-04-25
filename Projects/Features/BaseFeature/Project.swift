@@ -14,6 +14,7 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .BaseFeature, type: .interface),
                     .domain(target: .BaseDomain, type: .interface),
+                    .domain(target: .AuthDomain, type: .interface),
                     .domain(target: .PlayListDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
                     .Project.Module.FeatureThirdPartyLib,

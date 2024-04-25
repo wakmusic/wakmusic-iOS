@@ -141,11 +141,12 @@ public extension Target {
         spec.with {
             $0.sources = .demoSources
             $0.settings = .settings(
-                base: spec.settings?.base ?? [:],
+                base: (spec.settings?.base ?? [:])
+                    .merging(["OTHER_LDFLAGS": "$(inherited) -Xlinker -interposable"]),
                 configurations: .default,
                 defaultSettings: spec.settings?.defaultSettings ?? .recommended
             )
-            $0.dependencies = spec.dependencies
+            $0.dependencies = spec.dependencies + [.SPM.Inject]
             $0.infoPlist = spec.infoPlist ?? .extendingDefault(with: [
                 "UIMainStoryboardFile": "",
                 "UILaunchStoryboardName": "LaunchScreen",
@@ -163,7 +164,11 @@ public extension Target {
                 "ENABLE_TESTS": .boolean(true),
             ]),
             sources: .demoSources,
-            dependencies: dependencies
+            dependencies: dependencies + [.SPM.Inject],
+            settings: .settings(
+                base: ["OTHER_LDFLAGS": "$(inherited) -Xlinker -interposable"],
+                configurations: .default
+            )
         )
         .toTarget(with: module.targetName(type: .demo), product: .app)
     }
@@ -172,11 +177,12 @@ public extension Target {
         spec.with {
             $0.sources = .demoSources
             $0.settings = .settings(
-                base: spec.settings?.base ?? [:],
+                base: (spec.settings?.base ?? [:])
+                    .merging(["OTHER_LDFLAGS": "$(inherited) -Xlinker -interposable"]),
                 configurations: .default,
                 defaultSettings: spec.settings?.defaultSettings ?? .recommended
             )
-            $0.dependencies = spec.dependencies
+            $0.dependencies = spec.dependencies + [.SPM.Inject]
             $0.infoPlist = spec.infoPlist ?? .extendingDefault(with: [
                 "UIMainStoryboardFile": "",
                 "UILaunchStoryboardName": "LaunchScreen",
@@ -194,7 +200,11 @@ public extension Target {
                 "ENABLE_TESTS": .boolean(true),
             ]),
             sources: .demoSources,
-            dependencies: dependencies
+            dependencies: dependencies + [.SPM.Inject],
+            settings: .settings(
+                base: ["OTHER_LDFLAGS": "$(inherited) -Xlinker -interposable"],
+                configurations: .default
+            )
         )
         .toTarget(with: "\(name)Demo", product: .app)
     }
