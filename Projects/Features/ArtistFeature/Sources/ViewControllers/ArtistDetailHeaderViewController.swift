@@ -34,7 +34,6 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var introDescriptionLabel: UILabel!
 
     var disposeBag: DisposeBag = DisposeBag()
-    var isBack: Bool = false
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -93,8 +92,8 @@ extension ArtistDetailHeaderViewController {
         )
 
         self.artistNameLabelHeight.constant =
-            (availableWidth >= artistNameWidth) ? 36 :
-            ceil(artistNameAttributedString.height(containerWidth: availableWidth))
+        (availableWidth >= artistNameWidth) ? 36 :
+        ceil(artistNameAttributedString.height(containerWidth: availableWidth))
 
         self.artistNameLabel.attributedText = artistNameAttributedString
 
@@ -144,51 +143,37 @@ extension ArtistDetailHeaderViewController {
         )
         self.view.layoutIfNeeded()
     }
+}
 
-    private func bind() {
+private extension ArtistDetailHeaderViewController {
+    func bind() {
         let mergeObservable = Observable.merge(
             descriptionFrontButton.rx.tap.map { _ in () },
             descriptionBackButton.rx.tap.map { _ in () }
         )
 
         mergeObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.flip()
-            }).disposed(by: disposeBag)
+            .bind(with: self) { owner, _ in
+                owner.flipArtistIntro()
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func flip() {
-        if self.isBack {
-            self.isBack = false
-            self.descriptionFrontView.isHidden = self.isBack
-            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
+    func flipArtistIntro() {
+        descriptionFrontView.isHidden = descriptionFrontView.isHidden ? false : true
+        descriptionBackView.isHidden = !descriptionFrontView.isHidden
 
-            UIView.transition(
-                with: self.descriptionView,
-                duration: 0.3,
-                options: .transitionFlipFromLeft,
-                animations: nil,
-                completion: { _ in
-                }
-            )
-        } else {
-            self.isBack = true
-            self.descriptionFrontView.isHidden = self.isBack
-            self.descriptionBackView.isHidden = !self.descriptionFrontView.isHidden
-
-            UIView.transition(
-                with: self.descriptionView,
-                duration: 0.3,
-                options: .transitionFlipFromRight,
-                animations: nil,
-                completion: { _ in
-                }
-            )
-        }
+        UIView.transition(
+            with: descriptionView,
+            duration: 0.3,
+            options: descriptionFrontView.isHidden ? .transitionFlipFromRight : .transitionFlipFromLeft,
+            animations: nil,
+            completion: { _ in
+            }
+        )
     }
 
-    private func configureUI() {
+    func configureUI() {
         descriptionFrontButton.setImage(DesignSystemAsset.Artist.documentOff.image, for: .normal)
         descriptionBackButton.setImage(DesignSystemAsset.Artist.documentOn.image, for: .normal)
 
