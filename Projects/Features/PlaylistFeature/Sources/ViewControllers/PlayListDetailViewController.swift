@@ -174,16 +174,15 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
             })
             .disposed(by: disposeBag)
-        
+
         currentState.map(\.selectedItemCount)
             .subscribe(onNext: { [weak self] count in
-                
-                guard let self , let type = self.reactor?.type else {
+
+                guard let self, let type = self.reactor?.type else {
                     return
                 }
-                
+
                 switch type {
-                    
                 case .custom:
                     break
                 case .wmRecommend:
@@ -195,15 +194,14 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                             type: .WMPlayList,
                             selectedSongCount: count,
                             totalSongCount: self.reactor?.currentState.dataSource.first?.items.count ?? 0,
-                            useBottomSpace: false)
+                            useBottomSpace: false
+                        )
                         self.songCartView?.delegate = self
                     }
                 }
-                
-                
+
             })
             .disposed(by: disposeBag)
-        
     }
 
     override public func bindAction(reactor: PlaylistDetailReactor) {
@@ -212,7 +210,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         reactor.action.onNext(.viewDidLoad)
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
-            .map {$0.row}
+            .map { $0.row }
             .subscribe(onNext: {
                 reactor.action.onNext(.tapSong($0))
             })
@@ -293,19 +291,31 @@ extension PlayListDetailViewController: UITableViewDelegate {
     }
 }
 
-extension PlayListDetailViewController : SongCartViewDelegate {
+extension PlayListDetailViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         
+        #warning("SongCart 나머지 기능 구현")
+        
+        switch type {
+        case .allSelect(flag: let flag):
+            reactor?.action.onNext(.tapAll(flag))
+        case .addSong:
+            break
+        case .addPlayList:
+            break
+        case .play:
+            break
+        case .remove:
+            break
+        }
+        
+        
     }
-    
-    
 }
 
 extension PlayListDetailViewController: EditSheetViewDelegate {
     public func buttonTapped(type: EditSheetSelectType) {
-     
         switch type {
-    
         case .edit:
             break
         case .share:
@@ -315,14 +325,11 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
         case .nickname:
             break
         }
-        
     }
 }
 
 extension PlayListDetailViewController: PlayListCellDelegate {
-    public func buttonTapped(type: PlayListCellDelegateConstant) {
-        
-    }
+    public func buttonTapped(type: PlayListCellDelegateConstant) {}
 }
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
