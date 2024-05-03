@@ -21,6 +21,7 @@ public final class PlaylistDetailReactor: Reactor {
         case completeEdit
         case tapSong(Int)
         case tapAll(Bool)
+        case undo
     }
 
     public enum Mutation {
@@ -30,6 +31,7 @@ public final class PlaylistDetailReactor: Reactor {
         case save
         case changeSelectedState(([SongEntity], Int))
         case changeAllState(([SongEntity], Int))
+        case undo
     }
 
     public struct State {
@@ -92,6 +94,8 @@ public final class PlaylistDetailReactor: Reactor {
             return changeSelectingState(index)
         case let .tapAll(flag):
             return tapAll(flag)
+        case .undo:
+            return .just(.undo)
         }
     }
 
@@ -114,6 +118,9 @@ public final class PlaylistDetailReactor: Reactor {
         case let .changeSelectedState((data, count)), let .changeAllState((data, count)):
             newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
             newState.selectedItemCount = count
+        case .undo:
+            newState.dataSource = state.backupDataSource
+            newState.isEditing = false
         }
 
         return newState

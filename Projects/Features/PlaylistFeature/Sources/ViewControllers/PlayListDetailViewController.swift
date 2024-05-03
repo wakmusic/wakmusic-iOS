@@ -113,10 +113,9 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         playListInfoView.layer.cornerRadius = 8
 
         playListImage.layer.cornerRadius = 12
-        
+
         moreButton.isHidden = false
-        //reactor?.type == .wmRecommend
-        
+        // reactor?.type == .wmRecommend
     }
 
     override public func bind(reactor: PlaylistDetailReactor) {
@@ -205,19 +204,21 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
             })
             .disposed(by: disposeBag)
-        
+
         currentState.map(\.isEditing)
             .subscribe(onNext: { [weak self] flag in
-                
+
                 guard let self else { return }
-                
+
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? self : nil
                 self.moreButton.isHidden = flag
                 self.editPlayListNameButton.isHidden = !flag
                 self.editStateLabel.isHidden = !flag
                 self.completeButton.isHidden = !flag
-                
+
+                tableView.isEditing = flag
                 tableView.reloadData()
-                
+
             })
             .disposed(by: disposeBag)
     }
@@ -233,17 +234,45 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 reactor.action.onNext(.tapSong($0))
             })
             .disposed(by: disposeBag)
-        
+
         moreButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner,_) in
-                
+            .subscribe(onNext: { owner, _ in
+
                 owner.showEditSheet(in: owner.view, type: .playList)
                 owner.editSheetView.delegate = owner
             })
             .disposed(by: disposeBag)
         
-        
+        backButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { [weak self] _ in
+                
+                guard let self , let isEditing = self.reactor?.currentState.isEditing else {
+                    return
+                }
+                    
+                if isEditing {
+                    
+                    let vc = TextPopupViewController.viewController(
+                                   text: "변경된 내용을 저장할까요?",
+                                   cancelButtonIsHidden: false,
+                                   completion: {
+
+                                   },
+                                   cancelCompletion: {
+                                       self.reactor?.action.onNext(.undo)
+                                   }
+                               )
+                               self.showPanModal(content: vc)
+                    
+                } else {
+                    
+                    self.navigationController?.popViewController(animated: true)
+                }
+              
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -364,4 +393,10 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
 
 extension PlayListDetailViewController: PlayButtonDelegate {
     public func play(model: SongEntity) {}
+}
+
+extension PlayListDetailViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
 }
