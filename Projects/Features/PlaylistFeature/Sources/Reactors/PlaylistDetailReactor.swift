@@ -11,7 +11,7 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-#warning("저장하기, ")
+#warning("저장하기, 업데이트")
 
 public final class PlaylistDetailReactor: Reactor {
     public enum Action {
@@ -20,17 +20,17 @@ public final class PlaylistDetailReactor: Reactor {
         case tapEdit
         case completeEdit
         case tapSong(Int)
-        case tapAll(Bool)
+        case tapAll(isSelecting: Bool)
         case undo
     }
 
     public enum Mutation {
         case fetchData(PlaylistMetaData)
         case updateOrder([SongEntity])
-        case beginEdit
+        case beginEditing
         case save
-        case changeSelectedState(([SongEntity], Int))
-        case changeAllState(([SongEntity], Int))
+        case changeSelectedState((data: [SongEntity], selectedCount: Int))
+        case changeAllState((data: [SongEntity], selectedCount: Int))
         case undo
     }
 
@@ -86,7 +86,7 @@ public final class PlaylistDetailReactor: Reactor {
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
 
         case .tapEdit:
-            return .just(Mutation.beginEdit)
+            return .just(Mutation.beginEditing)
 
         case .completeEdit:
             return saveData()
@@ -111,7 +111,7 @@ public final class PlaylistDetailReactor: Reactor {
             newState.dataSource = metadata.list
             newState.header = metadata.header
 
-        case .beginEdit:
+        case .beginEditing:
             newState.isEditing = true
         case .save:
             newState.isEditing = false

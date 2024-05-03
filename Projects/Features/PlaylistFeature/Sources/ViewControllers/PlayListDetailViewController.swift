@@ -377,7 +377,7 @@ extension PlayListDetailViewController: SongCartViewDelegate {
 
         switch type {
         case let .allSelect(flag: flag):
-            reactor?.action.onNext(.tapAll(flag))
+            reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
             let songs = reactor?.currentState.dataSource.first?.items.filter { $0.isSelected }.map { $0.id }
             // songContainer
