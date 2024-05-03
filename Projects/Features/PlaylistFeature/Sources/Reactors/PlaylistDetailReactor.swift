@@ -14,7 +14,7 @@ import Utility
 #warning("저장하기, 업데이트")
 
 internal final class PlaylistDetailReactor: Reactor {
-     enum Action {
+    enum Action {
         case viewDidLoad
         case itemMoved(ItemMovedEvent)
         case tapEdit
@@ -24,7 +24,7 @@ internal final class PlaylistDetailReactor: Reactor {
         case undo
     }
 
-     enum Mutation {
+    enum Mutation {
         case fetchData(PlaylistMetaData)
         case updateOrder([SongEntity])
         case beginEditing
@@ -34,7 +34,7 @@ internal final class PlaylistDetailReactor: Reactor {
         case undo
     }
 
-     struct State {
+    struct State {
         var dataSource: [PlayListDetailSectionModel]
         var backupDataSource: [PlayListDetailSectionModel]
         var header: PlayListHeaderModel
@@ -100,7 +100,7 @@ internal final class PlaylistDetailReactor: Reactor {
         }
     }
 
-     func reduce(state: State, mutation: Mutation) -> State {
+    func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
         switch mutation {

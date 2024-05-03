@@ -330,7 +330,6 @@ extension PlayListDetailViewController {
                     }
                     cell.update(model)
                     return cell
-
                 }
 
             },
