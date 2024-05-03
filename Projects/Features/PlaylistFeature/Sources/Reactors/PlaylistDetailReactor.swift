@@ -73,7 +73,8 @@ internal final class PlaylistDetailReactor: Reactor {
                 songCount: "",
                 image: "",
                 version: 0
-            ), selectedItemCount: 0,
+            ), 
+            selectedItemCount: 0,
             isEditing: false
         )
     }
@@ -198,7 +199,7 @@ private extension PlaylistDetailReactor {
         guard var tmp = currentState.dataSource.first?.items else {
             return .empty()
         }
-    
+
         var count = currentState.selectedItemCount
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1

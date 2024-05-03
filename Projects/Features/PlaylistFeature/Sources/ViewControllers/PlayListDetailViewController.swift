@@ -237,12 +237,12 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
             .map { $0.row }
-            .map { Reactor.Action.tapSong($0)}
+            .map { Reactor.Action.tapSong($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
-            .map{ Reactor.Action.itemMoved($0) }
+            .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
