@@ -18,7 +18,7 @@ internal final class PlaylistDetailReactor: Reactor {
         case viewDidLoad
         case itemMoved(ItemMovedEvent)
         case tapEdit
-        case completeEdit
+        case save
         case tapSong(Int)
         case tapAll(isSelecting: Bool)
         case undo
@@ -27,11 +27,10 @@ internal final class PlaylistDetailReactor: Reactor {
     enum Mutation {
         case fetchData(PlaylistMetaData)
         case updateOrder([SongEntity])
-        case beginEditing
-        case save
         case changeSelectedState(data: [SongEntity], selectedCount: Int)
         case changeAllState(data: [SongEntity], selectedCount: Int)
-        case undo
+        case updateDataSource(data: [PlayListDetailSectionModel])
+        case updateIsEditing(Bool)
     }
 
     struct State {
@@ -87,16 +86,24 @@ internal final class PlaylistDetailReactor: Reactor {
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
 
         case .tapEdit:
-            return .just(Mutation.beginEditing)
+            return updateIsEditing(true)
 
-        case .completeEdit:
-            return saveData()
+        case .save:
+            return .concat(
+                updateIsEditing(false),
+                updateDataSource(false),
+                saveData()
+            )
         case let .tapSong(index):
             return changeSelectingState(index)
         case let .tapAll(flag):
             return tapAll(flag)
         case .undo:
-            return .just(.undo)
+            return .concat(
+                updateIsEditing(false),
+                updateDataSource(true)
+            )
+
         }
     }
 
@@ -112,16 +119,16 @@ internal final class PlaylistDetailReactor: Reactor {
             newState.dataSource = metadata.list
             newState.header = metadata.header
 
-        case .beginEditing:
-            newState.isEditing = true
-        case .save:
-            newState.isEditing = false
         case let .changeSelectedState((data, count)), let .changeAllState((data, count)):
             newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
             newState.selectedItemCount = count
-        case .undo:
-            newState.dataSource = state.backupDataSource
-            newState.isEditing = false
+            
+        case let .updateDataSource(dataSource):
+            newState.dataSource = dataSource
+            newState.backupDataSource = dataSource
+            
+        case let .updateIsEditing(flag):
+            newState.isEditing = flag
         }
 
         return newState
@@ -166,6 +173,20 @@ private extension PlaylistDetailReactor {
             }
             .map(Mutation.fetchData)
     }
+    
+    /// 데이터 업데이트
+    
+    func updateDataSource(_ isBackup: Bool) -> Observable<Mutation> {
+        
+        let tmp = isBackup ?  currentState.backupDataSource : currentState.dataSource
+   
+        return .just(.updateDataSource(data:tmp))
+    }
+    
+    func updateIsEditing(_ flag: Bool) -> Observable<Mutation> {
+        
+        return .just(.updateIsEditing(flag))
+    }
 
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
@@ -176,7 +197,7 @@ private extension PlaylistDetailReactor {
         return .just(.updateOrder(tmp))
     }
 
-    /// 저장(서버)
+    /// 저장(서버) , 따로 패치는 안한다 ..
     func saveData() -> Observable<Mutation> {
         let dataSource = currentState.dataSource.first?.items.map { $0.id } ?? []
         let backupDataSource = currentState.backupDataSource.first?.items.map { $0.id } ?? []
@@ -188,8 +209,9 @@ private extension PlaylistDetailReactor {
         return editPlayListUseCase
             .execute(key: key, songs: dataSource)
             .asObservable()
-            .map { _ in .save }
-
+            .flatMap({_ in Observable.empty()})
+        
+        // 노티피케이션
         // 여기서 새로운 데이터 패치 해야하는데 ??
     }
 
