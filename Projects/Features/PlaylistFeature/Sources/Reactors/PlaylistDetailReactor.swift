@@ -17,13 +17,15 @@ public final class PlaylistDetailReactor: Reactor {
         case itemMoved(ItemMovedEvent)
         case tapEdit
         case completeEdit
+        case tapSong(Int)
     }
 
     public enum Mutation {
-        case updateData(PlaylistMetaData)
-        case updateOrder([PlayListDetailSectionModel])
+        case fetchData(PlaylistMetaData)
+        case updateOrder([SongEntity])
         case beginEdit
-        case saveData
+        case save
+        case changeSelectedState(([SongEntity],Int))
     }
 
     public struct State {
@@ -81,7 +83,11 @@ public final class PlaylistDetailReactor: Reactor {
             return .just(Mutation.beginEdit)
 
         case .completeEdit:
-            return .just(.saveData)
+            return saveData()
+        case let .tapSong(index):
+            return changeSelectingState(index)
+            
+            
         }
     }
 
@@ -90,17 +96,20 @@ public final class PlaylistDetailReactor: Reactor {
 
         switch mutation {
         case let .updateOrder(data):
-            newState.dataSource = data
+            newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
 
-        case let .updateData(metadata):
+        case let .fetchData(metadata):
             newState.backupDataSource = metadata.list
             newState.dataSource = metadata.list
             newState.header = metadata.header
 
         case .beginEdit:
             newState.isEditing = true
-        case .saveData:
-            break
+        case .save:
+            newState.isEditing = false
+        case let  .changeSelectedState((data, count)):
+            newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
+            newState.selectedItemCount = count
         }
 
         return newState
@@ -142,11 +151,11 @@ private extension PlaylistDetailReactor {
                     )
                 )
             }
-            .map(Mutation.updateData)
+            .map(Mutation.fetchData)
     }
 
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
-        var tmp = currentState.dataSource
+        var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
         let target = tmp[src]
         tmp.remove(at: src)
         tmp.insert(target, at: dest)
@@ -161,8 +170,20 @@ private extension PlaylistDetailReactor {
             return .empty()
         }
 
-        self.editPlayListUseCase.execute(key: key, songs: dataSource)
-
-        return .empty()
+        return editPlayListUseCase
+            .execute(key: key, songs: dataSource)
+            .asObservable()
+            .map{_ in .save}
+        
+        
+        // 여기서 새로운 데이터 패치 해야하는데 ??
+    }
+    func changeSelectingState(_ index: Int) -> Observable<Mutation> {
+        var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
+        var count = currentState.selectedItemCount
+        let target = tmp[index]
+        count = target.isSelected ? count-1 : count+1
+        tmp[index].isSelected = !tmp[index].isSelected
+        return .just(.changeSelectedState((tmp, count)))
     }
 }
