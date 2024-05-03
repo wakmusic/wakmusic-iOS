@@ -18,7 +18,6 @@ public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 // TODO: 커스텀 플리 확인 ( 삭제 및 업데이트(노티) )
 // TODO: songCart ( 곡 담기, 재생목록 추가 , 재생 ?)
 
-
 public class PlayListDetailViewController: BaseStoryboardReactorViewController<PlaylistDetailReactor>,
     SongCartViewType,
     EditSheetViewType {
@@ -364,7 +363,7 @@ extension PlayListDetailViewController: SongCartViewDelegate {
         case let .allSelect(flag: flag):
             reactor?.action.onNext(.tapAll(flag))
         case .addSong:
-            let songs = reactor?.currentState.dataSource.first?.items.filter{$0.isSelected}.map{$0.id}
+            let songs = reactor?.currentState.dataSource.first?.items.filter { $0.isSelected }.map { $0.id }
             // songContainer
             break
         case .addPlayList:
@@ -395,11 +394,10 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
 extension PlayListDetailViewController: PlayListCellDelegate {
     public func buttonTapped(type: PlayListCellDelegateConstant) {
         switch type {
-            
-        case .listTapped(index: let index):
+        case let .listTapped(index: index):
             reactor?.action.onNext(.tapSong(index))
-        
-        case .playTapped(song: let song):
+
+        case let .playTapped(song: song):
             #warning("커스텀 플리 시 바로 재생")
             break
         }
@@ -408,15 +406,12 @@ extension PlayListDetailViewController: PlayListCellDelegate {
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
-        
         switch event {
-            
         case .allPlay:
             #warning("전체 재생")
         case .shufflePlay:
             #warning("셔플 재생")
         }
-        
     }
 }
 
