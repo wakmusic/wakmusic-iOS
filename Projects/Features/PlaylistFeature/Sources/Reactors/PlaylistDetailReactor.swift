@@ -104,6 +104,7 @@ public final class PlaylistDetailReactor: Reactor {
 
         switch mutation {
         case let .updateOrder(data):
+            DEBUG_LOG(data.map{$0.title})
             newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
 
         case let .fetchData(metadata):

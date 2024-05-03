@@ -227,6 +227,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         super.bindAction(reactor: reactor)
 
         reactor.action.onNext(.viewDidLoad)
+        
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
             .map { $0.row }
@@ -234,6 +235,13 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 reactor.action.onNext(.tapSong($0))
             })
             .disposed(by: disposeBag)
+        
+        tableView.rx.itemMoved
+            .subscribe(onNext: {
+                reactor.action.onNext(.itemMoved($0))
+            })
+            .disposed(by: disposeBag)
+        
 
         moreButton.rx.tap
             .withUnretained(self)
@@ -243,36 +251,38 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 owner.editSheetView.delegate = owner
             })
             .disposed(by: disposeBag)
-        
+
         backButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { [weak self] _ in
-                
-                guard let self , let isEditing = self.reactor?.currentState.isEditing else {
+
+                guard let self, let isEditing = self.reactor?.currentState.isEditing else {
                     return
                 }
-                    
-                if isEditing {
-                    
-                    let vc = TextPopupViewController.viewController(
-                                   text: "변경된 내용을 저장할까요?",
-                                   cancelButtonIsHidden: false,
-                                   completion: {
 
-                                   },
-                                   cancelCompletion: {
-                                       self.reactor?.action.onNext(.undo)
-                                   }
-                               )
-                               self.showPanModal(content: vc)
-                    
+                if isEditing {
+                    let vc = TextPopupViewController.viewController(
+                        text: "변경된 내용을 저장할까요?",
+                        cancelButtonIsHidden: false,
+                        completion: {},
+                        cancelCompletion: {
+                            self.reactor?.action.onNext(.undo)
+                        }
+                    )
+                    self.showPanModal(content: vc)
+
                 } else {
-                    
                     self.navigationController?.popViewController(animated: true)
                 }
-              
+
             })
             .disposed(by: disposeBag)
+        
+        // 저장 버튼 동작
+        
+        
+    
+        
     }
 }
 
