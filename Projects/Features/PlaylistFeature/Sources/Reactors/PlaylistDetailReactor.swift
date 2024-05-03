@@ -14,7 +14,7 @@ import Utility
 #warning("저장하기, 업데이트")
 
 internal final class PlaylistDetailReactor: Reactor {
-    public enum Action {
+     enum Action {
         case viewDidLoad
         case itemMoved(ItemMovedEvent)
         case tapEdit
@@ -24,17 +24,17 @@ internal final class PlaylistDetailReactor: Reactor {
         case undo
     }
 
-    public enum Mutation {
+     enum Mutation {
         case fetchData(PlaylistMetaData)
         case updateOrder([SongEntity])
         case beginEditing
         case save
-        case changeSelectedState((data: [SongEntity], selectedCount: Int))
-        case changeAllState((data: [SongEntity], selectedCount: Int))
+        case changeSelectedState(data: [SongEntity], selectedCount: Int)
+        case changeAllState(data: [SongEntity], selectedCount: Int)
         case undo
     }
 
-    public struct State {
+     struct State {
         var dataSource: [PlayListDetailSectionModel]
         var backupDataSource: [PlayListDetailSectionModel]
         var header: PlayListHeaderModel
@@ -100,7 +100,7 @@ internal final class PlaylistDetailReactor: Reactor {
         }
     }
 
-    public func reduce(state: State, mutation: Mutation) -> State {
+     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
         switch mutation {
@@ -204,7 +204,7 @@ private extension PlaylistDetailReactor {
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1
         tmp[index].isSelected = !tmp[index].isSelected
-        return .just(.changeSelectedState((tmp, count)))
+        return .just(.changeSelectedState(data: tmp, selectedCount: count))
     }
 
     /// 전체 곡 선택 / 해제
@@ -215,6 +215,6 @@ private extension PlaylistDetailReactor {
         for i in 0 ..< tmp.count {
             tmp[i].isSelected = flag
         }
-        return .just(.changeAllState((tmp, count)))
+        return .just(.changeAllState(data: tmp, selectedCount: count))
     }
 }
