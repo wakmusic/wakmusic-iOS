@@ -37,7 +37,7 @@ public final class PlaylistDetailReactor: Reactor {
     public struct State {
         var dataSource: [PlayListDetailSectionModel]
         var backupDataSource: [PlayListDetailSectionModel]
-        var header: PlayListHeader
+        var header: PlayListHeaderModel
         var selectedItemCount: Int
         var isEditing: Bool
     }
@@ -68,7 +68,7 @@ public final class PlaylistDetailReactor: Reactor {
         self.initialState = .init(
             dataSource: [],
             backupDataSource: [],
-            header: PlayListHeader(
+            header: PlayListHeaderModel(
                 title: "",
                 songCount: "",
                 image: "",
@@ -150,12 +150,12 @@ private extension PlaylistDetailReactor {
                 guard let self else {
                     return PlaylistMetaData(
                         list: [],
-                        header: PlayListHeader(title: "", songCount: "", image: "", version: 0)
+                        header: PlayListHeaderModel(title: "", songCount: "", image: "", version: 0)
                     )
                 }
                 return PlaylistMetaData(
                     list: [PlayListDetailSectionModel(model: 0, items: result.songs)],
-                    header: PlayListHeader(
+                    header: PlayListHeaderModel(
                         title: result.title,
                         songCount: "\(result.songs.count)곡",
                         image: self.type == .wmRecommend ? result.key : result.image,

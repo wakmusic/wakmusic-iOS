@@ -41,7 +41,7 @@ public final class PlayListDetailViewModel: ViewModelType {
     }
 
     public struct Output {
-        let headerInfo: PublishRelay<PlayListHeader> = PublishRelay()
+        let headerInfo: PublishRelay<PlayListHeaderModel> = PublishRelay()
         let dataSource: BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let backUpdataSource: BehaviorRelay<[PlayListDetailSectionModel]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
@@ -96,7 +96,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                     .do(onNext: { [weak self] model in
                         guard let self = self else { return }
                         output.headerInfo.accept(
-                            PlayListHeader(
+                            PlayListHeaderModel(
                                 title: model.title,
                                 songCount: "\(model.songs.count)곡",
                                 image: self.type == .wmRecommend ?
@@ -114,7 +114,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         input.playListNameLoad
             .skip(1)
             .withLatestFrom(output.headerInfo) { ($0, $1) }
-            .map { PlayListHeader(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
+            .map { PlayListHeaderModel(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
             }
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)

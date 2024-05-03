@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PlayListHeader {
+public struct PlayListHeaderModel {
     var title: String
     var songCount: String
     var image: String
