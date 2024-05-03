@@ -43,8 +43,8 @@ internal final class PlaylistDetailReactor: Reactor {
     }
 
     public var initialState: State
-    public let type: PlayListType!
-    public let key: String!
+    public let type: PlayListType
+    public let key: String
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
     private let editPlayListUseCase: any EditPlayListUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
