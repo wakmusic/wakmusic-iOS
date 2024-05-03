@@ -73,7 +73,7 @@ internal final class PlaylistDetailReactor: Reactor {
                 songCount: "",
                 image: "",
                 version: 0
-            ), 
+            ),
             selectedItemCount: 0,
             isEditing: false
         )
