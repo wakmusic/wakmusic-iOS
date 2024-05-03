@@ -84,6 +84,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
         completeButton.isHidden = true
         editStateLabel.isHidden = true
+        editPlayListNameButton.isHidden = true
 
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         moreButton.setImage(DesignSystemAsset.Storage.more.image, for: .normal)
@@ -112,8 +113,10 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         playListInfoView.layer.cornerRadius = 8
 
         playListImage.layer.cornerRadius = 12
-        moreButton.isHidden = reactor?.type == .wmRecommend
-        editPlayListNameButton.isHidden = true
+        
+        moreButton.isHidden = false
+        //reactor?.type == .wmRecommend
+        
     }
 
     override public func bind(reactor: PlaylistDetailReactor) {
@@ -202,6 +205,21 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
             })
             .disposed(by: disposeBag)
+        
+        currentState.map(\.isEditing)
+            .subscribe(onNext: { [weak self] flag in
+                
+                guard let self else { return }
+                
+                self.moreButton.isHidden = flag
+                self.editPlayListNameButton.isHidden = !flag
+                self.editStateLabel.isHidden = !flag
+                self.completeButton.isHidden = !flag
+                
+                tableView.reloadData()
+                
+            })
+            .disposed(by: disposeBag)
     }
 
     override public func bindAction(reactor: PlaylistDetailReactor) {
@@ -215,6 +233,17 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 reactor.action.onNext(.tapSong($0))
             })
             .disposed(by: disposeBag)
+        
+        moreButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (owner,_) in
+                
+                owner.showEditSheet(in: owner.view, type: .playList)
+                owner.editSheetView.delegate = owner
+            })
+            .disposed(by: disposeBag)
+        
+        
     }
 }
 
@@ -293,11 +322,10 @@ extension PlayListDetailViewController: UITableViewDelegate {
 
 extension PlayListDetailViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
-        
         #warning("SongCart 나머지 기능 구현")
-        
+
         switch type {
-        case .allSelect(flag: let flag):
+        case let .allSelect(flag: flag):
             reactor?.action.onNext(.tapAll(flag))
         case .addSong:
             break
@@ -308,8 +336,6 @@ extension PlayListDetailViewController: SongCartViewDelegate {
         case .remove:
             break
         }
-        
-        
     }
 }
 
@@ -317,7 +343,7 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
     public func buttonTapped(type: EditSheetSelectType) {
         switch type {
         case .edit:
-            break
+            reactor?.action.onNext(.tapEdit)
         case .share:
             break
         case .profile:

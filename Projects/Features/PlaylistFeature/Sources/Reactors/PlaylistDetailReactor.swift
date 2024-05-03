@@ -11,6 +11,8 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
+#warning("저장하기, ")
+
 public final class PlaylistDetailReactor: Reactor {
     public enum Action {
         case viewDidLoad
@@ -112,7 +114,6 @@ public final class PlaylistDetailReactor: Reactor {
         case let .changeSelectedState((data, count)), let .changeAllState((data, count)):
             newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
             newState.selectedItemCount = count
-
         }
 
         return newState
@@ -122,8 +123,7 @@ public final class PlaylistDetailReactor: Reactor {
 // MARK: - Mutate
 
 private extension PlaylistDetailReactor {
-    
-    // 서버에서 데이터 불러오기
+    /// 서버에서 데이터 불러오기
     func fetchData() -> Observable<Mutation> {
         return fetchPlayListDetailUseCase.execute(id: key, type: type)
             .catchAndReturn(
@@ -159,7 +159,7 @@ private extension PlaylistDetailReactor {
             .map(Mutation.fetchData)
     }
 
-    // 순서 변경
+    /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
         let target = tmp[src]
@@ -167,9 +167,8 @@ private extension PlaylistDetailReactor {
         tmp.insert(target, at: dest)
         return .just(.updateOrder(tmp))
     }
-    
-    
-    // 저장(서버)
+
+    /// 저장(서버)
     func saveData() -> Observable<Mutation> {
         let dataSource = currentState.dataSource[0].items.map { $0.id }
         let backupDataSource = currentState.backupDataSource[0].items.map { $0.id }
@@ -186,7 +185,7 @@ private extension PlaylistDetailReactor {
         // 여기서 새로운 데이터 패치 해야하는데 ??
     }
 
-    // 단일 곡 선택 상태 변경
+    /// 단일 곡 선택 상태 변경
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
         var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
         var count = currentState.selectedItemCount
@@ -195,15 +194,15 @@ private extension PlaylistDetailReactor {
         tmp[index].isSelected = !tmp[index].isSelected
         return .just(.changeSelectedState((tmp, count)))
     }
-    // 전체 곡 선택 / 해제
+
+    /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
-        
         var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
-        var count = flag ? tmp.count : 0
-        
-        for i in 0..<tmp.count {
+        let count = flag ? tmp.count : 0
+
+        for i in 0 ..< tmp.count {
             tmp[i].isSelected = flag
         }
-        return .just(.changeAllState((tmp,count)))
+        return .just(.changeAllState((tmp, count)))
     }
 }
