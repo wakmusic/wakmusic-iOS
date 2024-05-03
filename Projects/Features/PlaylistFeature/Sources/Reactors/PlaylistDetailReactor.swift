@@ -13,7 +13,7 @@ import Utility
 
 #warning("저장하기, 업데이트")
 
-public final class PlaylistDetailReactor: Reactor {
+internal final class PlaylistDetailReactor: Reactor {
     public enum Action {
         case viewDidLoad
         case itemMoved(ItemMovedEvent)
@@ -177,8 +177,8 @@ private extension PlaylistDetailReactor {
 
     /// 저장(서버)
     func saveData() -> Observable<Mutation> {
-        let dataSource = currentState.dataSource[0].items.map { $0.id }
-        let backupDataSource = currentState.backupDataSource[0].items.map { $0.id }
+        let dataSource = currentState.dataSource.first?.items.map { $0.id } ?? []
+        let backupDataSource = currentState.backupDataSource.first?.items.map { $0.id } ?? []
 
         if dataSource.elementsEqual(backupDataSource) {
             return .empty()

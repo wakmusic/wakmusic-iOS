@@ -13,12 +13,12 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
+internal typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
 // TODO: 커스텀 플리 확인 ( 삭제 및 업데이트(노티) )
 // TODO: songCart ( 곡 담기, 재생목록 추가 , 재생 ?)
 
-public class PlayListDetailViewController: BaseStoryboardReactorViewController<PlaylistDetailReactor>,
+internal class PlayListDetailViewController: BaseStoryboardReactorViewController<PlaylistDetailReactor>,
     SongCartViewType,
     EditSheetViewType {
     typealias Reactor = PlaylistDetailReactor
@@ -137,69 +137,75 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         let currentState = reactor.state
 
         currentState.map(\.dataSource)
-            .do(onNext: { [weak self] model in
-                self?.activityIndicator.stopAnimating()
+            .withUnretained(self)
+            .do(onNext: { (owner,model) in
+                
+                owner.activityIndicator.stopAnimating()
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
                 warningView.text = "리스트에 곡이 없습니다."
                 let items = model.first?.items ?? []
-                self?.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
+                owner.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
                     x: 0,
                     y: 0,
                     width: APP_WIDTH(),
                     height: 56
                 ))
             })
+            .map{$0.1}
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
 
         currentState.map(\.header)
-            .do(onNext: { [weak self] _ in
-                guard let self = self else { return }
+            .withUnretained(self)
+            .do(onNext: { (owner,model)  in
+               
                 let imageHeight: CGFloat = (140.0 * APP_WIDTH()) / 375.0
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
-                self.tableView.tableHeaderView?.frame = newFrame
+                owner.tableView.tableHeaderView?.frame = newFrame
             })
-            .subscribe(onNext: { [weak self] model in
+            .bind(onNext: { (owner,model) in
 
-                guard let self else { return }
-
-                self.playListImage.kf.setImage(
-                    with: self.reactor?.type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(
+                guard let type = owner.reactor?.type else {
+                    return
+                }
+                
+                owner.playListImage.kf.setImage(
+                    with: owner.reactor?.type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(
                         id: model.image,
                         version: model.version
                     ).toURL : WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL,
                     placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )
-                self.playListCountLabel.text = model.songCount
-                self.playListNameLabel.text = model.title
-                self.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
+                owner.playListCountLabel.text = model.songCount
+                owner.playListNameLabel.text = model.title
+                owner.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
 
             })
             .disposed(by: disposeBag)
 
         currentState.map(\.selectedItemCount)
-            .subscribe(onNext: { [weak self] count in
-
-                guard let self, let type = self.reactor?.type else {
+            .withUnretained(self)
+            .bind(onNext: { (owner,count) in
+                guard let type = owner.reactor?.type else {
                     return
                 }
-
+        
                 switch type {
                 case .custom:
                     break
                 case .wmRecommend:
                     if count == 0 {
-                        self.hideSongCart()
+                        owner.hideSongCart()
                     } else {
-                        self.showSongCart(
+                        owner.showSongCart(
                             in: self.view,
                             type: .WMPlayList,
                             selectedSongCount: count,
-                            totalSongCount: self.reactor?.currentState.dataSource.first?.items.count ?? 0,
+                            totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
                             useBottomSpace: false
                         )
-                        self.songCartView?.delegate = self
+                        owner.songCartView?.delegate = owner
                     }
                 }
 
@@ -207,18 +213,17 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
             .disposed(by: disposeBag)
 
         currentState.map(\.isEditing)
-            .subscribe(onNext: { [weak self] flag in
+            .withUnretained(self)
+            .bind(onNext: { (owner,flag) in
 
-                guard let self else { return }
+                owner.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? owner : nil
+                owner.moreButton.isHidden = flag
+                owner.editPlayListNameButton.isHidden = !flag
+                owner.editStateLabel.isHidden = !flag
+                owner.completeButton.isHidden = !flag
 
-                self.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? self : nil
-                self.moreButton.isHidden = flag
-                self.editPlayListNameButton.isHidden = !flag
-                self.editStateLabel.isHidden = !flag
-                self.completeButton.isHidden = !flag
-
-                tableView.isEditing = flag
-                tableView.reloadData()
+                owner.tableView.isEditing = flag
+                owner.tableView.reloadData()
 
             })
             .disposed(by: disposeBag)
@@ -232,9 +237,8 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
             .map { $0.row }
-            .subscribe(onNext: {
-                reactor.action.onNext(.tapSong($0))
-            })
+            .map{Reactor.Action.tapSong}
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
