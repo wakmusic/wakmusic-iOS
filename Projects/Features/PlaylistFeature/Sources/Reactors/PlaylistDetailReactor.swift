@@ -11,8 +11,6 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-#warning("저장하기, 업데이트")
-
 internal final class PlaylistDetailReactor: Reactor {
     enum Action {
         case viewDidLoad
@@ -41,14 +39,15 @@ internal final class PlaylistDetailReactor: Reactor {
         var isEditing: Bool
     }
 
-    public var initialState: State
-    public let type: PlayListType
-    public let key: String
+    internal var initialState: State
+    internal let type: PlayListType
+    private var disposeBag = DisposeBag()
+    internal let key: String
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
     private let editPlayListUseCase: any EditPlayListUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let logoutUseCase: any LogoutUseCase
-    var disposeBag = DisposeBag()
+
 
     public init(
         key: String,
@@ -103,7 +102,6 @@ internal final class PlaylistDetailReactor: Reactor {
                 updateIsEditing(false),
                 updateDataSource(true)
             )
-
         }
     }
 
@@ -122,11 +120,11 @@ internal final class PlaylistDetailReactor: Reactor {
         case let .changeSelectedState((data, count)), let .changeAllState((data, count)):
             newState.dataSource = [PlayListDetailSectionModel(model: 0, items: data)]
             newState.selectedItemCount = count
-            
+
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
             newState.backupDataSource = dataSource
-            
+
         case let .updateIsEditing(flag):
             newState.isEditing = flag
         }
@@ -173,18 +171,16 @@ private extension PlaylistDetailReactor {
             }
             .map(Mutation.fetchData)
     }
-    
-    /// 데이터 업데이트
-    
+
+    // 데이터 업데이트
+
     func updateDataSource(_ isBackup: Bool) -> Observable<Mutation> {
-        
-        let tmp = isBackup ?  currentState.backupDataSource : currentState.dataSource
-   
-        return .just(.updateDataSource(data:tmp))
+        let tmp = isBackup ? currentState.backupDataSource : currentState.dataSource
+
+        return .just(.updateDataSource(data: tmp))
     }
-    
+
     func updateIsEditing(_ flag: Bool) -> Observable<Mutation> {
-        
         return .just(.updateIsEditing(flag))
     }
 
@@ -209,10 +205,11 @@ private extension PlaylistDetailReactor {
         return editPlayListUseCase
             .execute(key: key, songs: dataSource)
             .asObservable()
-            .flatMap({_ in Observable.empty()})
-        
-        // 노티피케이션
-        // 여기서 새로운 데이터 패치 해야하는데 ??
+            .do(onNext: { _ in
+                NotificationCenter.default.post(name: .playListRefresh, object: nil)
+            })
+            .flatMap { _ in Observable.empty() }
+    
     }
 
     /// 단일 곡 선택 상태 변경

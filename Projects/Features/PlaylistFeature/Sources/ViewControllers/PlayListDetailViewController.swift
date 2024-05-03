@@ -245,6 +245,11 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        completeButton.rx.tap
+            .map { Reactor.Action.save}
+            .bind(to:reactor.action )
+            .disposed(by: disposeBag)
 
         moreButton.rx.tap
             .withUnretained(self)
@@ -257,25 +262,25 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         backButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { [weak self] _ in
+            .subscribe(onNext: { (owner, _) in
 
-                guard let self, let isEditing = self.reactor?.currentState.isEditing else {
-                    return
-                }
+                let isEditing = reactor.currentState.isEditing
 
                 if isEditing {
                     let vc = TextPopupViewController.viewController(
                         text: "변경된 내용을 저장할까요?",
                         cancelButtonIsHidden: false,
-                        completion: {},
+                        completion: {
+                            owner.reactor?.action.onNext(.save)
+                        },
                         cancelCompletion: {
-                            self.reactor?.action.onNext(.undo)
+                            owner.reactor?.action.onNext(.undo)
                         }
                     )
-                    self.showPanModal(content: vc)
+                    owner.showPanModal(content: vc)
 
                 } else {
-                    self.navigationController?.popViewController(animated: true)
+                    owner.navigationController?.popViewController(animated: true)
                 }
 
             })
@@ -297,7 +302,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             })
             .disposed(by: disposeBag)
 
-        // 저장 버튼 동작
     }
 }
 
