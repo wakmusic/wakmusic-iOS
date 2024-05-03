@@ -245,10 +245,10 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         completeButton.rx.tap
-            .map { Reactor.Action.save}
-            .bind(to:reactor.action )
+            .map { Reactor.Action.save }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         moreButton.rx.tap
@@ -262,7 +262,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         backButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
 
                 let isEditing = reactor.currentState.isEditing
 
@@ -301,7 +301,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 self.showEntryKitModal(content: multiPurposePopVc, height: 296)
             })
             .disposed(by: disposeBag)
-
     }
 }
 

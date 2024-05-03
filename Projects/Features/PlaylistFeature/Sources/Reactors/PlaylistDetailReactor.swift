@@ -48,7 +48,6 @@ internal final class PlaylistDetailReactor: Reactor {
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let logoutUseCase: any LogoutUseCase
 
-
     public init(
         key: String,
         type: PlayListType,
@@ -209,7 +208,6 @@ private extension PlaylistDetailReactor {
                 NotificationCenter.default.post(name: .playListRefresh, object: nil)
             })
             .flatMap { _ in Observable.empty() }
-    
     }
 
     /// 단일 곡 선택 상태 변경
