@@ -277,6 +277,22 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
             })
             .disposed(by: disposeBag)
+        
+        editPlayListNameButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext:{ (owner, _) in
+                
+                guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+                    type: .edit,
+                    key: owner.reactor?.key ?? "",
+                    completion: nil
+                ) as? MultiPurposePopupViewController else {
+                    return
+                }
+                multiPurposePopVc.delegate = owner
+                self.showEntryKitModal(content: multiPurposePopVc, height: 296)
+            })
+            .disposed(by: disposeBag)
 
         // 저장 버튼 동작
     }
@@ -418,6 +434,12 @@ extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
 extension PlayListDetailViewController: PlayButtonDelegate {
     public func play(model: SongEntity) {
         #warning("단일 곡 재생")
+    }
+}
+
+extension PlayListDetailViewController: MultiPurposePopupViewDelegate {
+    public func didTokenExpired() {
+        #warning("Token Expired")
     }
 }
 
