@@ -194,7 +194,11 @@ private extension PlaylistDetailReactor {
 
     /// 단일 곡 선택 상태 변경
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
-        var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
+        // TODO: 로그 찍기 ,  LogManager.printError("playlist detail datasource is empty")
+        guard var tmp = currentState.dataSource.first?.items else {
+            return .empty()
+        }
+    
         var count = currentState.selectedItemCount
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1

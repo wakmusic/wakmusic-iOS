@@ -138,8 +138,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         currentState.map(\.dataSource)
             .withUnretained(self)
-            .do(onNext: { (owner,model) in
-                
+            .do(onNext: { owner, model in
+
                 owner.activityIndicator.stopAnimating()
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
                 warningView.text = "리스트에 곡이 없습니다."
@@ -151,24 +151,24 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                     height: 56
                 ))
             })
-            .map{$0.1}
+            .map { $0.1 }
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
 
         currentState.map(\.header)
             .withUnretained(self)
-            .do(onNext: { (owner,model)  in
-               
+            .do(onNext: { owner, model in
+
                 let imageHeight: CGFloat = (140.0 * APP_WIDTH()) / 375.0
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
                 owner.tableView.tableHeaderView?.frame = newFrame
             })
-            .bind(onNext: { (owner,model) in
+            .bind(onNext: { owner, model in
 
                 guard let type = owner.reactor?.type else {
                     return
                 }
-                
+
                 owner.playListImage.kf.setImage(
                     with: owner.reactor?.type == .wmRecommend ? WMImageAPI.fetchRecommendPlayListWithSquare(
                         id: model.image,
@@ -186,11 +186,11 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         currentState.map(\.selectedItemCount)
             .withUnretained(self)
-            .bind(onNext: { (owner,count) in
+            .bind(onNext: { owner, count in
                 guard let type = owner.reactor?.type else {
                     return
                 }
-        
+
                 switch type {
                 case .custom:
                     break
@@ -214,7 +214,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         currentState.map(\.isEditing)
             .withUnretained(self)
-            .bind(onNext: { (owner,flag) in
+            .bind(onNext: { owner, flag in
 
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? owner : nil
                 owner.moreButton.isHidden = flag
@@ -237,14 +237,13 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
             .map { $0.row }
-            .map{Reactor.Action.tapSong}
+            .map { Reactor.Action.tapSong($0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
-            .subscribe(onNext: {
-                reactor.action.onNext(.itemMoved($0))
-            })
+            .map{ Reactor.Action.itemMoved($0) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         moreButton.rx.tap
