@@ -15,8 +15,9 @@ import Utility
 
 public typealias PlayListDetailSectionModel = SectionModel<Int, SongEntity>
 
-// TODO: 커스텀 플리 확인
-// TODO: songCart
+// TODO: 커스텀 플리 확인 ( 삭제 및 업데이트(노티) )
+// TODO: songCart ( 곡 담기, 재생목록 추가 , 재생 ?)
+
 
 public class PlayListDetailViewController: BaseStoryboardReactorViewController<PlaylistDetailReactor>,
     SongCartViewType,
@@ -114,6 +115,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
         playListImage.layer.cornerRadius = 12
 
+        #warning("토큰 해결시 false 지우기")
         moreButton.isHidden = false
         // reactor?.type == .wmRecommend
     }
@@ -227,7 +229,7 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
         super.bindAction(reactor: reactor)
 
         reactor.action.onNext(.viewDidLoad)
-        
+
         tableView.rx.itemSelected
             .filter { _ in reactor.type == .wmRecommend }
             .map { $0.row }
@@ -235,13 +237,12 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
                 reactor.action.onNext(.tapSong($0))
             })
             .disposed(by: disposeBag)
-        
+
         tableView.rx.itemMoved
             .subscribe(onNext: {
                 reactor.action.onNext(.itemMoved($0))
             })
             .disposed(by: disposeBag)
-        
 
         moreButton.rx.tap
             .withUnretained(self)
@@ -277,12 +278,8 @@ public class PlayListDetailViewController: BaseStoryboardReactorViewController<P
 
             })
             .disposed(by: disposeBag)
-        
+
         // 저장 버튼 동작
-        
-        
-    
-        
     }
 }
 
@@ -367,6 +364,8 @@ extension PlayListDetailViewController: SongCartViewDelegate {
         case let .allSelect(flag: flag):
             reactor?.action.onNext(.tapAll(flag))
         case .addSong:
+            let songs = reactor?.currentState.dataSource.first?.items.filter{$0.isSelected}.map{$0.id}
+            // songContainer
             break
         case .addPlayList:
             break
@@ -394,15 +393,37 @@ extension PlayListDetailViewController: EditSheetViewDelegate {
 }
 
 extension PlayListDetailViewController: PlayListCellDelegate {
-    public func buttonTapped(type: PlayListCellDelegateConstant) {}
+    public func buttonTapped(type: PlayListCellDelegateConstant) {
+        switch type {
+            
+        case .listTapped(index: let index):
+            reactor?.action.onNext(.tapSong(index))
+        
+        case .playTapped(song: let song):
+            #warning("커스텀 플리 시 바로 재생")
+            break
+        }
+    }
 }
 
 extension PlayListDetailViewController: PlayButtonGroupViewDelegate {
-    public func play(_ event: BaseFeature.PlayEvent) {}
+    public func play(_ event: PlayEvent) {
+        
+        switch event {
+            
+        case .allPlay:
+            #warning("전체 재생")
+        case .shufflePlay:
+            #warning("셔플 재생")
+        }
+        
+    }
 }
 
 extension PlayListDetailViewController: PlayButtonDelegate {
-    public func play(model: SongEntity) {}
+    public func play(model: SongEntity) {
+        #warning("단일 곡 재생")
+    }
 }
 
 extension PlayListDetailViewController: UIGestureRecognizerDelegate {
