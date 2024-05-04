@@ -1,11 +1,3 @@
-//
-//  AfterLoginViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
@@ -28,9 +20,9 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var headerFakeView: UIView!
     @IBOutlet weak var myPlayListFakeView: UIView!
     @IBOutlet weak var favoriteFakeView: UIView!
-    
+
     var textPopUpFactory: TextPopUpFactory!
-    
+
     public var editSheetView: EditSheetView!
     public var bottomSheetView: BottomSheetView!
     private var viewControllers: [UIViewController] = [UIViewController(), UIViewController()]
@@ -59,16 +51,14 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
             allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
-            completion: {  self.input.pressLogOut.accept(()) },
+            completion: { self.input.pressLogOut.accept(()) },
             cancelCompletion: nil
         ) as? TextPopupViewController else {
             return
         }
-        
+
         self.showPanModal(content: textPopupViewController)
     }
-
-
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -128,6 +118,10 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.viewControllers = [myPlayListComponent.makeView(), favoriteComponent.makeView()]
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
+    }
+    
+    deinit {
+        DEBUG_LOG("❌ \(Self.self)")
     }
 }
 

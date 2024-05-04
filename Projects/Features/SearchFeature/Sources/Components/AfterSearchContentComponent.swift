@@ -1,8 +1,8 @@
 
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import BaseFeatureInterface
 
 public final class AfterSearchContentComponent: Component<EmptyDependency> {
     public func makeView(

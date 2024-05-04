@@ -61,6 +61,9 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         viewController.containSongsComponent = containSongsComponent
         return viewController
     }
+    deinit {
+        DEBUG_LOG("❌ \(Self.self)")
+    }
 }
 
 extension AfterSearchViewController {
