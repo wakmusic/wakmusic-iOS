@@ -298,6 +298,9 @@ private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDepe
     var openSourceLicenseComponent: OpenSourceLicenseComponent {
         return appComponent.openSourceLicenseComponent
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -960,6 +963,7 @@ extension ChartContentComponent: Registration {
 extension ServiceInfoComponent: Registration {
     public func registerItems() {
         keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+        keyPathToName[\ServiceInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension StorageComponent: Registration {

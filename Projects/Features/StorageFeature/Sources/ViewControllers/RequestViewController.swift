@@ -1,9 +1,9 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import RxSwift
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
@@ -35,7 +35,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     @IBOutlet weak var withdrawButton: UIButton!
-    
+
     var textPopUpFactory: TextPopUpFactory!
 
     @IBAction func pressBackAction(_ sender: UIButton) {
@@ -59,38 +59,40 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func presswithDrawAction(_ sender: UIButton) {
-        guard let secondConfirmVc =  textPopUpFactory.makeView(
+        guard let secondConfirmVc = textPopUpFactory.makeView(
             text: "정말 탈퇴하시겠습니까?",
             cancelButtonIsHidden: false,
             allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
-            completion: { [weak self]  in
-                
+            completion: { [weak self] in
+
                 guard let self else { return }
-                
+
                 self.input.pressWithdraw.onNext(())
             },
-            cancelCompletion: nil) as? TextPopupViewController else {
+            cancelCompletion: nil
+        ) as? TextPopupViewController else {
             return
         }
-        
-        guard let firstConfirmVc =  textPopUpFactory.makeView(
+
+        guard let firstConfirmVc = textPopUpFactory.makeView(
             text: "회원탈퇴 신청을 하시겠습니까?",
             cancelButtonIsHidden: false,
             allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
-            completion: { [weak self]  in
-                
+            completion: { [weak self] in
+
                 guard let self else { return }
-                
+
                 self.showPanModal(content: secondConfirmVc)
             },
-            cancelCompletion: nil) as? TextPopupViewController else {
+            cancelCompletion: nil
+        ) as? TextPopupViewController else {
             return
         }
-        
+
         self.showPanModal(content: firstConfirmVc)
     }
 
@@ -240,17 +242,17 @@ extension RequestViewController {
             }
 
             let status: Int = $0.status
-            
-            guard let textPopUpViewController =  textPopUpFactory.makeView(
+
+            guard let textPopUpViewController = textPopUpFactory.makeView(
                 text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0.description,
                 cancelButtonIsHidden: true,
                 allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
-                completion: { [weak self]  in
-                    
+                completion: { [weak self] in
+
                     guard let self else { return }
-                    
+
                     if status == 200 {
                         self.navigationController?.popViewController(animated: true)
                     }
