@@ -1,10 +1,10 @@
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeature
 import UserDomainInterface
-import BaseFeatureInterface
 
 public protocol FavoriteDependency: Dependency {
     var containSongsComponent: ContainSongsComponent { get }

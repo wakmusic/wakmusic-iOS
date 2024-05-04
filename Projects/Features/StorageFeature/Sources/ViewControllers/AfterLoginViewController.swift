@@ -44,7 +44,6 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     }
 
     @IBAction func pressLogoutAction(_ sender: UIButton) {
-        
         guard let textPopupViewController = self.textPopUpFactory.makeView(
             text: "로그아웃 하시겠습니까?",
             cancelButtonIsHidden: false,
@@ -119,7 +118,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
     }

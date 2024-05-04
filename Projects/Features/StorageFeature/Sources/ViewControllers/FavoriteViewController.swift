@@ -1,5 +1,6 @@
 import BaseDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import RxDataSources
@@ -9,7 +10,6 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import BaseFeatureInterface
 
 public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
@@ -19,17 +19,15 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
-    
+
     var containSongsComponent: ContainSongsComponent!
     var textPopUpFactory: TextPopUpFactory!
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
-    
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    
 
     let playState = PlayState.shared
 
@@ -243,26 +241,25 @@ extension FavoriteViewController: SongCartViewDelegate {
             self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedLikeLists.value.count
-            
+
             guard let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
                 cancelButtonIsHidden: false,
                 allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
-                completion: {  [weak self]  in
-                    
+                completion: { [weak self] in
+
                     guard let self else { return }
                     self.input.deleteLikeList.onNext(())
                     self.hideSongCart()
-                    
-                    
+
                 },
                 cancelCompletion: nil
             ) as? TextPopupViewController else {
                 return
             }
-            
+
             self.showPanModal(content: textPopupViewController)
         default: return
         }
