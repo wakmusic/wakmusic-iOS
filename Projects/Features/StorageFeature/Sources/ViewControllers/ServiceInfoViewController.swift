@@ -1,11 +1,11 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public class ServiceInfoViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
@@ -90,9 +90,9 @@ extension ServiceInfoViewController {
             .cacheSizeString
             .withUnretained(self)
             .subscribe(onNext: { owner, sizeString in
-                
+
                 guard let textPopupVC = owner.textPopUpFactory.makeView(
-                    text: "캐시 데이터(\(sizeString))를 지우시겠습니까?", 
+                    text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
@@ -102,7 +102,7 @@ extension ServiceInfoViewController {
                 ) as? TextPopupViewController else {
                     return
                 }
-                
+
                 owner.showPanModal(content: textPopupVC)
             }).disposed(by: disposeBag)
 
