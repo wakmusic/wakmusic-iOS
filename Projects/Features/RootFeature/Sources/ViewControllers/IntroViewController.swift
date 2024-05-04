@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import Lottie
 import MainTabFeature
@@ -11,6 +12,7 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
     var mainContainerComponent: MainContainerComponent!
     var permissionComponent: PermissionComponent!
+    var textPopUpFactory: TextPopUpFactory!
 
     private var viewModel: IntroViewModel!
     lazy var input = IntroViewModel.Input()
@@ -26,11 +28,13 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
     public static func viewController(
         mainContainerComponent: MainContainerComponent,
         permissionComponent: PermissionComponent,
+        textPopUpFactory: TextPopUpFactory,
         viewModel: IntroViewModel
     ) -> IntroViewController {
         let viewController = IntroViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
         viewController.mainContainerComponent = mainContainerComponent
         viewController.permissionComponent = permissionComponent
+        viewController.textPopUpFactory = textPopUpFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -85,30 +89,35 @@ extension IntroViewController {
 
                     case .offline:
                         owner.showPanModal(
-                            content: TextPopupViewController.viewController(
+                            content: owner.textPopUpFactory.makeView(
                                 text: entity.description,
                                 cancelButtonIsHidden: true,
                                 allowsDragAndTapToDismiss: false,
                                 confirmButtonText: "재시도",
+                                cancelButtonText: nil,
                                 completion: {
                                     owner.input.fetchAppCheck.onNext(())
-                                }
-                            )
+                                }, cancelCompletion: nil
+                            ) as? TextPopupViewController ?? .init()
                         )
                         return
 
                     case .event:
-                        textPopupVc = TextPopupViewController.viewController(
+
+                        textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
                             allowsDragAndTapToDismiss: false,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
                             completion: {
                                 exit(0)
-                            }
-                        )
+                            }, cancelCompletion: nil
+                        ) as? TextPopupViewController ?? .init()
 
                     case .update:
-                        textPopupVc = TextPopupViewController.viewController(
+
+                        textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
                             allowsDragAndTapToDismiss: false,
@@ -120,29 +129,37 @@ extension IntroViewController {
                             cancelCompletion: {
                                 owner.input.fetchUserInfoCheck.onNext(())
                             }
-                        )
+                        ) as? TextPopupViewController ?? .init()
 
                     case .forceUpdate:
-                        textPopupVc = TextPopupViewController.viewController(
+                        textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: true,
                             allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
+                            cancelButtonText: nil,
                             completion: {
                                 owner.goAppStore()
-                            }
-                        )
+                            },
+                            cancelCompletion: nil
+                        ) as? TextPopupViewController ?? .init()
                     }
+
                     owner.showPanModal(content: textPopupVc)
 
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
+
                     owner.showPanModal(
-                        content: TextPopupViewController.viewController(
+                        content: owner.textPopUpFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false
-                        )
+                            allowsDragAndTapToDismiss: false,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: nil,
+                            cancelCompletion: nil
+                        ) as? TextPopupViewController ?? .init()
                     )
                 }
             })
@@ -165,14 +182,17 @@ extension IntroViewController {
 
             case let .failure(error):
                 owner.showPanModal(
-                    content: TextPopupViewController.viewController(
+                    content: owner.textPopUpFactory.makeView(
                         text: error.asWMError.errorDescription ?? "",
                         cancelButtonIsHidden: true,
                         allowsDragAndTapToDismiss: false,
-                        completion: { () in
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: {
                             owner.showTabBar()
-                        }
-                    )
+                        },
+                        cancelCompletion: nil
+                    ) as? TextPopupViewController ?? .init()
                 )
             }
         })

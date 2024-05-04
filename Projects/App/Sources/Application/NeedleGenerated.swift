@@ -544,6 +544,9 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase {
         return appComponent.checkIsExistAccessTokenUseCase
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -835,6 +838,7 @@ extension AppComponent: Registration {
         localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { [unowned self] in self.fetchNoticeUseCase as Any }
         localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
         localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { [unowned self] in self.multiPurposePopUpFactory as Any }
+        localTable["textPopUpFactory-any TextPopUpFactory"] = { [unowned self] in self.textPopUpFactory as Any }
         localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
         localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
         localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
@@ -1044,6 +1048,7 @@ extension RootComponent: Registration {
         keyPathToName[\RootDependency.fetchAppCheckUseCase] = "fetchAppCheckUseCase-any FetchAppCheckUseCase"
         keyPathToName[\RootDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\RootDependency.checkIsExistAccessTokenUseCase] = "checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"
+        keyPathToName[\RootDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension PermissionComponent: Registration {
@@ -1120,6 +1125,11 @@ extension MultiPurposePopUpComponent: Registration {
         keyPathToName[\MultiPurposePopUpDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
+extension TextPopUpComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 
 
 #endif
@@ -1175,6 +1185,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
 }
 #endif
 

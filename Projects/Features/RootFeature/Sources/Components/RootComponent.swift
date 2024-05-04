@@ -1,10 +1,10 @@
 import AppDomainInterface
 import AuthDomainInterface
+import BaseFeatureInterface
 import MainTabFeature
 import NeedleFoundation
 import UIKit
 import UserDomainInterface
-import BaseFeatureInterface
 
 public protocol RootDependency: Dependency {
     var mainContainerComponent: MainContainerComponent { get }
