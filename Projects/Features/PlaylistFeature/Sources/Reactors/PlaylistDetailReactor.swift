@@ -3,6 +3,7 @@ import BaseDomainInterface
 import BaseFeature
 import ErrorModule
 import Foundation
+import LogManager
 import PlayListDomainInterface
 import ReactorKit
 import RxCocoa
@@ -10,7 +11,6 @@ import RxRelay
 import RxSwift
 import SongsDomainInterface
 import Utility
-import LogManager
 
 internal final class PlaylistDetailReactor: Reactor {
     enum Action {
@@ -217,7 +217,6 @@ private extension PlaylistDetailReactor {
     /// 단일 곡 선택 상태 변경
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
-    
             LogManager.printError("playlist detail datasource is empty")
             return .empty()
         }
