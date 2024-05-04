@@ -1,7 +1,6 @@
+import BaseFeatureInterface
 import NeedleFoundation
 import UIKit
-import BaseFeatureInterface
-
 
 public protocol TextPopUpDependency: EmptyDependency {}
 
@@ -24,6 +23,5 @@ public final class TextPopUpComponent: Component<TextPopUpDependency>, TextPopUp
             completion: completion,
             cancelCompletion: cancelCompletion
         )
-
     }
 }

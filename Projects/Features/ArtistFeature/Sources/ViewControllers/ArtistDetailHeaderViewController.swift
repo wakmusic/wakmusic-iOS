@@ -92,8 +92,8 @@ extension ArtistDetailHeaderViewController {
         )
 
         self.artistNameLabelHeight.constant =
-        (availableWidth >= artistNameWidth) ? 36 :
-        ceil(artistNameAttributedString.height(containerWidth: availableWidth))
+            (availableWidth >= artistNameWidth) ? 36 :
+            ceil(artistNameAttributedString.height(containerWidth: availableWidth))
 
         self.artistNameLabel.attributedText = artistNameAttributedString
 
