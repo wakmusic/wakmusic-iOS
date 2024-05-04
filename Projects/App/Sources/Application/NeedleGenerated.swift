@@ -343,15 +343,17 @@ private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: Needle
     return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
-
-
-    init() {
-
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->QuestionComponent
-private func factoryedad1813a36115eec11ee3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return QuestionDependencyf7010567c2d88e76d191Provider()
+private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
@@ -972,7 +974,7 @@ extension FaqComponent: Registration {
 }
 extension QuestionComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\QuestionDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -1172,7 +1174,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ee3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
