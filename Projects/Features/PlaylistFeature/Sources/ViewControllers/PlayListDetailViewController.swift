@@ -214,7 +214,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         currentState.map(\.isEditing)
             .withUnretained(self)
             .bind(onNext: { owner, flag in
-
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? owner : nil
                 owner.moreButton.isHidden = flag
                 owner.editPlayListNameButton.isHidden = !flag
