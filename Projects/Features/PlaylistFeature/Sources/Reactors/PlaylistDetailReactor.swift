@@ -41,8 +41,9 @@ internal final class PlaylistDetailReactor: Reactor {
 
     internal var initialState: State
     internal let type: PlayListType
-    private var disposeBag = DisposeBag()
     internal let key: String
+    
+    private var disposeBag = DisposeBag()
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
     private let editPlayListUseCase: any EditPlayListUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
@@ -75,6 +76,10 @@ internal final class PlaylistDetailReactor: Reactor {
             isEditing: false
         )
     }
+    
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) deinit")
+    }
 
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -82,10 +87,8 @@ internal final class PlaylistDetailReactor: Reactor {
             return fetchData()
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-
         case .tapEdit:
             return updateIsEditing(true)
-
         case .save:
             return .concat(
                 updateIsEditing(false),
@@ -208,6 +211,7 @@ private extension PlaylistDetailReactor {
                 NotificationCenter.default.post(name: .playListRefresh, object: nil)
             })
             .flatMap { _ in Observable.empty() }
+            
     }
 
     /// 단일 곡 선택 상태 변경
@@ -226,7 +230,12 @@ private extension PlaylistDetailReactor {
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
-        var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
+        
+        guard var tmp = currentState.dataSource.first?.items else {
+            // TODO: 로그 찍기 ,  LogManager.printError("playlist detail datasource is empty")
+            return .empty()
+        }
+                    
         let count = flag ? tmp.count : 0
 
         for i in 0 ..< tmp.count {

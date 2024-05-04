@@ -49,7 +49,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     }
 
     deinit {
-        DEBUG_LOG("\(Self.self) deinit")
+        DEBUG_LOG("❌ \(Self.self) deinit")
     }
 
     public static func viewController(
@@ -72,6 +72,11 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
     override public func configureUI() {
         super.configureUI()
+        
+        tableView.register(
+            UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
+            forCellReuseIdentifier: "SongListCell"
+        )
 
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
 
@@ -125,16 +130,12 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
 
-        tableView.register(
-            UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
-            forCellReuseIdentifier: "SongListCell"
-        )
     }
 
     override public func bindState(reactor: PlaylistDetailReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state
+        let currentState = reactor.state.share(replay: 4)
 
         currentState.map(\.dataSource)
             .withUnretained(self)
@@ -199,7 +200,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         owner.hideSongCart()
                     } else {
                         owner.showSongCart(
-                            in: self.view,
+                            in: owner.view,
                             type: .WMPlayList,
                             selectedSongCount: count,
                             totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
@@ -298,7 +299,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                     return
                 }
                 multiPurposePopVc.delegate = owner
-                self.showEntryKitModal(content: multiPurposePopVc, height: 296)
+                owner.showEntryKitModal(content: multiPurposePopVc, height: 296)
             })
             .disposed(by: disposeBag)
     }
