@@ -57,7 +57,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
         viewController.viewModel = viewModel
         return viewController
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
     }
