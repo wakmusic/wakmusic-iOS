@@ -680,6 +680,9 @@ private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
     var afterSearchComponent: AfterSearchComponent {
         return appComponent.afterSearchComponent
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1100,6 +1103,7 @@ extension SearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\SearchDependency.beforeSearchComponent] = "beforeSearchComponent-BeforeSearchComponent"
         keyPathToName[\SearchDependency.afterSearchComponent] = "afterSearchComponent-AfterSearchComponent"
+        keyPathToName[\SearchDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension BeforeSearchComponent: Registration {
