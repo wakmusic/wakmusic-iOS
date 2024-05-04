@@ -21,6 +21,7 @@ public protocol MyPlayListDependency: Dependency {
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class MyPlayListComponent: Component<MyPlayListDependency> {
@@ -33,7 +34,8 @@ public final class MyPlayListComponent: Component<MyPlayListDependency> {
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            playlistDetailFactory: dependency.playlistDetailFactory
+            playlistDetailFactory: dependency.playlistDetailFactory,
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }
