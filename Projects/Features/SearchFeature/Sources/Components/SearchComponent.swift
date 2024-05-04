@@ -1,6 +1,6 @@
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import BaseFeatureInterface
 
 public protocol SearchDependency: Dependency {
     var beforeSearchComponent: BeforeSearchComponent { get }
