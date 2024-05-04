@@ -470,6 +470,9 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     var serviceInfoComponent: ServiceInfoComponent {
         return appComponent.serviceInfoComponent
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1019,6 +1022,7 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
         keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
+        keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension NoticeDetailComponent: Registration {
