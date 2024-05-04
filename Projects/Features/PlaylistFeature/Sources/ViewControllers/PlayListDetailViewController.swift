@@ -172,7 +172,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         id: model.image,
                         version: model.version
                     ).toURL
-                    : WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL,
+                        : WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL,
                     placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )
