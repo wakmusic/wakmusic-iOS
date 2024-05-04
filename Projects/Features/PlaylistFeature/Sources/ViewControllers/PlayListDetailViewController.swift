@@ -72,7 +72,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
     override public func configureUI() {
         super.configureUI()
-        
+
         tableView.register(
             UINib(nibName: "SongListCell", bundle: BaseFeatureResources.bundle),
             forCellReuseIdentifier: "SongListCell"
@@ -129,7 +129,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-
     }
 
     override public func bindState(reactor: PlaylistDetailReactor) {

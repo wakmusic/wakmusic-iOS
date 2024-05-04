@@ -42,7 +42,7 @@ internal final class PlaylistDetailReactor: Reactor {
     internal var initialState: State
     internal let type: PlayListType
     internal let key: String
-    
+
     private var disposeBag = DisposeBag()
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
     private let editPlayListUseCase: any EditPlayListUseCase
@@ -76,7 +76,7 @@ internal final class PlaylistDetailReactor: Reactor {
             isEditing: false
         )
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) deinit")
     }
@@ -211,7 +211,6 @@ private extension PlaylistDetailReactor {
                 NotificationCenter.default.post(name: .playListRefresh, object: nil)
             })
             .flatMap { _ in Observable.empty() }
-            
     }
 
     /// 단일 곡 선택 상태 변경
@@ -230,12 +229,11 @@ private extension PlaylistDetailReactor {
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
-        
         guard var tmp = currentState.dataSource.first?.items else {
             // TODO: 로그 찍기 ,  LogManager.printError("playlist detail datasource is empty")
             return .empty()
         }
-                    
+
         let count = flag ? tmp.count : 0
 
         for i in 0 ..< tmp.count {
