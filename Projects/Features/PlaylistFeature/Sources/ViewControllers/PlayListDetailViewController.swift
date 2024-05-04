@@ -287,7 +287,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         editPlayListNameButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-
                 guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
                     type: .edit,
                     key: owner.reactor?.key ?? "",
