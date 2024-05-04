@@ -403,6 +403,9 @@ private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDepend
     var favoriteComponent: FavoriteComponent {
         return appComponent.favoriteComponent
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -661,17 +664,6 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
 /// ^->AppComponent->AfterSearchComponent
 private func factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AfterSearchDependency61822c19bc2eb46d7c52Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class AfterSearchComponentDependency028b0697c8624344f660Provider: AfterSearchComponentDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->AfterSearchContentComponent
-private func factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AfterSearchComponentDependency028b0697c8624344f660Provider()
 }
 private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
     var beforeSearchComponent: BeforeSearchComponent {
@@ -996,6 +988,7 @@ extension AfterLoginComponent: Registration {
         keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
         keyPathToName[\AfterLoginDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\AfterLoginDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
+        keyPathToName[\AfterLoginDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension FavoriteComponent: Registration {
@@ -1188,7 +1181,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factorycaaccdf52467bfa87f73e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)

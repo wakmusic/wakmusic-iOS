@@ -7,6 +7,7 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NeedleFoundation
 import NVActivityIndicatorView
@@ -16,7 +17,6 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
@@ -30,7 +30,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
 
     var playlistDetailFactory: PlaylistDetailFactory!
     var textPopUpFactory: TextPopUpFactory!
-    
+
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
 
@@ -159,8 +159,8 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
         // 최근 검색어 전체 삭제 버튼 클릭 이벤트 받는 통로
         recentRecordHeaderView.completionHandler = { [weak self] in
-            
-            guard let self = self , let textPopupViewController = self.textPopUpFactory.makeView(
+
+            guard let self = self, let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "전체 내역을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false,
                 allowsDragAndTapToDismiss: nil,
@@ -171,8 +171,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             ) as? TextPopupViewController else {
                 return
             }
-            
-            
+
             self.showPanModal(content: textPopupViewController)
         }
 
