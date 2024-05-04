@@ -16,6 +16,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
@@ -28,6 +29,8 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     weak var delegate: BeforeSearchContentViewDelegate?
 
     var playlistDetailFactory: PlaylistDetailFactory!
+    var textPopUpFactory: TextPopUpFactory!
+    
     var viewModel: BeforeSearchContentViewModel!
     let disposeBag = DisposeBag()
 
@@ -41,6 +44,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     }
 
     public static func viewController(
+        textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         viewModel: BeforeSearchContentViewModel
     ) -> BeforeSearchContentViewController {
@@ -48,6 +52,7 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
             storyBoardName: "Search",
             bundle: Bundle.module
         )
+        viewController.textPopUpFactory = textPopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.viewModel = viewModel
         return viewController
@@ -153,14 +158,21 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
         let recentRecordHeaderView = RecentRecordHeaderView()
 
         // 최근 검색어 전체 삭제 버튼 클릭 이벤트 받는 통로
-        recentRecordHeaderView.completionHandler = {
-            let textPopupViewController = TextPopupViewController.viewController(
+        recentRecordHeaderView.completionHandler = { [weak self] in
+            
+            guard let self = self , let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "전체 내역을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false,
-                completion: { // 승인 핸들러
-                    Utility.PreferenceManager.recentRecords = nil
-                }
-            )
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: { Utility.PreferenceManager.recentRecords = nil },
+                cancelCompletion: nil
+            ) as? TextPopupViewController else {
+                return
+            }
+            
+            
             self.showPanModal(content: textPopupViewController)
         }
 

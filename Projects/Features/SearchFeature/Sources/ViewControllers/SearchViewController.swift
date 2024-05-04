@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NeedleFoundation
 import PanModal
@@ -8,7 +9,6 @@ import RxSwift
 import SnapKit
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet weak var searchImageView: UIImageView!
@@ -36,7 +36,6 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
 
     public static func viewController(
         viewModel: SearchViewModel,
@@ -167,8 +166,7 @@ extension SearchViewController {
                     // 유저 디폴트 저장
                     if str.isWhiteSpace == true {
                         self.searchTextFiled.rx.text.onNext("")
-                        
-                        
+
                         guard let textPopupViewController = textPopUpFactory.makeView(
                             text: "검색어를 입력해주세요.",
                             cancelButtonIsHidden: true,

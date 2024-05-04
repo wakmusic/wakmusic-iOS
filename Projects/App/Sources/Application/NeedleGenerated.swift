@@ -699,6 +699,9 @@ private class BeforeSearchDependencyebdecb1d478a4766488dProvider: BeforeSearchDe
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
         return appComponent.fetchRecommendPlayListUseCase
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1110,6 +1113,7 @@ extension BeforeSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\BeforeSearchDependency.playlistDetailFactory] = "playlistDetailFactory-any PlaylistDetailFactory"
         keyPathToName[\BeforeSearchDependency.fetchRecommendPlayListUseCase] = "fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"
+        keyPathToName[\BeforeSearchDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension ContainSongsComponent: Registration {
