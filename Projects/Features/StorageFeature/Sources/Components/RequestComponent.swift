@@ -1,16 +1,9 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseFeature
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
+import BaseFeatureInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }
@@ -20,6 +13,7 @@ public protocol RequestDependency: Dependency {
     var containSongsComponent: ContainSongsComponent { get }
     var noticeComponent: NoticeComponent { get }
     var serviceInfoComponent: ServiceInfoComponent { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class RequestComponent: Component<RequestDependency> {
@@ -33,7 +27,8 @@ public final class RequestComponent: Component<RequestDependency> {
             questionComponent: dependency.questionComponent,
             containSongsComponent: dependency.containSongsComponent,
             noticeComponent: dependency.noticeComponent,
-            serviceInfoComponent: dependency.serviceInfoComponent
+            serviceInfoComponent: dependency.serviceInfoComponent,
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }

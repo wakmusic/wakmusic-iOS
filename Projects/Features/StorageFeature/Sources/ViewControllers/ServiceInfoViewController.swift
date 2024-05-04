@@ -1,11 +1,3 @@
-//
-//  ServiceInfoViewController.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/05/17.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
 import Kingfisher
@@ -13,6 +5,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+
 
 public class ServiceInfoViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!

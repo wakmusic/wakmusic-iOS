@@ -1,10 +1,9 @@
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import BaseFeatureInterface
 
 public protocol QuestionDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
-    
 }
 
 public final class QuestionComponent: Component<QuestionDependency> {

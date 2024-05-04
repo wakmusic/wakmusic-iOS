@@ -1,16 +1,9 @@
-//
-//  RequestViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/28.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
 import RxSwift
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
@@ -42,6 +35,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     @IBOutlet weak var fakeViewHeight: NSLayoutConstraint!
     @IBOutlet weak var withdrawButton: UIButton!
+    
+    var textPopUpFactory: TextPopUpFactory!
 
     @IBAction func pressBackAction(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
@@ -64,21 +59,38 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func presswithDrawAction(_ sender: UIButton) {
-        let secondConfirmVc = TextPopupViewController.viewController(
+        guard let secondConfirmVc =  textPopUpFactory.makeView(
             text: "정말 탈퇴하시겠습니까?",
             cancelButtonIsHidden: false,
-            completion: {
-                // 회원탈퇴 작업
+            allowsDragAndTapToDismiss: nil,
+            confirmButtonText: nil,
+            cancelButtonText: nil,
+            completion: { [weak self]  in
+                
+                guard let self else { return }
+                
                 self.input.pressWithdraw.onNext(())
-            }
-        )
-        let firstConfirmVc = TextPopupViewController.viewController(
+            },
+            cancelCompletion: nil) as? TextPopupViewController else {
+            return
+        }
+        
+        guard let firstConfirmVc =  textPopUpFactory.makeView(
             text: "회원탈퇴 신청을 하시겠습니까?",
             cancelButtonIsHidden: false,
-            completion: {
+            allowsDragAndTapToDismiss: nil,
+            confirmButtonText: nil,
+            cancelButtonText: nil,
+            completion: { [weak self]  in
+                
+                guard let self else { return }
+                
                 self.showPanModal(content: secondConfirmVc)
-            }
-        )
+            },
+            cancelCompletion: nil) as? TextPopupViewController else {
+            return
+        }
+        
         self.showPanModal(content: firstConfirmVc)
     }
 
@@ -112,7 +124,8 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         questionComponent: QuestionComponent,
         containSongsComponent: ContainSongsComponent,
         noticeComponent: NoticeComponent,
-        serviceInfoComponent: ServiceInfoComponent
+        serviceInfoComponent: ServiceInfoComponent,
+        textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -121,6 +134,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewController.containSongsComponent = containSongsComponent
         viewController.noticeComponent = noticeComponent
         viewController.serviceInfoComponent = serviceInfoComponent
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 }
@@ -226,16 +240,27 @@ extension RequestViewController {
             }
 
             let status: Int = $0.status
-            let withdrawVc = TextPopupViewController.viewController(
+            
+            guard let textPopUpViewController =  textPopUpFactory.makeView(
                 text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0.description,
                 cancelButtonIsHidden: true,
-                completion: {
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: { [weak self]  in
+                    
+                    guard let self else { return }
+                    
                     if status == 200 {
                         self.navigationController?.popViewController(animated: true)
                     }
-                }
-            )
-            self.showPanModal(content: withdrawVc)
+                },
+                cancelCompletion: nil
+            ) as? TextPopupViewController else {
+                return
+            }
+
+            self.showPanModal(content: textPopUpViewController)
         })
         .disposed(by: disposeBag)
 
