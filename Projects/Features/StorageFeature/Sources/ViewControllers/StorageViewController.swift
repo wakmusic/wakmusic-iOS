@@ -8,7 +8,6 @@ import SignInFeature
 import UIKit
 import Utility
 
-
 public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
 
