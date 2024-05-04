@@ -280,7 +280,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 } else {
                     owner.navigationController?.popViewController(animated: true)
                 }
-
             })
             .disposed(by: disposeBag)
 
