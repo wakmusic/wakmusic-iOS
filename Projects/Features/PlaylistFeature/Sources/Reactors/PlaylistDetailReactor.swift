@@ -10,6 +10,7 @@ import RxRelay
 import RxSwift
 import SongsDomainInterface
 import Utility
+import LogManager
 
 internal final class PlaylistDetailReactor: Reactor {
     enum Action {
@@ -215,8 +216,9 @@ private extension PlaylistDetailReactor {
 
     /// 단일 곡 선택 상태 변경
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
-        // TODO: 로그 찍기 ,  LogManager.printError("playlist detail datasource is empty")
         guard var tmp = currentState.dataSource.first?.items else {
+    
+            LogManager.printError("playlist detail datasource is empty")
             return .empty()
         }
 
@@ -230,7 +232,7 @@ private extension PlaylistDetailReactor {
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
-            // TODO: 로그 찍기 ,  LogManager.printError("playlist detail datasource is empty")
+            LogManager.printError("playlist detail datasource is empty")
             return .empty()
         }
 
