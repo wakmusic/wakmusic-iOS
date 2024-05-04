@@ -1,11 +1,3 @@
-//
-//  FavoriteViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/27.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import BaseFeature
 import DesignSystem
@@ -17,6 +9,7 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
+import BaseFeatureInterface
 
 public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
@@ -26,14 +19,17 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
+    
     var containSongsComponent: ContainSongsComponent!
-
+    var textPopUpFactory: TextPopUpFactory!
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
+    
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
+    
 
     let playState = PlayState.shared
 
@@ -47,11 +43,13 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     public static func viewController(
         viewModel: FavoriteViewModel,
-        containSongsComponent: ContainSongsComponent
+        containSongsComponent: ContainSongsComponent,
+        textPopUpFactory: TextPopUpFactory
     ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.containSongsComponent = containSongsComponent
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 }
@@ -245,16 +243,27 @@ extension FavoriteViewController: SongCartViewDelegate {
             self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedLikeLists.value.count
-            let popup = TextPopupViewController.viewController(
-                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.",
+            
+            guard let textPopupViewController = self.textPopUpFactory.makeView(
+                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
                 cancelButtonIsHidden: false,
-                completion: { [weak self] () in
-                    guard let `self` = self else { return }
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: {  [weak self]  in
+                    
+                    guard let self else { return }
                     self.input.deleteLikeList.onNext(())
                     self.hideSongCart()
-                }
-            )
-            self.showPanModal(content: popup)
+                    
+                    
+                },
+                cancelCompletion: nil
+            ) as? TextPopupViewController else {
+                return
+            }
+            
+            self.showPanModal(content: textPopupViewController)
         default: return
         }
     }

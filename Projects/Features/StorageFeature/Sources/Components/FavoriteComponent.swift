@@ -1,17 +1,10 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseFeature
 import Foundation
 import NeedleFoundation
 import SignInFeature
 import UserDomainInterface
+import BaseFeatureInterface
 
 public protocol FavoriteDependency: Dependency {
     var containSongsComponent: ContainSongsComponent { get }
@@ -19,6 +12,7 @@ public protocol FavoriteDependency: Dependency {
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
@@ -30,7 +24,8 @@ public final class FavoriteComponent: Component<FavoriteDependency> {
                 deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent
+            containSongsComponent: dependency.containSongsComponent,
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }
