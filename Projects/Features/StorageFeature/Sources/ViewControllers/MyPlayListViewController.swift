@@ -13,7 +13,6 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-
 public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
 public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
@@ -46,7 +45,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
         viewModel: MyPlayListViewModel,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
-        textPopUpFactory : TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -263,7 +262,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
 
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
-            
+
             guard let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
                 cancelButtonIsHidden: false,
@@ -281,7 +280,6 @@ extension MyPlayListViewController: SongCartViewDelegate {
             ) as? TextPopupViewController else {
                 return
             }
-            
 
         default: return
         }
