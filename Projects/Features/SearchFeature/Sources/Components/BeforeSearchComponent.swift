@@ -7,11 +7,11 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import PlaylistFeatureInterface
-import BaseFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
