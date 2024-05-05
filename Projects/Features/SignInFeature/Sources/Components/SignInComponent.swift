@@ -1,15 +1,9 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
+import SignInFeatureInterface
+import UIKit
 
 public protocol SignInDependency: Dependency {
     var fetchTokenUseCase: any FetchTokenUseCase { get }
@@ -17,8 +11,8 @@ public protocol SignInDependency: Dependency {
     var fetchUserInfoUseCase: any FetchUserInfoUseCase { get }
 }
 
-public final class SignInComponent: Component<SignInDependency> {
-    public func makeView() -> LoginViewController {
+public final class SignInComponent: Component<SignInDependency>, SignInFactory {
+    public func makeView() -> UIViewController {
         return LoginViewController.viewController(
             viewModel: .init(
                 fetchTokenUseCase: dependency.fetchTokenUseCase,
@@ -27,4 +21,5 @@ public final class SignInComponent: Component<SignInDependency> {
             )
         )
     }
+
 }

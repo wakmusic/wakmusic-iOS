@@ -1,24 +1,16 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import NeedleFoundation
-import SignInFeature
+import SignInFeatureInterface
 
 public protocol StorageDependency: Dependency {
-    var signInComponent: SignInComponent { get }
+    var signInFactory: any SignInFactory { get }
     var afterLoginComponent: AfterLoginComponent { get }
 }
 
 public final class StorageComponent: Component<StorageDependency> {
     public func makeView() -> StorageViewController {
         return StorageViewController.viewController(
-            signInComponent: dependency.signInComponent,
+            signInFactory: dependency.signInFactory,
             afterLoginComponent: dependency.afterLoginComponent
         )
     }

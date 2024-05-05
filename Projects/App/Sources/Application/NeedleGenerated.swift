@@ -32,6 +32,7 @@ import PlaylistFeatureInterface
 import RootFeature
 import SearchFeature
 import SignInFeature
+import SignInFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 import StorageFeature
@@ -315,8 +316,8 @@ private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: Needle
     return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
-    var signInComponent: SignInComponent {
-        return appComponent.signInComponent
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
     }
     var afterLoginComponent: AfterLoginComponent {
         return appComponent.afterLoginComponent
@@ -782,7 +783,7 @@ extension AppComponent: Registration {
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { [unowned self] in self.fetchSearchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
-        localTable["signInComponent-SignInComponent"] = { [unowned self] in self.signInComponent as Any }
+        localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
         localTable["storageComponent-StorageComponent"] = { [unowned self] in self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { [unowned self] in self.afterLoginComponent as Any }
         localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
@@ -970,7 +971,7 @@ extension ServiceInfoComponent: Registration {
 }
 extension StorageComponent: Registration {
     public func registerItems() {
-        keyPathToName[\StorageDependency.signInComponent] = "signInComponent-SignInComponent"
+        keyPathToName[\StorageDependency.signInFactory] = "signInFactory-any SignInFactory"
         keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
     }
 }
