@@ -28,9 +28,6 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="back"/>
-                                        <connections>
-                                            <action selector="backButtonAction:" destination="SM8-hg-XhK" eventType="touchUpInside" id="oMy-nn-z6W"/>
-                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="편집" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6wo-Du-OzR">
                                         <rect key="frame" x="181.66666666666666" y="13.999999999999998" width="29.666666666666657" height="20.333333333333329"/>
@@ -41,9 +38,6 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gm-5T-7GB">
                                         <rect key="frame" x="343" y="7" width="30" height="34"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <connections>
-                                            <action selector="pressEditListAction:" destination="SM8-hg-XhK" eventType="touchUpInside" id="dqF-sp-TNY"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a9D-Xe-d3o">
                                         <rect key="frame" x="328" y="7" width="45" height="34"/>
@@ -54,9 +48,6 @@
                                         <state key="normal" title="완료">
                                             <color key="titleColor" name="POINT"/>
                                         </state>
-                                        <connections>
-                                            <action selector="pressCompleteAction:" destination="SM8-hg-XhK" eventType="touchUpInside" id="uMK-e5-uvn"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -106,9 +97,6 @@
                                                         <constraint firstAttribute="height" constant="24" id="qMZ-vr-bqk"/>
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <connections>
-                                                        <action selector="pressEditNameAction:" destination="SM8-hg-XhK" eventType="touchUpInside" id="q3k-hz-L8X"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.98823529409999999" green="0.98823529409999999" blue="0.99215686270000003" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>

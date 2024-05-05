@@ -184,7 +184,7 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 }
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
-    public func pressPlay(_ event: PlayEvent) {
+    public func play(_ event: PlayEvent) {
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
                 id: $0.songId,

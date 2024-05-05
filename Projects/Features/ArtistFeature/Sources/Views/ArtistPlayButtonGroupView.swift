@@ -30,11 +30,11 @@ public class ArtistPlayButtonGroupView: UIView {
     }
 
     @IBAction func allPlayButtonAction(_ sender: Any) {
-        delegate?.pressPlay(.allPlay)
+        delegate?.play(.allPlay)
     }
 
     @IBAction func shufflePlayButtonAction(_ sender: Any) {
-        delegate?.pressPlay(.shufflePlay)
+        delegate?.play(.shufflePlay)
     }
 }
 

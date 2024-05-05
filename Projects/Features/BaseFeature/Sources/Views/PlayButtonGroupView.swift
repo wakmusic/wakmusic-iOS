@@ -15,7 +15,7 @@ public enum PlayEvent {
 }
 
 public protocol PlayButtonGroupViewDelegate: AnyObject {
-    func pressPlay(_ event: PlayEvent)
+    func play(_ event: PlayEvent)
 }
 
 public class PlayButtonGroupView: UIView {
@@ -28,11 +28,11 @@ public class PlayButtonGroupView: UIView {
     public weak var delegate: PlayButtonGroupViewDelegate?
 
     @IBAction func pressAllPlay(_ sender: UIButton) {
-        delegate?.pressPlay(.allPlay)
+        delegate?.play(.allPlay)
     }
 
     @IBAction func pressSufflePlay(_ sender: UIButton) {
-        delegate?.pressPlay(.shufflePlay)
+        delegate?.play(.shufflePlay)
     }
 
     override public init(frame: CGRect) {
