@@ -21,6 +21,7 @@ import KeychainModule
 import LikeDomain
 import LikeDomainInterface
 import MainTabFeature
+import MyInfoFeature
 import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
@@ -176,6 +177,9 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     }
     var storageComponent: StorageComponent {
         return appComponent.storageComponent
+    }
+    var myInfoComponent: MyInfoComponent {
+        return appComponent.myInfoComponent
     }
     var noticePopupComponent: NoticePopupComponent {
         return appComponent.noticePopupComponent
@@ -766,6 +770,17 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
 private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->MyInfoComponent
+private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MyInfoDependency3b44bce00dab6fc2e345Provider()
+}
 
 #else
 extension AppComponent: Registration {
@@ -918,6 +933,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
+        keyPathToName[\MainTabBarDependency.myInfoComponent] = "myInfoComponent-MyInfoComponent"
         keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
         keyPathToName[\MainTabBarDependency.noticeComponent] = "noticeComponent-NoticeComponent"
         keyPathToName[\MainTabBarDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
@@ -1151,6 +1167,11 @@ extension TextPopUpComponent: Registration {
 
     }
 }
+extension MyInfoComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 
 
 #endif
@@ -1207,6 +1228,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35de3b0c44298fc1c149afb)
 }
 #endif
 

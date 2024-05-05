@@ -18,6 +18,7 @@ let project = Project.module(
                     .feature(target: .ArtistFeature),
                     .feature(target: .StorageFeature),
                     .feature(target: .PlayerFeature),
+                    .feature(target: .MyInfoFeature),
                     .domain(target: .NoticeDomain, type: .interface)
                 ]
             )

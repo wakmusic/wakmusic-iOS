@@ -1,11 +1,3 @@
-//
-//  BottomTabBarViewController.swift
-//  MainTabFeature
-//
-//  Created by KTH on 2023/01/14.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import RxSwift
 import UIKit
@@ -24,7 +16,7 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
 
     private lazy var tabs: [TabItemView] = {
         var items = [TabItemView]()
-        for _ in 0 ..< 5 {
+        for _ in 0 ..< 6 {
             items.append(TabItemView.newInstance)
         }
         return items
@@ -48,7 +40,7 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
                 title: "검색",
                 offImage: DesignSystemAsset.TabBar.searchOff.image,
                 onImage: DesignSystemAsset.TabBar.searchOn.image,
-                animateImage: "Search_Tab"
+                animateImage: "Chart_Tab"
             ),
             TabItem(
                 title: "아티스트",
@@ -61,6 +53,12 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
                 offImage: DesignSystemAsset.TabBar.storageOff.image,
                 onImage: DesignSystemAsset.TabBar.storageOn.image,
                 animateImage: "Storage_Tab"
+            ),
+            TabItem(
+                title: "내정보",
+                offImage: DesignSystemAsset.TabBar.myinfoOff.image,
+                onImage: DesignSystemAsset.TabBar.myinfoOn.image,
+                animateImage: "MyInfo_Tab"
             )
         ]
     }()

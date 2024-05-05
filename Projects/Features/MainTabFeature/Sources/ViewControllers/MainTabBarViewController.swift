@@ -1,11 +1,3 @@
-//
-//  MainTabBarViewController.swift
-//  MainTabFeature
-//
-//  Created by KTH on 2023/01/13.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistFeature
 import BaseFeature
 import ChartFeature
@@ -19,6 +11,7 @@ import SnapKit
 import StorageFeature
 import UIKit
 import Utility
+import MyInfoFeature
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
@@ -29,7 +22,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
             chartComponent.makeView().wrapNavigationController,
             searchComponent.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
-            storageComponent.makeView().wrapNavigationController
+            storageComponent.makeView().wrapNavigationController,
+            myInfoComponent.makeView().wrapNavigationController
         ]
     }()
 
@@ -43,6 +37,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var searchComponent: SearchComponent!
     private var artistComponent: ArtistComponent!
     private var storageComponent: StorageComponent!
+    private var myInfoComponent: MyInfoComponent!
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeComponent: NoticeComponent!
     private var noticeDetailComponent: NoticeDetailComponent!
@@ -70,6 +65,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent,
+        myInfoComponent: MyInfoComponent,
         noticePopupComponent: NoticePopupComponent,
         noticeComponent: NoticeComponent,
         noticeDetailComponent: NoticeDetailComponent
@@ -81,6 +77,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
         viewController.storageComponent = storageCompoent
+        viewController.myInfoComponent = myInfoComponent
         viewController.noticePopupComponent = noticePopupComponent
         viewController.noticeComponent = noticeComponent
         viewController.noticeDetailComponent = noticeDetailComponent

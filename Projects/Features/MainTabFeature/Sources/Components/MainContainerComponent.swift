@@ -7,6 +7,7 @@ public protocol MainContainerDependency: Dependency {
     var bottomTabBarComponent: BottomTabBarComponent { get }
     var mainTabBarComponent: MainTabBarComponent { get }
     var playerComponent: PlayerComponent { get }
+    
 }
 
 public final class MainContainerComponent: Component<MainContainerDependency> {
