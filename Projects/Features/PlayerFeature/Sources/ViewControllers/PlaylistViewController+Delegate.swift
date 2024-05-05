@@ -1,11 +1,3 @@
-//
-//  PlaylistViewController+SongCartViewDelegate.swift
-//  PlayerFeature
-//
-//  Created by YoungK on 2023/04/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
 import UIKit
@@ -18,7 +10,9 @@ extension PlaylistViewController: SongCartViewDelegate {
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
             let songs: [String] = self.playState.playList.list.filter { $0.item.isSelected }.map { $0.item.id }
-            let viewController = containSongsComponent.makeView(songs: songs)
+            guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
+                return
+            }
             viewController.delegate = self
             viewController.modalPresentationStyle = .overFullScreen
 

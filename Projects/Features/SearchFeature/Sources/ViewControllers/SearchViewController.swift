@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NeedleFoundation
 import PanModal
@@ -21,6 +22,7 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
     let disposeBag = DisposeBag()
     var beforeSearchComponent: BeforeSearchComponent!
     var afterSearchComponent: AfterSearchComponent!
+    var textPopUpFactory: TextPopUpFactory!
 
     lazy var beforeVc = beforeSearchComponent.makeView()
     lazy var afterVc = afterSearchComponent.makeView()
@@ -33,40 +35,19 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // navigationController?.interactivePopGestureRecognizer?.delegate = nil // 현재 탭에서 화면이동이 일어날 시 , 빠져나올 때 swipe로 이동
     }
-
-//    override public func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-//        //guard let child = self.children.first as? BeforeSearchContentViewController else { return }
-//        //child.view.frame = searchContentView.bounds
-//
-//        guard let child = self.children.first as? AfterSearchViewController else { return }
-//        child.view.frame = searchContentView.bounds
-//
-//        //오차로 인하여 여기서 설정함
-//        /*
-//          frame != bounds
-//         - 두개 모두 x,y , width, height 을 갖고 있음
-//         - frame의 x,y는 부모의 중심 x,y을 가르킴
-//         - bounds의 x,y는 항상 자기자신을 중심으로 찍힘( 언제나 (0,0))
-//
-//         */
-//
-//
-//
-//    }
 
     public static func viewController(
         viewModel: SearchViewModel,
         beforeSearchComponent: BeforeSearchComponent,
-        afterSearchComponent: AfterSearchComponent
+        afterSearchComponent: AfterSearchComponent,
+        textPopUpFactory: TextPopUpFactory
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.beforeSearchComponent = beforeSearchComponent
         viewController.afterSearchComponent = afterSearchComponent
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 
@@ -185,10 +166,18 @@ extension SearchViewController {
                     // 유저 디폴트 저장
                     if str.isWhiteSpace == true {
                         self.searchTextFiled.rx.text.onNext("")
-                        let textPopupViewController = TextPopupViewController.viewController(
+
+                        guard let textPopupViewController = textPopUpFactory.makeView(
                             text: "검색어를 입력해주세요.",
-                            cancelButtonIsHidden: true
-                        )
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: nil,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: nil,
+                            cancelCompletion: nil
+                        ) as? TextPopupViewController else {
+                            return
+                        }
                         self.showPanModal(content: textPopupViewController)
 
                     } else {

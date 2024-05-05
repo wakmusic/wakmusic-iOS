@@ -1,11 +1,3 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AppDomain
 import AppDomainInterface
 

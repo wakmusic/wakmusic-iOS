@@ -1,13 +1,6 @@
-//
-//  ArtistMusicContentViewController.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/01/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa
@@ -22,7 +15,7 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    var containSongsComponent: ContainSongsComponent!
+    var containSongsFactory: ContainSongsFactory!
 
     private var viewModel: ArtistMusicContentViewModel!
     lazy var input = ArtistMusicContentViewModel.Input()
@@ -45,14 +38,14 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 
     public static func viewController(
         viewModel: ArtistMusicContentViewModel,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(
             storyBoardName: "Artist",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         return viewController
     }
 }
@@ -147,7 +140,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsComponent.makeView(songs: songs)
+            let viewController = containSongsFactory.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)

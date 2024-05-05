@@ -1,13 +1,6 @@
-//
-//  FavoriteViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/27.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import RxDataSources
@@ -26,8 +19,9 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
-    var containSongsComponent: ContainSongsComponent!
 
+    var containSongsFactory: ContainSongsFactory!
+    var textPopUpFactory: TextPopUpFactory!
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
@@ -47,11 +41,13 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     public static func viewController(
         viewModel: FavoriteViewModel,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory,
+        textPopUpFactory: TextPopUpFactory
     ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 }
@@ -147,7 +143,7 @@ extension FavoriteViewController {
             .debug("willAddSongList")
             .subscribe(onNext: { [weak self] songs in
                 guard let `self` = self else { return }
-                let viewController = self.containSongsComponent.makeView(songs: songs)
+                let viewController = self.containSongsFactory.makeView(songs: songs)
                 viewController.modalPresentationStyle = .overFullScreen
                 self.present(viewController, animated: true) {
                     self.input.allLikeListSelected.onNext(false)
@@ -245,16 +241,26 @@ extension FavoriteViewController: SongCartViewDelegate {
             self.hideSongCart()
         case .remove:
             let count: Int = output.indexPathOfSelectedLikeLists.value.count
-            let popup = TextPopupViewController.viewController(
-                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.",
+
+            guard let textPopupViewController = self.textPopUpFactory.makeView(
+                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
                 cancelButtonIsHidden: false,
-                completion: { [weak self] () in
-                    guard let `self` = self else { return }
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: { [weak self] in
+
+                    guard let self else { return }
                     self.input.deleteLikeList.onNext(())
                     self.hideSongCart()
-                }
-            )
-            self.showPanModal(content: popup)
+
+                },
+                cancelCompletion: nil
+            ) as? TextPopupViewController else {
+                return
+            }
+
+            self.showPanModal(content: textPopupViewController)
         default: return
         }
     }

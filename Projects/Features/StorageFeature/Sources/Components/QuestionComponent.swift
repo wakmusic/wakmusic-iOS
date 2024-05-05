@@ -1,20 +1,16 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 
-public protocol QuestionDependency: Dependency {}
+public protocol QuestionDependency: Dependency {
+    var textPopUpFactory: any TextPopUpFactory { get }
+}
 
 public final class QuestionComponent: Component<QuestionDependency> {
     public func makeView() -> QuestionViewController {
         return QuestionViewController.viewController(
-            viewModel: .init()
+            viewModel: .init(),
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }

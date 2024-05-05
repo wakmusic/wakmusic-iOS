@@ -1,5 +1,6 @@
 import AppDomainInterface
 import AuthDomainInterface
+import BaseFeatureInterface
 import MainTabFeature
 import NeedleFoundation
 import UIKit
@@ -12,6 +13,7 @@ public protocol RootDependency: Dependency {
     var fetchAppCheckUseCase: any FetchAppCheckUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class RootComponent: Component<RootDependency> {
@@ -19,6 +21,7 @@ public final class RootComponent: Component<RootDependency> {
         return IntroViewController.viewController(
             mainContainerComponent: dependency.mainContainerComponent,
             permissionComponent: dependency.permissionComponent,
+            textPopUpFactory: dependency.textPopUpFactory,
             viewModel: IntroViewModel(
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,
                 fetchAppCheckUseCase: dependency.fetchAppCheckUseCase,

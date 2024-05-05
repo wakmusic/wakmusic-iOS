@@ -1,5 +1,6 @@
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import LikeDomainInterface
 import NeedleFoundation
@@ -14,7 +15,7 @@ public protocol PlayerDependency: Dependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var playlistComponent: PlaylistComponent { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class PlayerComponent: Component<PlayerDependency> {
@@ -29,7 +30,7 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 logoutUseCase: dependency.logoutUseCase
             ),
             playlistComponent: dependency.playlistComponent,
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }

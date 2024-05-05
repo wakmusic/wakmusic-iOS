@@ -1,12 +1,5 @@
-//
-//  ServiceInfoViewController.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/05/17.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
 import RxCocoa
@@ -20,6 +13,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var tableView: UITableView!
 
     var openSourceLicenseComponent: OpenSourceLicenseComponent!
+    var textPopUpFactory: TextPopUpFactory!
     var viewModel: ServiceInfoViewModel!
     var disposeBag: DisposeBag = DisposeBag()
 
@@ -35,11 +29,13 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
 
     public static func viewController(
         viewModel: ServiceInfoViewModel,
-        openSourceLicenseComponent: OpenSourceLicenseComponent
+        openSourceLicenseComponent: OpenSourceLicenseComponent,
+        textPopUpFactory: TextPopUpFactory
     ) -> ServiceInfoViewController {
         let viewController = ServiceInfoViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.openSourceLicenseComponent = openSourceLicenseComponent
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 }
@@ -94,14 +90,20 @@ extension ServiceInfoViewController {
             .cacheSizeString
             .withUnretained(self)
             .subscribe(onNext: { owner, sizeString in
-                let popup = TextPopupViewController.viewController(
+
+                guard let textPopupVC = owner.textPopUpFactory.makeView(
                     text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
-                    completion: {
-                        owner.viewModel.input.removeCache.onNext(())
-                    }
-                )
-                owner.showPanModal(content: popup)
+                    allowsDragAndTapToDismiss: nil,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: { owner.viewModel.input.removeCache.onNext(()) },
+                    cancelCompletion: nil
+                ) as? TextPopupViewController else {
+                    return
+                }
+
+                owner.showPanModal(content: textPopupVC)
             }).disposed(by: disposeBag)
 
         viewModel.output

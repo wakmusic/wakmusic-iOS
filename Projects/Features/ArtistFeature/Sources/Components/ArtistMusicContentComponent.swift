@@ -1,19 +1,12 @@
-//
-//  ArtistMusicContentComponent.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 
 public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class ArtistMusicContentComponent: Component<ArtistMusicContentDependency> {
@@ -27,7 +20,7 @@ public final class ArtistMusicContentComponent: Component<ArtistMusicContentDepe
                 model: model,
                 fetchArtistSongListUseCase: dependency.fetchArtistSongListUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }

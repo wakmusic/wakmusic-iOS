@@ -1,11 +1,3 @@
-//
-//  AfterLoginViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
@@ -29,24 +21,7 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     @IBOutlet weak var myPlayListFakeView: UIView!
     @IBOutlet weak var favoriteFakeView: UIView!
 
-    @IBAction func pressRequestAction(_ sender: UIButton) {
-        let viewController = requestComponent.makeView()
-        self.navigationController?.pushViewController(viewController, animated: true)
-    }
-
-    @IBAction func pressLogoutAction(_ sender: UIButton) {
-        let vc = TextPopupViewController.viewController(
-            text: "로그아웃 하시겠습니까?",
-            cancelButtonIsHidden: false,
-            completion: { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                self.input.pressLogOut.accept(())
-            }
-        )
-        self.showPanModal(content: vc)
-    }
+    var textPopUpFactory: TextPopUpFactory!
 
     public var editSheetView: EditSheetView!
     public var bottomSheetView: BottomSheetView!
@@ -62,6 +37,27 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
     lazy var input = AfterLoginViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let disposeBag = DisposeBag()
+
+    @IBAction func pressRequestAction(_ sender: UIButton) {
+        let viewController = requestComponent.makeView()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    @IBAction func pressLogoutAction(_ sender: UIButton) {
+        guard let textPopupViewController = self.textPopUpFactory.makeView(
+            text: "로그아웃 하시겠습니까?",
+            cancelButtonIsHidden: false,
+            allowsDragAndTapToDismiss: nil,
+            confirmButtonText: nil,
+            cancelButtonText: nil,
+            completion: { self.input.pressLogOut.accept(()) },
+            cancelCompletion: nil
+        ) as? TextPopupViewController else {
+            return
+        }
+
+        self.showPanModal(content: textPopupViewController)
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +104,8 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         profilePopComponent: ProfilePopComponent,
         myPlayListComponent: MyPlayListComponent,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
-        favoriteComponent: FavoriteComponent
+        favoriteComponent: FavoriteComponent,
+        textPopUpFactory: TextPopUpFactory
     ) -> AfterLoginViewController {
         let viewController = AfterLoginViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -118,7 +115,12 @@ public final class AfterLoginViewController: TabmanViewController, ViewControlle
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.favoriteComponent = favoriteComponent
         viewController.viewControllers = [myPlayListComponent.makeView(), favoriteComponent.makeView()]
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
+    }
+
+    deinit {
+        DEBUG_LOG("❌ \(Self.self)")
     }
 }
 

@@ -36,7 +36,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     @IBOutlet weak var playListInfoSuperView: UIView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     var multiPurposePopUpFactory: MultiPurposePopUpFactory!
-    var containSongsComponent: ContainSongsComponent!
+    var containSongsFactory: ContainSongsFactory!
+    var textPopUpFactory: TextPopUpFactory!
 
     public var editSheetView: EditSheetView!
     public var songCartView: SongCartView!
@@ -55,7 +56,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     public static func viewController(
         reactor: PlaylistDetailReactor,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory,
+        textPopUpFactory: TextPopUpFactory
     ) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(
             storyBoardName: "Playlist",
@@ -65,7 +67,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         viewController.reactor = reactor
 
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
+        viewController.textPopUpFactory = textPopUpFactory
 
         return viewController
     }
@@ -265,17 +268,19 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 let isEditing = reactor.currentState.isEditing
 
                 if isEditing {
-                    let vc = TextPopupViewController.viewController(
+                    guard let textPopUpVC = owner.textPopUpFactory.makeView(
                         text: "변경된 내용을 저장할까요?",
                         cancelButtonIsHidden: false,
-                        completion: {
-                            owner.reactor?.action.onNext(.save)
-                        },
-                        cancelCompletion: {
-                            owner.reactor?.action.onNext(.undo)
-                        }
-                    )
-                    owner.showPanModal(content: vc)
+                        allowsDragAndTapToDismiss: nil,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: { owner.reactor?.action.onNext(.save) },
+                        cancelCompletion: { owner.reactor?.action.onNext(.undo) }
+                    ) as? TextPopupViewController else {
+                        return
+                    }
+
+                    owner.showPanModal(content: textPopUpVC)
 
                 } else {
                     owner.navigationController?.popViewController(animated: true)

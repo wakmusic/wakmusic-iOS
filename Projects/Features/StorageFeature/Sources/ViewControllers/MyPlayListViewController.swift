@@ -1,11 +1,3 @@
-//
-//  MyPlayListViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/27.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
@@ -29,6 +21,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     private var refreshControl = UIRefreshControl()
     var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    var textPopUpFactory: TextPopUpFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
     var viewModel: MyPlayListViewModel!
 
@@ -51,12 +44,14 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MyPlayListViewModel,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
-        playlistDetailFactory: PlaylistDetailFactory
+        playlistDetailFactory: PlaylistDetailFactory,
+        textPopUpFactory: TextPopUpFactory
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
+        viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
 }
@@ -267,16 +262,24 @@ extension MyPlayListViewController: SongCartViewDelegate {
 
         case .remove:
             let count: Int = output.indexPathOfSelectedPlayLists.value.count
-            let popup = TextPopupViewController.viewController(
+
+            guard let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
                 cancelButtonIsHidden: false,
-                completion: { [weak self] () in
-                    guard let `self` = self else { return }
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: { [weak self] in
+
+                    guard let self else { return }
                     self.input.deletePlayList.onNext(())
                     self.hideSongCart()
-                }
-            )
-            self.showPanModal(content: popup)
+
+                },
+                cancelCompletion: nil
+            ) as? TextPopupViewController else {
+                return
+            }
 
         default: return
         }

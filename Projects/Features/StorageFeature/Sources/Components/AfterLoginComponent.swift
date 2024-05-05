@@ -1,11 +1,3 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
@@ -21,6 +13,7 @@ public protocol AfterLoginDependency: Dependency {
     var myPlayListComponent: MyPlayListComponent { get }
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var favoriteComponent: FavoriteComponent { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class AfterLoginComponent: Component<AfterLoginDependency> {
@@ -34,7 +27,8 @@ public final class AfterLoginComponent: Component<AfterLoginDependency> {
             profilePopComponent: dependency.profilePopComponent,
             myPlayListComponent: dependency.myPlayListComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            favoriteComponent: dependency.favoriteComponent
+            favoriteComponent: dependency.favoriteComponent,
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }

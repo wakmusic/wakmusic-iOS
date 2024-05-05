@@ -1,12 +1,6 @@
-//
-//  NewSongsContentComponent.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/11/15.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
 
 import BaseFeature
+import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
@@ -15,7 +9,7 @@ import SongsDomainInterface
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class NewSongsContentComponent: Component<NewSongsContentDependency> {
@@ -26,7 +20,7 @@ public final class NewSongsContentComponent: Component<NewSongsContentDependency
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
                 fetchChartUpdateTimeUseCase: dependency.fetchChartUpdateTimeUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }
