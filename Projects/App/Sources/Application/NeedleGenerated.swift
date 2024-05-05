@@ -253,6 +253,9 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var containSongsComponent: ContainSongsComponent {
         return appComponent.containSongsComponent
     }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -946,6 +949,7 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\PlayListDetailDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension ChartComponent: Registration {

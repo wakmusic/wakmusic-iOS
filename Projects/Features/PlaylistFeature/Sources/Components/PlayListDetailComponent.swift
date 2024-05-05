@@ -24,6 +24,8 @@ public protocol PlayListDetailDependency: Dependency {
 
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var containSongsComponent: ContainSongsComponent { get }
+    
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistDetailFactory {
@@ -38,7 +40,8 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            containSongsComponent: dependency.containSongsComponent
+            containSongsComponent: dependency.containSongsComponent,
+            textPopUpFactory: dependency.textPopUpFactory
         )
     }
 }
