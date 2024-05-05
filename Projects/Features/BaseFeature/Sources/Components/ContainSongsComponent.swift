@@ -3,9 +3,8 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
-import UserDomainInterface
 import UIKit
-
+import UserDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }

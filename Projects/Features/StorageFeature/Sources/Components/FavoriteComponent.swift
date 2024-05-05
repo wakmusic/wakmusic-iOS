@@ -1,11 +1,11 @@
 import AuthDomainInterface
+import BaseDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeature
 import UserDomainInterface
-import BaseDomainInterface
 
 public protocol FavoriteDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }

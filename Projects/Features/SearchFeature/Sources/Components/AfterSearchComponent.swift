@@ -1,8 +1,8 @@
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SongsDomainInterface
-import BaseFeatureInterface
 
 public protocol AfterSearchDependency: Dependency {
     var afterSearchContentComponent: AfterSearchContentComponent { get }

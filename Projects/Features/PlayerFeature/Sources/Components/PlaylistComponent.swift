@@ -1,7 +1,7 @@
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import BaseFeatureInterface
 
 public protocol PlaylistDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }

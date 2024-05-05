@@ -7,7 +7,6 @@ import PlayListDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
-
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
 

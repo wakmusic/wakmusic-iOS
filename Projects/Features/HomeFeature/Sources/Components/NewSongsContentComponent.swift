@@ -1,10 +1,10 @@
 
 import BaseFeature
+import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
 import SongsDomainInterface
-import BaseFeatureInterface
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }

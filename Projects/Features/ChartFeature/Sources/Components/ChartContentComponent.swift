@@ -1,8 +1,8 @@
 import BaseFeature
+import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
-import BaseFeatureInterface
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }

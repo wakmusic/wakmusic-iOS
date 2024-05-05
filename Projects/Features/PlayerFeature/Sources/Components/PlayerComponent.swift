@@ -1,11 +1,11 @@
 import AuthDomainInterface
 import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import LikeDomainInterface
 import NeedleFoundation
 import SongsDomainInterface
 import UserDomainInterface
-import BaseFeatureInterface
 
 public protocol PlayerDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }

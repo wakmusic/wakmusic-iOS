@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa
@@ -7,7 +8,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     private let disposeBag = DisposeBag()

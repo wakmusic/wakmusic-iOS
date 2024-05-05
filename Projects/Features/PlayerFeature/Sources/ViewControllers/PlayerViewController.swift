@@ -7,6 +7,7 @@
 //
 
 import BaseFeature
+import BaseFeatureInterface
 import Combine
 import DesignSystem
 import Kingfisher
@@ -18,7 +19,6 @@ import Then
 import UIKit
 import Utility
 import YouTubePlayerKit
-import BaseFeatureInterface
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()

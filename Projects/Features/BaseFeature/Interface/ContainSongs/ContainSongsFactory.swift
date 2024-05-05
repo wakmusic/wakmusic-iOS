@@ -1,6 +1,5 @@
 import UIKit
 
-
 public protocol ContainSongsFactory {
-    func makeView( songs: [String] ) -> UIViewController
+    func makeView(songs: [String]) -> UIViewController
 }

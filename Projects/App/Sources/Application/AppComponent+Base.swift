@@ -10,7 +10,7 @@ public extension AppComponent {
     var textPopUpFactory: any TextPopUpFactory {
         TextPopUpComponent(parent: self)
     }
-    
+
     var containSongsFactory: any ContainSongsFactory {
         ContainSongsComponent(parent: self)
     }

@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import Pageboy
@@ -7,7 +8,6 @@ import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tabBarView: UIView!

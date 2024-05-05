@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import Combine
 import DesignSystem
 import Foundation
@@ -9,7 +10,6 @@ import RxSwift
 import SnapKit
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
