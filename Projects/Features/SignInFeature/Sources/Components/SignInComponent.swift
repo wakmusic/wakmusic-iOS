@@ -1,9 +1,9 @@
 import AuthDomainInterface
 import Foundation
 import NeedleFoundation
-import UserDomainInterface
 import SignInFeatureInterface
 import UIKit
+import UserDomainInterface
 
 public protocol SignInDependency: Dependency {
     var fetchTokenUseCase: any FetchTokenUseCase { get }
@@ -21,5 +21,4 @@ public final class SignInComponent: Component<SignInDependency>, SignInFactory {
             )
         )
     }
-
 }

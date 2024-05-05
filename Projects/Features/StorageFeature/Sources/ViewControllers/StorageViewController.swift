@@ -40,8 +40,8 @@ extension StorageViewController {
     }
 
     private func bindRx() {
-    // TODO: 나중에 작업 시
-        
+        // TODO: 나중에 작업 시
+
 //        Utility.PreferenceManager.$userInfo
 //            .map { $0 != nil }
 //            .subscribe(onNext: { [weak self] isLogin in
@@ -67,8 +67,7 @@ extension StorageViewController {
 }
 
 public extension StorageViewController {
-    
-    //TODO: 나중에 작업 시
+    // TODO: 나중에 작업 시
     func equalHandleTapped() {
 //        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
 //        if viewControllersCount > 1 {
