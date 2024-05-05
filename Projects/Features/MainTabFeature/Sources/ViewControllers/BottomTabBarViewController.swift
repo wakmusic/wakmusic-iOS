@@ -40,7 +40,7 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
                 title: "검색",
                 offImage: DesignSystemAsset.TabBar.searchOff.image,
                 onImage: DesignSystemAsset.TabBar.searchOn.image,
-                animateImage: "Chart_Tab"
+                animateImage: "Search_Tab"
             ),
             TabItem(
                 title: "아티스트",
