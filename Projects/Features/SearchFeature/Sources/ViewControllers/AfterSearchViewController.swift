@@ -1,11 +1,3 @@
-//
-//  AfterSearchContentViewController.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/11.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
 import NVActivityIndicatorView
@@ -15,6 +7,7 @@ import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tabBarView: UIView!
@@ -23,7 +16,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     var viewModel: AfterSearchViewModel!
     var afterSearchContentComponent: AfterSearchContentComponent!
-    var containSongsComponent: ContainSongsComponent!
+    var containSongsFactory: ContainSongsFactory!
     let disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
@@ -52,13 +45,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     public static func viewController(
         afterSearchContentComponent: AfterSearchContentComponent,
-        containSongsComponent: ContainSongsComponent,
+        containSongsFactory: ContainSongsFactory,
         viewModel: AfterSearchViewModel
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.afterSearchContentComponent = afterSearchContentComponent
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         return viewController
     }
 
@@ -210,7 +203,7 @@ extension AfterSearchViewController: SongCartViewDelegate {
 
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsComponent.makeView(songs: songs)
+            let viewController = containSongsFactory.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) { [weak self] in
                 guard let self = self else { return }

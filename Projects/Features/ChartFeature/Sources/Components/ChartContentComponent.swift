@@ -2,11 +2,12 @@ import BaseFeature
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
+import BaseFeatureInterface
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class ChartContentComponent: Component<ChartContentDependency> {
@@ -17,7 +18,7 @@ public final class ChartContentComponent: Component<ChartContentDependency> {
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
                 fetchChartUpdateTimeUseCase: dependency.fetchChartUpdateTimeUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }

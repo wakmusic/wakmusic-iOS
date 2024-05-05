@@ -1,10 +1,3 @@
-//
-//  NewSongsContentViewController.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/11/15.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
 
 import BaseFeature
 import DesignSystem
@@ -14,6 +7,7 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
@@ -24,7 +18,7 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     fileprivate lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
-    private var containSongsComponent: ContainSongsComponent!
+    private var containSongsFactory: ContainSongsFactory!
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var refreshControl = UIRefreshControl()
@@ -45,14 +39,14 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
 
     public static func viewController(
         viewModel: NewSongsContentViewModel,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory
     ) -> NewSongsContentViewController {
         let viewController = NewSongsContentViewController.viewController(
             storyBoardName: "Home",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         return viewController
     }
 }
@@ -214,7 +208,7 @@ extension NewSongsContentViewController: SongCartViewDelegate {
 
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsComponent.makeView(songs: songs)
+            let viewController = containSongsFactory.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)

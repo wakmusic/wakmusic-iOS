@@ -7,6 +7,7 @@ import ArtistDomainInterface
 import ArtistFeature
 import AuthDomain
 import AuthDomainInterface
+import BaseDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import ChartDomain
@@ -84,8 +85,8 @@ private class ArtistMusicContentDependency1615ac8469e54ec51921Provider: ArtistMu
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase {
         return appComponent.fetchArtistSongListUseCase
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -110,8 +111,8 @@ private func factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5(_ component: Needle
     return ArtistMusicDependencya0f5073287829dfbc260Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class PlaylistDependency6f376d117dc0f38671edProvider: PlaylistDependency {
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -144,8 +145,8 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var playlistComponent: PlaylistComponent {
         return appComponent.playlistComponent
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -250,8 +251,8 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
         return appComponent.multiPurposePopUpFactory
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
@@ -285,8 +286,8 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
         return appComponent.fetchChartUpdateTimeUseCase
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -427,8 +428,8 @@ private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: Needle
     return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase {
         return appComponent.fetchFavoriteSongsUseCase
@@ -466,9 +467,6 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
     }
     var questionComponent: QuestionComponent {
         return appComponent.questionComponent
-    }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
     }
     var noticeComponent: NoticeComponent {
         return appComponent.noticeComponent
@@ -651,8 +649,8 @@ private class NewSongsContentDependency93a05f20fa300c5bbec3Provider: NewSongsCon
     var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
         return appComponent.fetchChartUpdateTimeUseCase
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -670,8 +668,8 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var fetchSearchSongUseCase: any FetchSearchSongUseCase {
         return appComponent.fetchSearchSongUseCase
     }
-    var containSongsComponent: ContainSongsComponent {
-        return appComponent.containSongsComponent
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -803,7 +801,6 @@ extension AppComponent: Registration {
         localTable["beforeSearchComponent-BeforeSearchComponent"] = { [unowned self] in self.beforeSearchComponent as Any }
         localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
-        localTable["containSongsComponent-ContainSongsComponent"] = { [unowned self] in self.containSongsComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { [unowned self] in self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { [unowned self] in self.fetchRecommendPlayListUseCase as Any }
@@ -854,6 +851,7 @@ extension AppComponent: Registration {
         localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
         localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { [unowned self] in self.multiPurposePopUpFactory as Any }
         localTable["textPopUpFactory-any TextPopUpFactory"] = { [unowned self] in self.textPopUpFactory as Any }
+        localTable["containSongsFactory-any ContainSongsFactory"] = { [unowned self] in self.containSongsFactory as Any }
         localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
         localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
         localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
@@ -886,7 +884,7 @@ extension ArtistDetailComponent: Registration {
 extension ArtistMusicContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ArtistMusicContentDependency.fetchArtistSongListUseCase] = "fetchArtistSongListUseCase-any FetchArtistSongListUseCase"
-        keyPathToName[\ArtistMusicContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\ArtistMusicContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension ArtistMusicComponent: Registration {
@@ -896,7 +894,7 @@ extension ArtistMusicComponent: Registration {
 }
 extension PlaylistComponent: Registration {
     public func registerItems() {
-        keyPathToName[\PlaylistDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\PlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension PlayerComponent: Registration {
@@ -908,7 +906,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\PlayerDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
-        keyPathToName[\PlayerDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\PlayerDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension MainTabBarComponent: Registration {
@@ -948,7 +946,7 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
         keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
-        keyPathToName[\PlayListDetailDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\PlayListDetailDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
         keyPathToName[\PlayListDetailDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
@@ -961,7 +959,7 @@ extension ChartContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartContentDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
         keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
-        keyPathToName[\ChartContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\ChartContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension ServiceInfoComponent: Registration {
@@ -1013,7 +1011,7 @@ extension AfterLoginComponent: Registration {
 }
 extension FavoriteComponent: Registration {
     public func registerItems() {
-        keyPathToName[\FavoriteDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\FavoriteDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
         keyPathToName[\FavoriteDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\FavoriteDependency.editFavoriteSongsOrderUseCase] = "editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"
         keyPathToName[\FavoriteDependency.deleteFavoriteListUseCase] = "deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"
@@ -1027,7 +1025,6 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
         keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
-        keyPathToName[\RequestDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
         keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
         keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
@@ -1102,14 +1099,14 @@ extension NewSongsContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\NewSongsContentDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
         keyPathToName[\NewSongsContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
-        keyPathToName[\NewSongsContentDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\NewSongsContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
         keyPathToName[\AfterSearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
-        keyPathToName[\AfterSearchDependency.containSongsComponent] = "containSongsComponent-ContainSongsComponent"
+        keyPathToName[\AfterSearchDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension AfterSearchContentComponent: Registration {

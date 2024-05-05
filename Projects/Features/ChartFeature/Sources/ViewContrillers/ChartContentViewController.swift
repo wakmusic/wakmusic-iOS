@@ -7,6 +7,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     private let disposeBag = DisposeBag()
@@ -24,7 +25,7 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 
     let playState = PlayState.shared
 
-    private var containSongsComponent: ContainSongsComponent!
+    private var containSongsFactory: ContainSongsFactory!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -40,11 +41,11 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
 
     public static func viewController(
         viewModel: ChartContentViewModel,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory
     ) -> ChartContentViewController {
         let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         return viewController
     }
 }
@@ -176,7 +177,7 @@ extension ChartContentViewController: SongCartViewDelegate {
 
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsComponent.makeView(songs: songs)
+            let viewController = containSongsFactory.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)

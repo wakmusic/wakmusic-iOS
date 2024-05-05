@@ -5,6 +5,7 @@ import LikeDomainInterface
 import NeedleFoundation
 import SongsDomainInterface
 import UserDomainInterface
+import BaseFeatureInterface
 
 public protocol PlayerDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }
@@ -14,7 +15,7 @@ public protocol PlayerDependency: Dependency {
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var playlistComponent: PlaylistComponent { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class PlayerComponent: Component<PlayerDependency> {
@@ -29,7 +30,7 @@ public final class PlayerComponent: Component<PlayerDependency> {
                 logoutUseCase: dependency.logoutUseCase
             ),
             playlistComponent: dependency.playlistComponent,
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }

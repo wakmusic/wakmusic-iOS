@@ -1,11 +1,3 @@
-//
-//  BeforeSearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
@@ -15,6 +7,7 @@ import PlayListDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
+
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
 
@@ -23,7 +16,7 @@ public protocol PlayListDetailDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
 
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -40,7 +33,7 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            containSongsComponent: dependency.containSongsComponent,
+            containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory
         )
     }

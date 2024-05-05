@@ -18,6 +18,7 @@ import Then
 import UIKit
 import Utility
 import YouTubePlayerKit
+import BaseFeatureInterface
 
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
@@ -33,16 +34,16 @@ public class PlayerViewController: UIViewController {
 
     private let logoutHandlerSubject = PassthroughSubject<Void, Never>()
     internal var playlistComponent: PlaylistComponent!
-    internal var containSongsComponent: ContainSongsComponent!
+    internal var containSongsFactory: ContainSongsFactory!
 
     init(
         viewModel: PlayerViewModel,
         playlistComponent: PlaylistComponent,
-        containSongsComponent: ContainSongsComponent
+        containSongsFactory: ContainSongsFactory
     ) {
         self.viewModel = viewModel
         self.playlistComponent = playlistComponent
-        self.containSongsComponent = containSongsComponent
+        self.containSongsFactory = containSongsFactory
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -390,7 +391,7 @@ private extension PlayerViewController {
     private func bindShowContainSongsViewController(output: PlayerViewModel.Output) {
         output.showContainSongsViewController.sink { [weak self] songId in
             guard let self else { return }
-            let viewController = self.containSongsComponent.makeView(songs: [songId])
+            let viewController = self.containSongsFactory.makeView(songs: [songId])
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true)
         }.store(in: &subscription)

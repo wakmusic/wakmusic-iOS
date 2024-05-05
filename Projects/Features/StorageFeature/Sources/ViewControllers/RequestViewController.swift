@@ -102,7 +102,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     var faqComponent: FaqComponent!
     var questionComponent: QuestionComponent!
-    var containSongsComponent: ContainSongsComponent!
     var noticeComponent: NoticeComponent!
     var serviceInfoComponent: ServiceInfoComponent!
 
@@ -124,7 +123,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewModel: RequestViewModel,
         faqComponent: FaqComponent,
         questionComponent: QuestionComponent,
-        containSongsComponent: ContainSongsComponent,
         noticeComponent: NoticeComponent,
         serviceInfoComponent: ServiceInfoComponent,
         textPopUpFactory: TextPopUpFactory
@@ -133,7 +131,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewController.viewModel = viewModel
         viewController.faqComponent = faqComponent
         viewController.questionComponent = questionComponent
-        viewController.containSongsComponent = containSongsComponent
         viewController.noticeComponent = noticeComponent
         viewController.serviceInfoComponent = serviceInfoComponent
         viewController.textPopUpFactory = textPopUpFactory

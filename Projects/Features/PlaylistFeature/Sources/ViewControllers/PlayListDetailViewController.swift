@@ -36,7 +36,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     @IBOutlet weak var playListInfoSuperView: UIView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     var multiPurposePopUpFactory: MultiPurposePopUpFactory!
-    var containSongsComponent: ContainSongsComponent!
+    var containSongsFactory: ContainSongsFactory!
     var textPopUpFactory: TextPopUpFactory!
 
     public var editSheetView: EditSheetView!
@@ -56,7 +56,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     public static func viewController(
         reactor: PlaylistDetailReactor,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
-        containSongsComponent: ContainSongsComponent,
+        containSongsFactory: ContainSongsFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> PlayListDetailViewController {
         let viewController = PlayListDetailViewController.viewController(
@@ -67,7 +67,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
         viewController.reactor = reactor
 
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         viewController.textPopUpFactory = textPopUpFactory
 
         return viewController

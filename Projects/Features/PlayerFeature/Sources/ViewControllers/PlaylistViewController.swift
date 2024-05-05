@@ -1,11 +1,3 @@
-//
-//  PlaylistViewController.swift
-//  PlayerFeature
-//
-//  Created by YoungK on 2023/02/28.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import Combine
 import DesignSystem
@@ -17,6 +9,7 @@ import RxSwift
 import SnapKit
 import UIKit
 import Utility
+import BaseFeatureInterface
 
 public class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
@@ -30,16 +23,16 @@ public class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
 
-    internal var containSongsComponent: ContainSongsComponent!
+    internal var containSongsFactory: ContainSongsFactory!
 
     public var songCartView: BaseFeature.SongCartView!
     public var bottomSheetView: BaseFeature.BottomSheetView!
 
     private var panGestureRecognizer: UIPanGestureRecognizer!
 
-    init(viewModel: PlaylistViewModel, containSongsComponent: ContainSongsComponent) {
+    init(viewModel: PlaylistViewModel, containSongsFactory: ContainSongsFactory) {
         self.viewModel = viewModel
-        self.containSongsComponent = containSongsComponent
+        self.containSongsFactory = containSongsFactory
         super.init(nibName: nil, bundle: nil)
     }
 

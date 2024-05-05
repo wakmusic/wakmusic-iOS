@@ -1,17 +1,11 @@
-//
-//  BeforeSearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import UserDomainInterface
+import UIKit
+
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
@@ -20,8 +14,8 @@ public protocol ContainSongsDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
 }
 
-public final class ContainSongsComponent: Component<ContainSongsDependency> {
-    public func makeView(songs: [String]) -> ContainSongsViewController {
+public final class ContainSongsComponent: Component<ContainSongsDependency>, ContainSongsFactory {
+    public func makeView(songs: [String]) -> UIViewController {
         return ContainSongsViewController.viewController(
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             viewModel: .init(

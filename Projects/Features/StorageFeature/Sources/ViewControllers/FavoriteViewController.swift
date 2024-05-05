@@ -20,7 +20,7 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
     private var refreshControl = UIRefreshControl()
     var viewModel: FavoriteViewModel!
 
-    var containSongsComponent: ContainSongsComponent!
+    var containSongsFactory: ContainSongsFactory!
     var textPopUpFactory: TextPopUpFactory!
     lazy var input = FavoriteViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -41,12 +41,12 @@ public final class FavoriteViewController: BaseViewController, ViewControllerFro
 
     public static func viewController(
         viewModel: FavoriteViewModel,
-        containSongsComponent: ContainSongsComponent,
+        containSongsFactory: ContainSongsFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.containSongsComponent = containSongsComponent
+        viewController.containSongsFactory = containSongsFactory
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
@@ -143,7 +143,7 @@ extension FavoriteViewController {
             .debug("willAddSongList")
             .subscribe(onNext: { [weak self] songs in
                 guard let `self` = self else { return }
-                let viewController = self.containSongsComponent.makeView(songs: songs)
+                let viewController = self.containSongsFactory.makeView(songs: songs)
                 viewController.modalPresentationStyle = .overFullScreen
                 self.present(viewController, animated: true) {
                     self.input.allLikeListSelected.onNext(false)

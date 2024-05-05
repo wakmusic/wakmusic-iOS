@@ -5,9 +5,10 @@ import Foundation
 import NeedleFoundation
 import SignInFeature
 import UserDomainInterface
+import BaseDomainInterface
 
 public protocol FavoriteDependency: Dependency {
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
@@ -24,7 +25,7 @@ public final class FavoriteComponent: Component<FavoriteDependency> {
                 deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent,
+            containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory
         )
     }
