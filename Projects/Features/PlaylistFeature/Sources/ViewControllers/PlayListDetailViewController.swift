@@ -268,15 +268,14 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 let isEditing = reactor.currentState.isEditing
 
                 if isEditing {
-                    
                     guard let textPopUpVC = owner.textPopUpFactory.makeView(
                         text: "변경된 내용을 저장할까요?",
-                        cancelButtonIsHidden: false, 
+                        cancelButtonIsHidden: false,
                         allowsDragAndTapToDismiss: nil,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: { owner.reactor?.action.onNext(.save) },
-                        cancelCompletion: {  owner.reactor?.action.onNext(.undo) }
+                        cancelCompletion: { owner.reactor?.action.onNext(.undo) }
                     ) as? TextPopupViewController else {
                         return
                     }

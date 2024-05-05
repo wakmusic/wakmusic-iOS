@@ -24,7 +24,7 @@ public protocol PlayListDetailDependency: Dependency {
 
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var containSongsComponent: ContainSongsComponent { get }
-    
+
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
