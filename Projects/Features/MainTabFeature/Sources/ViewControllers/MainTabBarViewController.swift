@@ -3,6 +3,7 @@ import BaseFeature
 import ChartFeature
 import DesignSystem
 import HomeFeature
+import MyInfoFeature
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
@@ -11,7 +12,6 @@ import SnapKit
 import StorageFeature
 import UIKit
 import Utility
-import MyInfoFeature
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!

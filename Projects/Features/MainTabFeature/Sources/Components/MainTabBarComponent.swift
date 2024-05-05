@@ -3,11 +3,11 @@ import BaseFeature
 import ChartFeature
 import Foundation
 import HomeFeature
+import MyInfoFeature
 import NeedleFoundation
 import NoticeDomainInterface
 import SearchFeature
 import StorageFeature
-import MyInfoFeature
 
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }

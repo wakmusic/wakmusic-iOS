@@ -1,17 +1,11 @@
-import UIKit
 import BaseFeature
+import UIKit
 
-// TODO:
+/// TODO:
 public class MyInfoViewController: UIViewController {
-
-    
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = .red
     }
-    
-    
-
-
 }
