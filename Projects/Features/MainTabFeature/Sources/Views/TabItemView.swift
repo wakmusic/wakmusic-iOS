@@ -71,7 +71,7 @@ extension TabItemView {
             self.lottieContentView.addSubview(lottieAnimationView)
 
             lottieAnimationView.snp.makeConstraints {
-                $0.width.height.equalTo(45)
+                $0.width.height.equalTo(32)
                 $0.centerX.equalTo(self.lottieContentView.snp.centerX)
                 $0.centerY.equalTo(self.lottieContentView.snp.centerY).offset(0.75)
             }
