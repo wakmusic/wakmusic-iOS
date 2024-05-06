@@ -29,11 +29,11 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
     lazy var beforeVc = beforeSearchComponent.makeView().then {
         $0.delegate = self
     }
+
     lazy var afterVc = afterSearchComponent.makeView()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -88,51 +88,42 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
 
         let currentState = reactor.state.share(replay: 1)
 
-        
-        
-        
         currentState
-            .map{($0.typingState,$0.text)}
+            .map { ($0.typingState, $0.text) }
             .withUnretained(self)
             .bind(onNext: { owner, data in
 
                 let (state, text) = data
-                
+
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state)
-                
+
                 if state == .search {
-                    
                     if text.isEmpty {
-                        
                         guard let textPopupViewController = owner.textPopUpFactory.makeView(
-                                text: "검색어를 입력해주세요.",
-                                cancelButtonIsHidden: true,
-                                allowsDragAndTapToDismiss: nil,
-                                confirmButtonText: nil,
-                                cancelButtonText: nil,
-                                completion: nil,
-                                cancelCompletion: nil
-                            ) as? TextPopupViewController else {
-                                return
-                            }
-                            owner.showPanModal(content: textPopupViewController)
-                    
-                        
+                            text: "검색어를 입력해주세요.",
+                            cancelButtonIsHidden: true,
+                            allowsDragAndTapToDismiss: nil,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: nil,
+                            cancelCompletion: nil
+                        ) as? TextPopupViewController else {
+                            return
+                        }
+                        owner.showPanModal(content: textPopupViewController)
+
                     } else {
                         PreferenceManager.shared.addRecentRecords(word: text)
                         UIView.setAnimationsEnabled(false)
                         owner.view.endEditing(true)
                         UIView.setAnimationsEnabled(true)
                     }
-                    
                 }
-                
 
             })
             .disposed(by: disposeBag)
-
     }
 
     override public func bindAction(reactor: SearchReactor) {
@@ -159,7 +150,6 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
             .map { SearchReactor.Action.updateText($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
 
         let editingDidBegin = searchTextFiled.rx.controlEvent(.editingDidBegin)
         let editingDidEnd = searchTextFiled.rx.controlEvent(.editingDidEnd)
@@ -180,11 +170,9 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
                     reactor.action.onNext(.switchTypingState(.typing))
 
                 } else if event == .editingDidEnd {
-                   
                     NotificationCenter.default.post(name: .statusBarEnterLightBackground, object: nil)
 
                 } else {
-                   
                     reactor.action.onNext(.switchTypingState(.search))
                 }
 
@@ -193,7 +181,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
 
         RxKeyboard.instance.visibleHeight // 드라이브: 무조건 메인쓰레드에서 돌아감
             .drive(onNext: { [weak self] keyboardVisibleHeight in
-            
+
                 guard let self = self else {
                     return
                 }
@@ -230,11 +218,10 @@ extension SearchViewController {
                 return
 
             } else {
-                
                 guard let text = reactor?.currentState.text else {
                     return
                 }
-                
+
                 self.remove(asChildViewController: beforeVc)
                 self.add(asChildViewController: afterVc)
                 afterVc.input.text.accept(text)
@@ -249,8 +236,6 @@ extension SearchViewController {
             }
         }
     }
-
-
 
     private func reactSearchHeader(_ state: TypingStatus) {
         var placeHolderAttributes = [
