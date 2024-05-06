@@ -18,7 +18,6 @@ import StorageFeature
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
-
     var playlistDetailFactory: any PlaylistDetailFactory {
         PlayListDetailComponent(parent: self)
     }

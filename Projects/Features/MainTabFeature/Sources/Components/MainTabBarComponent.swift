@@ -7,9 +7,8 @@ import MyInfoFeature
 import NeedleFoundation
 import NoticeDomainInterface
 import SearchFeature
-import StorageFeature
 import SearchFeatureInterface
-
+import StorageFeature
 
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }

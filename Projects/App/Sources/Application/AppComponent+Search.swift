@@ -6,7 +6,7 @@ extension AppComponent {
     var searchFactory: any SearchFactory {
         SearchComponent(parent: self)
     }
-    
+
     var beforeSearchComponent: BeforeSearchComponent {
         BeforeSearchComponent(parent: self)
     }

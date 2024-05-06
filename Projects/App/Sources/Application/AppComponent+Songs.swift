@@ -4,7 +4,6 @@ import SongsDomain
 import SongsDomainInterface
 
 public extension AppComponent {
-
     var homeComponent: HomeComponent {
         HomeComponent(parent: self)
     }

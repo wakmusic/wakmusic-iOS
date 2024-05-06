@@ -8,11 +8,11 @@ import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import SearchFeature
+import SearchFeatureInterface
 import SnapKit
 import StorageFeature
 import UIKit
 import Utility
-import SearchFeatureInterface
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
