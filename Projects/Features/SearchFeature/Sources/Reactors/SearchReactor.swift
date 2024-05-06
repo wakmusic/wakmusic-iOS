@@ -40,16 +40,15 @@ public final class SearchReactor: Reactor {
     }
 
     public func reduce(state: State, mutation: Mutation) -> State {
-        
         var newState = state
-        
+
         switch mutation {
         case let .updateTypingState(state):
             newState.typingState = state
-        case let.updateText(text):
+        case let .updateText(text):
             newState.text = text
         }
-        
+
         return newState
     }
 
@@ -68,13 +67,11 @@ public final class SearchReactor: Reactor {
 }
 
 fileprivate extension SearchReactor {
-    func updateTypingState(_ state:TypingStatus) -> Observable<Mutation> {
-    
+    func updateTypingState(_ state: TypingStatus) -> Observable<Mutation> {
         return .just(.updateTypingState(state: state))
     }
-    
-    func updateText(_ text:String) -> Observable<Mutation> {
-    
+
+    func updateText(_ text: String) -> Observable<Mutation> {
         return .just(.updateText(text))
     }
 }

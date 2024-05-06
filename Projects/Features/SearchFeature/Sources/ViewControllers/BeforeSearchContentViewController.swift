@@ -131,7 +131,7 @@ extension BeforeSearchContentViewController {
         parent.reactor?.state
             .map(\.typingState)
             .asObservable()
-            .map{$0 == .before}
+            .map { $0 == .before }
             .bind(to: output.showRecommend)
             .disposed(by: disposeBag)
     }
