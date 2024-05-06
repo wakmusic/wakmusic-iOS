@@ -1,8 +1,8 @@
 import BaseFeatureInterface
-import UIKit
 import Foundation
 import NeedleFoundation
 import SearchFeatureInterface
+import UIKit
 
 public protocol SearchDependency: Dependency {
     var beforeSearchComponent: BeforeSearchComponent { get }

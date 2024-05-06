@@ -8,12 +8,14 @@ import NeedleFoundation
 import NoticeDomainInterface
 import SearchFeature
 import StorageFeature
+import SearchFeatureInterface
+
 
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }
     var homeComponent: HomeComponent { get }
     var chartComponent: ChartComponent { get }
-    var searchComponent: SearchComponent { get }
+    var searchFactory: any SearchFactory { get }
     var artistComponent: ArtistComponent { get }
     var storageComponent: StorageComponent { get }
     var myInfoComponent: MyInfoComponent { get }
@@ -30,7 +32,7 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
             ),
             homeComponent: self.dependency.homeComponent,
             chartComponent: self.dependency.chartComponent,
-            searchComponent: self.dependency.searchComponent,
+            searchFactory: self.dependency.searchFactory,
             artistComponent: self.dependency.artistComponent,
             storageCompoent: self.dependency.storageComponent,
             myInfoComponent: self.dependency.myInfoComponent,

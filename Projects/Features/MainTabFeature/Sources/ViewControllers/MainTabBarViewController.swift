@@ -12,6 +12,7 @@ import SnapKit
 import StorageFeature
 import UIKit
 import Utility
+import SearchFeatureInterface
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
@@ -20,7 +21,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         return [
             homeComponent.makeView().wrapNavigationController,
             chartComponent.makeView().wrapNavigationController,
-            searchComponent.makeView().wrapNavigationController,
+            searchFactory.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
             storageComponent.makeView().wrapNavigationController,
             myInfoComponent.makeView().wrapNavigationController
@@ -34,7 +35,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     private var homeComponent: HomeComponent!
     private var chartComponent: ChartComponent!
-    private var searchComponent: SearchComponent!
+    private var searchFactory: SearchFactory!
     private var artistComponent: ArtistComponent!
     private var storageComponent: StorageComponent!
     private var myInfoComponent: MyInfoComponent!
@@ -62,7 +63,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewModel: MainTabBarViewModel,
         homeComponent: HomeComponent,
         chartComponent: ChartComponent,
-        searchComponent: SearchComponent,
+        searchFactory: SearchFactory,
         artistComponent: ArtistComponent,
         storageCompoent: StorageComponent,
         myInfoComponent: MyInfoComponent,
@@ -74,7 +75,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.viewModel = viewModel
         viewController.homeComponent = homeComponent
         viewController.chartComponent = chartComponent
-        viewController.searchComponent = searchComponent
+        viewController.searchFactory = searchFactory
         viewController.artistComponent = artistComponent
         viewController.storageComponent = storageCompoent
         viewController.myInfoComponent = myInfoComponent
