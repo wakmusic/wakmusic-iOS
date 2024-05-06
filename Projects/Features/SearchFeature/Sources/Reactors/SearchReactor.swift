@@ -7,23 +7,74 @@ import RxSwift
 import Utility
 
 public final class SearchReactor: Reactor {
-    public enum Action {}
+    var disposeBag: DisposeBag = DisposeBag()
 
-    public enum Mutation {}
+    public enum Action {
+        case switchTypingState(TypingStatus)
+        case updateText(String)
+        case cancel
+        case search
+    }
 
-    public struct State {}
+    public enum Mutation {
+        case updateTypingState(state: TypingStatus)
+        case updateText(String)
+    }
+
+    public struct State {
+        var typingState: TypingStatus
+        var text: String
+    }
 
     public var initialState: State
 
     init() {
-        self.initialState = .init()
+        self.initialState = State(
+            typingState: .before,
+            text: ""
+        )
     }
 
     deinit {
         LogManager.printDebug("❌ \(Self.self) deinit")
     }
 
-    public func reduce(state: State, mutation: Mutation) -> State {}
+    public func reduce(state: State, mutation: Mutation) -> State {
+        
+        var newState = state
+        
+        switch mutation {
+        case let .updateTypingState(state):
+            newState.typingState = state
+        case let.updateText(text):
+            newState.text = text
+        }
+        
+        return newState
+    }
 
-    public func mutate(action: Action) -> Observable<Mutation> {}
+    public func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case let .switchTypingState(state):
+            updateTypingState(state)
+        case .cancel:
+            updateTypingState(.before)
+        case let .updateText(text):
+            updateText(text)
+        case .search:
+            updateTypingState(.search)
+        }
+    }
+}
+
+fileprivate extension SearchReactor {
+    func updateTypingState(_ state:TypingStatus) -> Observable<Mutation> {
+    
+        return .just(.updateTypingState(state: state))
+    }
+    
+    func updateText(_ text:String) -> Observable<Mutation> {
+    
+        return .just(.updateText(text))
+    }
 }
