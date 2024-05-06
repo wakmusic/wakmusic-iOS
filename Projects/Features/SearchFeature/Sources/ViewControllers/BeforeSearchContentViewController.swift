@@ -128,13 +128,13 @@ extension BeforeSearchContentViewController {
             return
         }
 
-        parent.viewModel.output.isFoucused
-            .withLatestFrom(parent.viewModel.input.textString) { ($0, $1) }
-            .map { (focus: Bool, str: String) -> Bool in
-                return focus == false && str.isWhiteSpace == true
-            }
-            .bind(to: output.showRecommend)
-            .disposed(by: disposeBag)
+//        parent.viewModel.output.isFoucused
+//            .withLatestFrom(parent.viewModel.input.textString) { ($0, $1) }
+//            .map { (focus: Bool, str: String) -> Bool in
+//                return focus == false && str.isWhiteSpace == true
+//            }
+//            .bind(to: output.showRecommend)
+//            .disposed(by: disposeBag)
     }
 }
 
