@@ -3,15 +3,15 @@ import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import Pageboy
+import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import ReactorKit
 
-
-public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView, SongCartViewType {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView,
+    SongCartViewType {
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
@@ -19,8 +19,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     var afterSearchContentComponent: AfterSearchContentComponent!
     var containSongsFactory: ContainSongsFactory!
     public var disposeBag = DisposeBag()
-
-    
 
     private var viewControllers: [UIViewController] = [
         UIViewController(),
@@ -59,34 +57,30 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
     }
-    
+
     public func bind(reactor: AfterSearchReactor) {
         bindState(reacotr: reactor)
         bindAction(reactor: reactor)
-        
     }
 }
 
 extension AfterSearchViewController {
-        
     func bindState(reacotr: AfterSearchReactor) {
-        
-        let currentState = reacotr.state.share(replay:2)
-        
-        //TODO: Content쪽 tableView처리
+        let currentState = reacotr.state.share(replay: 2)
+
+        // TODO: Content쪽 tableView처리
         currentState.map(\.dataSource)
             .withUnretained(self)
-            .bind(onNext: { (owner,dataSource) in
-                
+            .bind(onNext: { owner, dataSource in
+
                 guard let comp = owner.afterSearchContentComponent else {
                     return
                 }
-                
+
                 if dataSource.isEmpty {
                     return
                 }
-                
-                
+
                 owner.viewControllers = [
                     comp.makeView(type: .all, dataSource: dataSource[0]),
                     comp.makeView(type: .song, dataSource: dataSource[1]),
@@ -97,16 +91,10 @@ extension AfterSearchViewController {
                 owner.reloadData()
             })
             .disposed(by: disposeBag)
-        
     }
-    
-    func bindAction(reactor: AfterSearchReactor) {
-        
-        
-        
-    }
-    
-    
+
+    func bindAction(reactor: AfterSearchReactor) {}
+
     private func configureUI() {
         self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.indicator.type = .circleStrokeSpin

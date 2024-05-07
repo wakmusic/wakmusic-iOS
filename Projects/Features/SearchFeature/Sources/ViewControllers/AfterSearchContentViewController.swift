@@ -84,7 +84,7 @@ extension AfterSearchContentViewController {
                     return
                 }
                 self.input.deSelectedAllSongs.accept(())
-             //   parent.output.songEntityOfSelectedSongs.accept([])
+                //   parent.output.songEntityOfSelectedSongs.accept([])
             }).disposed(by: disposeBag)
     }
 

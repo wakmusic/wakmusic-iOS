@@ -1,29 +1,28 @@
 import Foundation
+import LogManager
 import ReactorKit
 import RxSwift
 import SongsDomainInterface
-import LogManager
 
 public final class AfterSearchReactor: Reactor {
-    
     var disposeBag: DisposeBag = DisposeBag()
     var fetchSearchSongUseCase: FetchSearchSongUseCase
-    
+
     public enum Action {
         case fetchData(String)
     }
-    
+
     public enum Mutation {
         case fetchData([[SearchSectionModel]])
     }
-    
+
     public struct State {
         var dataSource: [[SearchSectionModel]]
         var text: String
     }
-    
+
     public var initialState: State
-    
+
     init(fetchSearchSongUseCase: FetchSearchSongUseCase) {
         self.fetchSearchSongUseCase = fetchSearchSongUseCase
         self.initialState = State(
@@ -31,38 +30,32 @@ public final class AfterSearchReactor: Reactor {
             text: ""
         )
     }
-    
+
     deinit {
         LogManager.printDebug("\(Self.self)")
     }
-    
+
     public func reduce(state: State, mutation: Mutation) -> State {
-        
         var newState = state
-        
+
         switch mutation {
-            
         case let .fetchData(data):
             newState.dataSource = data
         }
-        
+
         return newState
     }
-    
+
     public func mutate(action: Action) -> Observable<Mutation> {
-        
         switch action {
-            
         case let .fetchData(text):
             return fetchData(text)
         }
-        
     }
 }
 
 extension AfterSearchReactor {
     func fetchData(_ text: String) -> Observable<Mutation> {
-        
         return fetchSearchSongUseCase
             .execute(keyword: text)
             .asObservable()
@@ -97,7 +90,6 @@ extension AfterSearchReactor {
 
                 return results
             }
-            .map{ Mutation.fetchData($0) }
-        
+            .map { Mutation.fetchData($0) }
     }
 }
