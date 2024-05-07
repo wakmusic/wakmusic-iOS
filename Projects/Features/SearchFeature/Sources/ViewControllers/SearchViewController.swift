@@ -9,6 +9,7 @@ import RxSwift
 import SnapKit
 import UIKit
 import Utility
+import ReactorKit
 
 public final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType {
     @IBOutlet weak var searchImageView: UIImageView!

@@ -24,7 +24,7 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
         return BeforeSearchContentViewController.viewController(
             textPopUpFactory: dependency.textPopUpFactory,
             playlistDetailFactory: dependency.playlistDetailFactory,
-            viewModel: .init(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
+            reactor:  BeforeSearchReactor(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
         )
     }
 }
