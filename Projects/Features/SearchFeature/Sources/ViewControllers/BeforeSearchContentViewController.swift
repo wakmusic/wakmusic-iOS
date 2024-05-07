@@ -5,11 +5,11 @@ import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
 import PlaylistFeatureInterface
+import ReactorKit
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import ReactorKit
 
 protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
@@ -42,15 +42,15 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
     }
-    
-    public override func configureUI() {
+
+    override public func configureUI() {
         super.configureUI()
-        
+
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
@@ -58,22 +58,21 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.indicator.startAnimating()
     }
-    
-    public override func bind(reactor: BeforeSearchReactor) {
+
+    override public func bind(reactor: BeforeSearchReactor) {
         super.bind(reactor: reactor)
-        
+
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        
     }
-    
-    public override func bindAction(reactor: BeforeSearchReactor) {
+
+    override public func bindAction(reactor: BeforeSearchReactor) {
         super.bindAction(reactor: reactor)
-        
+
         tableView.rx.modelSelected(String.self)
             .withUnretained(self)
-            .bind(onNext: {  owner,keyword in
+            .bind(onNext: { owner, keyword in
                 owner.delegate?.itemSelected(keyword)
             })
             .disposed(by: disposeBag)
@@ -88,25 +87,21 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
             .map { Reactor.Action.updateShowRecommend($0 == .before) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
-        
     }
-    
-    public override func bindState(reactor: BeforeSearchReactor) {
+
+    override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
-     
+
         let currentState = reactor.state.share(replay: 2)
-        
-        
+
         let combine = Observable.combineLatest(
             currentState.map(\.showRecommend),
             Utility.PreferenceManager.$recentRecords,
             currentState.map(\.dataSource)
         )
-        
-        
+
         combine
-            .map { (showRecommend: Bool, item: [String]?, _ ) -> [String] in
+            .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
                 if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
                     return []
                 } else {
@@ -132,13 +127,8 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
                 cell.recentLabel.text = element
                 return cell
             }.disposed(by: disposeBag)
-        
-        
-        
     }
-    
 }
-
 
 extension BeforeSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -146,11 +136,10 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
         guard let state = reactor?.currentState else {
             return .zero
         }
-        
+
         if state.showRecommend {
             return RecommendPlayListView.getViewHeight(model: state.dataSource)
 
@@ -165,7 +154,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
         warningView.text = "최근 검색 기록이 없습니다."
-        
+
         guard let state = reactor?.currentState else {
             return nil
         }

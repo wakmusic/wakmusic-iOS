@@ -3,13 +3,13 @@ import BaseFeatureInterface
 import DesignSystem
 import NeedleFoundation
 import PanModal
+import ReactorKit
 import RxCocoa
 import RxKeyboard
 import RxSwift
 import SnapKit
 import UIKit
 import Utility
-import ReactorKit
 
 public final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType {
     @IBOutlet weak var searchImageView: UIImageView!
