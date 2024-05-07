@@ -8,7 +8,7 @@ import SignInFeatureInterface
 import UIKit
 import Utility
 
-public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType, EqualHandleTappedType {
     @IBOutlet public weak var contentView: UIView!
 
     var signInFactory: SignInFactory!
