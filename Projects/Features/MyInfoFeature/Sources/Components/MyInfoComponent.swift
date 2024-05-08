@@ -1,6 +1,6 @@
+import MyInfoFeatureInterface
 import NeedleFoundation
 import UIKit
-import MyInfoFeatureInterface
 
 public protocol MyInfoDependency: Dependency {}
 
