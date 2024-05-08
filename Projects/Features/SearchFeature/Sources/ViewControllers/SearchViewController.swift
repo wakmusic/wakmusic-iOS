@@ -11,8 +11,7 @@ import UIKit
 import Utility
 
 
-public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType, EqualHandleTappedType {
-    EqualHandleTappedType {
+internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType, EqualHandleTappedType {
     @IBOutlet weak var searchImageView: UIImageView!
     @IBOutlet weak var searchTextFiled: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
@@ -38,7 +37,7 @@ public final class SearchViewController: BaseViewController, ViewControllerFromS
         super.viewDidLoad()
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
+    override  func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
 
@@ -284,8 +283,8 @@ extension SearchViewController: BeforeSearchContentViewDelegate {
     }
 }
 
-public extension SearchViewController {
-    func equalHandleTapped() {
+extension SearchViewController {
+    public func equalHandleTapped() {
         let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)

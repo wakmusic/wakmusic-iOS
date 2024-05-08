@@ -6,27 +6,27 @@ import RxRelay
 import RxSwift
 import Utility
 
-public final class SearchReactor: Reactor {
+final class SearchReactor: Reactor {
     var disposeBag: DisposeBag = DisposeBag()
 
-    public enum Action {
+     enum Action {
         case switchTypingState(TypingStatus)
         case updateText(String)
         case cancel
         case search
     }
 
-    public enum Mutation {
+     enum Mutation {
         case updateTypingState(state: TypingStatus)
         case updateText(String)
     }
 
-    public struct State {
+     struct State {
         var typingState: TypingStatus
         var text: String
     }
 
-    public var initialState: State
+    var initialState: State
 
     init() {
         self.initialState = State(
@@ -39,7 +39,7 @@ public final class SearchReactor: Reactor {
         LogManager.printDebug("❌ \(Self.self) deinit")
     }
 
-    public func reduce(state: State, mutation: Mutation) -> State {
+    func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
         switch mutation {
@@ -52,7 +52,7 @@ public final class SearchReactor: Reactor {
         return newState
     }
 
-    public func mutate(action: Action) -> Observable<Mutation> {
+    func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .switchTypingState(state):
             updateTypingState(state)
