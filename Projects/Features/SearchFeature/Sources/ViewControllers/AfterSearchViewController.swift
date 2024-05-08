@@ -165,7 +165,7 @@ extension AfterSearchViewController {
 //    }
 
     func clearSongCart() {
-       // self.output.songEntityOfSelectedSongs.accept([])
+        // self.output.songEntityOfSelectedSongs.accept([])
         self.viewControllers.forEach { vc in
             guard let afterContentVc = vc as? AfterSearchContentViewController else {
                 return
