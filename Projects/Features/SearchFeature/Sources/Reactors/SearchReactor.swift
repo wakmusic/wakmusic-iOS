@@ -9,19 +9,19 @@ import Utility
 final class SearchReactor: Reactor {
     var disposeBag: DisposeBag = DisposeBag()
 
-     enum Action {
+    enum Action {
         case switchTypingState(TypingStatus)
         case updateText(String)
         case cancel
         case search
     }
 
-     enum Mutation {
+    enum Mutation {
         case updateTypingState(state: TypingStatus)
         case updateText(String)
     }
 
-     struct State {
+    struct State {
         var typingState: TypingStatus
         var text: String
     }

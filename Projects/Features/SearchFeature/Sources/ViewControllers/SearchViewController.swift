@@ -10,8 +10,8 @@ import SnapKit
 import UIKit
 import Utility
 
-
-internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType, EqualHandleTappedType {
+internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
+    EqualHandleTappedType {
     @IBOutlet weak var searchImageView: UIImageView!
     @IBOutlet weak var searchTextFiled: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
@@ -37,7 +37,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         super.viewDidLoad()
     }
 
-    override  func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
 
