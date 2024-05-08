@@ -12,6 +12,7 @@ import Utility
 
 
 public final class SearchViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType, EqualHandleTappedType {
+    EqualHandleTappedType {
     @IBOutlet weak var searchImageView: UIImageView!
     @IBOutlet weak var searchTextFiled: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
