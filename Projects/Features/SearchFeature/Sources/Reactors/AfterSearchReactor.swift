@@ -6,7 +6,7 @@ import SongsDomainInterface
 
 public final class AfterSearchReactor: Reactor {
     var disposeBag: DisposeBag = DisposeBag()
-    var fetchSearchSongUseCase: FetchSearchSongUseCase
+    private let fetchSearchSongUseCase: FetchSearchSongUseCase
 
     public enum Action {
         case fetchData(String)
