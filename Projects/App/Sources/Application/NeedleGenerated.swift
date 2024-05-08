@@ -22,6 +22,7 @@ import LikeDomain
 import LikeDomainInterface
 import MainTabFeature
 import MyInfoFeature
+import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
