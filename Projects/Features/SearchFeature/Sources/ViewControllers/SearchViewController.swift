@@ -136,8 +136,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
                 owner.view.endEditing(true)
                 owner.searchTextFiled.rx.text.onNext("")
                 if let nowChildVc = owner.children.first as? AfterSearchViewController {
-                    // TODO: afterVC 리팩 후 주석 해제
-                    // nowChildVc.clearSongCart()
+                    nowChildVc.clearSongCart()
                 }
             })
             .map { _ in SearchReactor.Action.cancel }

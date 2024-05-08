@@ -39,7 +39,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.scrollToPage(.at(index: 0), animated: false)
-        self.indicator.startAnimating()
     }
 
     public static func viewController(
@@ -68,7 +67,7 @@ extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share(replay: 2)
 
-        // TODO: Content쪽 tableView처리
+        // TODO: 검색 결과 화면 나올 때 , Content쪽 tableView hidden처리 및 indicator start 시점 고려
         currentState.map(\.dataSource)
             .withUnretained(self)
             .bind(onNext: { owner, dataSource in
@@ -165,15 +164,15 @@ extension AfterSearchViewController {
 //            .disposed(by: disposeBag)
 //    }
 
-//    func clearSongCart() {
-//        self.output.songEntityOfSelectedSongs.accept([])
-//        self.viewControllers.forEach { vc in
-//            guard let afterContentVc = vc as? AfterSearchContentViewController else {
-//                return
-//            }
-//            afterContentVc.input.deSelectedAllSongs.accept(())
-//        }
-//    }
+    func clearSongCart() {
+       // self.output.songEntityOfSelectedSongs.accept([])
+        self.viewControllers.forEach { vc in
+            guard let afterContentVc = vc as? AfterSearchContentViewController else {
+                return
+            }
+            afterContentVc.input.deSelectedAllSongs.accept(())
+        }
+    }
 }
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
