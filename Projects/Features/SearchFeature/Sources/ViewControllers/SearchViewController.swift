@@ -226,7 +226,7 @@ extension SearchViewController {
                 self.remove(asChildViewController: beforeVc)
                 self.add(asChildViewController: afterVc)
 
-                guard let childReactor = afterVc.reactor as? AfterSearchReactor else {
+                guard let childReactor = afterVc.reactor else {
                     return
                 }
 
