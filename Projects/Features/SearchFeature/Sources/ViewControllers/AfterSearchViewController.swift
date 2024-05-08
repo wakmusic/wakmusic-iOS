@@ -77,10 +77,6 @@ extension AfterSearchViewController {
                     return
                 }
 
-                if dataSource.isEmpty {
-                    return
-                }
-
                 owner.viewControllers = [
                     comp.makeView(type: .all, dataSource: dataSource[0]),
                     comp.makeView(type: .song, dataSource: dataSource[1]),
