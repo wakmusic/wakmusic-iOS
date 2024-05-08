@@ -8,7 +8,7 @@ import SignInFeatureInterface
 import UIKit
 import Utility
 
-public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class StorageViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType, EqualHandleTappedType {
     @IBOutlet public weak var contentView: UIView!
 
     var signInFactory: SignInFactory!
@@ -40,7 +40,7 @@ extension StorageViewController {
     }
 
     private func bindRx() {
-        // TODO: 나중에 작업 시
+        // TODO: 나중에 보관함 작업 리팩할 때
 
 //        Utility.PreferenceManager.$userInfo
 //            .map { $0 != nil }
@@ -67,7 +67,7 @@ extension StorageViewController {
 }
 
 public extension StorageViewController {
-    // TODO: 나중에 작업 시
+    // TODO: 나중에 보관함 작업 리팩할 때
     func equalHandleTapped() {
 //        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
 //        if viewControllersCount > 1 {

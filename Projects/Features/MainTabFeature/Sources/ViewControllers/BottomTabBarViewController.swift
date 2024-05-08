@@ -22,6 +22,7 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
         return items
     }()
 
+    #warning("차트를 홈에 적용 시 삭제 요망")
     private lazy var tabItems: [TabItem] = {
         return [
             TabItem(
