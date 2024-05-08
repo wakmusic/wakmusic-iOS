@@ -5,6 +5,7 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.SignInFeature.rawValue,
     targets: [
+        .interface(module: .feature(.SignInFeature)),
         .implements(
             module: .feature(.SignInFeature),
             product: .staticFramework,
@@ -13,7 +14,8 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .PlayerFeature),
                     .domain(target: .AuthDomain, type: .interface),
-                    .domain(target: .UserDomain, type: .interface)
+                    .domain(target: .UserDomain, type: .interface),
+                    .feature(target: .SignInFeature, type: .interface)
                 ]
             )
         )

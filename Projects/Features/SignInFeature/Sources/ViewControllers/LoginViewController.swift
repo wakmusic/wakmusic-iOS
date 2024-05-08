@@ -1,11 +1,3 @@
-//
-//  BeforeLoginStorageViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/24.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthenticationServices
 import BaseFeature
 import DesignSystem

@@ -5,7 +5,7 @@ import Tabman
 import UIKit
 import Utility
 
-public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard {
+public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
     private var chartContentComponent: ChartContentComponent?
 
     private lazy var viewControllers: [ChartContentViewController?] = {

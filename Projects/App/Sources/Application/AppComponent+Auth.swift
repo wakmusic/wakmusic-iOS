@@ -1,22 +1,15 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomain
 import AuthDomainInterface
 import BaseFeature
 import SignInFeature
+import SignInFeatureInterface
 import StorageFeature
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
-    var signInComponent: SignInComponent {
+    var signInFactory: any SignInFactory {
         SignInComponent(parent: self)
     }
 

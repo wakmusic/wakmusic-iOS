@@ -21,6 +21,8 @@ import KeychainModule
 import LikeDomain
 import LikeDomainInterface
 import MainTabFeature
+import MyInfoFeature
+import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
@@ -32,6 +34,7 @@ import PlaylistFeatureInterface
 import RootFeature
 import SearchFeature
 import SignInFeature
+import SignInFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 import StorageFeature
@@ -176,6 +179,9 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var storageComponent: StorageComponent {
         return appComponent.storageComponent
     }
+    var myInfoComponent: MyInfoComponent {
+        return appComponent.myInfoComponent
+    }
     var noticePopupComponent: NoticePopupComponent {
         return appComponent.noticePopupComponent
     }
@@ -315,8 +321,8 @@ private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: Needle
     return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
-    var signInComponent: SignInComponent {
-        return appComponent.signInComponent
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
     }
     var afterLoginComponent: AfterLoginComponent {
         return appComponent.afterLoginComponent
@@ -765,6 +771,17 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
 private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->MyInfoComponent
+private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MyInfoDependency3b44bce00dab6fc2e345Provider()
+}
 
 #else
 extension AppComponent: Registration {
@@ -782,7 +799,7 @@ extension AppComponent: Registration {
         localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { [unowned self] in self.fetchSearchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
-        localTable["signInComponent-SignInComponent"] = { [unowned self] in self.signInComponent as Any }
+        localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
         localTable["storageComponent-StorageComponent"] = { [unowned self] in self.storageComponent as Any }
         localTable["afterLoginComponent-AfterLoginComponent"] = { [unowned self] in self.afterLoginComponent as Any }
         localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
@@ -917,6 +934,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
+        keyPathToName[\MainTabBarDependency.myInfoComponent] = "myInfoComponent-MyInfoComponent"
         keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
         keyPathToName[\MainTabBarDependency.noticeComponent] = "noticeComponent-NoticeComponent"
         keyPathToName[\MainTabBarDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
@@ -970,7 +988,7 @@ extension ServiceInfoComponent: Registration {
 }
 extension StorageComponent: Registration {
     public func registerItems() {
-        keyPathToName[\StorageDependency.signInComponent] = "signInComponent-SignInComponent"
+        keyPathToName[\StorageDependency.signInFactory] = "signInFactory-any SignInFactory"
         keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
     }
 }
@@ -1150,6 +1168,11 @@ extension TextPopUpComponent: Registration {
 
     }
 }
+extension MyInfoComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 
 
 #endif
@@ -1206,6 +1229,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35de3b0c44298fc1c149afb)
 }
 #endif
 
