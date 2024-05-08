@@ -1,10 +1,17 @@
 import BaseFeature
 import UIKit
 
-class MyInfoViewController: UIViewController {
-    override func viewDidLoad() {
+/// TODO:
+public final class MyInfoViewController: UIViewController, EqualHandleTappedType {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = .red
+    }
+}
+
+public extension MyInfoViewController {
+    func equalHandleTapped() {
     }
 }
