@@ -54,7 +54,7 @@ public final class AfterSearchReactor: Reactor {
     }
 }
 
-extension AfterSearchReactor {
+private extension AfterSearchReactor {
     func fetchData(_ text: String) -> Observable<Mutation> {
         return fetchSearchSongUseCase
             .execute(keyword: text)
