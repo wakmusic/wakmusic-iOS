@@ -69,6 +69,7 @@ extension AfterSearchViewController {
 
         // TODO: 검색 결과 화면 나올 때 , Content쪽 tableView hidden처리 및 indicator start 시점 고려
         currentState.map(\.dataSource)
+            .filter { !$0.isEmpty }
             .withUnretained(self)
             .bind(onNext: { owner, dataSource in
 
