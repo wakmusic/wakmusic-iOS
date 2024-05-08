@@ -126,7 +126,7 @@ extension MainTabBarViewController {
 
     func equalHandleTapped(for index: Int) {
         guard let navigationController = self.viewControllers[index] as? UINavigationController,
-            let viewController = navigationController.viewControllers.first as? EqualHandleTappedType else {
+              let viewController = navigationController.viewControllers.first as? EqualHandleTappedType else {
             return
         }
         viewController.equalHandleTapped()
