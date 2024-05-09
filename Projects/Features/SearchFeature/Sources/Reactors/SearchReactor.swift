@@ -38,6 +38,19 @@ final class SearchReactor: Reactor {
     deinit {
         LogManager.printDebug("❌ \(Self.self) deinit")
     }
+    
+    func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case let .switchTypingState(state):
+            updateTypingState(state)
+        case .cancel:
+            updateTypingState(.before)
+        case let .updateText(text):
+            updateText(text)
+        case .search:
+            updateTypingState(.search)
+        }
+    }
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -52,18 +65,7 @@ final class SearchReactor: Reactor {
         return newState
     }
 
-    func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case let .switchTypingState(state):
-            updateTypingState(state)
-        case .cancel:
-            updateTypingState(.before)
-        case let .updateText(text):
-            updateText(text)
-        case .search:
-            updateTypingState(.search)
-        }
-    }
+
 }
 
 fileprivate extension SearchReactor {
