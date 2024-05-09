@@ -5,6 +5,7 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.StorageFeature.rawValue,
     targets: [
+        .interface(module: .feature(.StorageFeature)),
         .implements(
             module: .feature(.StorageFeature),
             product: .staticFramework,
@@ -13,10 +14,11 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .SignInFeature),
                     .feature(target: .PlaylistFeature, type: .interface),
+                    .feature(target: .StorageFeature, type: .interface),
                     .domain(target: .FaqDomain, type: .interface),
                     .domain(target: .NoticeDomain, type: .interface),
                     .domain(target: .PlayListDomain, type: .interface),
-                    .domain(target: .UserDomain, type: .interface)
+                    .domain(target: .UserDomain, type: .interface),
                 ]
             )
         )

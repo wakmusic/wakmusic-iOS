@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
+import StorageFeatureInterface
 import UIKit
 
 public protocol StorageDependency: Dependency {
@@ -13,7 +14,7 @@ public protocol StorageDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class StorageComponent: Component<StorageDependency> {
+public final class StorageComponent: Component<StorageDependency>, StorageFactory {
     public func makeView() -> UIViewController {
         return StorageViewController.viewController(
             reactor: StorageReactor(),
