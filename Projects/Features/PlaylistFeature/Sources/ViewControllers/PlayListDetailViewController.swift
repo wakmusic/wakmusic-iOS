@@ -166,7 +166,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
                 owner.tableView.tableHeaderView?.frame = newFrame
             })
-            .bind{ owner, model in
+            .bind { owner, model in
 
                 guard let type = owner.reactor?.type else { return }
 
@@ -182,13 +182,12 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 owner.playListCountLabel.text = model.songCount
                 owner.playListNameLabel.text = model.title
                 owner.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
-
             }
             .disposed(by: disposeBag)
 
         currentState.map(\.selectedItemCount)
             .withUnretained(self)
-            .bind{ owner, count in
+            .bind { owner, count in
                 guard let type = owner.reactor?.type else {
                     return
                 }
@@ -210,7 +209,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         owner.songCartView?.delegate = owner
                     }
                 }
-
             }
             .disposed(by: disposeBag)
 
@@ -225,7 +223,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
                 owner.tableView.isEditing = flag
                 owner.tableView.reloadData()
-
             }
             .disposed(by: disposeBag)
     }

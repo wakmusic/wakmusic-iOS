@@ -97,7 +97,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         currentState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
-            .bind{ owner, data in
+            .bind { owner, data in
 
                 let (state, text) = data
 
@@ -106,9 +106,9 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                 owner.bindSubView(state)
 
                 guard state == .search else {
-                        return
+                    return
                 }
-                
+
                 if text.isEmpty {
                     guard let textPopupViewController = owner.textPopUpFactory.makeView(
                         text: "검색어를 입력해주세요.",
@@ -128,7 +128,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     owner.view.endEditing(true)
                     UIView.setAnimationsEnabled(true)
                 }
-
             }
             .disposed(by: disposeBag)
     }
@@ -170,7 +169,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
         mergeObservable
             .withUnretained(self)
-            .bind{ owner, event in
+            .bind { owner, event in
 
                 if event == .editingDidBegin {
                     NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
@@ -182,7 +181,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                 } else {
                     reactor.action.onNext(.switchTypingState(.search))
                 }
-
             }
             .disposed(by: disposeBag)
 
@@ -221,7 +219,7 @@ extension SearchViewController {
          */
 
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
-            guard  state == .before || state == .typing   else {
+            guard state == .before || state == .typing else {
                 guard let text = reactor?.currentState.text else {
                     return
                 }
@@ -229,15 +227,15 @@ extension SearchViewController {
                 self.remove(asChildViewController: beforeVC)
                 self.add(asChildViewController: afterVC)
                 afterVC.input.text.accept(text)
-                
+
                 return
             }
-            
+
         } else if let nowChildVc = children.first as? AfterSearchViewController {
-            guard state == .search || state == .typing  else {
+            guard state == .search || state == .typing else {
                 self.remove(asChildViewController: afterVC)
                 self.add(asChildViewController: beforeVC)
-                
+
                 return
             }
         }
