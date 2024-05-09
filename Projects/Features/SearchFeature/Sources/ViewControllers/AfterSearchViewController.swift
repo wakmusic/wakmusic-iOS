@@ -71,7 +71,7 @@ extension AfterSearchViewController {
         currentState.map(\.dataSource)
             .filter { !$0.isEmpty }
             .withUnretained(self)
-            .bind{ owner, dataSource in
+            .bind { owner, dataSource in
 
                 guard let comp = owner.afterSearchContentComponent else {
                     return
