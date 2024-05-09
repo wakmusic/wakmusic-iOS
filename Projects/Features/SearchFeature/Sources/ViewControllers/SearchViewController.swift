@@ -220,23 +220,21 @@ extension SearchViewController {
 
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
             guard state == .before || state == .typing else {
-                guard let text = reactor?.currentState.text else {
-                    return
-                }
-
-                self.remove(asChildViewController: beforeVC)
-                self.add(asChildViewController: afterVC)
-                afterVC.input.text.accept(text)
-
+                return
+            }
+            guard let text = reactor?.currentState.text else {
                 return
             }
 
+            self.remove(asChildViewController: beforeVc)
+            self.add(asChildViewController: afterVc)
+            afterVc.input.text.accept(text)
         } else if let nowChildVc = children.first as? AfterSearchViewController {
-            guard state == .before || state == .typing else {
+            guard state == .search || state == .typing else {
                 return
             }
-            self.remove(asChildViewController: afterVC)
-            self.add(asChildViewController: beforeVC)
+            self.remove(asChildViewController: afterVc)
+            self.add(asChildViewController: beforeVc)
         }
     }
 
