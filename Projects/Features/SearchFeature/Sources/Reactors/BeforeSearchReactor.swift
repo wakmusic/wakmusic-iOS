@@ -4,9 +4,9 @@ import ReactorKit
 import RxSwift
 
 public final class BeforeSearchReactor: Reactor {
-    var disposeBag: DisposeBag = DisposeBag()
+    private let  disposeBag: DisposeBag = DisposeBag()
 
-    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    private let  fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
     public enum Action {
         case viewDidLoad
