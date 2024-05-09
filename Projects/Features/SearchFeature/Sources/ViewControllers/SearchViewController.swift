@@ -10,17 +10,17 @@ import SnapKit
 import UIKit
 import Utility
 
-private enum Font {
-    static let headerFontSize: CGFloat = 16
-}
-
-private enum Color {
-    static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
-    static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
-}
-
 internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {
+    private enum Font {
+        static let headerFontSize: CGFloat = 16
+    }
+
+    private enum Color {
+        static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
+        static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
+    }
+
     @IBOutlet weak var searchImageView: UIImageView!
     @IBOutlet weak var searchTextFiled: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
