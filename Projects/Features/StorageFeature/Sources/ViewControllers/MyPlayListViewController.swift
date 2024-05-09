@@ -98,21 +98,23 @@ extension MyPlayListViewController {
                 if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
+                
+                // TODO: Storage 리팩 후
 
-                guard let parent = self.parent?.parent as? AfterLoginViewController else {
-                    return
-                }
-
-                // 탭맨 쪽 편집 변경
-                let isEdit: Bool = state.isEditing
-                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
-                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
-                self.tableView.setEditing(isEdit, animated: true)
-
-                let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-                header.delegate = self
-                self.tableView.tableHeaderView = isEdit ? nil : header
-                self.tableView.reloadData()
+//                guard let parent = self.parent?.parent as? AfterLoginViewController else {
+//                    return
+//                }
+//
+//                // 탭맨 쪽 편집 변경
+//                let isEdit: Bool = state.isEditing
+//                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+//                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
+//                self.tableView.setEditing(isEdit, animated: true)
+//
+//                let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+//                header.delegate = self
+//                self.tableView.tableHeaderView = isEdit ? nil : header
+//                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
 
@@ -322,13 +324,14 @@ extension MyPlayListViewController: UITableViewDelegate {
 
 extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
     public func action(_ type: PurposeType) {
-        if let parent = self.parent?.parent as? AfterLoginViewController {
-            parent.hideEditSheet()
-            parent.profileButton.isSelected = false
-        }
-        let vc = multiPurposePopUpFactory
-            .makeView(type: type, key: "", completion: nil)
-        self.showEntryKitModal(content: vc, height: 296)
+        // TODO: Storage 리팩 후
+//        if let parent = self.parent?.parent as? AfterLoginViewController {
+//            parent.hideEditSheet()
+//            parent.profileButton.isSelected = false
+//        }
+//        let vc = multiPurposePopUpFactory
+//            .makeView(type: type, key: "", completion: nil)
+//        self.showEntryKitModal(content: vc, height: 296)
     }
 }
 

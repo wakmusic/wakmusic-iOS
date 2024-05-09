@@ -103,15 +103,16 @@ extension FavoriteViewController {
                 if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
-                guard let parent = self.parent?.parent as? AfterLoginViewController else {
-                    return
-                }
+                // TODO: Storage 리팩 후
+//                guard let parent = self.parent?.parent as? AfterLoginViewController else {
+//                    return
+//                }
                 // 탭맨 쪽 편집 변경
-                let isEdit: Bool = state.isEditing
-                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
-                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
-                self.tableView.setEditing(isEdit, animated: true)
-                self.tableView.reloadData()
+//                let isEdit: Bool = state.isEditing
+//                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
+//                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
+//                self.tableView.setEditing(isEdit, animated: true)
+//                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
 
