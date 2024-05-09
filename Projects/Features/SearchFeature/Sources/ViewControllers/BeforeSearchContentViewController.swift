@@ -80,6 +80,7 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
             return
         }
 
+        //TODO: #531
         parent.reactor?.state
             .map(\.typingState)
             .asObservable()
