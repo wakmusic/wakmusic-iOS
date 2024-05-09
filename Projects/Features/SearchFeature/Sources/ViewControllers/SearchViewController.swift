@@ -238,7 +238,6 @@ extension SearchViewController {
             self.remove(asChildViewController: afterVC)
             self.add(asChildViewController: beforeVC)
         }
-        
     }
 
     private func reactSearchHeader(_ state: TypingStatus) {
