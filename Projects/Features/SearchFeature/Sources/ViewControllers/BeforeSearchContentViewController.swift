@@ -84,7 +84,8 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         parent.reactor?.state
             .map(\.typingState)
             .asObservable()
-            .map { Reactor.Action.updateShowRecommend($0 == .before) }
+            .map { $0 == .before }
+            .map { Reactor.Action.updateShowRecommend($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
