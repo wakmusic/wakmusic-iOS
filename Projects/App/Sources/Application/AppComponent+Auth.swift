@@ -17,10 +17,6 @@ public extension AppComponent {
         StorageComponent(parent: self)
     }
 
-    var afterLoginComponent: AfterLoginComponent {
-        AfterLoginComponent(parent: self)
-    }
-
     var requestComponent: RequestComponent {
         RequestComponent(parent: self)
     }

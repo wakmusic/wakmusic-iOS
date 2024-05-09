@@ -1,17 +1,28 @@
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
+import BaseFeatureInterface
+import BaseFeature
+import UIKit
 
 public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
-    var afterLoginComponent: AfterLoginComponent { get }
+    var myPlayListComponent: MyPlayListComponent { get }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var favoriteComponent: FavoriteComponent { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
+    
 }
 
 public final class StorageComponent: Component<StorageDependency> {
-    public func makeView() -> StorageViewController {
+    public func makeView() -> UIViewController  {
         return StorageViewController.viewController(
-            signInFactory: dependency.signInFactory,
-            afterLoginComponent: dependency.afterLoginComponent
+            reactor: StorageReactor(),
+            myPlayListComponent: dependency.myPlayListComponent,
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            favoriteComponent: dependency.favoriteComponent,
+            textPopUpFactory: dependency.textPopUpFactory,
+            signInFactory: dependency.signInFactory
         )
     }
 }
