@@ -10,6 +10,15 @@ import SnapKit
 import UIKit
 import Utility
 
+private enum Font {
+    static let headerFontSize: CGFloat = 16
+}
+private enum Color {
+    static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
+    static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
+
+}
+
 internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {
     @IBOutlet weak var searchImageView: UIImageView!
@@ -23,10 +32,8 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     var afterSearchComponent: AfterSearchComponent!
     var textPopUpFactory: TextPopUpFactory!
 
-    let headerFontSize: CGFloat = 16
-    let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
-    let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
 
+   
     private lazy var beforeVC = beforeSearchComponent.makeView().then {
         $0.delegate = self
     }
@@ -64,7 +71,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
         // MARK: 서치바
         self.searchTextFiled.borderStyle = .none // 텍스트 필드 테두리 제거
-        self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: Font.headerFontSize)
 
         // MARK: 검색 취소 버튼
         self.cancelButton.titleLabel?.text = "취소"
@@ -77,7 +84,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         self.searchTextFiled.tintColor = UIColor.white
         self.view.backgroundColor = .clear
 
-        self.add(asChildViewController: beforeVc)
+        self.add(asChildViewController: beforeVC)
     }
 
     override public func bind(reactor: SearchReactor) {
@@ -223,34 +230,34 @@ extension SearchViewController {
                     return
                 }
 
-                self.remove(asChildViewController: beforeVc)
-                self.add(asChildViewController: afterVc)
-                afterVc.input.text.accept(text)
+                self.remove(asChildViewController: beforeVC)
+                self.add(asChildViewController: afterVC)
+                afterVC.input.text.accept(text)
             }
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             if state == .search || state == .typing {
                 return
 
             } else {
-                self.remove(asChildViewController: afterVc)
-                self.add(asChildViewController: beforeVc)
+                self.remove(asChildViewController: afterVC)
+                self.add(asChildViewController: beforeVC)
             }
         }
     }
 
     private func reactSearchHeader(_ state: TypingStatus) {
         var placeHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: grayColor,
-            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+            NSAttributedString.Key.foregroundColor: Color.grayColor,
+            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: Font.headerFontSize)
         ]
 
         var bgColor: UIColor = .white
         var textColor: UIColor = .black
-        var tintColor: UIColor = grayColor
+        var tintColor: UIColor = Color.grayColor
 
         if state == .typing {
             placeHolderAttributes[.foregroundColor] = UIColor.white
-            bgColor = pointColor
+            bgColor = Color.pointColor
             textColor = .white
             tintColor = .white
         }
