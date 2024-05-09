@@ -27,11 +27,11 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
     let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
 
-    lazy var beforeVc = beforeSearchComponent.makeView().then {
+    private lazy var beforeVC = beforeSearchComponent.makeView().then {
         $0.delegate = self
     }
 
-    lazy var afterVc = afterSearchComponent.makeView()
+    private lazy var afterVC = afterSearchComponent.makeView()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
