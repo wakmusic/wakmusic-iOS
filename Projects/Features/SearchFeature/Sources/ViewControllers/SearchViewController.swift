@@ -144,7 +144,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     nowChildVc.clearSongCart()
                 }
             })
-            .map { _ in SearchReactor.Action.cancel }
+            .map { _ in SearchReactor.Action.cancelButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

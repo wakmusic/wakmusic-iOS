@@ -12,8 +12,7 @@ final class SearchReactor: Reactor {
     enum Action {
         case switchTypingState(TypingStatus)
         case updateText(String)
-        case cancel
-        case search
+        case cancelButtonDidTap
     }
 
     enum Mutation {
@@ -43,12 +42,10 @@ final class SearchReactor: Reactor {
         switch action {
         case let .switchTypingState(state):
             updateTypingState(state)
-        case .cancel:
+        case .cancelButtonDidTap:
             updateTypingState(.before)
         case let .updateText(text):
             updateText(text)
-        case .search:
-            updateTypingState(.search)
         }
     }
 
