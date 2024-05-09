@@ -126,7 +126,7 @@ extension AfterSearchViewController {
         )
     }
 
-// TODO: 검색 결과 화면 나오면 이어서 작업
+    // TODO: 검색 결과 화면 나오면 이어서 작업
 //    private func bindRx() {
 //
 //        output.isFetchStart
