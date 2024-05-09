@@ -10,9 +10,9 @@ import RxSwift
 import SearchFeature
 import SnapKit
 import StorageFeature
+import StorageFeatureInterface
 import UIKit
 import Utility
-import StorageFeatureInterface
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
