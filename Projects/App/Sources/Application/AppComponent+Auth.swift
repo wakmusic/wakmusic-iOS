@@ -4,6 +4,7 @@ import BaseFeature
 import SignInFeature
 import SignInFeatureInterface
 import StorageFeature
+import StorageFeatureInterface
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
@@ -13,7 +14,7 @@ public extension AppComponent {
         SignInComponent(parent: self)
     }
 
-    var storageComponent: StorageComponent {
+    var storageFactory: any StorageFactory {
         StorageComponent(parent: self)
     }
 

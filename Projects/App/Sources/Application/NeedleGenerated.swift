@@ -38,6 +38,7 @@ import SignInFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 import StorageFeature
+import StorageFeatureInterface
 import UIKit
 import UserDomain
 import UserDomainInterface
@@ -176,8 +177,8 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var artistComponent: ArtistComponent {
         return appComponent.artistComponent
     }
-    var storageComponent: StorageComponent {
-        return appComponent.storageComponent
+    var storageFactory: any StorageFactory {
+        return appComponent.storageFactory
     }
     var myInfoComponent: MyInfoComponent {
         return appComponent.myInfoComponent
@@ -775,7 +776,7 @@ extension AppComponent: Registration {
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
         localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
-        localTable["storageComponent-StorageComponent"] = { [unowned self] in self.storageComponent as Any }
+        localTable["storageFactory-any StorageFactory"] = { [unowned self] in self.storageFactory as Any }
         localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
@@ -907,7 +908,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
-        keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
+        keyPathToName[\MainTabBarDependency.storageFactory] = "storageFactory-any StorageFactory"
         keyPathToName[\MainTabBarDependency.myInfoComponent] = "myInfoComponent-MyInfoComponent"
         keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
         keyPathToName[\MainTabBarDependency.noticeComponent] = "noticeComponent-NoticeComponent"

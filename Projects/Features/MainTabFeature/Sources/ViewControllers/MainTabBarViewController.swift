@@ -12,6 +12,7 @@ import SnapKit
 import StorageFeature
 import UIKit
 import Utility
+import StorageFeatureInterface
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
@@ -22,7 +23,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
             chartComponent.makeView().wrapNavigationController,
             searchComponent.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
-            storageComponent.makeView().wrapNavigationController,
+            storageFactory.makeView().wrapNavigationController,
             myInfoComponent.makeView().wrapNavigationController
         ]
     }()
@@ -36,7 +37,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var chartComponent: ChartComponent!
     private var searchComponent: SearchComponent!
     private var artistComponent: ArtistComponent!
-    private var storageComponent: StorageComponent!
+    private var storageFactory: StorageFactory!
     private var myInfoComponent: MyInfoComponent!
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeComponent: NoticeComponent!
@@ -64,7 +65,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         chartComponent: ChartComponent,
         searchComponent: SearchComponent,
         artistComponent: ArtistComponent,
-        storageCompoent: StorageComponent,
+        storageFactory: StorageFactory,
         myInfoComponent: MyInfoComponent,
         noticePopupComponent: NoticePopupComponent,
         noticeComponent: NoticeComponent,
@@ -76,7 +77,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.chartComponent = chartComponent
         viewController.searchComponent = searchComponent
         viewController.artistComponent = artistComponent
-        viewController.storageComponent = storageCompoent
+        viewController.storageFactory = storageFactory
         viewController.myInfoComponent = myInfoComponent
         viewController.noticePopupComponent = noticePopupComponent
         viewController.noticeComponent = noticeComponent
