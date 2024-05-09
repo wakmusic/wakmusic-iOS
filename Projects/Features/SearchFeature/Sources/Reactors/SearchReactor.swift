@@ -38,7 +38,7 @@ final class SearchReactor: Reactor {
     deinit {
         LogManager.printDebug("❌ \(Self.self) deinit")
     }
-    
+
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .switchTypingState(state):
@@ -64,8 +64,6 @@ final class SearchReactor: Reactor {
 
         return newState
     }
-
-
 }
 
 fileprivate extension SearchReactor {
