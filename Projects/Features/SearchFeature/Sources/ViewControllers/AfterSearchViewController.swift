@@ -71,7 +71,7 @@ extension AfterSearchViewController {
         currentState.map(\.dataSource)
             .filter { !$0.isEmpty }
             .withUnretained(self)
-            .bind(onNext: { owner, dataSource in
+            .bind{ owner, dataSource in
 
                 guard let comp = owner.afterSearchContentComponent else {
                     return
@@ -85,7 +85,7 @@ extension AfterSearchViewController {
                 ]
                 owner.indicator.stopAnimating()
                 owner.reloadData()
-            })
+            }
             .disposed(by: disposeBag)
     }
 
