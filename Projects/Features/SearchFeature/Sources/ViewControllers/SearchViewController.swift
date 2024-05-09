@@ -232,13 +232,13 @@ extension SearchViewController {
             }
 
         } else if let nowChildVc = children.first as? AfterSearchViewController {
-            guard state == .search || state == .typing else {
-                self.remove(asChildViewController: afterVC)
-                self.add(asChildViewController: beforeVC)
-
+            guard state == .before || state == .typing else {
                 return
             }
+            self.remove(asChildViewController: afterVC)
+            self.add(asChildViewController: beforeVC)
         }
+        
     }
 
     private func reactSearchHeader(_ state: TypingStatus) {
