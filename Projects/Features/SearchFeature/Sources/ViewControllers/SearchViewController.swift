@@ -92,9 +92,9 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     override public func bindState(reactor: SearchReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state.share(replay: 1)
+        let sharedState = reactor.state.share(replay: 1)
 
-        currentState
+        sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
             .bind { owner, data in
