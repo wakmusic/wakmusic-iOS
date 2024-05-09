@@ -4,9 +4,9 @@ import ReactorKit
 import RxSwift
 
 public final class BeforeSearchReactor: Reactor {
-    private let  disposeBag: DisposeBag = DisposeBag()
+    private let disposeBag: DisposeBag = DisposeBag()
 
-    private let  fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
     public enum Action {
         case viewDidLoad
@@ -14,7 +14,7 @@ public final class BeforeSearchReactor: Reactor {
     }
 
     public enum Mutation {
-        case fetchRecommend([RecommendPlayListEntity])
+        case updateRecommend([RecommendPlayListEntity])
         case updateShowRecommend(Bool)
     }
 
@@ -37,7 +37,7 @@ public final class BeforeSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .fetchRecommend(dataSource):
+        case let .updateRecommend(dataSource):
             newState.dataSource = dataSource
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
@@ -61,6 +61,6 @@ extension BeforeSearchReactor {
         return fetchRecommendPlayListUseCase
             .execute()
             .asObservable()
-            .map { Mutation.fetchRecommend($0) }
+            .map { Mutation.updateRecommend($0) }
     }
 }
