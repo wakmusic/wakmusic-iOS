@@ -226,15 +226,15 @@ extension SearchViewController {
                 return
             }
 
-            self.remove(asChildViewController: beforeVc)
-            self.add(asChildViewController: afterVc)
-            afterVc.input.text.accept(text)
+            self.remove(asChildViewController: beforeVC)
+            self.add(asChildViewController: afterVC)
+            afterVC.input.text.accept(text)
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             guard state == .search || state == .typing else {
                 return
             }
-            self.remove(asChildViewController: afterVc)
-            self.add(asChildViewController: beforeVc)
+            self.remove(asChildViewController: afterVC)
+            self.add(asChildViewController: beforeVC)
         }
     }
 
