@@ -71,10 +71,9 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         super.bindAction(reactor: reactor)
 
         tableView.rx.modelSelected(String.self)
-            .withUnretained(self)
-            .bind(onNext: { owner, keyword in
-                owner.delegate?.itemSelected(keyword)
-            })
+            .bind { [delegate] keyword in
+                delegate?.itemSelected(keyword)
+            }
             .disposed(by: disposeBag)
 
         guard let parent = self.parent as? SearchViewController else {
