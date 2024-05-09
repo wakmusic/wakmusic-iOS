@@ -98,7 +98,7 @@ extension MyPlayListViewController {
                 if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
                     self.input.runEditing.onNext(())
                 }
-                
+
                 // TODO: Storage 리팩 후
 
 //                guard let parent = self.parent?.parent as? AfterLoginViewController else {

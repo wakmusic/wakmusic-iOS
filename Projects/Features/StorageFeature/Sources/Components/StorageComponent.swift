@@ -1,8 +1,8 @@
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
-import BaseFeatureInterface
-import BaseFeature
 import UIKit
 
 public protocol StorageDependency: Dependency {
@@ -11,11 +11,10 @@ public protocol StorageDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var favoriteComponent: FavoriteComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    
 }
 
 public final class StorageComponent: Component<StorageDependency> {
-    public func makeView() -> UIViewController  {
+    public func makeView() -> UIViewController {
         return StorageViewController.viewController(
             reactor: StorageReactor(),
             myPlayListComponent: dependency.myPlayListComponent,
