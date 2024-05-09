@@ -13,10 +13,10 @@ import Utility
 private enum Font {
     static let headerFontSize: CGFloat = 16
 }
+
 private enum Color {
     static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
     static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
-
 }
 
 internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
@@ -32,8 +32,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     var afterSearchComponent: AfterSearchComponent!
     var textPopUpFactory: TextPopUpFactory!
 
-
-   
     private lazy var beforeVC = beforeSearchComponent.makeView().then {
         $0.delegate = self
     }
@@ -99,7 +97,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         currentState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
-            .bind(onNext: { owner, data in
+            .bind{ owner, data in
 
                 let (state, text) = data
 
@@ -107,30 +105,31 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state)
 
-                if state == .search {
-                    if text.isEmpty {
-                        guard let textPopupViewController = owner.textPopUpFactory.makeView(
-                            text: "검색어를 입력해주세요.",
-                            cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: nil,
-                            confirmButtonText: nil,
-                            cancelButtonText: nil,
-                            completion: nil,
-                            cancelCompletion: nil
-                        ) as? TextPopupViewController else {
-                            return
-                        }
-                        owner.showPanModal(content: textPopupViewController)
-
-                    } else {
-                        PreferenceManager.shared.addRecentRecords(word: text)
-                        UIView.setAnimationsEnabled(false)
-                        owner.view.endEditing(true)
-                        UIView.setAnimationsEnabled(true)
+                guard state == .search else {
+                        return
+                }
+                
+                if text.isEmpty {
+                    guard let textPopupViewController = owner.textPopUpFactory.makeView(
+                        text: "검색어를 입력해주세요.",
+                        cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: nil,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: nil,
+                        cancelCompletion: nil
+                    ) as? TextPopupViewController else {
+                        return
                     }
+                    owner.showPanModal(content: textPopupViewController)
+                } else {
+                    PreferenceManager.shared.addRecentRecords(word: text)
+                    UIView.setAnimationsEnabled(false)
+                    owner.view.endEditing(true)
+                    UIView.setAnimationsEnabled(true)
                 }
 
-            })
+            }
             .disposed(by: disposeBag)
     }
 
@@ -171,7 +170,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
         mergeObservable
             .withUnretained(self)
-            .bind(onNext: { owner, event in
+            .bind{ owner, event in
 
                 if event == .editingDidBegin {
                     NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
@@ -184,7 +183,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     reactor.action.onNext(.switchTypingState(.search))
                 }
 
-            })
+            }
             .disposed(by: disposeBag)
 
         RxKeyboard.instance.visibleHeight // 드라이브: 무조건 메인쓰레드에서 돌아감
@@ -222,10 +221,7 @@ extension SearchViewController {
          */
 
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
-            if state == .before || state == .typing {
-                return
-
-            } else {
+            guard  state == .before || state == .typing   else {
                 guard let text = reactor?.currentState.text else {
                     return
                 }
@@ -233,14 +229,16 @@ extension SearchViewController {
                 self.remove(asChildViewController: beforeVC)
                 self.add(asChildViewController: afterVC)
                 afterVC.input.text.accept(text)
-            }
-        } else if let nowChildVc = children.first as? AfterSearchViewController {
-            if state == .search || state == .typing {
+                
                 return
-
-            } else {
+            }
+            
+        } else if let nowChildVc = children.first as? AfterSearchViewController {
+            guard state == .search || state == .typing  else {
                 self.remove(asChildViewController: afterVC)
                 self.add(asChildViewController: beforeVC)
+                
+                return
             }
         }
     }
