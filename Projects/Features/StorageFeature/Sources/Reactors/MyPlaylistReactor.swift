@@ -1,7 +1,7 @@
 import Foundation
-import RxCocoa
 import LogManager
 import ReactorKit
+import RxCocoa
 import RxSwift
 import UserDomainInterface
 
@@ -31,7 +31,7 @@ final class MyPlaylistReactor: Reactor {
 
     var initialState: State
     private let storageCommonService: any StorageCommonService
-    
+
     init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
         self.initialState = State (
             isEditing: false,
@@ -39,7 +39,7 @@ final class MyPlaylistReactor: Reactor {
             backupDataSource: [],
             selectedItemCount: 0
         )
-        
+
         self.storageCommonService = storageCommonService
     }
 
@@ -75,44 +75,43 @@ final class MyPlaylistReactor: Reactor {
             newState.isEditing = flag
         case let .updateOrder(dataSource):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: dataSource)]
-        case let .changeSelectedState(data:data, selectedCount:selectedCount):
+        case let .changeSelectedState(data: data, selectedCount: selectedCount):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
         }
 
         return newState
     }
-    
+
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        
-       let editState = storageCommonService.isEditingState
+        let editState = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
-        
-        
-           
-        
-        return Observable.merge(mutation,editState)
+
+        return Observable.merge(mutation, editState)
     }
 }
 
 extension MyPlaylistReactor {
     func fetchDataSource() -> Observable<Mutation> {
-        return .just(.fetchDataSource(
-            [MyPlayListSectionModel(model: 0, items: [
-            .init(key: "123", title: "플리1", image: "", songlist: [], image_version: 0),
-            .init(key: "1234", title: "플리2", image: "", songlist: [], image_version: 0),
-            .init(key: "1234", title: "플리3", image: "", songlist: [], image_version: 0),
-            .init(key: "1234", title: "플리4", image: "", songlist: [], image_version: 0)]
-        )]
+        return .just(
+            .fetchDataSource(
+                [MyPlayListSectionModel(
+                    model: 0,
+                    items: [
+                        .init(key: "123", title: "플리1", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플리2", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플리3", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플리4", image: "", songlist: [], image_version: 0)
+                    ]
+                )]
+            )
         )
-        )
-    
     }
-    
+
     func switchEditing(_ flag: Bool) -> Observable<Mutation> {
         return .just(.switchEditingState(flag))
     }
-    
+
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         var tmp = (currentState.dataSource.first ?? MyPlayListSectionModel(model: 0, items: [])).items
@@ -121,19 +120,17 @@ extension MyPlaylistReactor {
         tmp.insert(target, at: dest)
         return .just(.updateOrder(tmp))
     }
-    
+
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("playlist datasource is empty")
             return .empty()
         }
-        
+
         var count = currentState.selectedItemCount
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1
         tmp[index].isSelected = !tmp[index].isSelected
         return .just(.changeSelectedState(data: tmp, selectedCount: count))
-        
     }
-    
 }
