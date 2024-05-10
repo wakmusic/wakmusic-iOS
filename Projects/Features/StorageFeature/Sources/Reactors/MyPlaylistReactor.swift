@@ -1,51 +1,35 @@
 import Foundation
+import LogManager
 import ReactorKit
 import RxSwift
-import LogManager
 
 final class MyPlaylistReactor: Reactor {
-    
-    enum Action {
-        
-    }
-    
-    enum Mutation {
-        
-    }
-    
-    struct State {
-        
-    }
-    
+    enum Action {}
+
+    enum Mutation {}
+
+    struct State {}
+
     var initialState: State
-    
+
     init() {
         self.initialState = State (
         )
     }
-    
+
     deinit {
         LogManager.printDebug("❌ Deinit \(Self.self)")
     }
-    
+
     func mutate(action: Action) -> Observable<Mutation> {
-        
-        switch action {
-            
-        }
-        
+        switch action {}
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
-        
         var newState = state
-        
-        switch mutation {
-            
-        }
-        
-        
+
+        switch mutation {}
+
         return newState
     }
-    
 }
