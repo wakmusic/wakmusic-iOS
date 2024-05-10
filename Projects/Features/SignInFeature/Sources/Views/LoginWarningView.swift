@@ -18,7 +18,7 @@ class LoginWarningView: UIView {
 
     var label: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor =  DesignSystemAsset.BlueGrayColor.blueGray900.color
+        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.textAlignment = .center
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero
@@ -34,14 +34,14 @@ class LoginWarningView: UIView {
         $0.clipsToBounds = true
     }
 
-    init(frame: CGRect,text: String?,_ completion: @escaping (() -> Void)) {
+    init(frame: CGRect, text: String?, _ completion: @escaping (() -> Void)) {
         self.completion = completion
         super.init(frame: frame)
 
         self.addSubview(imageView)
         self.addSubview(label)
         self.addSubview(button)
-        
+
         label.text = text ?? "로그인을 해주세요."
 
         configureUI()
@@ -54,7 +54,6 @@ class LoginWarningView: UIView {
             }
             .disposed(by: disposeBag)
     }
-    
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
