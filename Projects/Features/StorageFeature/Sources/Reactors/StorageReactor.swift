@@ -3,7 +3,6 @@ import ReactorKit
 import Utility
 
 final class StorageReactor: Reactor {
-
     enum Action {
         case switchTab(Int)
         case tabDidEditButton
@@ -12,11 +11,9 @@ final class StorageReactor: Reactor {
     }
 
     enum Mutation {
-        
         case switchTabIndex(Int)
         case switchEditingState(Bool)
         case showLoginAlert
-        
     }
 
     struct State {
@@ -36,9 +33,7 @@ final class StorageReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        
         switch action {
-            
         case let .switchTab(index):
             return switchTabIndex(index)
         case let .tabDidEditButton:
@@ -48,16 +43,12 @@ final class StorageReactor: Reactor {
         case .saveButtonTap:
             return switchEditingState(false)
         }
-        
-        
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
-        
         var newState = state
-        
+
         switch mutation {
-            
         case let .switchTabIndex(index):
             newState.tabIndex = index
         case let .switchEditingState(flag):
@@ -65,26 +56,21 @@ final class StorageReactor: Reactor {
         case .showLoginAlert:
             newState.isShowLoginAlert = ()
         }
-        
+
         return newState
-        
     }
-    
 }
 
 extension StorageReactor {
-    
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
         return .just(.switchTabIndex(index))
     }
-    
+
     func switchEditingState(_ flag: Bool) -> Observable<Mutation> {
-        
         return .just(.switchEditingState(flag))
     }
-    
+
     func showLoginAlert() -> Observable<Mutation> {
         return .just(.showLoginAlert)
     }
-    
 }
