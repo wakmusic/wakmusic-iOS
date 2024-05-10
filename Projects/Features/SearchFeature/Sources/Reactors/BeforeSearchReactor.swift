@@ -32,7 +32,7 @@ public final class BeforeSearchReactor: Reactor {
             dataSource: []
         )
     }
-    
+
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
@@ -54,8 +54,6 @@ public final class BeforeSearchReactor: Reactor {
 
         return newState
     }
-
-
 }
 
 extension BeforeSearchReactor {
