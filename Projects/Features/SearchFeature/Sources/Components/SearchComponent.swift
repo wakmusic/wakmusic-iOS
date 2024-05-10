@@ -1,6 +1,8 @@
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
+import SearchFeatureInterface
+import UIKit
 
 public protocol SearchDependency: Dependency {
     var beforeSearchComponent: BeforeSearchComponent { get }
@@ -8,10 +10,10 @@ public protocol SearchDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class SearchComponent: Component<SearchDependency> {
-    public func makeView() -> SearchViewController {
+public final class SearchComponent: Component<SearchDependency>, SearchFactory {
+    public func makeView() -> UIViewController {
         return SearchViewController.viewController(
-            viewModel: .init(),
+            reactor: SearchReactor(),
             beforeSearchComponent: self.dependency.beforeSearchComponent,
             afterSearchComponent: self.dependency.afterSearchComponent,
             textPopUpFactory: dependency.textPopUpFactory

@@ -18,3 +18,9 @@ public enum TabPosition: Int {
     case artist
     case remix
 }
+
+public enum TypingStatus {
+    case before
+    case typing
+    case search
+}

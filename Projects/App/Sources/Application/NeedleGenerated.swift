@@ -33,6 +33,7 @@ import PlaylistFeature
 import PlaylistFeatureInterface
 import RootFeature
 import SearchFeature
+import SearchFeatureInterface
 import SignInFeature
 import SignInFeatureInterface
 import SongsDomain
@@ -170,8 +171,8 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var chartComponent: ChartComponent {
         return appComponent.chartComponent
     }
-    var searchComponent: SearchComponent {
-        return appComponent.searchComponent
+    var searchFactory: any SearchFactory {
+        return appComponent.searchFactory
     }
     var artistComponent: ArtistComponent {
         return appComponent.artistComponent
@@ -788,9 +789,6 @@ extension AppComponent: Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
-        localTable["searchComponent-SearchComponent"] = { [unowned self] in self.searchComponent as Any }
-        localTable["afterSearchComponent-AfterSearchComponent"] = { [unowned self] in self.afterSearchComponent as Any }
-        localTable["afterSearchContentComponent-AfterSearchContentComponent"] = { [unowned self] in self.afterSearchContentComponent as Any }
         localTable["homeComponent-HomeComponent"] = { [unowned self] in self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { [unowned self] in self.newSongsComponent as Any }
         localTable["newSongsContentComponent-NewSongsContentComponent"] = { [unowned self] in self.newSongsContentComponent as Any }
@@ -815,7 +813,6 @@ extension AppComponent: Registration {
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
-        localTable["beforeSearchComponent-BeforeSearchComponent"] = { [unowned self] in self.beforeSearchComponent as Any }
         localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
@@ -931,7 +928,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
         keyPathToName[\MainTabBarDependency.homeComponent] = "homeComponent-HomeComponent"
         keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
-        keyPathToName[\MainTabBarDependency.searchComponent] = "searchComponent-SearchComponent"
+        keyPathToName[\MainTabBarDependency.searchFactory] = "searchFactory-any SearchFactory"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
         keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
         keyPathToName[\MainTabBarDependency.myInfoComponent] = "myInfoComponent-MyInfoComponent"
