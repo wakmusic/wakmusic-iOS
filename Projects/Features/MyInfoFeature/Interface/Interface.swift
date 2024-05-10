@@ -1,3 +1,5 @@
+import UIKit
+
 public protocol MyInfoFactory {
-    func makeView()
+    func makeView() -> UIViewController
 }
