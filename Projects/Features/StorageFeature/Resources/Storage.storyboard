@@ -33,6 +33,14 @@
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5i-s9-jcg">
+                                <rect key="frame" x="328" y="125" width="45" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="DFd-Z8-ecl"/>
+                                    <constraint firstAttribute="width" constant="45" id="gYR-7t-Ht4"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            </button>
                             <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5pT-od-cmR">
                                 <rect key="frame" x="20" y="114" width="61" height="36"/>
                                 <color key="backgroundColor" name="gray100"/>
@@ -60,14 +68,17 @@
                             <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="JA6-iz-jxx" secondAttribute="trailing" constant="20" id="Usm-Hh-DGw"/>
                             <constraint firstItem="W6x-My-F0r" firstAttribute="bottom" secondItem="2Hy-W4-acm" secondAttribute="bottom" constant="-5" id="WW1-2E-yXD"/>
                             <constraint firstItem="2Hy-W4-acm" firstAttribute="trailing" secondItem="gpa-Bd-Phk" secondAttribute="trailing" id="Xg5-sg-fpQ"/>
+                            <constraint firstItem="gpa-Bd-Phk" firstAttribute="trailing" secondItem="q5i-s9-jcg" secondAttribute="trailing" constant="20" id="Zzl-zw-pxT"/>
                             <constraint firstItem="W6x-My-F0r" firstAttribute="leading" secondItem="5pT-od-cmR" secondAttribute="trailing" constant="16" id="cl6-58-bin"/>
                             <constraint firstItem="5pT-od-cmR" firstAttribute="bottom" secondItem="2Hy-W4-acm" secondAttribute="bottom" constant="-5" id="iXh-oi-bHC"/>
+                            <constraint firstItem="q5i-s9-jcg" firstAttribute="centerY" secondItem="2Hy-W4-acm" secondAttribute="centerY" id="uXA-7f-MOq"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="editButton" destination="JA6-iz-jxx" id="NHh-Cw-GDE"/>
                         <outlet property="favoriteFakeView" destination="W6x-My-F0r" id="IRy-KQ-MvU"/>
                         <outlet property="myPlayListFakeView" destination="5pT-od-cmR" id="CJi-sa-kLY"/>
+                        <outlet property="saveButton" destination="q5i-s9-jcg" id="OrA-L9-nfy"/>
                         <outlet property="tabBarView" destination="2Hy-W4-acm" id="Xdg-on-61v"/>
                     </connections>
                 </viewController>
