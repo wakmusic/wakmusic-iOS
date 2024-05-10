@@ -31,6 +31,8 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
     public var bottomSheetView: BottomSheetView!
 
     let playState = PlayState.shared
+    
+    let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -56,10 +58,10 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
         super.configureUI()
 
         self.tableView.refreshControl = self.refreshControl
-        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+
         header.delegate = self
         self.tableView.tableHeaderView = header
-        // self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+  
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
 
         self.activityIndicator.type = .circleStrokeSpin
@@ -78,13 +80,75 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     override func bindAction(reactor: MyPlaylistReactor) {
         super.bindAction(reactor: reactor)
+        
+        let currentState = reactor.state
+        
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .map{ Reactor.Action.refresh }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .withUnretained(self)
+            .withLatestFrom(currentState.map(\.isEditing)){($0.0,$0.1,$1)}
+            .withLatestFrom(currentState.map(\.dataSource)){($0.0,$0.1,$0.2,$1)}
+            .bind { (owner, indexPath, isEditing,dataSource) in
+                
+                guard isEditing else {
+                
+                    owner.navigationController?.pushViewController(
+                        owner.playlistDetailFactory.makeView(
+                            id: dataSource[indexPath.section].items[indexPath.row].key,
+                            isCustom: true), 
+                        animated: true)
+                    
+                    return
+                }
+                
+                
+                // TODO: 상위로 전달
+                
+                
+                
+            }
+            .disposed(by: disposeBag)
+        
+        
+//        tableView.rx.itemSelected
+//            .withLatestFrom(output.dataSource) { ($0, $1) }
+//            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
+//            .subscribe(onNext: { [weak self] indexPath, dataSource, state in
+//                guard let self = self else { return }
+//
+//                let isEditing: Bool = state.isEditing
+//
+//                if isEditing { // 편집 중일 때, 동작 안함
+//                    self.input.itemSelected.onNext(indexPath)
+//
+//                } else {
+//                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
+//                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
+//                    self.navigationController?.pushViewController(vc, animated: true)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+        
+        tableView.rx.itemMoved
+            .map { Reactor.Action.itemMoved($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        
     }
 
     override func bindState(reactor: MyPlaylistReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 1)
+        let sharedState = reactor.state.share(replay: 2)
 
+        
+        
         sharedState.map(\.dataSource)
             .skip(1)
             .withUnretained(self)
@@ -121,14 +185,24 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
             .map { $0.1 }
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
+        
+        sharedState.map(\.isEditing)
+            .withUnretained(self)
+            .bind { (owner, flag) in
+                
+                owner.tableView.tableHeaderView = flag ? nil : owner.header
+                owner.tableView.isEditing = flag
+                owner.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
+        
+        
     }
 
     // extension MyPlayListViewController {
 //    private func inputBindRx() {
-//        refreshControl.rx
-//            .controlEvent(.valueChanged)
-//            .bind(to: input.playListLoad)
-//            .disposed(by: disposeBag)
+
 //
 //        tableView.rx.itemSelected
 //            .withLatestFrom(output.dataSource) { ($0, $1) }
@@ -379,6 +453,33 @@ extension MyPlayListViewController: UITableViewDelegate {
 
 extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
     public func action(_ type: PurposeType) {
+        
+        guard let userInfo =  Utility.PreferenceManager.userInfo else {
+            
+            guard let vc = self.textPopUpFactory.makeView(
+                text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                cancelButtonIsHidden: false,
+                allowsDragAndTapToDismiss: nil,
+                confirmButtonText: nil,
+                cancelButtonText: nil,
+                completion: { [weak self]  in
+                    
+                    guard let self else {return}
+                    
+                    let loginVC = self.signInFactory.makeView()
+                    self.present(loginVC, animated: true)
+                },
+                cancelCompletion: {}
+            ) as? TextPopupViewController else {
+                return
+            }
+            
+            self.showPanModal(content: vc)
+            
+            return
+        }
+        
+        
         // TODO: Storage 리팩 후
 //        if let parent = self.parent?.parent as? AfterLoginViewController {
 //            parent.hideEditSheet()
