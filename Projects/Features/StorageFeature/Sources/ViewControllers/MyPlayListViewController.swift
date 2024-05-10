@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import PanModal
 import PlaylistFeatureInterface
@@ -13,7 +14,6 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import LogManager
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
@@ -54,26 +54,24 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     override func configureUI() {
         super.configureUI()
-        
+
         self.tableView.refreshControl = self.refreshControl
         let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
         header.delegate = self
         self.tableView.tableHeaderView = header
-        //self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        // self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        
-    
+
         self.activityIndicator.type = .circleStrokeSpin
         self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.startAnimating()
-        
+
         reactor?.action.onNext(.viewDidLoad)
-        
     }
 
     override func bind(reactor: MyPlaylistReactor) {
         super.bind(reactor: reactor)
-        
+
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
@@ -84,28 +82,27 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     override func bindState(reactor: MyPlaylistReactor) {
         super.bindState(reactor: reactor)
-        
+
         let sharedState = reactor.state.share(replay: 1)
-        
+
         sharedState.map(\.dataSource)
             .skip(1)
             .withUnretained(self)
-            .withLatestFrom(Utility.PreferenceManager.$userInfo){($0.0,$0.1,$1)}
+            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, userInfo in
-                
+
                 owner.activityIndicator.stopAnimating()
                 owner.refreshControl.endRefreshing()
-         
+
                 guard let userInfo = userInfo else {
                     // 로그인 안되어있음
                     let view = owner.signInFactory.makeWarnigView(
-                        CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()/5),
-                         text: "로그인 하고\n리스트를 확인해보세요." ,
-                        {
-                        //TODO: 로그인 팝업 요청 (아마 StorageVC로 가야할 듯?
-                    })
-                    
-                    
+                        CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT() / 5),
+                        text: "로그인 하고\n리스트를 확인해보세요."
+                    ) {
+                        // TODO: 로그인 팝업 요청 (아마 StorageVC로 가야할 듯?
+                    }
+
                     owner.tableView.tableFooterView = view
                     return
                 }
@@ -121,15 +118,12 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                     height: 56
                 ))
             })
-            .map{$0.1}
+            .map { $0.1 }
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
-        
-        
     }
 
-
-//extension MyPlayListViewController {
+    // extension MyPlayListViewController {
 //    private func inputBindRx() {
 //        refreshControl.rx
 //            .controlEvent(.valueChanged)
@@ -172,7 +166,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 //                    self.input.runEditing.onNext(())
 //                }
 
-        // TODO: Storage 리팩 후
+    // TODO: Storage 리팩 후
 
 //                guard let parent = self.parent?.parent as? AfterLoginViewController else {
 //                    return
@@ -284,7 +278,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
-                guard let self = self , let reactor = self.reactor else { return UITableViewCell() }
+                guard let self = self, let reactor = self.reactor else { return UITableViewCell() }
 
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "MyPlayListTableViewCell",
@@ -311,7 +305,6 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
         )
         return datasource
     }
-
 }
 
 extension MyPlayListViewController: SongCartViewDelegate {
@@ -382,8 +375,6 @@ extension MyPlayListViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-    
-
 }
 
 extension MyPlayListViewController: MyPlayListHeaderViewDelegate {

@@ -9,9 +9,7 @@ final class MyPlaylistReactor: Reactor {
     }
 
     enum Mutation {
-        
         case fetchDataSource([MyPlayListSectionModel])
-        
     }
 
     struct State {
@@ -36,7 +34,6 @@ final class MyPlaylistReactor: Reactor {
         switch action {
         case .viewDidLoad:
             fetchDataSource()
-            
         }
     }
 
@@ -44,7 +41,6 @@ final class MyPlaylistReactor: Reactor {
         var newState = state
 
         switch mutation {
-        
         case let .fetchDataSource(dataSource):
             newState.dataSource = dataSource
         }
@@ -54,9 +50,7 @@ final class MyPlaylistReactor: Reactor {
 }
 
 extension MyPlaylistReactor {
-    
     func fetchDataSource() -> Observable<Mutation> {
         return .just(.fetchDataSource([]))
     }
-    
 }

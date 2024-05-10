@@ -12,13 +12,13 @@ public protocol SignInDependency: Dependency {
 }
 
 public final class SignInComponent: Component<SignInDependency>, SignInFactory {
-    public func makeWarnigView(_ frame: CGRect?, text: String? ,_ completion: @escaping () -> Void) -> UIView {
-        return LoginWarningView(frame: frame ?? CGRect(x: .zero, y: .zero, width: 164, height: 176),
-                                text: text,
-                                completion)
+    public func makeWarnigView(_ frame: CGRect?, text: String?, _ completion: @escaping () -> Void) -> UIView {
+        return LoginWarningView(
+            frame: frame ?? CGRect(x: .zero, y: .zero, width: 164, height: 176),
+            text: text,
+            completion
+        )
     }
-    
-
 
     public func makeView() -> UIViewController {
         return LoginViewController.viewController(
