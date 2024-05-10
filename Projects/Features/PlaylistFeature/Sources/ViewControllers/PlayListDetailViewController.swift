@@ -137,9 +137,9 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
     override public func bindState(reactor: PlaylistDetailReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state.share(replay: 4)
+        let sharedState = reactor.state.share(replay: 4)
 
-        currentState.map(\.dataSource)
+        sharedState.map(\.dataSource)
             .withUnretained(self)
             .do(onNext: { owner, model in
 
@@ -158,7 +158,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
 
-        currentState.map(\.header)
+        sharedState.map(\.header)
             .withUnretained(self)
             .do(onNext: { owner, model in
 
@@ -166,7 +166,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 let newFrame: CGRect = CGRect(x: 0, y: 0, width: APP_WIDTH(), height: imageHeight + 20)
                 owner.tableView.tableHeaderView?.frame = newFrame
             })
-            .bind(onNext: { owner, model in
+            .bind { owner, model in
 
                 guard let type = owner.reactor?.type else { return }
 
@@ -182,13 +182,12 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                 owner.playListCountLabel.text = model.songCount
                 owner.playListNameLabel.text = model.title
                 owner.editPlayListNameButton.setImage(DesignSystemAsset.Storage.storageEdit.image, for: .normal)
-
-            })
+            }
             .disposed(by: disposeBag)
 
-        currentState.map(\.selectedItemCount)
+        sharedState.map(\.selectedItemCount)
             .withUnretained(self)
-            .bind(onNext: { owner, count in
+            .bind { owner, count in
                 guard let type = owner.reactor?.type else {
                     return
                 }
@@ -210,13 +209,12 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         owner.songCartView?.delegate = owner
                     }
                 }
-
-            })
+            }
             .disposed(by: disposeBag)
 
-        currentState.map(\.isEditing)
+        sharedState.map(\.isEditing)
             .withUnretained(self)
-            .bind(onNext: { owner, flag in
+            .bind { owner, flag in
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = flag ? owner : nil
                 owner.moreButton.isHidden = flag
                 owner.editPlayListNameButton.isHidden = !flag
@@ -225,8 +223,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
 
                 owner.tableView.isEditing = flag
                 owner.tableView.reloadData()
-
-            })
+            }
             .disposed(by: disposeBag)
     }
 
