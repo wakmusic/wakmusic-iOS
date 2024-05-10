@@ -31,9 +31,8 @@ final class StorageReactor: Reactor {
             tabIndex: 0,
             isShowLoginAlert: ()
         )
-        
+
         self.storageCommonService = storageCommonService
-        
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -65,14 +64,12 @@ final class StorageReactor: Reactor {
 
         return newState
     }
-    
+
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        
-       let editState = storageCommonService.isEditingState
+        let editState = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
-           
-        
-        return Observable.merge(mutation,editState)
+
+        return Observable.merge(mutation, editState)
     }
 }
 

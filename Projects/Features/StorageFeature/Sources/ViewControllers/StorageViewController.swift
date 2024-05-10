@@ -47,19 +47,17 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
     @IBOutlet weak var myPlayListFakeView: UIView!
     @IBOutlet weak var favoriteFakeView: UIView!
 
-
-
     public var bottomSheetView: BottomSheetView!
     private var myPlayListComponent: MyPlayListComponent!
     private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     private var favoriteComponent: FavoriteComponent!
     private var textPopUpFactory: TextPopUpFactory!
-    
+
     private lazy var viewControllers: [UIViewController] = [
         myPlayListComponent.makeView(),
         favoriteComponent.makeView()
     ]
-    
+
     private var signInFactory: SignInFactory!
 
     override public func viewDidLoad() {
@@ -167,16 +165,10 @@ extension StorageViewController {
                 if flag {
                     owner.myPlayListFakeView.isHidden = owner.currentIndex == 0
                     owner.favoriteFakeView.isHidden = owner.currentIndex == 1
-                    
 
-                    
                 } else {
                     owner.myPlayListFakeView.isHidden = true
                     owner.favoriteFakeView.isHidden = true
-                    
-
-                    
-                    
                 }
             }
             .disposed(by: disposeBag)
