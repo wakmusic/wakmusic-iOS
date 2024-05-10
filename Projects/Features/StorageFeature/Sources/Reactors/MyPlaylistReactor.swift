@@ -13,6 +13,7 @@ final class MyPlaylistReactor: Reactor {
         case tapDidEditButton
         case tapDidSaveButton
         case tapDidPlaylist(Int)
+        case tapAll(isSelecting: Bool)
     }
 
     enum Mutation {
@@ -20,6 +21,7 @@ final class MyPlaylistReactor: Reactor {
         case switchEditingState(Bool)
         case updateOrder([PlayListEntity])
         case changeSelectedState(data: [PlayListEntity], selectedCount: Int)
+        case changeAllState(data: [PlayListEntity], selectedCount: Int)
     }
 
     struct State {
@@ -61,6 +63,8 @@ final class MyPlaylistReactor: Reactor {
             updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
         case let .tapDidPlaylist(index):
             changeSelectingState(index)
+        case let .tapAll(isSelecting):
+            tapAll(isSelecting)
         }
     }
 
@@ -76,6 +80,9 @@ final class MyPlaylistReactor: Reactor {
         case let .updateOrder(dataSource):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: dataSource)]
         case let .changeSelectedState(data: data, selectedCount: selectedCount):
+            newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
+            newState.selectedItemCount = selectedCount
+        case let .changeAllState(data:data, selectedCount:  selectedCount):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
         }
@@ -132,5 +139,20 @@ extension MyPlaylistReactor {
         count = target.isSelected ? count - 1 : count + 1
         tmp[index].isSelected = !tmp[index].isSelected
         return .just(.changeSelectedState(data: tmp, selectedCount: count))
+    }
+    
+    /// 전체 곡 선택 / 해제
+    func tapAll(_ flag: Bool) -> Observable<Mutation> {
+        guard var tmp = currentState.dataSource.first?.items else {
+            LogManager.printError("playlist datasource is empty")
+            return .empty()
+        }
+
+        let count = flag ? tmp.count : 0
+
+        for i in 0 ..< tmp.count {
+            tmp[i].isSelected = flag
+        }
+        return .just(.changeAllState(data: tmp, selectedCount: count))
     }
 }

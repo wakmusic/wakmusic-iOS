@@ -107,28 +107,9 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                     return
                 }
 
-                // TODO: 상위로 전달
             }
             .disposed(by: disposeBag)
 
-//        tableView.rx.itemSelected
-//            .withLatestFrom(output.dataSource) { ($0, $1) }
-//            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
-//            .subscribe(onNext: { [weak self] indexPath, dataSource, state in
-//                guard let self = self else { return }
-//
-//                let isEditing: Bool = state.isEditing
-//
-//                if isEditing { // 편집 중일 때, 동작 안함
-//                    self.input.itemSelected.onNext(indexPath)
-//
-//                } else {
-//                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
-//                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
-//                    self.navigationController?.pushViewController(vc, animated: true)
-//                }
-//            })
-//            .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
             .map { Reactor.Action.itemMoved($0) }
@@ -139,7 +120,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
     override func bindState(reactor: MyPlaylistReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share(replay: 3)
 
         sharedState.map(\.dataSource)
             .skip(1)
@@ -187,133 +168,35 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                 owner.tableView.reloadData()
             }
             .disposed(by: disposeBag)
+        
+        sharedState.map(\.selectedItemCount)
+            .withUnretained(self)
+            .bind(onNext: { owner, count in
+
+                if count == 0 {
+                    owner.hideSongCart()
+                } else {
+                    owner.showSongCart(
+                        in: owner.view,
+                        type: .myList,
+                        selectedSongCount: count,
+                        totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
+                        useBottomSpace: false
+                    )
+                    owner.songCartView?.delegate = owner
+                }
+
+            })
+            .disposed(by: disposeBag)
+        
+        
     }
 
     // extension MyPlayListViewController {
-//    private func inputBindRx() {
 
-//
-//        tableView.rx.itemSelected
-//            .withLatestFrom(output.dataSource) { ($0, $1) }
-//            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
-//            .subscribe(onNext: { [weak self] indexPath, dataSource, state in
-//                guard let self = self else { return }
-//
-//                let isEditing: Bool = state.isEditing
-//
-//                if isEditing { // 편집 중일 때, 동작 안함
-//                    self.input.itemSelected.onNext(indexPath)
-//
-//                } else {
-//                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
-//                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
-//                    self.navigationController?.pushViewController(vc, animated: true)
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//
-//        tableView.rx.itemMoved
-//            .debug("itemMoved")
-//            .bind(to: input.itemMoved)
-//            .disposed(by: disposeBag)
-//    }
 
-//    private func outputBindRx() {
-//        output.state
-//            .skip(1)
-//            .subscribe(onNext: { [weak self] state in
-//                guard let self = self else {
-//                    return
-//                }
-//                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
-//                    self.input.runEditing.onNext(())
-//                }
 
-    // TODO: Storage 리팩 후
 
-//                guard let parent = self.parent?.parent as? AfterLoginViewController else {
-//                    return
-//                }
-//
-//                // 탭맨 쪽 편집 변경
-//                let isEdit: Bool = state.isEditing
-//                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
-//                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
-//                self.tableView.setEditing(isEdit, animated: true)
-//
-//                let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-//                header.delegate = self
-//                self.tableView.tableHeaderView = isEdit ? nil : header
-//                self.tableView.reloadData()
-//            })
-//            .disposed(by: disposeBag)
-//
-//        tableView.rx.setDelegate(self).disposed(by: disposeBag)
-//
-//        output.dataSource
-//            .skip(1)
-//            .do(onNext: { [weak self] model in
-//                guard let self = self else {
-//                    return
-//                }
-//                self.refreshControl.endRefreshing()
-//                self.activityIndicator.stopAnimating()
-//
-//                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
-//                warningView.text = "내 리스트가 없습니다."
-//
-//                let items = model.first?.items ?? []
-//                self.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
-//                    x: 0,
-//                    y: 0,
-//                    width: APP_WIDTH(),
-//                    height: 56
-//                ))
-//            })
-//            .bind(to: tableView.rx.items(dataSource: createDatasources()))
-//            .disposed(by: disposeBag)
-//
-//        output.indexPathOfSelectedPlayLists
-//            .skip(1)
-//            .debug("indexPathOfSelectedPlayLists")
-//            .withLatestFrom(output.dataSource) { ($0, $1) }
-//            .subscribe(onNext: { [weak self] songs, dataSource in
-//                guard let self = self else { return }
-//                let items = dataSource.first?.items ?? []
-//
-//                switch songs.isEmpty {
-//                case true:
-//                    self.hideSongCart()
-//                case false:
-//                    self.showSongCart(
-//                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
-//                        type: .myList,
-//                        selectedSongCount: songs.count,
-//                        totalSongCount: items.count,
-//                        useBottomSpace: true
-//                    )
-//                    self.songCartView?.delegate = self
-//                }
-//            }).disposed(by: disposeBag)
-//
-//        output.willAddPlayList
-//            .skip(1)
-//            .debug("willAddPlayList")
-//            .subscribe(onNext: { [weak self] songs in
-//                guard let self = self else { return }
-//                if !songs.isEmpty {
-//                    self.playState.appendSongsToPlaylist(songs)
-//                }
-//                self.input.allPlayListSelected.onNext(false)
-//                self.output.state.accept(EditState(isEditing: false, force: true))
-//                let message: String = songs.isEmpty ?
-//                    "리스트에 곡이 없습니다." :
-//                    "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다."
-//                self.showToast(
-//                    text: message,
-//                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-//                )
-//            }).disposed(by: disposeBag)
 //
 //        output.showToast
 //            .subscribe(onNext: { [weak self] result in
@@ -338,7 +221,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 //        .disposed(by: disposeBag)
 //    }
 
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
+private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell() }
@@ -372,15 +255,17 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
 extension MyPlayListViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
-//        switch type {
-//        case let .allSelect(flag):
-//            input.allPlayListSelected.onNext(flag)
-//
-//        case .addPlayList:
-//            input.addPlayList.onNext(())
-//            self.hideSongCart()
-//
-//        case .remove:
+        switch type {
+        case let .allSelect(flag):
+            reactor?.action.onNext(.tapAll(isSelecting: flag))
+
+        case .addPlayList:
+            //input.addPlayList.onNext(())
+            self.hideSongCart()
+
+        case .remove:
+            // TODO: useCase 연결 후
+            break
 //            let count: Int = output.indexPathOfSelectedPlayLists.value.count
 //
 //            guard let textPopupViewController = self.textPopUpFactory.makeView(
@@ -400,18 +285,20 @@ extension MyPlayListViewController: SongCartViewDelegate {
 //            ) as? TextPopupViewController else {
 //                return
 //            }
-//
-//        default: return
-//        }
+
+        default: return
+        }
     }
 }
 
 extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
     public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
-//        switch type {
-//        case let .listTapped(indexPath):
-//            input.itemSelected.onNext(indexPath)
-//        case let .playTapped(indexPath):
+        switch type {
+        case let .listTapped(indexPath):
+            self.reactor?.action.onNext(.tapDidPlaylist(indexPath.row))
+        case let .playTapped(indexPath):
+            // TODO: useCase 연결 후
+            break
 //            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
 //            guard !songs.isEmpty else {
 //                self.showToast(
@@ -421,7 +308,7 @@ extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
 //                return
 //            }
 //            self.playState.loadAndAppendSongsToPlaylist(songs)
-//        }
+        }
     }
 }
 
@@ -465,22 +352,22 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
 
             return
         }
+        
+        switch type {
+          // TODO: UseCase 연결 후
+        case .creation:
+            break
+        case .share:
+            break
+        default:
+            break
+        }
 
-        // TODO: Storage 리팩 후
-//        if let parent = self.parent?.parent as? AfterLoginViewController {
-//            parent.hideEditSheet()
-//            parent.profileButton.isSelected = false
-//        }
-//        let vc = multiPurposePopUpFactory
-//            .makeView(type: type, key: "", completion: nil)
-//        self.showEntryKitModal(content: vc, height: 296)
     }
 }
 
 extension MyPlayListViewController {
     func scrollToTop() {
-//        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
-//        guard !itemIsEmpty else { return }
-//        tableView.setContentOffset(.zero, animated: true)
+        tableView.setContentOffset(.zero, animated: true)
     }
 }
