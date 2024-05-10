@@ -11,7 +11,17 @@ import SnapKit
 import UIKit
 import Utility
 
-public final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType {
+internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
+    EqualHandleTappedType {
+    private enum Font {
+        static let headerFontSize: CGFloat = 16
+    }
+
+    private enum Color {
+        static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
+        static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
+    }
+
     @IBOutlet weak var searchImageView: UIImageView!
     @IBOutlet weak var searchTextFiled: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
@@ -23,21 +33,17 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
     var afterSearchComponent: AfterSearchComponent!
     var textPopUpFactory: TextPopUpFactory!
 
-    let headerFontSize: CGFloat = 16
-    let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
-    let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
-
-    lazy var beforeVc = beforeSearchComponent.makeView().then {
+    private lazy var beforeVC = beforeSearchComponent.makeView().then {
         $0.delegate = self
     }
 
-    lazy var afterVc = afterSearchComponent.makeView()
+    private lazy var afterVC = afterSearchComponent.makeView()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
 
@@ -64,7 +70,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
 
         // MARK: 서치바
         self.searchTextFiled.borderStyle = .none // 텍스트 필드 테두리 제거
-        self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        self.searchTextFiled.font = DesignSystemFontFamily.Pretendard.medium.font(size: Font.headerFontSize)
 
         // MARK: 검색 취소 버튼
         self.cancelButton.titleLabel?.text = "취소"
@@ -77,7 +83,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
         self.searchTextFiled.tintColor = UIColor.white
         self.view.backgroundColor = .clear
 
-        self.add(asChildViewController: beforeVc)
+        self.add(asChildViewController: beforeVC)
     }
 
     override public func bind(reactor: SearchReactor) {
@@ -87,12 +93,12 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
     override public func bindState(reactor: SearchReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state.share(replay: 1)
+        let sharedState = reactor.state.share(replay: 1)
 
-        currentState
+        sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
-            .bind(onNext: { owner, data in
+            .bind { owner, data in
 
                 let (state, text) = data
 
@@ -100,30 +106,30 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state)
 
-                if state == .search {
-                    if text.isEmpty {
-                        guard let textPopupViewController = owner.textPopUpFactory.makeView(
-                            text: "검색어를 입력해주세요.",
-                            cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: nil,
-                            confirmButtonText: nil,
-                            cancelButtonText: nil,
-                            completion: nil,
-                            cancelCompletion: nil
-                        ) as? TextPopupViewController else {
-                            return
-                        }
-                        owner.showPanModal(content: textPopupViewController)
-
-                    } else {
-                        PreferenceManager.shared.addRecentRecords(word: text)
-                        UIView.setAnimationsEnabled(false)
-                        owner.view.endEditing(true)
-                        UIView.setAnimationsEnabled(true)
-                    }
+                guard state == .search else {
+                    return
                 }
 
-            })
+                if text.isEmpty {
+                    guard let textPopupViewController = owner.textPopUpFactory.makeView(
+                        text: "검색어를 입력해주세요.",
+                        cancelButtonIsHidden: true,
+                        allowsDragAndTapToDismiss: nil,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: nil,
+                        cancelCompletion: nil
+                    ) as? TextPopupViewController else {
+                        return
+                    }
+                    owner.showPanModal(content: textPopupViewController)
+                } else {
+                    PreferenceManager.shared.addRecentRecords(word: text)
+                    UIView.setAnimationsEnabled(false)
+                    owner.view.endEditing(true)
+                    UIView.setAnimationsEnabled(true)
+                }
+            }
             .disposed(by: disposeBag)
     }
 
@@ -139,7 +145,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
                     nowChildVc.clearSongCart()
                 }
             })
-            .map { _ in SearchReactor.Action.cancel }
+            .map { _ in SearchReactor.Action.cancelButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -164,7 +170,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
 
         mergeObservable
             .withUnretained(self)
-            .bind(onNext: { owner, event in
+            .bind { owner, event in
 
                 if event == .editingDidBegin {
                     NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
@@ -176,8 +182,7 @@ public final class SearchViewController: BaseStoryboardReactorViewController<Sea
                 } else {
                     reactor.action.onNext(.switchTypingState(.search))
                 }
-
-            })
+            }
             .disposed(by: disposeBag)
 
         RxKeyboard.instance.visibleHeight // 드라이브: 무조건 메인쓰레드에서 돌아감
@@ -215,42 +220,38 @@ extension SearchViewController {
          */
 
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
-            if state == .before || state == .typing {
+            guard state == .before || state == .typing else {
                 return
-
-            } else {
-                guard let text = reactor?.currentState.text else {
-                    return
-                }
-
-                self.remove(asChildViewController: beforeVc)
-                self.add(asChildViewController: afterVc)
-                afterVc.input.text.accept(text)
             }
+            guard let text = reactor?.currentState.text else {
+                return
+            }
+
+            self.remove(asChildViewController: beforeVC)
+            self.add(asChildViewController: afterVC)
+            afterVC.input.text.accept(text)
         } else if let nowChildVc = children.first as? AfterSearchViewController {
-            if state == .search || state == .typing {
+            guard state == .search || state == .typing else {
                 return
-
-            } else {
-                self.remove(asChildViewController: afterVc)
-                self.add(asChildViewController: beforeVc)
             }
+            self.remove(asChildViewController: afterVC)
+            self.add(asChildViewController: beforeVC)
         }
     }
 
     private func reactSearchHeader(_ state: TypingStatus) {
         var placeHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: grayColor,
-            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+            NSAttributedString.Key.foregroundColor: Color.grayColor,
+            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: Font.headerFontSize)
         ]
 
         var bgColor: UIColor = .white
         var textColor: UIColor = .black
-        var tintColor: UIColor = grayColor
+        var tintColor: UIColor = Color.grayColor
 
         if state == .typing {
             placeHolderAttributes[.foregroundColor] = UIColor.white
-            bgColor = pointColor
+            bgColor = Color.pointColor
             textColor = .white
             tintColor = .white
         }
@@ -283,8 +284,8 @@ extension SearchViewController: BeforeSearchContentViewDelegate {
     }
 }
 
-public extension SearchViewController {
-    func equalHandleTapped() {
+extension SearchViewController {
+    public func equalHandleTapped() {
         let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
