@@ -82,7 +82,7 @@ final class MyPlaylistReactor: Reactor {
         case let .changeSelectedState(data: data, selectedCount: selectedCount):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
-        case let .changeAllState(data:data, selectedCount:  selectedCount):
+        case let .changeAllState(data: data, selectedCount: selectedCount):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
         }
@@ -140,7 +140,7 @@ extension MyPlaylistReactor {
         tmp[index].isSelected = !tmp[index].isSelected
         return .just(.changeSelectedState(data: tmp, selectedCount: count))
     }
-    
+
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {

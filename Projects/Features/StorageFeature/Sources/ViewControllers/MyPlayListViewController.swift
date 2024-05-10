@@ -106,10 +106,8 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
                     return
                 }
-
             }
             .disposed(by: disposeBag)
-
 
         tableView.rx.itemMoved
             .map { Reactor.Action.itemMoved($0) }
@@ -168,7 +166,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                 owner.tableView.reloadData()
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.selectedItemCount)
             .withUnretained(self)
             .bind(onNext: { owner, count in
@@ -188,14 +186,9 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
             })
             .disposed(by: disposeBag)
-        
-        
     }
 
     // extension MyPlayListViewController {
-
-
-
 
 //
 //        output.showToast
@@ -221,7 +214,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 //        .disposed(by: disposeBag)
 //    }
 
-private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell() }
@@ -260,7 +253,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
             reactor?.action.onNext(.tapAll(isSelecting: flag))
 
         case .addPlayList:
-            //input.addPlayList.onNext(())
+            // input.addPlayList.onNext(())
             self.hideSongCart()
 
         case .remove:
@@ -352,9 +345,9 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
 
             return
         }
-        
+
         switch type {
-          // TODO: UseCase 연결 후
+        // TODO: UseCase 연결 후
         case .creation:
             break
         case .share:
@@ -362,7 +355,6 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
         default:
             break
         }
-
     }
 }
 
