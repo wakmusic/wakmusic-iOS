@@ -400,6 +400,9 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -991,6 +994,7 @@ extension MyPlayListComponent: Registration {
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
         keyPathToName[\MyPlayListDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\MyPlayListDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\MyPlayListDependency.signInFactory] = "signInFactory-any SignInFactory"
     }
 }
 extension FavoriteComponent: Registration {
