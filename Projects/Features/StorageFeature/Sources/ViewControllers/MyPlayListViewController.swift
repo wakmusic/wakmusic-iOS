@@ -8,16 +8,15 @@ import RxCocoa
 import RxDataSources
 import RxRelay
 import RxSwift
+import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import SignInFeatureInterface
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
 final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlaylistReactor>, SongCartViewType {
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -34,7 +33,6 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     static func viewController(
@@ -52,19 +50,19 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
         viewController.signInFactory = signInFactory
         return viewController
     }
-    
+
     override func configureUI() {
         super.configureUI()
     }
-    
+
     override func bind(reactor: MyPlaylistReactor) {
         super.bind(reactor: reactor)
     }
-    
+
     override func bindAction(reactor: MyPlaylistReactor) {
         super.bindAction(reactor: reactor)
     }
-    
+
     override func bindState(reactor: MyPlaylistReactor) {
         super.bindState(reactor: reactor)
     }
@@ -113,7 +111,7 @@ extension MyPlayListViewController {
 //                    self.input.runEditing.onNext(())
 //                }
 
-                // TODO: Storage 리팩 후
+        // TODO: Storage 리팩 후
 
 //                guard let parent = self.parent?.parent as? AfterLoginViewController else {
 //                    return
@@ -263,7 +261,7 @@ extension MyPlayListViewController {
 //        self.activityIndicator.type = .circleStrokeSpin
 //        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
 //        self.activityIndicator.startAnimating()
- //   }
+    //   }
 }
 
 extension MyPlayListViewController: SongCartViewDelegate {

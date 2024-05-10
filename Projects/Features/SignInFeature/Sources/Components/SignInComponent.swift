@@ -12,11 +12,10 @@ public protocol SignInDependency: Dependency {
 }
 
 public final class SignInComponent: Component<SignInDependency>, SignInFactory {
-    
-    public func makeWarnigView(_ completion: @escaping () -> Void ) -> UIView {
+    public func makeWarnigView(_ completion: @escaping () -> Void) -> UIView {
         return LoginWarningView(completion: completion)
     }
-    
+
     public func makeView() -> UIViewController {
         return LoginViewController.viewController(
             viewModel: .init(
