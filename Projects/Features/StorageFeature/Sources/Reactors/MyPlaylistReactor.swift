@@ -4,16 +4,27 @@ import ReactorKit
 import RxSwift
 
 final class MyPlaylistReactor: Reactor {
-    enum Action {}
+    enum Action {
+        case viewDidLoad
+    }
 
-    enum Mutation {}
+    enum Mutation {
+        
+        case fetchDataSource([MyPlayListSectionModel])
+        
+    }
 
-    struct State {}
+    struct State {
+        var isEditing: Bool
+        var dataSource: [MyPlayListSectionModel]
+    }
 
     var initialState: State
 
     init() {
         self.initialState = State (
+            isEditing: false,
+            dataSource: []
         )
     }
 
@@ -22,14 +33,30 @@ final class MyPlaylistReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action {}
+        switch action {
+        case .viewDidLoad:
+            fetchDataSource()
+            
+        }
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
-        switch mutation {}
+        switch mutation {
+        
+        case let .fetchDataSource(dataSource):
+            newState.dataSource = dataSource
+        }
 
         return newState
     }
+}
+
+extension MyPlaylistReactor {
+    
+    func fetchDataSource() -> Observable<Mutation> {
+        return .just(.fetchDataSource([]))
+    }
+    
 }
