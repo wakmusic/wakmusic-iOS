@@ -282,7 +282,6 @@ extension StorageViewController {
 //             }).disposed(by: disposeBag)
     }
 
-
     private func configureUI() {
         editButton.layer.cornerRadius = 4
         editButton.layer.borderWidth = 1

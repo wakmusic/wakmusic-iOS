@@ -12,10 +12,12 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
+import SignInFeatureInterface
 
-public typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
+typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-public final class MyPlayListViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlaylistReactor>, SongCartViewType {
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -23,11 +25,7 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
     var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     var textPopUpFactory: TextPopUpFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
-    var viewModel: MyPlayListViewModel!
-
-    lazy var input = MyPlayListViewModel.Input()
-    lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    var signInFactory: SignInFactory!
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
@@ -36,68 +34,84 @@ public final class MyPlayListViewController: BaseViewController, ViewControllerF
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
-        inputBindRx()
-        outputBindRx()
+
     }
 
-    public static func viewController(
-        viewModel: MyPlayListViewModel,
+    static func viewController(
+        reactor: MyPlaylistReactor,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        signInFactory: SignInFactory
     ) -> MyPlayListViewController {
         let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        viewController.viewModel = viewModel
+        viewController.reactor = reactor
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.signInFactory = signInFactory
         return viewController
+    }
+    
+    override func configureUI() {
+        super.configureUI()
+    }
+    
+    override func bind(reactor: MyPlaylistReactor) {
+        super.bind(reactor: reactor)
+    }
+    
+    override func bindAction(reactor: MyPlaylistReactor) {
+        super.bindAction(reactor: reactor)
+    }
+    
+    override func bindState(reactor: MyPlaylistReactor) {
+        super.bindState(reactor: reactor)
     }
 }
 
 extension MyPlayListViewController {
     private func inputBindRx() {
-        refreshControl.rx
-            .controlEvent(.valueChanged)
-            .bind(to: input.playListLoad)
-            .disposed(by: disposeBag)
-
-        tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
-            .subscribe(onNext: { [weak self] indexPath, dataSource, state in
-                guard let self = self else { return }
-
-                let isEditing: Bool = state.isEditing
-
-                if isEditing { // 편집 중일 때, 동작 안함
-                    self.input.itemSelected.onNext(indexPath)
-
-                } else {
-                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
-                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            })
-            .disposed(by: disposeBag)
-
-        tableView.rx.itemMoved
-            .debug("itemMoved")
-            .bind(to: input.itemMoved)
-            .disposed(by: disposeBag)
+//        refreshControl.rx
+//            .controlEvent(.valueChanged)
+//            .bind(to: input.playListLoad)
+//            .disposed(by: disposeBag)
+//
+//        tableView.rx.itemSelected
+//            .withLatestFrom(output.dataSource) { ($0, $1) }
+//            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
+//            .subscribe(onNext: { [weak self] indexPath, dataSource, state in
+//                guard let self = self else { return }
+//
+//                let isEditing: Bool = state.isEditing
+//
+//                if isEditing { // 편집 중일 때, 동작 안함
+//                    self.input.itemSelected.onNext(indexPath)
+//
+//                } else {
+//                    let id: String = dataSource[indexPath.section].items[indexPath.row].key
+//                    let vc = self.playlistDetailFactory.makeView(id: id, isCustom: true)
+//                    self.navigationController?.pushViewController(vc, animated: true)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//
+//        tableView.rx.itemMoved
+//            .debug("itemMoved")
+//            .bind(to: input.itemMoved)
+//            .disposed(by: disposeBag)
     }
 
     private func outputBindRx() {
-        output.state
-            .skip(1)
-            .subscribe(onNext: { [weak self] state in
-                guard let self = self else {
-                    return
-                }
-                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
-                    self.input.runEditing.onNext(())
-                }
+//        output.state
+//            .skip(1)
+//            .subscribe(onNext: { [weak self] state in
+//                guard let self = self else {
+//                    return
+//                }
+//                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
+//                    self.input.runEditing.onNext(())
+//                }
 
                 // TODO: Storage 리팩 후
 
@@ -115,195 +129,195 @@ extension MyPlayListViewController {
 //                header.delegate = self
 //                self.tableView.tableHeaderView = isEdit ? nil : header
 //                self.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
-
-        output.dataSource
-            .skip(1)
-            .do(onNext: { [weak self] model in
-                guard let self = self else {
-                    return
-                }
-                self.refreshControl.endRefreshing()
-                self.activityIndicator.stopAnimating()
-
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
-                warningView.text = "내 리스트가 없습니다."
-
-                let items = model.first?.items ?? []
-                self.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
-                    x: 0,
-                    y: 0,
-                    width: APP_WIDTH(),
-                    height: 56
-                ))
-            })
-            .bind(to: tableView.rx.items(dataSource: createDatasources()))
-            .disposed(by: disposeBag)
-
-        output.indexPathOfSelectedPlayLists
-            .skip(1)
-            .debug("indexPathOfSelectedPlayLists")
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] songs, dataSource in
-                guard let self = self else { return }
-                let items = dataSource.first?.items ?? []
-
-                switch songs.isEmpty {
-                case true:
-                    self.hideSongCart()
-                case false:
-                    self.showSongCart(
-                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
-                        type: .myList,
-                        selectedSongCount: songs.count,
-                        totalSongCount: items.count,
-                        useBottomSpace: true
-                    )
-                    self.songCartView?.delegate = self
-                }
-            }).disposed(by: disposeBag)
-
-        output.willAddPlayList
-            .skip(1)
-            .debug("willAddPlayList")
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else { return }
-                if !songs.isEmpty {
-                    self.playState.appendSongsToPlaylist(songs)
-                }
-                self.input.allPlayListSelected.onNext(false)
-                self.output.state.accept(EditState(isEditing: false, force: true))
-                let message: String = songs.isEmpty ?
-                    "리스트에 곡이 없습니다." :
-                    "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다."
-                self.showToast(
-                    text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
-            }).disposed(by: disposeBag)
-
-        output.showToast
-            .subscribe(onNext: { [weak self] result in
-                guard let self = self else {
-                    return
-                }
-
-                self.showToast(
-                    text: result.description,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
-            })
-            .disposed(by: disposeBag)
-
-        output.onLogout.bind(with: self) { owner, error in
-            NotificationCenter.default.post(name: .movedTab, object: 4)
-            owner.showToast(
-                text: error.localizedDescription,
-                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-            )
-        }
-        .disposed(by: disposeBag)
+//            })
+//            .disposed(by: disposeBag)
+//
+//        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+//
+//        output.dataSource
+//            .skip(1)
+//            .do(onNext: { [weak self] model in
+//                guard let self = self else {
+//                    return
+//                }
+//                self.refreshControl.endRefreshing()
+//                self.activityIndicator.stopAnimating()
+//
+//                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
+//                warningView.text = "내 리스트가 없습니다."
+//
+//                let items = model.first?.items ?? []
+//                self.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
+//                    x: 0,
+//                    y: 0,
+//                    width: APP_WIDTH(),
+//                    height: 56
+//                ))
+//            })
+//            .bind(to: tableView.rx.items(dataSource: createDatasources()))
+//            .disposed(by: disposeBag)
+//
+//        output.indexPathOfSelectedPlayLists
+//            .skip(1)
+//            .debug("indexPathOfSelectedPlayLists")
+//            .withLatestFrom(output.dataSource) { ($0, $1) }
+//            .subscribe(onNext: { [weak self] songs, dataSource in
+//                guard let self = self else { return }
+//                let items = dataSource.first?.items ?? []
+//
+//                switch songs.isEmpty {
+//                case true:
+//                    self.hideSongCart()
+//                case false:
+//                    self.showSongCart(
+//                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
+//                        type: .myList,
+//                        selectedSongCount: songs.count,
+//                        totalSongCount: items.count,
+//                        useBottomSpace: true
+//                    )
+//                    self.songCartView?.delegate = self
+//                }
+//            }).disposed(by: disposeBag)
+//
+//        output.willAddPlayList
+//            .skip(1)
+//            .debug("willAddPlayList")
+//            .subscribe(onNext: { [weak self] songs in
+//                guard let self = self else { return }
+//                if !songs.isEmpty {
+//                    self.playState.appendSongsToPlaylist(songs)
+//                }
+//                self.input.allPlayListSelected.onNext(false)
+//                self.output.state.accept(EditState(isEditing: false, force: true))
+//                let message: String = songs.isEmpty ?
+//                    "리스트에 곡이 없습니다." :
+//                    "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다."
+//                self.showToast(
+//                    text: message,
+//                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+//                )
+//            }).disposed(by: disposeBag)
+//
+//        output.showToast
+//            .subscribe(onNext: { [weak self] result in
+//                guard let self = self else {
+//                    return
+//                }
+//
+//                self.showToast(
+//                    text: result.description,
+//                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+//                )
+//            })
+//            .disposed(by: disposeBag)
+//
+//        output.onLogout.bind(with: self) { owner, error in
+//            NotificationCenter.default.post(name: .movedTab, object: 4)
+//            owner.showToast(
+//                text: error.localizedDescription,
+//                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+//            )
+//        }
+//        .disposed(by: disposeBag)
     }
 
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(
-            configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
-                guard let self = self else { return UITableViewCell() }
+//    private func createDatasources() -> RxTableViewSectionedReloadDataSource<MyPlayListSectionModel> {
+//        let datasource = RxTableViewSectionedReloadDataSource<MyPlayListSectionModel>(
+//            configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
+//                guard let self = self else { return UITableViewCell() }
+//
+//                guard let cell = tableView.dequeueReusableCell(
+//                    withIdentifier: "MyPlayListTableViewCell",
+//                    for: IndexPath(row: indexPath.row, section: 0)
+//                ) as? MyPlayListTableViewCell
+//                else { return UITableViewCell() }
+//
+//                cell.update(
+//                    model: model,
+//                    isEditing: self.output.state.value.isEditing,
+//                    indexPath: indexPath
+//                )
+//                cell.delegate = self
+//                return cell
+//
+//            },
+//            canEditRowAtIndexPath: { _, _ -> Bool in
+//                return true
+//
+//            },
+//            canMoveRowAtIndexPath: { _, _ -> Bool in
+//                return true
+//            }
+//        )
+//        return datasource
+//    }
 
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "MyPlayListTableViewCell",
-                    for: IndexPath(row: indexPath.row, section: 0)
-                ) as? MyPlayListTableViewCell
-                else { return UITableViewCell() }
-
-                cell.update(
-                    model: model,
-                    isEditing: self.output.state.value.isEditing,
-                    indexPath: indexPath
-                )
-                cell.delegate = self
-                return cell
-
-            },
-            canEditRowAtIndexPath: { _, _ -> Bool in
-                return true
-
-            },
-            canMoveRowAtIndexPath: { _, _ -> Bool in
-                return true
-            }
-        )
-        return datasource
-    }
-
-    private func configureUI() {
-        self.tableView.refreshControl = self.refreshControl
-        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
-        header.delegate = self
-        self.tableView.tableHeaderView = header
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        self.activityIndicator.type = .circleStrokeSpin
-        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIndicator.startAnimating()
-    }
+//    private func configureUI() {
+//        self.tableView.refreshControl = self.refreshControl
+//        let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+//        header.delegate = self
+//        self.tableView.tableHeaderView = header
+//        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+//        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+//        self.activityIndicator.type = .circleStrokeSpin
+//        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+//        self.activityIndicator.startAnimating()
+ //   }
 }
 
 extension MyPlayListViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
-        switch type {
-        case let .allSelect(flag):
-            input.allPlayListSelected.onNext(flag)
-
-        case .addPlayList:
-            input.addPlayList.onNext(())
-            self.hideSongCart()
-
-        case .remove:
-            let count: Int = output.indexPathOfSelectedPlayLists.value.count
-
-            guard let textPopupViewController = self.textPopUpFactory.makeView(
-                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
-                cancelButtonIsHidden: false,
-                allowsDragAndTapToDismiss: nil,
-                confirmButtonText: nil,
-                cancelButtonText: nil,
-                completion: { [weak self] in
-
-                    guard let self else { return }
-                    self.input.deletePlayList.onNext(())
-                    self.hideSongCart()
-
-                },
-                cancelCompletion: nil
-            ) as? TextPopupViewController else {
-                return
-            }
-
-        default: return
-        }
+//        switch type {
+//        case let .allSelect(flag):
+//            input.allPlayListSelected.onNext(flag)
+//
+//        case .addPlayList:
+//            input.addPlayList.onNext(())
+//            self.hideSongCart()
+//
+//        case .remove:
+//            let count: Int = output.indexPathOfSelectedPlayLists.value.count
+//
+//            guard let textPopupViewController = self.textPopUpFactory.makeView(
+//                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
+//                cancelButtonIsHidden: false,
+//                allowsDragAndTapToDismiss: nil,
+//                confirmButtonText: nil,
+//                cancelButtonText: nil,
+//                completion: { [weak self] in
+//
+//                    guard let self else { return }
+//                    self.input.deletePlayList.onNext(())
+//                    self.hideSongCart()
+//
+//                },
+//                cancelCompletion: nil
+//            ) as? TextPopupViewController else {
+//                return
+//            }
+//
+//        default: return
+//        }
     }
 }
 
 extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
     public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
-        switch type {
-        case let .listTapped(indexPath):
-            input.itemSelected.onNext(indexPath)
-        case let .playTapped(indexPath):
-            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
-            guard !songs.isEmpty else {
-                self.showToast(
-                    text: "리스트에 곡이 없습니다.",
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
-                return
-            }
-            self.playState.loadAndAppendSongsToPlaylist(songs)
-        }
+//        switch type {
+//        case let .listTapped(indexPath):
+//            input.itemSelected.onNext(indexPath)
+//        case let .playTapped(indexPath):
+//            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
+//            guard !songs.isEmpty else {
+//                self.showToast(
+//                    text: "리스트에 곡이 없습니다.",
+//                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+//                )
+//                return
+//            }
+//            self.playState.loadAndAppendSongsToPlaylist(songs)
+//        }
     }
 }
 
@@ -337,8 +351,8 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
 
 extension MyPlayListViewController {
     func scrollToTop() {
-        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
-        guard !itemIsEmpty else { return }
-        tableView.setContentOffset(.zero, animated: true)
+//        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
+//        guard !itemIsEmpty else { return }
+//        tableView.setContentOffset(.zero, animated: true)
     }
 }
