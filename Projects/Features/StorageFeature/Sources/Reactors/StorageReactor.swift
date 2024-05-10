@@ -23,24 +23,30 @@ final class StorageReactor: Reactor {
     }
 
     let initialState: State
+    private let storageCommonService: any StorageCommonService
 
-    init() {
+    init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
         initialState = State(
             isEditing: false,
             tabIndex: 0,
             isShowLoginAlert: ()
         )
+        
+        self.storageCommonService = storageCommonService
+        
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .switchTab(index):
             return switchTabIndex(index)
-        case let .tabDidEditButton:
+        case .tabDidEditButton:
+            storageCommonService.isEditingState.onNext(true)
             return switchEditingState(true)
         case .showLoginAlert:
             return showLoginAlert()
         case .saveButtonTap:
+            storageCommonService.isEditingState.onNext(false)
             return switchEditingState(false)
         }
     }
@@ -58,6 +64,15 @@ final class StorageReactor: Reactor {
         }
 
         return newState
+    }
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        
+       let editState = storageCommonService.isEditingState
+            .map { Mutation.switchEditingState($0) }
+           
+        
+        return Observable.merge(mutation,editState)
     }
 }
 
