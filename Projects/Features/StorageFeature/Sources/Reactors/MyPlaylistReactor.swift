@@ -35,7 +35,7 @@ final class MyPlaylistReactor: Reactor {
     private let storageCommonService: any StorageCommonService
 
     init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
-        self.initialState = State (
+        self.initialState = State(
             isEditing: false,
             dataSource: [],
             backupDataSource: [],
