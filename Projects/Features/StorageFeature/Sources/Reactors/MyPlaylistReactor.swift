@@ -58,7 +58,7 @@ final class MyPlaylistReactor: Reactor {
         case .tapDidEditButton:
             switchEditing(true)
         case .tapDidSaveButton:
-            // TODO: USECASE 연결 
+            // TODO: USECASE 연결
             switchEditing(false)
         case let .itemMoved((sourceIndex, destinationIndex)):
             updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
