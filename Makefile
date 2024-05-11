@@ -7,7 +7,7 @@ install:
 	tuist install
 
 test:
-	TUIST_ENV=DEV TUIST_ROOT_DIR=${PWD} tuist test
+	TUIST_ENV=CI TUIST_ROOT_DIR=${PWD} tuist test --no-cache --platform ios
 
 clean:
 	rm -rf **/*.xcodeproj
