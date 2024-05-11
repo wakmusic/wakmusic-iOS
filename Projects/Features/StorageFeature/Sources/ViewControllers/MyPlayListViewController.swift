@@ -131,9 +131,9 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
                 guard let userInfo = userInfo else {
                     // 로그인 안되어있음
-                    
+
                     let view = LoginWarningView(
-                        frame:CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT() / 5),
+                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT() / 5),
                         text: "로그인 하고\n리스트를 확인해보세요."
                     ) {
                         // TODO: 로그인 팝업 요청 (아마 StorageVC로 가야할 듯?

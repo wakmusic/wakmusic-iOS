@@ -33,8 +33,11 @@ public final class LoginWarningView: UIView {
         $0.clipsToBounds = true
     }
 
-    
-    public init(frame: CGRect = CGRect(x: .zero, y: .zero, width: 164, height: 176), text: String = "로그인을 해주세요.", _ completion: @escaping (() -> Void)) {
+    public init(
+        frame: CGRect = CGRect(x: .zero, y: .zero, width: 164, height: 176),
+        text: String = "로그인을 해주세요.",
+        _ completion: @escaping (() -> Void)
+    ) {
         self.completion = completion
         super.init(frame: frame)
 
