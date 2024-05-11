@@ -40,7 +40,7 @@ public final class WMLabel: UILabel {
         font: UIFont.WMFontSystem,
         alignment: NSTextAlignment = .left,
         lineHeight: CGFloat? = nil,
-        kernValue: Double? = 0.5
+        kernValue: Double? = -0.5
     ) {
         self.init(
             text: text,
