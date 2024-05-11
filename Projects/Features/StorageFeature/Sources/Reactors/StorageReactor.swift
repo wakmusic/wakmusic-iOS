@@ -19,7 +19,7 @@ final class StorageReactor: Reactor {
     struct State {
         var isEditing: Bool
         var tabIndex: Int
-        @Pulse var isShowLoginAlert: Void
+        @Pulse var showLoginAlert: Void
     }
 
     let initialState: State
@@ -29,7 +29,7 @@ final class StorageReactor: Reactor {
         initialState = State(
             isEditing: false,
             tabIndex: 0,
-            isShowLoginAlert: ()
+            showLoginAlert: ()
         )
 
         self.storageCommonService = storageCommonService
@@ -59,7 +59,7 @@ final class StorageReactor: Reactor {
         case let .switchEditingState(flag):
             newState.isEditing = flag
         case .showLoginAlert:
-            newState.isShowLoginAlert = ()
+            newState.showLoginAlert = ()
         }
 
         return newState

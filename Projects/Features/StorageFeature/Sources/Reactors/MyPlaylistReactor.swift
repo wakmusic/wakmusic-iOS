@@ -122,7 +122,6 @@ extension MyPlaylistReactor {
 
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
-        
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("playlist datasource is empty")
             return .empty()

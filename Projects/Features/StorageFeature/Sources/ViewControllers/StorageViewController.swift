@@ -158,7 +158,7 @@ extension StorageViewController {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$isShowLoginAlert)
+        reactor.pulse(\.$showLoginAlert)
             .skip(1)
             .withUnretained(self)
             .bind { owner, _ in
