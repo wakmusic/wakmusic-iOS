@@ -3,7 +3,6 @@ import Then
 import UIKit
 
 public final class LoginWarningView: UIView {
-
     private let completion: () -> Void
 
     private let imageView: UIImageView = UIImageView().then {
@@ -30,10 +29,13 @@ public final class LoginWarningView: UIView {
     }
 
     public init(
-        frame: CGRect = CGRect(x: .zero, 
-                               y: .zero,
-                               width: 164,
-                               height: 176),
+        frame: CGRect = CGRect(
+            x: .zero,
+
+            y: .zero,
+            width: 164,
+            height: 176
+        ),
         text: String = "로그인을 해주세요.",
         _ completion: @escaping (() -> Void)
     ) {
@@ -47,10 +49,8 @@ public final class LoginWarningView: UIView {
         label.text = text
 
         configureUI()
-        
+
         button.addTarget(self, action: #selector(tapLoginButton), for: .touchUpInside)
-
-
     }
 
     @available(*, unavailable)
@@ -80,7 +80,7 @@ extension LoginWarningView {
             $0.centerX.equalToSuperview()
         }
     }
-    
+
     @objc func tapLoginButton() {
         completion()
     }
