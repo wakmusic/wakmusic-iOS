@@ -137,6 +137,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                         text: "로그인 하고\n리스트를 확인해보세요."
                     ) {
                         // TODO: 로그인 팝업 요청 (아마 StorageVC로 가야할 듯?
+                        LogManager.printDebug("TAP 로그인 버튼")
                     }
 
                     owner.tableView.tableFooterView = view

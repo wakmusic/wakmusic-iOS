@@ -1,11 +1,8 @@
-import RxCocoa
-import RxSwift
 import SnapKit
 import Then
 import UIKit
 
 public final class LoginWarningView: UIView {
-    private let disposeBag = DisposeBag()
 
     private let completion: () -> Void
 
@@ -33,7 +30,10 @@ public final class LoginWarningView: UIView {
     }
 
     public init(
-        frame: CGRect = CGRect(x: .zero, y: .zero, width: 164, height: 176),
+        frame: CGRect = CGRect(x: .zero, 
+                               y: .zero,
+                               width: 164,
+                               height: 176),
         text: String = "로그인을 해주세요.",
         _ completion: @escaping (() -> Void)
     ) {
@@ -47,14 +47,10 @@ public final class LoginWarningView: UIView {
         label.text = text
 
         configureUI()
+        
+        button.addTarget(self, action: #selector(tapLoginButton), for: .touchUpInside)
 
-        button.rx
-            .tap
-            .withUnretained(self)
-            .bind { owner, _ in
-                owner.completion()
-            }
-            .disposed(by: disposeBag)
+
     }
 
     @available(*, unavailable)
@@ -66,13 +62,13 @@ public final class LoginWarningView: UIView {
 extension LoginWarningView {
     private func configureUI() {
         imageView.snp.makeConstraints {
-            $0.width.height.equalTo(56)
-            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(80)
+            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
         }
 
         label.snp.makeConstraints {
-            $0.top.equalTo(imageView.snp.bottom).offset(16)
+            $0.top.equalTo(imageView.snp.bottom).offset(-8)
             $0.leading.trailing.equalToSuperview()
             $0.centerX.equalTo(imageView.snp.centerX)
         }
@@ -83,5 +79,9 @@ extension LoginWarningView {
             $0.top.equalTo(label.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    @objc func tapLoginButton() {
+        completion()
     }
 }
