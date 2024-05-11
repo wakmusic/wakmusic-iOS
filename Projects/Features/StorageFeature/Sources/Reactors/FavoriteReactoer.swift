@@ -1,33 +1,39 @@
+import AuthDomainInterface
+import BaseDomainInterface
+import BaseFeature
 import Foundation
-import LogManager
-import ReactorKit
 import RxCocoa
+import RxRelay
 import RxSwift
+import SongsDomainInterface
 import UserDomainInterface
+import Utility
+import ReactorKit
+import LogManager
 
 final class FavoriteReactoer: Reactor {
     enum Action {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case tapDidEditButton
-        case tapDidSaveButton
-        case tapDidPlaylist(Int)
+        case editButtonDidTap
+        case saveButtonDidTap
+        case songDidTap(Int)
         case tapAll(isSelecting: Bool)
     }
 
     enum Mutation {
-        case updateDataSource([MyPlayListSectionModel])
+        case updateDataSource([FavoriteSectionModel])
         case switchEditingState(Bool)
-        case updateOrder([PlayListEntity])
-        case changeSelectedState(data: [PlayListEntity], selectedCount: Int)
-        case changeAllState(data: [PlayListEntity], selectedCount: Int)
+        case updateOrder([FavoriteSongEntity])
+        case changeSelectedState(data: [FavoriteSongEntity], selectedCount: Int)
+        case changeAllState(data: [FavoriteSongEntity], selectedCount: Int)
     }
 
     struct State {
         var isEditing: Bool
-        var dataSource: [MyPlayListSectionModel]
-        var backupDataSource: [MyPlayListSectionModel]
+        var dataSource: [FavoriteSectionModel]
+        var backupDataSource: [FavoriteSectionModel]
         var selectedItemCount: Int
     }
 
@@ -55,14 +61,14 @@ final class FavoriteReactoer: Reactor {
             updateDataSource()
         case .refresh:
             updateDataSource()
-        case .tapDidEditButton:
+        case .editButtonDidTap:
             switchEditing(true)
-        case .tapDidSaveButton:
+        case .saveButtonDidTap:
             // TODO: USECASE 연결
             switchEditing(false)
         case let .itemMoved((sourceIndex, destinationIndex)):
             updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-        case let .tapDidPlaylist(index):
+        case let .songDidTap(index):
             changeSelectingState(index)
         case let .tapAll(isSelecting):
             tapAll(isSelecting)
@@ -79,12 +85,12 @@ final class FavoriteReactoer: Reactor {
         case let .switchEditingState(flag):
             newState.isEditing = flag
         case let .updateOrder(dataSource):
-            newState.dataSource = [MyPlayListSectionModel(model: 0, items: dataSource)]
+            newState.dataSource = [FavoriteSectionModel(model: 0, items: dataSource)]
         case let .changeSelectedState(data: data, selectedCount: selectedCount):
-            newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
+            newState.dataSource = [FavoriteSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
         case let .changeAllState(data: data, selectedCount: selectedCount):
-            newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
+            newState.dataSource = [FavoriteSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
         }
 
@@ -103,13 +109,13 @@ extension FavoriteReactoer {
     func updateDataSource() -> Observable<Mutation> {
         return .just(
             .updateDataSource(
-                [MyPlayListSectionModel(
+                [FavoriteSectionModel(
                     model: 0,
                     items: [
-                        .init(key: "123", title: "플리1", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리2", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리3", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리4", image: "", songlist: [], image_version: 0)
+                        .init(like: 1, song: SongEntity(id: "1", title: "1234", artist: "!2344", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false),
+                        .init(like: 1, song: SongEntity(id: "2", title: "123", artist: "!23", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false),
+                        .init(like: 1, song: SongEntity(id: "3", title: "112323", artist: "!55523", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false)
+                        
                     ]
                 )]
             )
@@ -123,7 +129,7 @@ extension FavoriteReactoer {
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
-            LogManager.printError("playlist datasource is empty")
+            LogManager.printError("favorite datasource is empty")
             return .empty()
         }
 
@@ -135,7 +141,7 @@ extension FavoriteReactoer {
 
     func changeSelectingState(_ index: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
-            LogManager.printError("playlist datasource is empty")
+            LogManager.printError("favorite datasource is empty")
             return .empty()
         }
 

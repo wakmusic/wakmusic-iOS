@@ -9,11 +9,11 @@ public final class AfterSearchReactor: Reactor {
     private let fetchSearchSongUseCase: FetchSearchSongUseCase
 
     public enum Action {
-        case fetchData(String)
+        case updateData(String)
     }
 
     public enum Mutation {
-        case fetchData([[SearchSectionModel]])
+        case updateData([[SearchSectionModel]])
     }
 
     public struct State {
@@ -39,7 +39,7 @@ public final class AfterSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .fetchData(data):
+        case let .updateData(data):
             newState.dataSource = data
         }
 
@@ -48,7 +48,7 @@ public final class AfterSearchReactor: Reactor {
 
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .fetchData(text):
+        case let .updateData(text):
             return fetchData(text)
         }
     }
@@ -90,6 +90,6 @@ private extension AfterSearchReactor {
 
                 return results
             }
-            .map { Mutation.fetchData($0) }
+            .map { Mutation.updateData($0) }
     }
 }

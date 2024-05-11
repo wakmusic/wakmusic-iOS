@@ -235,7 +235,7 @@ extension SearchViewController {
                 return
             }
 
-            childReactor.action.onNext(.fetchData(text))
+            childReactor.action.onNext(.updateData(text))
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             guard state == .before || state == .typing else {
                 return

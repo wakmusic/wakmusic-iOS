@@ -10,9 +10,9 @@ final class MyPlaylistReactor: Reactor {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case tapDidEditButton
-        case tapDidSaveButton
-        case tapDidPlaylist(Int)
+        case editButtonDidTap
+        case saveButtonDidTap
+        case playlistDidTap(Int)
         case tapAll(isSelecting: Bool)
     }
 
@@ -55,14 +55,14 @@ final class MyPlaylistReactor: Reactor {
             updateDataSource()
         case .refresh:
             updateDataSource()
-        case .tapDidEditButton:
+        case .editButtonDidTap:
             switchEditing(true)
-        case .tapDidSaveButton:
+        case .saveButtonDidTap:
             // TODO: USECASE 연결
             switchEditing(false)
         case let .itemMoved((sourceIndex, destinationIndex)):
             updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-        case let .tapDidPlaylist(index):
+        case let .playlistDidTap(index):
             changeSelectingState(index)
         case let .tapAll(isSelecting):
             tapAll(isSelecting)
