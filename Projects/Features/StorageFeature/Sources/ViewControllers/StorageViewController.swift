@@ -143,6 +143,7 @@ extension StorageViewController {
             .withUnretained(self)
             .bind { owner, flag in
 
+            
                 owner.isScrollEnabled = !flag //  편집 시 , 옆 탭으로 swipe를 막기 위함
                 owner.editButton.isHidden = flag
                 owner.saveButton.isHidden = !flag
@@ -186,6 +187,8 @@ extension StorageViewController {
 
 extension StorageViewController {
     private func configureUI() {
+        
+        
         editButton.layer.cornerRadius = 4
         editButton.layer.borderWidth = 1
         editButton.backgroundColor = .clear
