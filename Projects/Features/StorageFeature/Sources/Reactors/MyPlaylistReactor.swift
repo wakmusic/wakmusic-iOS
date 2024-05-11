@@ -17,7 +17,7 @@ final class MyPlaylistReactor: Reactor {
     }
 
     enum Mutation {
-        case fetchDataSource([MyPlayListSectionModel])
+        case updateDataSource([MyPlayListSectionModel])
         case switchEditingState(Bool)
         case updateOrder([PlayListEntity])
         case changeSelectedState(data: [PlayListEntity], selectedCount: Int)
@@ -52,9 +52,9 @@ final class MyPlaylistReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            fetchDataSource()
+            updateDataSource()
         case .refresh:
-            fetchDataSource()
+            updateDataSource()
         case .tapDidEditButton:
             switchEditing(true)
         case .tapDidSaveButton:
@@ -73,7 +73,7 @@ final class MyPlaylistReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .fetchDataSource(dataSource):
+        case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
             newState.backupDataSource = dataSource
         case let .switchEditingState(flag):
@@ -100,9 +100,9 @@ final class MyPlaylistReactor: Reactor {
 }
 
 extension MyPlaylistReactor {
-    func fetchDataSource() -> Observable<Mutation> {
+    func updateDataSource() -> Observable<Mutation> {
         return .just(
-            .fetchDataSource(
+            .updateDataSource(
                 [MyPlayListSectionModel(
                     model: 0,
                     items: [
