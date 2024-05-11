@@ -6,7 +6,7 @@ import Then
 import UIKit
 import Utility
 
-class LoginWarningView: UIView {
+final class LoginWarningView: UIView {
     var disposeBag = DisposeBag()
 
     var completion: () -> Void
