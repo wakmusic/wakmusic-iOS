@@ -1,3 +1,4 @@
+import DesignSystem
 import Kingfisher
 import Then
 import UIKit
@@ -27,18 +28,9 @@ final class ThumbnailCell: UICollectionViewCell {
     }
 
     func configure(thumbnailImageURL: String) {
-        let rect = CGRect(origin: .zero, size: self.frame.size)
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-        UIColor.gray.setFill()
-        UIRectFill(rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgImage = image?.cgImage else { return }
-        let grayImage = UIImage(cgImage: cgImage)
-
         thumbnailImageView.kf.setImage(
             with: URL(string: thumbnailImageURL),
-            placeholder: grayImage,
+            placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
             options: [.alsoPrefetchToMemory]
         )
     }
