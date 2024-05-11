@@ -119,7 +119,7 @@ extension StorageViewController {
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $1) }
             .bind { owner, userInfo in
 
-// TODO: 나중에(USECASE 연결 후) 주석 해제
+                // TODO: 나중에(USECASE 연결 후) 주석 해제
 //                guard let userInfo = userInfo else {
 //                    reactor.action.onNext(.showLoginAlert) // 로그인 화면 팝업
 //                    return
@@ -185,7 +185,6 @@ extension StorageViewController {
 }
 
 extension StorageViewController {
-
     private func configureUI() {
         editButton.layer.cornerRadius = 4
         editButton.layer.borderWidth = 1
