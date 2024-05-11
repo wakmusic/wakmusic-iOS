@@ -84,7 +84,7 @@ extension AfterSearchContentViewController {
                     return
                 }
                 self.input.deSelectedAllSongs.accept(())
-                parent.output.songEntityOfSelectedSongs.accept([])
+                //   parent.output.songEntityOfSelectedSongs.accept([])
             }).disposed(by: disposeBag)
     }
 
@@ -92,21 +92,21 @@ extension AfterSearchContentViewController {
         guard let parent = self.parent?.parent as? AfterSearchViewController else {
             return
         }
-        let entities = parent.output.songEntityOfSelectedSongs.value
-        let models = output.dataSource.value
+//        let entities = parent.output.songEntityOfSelectedSongs.value
+//        let models = output.dataSource.value
+//
+//        let indexPaths = entities.map { entity -> IndexPath? in
+//            var indexPath: IndexPath?
+//
+//            models.enumerated().forEach { section, model in
+//                if let row = model.items.firstIndex(where: { $0 == entity }) {
+//                    indexPath = IndexPath(row: row, section: section)
+//                }
+//            }
+//            return indexPath
+//        }.compactMap { $0 }
 
-        let indexPaths = entities.map { entity -> IndexPath? in
-            var indexPath: IndexPath?
-
-            models.enumerated().forEach { section, model in
-                if let row = model.items.firstIndex(where: { $0 == entity }) {
-                    indexPath = IndexPath(row: row, section: section)
-                }
-            }
-            return indexPath
-        }.compactMap { $0 }
-
-        input.mandatoryLoadIndexPath.accept(indexPaths)
+//        input.mandatoryLoadIndexPath.accept(indexPaths)
     }
 
     private func configureUI() {
