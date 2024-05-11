@@ -110,7 +110,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         musicDetailView.rx.singingRoomButtonDidTap
-            .map { Reactor.Action.singingRoomButtonDiTap }
+            .map { Reactor.Action.singingRoomButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

@@ -9,7 +9,7 @@ final class MusicDetailReactor: Reactor {
         case prevButtonDidTap
         case playButtonDidTap
         case nextButtonDidTap
-        case singingRoomButtonDiTap
+        case singingRoomButtonDidTap
         case lyricsButtonDidTap
         case creditButtonDidTap
         case likeButtonDidTap
@@ -70,7 +70,7 @@ final class MusicDetailReactor: Reactor {
             return playButtonDidTap()
         case .nextButtonDidTap:
             return nextButtonDidTap()
-        case .singingRoomButtonDiTap:
+        case .singingRoomButtonDidTap:
             return singingRoomButtonDiTap()
         case .lyricsButtonDidTap:
             return lyricsButtonDidTap()
