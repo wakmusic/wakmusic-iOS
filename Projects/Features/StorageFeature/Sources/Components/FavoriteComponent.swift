@@ -5,8 +5,8 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
-import UserDomainInterface
 import UIKit
+import UserDomainInterface
 
 public protocol FavoriteDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
@@ -21,7 +21,7 @@ public protocol FavoriteDependency: Dependency {
 public final class FavoriteComponent: Component<FavoriteDependency> {
     public func makeView() -> UIViewController {
         return FavoriteViewController.viewController(
-            reactor: FavoriteReactoer() ,
+            reactor: FavoriteReactoer(),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory

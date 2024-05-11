@@ -2,14 +2,14 @@ import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
+import LogManager
+import ReactorKit
 import RxCocoa
 import RxRelay
 import RxSwift
 import SongsDomainInterface
 import UserDomainInterface
 import Utility
-import ReactorKit
-import LogManager
 
 final class FavoriteReactoer: Reactor {
     enum Action {
@@ -112,10 +112,48 @@ extension FavoriteReactoer {
                 [FavoriteSectionModel(
                     model: 0,
                     items: [
-                        .init(like: 1, song: SongEntity(id: "1", title: "1234", artist: "!2344", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false),
-                        .init(like: 1, song: SongEntity(id: "2", title: "123", artist: "!23", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false),
-                        .init(like: 1, song: SongEntity(id: "3", title: "112323", artist: "!55523", remix: "", reaction: "", views: 0, last: 0, date: ""), isSelected: false)
-                        
+                        .init(
+                            like: 1,
+                            song: SongEntity(
+                                id: "1",
+                                title: "1234",
+                                artist: "!2344",
+                                remix: "",
+                                reaction: "",
+                                views: 0,
+                                last: 0,
+                                date: ""
+                            ),
+                            isSelected: false
+                        ),
+                        .init(
+                            like: 1,
+                            song: SongEntity(
+                                id: "2",
+                                title: "123",
+                                artist: "!23",
+                                remix: "",
+                                reaction: "",
+                                views: 0,
+                                last: 0,
+                                date: ""
+                            ),
+                            isSelected: false
+                        ),
+                        .init(
+                            like: 1,
+                            song: SongEntity(
+                                id: "3",
+                                title: "112323",
+                                artist: "!55523",
+                                remix: "",
+                                reaction: "",
+                                views: 0,
+                                last: 0,
+                                date: ""
+                            ),
+                            isSelected: false
+                        )
                     ]
                 )]
             )
@@ -167,4 +205,3 @@ extension FavoriteReactoer {
         return .just(.changeAllState(data: tmp, selectedCount: count))
     }
 }
-

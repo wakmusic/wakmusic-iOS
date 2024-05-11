@@ -2,16 +2,16 @@ import BaseDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import RxDataSources
 import RxRelay
 import RxSwift
+import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import SignInFeatureInterface
-import LogManager
 
 typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
@@ -25,22 +25,20 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
     var textPopUpFactory: TextPopUpFactory!
     var signInFactory: SignInFactory!
 
-
-     var songCartView: SongCartView!
+    var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
 
     let playState = PlayState.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     static func viewController(
         reactor: FavoriteReactoer,
         containSongsFactory: ContainSongsFactory,
         textPopUpFactory: TextPopUpFactory,
-        signInFactory:SignInFactory
+        signInFactory: SignInFactory
     ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.reactor = reactor
@@ -49,10 +47,10 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
         viewController.signInFactory = signInFactory
         return viewController
     }
-    
+
     override func configureUI() {
         super.configureUI()
-        
+
         self.tableView.refreshControl = self.refreshControl
         self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.backgroundColor = .clear
@@ -60,21 +58,21 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
         self.activityIndicator.type = .circleStrokeSpin
         self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.startAnimating()
-        
+
         reactor?.action.onNext(.viewDidLoad)
     }
-    
+
     override func bind(reactor: FavoriteReactoer) {
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
-    
+
     override func bindAction(reactor: FavoriteReactoer) {
         super.bindAction(reactor: reactor)
-        
+
         let currentState = reactor.state
-        
+
         tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
@@ -82,8 +80,7 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
             .bind { owner, indexPath, isEditing, dataSource in
 
                 guard isEditing else {
-                    
-                    //TODO: 아마 곡 상세로 이동?
+                    // TODO: 아마 곡 상세로 이동?
 
                     return
                 }
@@ -94,12 +91,11 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
     }
-    
+
     override func bindState(reactor: FavoriteReactoer) {
         super.bindState(reactor: reactor)
-        
+
         let sharedState = reactor.state.share(replay: 3)
 
         sharedState.map(\.dataSource)
@@ -168,21 +164,18 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
 
             })
             .disposed(by: disposeBag)
-        
     }
-    
 }
 
 extension FavoriteViewController {
-
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<FavoriteSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell()
                 }
                 guard let cell = tableView.dequeueReusableCell(
-                      withIdentifier: "FavoriteTableViewCell",
-                      for: IndexPath(row: indexPath.row, section: 0)
+                    withIdentifier: "FavoriteTableViewCell",
+                    for: IndexPath(row: indexPath.row, section: 0)
                 ) as? FavoriteTableViewCell
                 else { return UITableViewCell() }
 
@@ -204,7 +197,6 @@ extension FavoriteViewController {
         )
         return datasource
     }
-
 }
 
 extension FavoriteViewController: SongCartViewDelegate {
@@ -241,7 +233,7 @@ extension FavoriteViewController: SongCartViewDelegate {
 //                return
 //            }
 
-//self.showPanModal(content: textPopupViewController)
+        // self.showPanModal(content: textPopupViewController)
         default: return
         }
     }
