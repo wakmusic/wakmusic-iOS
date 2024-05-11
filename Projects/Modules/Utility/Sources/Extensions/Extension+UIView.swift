@@ -102,4 +102,8 @@ public extension UIView {
             parentResponder = nextResponder
         }
     }
+
+    func addSubviews(_ views: UIView...) {
+        views.forEach(self.addSubview(_:))
+    }
 }
