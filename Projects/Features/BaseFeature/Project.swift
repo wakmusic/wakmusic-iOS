@@ -19,7 +19,8 @@ let project = Project.module(
                     .domain(target: .UserDomain, type: .interface),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
-                    .Project.Module.Utility
+                    .Project.Module.Utility,
+                    .Project.Module.ErrorModule
                 ]
             )
         ),
