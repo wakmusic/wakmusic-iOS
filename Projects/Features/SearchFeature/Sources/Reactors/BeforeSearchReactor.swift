@@ -33,6 +33,15 @@ public final class BeforeSearchReactor: Reactor {
         )
     }
 
+    public func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case .viewDidLoad:
+            return fetchRecommend()
+        case let .updateShowRecommend(flag):
+            return Observable.just(.updateShowRecommend(flag))
+        }
+    }
+
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
@@ -44,15 +53,6 @@ public final class BeforeSearchReactor: Reactor {
         }
 
         return newState
-    }
-
-    public func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case .viewDidLoad:
-            return fetchRecommend()
-        case let .updateShowRecommend(flag):
-            return Observable.just(.updateShowRecommend(flag))
-        }
     }
 }
 
