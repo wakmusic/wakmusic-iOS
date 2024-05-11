@@ -1,4 +1,3 @@
-import DesignSystem
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -6,7 +5,7 @@ import Then
 import UIKit
 import Utility
 
-final class LoginWarningView: UIView {
+public final class LoginWarningView: UIView {
     private let disposeBag = DisposeBag()
 
     private let completion: () -> Void
@@ -34,7 +33,8 @@ final class LoginWarningView: UIView {
         $0.clipsToBounds = true
     }
 
-    init(frame: CGRect, text: String?, _ completion: @escaping (() -> Void)) {
+    
+    public init(frame: CGRect = CGRect(x: .zero, y: .zero, width: 164, height: 176), text: String = "로그인을 해주세요.", _ completion: @escaping (() -> Void)) {
         self.completion = completion
         super.init(frame: frame)
 
@@ -42,7 +42,7 @@ final class LoginWarningView: UIView {
         self.addSubview(label)
         self.addSubview(button)
 
-        label.text = text ?? "로그인을 해주세요."
+        label.text = text
 
         configureUI()
 
