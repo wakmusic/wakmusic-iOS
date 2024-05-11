@@ -18,6 +18,7 @@ open class VerticalAlignButton: UIButton {
                 var attribute = $0
                 attribute.font = UIFont.setFont(.t7(weight: .medium))
                 attribute.foregroundColor = DesignSystemAsset.NewGrayColor.gray400.color
+                attribute.kern = -0.5
                 return attribute
             }
             config.title = title
@@ -31,6 +32,7 @@ open class VerticalAlignButton: UIButton {
             self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .highlighted)
             self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .disabled)
             self.titleLabel?.font = .setFont(.t7(weight: .medium))
+            self.titleLabel?.setTextWithAttributes(kernValue: -0.5)
             self.setImage(image, for: .normal)
         }
     }
