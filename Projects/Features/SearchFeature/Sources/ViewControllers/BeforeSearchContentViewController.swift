@@ -1,11 +1,3 @@
-//
-//  SearchContentViewController.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/05.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
@@ -13,6 +5,7 @@ import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
 import PlaylistFeatureInterface
+import ReactorKit
 import RxCocoa
 import RxSwift
 import UIKit
@@ -22,7 +15,7 @@ protocol BeforeSearchContentViewDelegate: AnyObject {
     func itemSelected(_ keyword: String)
 }
 
-public final class BeforeSearchContentViewController: BaseViewController, ViewControllerFromStoryBoard {
+public final class BeforeSearchContentViewController: BaseStoryboardReactorViewController<BeforeSearchReactor> {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
@@ -31,22 +24,10 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
     var playlistDetailFactory: PlaylistDetailFactory!
     var textPopUpFactory: TextPopUpFactory!
 
-    var viewModel: BeforeSearchContentViewModel!
-    let disposeBag = DisposeBag()
-
-    private lazy var input = viewModel.input
-    private lazy var output = viewModel.transform(from: input)
-
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-        configureUI()
-        bindTable()
-    }
-
     public static func viewController(
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
-        viewModel: BeforeSearchContentViewModel
+        reactor: BeforeSearchReactor
     ) -> BeforeSearchContentViewController {
         let viewController = BeforeSearchContentViewController.viewController(
             storyBoardName: "Search",
@@ -54,17 +35,22 @@ public final class BeforeSearchContentViewController: BaseViewController, ViewCo
         )
         viewController.textPopUpFactory = textPopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
-        viewController.viewModel = viewModel
+        viewController.reactor = reactor
         return viewController
     }
 
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
     }
-}
 
-extension BeforeSearchContentViewController {
-    private func configureUI() {
+    override public func viewDidLoad() {
+        super.viewDidLoad()
+        reactor?.action.onNext(.viewDidLoad)
+    }
+
+    override public func configureUI() {
+        super.configureUI()
+
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
@@ -73,26 +59,54 @@ extension BeforeSearchContentViewController {
         self.indicator.startAnimating()
     }
 
-    private func bindTable() {
+    override public func bind(reactor: BeforeSearchReactor) {
+        super.bind(reactor: reactor)
+
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+    }
 
-        // cell 그리기
+    override public func bindAction(reactor: BeforeSearchReactor) {
+        super.bindAction(reactor: reactor)
+
+        tableView.rx.modelSelected(String.self)
+            .bind { [delegate] keyword in
+                delegate?.itemSelected(keyword)
+            }
+            .disposed(by: disposeBag)
+
+        guard let parent = self.parent as? SearchViewController else {
+            return
+        }
+
+        // TODO: #531
+        parent.reactor?.state
+            .map(\.typingState)
+            .asObservable()
+            .map { $0 == .before }
+            .map { Reactor.Action.updateShowRecommend($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+
+    override public func bindState(reactor: BeforeSearchReactor) {
+        super.bindState(reactor: reactor)
+
+        let currentState = reactor.state.share(replay: 2)
+
         let combine = Observable.combineLatest(
-            output.showRecommend,
+            currentState.map(\.showRecommend),
             Utility.PreferenceManager.$recentRecords,
-            output.dataSource
-        ) { ($0, $1 ?? [], $2) }
-        // 추천 리스트 플래그 와 유저디폴트 기록을 모두 감지
+            currentState.map(\.dataSource)
+        )
 
         combine
-            .skip(2)
-            .map { (showRecommend: Bool, item: [String], _) -> [String] in
+            .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
                 if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
                     return []
                 } else {
-                    return item
+                    return item ?? []
                 }
             }
             .do(onNext: { [weak self] _ in
@@ -114,26 +128,6 @@ extension BeforeSearchContentViewController {
                 cell.recentLabel.text = element
                 return cell
             }.disposed(by: disposeBag)
-
-        // 터치 이벤트
-        tableView.rx.modelSelected(String.self)
-            .subscribe(onNext: { [weak self] keyword in
-                guard let self = self else {
-                    return
-                }
-                self.delegate?.itemSelected(keyword)
-            }).disposed(by: disposeBag)
-
-        guard let parent = self.parent as? SearchViewController else {
-            return
-        }
-
-        parent.reactor?.state
-            .map(\.typingState)
-            .asObservable()
-            .map { $0 == .before }
-            .bind(to: output.showRecommend)
-            .disposed(by: disposeBag)
     }
 }
 
@@ -143,8 +137,12 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if output.showRecommend.value {
-            return RecommendPlayListView.getViewHeight(model: output.dataSource.value)
+        guard let state = reactor?.currentState else {
+            return .zero
+        }
+
+        if state.showRecommend {
+            return RecommendPlayListView.getViewHeight(model: state.dataSource)
 
         } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
             return (APP_HEIGHT() * 3) / 8
@@ -157,6 +155,10 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
         warningView.text = "최근 검색 기록이 없습니다."
+
+        guard let state = reactor?.currentState else {
+            return nil
+        }
 
         let recentRecordHeaderView = RecentRecordHeaderView()
 
@@ -183,13 +185,13 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
                 x: 0,
                 y: 0,
                 width: APP_WIDTH(),
-                height: RecommendPlayListView.getViewHeight(model: output.dataSource.value)
+                height: RecommendPlayListView.getViewHeight(model: state.dataSource)
             )
         )
-        recommendView.dataSource = self.output.dataSource.value
+        recommendView.dataSource = state.dataSource
         recommendView.delegate = self
 
-        if output.showRecommend.value {
+        if state.showRecommend {
             return recommendView
 
         } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
