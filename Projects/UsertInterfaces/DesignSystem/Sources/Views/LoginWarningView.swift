@@ -3,7 +3,6 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
-import Utility
 
 public final class LoginWarningView: UIView {
     private let disposeBag = DisposeBag()
