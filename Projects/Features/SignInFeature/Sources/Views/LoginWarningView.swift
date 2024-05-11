@@ -7,16 +7,16 @@ import UIKit
 import Utility
 
 final class LoginWarningView: UIView {
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
-    var completion: () -> Void
+    private let completion: () -> Void
 
-    var imageView: UIImageView = UIImageView().then {
+    private let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Search.warning.image
     }
 
-    var label: UILabel = UILabel().then {
+    private let label: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.textAlignment = .center
@@ -24,7 +24,7 @@ final class LoginWarningView: UIView {
         $0.numberOfLines = .zero
     }
 
-    var button: UIButton = UIButton().then {
+    private let button: UIButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray600.color, for: .normal)
