@@ -32,7 +32,7 @@ open class VerticalAlignButton: UIButton {
             self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .highlighted)
             self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .disabled)
             self.titleLabel?.font = .setFont(.t7(weight: .medium))
-            self.titleLabel?.setTextWithAttributes(kernValue: -0.5)
+            self.titleLabel?.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             self.setImage(image, for: .normal)
         }
     }
