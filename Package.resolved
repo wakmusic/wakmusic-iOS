@@ -347,8 +347,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devxoul/Then",
       "state" : {
-        "revision" : "e421a7b3440a271834337694e6050133a3958bc7",
-        "version" : "2.7.0"
+        "revision" : "d41ef523faef0f911369f79c0b96815d9dbb6d7a",
+        "version" : "3.0.0"
       }
     },
     {
