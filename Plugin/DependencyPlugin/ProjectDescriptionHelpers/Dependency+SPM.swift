@@ -31,6 +31,8 @@ public extension TargetDependency.SPM {
     static let Quick = TargetDependency.external(name: "Quick")
     static let Nimble = TargetDependency.external(name: "Nimble")
     static let Inject = TargetDependency.external(name: "Inject")
+    static let Realm = TargetDependency.external(name: "Realm")
+    static let RealmSwift = TargetDependency.external(name: "RealmSwift")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")

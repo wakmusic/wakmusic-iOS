@@ -1,5 +1,6 @@
 generate:
-	tuist fetch
+	carthage update --use-xcframeworks 
+	tuist install
 	TUIST_ENV=DEV TUIST_ROOT_DIR=${PWD} tuist generate
 
 test:

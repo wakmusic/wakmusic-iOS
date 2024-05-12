@@ -28,7 +28,7 @@ jobs:
 
       - name: Compute dependency cache key
         id: compute_hash
-        run: echo "hash=${{ hashFiles('Tuist/Package.swift') }}" >> $GITHUB_OUTPUT
+        run: echo "hash=${{ hashFiles('Package.swift') }}" >> $GITHUB_OUTPUT
 
       - name: Check dependency cache
         uses: actions/cache@v3
@@ -42,13 +42,11 @@ jobs:
 
       - name: Install tuist
         if: steps.cache_dependencies.outputs.cache-hit == ''
-        run: |
-          tuist_version=`cat .tuist-version`
-          mise install tuist@$tuist_version
+        run: mise install tuist
 
       - name: Install dependencies needs
         if: steps.cache_dependencies.outputs.cache-hit == ''
-        run: tuist fetch
+        run: tuist install
     outputs:
       dependency_cache_key: ${{ steps.compute_hash.outputs.hash }}
 
@@ -72,9 +70,7 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Install tuist
-        run: |
-          tuist_version=`cat .tuist-version`
-          mise install tuist@$tuist_version
+        run: mise install tuist
 
       - name: Check dependency cache
         uses: actions/cache@v3
@@ -85,7 +81,7 @@ jobs:
 
       - name: Install dependencies needs
         if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: tuist fetch
+        run: tuist install
 
       - name: Remove Signing
         run: rm -rf Tuist/Signing
