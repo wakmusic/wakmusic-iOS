@@ -13,18 +13,16 @@ let settinges: Settings =
         defaultSettings: .recommended
     )
 
-let isForDev = (ProcessInfo.processInfo.environment["TUIST_ENV"] ?? "DEV") == "DEV" ? true : false
-
-let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrashlytics]
+let scripts: [TargetScript] = generateEnvironment.appScripts
 
 let targets: [Target] = [
-    .init(
+    .target(
         name: env.name,
-        platform: .iOS,
+        destinations: [.iPhone],
         product: .app,
         productName: env.name,
         bundleId: "\(env.organizationName).\(env.previousName)",
-        deploymentTarget: env.deploymentTarget,
+        deploymentTargets: env.deploymentTargets,
         infoPlist: .file(path: "Support/Info.plist"),
         sources: ["Sources/**"],
         resources: ["Resources/**"],
@@ -53,13 +51,12 @@ let targets: [Target] = [
             ]
         )
     ),
-
-    .init(
+    .target(
         name: "\(env.name)Tests",
-        platform: .iOS,
+        destinations: [.iPhone],
         product: .unitTests,
         bundleId: "\(env.organizationName).\(env.previousName)Tests",
-        deploymentTarget: env.deploymentTarget,
+        deploymentTargets: env.deploymentTargets,
         infoPlist: .default,
         sources: ["Tests/**"],
         dependencies: [
@@ -69,7 +66,7 @@ let targets: [Target] = [
 ]
 
 let schemes: [Scheme] = [
-    .init(
+    .scheme(
         name: "\(env.name)Tests-DEBUG",
         shared: true,
         buildAction: .buildAction(targets: ["\(env.name)"]),
@@ -86,10 +83,10 @@ let schemes: [Scheme] = [
         profileAction: .profileAction(configuration: .debug),
         analyzeAction: .analyzeAction(configuration: .debug)
     ),
-    .init(
+    .scheme(
         name: "\(env.name)-RELEASE",
         shared: true,
-        buildAction: BuildAction(targets: ["\(env.name)"]),
+        buildAction: .buildAction(targets: ["\(env.name)"]),
         testAction: nil,
         runAction: .runAction(configuration: .release),
         archiveAction: .archiveAction(configuration: .release),
