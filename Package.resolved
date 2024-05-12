@@ -181,12 +181,12 @@
       }
     },
     {
-      "identity" : "naveridlogin-ios-sp",
+      "identity" : "naveridlogin-sdk-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kyungkoo/naveridlogin-ios-sp",
+      "location" : "https://github.com/naver/naveridlogin-sdk-ios.git",
       "state" : {
-        "revision" : "85b08cf3be9bfd84df09437c64bc621c93336770",
-        "version" : "4.1.5"
+        "branch" : "master",
+        "revision" : "d8d2128b8bcef8cd93068a058ea898d6dbb7d486"
       }
     },
     {
