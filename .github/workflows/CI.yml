@@ -54,7 +54,9 @@ jobs:
 
       - name: Install tuist
         if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
-        run: mise install tuist
+        run: |
+          brew install carthage
+          mise install tuist
 
       - name: Install dependencies needs
         if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
@@ -83,7 +85,9 @@ jobs:
       - uses: jdx/mise-action@v2
 
       - name: Install tuist
-        run: mise install tuist
+        run: |
+          brew install carthage
+          mise install tuist
 
       - name: Check package dependency cache
         uses: actions/cache@v3
