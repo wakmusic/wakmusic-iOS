@@ -21,7 +21,7 @@ public extension TargetDependency.SPM {
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
     static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
-    static let NaverLogin = TargetDependency.external(name: "naveridlogin-sdk-ios")
+    static let NaverLogin = TargetDependency.external(name: "NaverThirdPartyLogin")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
