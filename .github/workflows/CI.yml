@@ -10,7 +10,8 @@ on:
       - "*"
 
 env:
-  CACHED_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+  CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+  CACHED_CARTHAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/Carthage
   MASTER_KEY_PATH: Tuist/master.key
   GOOGLE_SERVICE_INFO_PLIST_PATH: Projects/App/Resources/GoogleService-Info.plist
   SECRET_XCCONFIG_PATH: Projects/App/XCConfig/Secrets.xcconfig
@@ -23,32 +24,44 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Select Xcode 15.0
-        run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+      - name: Select Xcode 15.3
+        run: sudo xcode-select -s /Applications/Xcode_15.3.app/Contents/Developer
 
-      - name: Compute dependency cache key
-        id: compute_hash
-        run: echo "hash=${{ hashFiles('Package.swift') }}" >> $GITHUB_OUTPUT
+      - name: Compute package dependency cache key
+        id: compute_package_hash
+        run: echo "package_hash=${{ hashFiles('Package.swift') }}" >> $GITHUB_OUTPUT
 
-      - name: Check dependency cache
+      - name: Check package dependency cache
         uses: actions/cache@v3
-        id: cache_dependencies
+        id: cache_package_dependencies
         with:
-          path: ${{ env.CACHED_DEPENDENCY_PATHS }}
-          key: ${{ steps.compute_hash.outputs.hash }}
+          path: ${{ env.CACHED_PACKAGE_DEPENDENCY_PATHS }}
+          key: ${{ steps.compute_package_hash.outputs.package_hash }}
+
+      - name: Compute carthage dependency cache key
+        id: compute_carthage_hash
+        run: echo "carthage_hash=${{ hashFiles('Cartfile') }}" >> $GITHUB_OUTPUT
+
+      - name: Check carthage dependency cache
+        uses: actions/cache@v3
+        id: cache_carthage_dependencies
+        with:
+          path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
+          key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
 
       - uses: jdx/mise-action@v2
-        if: steps.cache_dependencies.outputs.cache-hit == ''
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
 
       - name: Install tuist
-        if: steps.cache_dependencies.outputs.cache-hit == ''
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
         run: mise install tuist
 
       - name: Install dependencies needs
-        if: steps.cache_dependencies.outputs.cache-hit == ''
-        run: tuist install
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
+        run: make install
     outputs:
-      dependency_cache_key: ${{ steps.compute_hash.outputs.hash }}
+      package_dependency_cache_key: ${{ steps.compute_package_hash.outputs.package_hash }}
+      carthage_dependency_cache_key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
 
   test:
     name: 🧪 Test
@@ -61,8 +74,8 @@ jobs:
       - name: List Xcode installations
         run: sudo ls -1 /Applications | grep "Xcode"
 
-      - name: Select Xcode 15.0
-        run: sudo xcode-select -s /Applications/Xcode_15.0.app/Contents/Developer
+      - name: Select Xcode 15.3
+        run: sudo xcode-select -s /Applications/Xcode_15.3.app/Contents/Developer
 
       - name: Show swift version
         run: swift --version
@@ -72,19 +85,23 @@ jobs:
       - name: Install tuist
         run: mise install tuist
 
-      - name: Check dependency cache
+      - name: Check package dependency cache
         uses: actions/cache@v3
-        id: cache_dependencies
+        id: cache_package_dependencies
         with:
-          path: ${{ env.CACHED_DEPENDENCY_PATHS }}
-          key: ${{ needs.prepare-ci.outputs.dependency_cache_key }}
+          path: ${{ env.CACHED_PACKAGE_DEPENDENCY_PATHS }}
+          key: ${{ needs.prepare-ci.outputs.package_dependency_cache_key }}
+
+      - name: Check carthage dependency cache
+        uses: actions/cache@v3
+        id: cache_carthage_dependencies
+        with:
+          path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
+          key: ${{ needs.prepare-ci.outputs.carthage_dependency_cache_key }}
 
       - name: Install dependencies needs
-        if: steps.cache_dependencies.outputs.cache-hit != 'true'
-        run: tuist install
-
-      - name: Remove Signing
-        run: rm -rf Tuist/Signing
+        if: steps.cache_package_dependencies.outputs.cache-hit != 'true' || steps.cache_carthage_dependencies.outputs.cache-hit != 'true'
+        run: make install
 
       - name: Make `Secrets.xcconfig`
         run: |

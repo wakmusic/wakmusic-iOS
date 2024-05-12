@@ -1,7 +1,10 @@
 generate:
+	make install
+	TUIST_ENV=DEV TUIST_ROOT_DIR=${PWD} tuist generate
+
+install:
 	carthage update --use-xcframeworks 
 	tuist install
-	TUIST_ENV=DEV TUIST_ROOT_DIR=${PWD} tuist generate
 
 test:
 	TUIST_ENV=DEV TUIST_ROOT_DIR=${PWD} tuist test
