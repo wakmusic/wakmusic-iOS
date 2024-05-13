@@ -39,13 +39,13 @@ class ArtistMusicCell: UITableViewCell {
     @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
         let songEntity: SongEntity = SongEntity(
-            id: song.songId,
+            id: song.songID,
             title: song.title,
             artist: song.artist,
-            remix: song.remix,
-            reaction: song.reaction,
-            views: song.views,
-            last: song.last,
+            remix: "",
+            reaction: "",
+            views: 0,
+            last: 0,
             date: song.date
         )
         PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
@@ -80,7 +80,7 @@ extension ArtistMusicCell {
         )
 
         albumImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.songId).toString),
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.songID).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )

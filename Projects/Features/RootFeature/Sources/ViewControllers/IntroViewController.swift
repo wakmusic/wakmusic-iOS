@@ -103,7 +103,6 @@ extension IntroViewController {
                         return
 
                     case .event:
-
                         textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
@@ -116,7 +115,6 @@ extension IntroViewController {
                         ) as? TextPopupViewController ?? .init()
 
                     case .update:
-
                         textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
@@ -147,9 +145,11 @@ extension IntroViewController {
 
                     owner.showPanModal(content: textPopupVc)
 
+                #warning("도메인 변경으로 항상 failure")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
-
+                    owner.showTabBar()
+                    /*
                     owner.showPanModal(
                         content: owner.textPopUpFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
@@ -161,6 +161,7 @@ extension IntroViewController {
                             cancelCompletion: nil
                         ) as? TextPopupViewController ?? .init()
                     )
+                     */
                 }
             })
             .disposed(by: disposeBag)

@@ -45,7 +45,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let ID: String = model?.artistId ?? ""
+        let ID: String = model?.ID ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
 
@@ -124,13 +124,13 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .map { indexOfSelectedSongs, dataSource in
                 return indexOfSelectedSongs.map {
                     SongEntity(
-                        id: dataSource[$0].songId,
+                        id: dataSource[$0].songID,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
-                        remix: dataSource[$0].remix,
-                        reaction: dataSource[$0].reaction,
-                        views: dataSource[$0].views,
-                        last: dataSource[$0].last,
+                        remix: "",
+                        reaction: "",
+                        views: 0,
+                        last: 0,
                         date: dataSource[$0].date
                     )
                 }

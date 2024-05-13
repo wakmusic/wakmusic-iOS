@@ -8,8 +8,8 @@
 
 import Foundation
 
-public enum ArtistSongSortType: String {
-    case new
+public enum ArtistSongSortType: Int {
+    case new = 1
     case popular
     case old
 

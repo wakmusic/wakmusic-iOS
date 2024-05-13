@@ -83,7 +83,7 @@ extension ArtistDetailViewController {
 
         guard let model = self.model else { return }
 
-        let flatColor: String = model.color.first?.first ?? ""
+        let flatColor: String = model.personalColor
         guard !flatColor.isEmpty else { return }
 
         let startAlpha: CGFloat = 0.6

@@ -180,13 +180,13 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
-                id: $0.songId,
+                id: $0.songID,
                 title: $0.title,
                 artist: $0.artist,
-                remix: $0.remix,
-                reaction: $0.reaction,
-                views: $0.views,
-                last: $0.last,
+                remix: "",
+                reaction: "",
+                views: 0,
+                last: 0,
                 date: $0.date
             )
         }
