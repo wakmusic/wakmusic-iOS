@@ -50,7 +50,7 @@ public final class HomeViewModel: ViewModelType {
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
 
         let chart = self.fetchChartRankingUseCase
-            .execute(type: .hourly, limit: 100)
+            .execute(type: .hourly)
             .catchAndReturn([])
             .asObservable()
 
@@ -91,8 +91,8 @@ public final class HomeViewModel: ViewModelType {
                         id: $0.id,
                         title: $0.title,
                         artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
+                        remix: "",
+                        reaction: "",
                         views: $0.views,
                         last: $0.last,
                         date: $0.date
