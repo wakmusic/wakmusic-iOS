@@ -5,7 +5,6 @@ import Moya
 import SongsDomainInterface
 
 public enum SongsAPI {
-    case fetchSearchSong(keyword: String)
     case fetchLyrics(id: String)
     case fetchCredits(id: String)
     case fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int)
@@ -18,8 +17,6 @@ extension SongsAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case .fetchSearchSong:
-            return "/search/all"
         case let .fetchLyrics(id):
             return "/\(id)/lyrics"
         case let .fetchCredits(id):
@@ -35,12 +32,6 @@ extension SongsAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchSearchSong(keyword):
-            return .requestParameters(parameters: [
-                "sort": "popular", // 기본 인기순으로
-                "keyword": keyword
-            ], encoding: URLEncoding.queryString)
-
         case .fetchLyrics, .fetchCredits:
             return .requestPlain
 

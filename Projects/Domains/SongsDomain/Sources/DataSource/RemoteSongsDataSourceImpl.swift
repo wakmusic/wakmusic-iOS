@@ -4,12 +4,6 @@ import RxSwift
 import SongsDomainInterface
 
 public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, RemoteSongsDataSource {
-    public func fetchSearchSong(keyword: String) -> Single<SearchResultEntity> {
-        request(.fetchSearchSong(keyword: keyword))
-            .map(SearchResultResponseDTO.self)
-            .map { $0.toDomain() }
-    }
-
     public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
         request(.fetchLyrics(id: id))
             .map([LyricsResponseDTO].self)
