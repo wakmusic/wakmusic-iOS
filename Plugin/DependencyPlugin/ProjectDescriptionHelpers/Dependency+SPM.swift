@@ -21,7 +21,7 @@ public extension TargetDependency.SPM {
     static let RxDataSources = TargetDependency.external(name: "RxDataSources")
     static let RxKeyboard = TargetDependency.external(name: "RxKeyboard")
     static let SwiftEntryKit = TargetDependency.external(name: "SwiftEntryKit")
-    static let NaverLogin = TargetDependency.external(name: "naveridlogin-ios-sp")
+    static let NaverLogin = TargetDependency.external(name: "NaverThirdPartyLogin")
     static let CryptoSwift = TargetDependency.external(name: "CryptoSwift")
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
@@ -31,6 +31,8 @@ public extension TargetDependency.SPM {
     static let Quick = TargetDependency.external(name: "Quick")
     static let Nimble = TargetDependency.external(name: "Nimble")
     static let Inject = TargetDependency.external(name: "Inject")
+    static let Realm = TargetDependency.external(name: "Realm")
+    static let RealmSwift = TargetDependency.external(name: "RealmSwift")
 
 // MARK: Native SPM
     static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
