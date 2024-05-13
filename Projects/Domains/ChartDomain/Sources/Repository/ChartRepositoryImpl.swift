@@ -11,11 +11,8 @@ public final class ChartRepositoryImpl: ChartRepository {
         self.remoteChartDataSource = remoteChartDataSource
     }
 
-    public func fetchChartRanking(
-        type: ChartDateType,
-        limit: Int
-    ) -> Single<[ChartRankingEntity]> {
-        remoteChartDataSource.fetchChartRanking(type: type, limit: limit)
+    public func fetchChartRanking(type: ChartDateType) -> Single<[ChartRankingEntity]> {
+        remoteChartDataSource.fetchChartRanking(type: type)
     }
 
     public func fetchChartUpdateTime(type: ChartDateType) -> Single<String> {

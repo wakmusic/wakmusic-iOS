@@ -4,8 +4,8 @@ import Foundation
 import RxSwift
 
 public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, RemoteChartDataSource {
-    public func fetchChartRanking(type: ChartDateType, limit: Int) -> Single<[ChartRankingEntity]> {
-        request(.fetchChartRanking(type: type, limit: limit))
+    public func fetchChartRanking(type: ChartDateType) -> Single<[ChartRankingEntity]> {
+        request(.fetchChartRanking(type: type))
             .map([SingleChartRankingResponseDTO].self)
             .map { $0.map { $0.toDomain(type: type) } }
     }
