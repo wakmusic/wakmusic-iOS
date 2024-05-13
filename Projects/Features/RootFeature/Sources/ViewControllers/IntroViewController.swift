@@ -145,23 +145,23 @@ extension IntroViewController {
 
                     owner.showPanModal(content: textPopupVc)
 
-                #warning("도메인 변경으로 항상 failure")
+                    #warning("도메인 변경으로 항상 failure")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
                     /*
-                    owner.showPanModal(
-                        content: owner.textPopUpFactory.makeView(
-                            text: error.asWMError.errorDescription ?? "",
-                            cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
-                            confirmButtonText: nil,
-                            cancelButtonText: nil,
-                            completion: nil,
-                            cancelCompletion: nil
-                        ) as? TextPopupViewController ?? .init()
-                    )
-                     */
+                     owner.showPanModal(
+                         content: owner.textPopUpFactory.makeView(
+                             text: error.asWMError.errorDescription ?? "",
+                             cancelButtonIsHidden: true,
+                             allowsDragAndTapToDismiss: false,
+                             confirmButtonText: nil,
+                             cancelButtonText: nil,
+                             completion: nil,
+                             cancelCompletion: nil
+                         ) as? TextPopupViewController ?? .init()
+                     )
+                      */
                 }
             })
             .disposed(by: disposeBag)
