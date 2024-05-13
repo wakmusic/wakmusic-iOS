@@ -10,19 +10,10 @@ import Foundation
 
 public struct LyricsEntity: Equatable {
     public init(
-        identifier: String,
-        start: Double,
-        end: Double,
-        text: String,
-        styles: String
+        text: String
     ) {
-        self.identifier = identifier
-        self.start = start
-        self.end = end
         self.text = text
-        self.styles = styles
     }
 
-    public let identifier, text, styles: String
-    public let start, end: Double
+    public let text: String
 }
