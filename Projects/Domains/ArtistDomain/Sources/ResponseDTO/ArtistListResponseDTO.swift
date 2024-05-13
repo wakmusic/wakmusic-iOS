@@ -10,11 +10,11 @@ import ArtistDomainInterface
 import Foundation
 
 public struct ArtistListResponseDTO: Decodable, Equatable {
-    public let name: ArtistListResponseDTO.Name?
-    public let group: ArtistListResponseDTO.Group?
-    public let info: ArtistListResponseDTO.Info?
-    public let imageURL: ArtistListResponseDTO.ImageURL?
-    public let graduated: Bool?
+    let name: ArtistListResponseDTO.Name?
+    let group: ArtistListResponseDTO.Group?
+    let info: ArtistListResponseDTO.Info?
+    let imageURL: ArtistListResponseDTO.ImageURL?
+    let graduated: Bool?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.group?.id == rhs.group?.id
@@ -31,8 +31,8 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
 
 public extension ArtistListResponseDTO {
     struct Name: Decodable {
-        public let krName: String
-        public let enName: String
+        let krName: String
+        let enName: String
 
         private enum CodingKeys: String, CodingKey {
             case krName = "krShort"
@@ -41,28 +41,29 @@ public extension ArtistListResponseDTO {
     }
 
     struct Group: Decodable {
-        public let id: String
-        public let name: String
+        let id: String
+        let name: String
     }
 
     struct Info: Decodable {
-        public let title: ArtistListResponseDTO.Info.Title
-        public let description: String
-        public let color: ArtistListResponseDTO.Info.Color
+        let title: ArtistListResponseDTO.Info.Title
+        let description: String
+        let color: ArtistListResponseDTO.Info.Color
     }
 
     struct ImageURL: Decodable {
-        public let round: String
-        public let square: String
+        let round: String
+        let square: String
     }
 }
 
 public extension ArtistListResponseDTO.Info {
     struct Title: Decodable {
-        public let short: String
+        let short: String
     }
+
     struct Color: Decodable {
-        public let background: [[String]]
+        let background: [[String]]
     }
 }
 
