@@ -9,7 +9,7 @@
 import Foundation
 
 public struct SongCreditsEntity {
-    init(
+    public init(
         vocal: String,
         featuring: String,
         original: String,

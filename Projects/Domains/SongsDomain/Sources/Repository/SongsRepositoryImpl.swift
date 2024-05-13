@@ -18,6 +18,10 @@ public final class SongsRepositoryImpl: SongsRepository {
         remoteSongsDataSource.fetchLyrics(id: id)
     }
 
+    public func fetchSongCredits(id: String) -> Single<SongCreditsEntity> {
+        remoteSongsDataSource.fetchSongCredits(id: id)
+    }
+
     public func fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]> {
         remoteSongsDataSource.fetchNewSongs(type: type, page: page, limit: limit)
     }

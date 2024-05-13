@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SongsDomainInterface
 
 public struct SongCreditsResponseDTO: Decodable {
     let vocal, featuring: [String]?
