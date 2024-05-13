@@ -11,33 +11,26 @@ import SongsDomainInterface
 import Utility
 
 public struct SingleSongResponseDTO: Decodable {
-    public let id, title, artist, remix, reaction: String
-    public let date, start, end: Int
-    public let total: SingleSongResponseDTO.Total?
+    let songID, title: String
+    let artists: [String]
+    let date, views, likes: Int
 
     enum CodingKeys: String, CodingKey {
-        case title, artist, remix, reaction, date, start, end, total
-        case id = "songId"
-    }
-}
-
-public extension SingleSongResponseDTO {
-    struct Total: Decodable {
-        public let views, last: Int
-        public let increase: Int?
+        case title, artists, date, views, likes
+        case songID = "videoId"
     }
 }
 
 public extension SingleSongResponseDTO {
     func toDomain() -> SongEntity {
-        SongEntity(
-            id: id,
+        return SongEntity(
+            id: songID,
             title: title,
-            artist: artist,
-            remix: remix,
-            reaction: reaction,
-            views: total?.views ?? 0,
-            last: total?.last ?? 0,
+            artist: artists.joined(separator: ", "),
+            remix: "",
+            reaction: "",
+            views: views,
+            last: 0,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
         )
     }
