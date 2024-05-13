@@ -7,6 +7,7 @@ import SongsDomainInterface
 public enum SongsAPI {
     case fetchSearchSong(keyword: String)
     case fetchLyrics(id: String)
+    case fetchCredits(id: String)
     case fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int)
 }
 
@@ -21,6 +22,8 @@ extension SongsAPI: WMAPI {
             return "/search/all"
         case let .fetchLyrics(id):
             return "/\(id)/lyrics"
+        case let .fetchCredits(id):
+            return "/\(id)/credits"
         case let .fetchNewSongs(type, _, _):
             return "/new/\(type.apiKey)"
         }
@@ -38,7 +41,7 @@ extension SongsAPI: WMAPI {
                 "keyword": keyword
             ], encoding: URLEncoding.queryString)
 
-        case .fetchLyrics:
+        case .fetchLyrics, .fetchCredits:
             return .requestPlain
 
         case let .fetchNewSongs(_, page, limit):

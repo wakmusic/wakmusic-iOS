@@ -11,9 +11,9 @@ import SongsDomainInterface
 import Utility
 
 public struct SingleSongResponseDTO: Decodable {
-    let songID, title: String
-    let artists: [String]
-    let date, views, likes: Int
+    public let songID, title: String
+    public let artists: [String]
+    public let date, views, likes: Int
 
     enum CodingKeys: String, CodingKey {
         case title, artists, date, views, likes
