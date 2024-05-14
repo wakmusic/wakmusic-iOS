@@ -33,7 +33,7 @@ final class ArtistReactorTests: XCTestCase {
         XCTAssertEqual(fetchArtistListUseCase.callCount, 1)
         XCTAssertEqual(sut.currentState.artistList[0], dummyArtistList.first)
         XCTAssertEqual(sut.currentState.artistList[0].id, "")
-        XCTAssertEqual(sut.currentState.artistList[0].isHiddenItem, true)
+        XCTAssertEqual(sut.currentState.artistList[0].isHiddenItem, false)
     }
 
     func test_when_viewDidLoad_action_and_artist_count_greater_than_2_then_swap_index_0_and_1() {
@@ -69,7 +69,7 @@ final class ArtistReactorTests: XCTestCase {
                 roundImage: "",
                 squareImage: "",
                 graduated: false,
-                isHiddenItem: false
+                isHiddenItem: true
             ),
             ArtistListEntity(
                 id: "2",
