@@ -21,9 +21,9 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
 
     private var refreshControl = UIRefreshControl()
 
-    var containSongsFactory: ContainSongsFactory!
-    var textPopUpFactory: TextPopUpFactory!
-    var signInFactory: SignInFactory!
+    private  var containSongsFactory: ContainSongsFactory!
+    private var textPopUpFactory: TextPopUpFactory!
+    private var signInFactory: SignInFactory!
 
     var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
