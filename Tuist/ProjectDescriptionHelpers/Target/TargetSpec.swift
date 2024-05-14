@@ -73,7 +73,7 @@ public struct TargetSpec: Configurable {
     }
 
     func toTarget(with name: String, product: Product? = nil) -> Target {
-        Target(
+        Target.target(
             name: name,
             destinations:destinations ,
             product: product ?? self.product,

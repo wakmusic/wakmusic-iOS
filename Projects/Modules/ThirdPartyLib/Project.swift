@@ -1,17 +1,23 @@
+import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.makeModule(
-    name: "ThirdPartyLib",
-    product: .framework,
-    dependencies: [
-        .Carthage.Realm,
-        .Carthage.RealmSwift,
-        .SPM.NaverLogin,
-        .SPM.RxSwift,
-        .SPM.RxMoya,
-        .SPM.Moya,
-        .SPM.FirebaseAnalytics,
-        .SPM.FirebaseCrashlytics
+let project = Project.module(
+    name: ModulePaths.Module.ThirdPartyLib.rawValue,
+    targets: [
+        .implements(
+            module: .module(.ThirdPartyLib),
+            product: .framework,
+            dependencies: [
+                .XCFramework.Realm,
+                .XCFramework.RealmSwift,
+                .SPM.NaverLogin,
+                .SPM.RxSwift,
+                .SPM.RxMoya,
+                .SPM.Moya,
+                .SPM.FirebaseAnalytics,
+                .SPM.FirebaseCrashlytics
+            ]
+        )
     ]
 )
