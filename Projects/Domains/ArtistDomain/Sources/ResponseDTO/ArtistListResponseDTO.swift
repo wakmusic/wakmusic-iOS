@@ -70,7 +70,7 @@ public extension ArtistListResponseDTO.Info {
 public extension ArtistListResponseDTO {
     func toDomain() -> ArtistListEntity {
         ArtistListEntity(
-            ID: group?.id ?? "",
+            id: group?.id ?? "",
             krName: name?.krName ?? "",
             enName: name?.enName ?? "",
             groupName: group?.name ?? "",

@@ -10,20 +10,20 @@ import Foundation
 
 public struct SongCreditsEntity {
     public init(
-        vocal: String,
-        featuring: String,
+        vocal: [String],
+        featuring: [String],
         original: String,
-        producing: String,
-        lyrics: String,
-        relyrics: String,
-        compose: String,
-        arrange: String,
-        mixing: String,
-        mastering: String,
-        session: String,
-        chorus: String,
-        vocalGuide: String,
-        trainer: String
+        producing: [String],
+        lyrics: [String],
+        relyrics: [String],
+        compose: [String],
+        arrange: [String],
+        mixing: [String],
+        mastering: [String],
+        session: [String],
+        chorus: [String],
+        vocalGuide: [String],
+        trainer: [String]
     ) {
         self.vocal = vocal
         self.featuring = featuring
@@ -41,9 +41,9 @@ public struct SongCreditsEntity {
         self.trainer = trainer
     }
 
-    public let vocal, featuring: String
+    public let vocal, featuring: [String]
     public let original: String
-    public let producing, lyrics, relyrics, compose: String
-    public let arrange, mixing, mastering, session: String
-    public let chorus, vocalGuide, trainer: String
+    public let producing, lyrics, relyrics, compose: [String]
+    public let arrange, mixing, mastering, session: [String]
+    public let chorus, vocalGuide, trainer: [String]
 }

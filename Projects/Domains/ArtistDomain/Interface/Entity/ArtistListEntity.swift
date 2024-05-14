@@ -10,7 +10,7 @@ import Foundation
 
 public struct ArtistListEntity: Equatable {
     public init(
-        ID: String,
+        id: String,
         krName: String,
         enName: String,
         groupName: String,
@@ -22,7 +22,7 @@ public struct ArtistListEntity: Equatable {
         graduated: Bool,
         isHiddenItem: Bool
     ) {
-        self.ID = ID
+        self.id = id
         self.krName = krName
         self.enName = enName
         self.groupName = groupName
@@ -36,10 +36,10 @@ public struct ArtistListEntity: Equatable {
     }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.ID == rhs.ID
+        return lhs.id == rhs.id
     }
 
-    public let ID, krName, enName, groupName: String
+    public let id, krName, enName, groupName: String
     public let title, description: String
     public let personalColor: String
     public let roundImage, squareImage: String
