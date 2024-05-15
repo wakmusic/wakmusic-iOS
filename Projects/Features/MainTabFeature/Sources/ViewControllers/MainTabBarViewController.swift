@@ -11,6 +11,7 @@ import SearchFeature
 import SearchFeatureInterface
 import SnapKit
 import StorageFeature
+import StorageFeatureInterface
 import UIKit
 import Utility
 
@@ -23,7 +24,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
             chartComponent.makeView().wrapNavigationController,
             searchFactory.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
-            storageComponent.makeView().wrapNavigationController,
+            storageFactory.makeView().wrapNavigationController,
             myInfoComponent.makeView().wrapNavigationController
         ]
     }()
@@ -37,7 +38,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var chartComponent: ChartComponent!
     private var searchFactory: SearchFactory!
     private var artistComponent: ArtistComponent!
-    private var storageComponent: StorageComponent!
+    private var storageFactory: StorageFactory!
     private var myInfoComponent: MyInfoComponent!
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeComponent: NoticeComponent!
@@ -65,7 +66,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         chartComponent: ChartComponent,
         searchFactory: SearchFactory,
         artistComponent: ArtistComponent,
-        storageCompoent: StorageComponent,
+        storageFactory: StorageFactory,
         myInfoComponent: MyInfoComponent,
         noticePopupComponent: NoticePopupComponent,
         noticeComponent: NoticeComponent,
@@ -77,7 +78,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.chartComponent = chartComponent
         viewController.searchFactory = searchFactory
         viewController.artistComponent = artistComponent
-        viewController.storageComponent = storageCompoent
+        viewController.storageFactory = storageFactory
         viewController.myInfoComponent = myInfoComponent
         viewController.noticePopupComponent = noticePopupComponent
         viewController.noticeComponent = noticeComponent

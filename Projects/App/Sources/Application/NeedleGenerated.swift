@@ -39,6 +39,7 @@ import SignInFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 import StorageFeature
+import StorageFeatureInterface
 import UIKit
 import UserDomain
 import UserDomainInterface
@@ -177,8 +178,8 @@ private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDepend
     var artistComponent: ArtistComponent {
         return appComponent.artistComponent
     }
-    var storageComponent: StorageComponent {
-        return appComponent.storageComponent
+    var storageFactory: any StorageFactory {
+        return appComponent.storageFactory
     }
     var myInfoComponent: MyInfoComponent {
         return appComponent.myInfoComponent
@@ -325,8 +326,17 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInFactory: any SignInFactory {
         return appComponent.signInFactory
     }
-    var afterLoginComponent: AfterLoginComponent {
-        return appComponent.afterLoginComponent
+    var myPlayListComponent: MyPlayListComponent {
+        return appComponent.myPlayListComponent
+    }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
+        return appComponent.multiPurposePopUpFactory
+    }
+    var favoriteComponent: FavoriteComponent {
+        return appComponent.favoriteComponent
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -391,6 +401,9 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -399,40 +412,6 @@ private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDepend
 /// ^->AppComponent->MyPlayListComponent
 private func factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MyPlayListDependency067bbf42b28f80e413acProvider(appComponent: parent1(component) as! AppComponent)
-}
-private class AfterLoginDependencya880b76858e0a77ed700Provider: AfterLoginDependency {
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
-        return appComponent.fetchUserInfoUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    var requestComponent: RequestComponent {
-        return appComponent.requestComponent
-    }
-    var profilePopComponent: ProfilePopComponent {
-        return appComponent.profilePopComponent
-    }
-    var myPlayListComponent: MyPlayListComponent {
-        return appComponent.myPlayListComponent
-    }
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
-        return appComponent.multiPurposePopUpFactory
-    }
-    var favoriteComponent: FavoriteComponent {
-        return appComponent.favoriteComponent
-    }
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->AfterLoginComponent
-private func factory6cc9c8141e04494113b8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AfterLoginDependencya880b76858e0a77ed700Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency {
     var containSongsFactory: any ContainSongsFactory {
@@ -452,6 +431,9 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
     }
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
+    }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -784,7 +766,6 @@ private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: Needle
 #else
 extension AppComponent: Registration {
     public func registerItems() {
-
         localTable["keychain-any Keychain"] = { self.keychain as Any }
         localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
@@ -926,7 +907,7 @@ extension MainTabBarComponent: Registration {
         keyPathToName[\MainTabBarDependency.chartComponent] = "chartComponent-ChartComponent"
         keyPathToName[\MainTabBarDependency.searchFactory] = "searchFactory-any SearchFactory"
         keyPathToName[\MainTabBarDependency.artistComponent] = "artistComponent-ArtistComponent"
-        keyPathToName[\MainTabBarDependency.storageComponent] = "storageComponent-StorageComponent"
+        keyPathToName[\MainTabBarDependency.storageFactory] = "storageFactory-any StorageFactory"
         keyPathToName[\MainTabBarDependency.myInfoComponent] = "myInfoComponent-MyInfoComponent"
         keyPathToName[\MainTabBarDependency.noticePopupComponent] = "noticePopupComponent-NoticePopupComponent"
         keyPathToName[\MainTabBarDependency.noticeComponent] = "noticeComponent-NoticeComponent"
@@ -982,7 +963,10 @@ extension ServiceInfoComponent: Registration {
 extension StorageComponent: Registration {
     public func registerItems() {
         keyPathToName[\StorageDependency.signInFactory] = "signInFactory-any SignInFactory"
-        keyPathToName[\StorageDependency.afterLoginComponent] = "afterLoginComponent-AfterLoginComponent"
+        keyPathToName[\StorageDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
+        keyPathToName[\StorageDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
+        keyPathToName[\StorageDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
+        keyPathToName[\StorageDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension FaqComponent: Registration {
@@ -1006,18 +990,7 @@ extension MyPlayListComponent: Registration {
         keyPathToName[\MyPlayListDependency.deletePlayListUseCase] = "deletePlayListUseCase-any DeletePlayListUseCase"
         keyPathToName[\MyPlayListDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\MyPlayListDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
-extension AfterLoginComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\AfterLoginDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
-        keyPathToName[\AfterLoginDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-        keyPathToName[\AfterLoginDependency.requestComponent] = "requestComponent-RequestComponent"
-        keyPathToName[\AfterLoginDependency.profilePopComponent] = "profilePopComponent-ProfilePopComponent"
-        keyPathToName[\AfterLoginDependency.myPlayListComponent] = "myPlayListComponent-MyPlayListComponent"
-        keyPathToName[\AfterLoginDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
-        keyPathToName[\AfterLoginDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
-        keyPathToName[\AfterLoginDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\MyPlayListDependency.signInFactory] = "signInFactory-any SignInFactory"
     }
 }
 extension FavoriteComponent: Registration {
@@ -1028,6 +1001,7 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.deleteFavoriteListUseCase] = "deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"
         keyPathToName[\FavoriteDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\FavoriteDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\FavoriteDependency.signInFactory] = "signInFactory-any SignInFactory"
     }
 }
 extension RequestComponent: Registration {
@@ -1200,7 +1174,6 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AfterLoginComponent", factory6cc9c8141e04494113b8f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)

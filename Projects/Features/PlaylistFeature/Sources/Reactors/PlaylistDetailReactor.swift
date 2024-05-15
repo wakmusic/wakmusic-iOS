@@ -189,7 +189,10 @@ private extension PlaylistDetailReactor {
 
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
-        var tmp = (currentState.dataSource.first ?? PlayListDetailSectionModel(model: 0, items: [])).items
+        guard var tmp = currentState.dataSource.first?.items else {
+            LogManager.printError("playlist detail datasource is empty")
+            return .empty()
+        }
         let target = tmp[src]
         tmp.remove(at: src)
         tmp.insert(target, at: dest)
