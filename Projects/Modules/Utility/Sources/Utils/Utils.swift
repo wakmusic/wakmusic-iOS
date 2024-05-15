@@ -26,7 +26,24 @@ public func STATUS_BAR_HEGHIT() -> CGFloat {
 }
 
 public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
-    return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+    return if #available(iOS 15.0, *) {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+            .first?
+            .keyWindow?
+            .safeAreaInsets
+            .bottom ?? 0
+    } else {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+            .first?
+            .windows
+            .first(where: \.isKeyWindow)?
+            .safeAreaInsets
+            .bottom ?? 0
+    }
 }
 
 public func APP_VERSION() -> String {

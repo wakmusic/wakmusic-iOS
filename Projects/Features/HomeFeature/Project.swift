@@ -13,6 +13,7 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .PlayerFeature),
                     .feature(target: .PlaylistFeature, type: .interface),
+                    .feature(target: .MusicDetailFeature, type: .interface),
                     .domain(target: .ChartDomain, type: .interface),
                     .domain(target: .SongsDomain, type: .interface),
                 ]
