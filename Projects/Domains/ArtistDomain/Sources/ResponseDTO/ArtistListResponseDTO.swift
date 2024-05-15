@@ -10,14 +10,14 @@ import ArtistDomainInterface
 import Foundation
 
 public struct ArtistListResponseDTO: Decodable, Equatable {
-    let name: ArtistListResponseDTO.Name?
-    let group: ArtistListResponseDTO.Group?
-    let info: ArtistListResponseDTO.Info?
-    let imageURL: ArtistListResponseDTO.ImageURL?
-    let graduated: Bool?
+    let name: ArtistListResponseDTO.Name
+    let group: ArtistListResponseDTO.Group
+    let info: ArtistListResponseDTO.Info
+    let imageURL: ArtistListResponseDTO.ImageURL
+    let graduated: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.name?.id == rhs.name?.id
+        return lhs.name.id == rhs.name.id
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -71,16 +71,16 @@ public extension ArtistListResponseDTO.Info {
 public extension ArtistListResponseDTO {
     func toDomain() -> ArtistListEntity {
         ArtistListEntity(
-            id: name?.id ?? "",
-            krName: name?.krName ?? "",
-            enName: name?.enName ?? "",
-            groupName: group?.name ?? "",
-            title: info?.title.short ?? "",
-            description: info?.description ?? "",
-            personalColor: info?.color.background.flatMap { $0 }.first ?? "",
-            roundImage: imageURL?.round ?? "",
-            squareImage: imageURL?.square ?? "",
-            graduated: graduated ?? false,
+            id: name.id,
+            krName: name.krName,
+            enName: name.enName,
+            groupName: group.name,
+            title: info.title.short,
+            description: info.description,
+            personalColor: info.color.background.flatMap { $0 }.first ?? "",
+            roundImage: imageURL.round,
+            squareImage: imageURL.square,
+            graduated: graduated,
             isHiddenItem: false
         )
     }
