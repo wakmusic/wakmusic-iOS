@@ -97,6 +97,7 @@ final class MusicControlView: UIView {
         }
 
         if playButtonGradientLayer == nil {
+            playMusicButton.layoutIfNeeded()
             let playButtonGradientLayer = PlayMusicButtonGradientLayer(
                 frame: playMusicButton.bounds,
                 cornerRadius: playMusicButton.frame.height / 2
