@@ -69,7 +69,7 @@ final class ArtistReactorTests: XCTestCase {
                 roundImage: "",
                 squareImage: "",
                 graduated: false,
-                isHiddenItem: true
+                isHiddenItem: false
             ),
             ArtistListEntity(
                 id: "2",
