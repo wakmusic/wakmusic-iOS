@@ -77,7 +77,7 @@ public extension ArtistListResponseDTO {
             groupName: group.name,
             title: info.title.short,
             description: info.description,
-            personalColor: info.color.background.flatMap { $0 }.first ?? "",
+            personalColor: info.color.background.flatMap { $0 }.first ?? "ffffff",
             roundImage: imageURL.round,
             squareImage: imageURL.square,
             graduated: graduated,
