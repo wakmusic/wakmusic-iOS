@@ -75,7 +75,7 @@ private extension ArtistReactor {
 private extension ArtistReactor {
     func makeHiddenArtistEntity() -> ArtistListEntity {
         ArtistListEntity(
-            ID: "",
+            id: "",
             krName: "",
             enName: "",
             groupName: "",

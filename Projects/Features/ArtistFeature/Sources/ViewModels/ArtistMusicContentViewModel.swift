@@ -45,7 +45,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let ID: String = model?.ID ?? ""
+        let ID: String = model?.id ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
 

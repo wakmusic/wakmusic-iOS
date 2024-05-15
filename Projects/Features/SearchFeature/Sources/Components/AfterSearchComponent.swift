@@ -6,7 +6,6 @@ import SongsDomainInterface
 
 public protocol AfterSearchDependency: Dependency {
     var afterSearchContentComponent: AfterSearchContentComponent { get }
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
 }
 
@@ -15,7 +14,7 @@ public final class AfterSearchComponent: Component<AfterSearchDependency> {
         return AfterSearchViewController.viewController(
             afterSearchContentComponent: dependency.afterSearchContentComponent,
             containSongsFactory: dependency.containSongsFactory,
-            reactor: .init(fetchSearchSongUseCase: dependency.fetchSearchSongUseCase)
+            reactor: .init()
         )
     }
 }

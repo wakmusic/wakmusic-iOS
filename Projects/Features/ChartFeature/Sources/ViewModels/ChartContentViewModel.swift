@@ -47,7 +47,8 @@ public final class ChartContentViewModel: ViewModelType {
                 .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
                 .asObservable(),
             fetchChartRankingUseCase
-                .execute(type: type, limit: 100)
+                .execute(type: type)
+                .debug("fetchChartRankingUseCase")
                 .catchAndReturn([])
                 .asObservable()
         )
@@ -119,8 +120,8 @@ public final class ChartContentViewModel: ViewModelType {
                         id: dataSource[$0].id,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
-                        remix: dataSource[$0].remix,
-                        reaction: dataSource[$0].reaction,
+                        remix: "",
+                        reaction: "",
                         views: dataSource[$0].views,
                         last: dataSource[$0].last,
                         date: dataSource[$0].date
@@ -138,8 +139,8 @@ public final class ChartContentViewModel: ViewModelType {
                         id: $0.id,
                         title: $0.title,
                         artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
+                        remix: "",
+                        reaction: "",
                         views: $0.views,
                         last: $0.last,
                         date: $0.date
