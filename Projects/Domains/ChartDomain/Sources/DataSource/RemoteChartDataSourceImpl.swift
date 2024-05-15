@@ -7,6 +7,6 @@ public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, Re
     public func fetchChartRanking(type: ChartDateType) -> Single<ChartEntity> {
         request(.fetchChartRanking(type: type))
             .map(SingleChartRankingResponseDTO.self)
-            .map { $0.toDomain(type: type)  }
+            .map { $0.toDomain(type: type) }
     }
 }
