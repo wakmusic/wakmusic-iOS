@@ -17,7 +17,7 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
     let graduated: Bool?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.group?.id == rhs.group?.id
+        return lhs.name?.id == rhs.name?.id
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -31,17 +31,18 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
 
 public extension ArtistListResponseDTO {
     struct Name: Decodable {
+        let id: String
         let krName: String
         let enName: String
 
         private enum CodingKeys: String, CodingKey {
+            case id = "kr"
             case krName = "krShort"
             case enName = "en"
         }
     }
 
     struct Group: Decodable {
-        let id: String
         let name: String
     }
 
@@ -70,7 +71,7 @@ public extension ArtistListResponseDTO.Info {
 public extension ArtistListResponseDTO {
     func toDomain() -> ArtistListEntity {
         ArtistListEntity(
-            ID: group?.id ?? "",
+            id: name?.id ?? "",
             krName: name?.krName ?? "",
             enName: name?.enName ?? "",
             groupName: group?.name ?? "",

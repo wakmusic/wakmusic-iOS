@@ -672,9 +672,6 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var afterSearchContentComponent: AfterSearchContentComponent {
         return appComponent.afterSearchContentComponent
     }
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
-        return appComponent.fetchSearchSongUseCase
-    }
     var containSongsFactory: any ContainSongsFactory {
         return appComponent.containSongsFactory
     }
@@ -794,7 +791,6 @@ extension AppComponent: Registration {
         localTable["newSongsContentComponent-NewSongsContentComponent"] = { self.newSongsContentComponent as Any }
         localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
-        localTable["fetchSearchSongUseCase-any FetchSearchSongUseCase"] = { self.fetchSearchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
         localTable["signInFactory-any SignInFactory"] = { self.signInFactory as Any }
@@ -1120,7 +1116,6 @@ extension NewSongsContentComponent: Registration {
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
-        keyPathToName[\AfterSearchDependency.fetchSearchSongUseCase] = "fetchSearchSongUseCase-any FetchSearchSongUseCase"
         keyPathToName[\AfterSearchDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }

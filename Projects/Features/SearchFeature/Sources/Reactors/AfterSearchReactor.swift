@@ -6,7 +6,6 @@ import SongsDomainInterface
 
 public final class AfterSearchReactor: Reactor {
     var disposeBag: DisposeBag = DisposeBag()
-    private let fetchSearchSongUseCase: FetchSearchSongUseCase
 
     public enum Action {
         case fetchData(String)
@@ -23,8 +22,7 @@ public final class AfterSearchReactor: Reactor {
 
     public var initialState: State
 
-    init(fetchSearchSongUseCase: FetchSearchSongUseCase) {
-        self.fetchSearchSongUseCase = fetchSearchSongUseCase
+    init() {
         self.initialState = State(
             dataSource: [],
             text: ""
@@ -56,8 +54,7 @@ public final class AfterSearchReactor: Reactor {
 
 private extension AfterSearchReactor {
     func fetchData(_ text: String) -> Observable<Mutation> {
-        return fetchSearchSongUseCase
-            .execute(keyword: text)
+        return Observable.just(SearchResultEntity(song: [], artist: [], remix: []))
             .asObservable()
             .map { res in
 

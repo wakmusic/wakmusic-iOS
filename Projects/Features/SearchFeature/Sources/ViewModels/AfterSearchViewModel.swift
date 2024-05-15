@@ -15,11 +15,9 @@ import Utility
 
 public final class AfterSearchViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var fetchSearchSongUseCase: FetchSearchSongUseCase!
 
-    public init(fetchSearchSongUseCase: FetchSearchSongUseCase) {
+    public init() {
         DEBUG_LOG("✅ AfterSearchViewModel 생성")
-        self.fetchSearchSongUseCase = fetchSearchSongUseCase
     }
 
     public struct Input {
@@ -47,8 +45,7 @@ public final class AfterSearchViewModel: ViewModelType {
                 guard let self = self else {
                     return Observable.empty()
                 }
-                return self.fetchSearchSongUseCase
-                    .execute(keyword: str)
+                return Observable.just(SearchResultEntity(song: [], artist: [], remix: []))
                     .asObservable()
             }
             .map { res in
