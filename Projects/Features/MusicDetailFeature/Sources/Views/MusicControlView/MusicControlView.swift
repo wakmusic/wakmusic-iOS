@@ -14,7 +14,7 @@ private protocol MusicControlStateProtool {
     func updateIsDisabledNextButton(isDisabled: Bool)
 }
 
-private protocol MusicControlActionProtool {
+private protocol MusicControlActionProtocol {
     var prevMusicButtonDidTap: Observable<Void> { get }
     var playMusicButtonDidTap: Observable<Void> { get }
     var nextMusicButtonDidTap: Observable<Void> { get }
@@ -193,7 +193,7 @@ extension MusicControlView: MusicControlStateProtool {
     }
 }
 
-extension Reactive: MusicControlActionProtool where Base: MusicControlView {
+extension Reactive: MusicControlActionProtocol where Base: MusicControlView {
     var prevMusicButtonDidTap: Observable<Void> {
         base.prevMusicButton.rx.tap.asObservable()
     }
