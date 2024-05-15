@@ -56,8 +56,8 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 
 extension ArtistDetailHeaderViewController {
     func update(model: ArtistListEntity) {
-        let artistName: String = model.name
-        let artistEngName: String = model.artistId.capitalizingFirstLetter
+        let artistName: String = model.krName
+        let artistEngName: String = model.enName.capitalizingFirstLetter
         let artistNameAttributedString = NSMutableAttributedString(
             string: artistName + " " + artistEngName,
             attributes: [
@@ -84,7 +84,7 @@ extension ArtistDetailHeaderViewController {
         let artistNameWidth: CGFloat = artistNameAttributedString.width(containerHeight: 36)
 
         DEBUG_LOG("availableWidth: \(availableWidth)")
-        DEBUG_LOG("\(model.name): \(artistNameWidth)")
+        DEBUG_LOG("\(model.krName): \(artistNameWidth)")
 
         artistNameAttributedString.addAttributes(
             [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= artistNameWidth ? 24 : 20)],
@@ -97,7 +97,7 @@ extension ArtistDetailHeaderViewController {
 
         self.artistNameLabel.attributedText = artistNameAttributedString
 
-        self.artistGroupLabel.text = model.group + (model.graduated ? " · 졸업" : "")
+        self.artistGroupLabel.text = model.groupName + (model.graduated ? " · 졸업" : "")
 
         let artistIntroParagraphStyle = NSMutableParagraphStyle()
         artistIntroParagraphStyle.lineHeightMultiple = (APP_WIDTH() < 375) ? 0 : 1.44
@@ -130,12 +130,8 @@ extension ArtistDetailHeaderViewController {
         )
         self.introDescriptionLabel.attributedText = artistIntroDescriptionAttributedString
 
-        let originImageURLString: String = WMImageAPI.fetchArtistWithSquare(
-            id: model.artistId,
-            version: model.imageSquareVersion
-        ).toString
-        let encodedImageURLString: String = originImageURLString
-            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? originImageURLString
+        let encodedImageURLString: String = model.squareImage
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? model.squareImage
         artistImageView.kf.setImage(
             with: URL(string: encodedImageURLString),
             placeholder: nil,

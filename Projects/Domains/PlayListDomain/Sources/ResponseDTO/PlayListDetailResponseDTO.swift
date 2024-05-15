@@ -35,13 +35,13 @@ public extension SinglePlayListDetailResponseDTO {
             title: title,
             songs: (songs ?? []).map { dto in
                 return SongEntity(
-                    id: dto.id,
+                    id: dto.songID,
                     title: dto.title,
-                    artist: dto.artist,
-                    remix: dto.remix,
-                    reaction: dto.reaction,
-                    views: dto.total?.views ?? 0,
-                    last: dto.total?.last ?? 0,
+                    artist: dto.artists.joined(separator: ", "),
+                    remix: "",
+                    reaction: "",
+                    views: dto.views,
+                    last: 0,
                     date: dto.date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
                 )
             },

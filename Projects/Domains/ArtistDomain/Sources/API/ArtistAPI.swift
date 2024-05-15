@@ -29,9 +29,9 @@ extension ArtistAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchArtistList:
-            return ""
-        case .fetchArtistSongList:
-            return "/albums"
+            return "/list"
+        case let .fetchArtistSongList(id, _, _):
+            return "/\(id)/songs"
         }
     }
 
@@ -47,12 +47,11 @@ extension ArtistAPI: WMAPI {
         switch self {
         case .fetchArtistList:
             return .requestPlain
-        case let .fetchArtistSongList(id, sort, page):
+        case let .fetchArtistSongList(_, sort, page):
             return .requestParameters(
                 parameters: [
-                    "id": id,
-                    "sort": sort.rawValue,
-                    "start": (page == 1) ? 0 : (page - 1) * 30
+                    "type": sort.rawValue,
+                    "page": page
                 ],
                 encoding: URLEncoding.queryString
             )

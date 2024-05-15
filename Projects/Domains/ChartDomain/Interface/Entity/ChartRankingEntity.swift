@@ -5,8 +5,6 @@ public struct ChartRankingEntity: Equatable {
         id: String,
         title: String,
         artist: String,
-        remix: String,
-        reaction: String,
         views: Int,
         last: Int,
         increase: Int,
@@ -16,8 +14,6 @@ public struct ChartRankingEntity: Equatable {
         self.id = id
         self.title = title
         self.artist = artist
-        self.remix = remix
-        self.reaction = reaction
         self.views = views
         self.last = last
         self.increase = increase
@@ -25,8 +21,7 @@ public struct ChartRankingEntity: Equatable {
         self.isSelected = isSelected
     }
 
-    public let id, title, artist, remix: String
-    public let reaction: String
+    public let id, title, artist: String
     public let views, last, increase: Int
     public let date: String
     public var isSelected: Bool

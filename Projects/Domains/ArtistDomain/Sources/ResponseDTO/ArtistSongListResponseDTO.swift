@@ -11,39 +11,27 @@ import Foundation
 import Utility
 
 public struct ArtistSongListResponseDTO: Decodable, Equatable {
-    public let songId, title, artist, remix: String
-    public let reaction: String
-    public let date: Int
-    public let total: ArtistSongListResponseDTO.Total?
+    let songID, title: String
+    let artists: [String]
+    let date: Int
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.songId == rhs.songId
+        return lhs.songID == rhs.songID
     }
 
     enum CodingKeys: String, CodingKey {
-        case songId
-        case title, artist, remix, reaction, date, total
-    }
-}
-
-public extension ArtistSongListResponseDTO {
-    struct Total: Codable {
-        public let views: Int
-        public let last: Int
+        case songID = "videoId"
+        case title, artists, date
     }
 }
 
 public extension ArtistSongListResponseDTO {
     func toDomain() -> ArtistSongListEntity {
         ArtistSongListEntity(
-            songId: songId,
+            songID: songID,
             title: title,
-            artist: artist,
-            remix: remix,
-            reaction: reaction,
+            artist: artists.joined(separator: ", "),
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
-            views: total?.views ?? 0,
-            last: total?.last ?? 0,
             isSelected: false
         )
     }

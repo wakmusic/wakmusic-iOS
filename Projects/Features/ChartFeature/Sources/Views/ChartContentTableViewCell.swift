@@ -339,8 +339,8 @@ extension ChartContentTableViewCell {
             id: song.id,
             title: song.title,
             artist: song.artist,
-            remix: song.remix,
-            reaction: song.reaction,
+            remix: "",
+            reaction: "",
             views: song.views,
             last: song.last,
             date: song.date

@@ -22,7 +22,7 @@ extension PlayerViewModel {
                 guard let self else { return }
                 self.lyricsDict.removeAll()
                 self.sortedLyrics.removeAll()
-                lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float($0.start)) }
+                lyricsEntityArray.forEach { self.lyricsDict.updateValue($0.text, forKey: Float(0)) }
                 self.sortedLyrics = self.lyricsDict.sorted { $0.key < $1.key }.map { $0.value }
             } onFailure: { [weak self] error in
                 guard let self else { return }

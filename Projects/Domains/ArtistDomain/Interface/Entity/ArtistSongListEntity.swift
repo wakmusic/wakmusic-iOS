@@ -10,32 +10,23 @@ import Foundation
 
 public struct ArtistSongListEntity: Equatable {
     public init(
-        songId: String,
+        songID: String,
         title: String,
         artist: String,
-        remix: String,
-        reaction: String,
         date: String,
-        views: Int,
-        last: Int,
         isSelected: Bool
     ) {
-        self.songId = songId
+        self.songID = songID
         self.title = title
         self.artist = artist
-        self.remix = remix
-        self.reaction = reaction
         self.date = date
-        self.views = views
-        self.last = last
         self.isSelected = isSelected
     }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.songId == rhs.songId
+        return lhs.songID == rhs.songID
     }
 
-    public let songId, title, artist, remix, reaction, date: String
-    public let views, last: Int
+    public let songID, title, artist, date: String
     public var isSelected: Bool = false
 }

@@ -32,8 +32,8 @@ final class ArtistReactorTests: XCTestCase {
         // Then
         XCTAssertEqual(fetchArtistListUseCase.callCount, 1)
         XCTAssertEqual(sut.currentState.artistList[0], dummyArtistList.first)
-        XCTAssertEqual(sut.currentState.artistList[0].artistId, "")
-        XCTAssertEqual(sut.currentState.artistList[0].isHiddenItem, true)
+        XCTAssertEqual(sut.currentState.artistList[0].id, "")
+        XCTAssertEqual(sut.currentState.artistList[0].isHiddenItem, false)
     }
 
     func test_when_viewDidLoad_action_and_artist_count_greater_than_2_then_swap_index_0_and_1() {
@@ -59,34 +59,28 @@ final class ArtistReactorTests: XCTestCase {
     private func makeTwoDummyArtistList() -> [ArtistListEntity] {
         [
             ArtistListEntity(
-                artistId: "",
-                name: "",
-                short: "",
-                group: "",
+                id: "",
+                krName: "",
+                enName: "",
+                groupName: "",
                 title: "",
                 description: "",
-                color: [],
-                youtube: "",
-                twitch: "",
-                instagram: "",
-                imageRoundVersion: 0,
-                imageSquareVersion: 0,
+                personalColor: "",
+                roundImage: "",
+                squareImage: "",
                 graduated: false,
-                isHiddenItem: true
+                isHiddenItem: false
             ),
             ArtistListEntity(
-                artistId: "2",
-                name: "nam2",
-                short: "short2",
-                group: "group2",
+                id: "2",
+                krName: "nam2",
+                enName: "eng2",
+                groupName: "group2",
                 title: "title2",
                 description: "description2",
-                color: [["ffffff"]],
-                youtube: "https://youtube.com",
-                twitch: "twitch",
-                instagram: "insta",
-                imageRoundVersion: 1,
-                imageSquareVersion: 1,
+                personalColor: "ffffff",
+                roundImage: "",
+                squareImage: "",
                 graduated: false,
                 isHiddenItem: false
             )

@@ -10,72 +10,77 @@ import ArtistDomainInterface
 import Foundation
 
 public struct ArtistListResponseDTO: Decodable, Equatable {
-    public let artistId, name, short: String
-    public let description: String
-    public let title: ArtistListResponseDTO.Title?
-    public let color: ArtistListResponseDTO.Color?
-    public let youtube, twitch, instagram: String?
-    public let graduated: Bool?
-    public let group: ArtistListResponseDTO.Group?
-    public let image: ArtistListResponseDTO.Image?
+    let name: ArtistListResponseDTO.Name
+    let group: ArtistListResponseDTO.Group
+    let info: ArtistListResponseDTO.Info
+    let imageURL: ArtistListResponseDTO.ImageURL
+    let graduated: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.artistId == rhs.artistId
+        return lhs.name.id == rhs.name.id
     }
 
     private enum CodingKeys: String, CodingKey {
-        case artistId
-        case title
-        case group, image
-        case name, short, description
-        case color, youtube, twitch, instagram
+        case name
+        case group
+        case info
+        case imageURL = "imageUrl"
         case graduated
     }
 }
 
 public extension ArtistListResponseDTO {
-    struct Group: Codable {
-        public let engName: String
-        public let korName: String
+    struct Name: Decodable {
+        let id: String
+        let krName: String
+        let enName: String
 
         private enum CodingKeys: String, CodingKey {
-            case engName = "en"
-            case korName = "kr"
+            case id = "kr"
+            case krName = "krShort"
+            case enName = "en"
         }
     }
 
-    struct Image: Codable {
-        public let round: Int
-        public let square: Int
+    struct Group: Decodable {
+        let name: String
     }
 
-    // MARK: - Color
-    struct Color: Codable {
-        public let background: [[String]]
+    struct Info: Decodable {
+        let title: ArtistListResponseDTO.Info.Title
+        let description: String
+        let color: ArtistListResponseDTO.Info.Color
     }
 
-    // MARK: - Title
-    struct Title: Codable {
-        public let app: String
+    struct ImageURL: Decodable {
+        let round: String
+        let square: String
+    }
+}
+
+public extension ArtistListResponseDTO.Info {
+    struct Title: Decodable {
+        let short: String
+    }
+
+    struct Color: Decodable {
+        let background: [[String]]
     }
 }
 
 public extension ArtistListResponseDTO {
     func toDomain() -> ArtistListEntity {
         ArtistListEntity(
-            artistId: artistId,
-            name: name,
-            short: short,
-            group: group?.korName ?? "",
-            title: title?.app ?? "",
-            description: description,
-            color: color?.background ?? [],
-            youtube: youtube ?? "",
-            twitch: twitch ?? "",
-            instagram: instagram ?? "",
-            imageRoundVersion: image?.round ?? 0,
-            imageSquareVersion: image?.square ?? 0,
-            graduated: graduated ?? false,
+            id: name.id,
+            krName: name.krName,
+            enName: name.enName,
+            groupName: group.name,
+            title: info.title.short,
+            description: info.description,
+            personalColor: info.color.background.flatMap { $0 }.first ?? "ffffff",
+            roundImage: imageURL.round,
+            squareImage: imageURL.square,
+            graduated: graduated,
             isHiddenItem: false
         )
     }

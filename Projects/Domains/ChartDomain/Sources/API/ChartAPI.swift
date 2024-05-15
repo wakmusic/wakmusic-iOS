@@ -5,7 +5,7 @@ import Foundation
 import Moya
 
 public enum ChartAPI {
-    case fetchChartRanking(type: ChartDateType, limit: Int)
+    case fetchChartRanking(type: ChartDateType)
     case fetchChartUpdateTime(type: ChartDateType)
 }
 
@@ -16,8 +16,8 @@ extension ChartAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case .fetchChartRanking:
-            return "/"
+        case let .fetchChartRanking(type):
+            return "/\(type.rawValue)"
         case let .fetchChartUpdateTime(type):
             return "/updated/\(type.rawValue)"
         }
@@ -29,11 +29,8 @@ extension ChartAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchChartRanking(type, limit):
-            return .requestParameters(parameters: [
-                "type": type.rawValue,
-                "limit": limit
-            ], encoding: URLEncoding.queryString)
+        case .fetchChartRanking:
+            return .requestPlain
 
         case .fetchChartUpdateTime:
             return .requestPlain

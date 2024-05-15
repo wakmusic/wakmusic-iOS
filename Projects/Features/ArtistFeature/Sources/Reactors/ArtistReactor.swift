@@ -75,20 +75,17 @@ private extension ArtistReactor {
 private extension ArtistReactor {
     func makeHiddenArtistEntity() -> ArtistListEntity {
         ArtistListEntity(
-            artistId: "",
-            name: "",
-            short: "",
-            group: "",
+            id: "",
+            krName: "",
+            enName: "",
+            groupName: "",
             title: "",
             description: "",
-            color: [],
-            youtube: "",
-            twitch: "",
-            instagram: "",
-            imageRoundVersion: 0,
-            imageSquareVersion: 0,
+            personalColor: "",
+            roundImage: "",
+            squareImage: "",
             graduated: false,
-            isHiddenItem: true
+            isHiddenItem: false
         )
     }
 }
