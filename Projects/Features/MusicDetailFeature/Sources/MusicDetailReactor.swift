@@ -15,6 +15,7 @@ final class MusicDetailReactor: Reactor {
         case likeButtonDidTap
         case musicPickButtonDidTap
         case playListButtonDidTap
+        case dismissButtonDidTap
     }
 
     enum Mutation {
@@ -25,6 +26,7 @@ final class MusicDetailReactor: Reactor {
     enum NavigateType {
         case youtube(id: String)
         case credit(id: String)
+        case dismiss
     }
 
     struct State {
@@ -82,6 +84,8 @@ final class MusicDetailReactor: Reactor {
             return musicPickButtonDidTap()
         case .playListButtonDidTap:
             return playListButtonDidTap()
+        case .dismissButtonDidTap:
+            return .just(.navigate(.dismiss))
         }
     }
 

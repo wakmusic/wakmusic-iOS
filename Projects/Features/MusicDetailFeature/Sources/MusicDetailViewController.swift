@@ -9,20 +9,13 @@ import Utility
 
 final class MusicDetailViewController: BaseReactorViewController<MusicDetailReactor> {
     private let musicDetailView = MusicDetailView()
-    private let creditBarButton = UIBarButtonItem(
-        image: DesignSystemAsset.MusicDetail.credit.image
-            .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal),
-        style: .plain,
-        target: nil,
-        action: nil
-    )
 
     override func loadView() {
         view = musicDetailView
     }
 
     override func configureNavigation() {
-        self.navigationItem.setRightBarButton(creditBarButton, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     override func bindState(reactor: MusicDetailReactor) {
@@ -81,6 +74,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.openYoutube(id: id)
                 case let .credit(id):
                     owner.navigateCredits(id: id)
+                case .dismiss:
+                    owner.dismiss()
                 }
             }
             .disposed(by: disposeBag)
@@ -104,7 +99,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        creditBarButton.rx.tap
+        musicDetailView.rx.creditButtonDidTap
             .map { Reactor.Action.creditButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -133,6 +128,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .map { Reactor.Action.playListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        musicDetailView.rx.dismissButtonDidTap
+            .map { Reactor.Action.dismissButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -154,5 +154,9 @@ private extension MusicDetailViewController {
 
     func navigateCredits(id: String) {
         LogManager.printDebug("Navigate Music Credit : id=\(id)")
+    }
+
+    func dismiss() {
+        self.dismiss(animated: true)
     }
 }

@@ -29,6 +29,8 @@ private protocol MusicDetailActionProtocol {
     var likeButtonDidTap: Observable<Void> { get }
     var musicPickButtonDidTap: Observable<Void> { get }
     var playlistButtonDidTap: Observable<Void> { get }
+    var creditButtonDidTap: Observable<Void> { get }
+    var dismissButtonDidTap: Observable<Void> { get }
 }
 
 final class MusicDetailView: UIView {
@@ -56,10 +58,23 @@ final class MusicDetailView: UIView {
         $0.clipsToBounds = true
     }
 
+    fileprivate let dismissButton = UIButton().then {
+        let dismissImage = DesignSystemAsset.MusicDetail.dismiss.image
+            .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
+        $0.setImage(dismissImage, for: .normal)
+    }
+
+    fileprivate let creditButton = UIButton().then {
+        let creditImage = DesignSystemAsset.MusicDetail.credit.image
+            .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
+        $0.setImage(creditImage, for: .normal)
+    }
+
     private let dimmedBackgroundView = UIView()
+    private var dimmedLayer: MusicDetailDimmedGradientLayer?
+    private let wmNavigationbarView = WMNavigationBarView()
     fileprivate let musicControlView = MusicControlView()
     fileprivate let musicToolbarView = MusicToolbarView()
-    private var dimmedLayer: MusicDetailDimmedGradientLayer?
 
     init() {
         super.init(frame: .zero)
@@ -102,6 +117,7 @@ private extension MusicDetailView {
             backgroundImageView,
             dimmedBackgroundView,
             thumbnailCollectionView,
+            wmNavigationbarView,
             musicControlView,
             musicToolbarView
         )
@@ -116,8 +132,16 @@ private extension MusicDetailView {
         }
 
         backgroundImageView.snp.makeConstraints {
-            $0.top.leading.bottom.trailing.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
+
+        wmNavigationbarView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(48)
+        }
+        wmNavigationbarView.setLeftViews([dismissButton])
+        wmNavigationbarView.setRightViews([creditButton])
 
         musicControlView.snp.makeConstraints {
             $0.top.equalTo(thumbnailCollectionView.snp.bottom).offset(36)
@@ -126,28 +150,9 @@ private extension MusicDetailView {
             $0.height.equalTo(musicControlView.snp.width).multipliedBy(1.0 / 1.0)
         }
 
-        let safeAreaBottomHeight: CGFloat
-        if #available(iOS 15.0, *) {
-            safeAreaBottomHeight = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .filter { $0.activationState == .foregroundActive }
-                .first?
-                .keyWindow?
-                .safeAreaInsets
-                .bottom ?? 0
-        } else {
-            safeAreaBottomHeight = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .filter { $0.activationState == .foregroundActive }
-                .first?
-                .windows
-                .first(where: \.isKeyWindow)?
-                .safeAreaInsets
-                .bottom ?? 0
-        }
         musicToolbarView.snp.makeConstraints {
             $0.leading.bottom.trailing.equalToSuperview()
-            $0.height.equalTo(safeAreaBottomHeight + 56)
+            $0.height.equalTo(SAFEAREA_BOTTOM_HEIGHT() + 56)
         }
 
         dimmedBackgroundView.snp.makeConstraints {
@@ -232,4 +237,6 @@ extension Reactive: MusicDetailActionProtocol where Base: MusicDetailView {
     var likeButtonDidTap: Observable<Void> { base.musicToolbarView.rx.likeButtonDidTap }
     var musicPickButtonDidTap: Observable<Void> { base.musicToolbarView.rx.musicPickButtonDidTap }
     var playlistButtonDidTap: Observable<Void> { base.musicToolbarView.rx.playlistButtonDidTap }
+    var creditButtonDidTap: Observable<Void> { base.creditButton.rx.tap.asObservable() }
+    var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
 }
