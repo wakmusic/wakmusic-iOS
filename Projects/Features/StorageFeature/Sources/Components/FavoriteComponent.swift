@@ -4,7 +4,8 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import SignInFeature
+import SignInFeatureInterface
+import UIKit
 import UserDomainInterface
 
 public protocol FavoriteDependency: Dependency {
@@ -14,19 +15,16 @@ public protocol FavoriteDependency: Dependency {
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
+    var signInFactory: any SignInFactory { get }
 }
 
 public final class FavoriteComponent: Component<FavoriteDependency> {
-    public func makeView() -> FavoriteViewController {
+    public func makeView() -> UIViewController {
         return FavoriteViewController.viewController(
-            viewModel: .init(
-                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
-                editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase,
-                deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
-                logoutUseCase: dependency.logoutUseCase
-            ),
+            reactor: FavoriteReactoer(),
             containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory
+            textPopUpFactory: dependency.textPopUpFactory,
+            signInFactory: dependency.signInFactory
         )
     }
 }

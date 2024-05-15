@@ -432,6 +432,9 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1002,6 +1005,7 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.deleteFavoriteListUseCase] = "deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"
         keyPathToName[\FavoriteDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\FavoriteDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\FavoriteDependency.signInFactory] = "signInFactory-any SignInFactory"
     }
 }
 extension RequestComponent: Registration {

@@ -2,204 +2,186 @@ import BaseDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import RxDataSources
 import RxRelay
 import RxSwift
+import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
 
-public typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
+typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
-public final class FavoriteViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+final class FavoriteViewController: BaseStoryboardReactorViewController<FavoriteReactoer>, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     private var refreshControl = UIRefreshControl()
-    var viewModel: FavoriteViewModel!
 
-    var containSongsFactory: ContainSongsFactory!
-    var textPopUpFactory: TextPopUpFactory!
-    lazy var input = FavoriteViewModel.Input()
-    lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private var containSongsFactory: ContainSongsFactory!
+    private var textPopUpFactory: TextPopUpFactory!
+    private var signInFactory: SignInFactory!
 
-    public var songCartView: SongCartView!
-    public var bottomSheetView: BottomSheetView!
+    var songCartView: SongCartView!
+    var bottomSheetView: BottomSheetView!
 
     let playState = PlayState.shared
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
-
-        configureUI()
-        inputBindRx()
-        outputBindRx()
     }
 
-    public static func viewController(
-        viewModel: FavoriteViewModel,
+    static func viewController(
+        reactor: FavoriteReactoer,
         containSongsFactory: ContainSongsFactory,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        signInFactory: SignInFactory
     ) -> FavoriteViewController {
         let viewController = FavoriteViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-        viewController.viewModel = viewModel
+        viewController.reactor = reactor
         viewController.containSongsFactory = containSongsFactory
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.signInFactory = signInFactory
         return viewController
     }
-}
 
-extension FavoriteViewController {
-    private func inputBindRx() {
-        refreshControl.rx
-            .controlEvent(.valueChanged)
-            .bind(to: input.likeListLoad)
+    override func configureUI() {
+        super.configureUI()
+
+        self.tableView.refreshControl = self.refreshControl
+        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.tableView.backgroundColor = .clear
+        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        self.activityIndicator.type = .circleStrokeSpin
+        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.activityIndicator.startAnimating()
+
+        reactor?.action.onNext(.viewDidLoad)
+    }
+
+    override func bind(reactor: FavoriteReactoer) {
+        super.bind(reactor: reactor)
+        tableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+    }
+
+    override func bindAction(reactor: FavoriteReactoer) {
+        super.bindAction(reactor: reactor)
+
+        let currentState = reactor.state
+
+        tableView.rx.itemSelected
+            .withUnretained(self)
+            .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
+            .withLatestFrom(currentState.map(\.dataSource)) { ($0.0, $0.1, $0.2, $1) }
+            .bind { owner, indexPath, isEditing, dataSource in
+
+                guard isEditing else {
+                    // TODO: 아마 곡 상세로 이동?
+
+                    return
+                }
+            }
             .disposed(by: disposeBag)
 
         tableView.rx.itemMoved
-            .bind(to: input.itemMoved)
-            .disposed(by: disposeBag)
-
-        tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .withLatestFrom(output.state) { ($0.0, $0.1, $1) }
-            .filter { $0.2.isEditing == false }
-            .subscribe(onNext: { indexPath, dataSource, _ in
-                let song: SongEntity = dataSource[indexPath.section].items[indexPath.row].song
-                PlayState.shared.loadAndAppendSongsToPlaylist([song])
-            })
+            .map { Reactor.Action.itemMoved($0) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 
-    private func outputBindRx() {
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+    override func bindState(reactor: FavoriteReactoer) {
+        super.bindState(reactor: reactor)
 
-        output.dataSource
-            .do(onNext: { [weak self] model in
-                guard let self = self else {
+        let sharedState = reactor.state.share(replay: 3)
+
+        sharedState.map(\.dataSource)
+            .skip(1)
+            .withUnretained(self)
+            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
+            .do(onNext: { owner, dataSource, userInfo in
+
+                owner.activityIndicator.stopAnimating()
+                owner.refreshControl.endRefreshing()
+
+                guard let userInfo = userInfo else {
+                    // 로그인 안되어있음
+
+                    let view = LoginWarningView(
+                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT() / 5),
+                        text: "로그인 하고\n리스트를 확인해보세요."
+                    ) {
+                        // TODO: 로그인 팝업 요청 (아마 StorageVC로 가야할 듯?
+                        LogManager.printDebug("TAP 로그인 버튼")
+                    }
+
+                    owner.tableView.tableFooterView = view
                     return
                 }
-                self.refreshControl.endRefreshing()
-                self.activityIndicator.stopAnimating()
 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
                 warningView.text = "좋아요 한 곡이 없습니다."
 
-                let items = model.first?.items ?? []
-                self.tableView.tableHeaderView = items.isEmpty ? warningView : nil
+                let items = dataSource.first?.items ?? []
+                owner.tableView.tableFooterView = items.isEmpty ? warningView : UIView(frame: CGRect(
+                    x: 0,
+                    y: 0,
+                    width: APP_WIDTH(),
+                    height: 56
+                ))
             })
+            .map { $0.1 }
             .bind(to: tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
 
-        output.state
-            .skip(1)
-            .subscribe(onNext: { [weak self] state in
-                guard let self = self else {
-                    return
-                }
-                if state.isEditing == false && state.force == false { // 정상적인 편집 완료 이벤트
-                    self.input.runEditing.onNext(())
-                }
-                // TODO: Storage 리팩 후
-//                guard let parent = self.parent?.parent as? AfterLoginViewController else {
-//                    return
-//                }
-                // 탭맨 쪽 편집 변경
-//                let isEdit: Bool = state.isEditing
-//                parent.output.state.accept(EditState(isEditing: isEdit, force: true))
-//                self.tableView.refreshControl = isEdit ? nil : self.refreshControl
-//                self.tableView.setEditing(isEdit, animated: true)
-//                self.tableView.reloadData()
-            })
+        sharedState.map(\.isEditing)
+            .withUnretained(self)
+            .bind { owner, flag in
+                owner.tableView.isEditing = flag
+                owner.tableView.reloadData()
+            }
             .disposed(by: disposeBag)
 
-        output.indexPathOfSelectedLikeLists
-            .skip(1)
-            .debug("indexPathOfSelectedLikeLists")
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] songs, dataSource in
-                guard let self = self else { return }
-                let items = dataSource.first?.items ?? []
+        sharedState.map(\.selectedItemCount)
+            .withUnretained(self)
+            .bind(onNext: { owner, count in
 
-                switch songs.isEmpty {
-                case true:
-                    self.hideSongCart()
-                case false:
-                    self.showSongCart(
+                if count == 0 {
+                    owner.hideSongCart()
+                } else {
+                    owner.showSongCart(
                         in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
                         type: .likeSong,
-                        selectedSongCount: songs.count,
-                        totalSongCount: items.count,
+                        selectedSongCount: count,
+                        totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
                         useBottomSpace: true
                     )
-                    self.songCartView?.delegate = self
+                    owner.songCartView?.delegate = owner
                 }
-            }).disposed(by: disposeBag)
 
-        output.willAddSongList
-            .skip(1)
-            .debug("willAddSongList")
-            .subscribe(onNext: { [weak self] songs in
-                guard let `self` = self else { return }
-                let viewController = self.containSongsFactory.makeView(songs: songs)
-                viewController.modalPresentationStyle = .overFullScreen
-                self.present(viewController, animated: true) {
-                    self.input.allLikeListSelected.onNext(false)
-                }
-            }).disposed(by: disposeBag)
-
-        output.willAddPlayList
-            .skip(1)
-            .debug("willAddPlayList")
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else { return }
-                self.playState.appendSongsToPlaylist(songs)
-                self.input.allLikeListSelected.onNext(false)
-                self.output.state.accept(EditState(isEditing: false, force: true))
-                self.showToast(
-                    text: "\(songs.count)곡이 재생목록에 추가되었습니다. 중복 곡은 제외됩니다.",
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
-            }).disposed(by: disposeBag)
-
-        output.showToast
-            .subscribe(onNext: { [weak self] (result: BaseEntity) in
-                guard let self = self else { return }
-
-                self.showToast(
-                    text: result.description,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
             })
             .disposed(by: disposeBag)
-
-        output.onLogout.bind(with: self) { owner, error in
-            NotificationCenter.default.post(name: .movedTab, object: 4)
-
-            owner.showToast(
-                text: error.localizedDescription,
-                font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-            )
-        }
-        .disposed(by: disposeBag)
     }
+}
 
+extension FavoriteViewController {
     private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {
         let datasource = RxTableViewSectionedReloadDataSource<FavoriteSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
-                guard let self = self,
-                      let cell = tableView.dequeueReusableCell(
-                          withIdentifier: "FavoriteTableViewCell",
-                          for: IndexPath(row: indexPath.row, section: 0)
-                      ) as? FavoriteTableViewCell
+                guard let self = self, let reactor = self.reactor else { return UITableViewCell()
+                }
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "FavoriteTableViewCell",
+                    for: IndexPath(row: indexPath.row, section: 0)
+                ) as? FavoriteTableViewCell
                 else { return UITableViewCell() }
 
                 cell.update(
                     model: model,
-                    isEditing: self.output.state.value.isEditing,
+                    isEditing: reactor.currentState.isEditing,
                     indexPath: indexPath
                 )
                 cell.delegate = self
@@ -215,53 +197,43 @@ extension FavoriteViewController {
         )
         return datasource
     }
-
-    private func configureUI() {
-        self.tableView.refreshControl = self.refreshControl
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        self.tableView.backgroundColor = .clear
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        self.activityIndicator.type = .circleStrokeSpin
-        self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIndicator.startAnimating()
-    }
 }
 
 extension FavoriteViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         switch type {
         case let .allSelect(flag):
-            input.allLikeListSelected.onNext(flag)
+            reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
-            input.addSongs.onNext(())
-            self.output.state.accept(EditState(isEditing: false, force: true))
+//            input.addSongs.onNext(())
             self.hideSongCart()
         case .addPlayList:
-            input.addPlayList.onNext(())
+            // input.addPlayList.onNext(())
             self.hideSongCart()
         case .remove:
-            let count: Int = output.indexPathOfSelectedLikeLists.value.count
+            break
+            // TODO: useCase 연결 후
+//            let count: Int = output.indexPathOfSelectedLikeLists.value.count
+//
+//            guard let textPopupViewController = self.textPopUpFactory.makeView(
+//                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
+//                cancelButtonIsHidden: false,
+//                allowsDragAndTapToDismiss: nil,
+//                confirmButtonText: nil,
+//                cancelButtonText: nil,
+//                completion: { [weak self] in
+//
+//                    guard let self else { return }
+//                    self.input.deleteLikeList.onNext(())
+//                    self.hideSongCart()
+//
+//                },
+//                cancelCompletion: nil
+//            ) as? TextPopupViewController else {
+//                return
+//            }
 
-            guard let textPopupViewController = self.textPopUpFactory.makeView(
-                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
-                cancelButtonIsHidden: false,
-                allowsDragAndTapToDismiss: nil,
-                confirmButtonText: nil,
-                cancelButtonText: nil,
-                completion: { [weak self] in
-
-                    guard let self else { return }
-                    self.input.deleteLikeList.onNext(())
-                    self.hideSongCart()
-
-                },
-                cancelCompletion: nil
-            ) as? TextPopupViewController else {
-                return
-            }
-
-            self.showPanModal(content: textPopupViewController)
+        // self.showPanModal(content: textPopupViewController)
         default: return
         }
     }
@@ -271,9 +243,10 @@ extension FavoriteViewController: FavoriteTableViewCellDelegate {
     public func buttonTapped(type: FavoriteTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
-            input.itemSelected.onNext(indexPath)
+            self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
-            playState.loadAndAppendSongsToPlaylist([song])
+            // TODO: useCase 연결 후
+            break
         }
     }
 }
@@ -295,8 +268,6 @@ extension FavoriteViewController: UITableViewDelegate {
 
 extension FavoriteViewController {
     func scrollToTop() {
-        let itemIsEmpty: Bool = output.dataSource.value.first?.items.isEmpty ?? true
-        guard !itemIsEmpty else { return }
         tableView.setContentOffset(.zero, animated: true)
     }
 }

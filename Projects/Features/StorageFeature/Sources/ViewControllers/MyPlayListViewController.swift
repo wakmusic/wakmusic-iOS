@@ -290,7 +290,7 @@ extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
     public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
-            self.reactor?.action.onNext(.tapDidPlaylist(indexPath.row))
+            self.reactor?.action.onNext(.playlistDidTap(indexPath.row))
         case let .playTapped(indexPath):
             // TODO: useCase 연결 후
             break
