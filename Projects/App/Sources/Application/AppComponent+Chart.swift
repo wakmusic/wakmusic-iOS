@@ -29,10 +29,4 @@ public extension AppComponent {
             FetchChartRankingUseCaseImpl(chartRepository: chartRepository)
         }
     }
-
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
-        shared {
-            FetchChartUpdateTimeUseCaseImpl(chartRepository: chartRepository)
-        }
-    }
 }

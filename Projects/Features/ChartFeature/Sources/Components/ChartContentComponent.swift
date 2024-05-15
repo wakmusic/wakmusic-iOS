@@ -6,7 +6,6 @@ import NeedleFoundation
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
 }
 
@@ -15,8 +14,7 @@ public final class ChartContentComponent: Component<ChartContentDependency> {
         return ChartContentViewController.viewController(
             viewModel: .init(
                 type: type,
-                fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
-                fetchChartUpdateTimeUseCase: dependency.fetchChartUpdateTimeUseCase
+                fetchChartRankingUseCase: dependency.fetchChartRankingUseCase
             ),
             containSongsFactory: dependency.containSongsFactory
         )

@@ -11,16 +11,13 @@ public final class ChartContentViewModel: ViewModelType {
 
     private let disposeBag = DisposeBag()
     private let fetchChartRankingUseCase: FetchChartRankingUseCase
-    private let fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
 
     public init(
         type: ChartDateType,
-        fetchChartRankingUseCase: FetchChartRankingUseCase,
-        fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
+        fetchChartRankingUseCase: FetchChartRankingUseCase
     ) {
         self.type = type
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
-        self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
 
     public struct Input {
@@ -41,32 +38,26 @@ public final class ChartContentViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
 
-        let dataSourceForZip = Observable.zip(
-            fetchChartUpdateTimeUseCase
-                .execute(type: type)
-                .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
-                .asObservable(),
-            fetchChartRankingUseCase
-                .execute(type: type)
-                .debug("fetchChartRankingUseCase")
-                .catchAndReturn([])
-                .asObservable()
-        )
+        let fetchChartRankingUseCase = fetchChartRankingUseCase
+            .execute(type: type)
+            .debug("fetchChartRankingUseCase")
+            .catchAndReturn(.init(updatedAt: "팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요.", songs: []))
+            .asObservable()
 
-        dataSourceForZip
-            .subscribe(onNext: { time, data in
-                output.updateTime.accept(time)
-                output.dataSource.accept(data)
+        fetchChartRankingUseCase
+            .subscribe(onNext: { entity in
+                output.updateTime.accept(entity.updatedAt)
+                output.dataSource.accept(entity.songs)
             })
             .disposed(by: disposeBag)
 
         input.refreshPulled
-            .flatMap { _ -> Observable<(String, [ChartRankingEntity])> in
-                return dataSourceForZip
+            .flatMap { _ -> Observable<ChartEntity> in
+                return fetchChartRankingUseCase
             }
-            .subscribe(onNext: { time, data in
-                output.updateTime.accept(time)
-                output.dataSource.accept(data)
+            .subscribe(onNext: { entity in
+                output.updateTime.accept(entity.updatedAt)
+                output.dataSource.accept(entity.songs)
             })
             .disposed(by: disposeBag)
 

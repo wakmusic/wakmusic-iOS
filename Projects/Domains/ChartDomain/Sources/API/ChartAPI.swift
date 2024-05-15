@@ -6,7 +6,6 @@ import Moya
 
 public enum ChartAPI {
     case fetchChartRanking(type: ChartDateType)
-    case fetchChartUpdateTime(type: ChartDateType)
 }
 
 extension ChartAPI: WMAPI {
@@ -18,8 +17,6 @@ extension ChartAPI: WMAPI {
         switch self {
         case let .fetchChartRanking(type):
             return "/\(type.rawValue)"
-        case let .fetchChartUpdateTime(type):
-            return "/updated/\(type.rawValue)"
         }
     }
 
@@ -30,9 +27,6 @@ extension ChartAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case .fetchChartRanking:
-            return .requestPlain
-
-        case .fetchChartUpdateTime:
             return .requestPlain
         }
     }
