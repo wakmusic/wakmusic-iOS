@@ -10,6 +10,7 @@ import ArtistDomainInterface
 import Foundation
 
 public struct ArtistListResponseDTO: Decodable, Equatable {
+    let id: String
     let name: ArtistListResponseDTO.Name
     let group: ArtistListResponseDTO.Group
     let info: ArtistListResponseDTO.Info
@@ -17,10 +18,11 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
     let graduated: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.name.id == rhs.name.id
+        return lhs.id == rhs.id
     }
 
     private enum CodingKeys: String, CodingKey {
+        case id
         case name
         case group
         case info
@@ -31,12 +33,10 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
 
 public extension ArtistListResponseDTO {
     struct Name: Decodable {
-        let id: String
         let krName: String
         let enName: String
 
         private enum CodingKeys: String, CodingKey {
-            case id = "kr"
             case krName = "krShort"
             case enName = "en"
         }
@@ -71,7 +71,7 @@ public extension ArtistListResponseDTO.Info {
 public extension ArtistListResponseDTO {
     func toDomain() -> ArtistListEntity {
         ArtistListEntity(
-            id: name.id,
+            id: id,
             krName: name.krName,
             enName: name.enName,
             groupName: group.name,
