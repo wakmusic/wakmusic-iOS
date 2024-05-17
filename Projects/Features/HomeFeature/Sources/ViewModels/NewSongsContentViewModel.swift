@@ -18,18 +18,15 @@ public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType
     private let disposeBag = DisposeBag()
     private let fetchNewSongsUseCase: FetchNewSongsUseCase
-    private let fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public init(
         type: NewSongGroupType,
-        fetchNewSongsUseCase: FetchNewSongsUseCase,
-        fetchChartUpdateTimeUseCase: FetchChartUpdateTimeUseCase
+        fetchNewSongsUseCase: FetchNewSongsUseCase
     ) {
         self.type = type
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
-        self.fetchChartUpdateTimeUseCase = fetchChartUpdateTimeUseCase
     }
 
     public struct Input {
@@ -50,16 +47,6 @@ public final class NewSongsContentViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-
-        let chartUpdateTime = self.fetchChartUpdateTimeUseCase
-            .execute(type: .total)
-            .catchAndReturn("팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요") // 이스터에그 🥰
-            .asObservable()
-
-        chartUpdateTime
-            .take(1)
-            .bind(to: output.updateTime)
-            .disposed(by: disposeBag)
 
         let refresh = Observable.combineLatest(
             output.dataSource,
@@ -97,7 +84,7 @@ public final class NewSongsContentViewModel: ViewModelType {
                 input.pageID.accept(1)
             })
             .flatMap { _ -> Observable<String> in
-                return chartUpdateTime
+                return .just("-")
             }
             .bind(to: output.updateTime)
             .disposed(by: disposeBag)

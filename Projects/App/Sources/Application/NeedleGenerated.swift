@@ -291,9 +291,6 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
     var fetchChartRankingUseCase: any FetchChartRankingUseCase {
         return appComponent.fetchChartRankingUseCase
     }
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
-        return appComponent.fetchChartUpdateTimeUseCase
-    }
     var containSongsFactory: any ContainSongsFactory {
         return appComponent.containSongsFactory
     }
@@ -635,9 +632,6 @@ private class NewSongsContentDependency93a05f20fa300c5bbec3Provider: NewSongsCon
     var fetchNewSongsUseCase: any FetchNewSongsUseCase {
         return appComponent.fetchNewSongsUseCase
     }
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
-        return appComponent.fetchChartUpdateTimeUseCase
-    }
     var containSongsFactory: any ContainSongsFactory {
         return appComponent.containSongsFactory
     }
@@ -766,6 +760,7 @@ private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: Needle
 #else
 extension AppComponent: Registration {
     public func registerItems() {
+
         localTable["keychain-any Keychain"] = { self.keychain as Any }
         localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
@@ -775,8 +770,7 @@ extension AppComponent: Registration {
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
         localTable["signInFactory-any SignInFactory"] = { self.signInFactory as Any }
-        localTable["storageComponent-StorageComponent"] = { self.storageComponent as Any }
-        localTable["afterLoginComponent-AfterLoginComponent"] = { self.afterLoginComponent as Any }
+        localTable["storageFactory-any StorageFactory"] = { self.storageFactory as Any }
         localTable["requestComponent-RequestComponent"] = { self.requestComponent as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
@@ -858,7 +852,6 @@ extension AppComponent: Registration {
         localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
         localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
         localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
-        localTable["fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"] = { self.fetchChartUpdateTimeUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
@@ -950,7 +943,6 @@ extension ChartComponent: Registration {
 extension ChartContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\ChartContentDependency.fetchChartRankingUseCase] = "fetchChartRankingUseCase-any FetchChartRankingUseCase"
-        keyPathToName[\ChartContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
         keyPathToName[\ChartContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
@@ -1083,7 +1075,6 @@ extension HomeComponent: Registration {
 extension NewSongsContentComponent: Registration {
     public func registerItems() {
         keyPathToName[\NewSongsContentDependency.fetchNewSongsUseCase] = "fetchNewSongsUseCase-any FetchNewSongsUseCase"
-        keyPathToName[\NewSongsContentDependency.fetchChartUpdateTimeUseCase] = "fetchChartUpdateTimeUseCase-any FetchChartUpdateTimeUseCase"
         keyPathToName[\NewSongsContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }

@@ -51,7 +51,8 @@ public final class HomeViewModel: ViewModelType {
 
         let chart = self.fetchChartRankingUseCase
             .execute(type: .hourly)
-            .catchAndReturn([])
+            .catchAndReturn(.init(updatedAt: "팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요.", songs: []))
+            .map { $0.songs }
             .asObservable()
 
         let newSongs = self.fetchNewSongsUseCase
