@@ -102,10 +102,9 @@ extension TmpViewController {
         switch layout {
         case .top:
 
-            
-            let width = APP_WIDTH()-40
+            let width = APP_WIDTH() - 40
             let height = (width * 292) / 335
-            
+
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(width), heightDimension: .absolute(height))
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
