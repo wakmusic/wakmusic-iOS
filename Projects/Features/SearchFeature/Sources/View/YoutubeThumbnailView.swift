@@ -1,10 +1,13 @@
 import SnapKit
 import Then
 import UIKit
+import DesignSystem
+import Utility
 
 class YoutubeThumbnailView: UICollectionViewCell {
     var thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
 
     override init(frame: CGRect) {
@@ -20,12 +23,18 @@ class YoutubeThumbnailView: UICollectionViewCell {
 
 extension YoutubeThumbnailView {
     func configureUI() {
-//        contentView.addSubview(thumbnailView)
-//
-//        thumbnailView.snp.makeConstraints {
-//            $0.verticalEdges.horizontalEdges.equalToSuperview()
-//        }
-//
+        contentView.addSubview(thumbnailView)
+
+        thumbnailView.snp.makeConstraints {
+            $0.verticalEdges.horizontalEdges.equalToSuperview()
+        }
+        
+        
+        thumbnailView.layer.cornerRadius = frame.height * 50 / 292
+        
+        
+        thumbnailView.image = DesignSystemAsset.Search.testThumbnail.image
+
         contentView.backgroundColor = .orange
     }
 }
