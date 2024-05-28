@@ -1,6 +1,6 @@
-import UIKit
 import Inject
 @testable import SearchFeature
+import UIKit
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
