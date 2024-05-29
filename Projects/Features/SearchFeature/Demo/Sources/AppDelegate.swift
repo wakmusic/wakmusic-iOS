@@ -1,5 +1,5 @@
-import Inject
 @testable import BaseFeature
+import Inject
 @testable import SearchFeature
 import UIKit
 

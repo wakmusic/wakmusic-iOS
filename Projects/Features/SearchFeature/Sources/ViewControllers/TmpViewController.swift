@@ -1,10 +1,10 @@
+import BaseFeature
+import LogManager
+import PlayListDomainInterface
 import SnapKit
 import Then
 import UIKit
 import Utility
-import BaseFeature
-import PlayListDomainInterface
-import LogManager
 
 struct Model: Hashable {
     var title: String
@@ -65,24 +65,21 @@ class TmpViewController: UIViewController {
         collectionView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
-        
+
         collectionView.register(
             UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
             forCellWithReuseIdentifier: "RecommendPlayListCell"
         )
-        
+
         configureDataSource()
     }
 }
 
 extension TmpViewController {
     func createCollectionView() {
-        
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        
-        view.addSubview(collectionView)
-        
 
+        view.addSubview(collectionView)
     }
 
     func createLayout() -> UICollectionViewLayout {
@@ -150,36 +147,46 @@ extension TmpViewController {
     }
 
     private func configureDataSource() {
-        
-        
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailView, Model> { cell, indexPath, item in
             }
-        
-        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell,Model> { cell, indexPath, item in
-            
-            cell.update(model: RecommendPlayListEntity(key: "bset", title: "임시 플레이리스트", image_round_version: 1, image_sqaure_version: 1))
 
-        }
-        
+        let recommandCellRegistration = UICollectionView
+            .CellRegistration<RecommendPlayListCell, Model> { cell, indexPath, item in
+
+                cell.update(model: RecommendPlayListEntity(
+                    key: "bset",
+                    title: "임시 플레이리스트",
+                    image_round_version: 1,
+                    image_sqaure_version: 1
+                ))
+            }
 
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
-            
-            switch item {
-                
-            case .youtube(model: let model):
-                return collectionView.dequeueConfiguredReusableCell(using: youtubeCellRegistration, for: indexPath, item: model)
-            case .recommand(model2: let model2):
-                return
-                collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: model2)
-                
-            case .popularList(model: let model):
-                return collectionView.dequeueConfiguredReusableCell(using: youtubeCellRegistration, for: indexPath, item: model)
-            }
-            
 
-      
+            switch item {
+            case let .youtube(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: youtubeCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            case let .recommand(model2: model2):
+                return
+                    collectionView.dequeueConfiguredReusableCell(
+                        using: recommandCellRegistration,
+                        for: indexPath,
+                        item: model2
+                    )
+
+            case let .popularList(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: youtubeCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            }
         }
 
         // initial data
