@@ -1,7 +1,7 @@
+import DesignSystem
 import SnapKit
 import Then
 import UIKit
-import DesignSystem
 import Utility
 
 class YoutubeThumbnailView: UICollectionViewCell {
@@ -28,11 +28,9 @@ extension YoutubeThumbnailView {
         thumbnailView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
-        
-        
+
         thumbnailView.layer.cornerRadius = frame.height * 50 / 292
-        
-        
+
         thumbnailView.image = DesignSystemAsset.Search.testThumbnail.image
 
         contentView.backgroundColor = .orange

@@ -2,6 +2,9 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import BaseFeature
+import PlayListDomainInterface
+import LogManager
 
 struct Model: Hashable {
     var title: String
@@ -28,7 +31,7 @@ class TmpViewController: UIViewController {
 
     enum DataSource: Hashable {
         case youtube(model: Model)
-        case recommand(model2: Model2)
+        case recommand(model2: Model)
         case popularList(model: Model)
 
         var title: String {
@@ -36,7 +39,7 @@ class TmpViewController: UIViewController {
             case let .youtube(model):
                 return model.title
             case let .recommand(model2):
-                return model2.title2
+                return model2.title
             case let .popularList(model):
                 return model.title
             }
@@ -44,8 +47,6 @@ class TmpViewController: UIViewController {
     }
 
     fileprivate var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>! = nil
-    var layout: UICollectionViewLayout?
-
     var collectionView: UICollectionView! = nil
 
     init() {
@@ -64,14 +65,24 @@ class TmpViewController: UIViewController {
         collectionView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
+        
+        collectionView.register(
+            UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
+            forCellWithReuseIdentifier: "RecommendPlayListCell"
+        )
+        
         configureDataSource()
     }
 }
 
 extension TmpViewController {
     func createCollectionView() {
+        
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        
         view.addSubview(collectionView)
+        
+
     }
 
     func createLayout() -> UICollectionViewLayout {
@@ -139,14 +150,36 @@ extension TmpViewController {
     }
 
     private func configureDataSource() {
-        let cellRegistration = UICollectionView
-            .CellRegistration<YoutubeThumbnailView, DataSource> { cell, indexPath, item in
+        
+        
+        let youtubeCellRegistration = UICollectionView
+            .CellRegistration<YoutubeThumbnailView, Model> { cell, indexPath, item in
             }
+        
+        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell,Model> { cell, indexPath, item in
+            
+            cell.update(model: RecommendPlayListEntity(key: "bset", title: "임시 플레이리스트", image_round_version: 1, image_sqaure_version: 1))
+
+        }
+        
 
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, model: DataSource) -> UICollectionViewCell? in
+            (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
+            
+            switch item {
+                
+            case .youtube(model: let model):
+                return collectionView.dequeueConfiguredReusableCell(using: youtubeCellRegistration, for: indexPath, item: model)
+            case .recommand(model2: let model2):
+                return
+                collectionView.dequeueConfiguredReusableCell(using: recommandCellRegistration, for: indexPath, item: model2)
+                
+            case .popularList(model: let model):
+                return collectionView.dequeueConfiguredReusableCell(using: youtubeCellRegistration, for: indexPath, item: model)
+            }
+            
 
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: model)
+      
         }
 
         // initial data
@@ -155,10 +188,10 @@ extension TmpViewController {
         snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .top)
         snapshot.appendItems(
             [
-                .recommand(model2: Model2(title2: "123")),
-                .recommand(model2: Model2(title2: "456")),
-                .recommand(model2: Model2(title2: "4564")),
-                .recommand(model2: Model2(title2: "4516")),
+                .recommand(model2: Model(title: "123")),
+                .recommand(model2: Model(title: "456")),
+                .recommand(model2: Model(title: "4564")),
+                .recommand(model2: Model(title: "4516")),
             ],
             toSection: .mid
         )
