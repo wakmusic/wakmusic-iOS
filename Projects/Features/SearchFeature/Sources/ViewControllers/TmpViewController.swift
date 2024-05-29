@@ -66,10 +66,10 @@ class TmpViewController: UIViewController {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
 
-        collectionView.register(
-            UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
-            forCellWithReuseIdentifier: "RecommendPlayListCell"
-        )
+//        collectionView.register(
+//            UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
+//            forCellWithReuseIdentifier: "RecommendPlayListCell"
+//        )
 
         configureDataSource()
     }
@@ -151,9 +151,11 @@ extension TmpViewController {
             .CellRegistration<YoutubeThumbnailView, Model> { cell, indexPath, item in
             }
 
-        let recommandCellRegistration = UICollectionView
-            .CellRegistration<RecommendPlayListCell, Model> { cell, indexPath, item in
-
+        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>
+            .init(cellNib: UINib(
+                nibName: "RecommendPlayListCell",
+                bundle: BaseFeatureResources.bundle
+            )) { cell, indexPath, itemIdentifier in
                 cell.update(model: RecommendPlayListEntity(
                     key: "bset",
                     title: "임시 플레이리스트",
