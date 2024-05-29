@@ -73,7 +73,7 @@ class TmpViewController: UIViewController {
 extension TmpViewController {
     func createCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        
+
         collectionView.backgroundColor = .systemGray
 
         view.addSubview(collectionView)
@@ -109,13 +109,14 @@ extension TmpViewController {
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.87))
+                heightDimension: .fractionalWidth(0.87)
+            )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
             section = NSCollectionLayoutSection(group: group)
-            
+
         case .mid:
-            
+
             let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
             let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
 
@@ -129,11 +130,10 @@ extension TmpViewController {
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
 
         case .bottom:
-            
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
-            
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
+            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
+
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
             section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
@@ -152,7 +152,7 @@ extension TmpViewController {
         let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
-        )){ cell, indexPath, itemIdentifier in
+        )) { cell, indexPath, itemIdentifier in
             cell.update(model: RecommendPlayListEntity(
                 key: "best",
                 title: "임시 플레이리스트",
@@ -160,13 +160,12 @@ extension TmpViewController {
                 image_sqaure_version: 1
             ))
         }
-        
+
         let popularListCellRegistration = UICollectionView
             .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
-           
+
                 cell.update(item)
             }
-
 
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in

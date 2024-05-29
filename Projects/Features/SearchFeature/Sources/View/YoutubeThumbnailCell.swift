@@ -32,6 +32,5 @@ extension YoutubeThumbnailCell {
         thumbnailView.layer.cornerRadius = frame.height * 50 / 292
 
         thumbnailView.image = DesignSystemAsset.Search.testThumbnail.image
-
     }
 }

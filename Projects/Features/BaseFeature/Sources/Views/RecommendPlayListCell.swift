@@ -42,7 +42,7 @@ public extension RecommendPlayListCell {
         )
         titleStringLabel.attributedText = attributedString
         titleStringLabel.numberOfLines = 3
-        
+
         logoImageView.kf.setImage(
             with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.key, version: model.image_round_version).toURL,
             placeholder: nil,
