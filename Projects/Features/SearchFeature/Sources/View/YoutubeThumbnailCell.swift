@@ -4,7 +4,7 @@ import Then
 import UIKit
 import Utility
 
-class YoutubeThumbnailView: UICollectionViewCell {
+class YoutubeThumbnailCell: UICollectionViewCell {
     var thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -21,7 +21,7 @@ class YoutubeThumbnailView: UICollectionViewCell {
     }
 }
 
-extension YoutubeThumbnailView {
+extension YoutubeThumbnailCell {
     func configureUI() {
         contentView.addSubview(thumbnailView)
 
@@ -33,6 +33,5 @@ extension YoutubeThumbnailView {
 
         thumbnailView.image = DesignSystemAsset.Search.testThumbnail.image
 
-        contentView.backgroundColor = .orange
     }
 }

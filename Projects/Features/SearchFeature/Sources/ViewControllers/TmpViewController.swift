@@ -66,11 +66,6 @@ class TmpViewController: UIViewController {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
 
-//        collectionView.register(
-//            UINib(nibName: "RecommendPlayListCell", bundle: BaseFeatureResources.bundle),
-//            forCellWithReuseIdentifier: "RecommendPlayListCell"
-//        )
-
         configureDataSource()
     }
 }
@@ -78,6 +73,8 @@ class TmpViewController: UIViewController {
 extension TmpViewController {
     func createCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        
+        collectionView.backgroundColor = .systemGray
 
         view.addSubview(collectionView)
     }
@@ -110,16 +107,15 @@ extension TmpViewController {
         switch layout {
         case .top:
 
-            let width = APP_WIDTH() - 40
-            let height = (width * 292) / 335
-
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(width), heightDimension: .absolute(height))
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(0.87))
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+            group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
             section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-
+            
         case .mid:
+            
             let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
             let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
 
@@ -133,9 +129,11 @@ extension TmpViewController {
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
 
         case .bottom:
-
+            
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
+            
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
 
             section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
@@ -148,21 +146,27 @@ extension TmpViewController {
 
     private func configureDataSource() {
         let youtubeCellRegistration = UICollectionView
-            .CellRegistration<YoutubeThumbnailView, Model> { cell, indexPath, item in
+            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
-        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>
-            .init(cellNib: UINib(
-                nibName: "RecommendPlayListCell",
-                bundle: BaseFeatureResources.bundle
-            )) { cell, indexPath, itemIdentifier in
-                cell.update(model: RecommendPlayListEntity(
-                    key: "bset",
-                    title: "임시 플레이리스트",
-                    image_round_version: 1,
-                    image_sqaure_version: 1
-                ))
+        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+            nibName: "RecommendPlayListCell",
+            bundle: BaseFeatureResources.bundle
+        )){ cell, indexPath, itemIdentifier in
+            cell.update(model: RecommendPlayListEntity(
+                key: "best",
+                title: "임시 플레이리스트",
+                image_round_version: 1,
+                image_sqaure_version: 1
+            ))
+        }
+        
+        let popularListCellRegistration = UICollectionView
+            .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
+           
+                cell.update(item)
             }
+
 
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
@@ -184,7 +188,7 @@ extension TmpViewController {
 
             case let .popularList(model: model):
                 return collectionView.dequeueConfiguredReusableCell(
-                    using: youtubeCellRegistration,
+                    using: popularListCellRegistration,
                     for: indexPath,
                     item: model
                 )
