@@ -8,7 +8,6 @@ import Utility
 
 // TODO: 코드 정리
 
-
 struct Model: Hashable {
     var title: String
 
@@ -113,9 +112,9 @@ extension TmpViewController {
             elementKind: BeforeSearchSectionHeaderView.kind,
             alignment: .top
         )
-    
+
         header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
-        
+
         switch layout {
         case .top:
 
@@ -183,13 +182,16 @@ extension TmpViewController {
             }
 
         let headerRegistration = UICollectionView
-            .SupplementaryRegistration<BeforeSearchSectionHeaderView>(elementKind: BeforeSearchSectionHeaderView.kind) { [weak self] supplementaryView, string, indexPath in
-                
+            .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
+                elementKind: BeforeSearchSectionHeaderView
+                    .kind
+            ) { [weak self] supplementaryView, string, indexPath in
+
                 guard let self else { return }
                 supplementaryView.delegate = self
-                supplementaryView.update("임시 타이틀",indexPath.section)
+                supplementaryView.update("임시 타이틀", indexPath.section)
             }
-    
+
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
 
@@ -218,7 +220,6 @@ extension TmpViewController {
         }
 
         dataSource.supplementaryViewProvider = { collectionView, kind, index in
-            
 
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
@@ -249,36 +250,26 @@ extension TmpViewController {
 }
 
 extension TmpViewController: UICollectionViewDelegate {
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         guard let model = dataSource.itemIdentifier(for: indexPath) as? DataSource else {
             return
         }
-        
+
         switch model {
-            
-        case .youtube(model: let model):
+        case let .youtube(model: model):
             LogManager.printDebug("youtube \(model)")
-        case .recommand(model2: let model2):
+        case let .recommand(model2: model2):
             LogManager.printDebug("recommand \(model2)")
-        case .popularList(model: let model):
+        case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }
-        
     }
-    
 }
-
 
 extension TmpViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
-        
         if let section = section, let layoutKind = Section(rawValue: section) {
-           print(layoutKind)
+            print(layoutKind)
         }
-        
     }
-    
-
 }
