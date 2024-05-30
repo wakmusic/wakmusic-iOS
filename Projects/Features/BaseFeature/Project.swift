@@ -2,6 +2,7 @@ import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+#warning("에러 모듈위치 변경 필요")
 let project = Project.module(
     name: ModulePaths.Feature.BaseFeature.rawValue,
     targets: [
@@ -17,6 +18,7 @@ let project = Project.module(
                     .domain(target: .AuthDomain, type: .interface),
                     .domain(target: .PlayListDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
+                    .module(target: .ErrorModule),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
                     .Project.Module.Utility
