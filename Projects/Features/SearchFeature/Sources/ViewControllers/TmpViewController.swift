@@ -6,6 +6,11 @@ import Then
 import UIKit
 import Utility
 
+//TODO: 코드 정리
+//TODO: 헤더 달기
+//TODO: 이벤트 처리
+
+
 struct Model: Hashable {
     var title: String
 
@@ -61,15 +66,16 @@ class TmpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createCollectionView()
-
+        configureDataSource()
+        
         collectionView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
-
-        configureDataSource()
     }
 }
 
+
+// collectionView 셋팅 관련
 extension TmpViewController {
     func createCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -103,7 +109,14 @@ extension TmpViewController {
 
         var group: NSCollectionLayoutGroup! = nil
         var section: NSCollectionLayoutSection! = nil
-
+        let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
+    
+        
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerLayout, elementKind: BeforeSearchSectionHeaderView.kind, alignment: .top)
+        
+        
+        header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
+        
         switch layout {
         case .top:
 
@@ -114,6 +127,7 @@ extension TmpViewController {
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
             section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
 
         case .mid:
 
@@ -125,19 +139,23 @@ extension TmpViewController {
                 heightDimension: .absolute(groupeight)
             )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+          
             section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+            section.boundarySupplementaryItems = [header]
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
         case .bottom:
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
 
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            
 
             section = NSCollectionLayoutSection(group: group)
+            section.boundarySupplementaryItems = [header]
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
         }
+
 
         section.orthogonalScrollingBehavior = .continuous
 
@@ -160,12 +178,20 @@ extension TmpViewController {
                 image_sqaure_version: 1
             ))
         }
-
+        
         let popularListCellRegistration = UICollectionView
             .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
 
                 cell.update(item)
             }
+        
+        let headerRegistration = UICollectionView.SupplementaryRegistration<BeforeSearchSectionHeaderView>(elementKind:BeforeSearchSectionHeaderView.kind) {
+            (supplementaryView, string, indexPath) in
+            
+            supplementaryView.update("임시 타이틀")
+            
+        }
+        
 
         dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
@@ -192,6 +218,14 @@ extension TmpViewController {
                     item: model
                 )
             }
+        }
+        
+        dataSource.supplementaryViewProvider = { (collectionView, kind, index) in
+            
+            LogManager.printDebug(index)
+            
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+            
         }
 
         // initial data
