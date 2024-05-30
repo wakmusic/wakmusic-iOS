@@ -35,15 +35,71 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         return viewController
     }
 
-    override func bindState(reactor: MyInfoReactor) {}
+    override func bindState(reactor: MyInfoReactor) {
+        reactor.pulse(\.$loginButtonDidTap)
+            .compactMap { $0 }
+            .bind { _ in print("로그인 버튼 눌림") }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$moreButtonDidTap)
+            .compactMap { $0 }
+            .bind { _ in print("더보기 버튼 눌림") }
+            .disposed(by: disposeBag)
+
+        reactor.state.compactMap(\.navigateType)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, navigateType in
+                print("navigateType:", navigateType)
+                // owner.navigationController?.pushViewController(UIViewController(), animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
 
     override func bindAction(reactor: MyInfoReactor) {
-        myInfoView.rx.loginButtonDidTap.subscribe { _ in
-            print("로그인 버튼 눌림")
-        }.disposed(by: disposeBag)
+        myInfoView.rx.loginButtonDidTap
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
+            .map { MyInfoReactor.Action.loginButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
-        myInfoView.rx.drawButtonDidTap.subscribe { _ in
-            print("뽑기 버튼 눌림")
-        }.disposed(by: disposeBag)
+        myInfoView.rx.moreButtonDidTap
+            .map { MyInfoReactor.Action.moreButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.drawButtonDidTap
+            .map { MyInfoReactor.Action.drawButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.likeNavigationButtonDidTap
+            .map { MyInfoReactor.Action.likeNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.qnaNavigationButtonDidTap
+            .map { MyInfoReactor.Action.qnaNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.notiNavigationButtonDidTap
+            .map { MyInfoReactor.Action.notiNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.mailNavigationButtonDidTap
+            .map { MyInfoReactor.Action.mailNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.teamNavigationButtonDidTap
+            .map { MyInfoReactor.Action.teamNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        myInfoView.rx.settingNavigationButtonDidTap
+            .map { MyInfoReactor.Action.settingNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

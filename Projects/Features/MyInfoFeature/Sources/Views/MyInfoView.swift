@@ -12,6 +12,7 @@ private protocol MyInfoStateProtocol {}
 
 private protocol MyInfoActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
+    var moreButtonDidTap: Observable<Void> { get }
     var likeNavigationButtonDidTap: Observable<Void> { get }
     var qnaNavigationButtonDidTap: Observable<Void> { get }
     var notiNavigationButtonDidTap: Observable<Void> { get }
@@ -119,6 +120,7 @@ private extension MyInfoView {
         loginWarningView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT() + 40)
             $0.centerX.equalToSuperview()
+            $0.width.equalTo(164)
             $0.height.equalTo(154)
         }
 
@@ -154,6 +156,7 @@ extension MyInfoView: MyInfoStateProtocol {}
 
 extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
+    var moreButtonDidTap: Observable<Void> { base.moreButton.rx.tap.asObservable() }
     var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }
     var likeNavigationButtonDidTap: Observable<Void> { base.likeNavigationButton.rx.tap.asObservable() }
     var qnaNavigationButtonDidTap: Observable<Void> { base.qnaNavigationButton.rx.tap.asObservable() }
