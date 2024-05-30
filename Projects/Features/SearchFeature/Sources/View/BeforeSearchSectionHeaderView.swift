@@ -4,7 +4,7 @@ import Then
 import UIKit
 
 protocol BeforeSearchSectionHeaderViewDelegate: AnyObject {
-    func tap() -> Void
+    func tap(_ section:Int?) -> Void
 }
 
 class BeforeSearchSectionHeaderView:
@@ -13,6 +13,8 @@ class BeforeSearchSectionHeaderView:
 
     weak var delegate: BeforeSearchSectionHeaderViewDelegate?
 
+    var section: Int? = nil
+    
     var label: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
 
@@ -55,10 +57,11 @@ extension BeforeSearchSectionHeaderView {
     }
 
     @objc func tap() {
-        delegate?.tap()
+        delegate?.tap(self.section)
     }
 
-    public func update(_ title: String) {
+    public func update(_ title: String,_ section:Int) {
         label.text = title
+        self.section = section
     }
 }
