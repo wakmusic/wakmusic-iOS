@@ -28,7 +28,7 @@ final class LoginWarningView: UIView {
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray600.color, for: .normal)
         $0.layer.cornerRadius = 8
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray400.color.cgColor
+        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray400.color.cgColor.copy(alpha: 0.4)
         $0.layer.borderWidth = 1
         $0.clipsToBounds = true
     }
