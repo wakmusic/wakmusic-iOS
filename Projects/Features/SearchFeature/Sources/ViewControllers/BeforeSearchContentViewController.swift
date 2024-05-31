@@ -11,33 +11,27 @@ import RxSwift
 import UIKit
 import Utility
 
-protocol BeforeSearchContentViewDelegate: AnyObject {
-    func itemSelected(_ keyword: String)
-}
 
-public final class BeforeSearchContentViewController: BaseStoryboardReactorViewController<BeforeSearchReactor> {
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    weak var delegate: BeforeSearchContentViewDelegate?
+public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
+    var tableView: UITableView = UITableView().then {
+        $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
+        $0.separatorStyle = .none
+    }
 
     var playlistDetailFactory: PlaylistDetailFactory!
     var textPopUpFactory: TextPopUpFactory!
-
-    public static func viewController(
-        textPopUpFactory: TextPopUpFactory,
-        playlistDetailFactory: PlaylistDetailFactory,
-        reactor: BeforeSearchReactor
-    ) -> BeforeSearchContentViewController {
-        let viewController = BeforeSearchContentViewController.viewController(
-            storyBoardName: "Search",
-            bundle: Bundle.module
-        )
-        viewController.textPopUpFactory = textPopUpFactory
-        viewController.playlistDetailFactory = playlistDetailFactory
-        viewController.reactor = reactor
-        return viewController
+    
+    init(textPopUpFactory: TextPopUpFactory,
+         playlistDetailFactory: PlaylistDetailFactory,
+         reactor: BeforeSearchReactor) {
+        
+        super.init(reactor: reactor)
+        self.textPopUpFactory = textPopUpFactory
+        self.playlistDetailFactory = playlistDetailFactory
+        
     }
+
 
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
@@ -47,20 +41,48 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
     }
+    
+    public override func addView() {
+        super.addView()
+        self.view.addSubviews(tableView)
+    }
+    
+    public override func setLayout() {
+        super.setLayout()
+        
+        tableView.snp.makeConstraints {
+            $0.horizontalEdges.verticalEdges.equalToSuperview()
+        }
+        
+    }
 
     override public func configureUI() {
         super.configureUI()
-
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.indicator.startAnimating()
+        
+
+//        guard let parent = self.parent as? SearchViewController else {
+//            return
+//        }
+//
+//        // TODO: #531
+//        parent.reactor?.state
+//            .map(\.typingState)
+//            .asObservable()
+//            .map { $0 == .before }
+//            .map { Reactor.Action.updateShowRecommend($0) }
+//            .bind(to: self.reactor.action)
+//            .disposed(by: disposeBag)
     }
 
     override public func bind(reactor: BeforeSearchReactor) {
+        self.indicator.startAnimating()
         super.bind(reactor: reactor)
+        self.indicator.stopAnimating()
 
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
@@ -69,50 +91,34 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
 
     override public func bindAction(reactor: BeforeSearchReactor) {
         super.bindAction(reactor: reactor)
-
+        
         tableView.rx.modelSelected(String.self)
-            .bind { [delegate] keyword in
-                delegate?.itemSelected(keyword)
-            }
+            .map{Reactor.Action.rencentTextDidTap($0)}
+            .bind(to:reactor.action)
             .disposed(by: disposeBag)
 
-        guard let parent = self.parent as? SearchViewController else {
-            return
-        }
-
-        // TODO: #531
-        parent.reactor?.state
-            .map(\.typingState)
-            .asObservable()
-            .map { $0 == .before }
-            .map { Reactor.Action.updateShowRecommend($0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
     }
 
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share(replay: 2)
 
         let combine = Observable.combineLatest(
-            currentState.map(\.showRecommend),
+            sharedState.map(\.showRecommend),
             Utility.PreferenceManager.$recentRecords,
-            currentState.map(\.dataSource)
+            sharedState.map(\.dataSource)
         )
 
         combine
             .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
+                DEBUG_LOG("hhh \(showRecommend) \(item)")
                 if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
                     return []
                 } else {
                     return item ?? []
                 }
             }
-            .do(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.indicator.stopAnimating()
-            })
             .bind(to: tableView.rx.items) { (
                 tableView: UITableView,
                 index: Int,
@@ -125,7 +131,9 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
                     return RecentRecordTableViewCell()
                 }
                 cell.backgroundColor = .clear
-                cell.recentLabel.text = element
+                cell.selectionStyle = .none
+                cell.update(element)
+                
                 return cell
             }.disposed(by: disposeBag)
     }

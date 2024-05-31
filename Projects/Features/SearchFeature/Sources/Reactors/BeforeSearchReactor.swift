@@ -2,6 +2,7 @@ import Foundation
 import PlayListDomainInterface
 import ReactorKit
 import RxSwift
+import Utility
 
 public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
@@ -11,11 +12,13 @@ public final class BeforeSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
         case updateShowRecommend(Bool)
+        case rencentTextDidTap(String)
     }
 
     public enum Mutation {
         case updateRecommend([RecommendPlayListEntity])
         case updateShowRecommend(Bool)
+        case updateRecentText(String)
     }
 
     public struct State {
@@ -25,12 +28,15 @@ public final class BeforeSearchReactor: Reactor {
 
     public var initialState: State
 
-    init(fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase) {
+    private let service: any SearchCommonService
+    init(fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,service: any SearchCommonService = DefaultSearchCommonService.shared) {
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.service = service
         self.initialState = State(
             showRecommend: true,
             dataSource: []
         )
+       
     }
 
     public func mutate(action: Action) -> Observable<Mutation> {
@@ -39,6 +45,8 @@ public final class BeforeSearchReactor: Reactor {
             return fetchRecommend()
         case let .updateShowRecommend(flag):
             return Observable.just(.updateShowRecommend(flag))
+        case let .rencentTextDidTap(text):
+            return updateRecentText(text)
         }
     }
 
@@ -50,9 +58,19 @@ public final class BeforeSearchReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
+        case .updateRecentText(_):
+            break
         }
 
         return newState
+    }
+    
+    public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        
+        let typingState = service.typingStatus.map{Mutation.updateShowRecommend($0 == .before)}
+        
+        return Observable.merge(mutation,typingState)
+        
     }
 }
 
@@ -62,5 +80,14 @@ extension BeforeSearchReactor {
             .execute()
             .asObservable()
             .map { Mutation.updateRecommend($0) }
+    }
+    
+    func updateRecentText(_ text:String) -> Observable<Mutation> {
+        
+        service.recentText.onNext(text)
+        service.typingStatus.onNext(.search)
+
+
+        return .empty()
     }
 }

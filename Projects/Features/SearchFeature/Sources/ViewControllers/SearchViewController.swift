@@ -33,9 +33,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     var afterSearchComponent: AfterSearchComponent!
     var textPopUpFactory: TextPopUpFactory!
 
-    private lazy var beforeVC = beforeSearchComponent.makeView().then {
-        $0.delegate = self
-    }
+    private lazy var beforeVC = beforeSearchComponent.makeView()
 
     private lazy var afterVC = afterSearchComponent.makeView()
 
@@ -76,7 +74,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         self.cancelButton.titleLabel?.text = "취소"
         self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         self.cancelButton.layer.cornerRadius = 4
-        self.cancelButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        self.cancelButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
 
@@ -93,15 +91,14 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     override public func bindState(reactor: SearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 1)
-
+        let sharedState = reactor.state.share(replay: 2)
+        
         sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
             .bind { owner, data in
 
                 let (state, text) = data
-
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state)
@@ -124,6 +121,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
+                    owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
                     UIView.setAnimationsEnabled(false)
                     owner.view.endEditing(true)
@@ -203,28 +201,13 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
 extension SearchViewController {
     private func bindSubView(_ state: TypingStatus) {
-        /*
-         A:부모
-         B:자식
-
-         서브뷰 추가
-         A.addChild(B)
-         A.view.addSubview(B.view)
-         B.didMove(toParent: A)
-
-         서브뷰 삭제
-         B.willMove(toParent: nil) // 제거되기 직전에 호출
-         B.removeFromParent() // parentVC로 부터 관계 삭제
-         B.view.removeFromSuperview() // parentVC.view.addsubView()와 반대 기능
-
-         */
 
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
             guard state == .search else {
                 return
             }
 
-            guard let text = reactor?.currentState.text else {
+            guard let text = reactor?.currentState.text, !text.isEmpty else {
                 return
             }
 
@@ -269,24 +252,6 @@ extension SearchViewController {
             attributes: placeHolderAttributes
         )
         self.searchImageView.tintColor = tintColor
-    }
-}
-
-extension SearchViewController: BeforeSearchContentViewDelegate {
-    func itemSelected(_ keyword: String) {
-        searchTextFiled.rx.text.onNext(keyword)
-        PreferenceManager.shared.addRecentRecords(word: keyword)
-
-        guard let reactor = reactor else {
-            return
-        }
-
-        reactor.action.onNext(.updateText(keyword))
-        reactor.action.onNext(.switchTypingState(.search))
-
-        UIView.setAnimationsEnabled(false)
-        view.endEditing(true) // 바인드 서브 뷰를 먼저 해야 tabMan tabBar가 짤리는 버그를 방지
-        UIView.setAnimationsEnabled(true)
     }
 }
 

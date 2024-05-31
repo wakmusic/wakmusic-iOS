@@ -38,6 +38,10 @@ public final class AfterSearchContentViewController: BaseViewController, ViewCon
         viewController.viewModel = viewModel
         return viewController
     }
+    
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
 }
 
 extension AfterSearchContentViewController {

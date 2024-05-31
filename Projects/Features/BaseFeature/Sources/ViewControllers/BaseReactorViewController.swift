@@ -33,7 +33,7 @@ open class BaseReactorViewController<R: Reactor>: UIViewController, View {
         configureNavigation()
     }
 
-    public func bind(reactor: R) {
+    open func bind(reactor: R) {
         bindState(reactor: reactor)
         bindAction(reactor: reactor)
     }
