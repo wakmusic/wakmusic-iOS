@@ -18,6 +18,7 @@ private protocol SettingActionProtocol {
     var privacyNavigationButtonDidTap: Observable<Void> { get }
     var openSourceNavigationButtonDidTap: Observable<Void> { get }
     var removeCacheButtonDidTap: Observable<Void> { get }
+    var versionInfoButtonDidTap: Observable<Void> { get }
 }
 
 final class SettingView: UIView {
@@ -175,4 +176,5 @@ extension Reactive: SettingActionProtocol where Base: SettingView {
     var privacyNavigationButtonDidTap: Observable<Void> { base.privacyNavgationButton.rx.didTap }
     var openSourceNavigationButtonDidTap: Observable<Void> { base.openSourceNavgationButton.rx.didTap }
     var removeCacheButtonDidTap: Observable<Void> { base.removeCacheButton.rx.didTap }
+    var versionInfoButtonDidTap: RxSwift.Observable<Void> { base.versionInfoButton.rx.didTap }
 }
