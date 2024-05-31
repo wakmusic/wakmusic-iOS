@@ -29,7 +29,7 @@ public final class FaqContentViewController: UIViewController, ViewControllerFro
     }
 
     public static func viewController(viewModel: QnaContentViewModel) -> FaqContentViewController {
-        let viewController = FaqContentViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = FaqContentViewController.viewController(storyBoardName: "Faq", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
     }
