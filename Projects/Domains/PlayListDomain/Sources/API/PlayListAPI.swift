@@ -41,14 +41,14 @@ extension PlayListAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchRecommendPlayList:
-            return "/recommended"
+            return "/recommend/list"
 
         case let .fetchPlayListDetail(id: id, type: type):
             switch type {
             case .custom:
                 return "/\(id)"
             case .wmRecommend:
-                return "/recommended/\(id)"
+                return "/recommend/\(id)"
             }
 
         case .createPlayList:

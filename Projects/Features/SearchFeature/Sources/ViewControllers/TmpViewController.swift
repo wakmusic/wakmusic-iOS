@@ -167,12 +167,10 @@ extension TmpViewController {
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
         )) { cell, indexPath, itemIdentifier in
-            cell.update(model: RecommendPlayListEntity(
-                key: "best",
-                title: "임시 플레이리스트",
-                image_round_version: 1,
-                image_sqaure_version: 1
-            ))
+            cell.update(model:
+                            
+                RecommendPlayListEntity(key: "best", title: "임시 플레이리스트", image: "", private: true, count: 0)
+           )
         }
 
         let popularListCellRegistration = UICollectionView

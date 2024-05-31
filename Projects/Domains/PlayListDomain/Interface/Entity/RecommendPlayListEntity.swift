@@ -12,15 +12,18 @@ public struct RecommendPlayListEntity: Equatable {
     public init(
         key: String,
         title: String,
-        image_round_version: Int,
-        image_sqaure_version: Int
+        image: String,
+        `private`: Bool,
+        count: Int
     ) {
         self.key = key
         self.title = title
-        self.image_round_version = image_round_version
-        self.image_sqaure_version = image_sqaure_version
+        self.image = image
+        self.private = `private`
+        self.count = count
     }
 
-    public let key, title: String
-    public let image_round_version, image_sqaure_version: Int
+    public let key, title, image: String
+    public let `private`: Bool
+    public let count: Int
 }
