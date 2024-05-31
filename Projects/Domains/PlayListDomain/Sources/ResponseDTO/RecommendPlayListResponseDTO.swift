@@ -10,7 +10,7 @@ public struct SingleRecommendPlayListResponseDTO: Decodable {
 public extension SingleRecommendPlayListResponseDTO {
     func toDomain() -> RecommendPlayListEntity {
         RecommendPlayListEntity(
-            key: key ,
+            key: key,
             title: title,
             image: imageUrl,
             private: `private`,
