@@ -11,7 +11,6 @@ public struct AddSongRequest: Encodable {
 
 public struct CreatePlayListRequset: Encodable {
     var title: String
-    var image: String
 }
 
 public struct SongsKeyBody: Encodable {
@@ -96,7 +95,7 @@ extension PlayListAPI: WMAPI {
             return .requestJSONEncodable(["key": key])
 
         case let .createPlayList(title: title):
-            return .requestJSONEncodable(CreatePlayListRequset(title: title, image: String(Int.random(in: 1 ... 11))))
+            return .requestJSONEncodable(CreatePlayListRequset(title: title))
 
         case let .editPlayList(_, songs: songs):
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))

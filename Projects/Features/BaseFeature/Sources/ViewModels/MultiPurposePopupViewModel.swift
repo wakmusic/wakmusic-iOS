@@ -1,11 +1,3 @@
-//
-//  SearchViewModel.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/05.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeatureInterface
@@ -84,28 +76,14 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 0,
-                                        key: "",
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
+                                output.result.onNext(BaseEntity(status: 400,description: wmError.asWMError.errorDescription ?? "" ))
+                                return .never()
+                                
                             }
                         }
                         .asObservable()
-                        .map { entity -> (BaseEntity, String) in
-                            return (BaseEntity(status: entity.status, description: entity.description), entity.key)
-                        }
-                        .subscribe(onNext: { (result: BaseEntity, key: String) in
-                            if result.status != 200 { // Created == 201
-                                output.result.onNext(result)
-                                return
-                            }
-                            // 리프래쉬 작업
-                            output.result.onNext(result)
-                            output.newPlayListKey.onNext(key)
+                        .subscribe(onNext: { (_) in
+                            output.result.onNext(BaseEntity(status: 200,description: ""))
                             NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         })
                         .disposed(by: self.disposeBag)
@@ -148,28 +126,15 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 0,
-                                        key: "",
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
+                                output.result.onNext(BaseEntity(status: 400,description: wmError.asWMError.errorDescription ?? "" ))
+                                return .never()
+                                
                             }
                         }
                         .asObservable()
-                        .map { entity -> BaseEntity in
-                            return BaseEntity(status: entity.status, description: entity.description)
-                        }
-                        .subscribe(onNext: { result in
-                            if result.status != 200 { // Created == 201
-                                output.result.onNext(result)
-                                return
-                            }
-                            // 리프래쉬 작업
+                        .subscribe(onNext: { (_) in
+                            output.result.onNext(BaseEntity(status: 200,description: ""))
                             NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                            output.result.onNext(result)
                         })
                         .disposed(by: self.disposeBag)
 
