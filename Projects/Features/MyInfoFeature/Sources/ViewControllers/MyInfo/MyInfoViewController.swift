@@ -50,6 +50,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .distinctUntilChanged()
             .bind(with: self) { owner, navigateType in
                 print("navigateType:", navigateType)
+                if navigateType == .setting {
+                    let reactor = SettingReactor()
+                    owner.navigationController?.pushViewController(
+                        SettingViewController(reactor: reactor),
+                        animated: true
+                    )
+                }
                 // owner.navigationController?.pushViewController(UIViewController(), animated: true)
             }
             .disposed(by: disposeBag)
