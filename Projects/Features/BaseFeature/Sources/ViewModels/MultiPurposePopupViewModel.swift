@@ -76,14 +76,16 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
-                                output.result.onNext(BaseEntity(status: 400,description: wmError.asWMError.errorDescription ?? "" ))
+                                output.result.onNext(BaseEntity(
+                                    status: 400,
+                                    description: wmError.asWMError.errorDescription ?? ""
+                                ))
                                 return .never()
-                                
                             }
                         }
                         .asObservable()
-                        .subscribe(onNext: { (_) in
-                            output.result.onNext(BaseEntity(status: 200,description: ""))
+                        .subscribe(onNext: { _ in
+                            output.result.onNext(BaseEntity(status: 200, description: ""))
                             NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         })
                         .disposed(by: self.disposeBag)
@@ -126,14 +128,16 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
-                                output.result.onNext(BaseEntity(status: 400,description: wmError.asWMError.errorDescription ?? "" ))
+                                output.result.onNext(BaseEntity(
+                                    status: 400,
+                                    description: wmError.asWMError.errorDescription ?? ""
+                                ))
                                 return .never()
-                                
                             }
                         }
                         .asObservable()
-                        .subscribe(onNext: { (_) in
-                            output.result.onNext(BaseEntity(status: 200,description: ""))
+                        .subscribe(onNext: { _ in
+                            output.result.onNext(BaseEntity(status: 200, description: ""))
                             NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         })
                         .disposed(by: self.disposeBag)
