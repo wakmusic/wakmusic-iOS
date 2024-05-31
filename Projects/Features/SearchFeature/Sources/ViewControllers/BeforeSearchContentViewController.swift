@@ -59,19 +59,6 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
-
-//        guard let parent = self.parent as? SearchViewController else {
-//            return
-//        }
-//
-//        // TODO: #531
-//        parent.reactor?.state
-//            .map(\.typingState)
-//            .asObservable()
-//            .map { $0 == .before }
-//            .map { Reactor.Action.updateShowRecommend($0) }
-//            .bind(to: self.reactor.action)
-//            .disposed(by: disposeBag)
     }
 
     override public func bind(reactor: BeforeSearchReactor) {
@@ -106,7 +93,6 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         combine
             .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
-                DEBUG_LOG("hhh \(showRecommend) \(item)")
                 if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
                     return []
                 } else {
