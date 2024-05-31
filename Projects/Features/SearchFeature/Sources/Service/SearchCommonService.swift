@@ -7,9 +7,8 @@ protocol SearchCommonService {
 }
 
 final class DefaultSearchCommonService: SearchCommonService {
-
     let typingStatus: BehaviorSubject<TypingStatus> = .init(value: .before)
-    
+
     let recentText: RxSwift.PublishSubject<String> = .init()
 
     static let shared = DefaultSearchCommonService()

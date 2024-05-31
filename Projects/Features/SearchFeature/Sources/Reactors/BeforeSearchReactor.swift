@@ -29,14 +29,16 @@ public final class BeforeSearchReactor: Reactor {
     public var initialState: State
 
     private let service: any SearchCommonService
-    init(fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,service: any SearchCommonService = DefaultSearchCommonService.shared) {
+    init(
+        fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
+        service: any SearchCommonService = DefaultSearchCommonService.shared
+    ) {
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         self.service = service
         self.initialState = State(
             showRecommend: true,
             dataSource: []
         )
-       
     }
 
     public func mutate(action: Action) -> Observable<Mutation> {
@@ -64,13 +66,11 @@ public final class BeforeSearchReactor: Reactor {
 
         return newState
     }
-    
+
     public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        
-        let typingState = service.typingStatus.map{Mutation.updateShowRecommend($0 == .before)}
-        
-        return Observable.merge(mutation,typingState)
-        
+        let typingState = service.typingStatus.map { Mutation.updateShowRecommend($0 == .before) }
+
+        return Observable.merge(mutation, typingState)
     }
 }
 
@@ -81,12 +81,10 @@ extension BeforeSearchReactor {
             .asObservable()
             .map { Mutation.updateRecommend($0) }
     }
-    
-    func updateRecentText(_ text:String) -> Observable<Mutation> {
-        
+
+    func updateRecentText(_ text: String) -> Observable<Mutation> {
         service.recentText.onNext(text)
         service.typingStatus.onNext(.search)
-
 
         return .empty()
     }

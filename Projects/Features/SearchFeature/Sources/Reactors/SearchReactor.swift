@@ -65,30 +65,25 @@ final class SearchReactor: Reactor {
 
         return newState
     }
-    
+
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        
-        let servicetypingState = DefaultSearchCommonService.shared.typingStatus.map{Mutation.updateTypingState(state: $0)}
-        
-        let text = DefaultSearchCommonService.shared.recentText.map{Mutation.updateText($0)}
-        
-        return Observable.merge(mutation,servicetypingState,text)
-        
-        
+        let servicetypingState = DefaultSearchCommonService.shared.typingStatus
+            .map { Mutation.updateTypingState(state: $0) }
+
+        let text = DefaultSearchCommonService.shared.recentText.map { Mutation.updateText($0) }
+
+        return Observable.merge(mutation, servicetypingState, text)
     }
 }
 
 fileprivate extension SearchReactor {
     func updateTypingState(_ state: TypingStatus) -> Observable<Mutation> {
-        
         service.typingStatus.onNext(state)
-        
+
         return .just(.updateTypingState(state: state))
     }
 
     func updateText(_ text: String) -> Observable<Mutation> {
         return .just(.updateText(text))
     }
-    
-    
 }

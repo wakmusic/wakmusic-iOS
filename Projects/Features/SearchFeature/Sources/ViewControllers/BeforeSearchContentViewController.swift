@@ -11,8 +11,6 @@ import RxSwift
 import UIKit
 import Utility
 
-
-
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
     var tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
@@ -21,17 +19,16 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     var playlistDetailFactory: PlaylistDetailFactory!
     var textPopUpFactory: TextPopUpFactory!
-    
-    init(textPopUpFactory: TextPopUpFactory,
-         playlistDetailFactory: PlaylistDetailFactory,
-         reactor: BeforeSearchReactor) {
-        
+
+    init(
+        textPopUpFactory: TextPopUpFactory,
+        playlistDetailFactory: PlaylistDetailFactory,
+        reactor: BeforeSearchReactor
+    ) {
         super.init(reactor: reactor)
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
-        
     }
-
 
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
@@ -41,19 +38,18 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
     }
-    
-    public override func addView() {
+
+    override public func addView() {
         super.addView()
         self.view.addSubviews(tableView)
     }
-    
-    public override func setLayout() {
+
+    override public func setLayout() {
         super.setLayout()
-        
+
         tableView.snp.makeConstraints {
             $0.horizontalEdges.verticalEdges.equalToSuperview()
         }
-        
     }
 
     override public func configureUI() {
@@ -63,7 +59,6 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
-        
 
 //        guard let parent = self.parent as? SearchViewController else {
 //            return
@@ -91,12 +86,11 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     override public func bindAction(reactor: BeforeSearchReactor) {
         super.bindAction(reactor: reactor)
-        
-        tableView.rx.modelSelected(String.self)
-            .map{Reactor.Action.rencentTextDidTap($0)}
-            .bind(to:reactor.action)
-            .disposed(by: disposeBag)
 
+        tableView.rx.modelSelected(String.self)
+            .map { Reactor.Action.rencentTextDidTap($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     override public func bindState(reactor: BeforeSearchReactor) {
@@ -133,7 +127,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
                 cell.backgroundColor = .clear
                 cell.selectionStyle = .none
                 cell.update(element)
-                
+
                 return cell
             }.disposed(by: disposeBag)
     }

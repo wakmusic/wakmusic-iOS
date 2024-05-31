@@ -28,7 +28,7 @@ public final class AfterSearchContentViewModel: ViewModelType {
         self.sectionType = type
         self.dataSource = dataSource
     }
-    
+
     deinit {
         DEBUG_LOG("❌ \(Self.self) 소멸")
     }

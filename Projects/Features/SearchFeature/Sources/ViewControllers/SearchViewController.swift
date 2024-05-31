@@ -92,7 +92,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 2)
-        
+
         sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
@@ -201,7 +201,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
 extension SearchViewController {
     private func bindSubView(_ state: TypingStatus) {
-
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
             guard state == .search else {
                 return
