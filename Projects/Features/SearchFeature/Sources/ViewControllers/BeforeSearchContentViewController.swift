@@ -10,15 +10,50 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import LogManager
+
+
+// DatSource model 실제 Entity로 교체
+
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-    var tableView: UITableView = UITableView().then {
-        $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
-        $0.separatorStyle = .none
+    
+    fileprivate enum Section: Int {
+        case top
+        case mid
+        case bottom
     }
 
-    var playlistDetailFactory: PlaylistDetailFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    enum DataSource: Hashable {
+        case youtube(model: Model)
+        case recommand(model2: Model)
+        case popularList(model: Model)
+
+        var title: String {
+            switch self {
+            case let .youtube(model):
+                return model.title
+            case let .recommand(model2):
+                return model2.title
+            case let .popularList(model):
+                return model.title
+            }
+        }
+    }
+
+    fileprivate var playlistDetailFactory: PlaylistDetailFactory!
+    fileprivate var textPopUpFactory: TextPopUpFactory!
+    fileprivate var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>! = nil
+    
+    fileprivate var collectionView: UICollectionView! = nil
+    
+    fileprivate var tableView: UITableView = UITableView().then {
+        $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
+        $0.separatorStyle = .none
+        $0.isHidden = true
+    }
+
+
 
     init(
         textPopUpFactory: TextPopUpFactory,
@@ -42,6 +77,8 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func addView() {
         super.addView()
         self.view.addSubviews(tableView)
+        createCollectionView()
+        configureDataSource()
     }
 
     override public func setLayout() {
@@ -49,6 +86,10 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         tableView.snp.makeConstraints {
             $0.horizontalEdges.verticalEdges.equalToSuperview()
+        }
+        
+        collectionView.snp.makeConstraints {
+            $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
     }
 
@@ -84,21 +125,19 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 2)
-
-        let combine = Observable.combineLatest(
-            sharedState.map(\.showRecommend),
-            Utility.PreferenceManager.$recentRecords,
-            sharedState.map(\.dataSource)
-        )
-
-        combine
-            .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
-                if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
-                    return []
-                } else {
-                    return item ?? []
-                }
+        
+        // 검색 전, 최근 검색어 스위칭
+        sharedState.map(\.showRecommend)
+            .withUnretained(self)
+            .bind { (owner, flag) in
+                owner.tableView.isHidden = flag
+                owner.collectionView.isHidden = !flag
             }
+            .disposed(by: disposeBag)
+        
+        // 최근 검색어 tableView 셋팅
+        Utility.PreferenceManager.$recentRecords
+            .compactMap({ $0 ?? []})
             .bind(to: tableView.rx.items) { (
                 tableView: UITableView,
                 index: Int,
@@ -129,12 +168,8 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             return .zero
         }
 
-        if state.showRecommend {
-            return RecommendPlayListView.getViewHeight(model: state.dataSource)
-
-        } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
             return (APP_HEIGHT() * 3) / 8
-
         } else {
             return 68
         }
@@ -168,21 +203,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             self.showPanModal(content: textPopupViewController)
         }
 
-        let recommendView = RecommendPlayListView(
-            frame: CGRect(
-                x: 0,
-                y: 0,
-                width: APP_WIDTH(),
-                height: RecommendPlayListView.getViewHeight(model: state.dataSource)
-            )
-        )
-        recommendView.dataSource = state.dataSource
-        recommendView.delegate = self
-
-        if state.showRecommend {
-            return recommendView
-
-        } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
             return warningView
 
         } else {
@@ -191,13 +212,208 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     }
 }
 
-extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    public func itemSelected(model: RecommendPlayListEntity) {
-        lazy var playListDetailVc = playlistDetailFactory.makeView(
-            id: model.key,
-            isCustom: false
+// MARK: Compositional
+extension BeforeSearchContentViewController {
+    func createCollectionView() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+
+        collectionView.backgroundColor = .systemGray
+        collectionView.delegate = self
+        view.addSubview(collectionView)
+    }
+
+    func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self]
+            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+                guard let self else { return nil }
+
+                guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
+
+                return self.configureSection(layoutKind)
+        }
+
+        return layout
+    }
+
+    private func configureSection(_ layout: Section) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
         )
-        self.navigationController?.pushViewController(playListDetailVc, animated: true)
+        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
+
+        var group: NSCollectionLayoutGroup! = nil
+        var section: NSCollectionLayoutSection! = nil
+        let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
+
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerLayout,
+            elementKind: BeforeSearchSectionHeaderView.kind,
+            alignment: .top
+        )
+
+        header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
+
+        switch layout {
+        case .top:
+
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(0.87)
+            )
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+            section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
+
+        case .mid:
+
+            let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
+            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
+
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(groupWidth),
+                heightDimension: .absolute(groupeight)
+            )
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+            section = NSCollectionLayoutSection(group: group)
+            section.boundarySupplementaryItems = [header]
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
+
+        case .bottom:
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
+
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+            section = NSCollectionLayoutSection(group: group)
+            section.boundarySupplementaryItems = [header]
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        }
+
+        section.orthogonalScrollingBehavior = .continuous
+
+        return section
+    }
+
+    private func configureDataSource() {
+        let youtubeCellRegistration = UICollectionView
+            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+            }
+
+        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+            nibName: "RecommendPlayListCell",
+            bundle: BaseFeatureResources.bundle
+        )) { cell, indexPath, itemIdentifier in
+            cell.update(model: RecommendPlayListEntity(
+                key: "best",
+                title: "임시 플레이리스트",
+                image_round_version: 1,
+                image_sqaure_version: 1
+            ))
+        }
+
+        let popularListCellRegistration = UICollectionView
+            .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
+
+                cell.update(item)
+            }
+
+        let headerRegistration = UICollectionView
+            .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
+                elementKind: BeforeSearchSectionHeaderView
+                    .kind
+            ) { [weak self] supplementaryView, string, indexPath in
+
+                guard let self else { return }
+                supplementaryView.delegate = self
+                supplementaryView.update("임시 타이틀", indexPath.section)
+            }
+
+        dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
+
+            switch item {
+            case let .youtube(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: youtubeCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            case let .recommand(model2: model2):
+                return
+                    collectionView.dequeueConfiguredReusableCell(
+                        using: recommandCellRegistration,
+                        for: indexPath,
+                        item: model2
+                    )
+
+            case let .popularList(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: popularListCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            }
+        }
+
+        dataSource.supplementaryViewProvider = { collectionView, kind, index in
+
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
+
+        // initial data
+        var snapshot = NSDiffableDataSourceSnapshot<Section, DataSource>()
+        snapshot.appendSections([.top, .mid, .bottom])
+        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .top)
+        snapshot.appendItems(
+            [
+                .recommand(model2: Model(title: "123")),
+                .recommand(model2: Model(title: "456")),
+                .recommand(model2: Model(title: "4564")),
+                .recommand(model2: Model(title: "4516")),
+            ],
+            toSection: .mid
+        )
+        snapshot.appendItems(
+            [
+                .popularList(model: Model(title: "Hello1")),
+                .popularList(model: Model(title: "Hello2")),
+                .popularList(model: Model(title: "Hello3")),
+            ],
+            toSection: .bottom
+        )
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+}
+
+// MARK: CollectionView Deleagte
+extension BeforeSearchContentViewController: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: indexPath) as? DataSource else {
+            return
+        }
+
+        switch model {
+        case let .youtube(model: model):
+            LogManager.printDebug("youtube \(model)")
+        case let .recommand(model2: model2):
+            LogManager.printDebug("recommand \(model2)")
+        case let .popularList(model: model):
+            LogManager.printDebug("popular \(model)")
+        }
+    }
+}
+
+// MARK: 전체보기
+extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
+    func tap(_ section: Int?) {
+        if let section = section, let layoutKind = Section(rawValue: section) {
+            print(layoutKind)
+        }
     }
 }
 

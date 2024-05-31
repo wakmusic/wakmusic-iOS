@@ -15,7 +15,6 @@ class RecentRecordTableViewCell: UITableViewCell {
 
     private let button: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Search.keywordRemove.image, for: .normal)
-        $0.addTarget(self, action: #selector(removeButtonDidTap), for: .touchUpInside)
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -33,6 +32,8 @@ class RecentRecordTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
         }
+        
+        button.addTarget(self, action: #selector(removeButtonDidTap), for: .touchUpInside)
     }
 
     @available(*, unavailable)
