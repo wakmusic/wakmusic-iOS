@@ -47,7 +47,7 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
         viewModel: FaqViewModel,
         faqContentComponent: FaqContentComponent
     ) -> FaqViewController {
-        let viewController = FaqViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = FaqViewController.viewController(storyBoardName: "Faq", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.faqContentComponent = faqContentComponent
         return viewController
