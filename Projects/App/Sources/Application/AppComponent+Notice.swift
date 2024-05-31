@@ -11,6 +11,7 @@ import MainTabFeature
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
+import MyInfoFeature
 
 public extension AppComponent {
     var noticePopupComponent: NoticePopupComponent {
