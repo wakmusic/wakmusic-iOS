@@ -127,7 +127,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         serviceInfoComponent: ServiceInfoComponent,
         textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
-        let viewController = RequestViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.faqComponent = faqComponent
         viewController.questionComponent = questionComponent

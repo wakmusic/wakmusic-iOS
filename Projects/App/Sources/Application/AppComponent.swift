@@ -6,6 +6,7 @@ import NeedleFoundation
 import PlayerFeature
 import RootFeature
 import StorageFeature
+import MyInfoFeature
 import UIKit
 
 public final class AppComponent: BootstrapComponent {
