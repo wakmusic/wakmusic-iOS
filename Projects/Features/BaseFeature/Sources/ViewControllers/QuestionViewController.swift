@@ -55,7 +55,7 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
         viewModel: QuestionViewModel,
         textPopUpFactory: TextPopUpFactory
     ) -> QuestionViewController {
-        let viewController = QuestionViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = QuestionViewController.viewController(storyBoardName: "Question", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
