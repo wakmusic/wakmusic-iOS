@@ -5,32 +5,37 @@ import Utility
 
 final class SettingReactor: Reactor {
     enum Action {
-        case loginButtonDidTap
-        case moreButtonDidTap
-        case drawButtonDidTap
-        case likeNavigationDidTap
-        case qnaNavigationDidTap
+        case dismissButtonDidTap
+        case withDrawButtonDidTap
         case notiNavigationDidTap
-        case mailNavigationDidTap
-        case teamNavigationDidTap
-        case settingNavigationDidTap
-    }
-
-    enum NavigateType {
-        case draw, like, qna, noti, mail, team, setting
+        case termsNavigationDidTap
+        case privacyNavigationDidTap
+        case openSourceNavigationDidTap
+        case removeCacheButtonDidTap
+        case versionInfoButtonDidTap
     }
 
     enum Mutation {
-        case navigate(NavigateType)
-        case loginButtonDidTap
-        case moreButtonDidTap
+        case dismissButtonDidTap
+        case withDrawButtonDidTap
+        case notiButtonDidTap
+        case termsNavigationDidTap
+        case privacyNavigationDidTap
+        case openSourceNavigationDidTap
+        case removeCacheButtonDidTap
+        case versionInfoButtonDidTap
     }
 
     struct State {
         var userInfo: UserInfo?
-        @Pulse var loginButtonDidTap: Bool?
-        @Pulse var moreButtonDidTap: Bool?
-        var navigateType: NavigateType?
+        @Pulse var dismissButtonDidTap: Bool?
+        @Pulse var withDrawButtonDidTap: Bool?
+        @Pulse var notiButtonDidTap: Bool?
+        @Pulse var termsNavigationDidTap: Bool?
+        @Pulse var privacyNavigationDidTap: Bool?
+        @Pulse var openSourceNavigationDidTap: Bool?
+        @Pulse var removeCacheButtonDidTap: Bool?
+        @Pulse var versionInfoButtonDidTap: Bool?
     }
 
     var initialState: State
@@ -44,77 +49,79 @@ final class SettingReactor: Reactor {
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .loginButtonDidTap:
-            return loginButtonDidTap()
-        case .moreButtonDidTap:
-            return moreButtonDidTap()
-        case .drawButtonDidTap:
-            return drawButtonDidTap()
-        case .likeNavigationDidTap:
-            return likeNavigationDidTap()
-        case .qnaNavigationDidTap:
-            return qnaNavigationDidTap()
+        case .dismissButtonDidTap:
+            return dismissButtonDidTap()
+        case .withDrawButtonDidTap:
+            return withDrawButtonDidTap()
         case .notiNavigationDidTap:
-            return notiNavigationDidTap()
-        case .mailNavigationDidTap:
-            return mailNavigationDidTap()
-        case .teamNavigationDidTap:
-            return teamNavigationDidTap()
-        case .settingNavigationDidTap:
-            return settingNavigationDidTap()
+            return notiButtonDidTap()
+        case .termsNavigationDidTap:
+            return termsNavigationDidTap()
+        case .privacyNavigationDidTap:
+            return privacyNavigationDidTap()
+        case .openSourceNavigationDidTap:
+            return openSourceNavigationDidTap()
+        case .removeCacheButtonDidTap:
+            return removeCacheButtonDidTap()
+        case .versionInfoButtonDidTap:
+            return versionInfoButtonDidTap()
         }
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .loginButtonDidTap:
-            newState.loginButtonDidTap = true
-
-        case .moreButtonDidTap:
-            newState.moreButtonDidTap = true
-
-        case let .navigate(navigateType):
-            newState.navigateType = navigateType
+        case .dismissButtonDidTap:
+            newState.dismissButtonDidTap = true
+        case .withDrawButtonDidTap:
+            newState.withDrawButtonDidTap = true
+        case .notiButtonDidTap:
+            newState.notiButtonDidTap = true
+        case .termsNavigationDidTap:
+            newState.termsNavigationDidTap = true
+        case .privacyNavigationDidTap:
+            newState.privacyNavigationDidTap = true
+        case .openSourceNavigationDidTap:
+            newState.openSourceNavigationDidTap = true
+        case .removeCacheButtonDidTap:
+            newState.removeCacheButtonDidTap = true
+        case .versionInfoButtonDidTap:
+            newState.versionInfoButtonDidTap = true
         }
         return newState
     }
 }
 
 private extension SettingReactor {
-    func loginButtonDidTap() -> Observable<Mutation> {
-        return .just(.loginButtonDidTap)
+    func dismissButtonDidTap() -> Observable<Mutation> {
+        return .just(.dismissButtonDidTap)
     }
 
-    func moreButtonDidTap() -> Observable<Mutation> {
-        return .just(.moreButtonDidTap)
+    func withDrawButtonDidTap() -> Observable<Mutation> {
+        return .just(.withDrawButtonDidTap)
     }
 
-    func drawButtonDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.draw))
+    func notiButtonDidTap() -> Observable<Mutation> {
+        return .just(.notiButtonDidTap)
     }
 
-    func likeNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.like))
+    func termsNavigationDidTap() -> Observable<Mutation> {
+        return .just(.termsNavigationDidTap)
     }
 
-    func qnaNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.qna))
+    func privacyNavigationDidTap() -> Observable<Mutation> {
+        return .just(.privacyNavigationDidTap)
     }
 
-    func notiNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.noti))
+    func openSourceNavigationDidTap() -> Observable<Mutation> {
+        return .just(.openSourceNavigationDidTap)
     }
 
-    func mailNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.mail))
+    func removeCacheButtonDidTap() -> Observable<Mutation> {
+        return .just(.removeCacheButtonDidTap)
     }
 
-    func teamNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.team))
-    }
-
-    func settingNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.setting))
+    func versionInfoButtonDidTap() -> Observable<Mutation> {
+        return .just(.versionInfoButtonDidTap)
     }
 }
