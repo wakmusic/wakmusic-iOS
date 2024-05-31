@@ -32,7 +32,10 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
         openSourceLicenseComponent: OpenSourceLicenseComponent,
         textPopUpFactory: TextPopUpFactory
     ) -> ServiceInfoViewController {
-        let viewController = ServiceInfoViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = ServiceInfoViewController.viewController(
+            storyBoardName: "OpenSourceAndServiceInfo",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         viewController.openSourceLicenseComponent = openSourceLicenseComponent
         viewController.textPopUpFactory = textPopUpFactory
