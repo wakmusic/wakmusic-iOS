@@ -30,7 +30,6 @@ public class GoogleLoginManager {
     private let accessTokenGoogleURL = "https://oauth2.googleapis.com"
     private let getProfileURL = "https://www.googleapis.com/oauth2/v1/userinfo"
     private let googleClientID = GOOGLE_CLIENT_ID()
-    private let googleSecretKey = GOOGLE_SECRET_KEY()
     private let googleURLScheme = GOOGLE_URL_SCHEME()
     private let scope = "profile"
 
