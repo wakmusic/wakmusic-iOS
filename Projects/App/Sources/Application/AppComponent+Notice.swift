@@ -8,10 +8,10 @@
 
 import BaseFeature
 import MainTabFeature
+import MyInfoFeature
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
-import MyInfoFeature
 
 public extension AppComponent {
     var noticePopupComponent: NoticePopupComponent {
