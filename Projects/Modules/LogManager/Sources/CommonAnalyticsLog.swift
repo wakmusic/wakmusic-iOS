@@ -26,7 +26,7 @@ public extension CommonAnalyticsLog {
         }
     }
 
-    public enum PlaylistItemLocation: String, CustomStringConvertible {
+    enum PlaylistItemLocation: String, CustomStringConvertible {
         case home
         case storage
         case search
