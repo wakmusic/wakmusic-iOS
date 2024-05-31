@@ -32,7 +32,7 @@ class RecentRecordTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
         }
-        
+
         button.addTarget(self, action: #selector(removeButtonDidTap), for: .touchUpInside)
     }
 

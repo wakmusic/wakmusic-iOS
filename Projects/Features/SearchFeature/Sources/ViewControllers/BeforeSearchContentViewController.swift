@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
@@ -10,14 +11,10 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import LogManager
-
 
 // DatSource model 실제 Entity로 교체
 
-
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-    
     fileprivate enum Section: Int {
         case top
         case mid
@@ -44,16 +41,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     fileprivate var playlistDetailFactory: PlaylistDetailFactory!
     fileprivate var textPopUpFactory: TextPopUpFactory!
     fileprivate var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>! = nil
-    
+
     fileprivate var collectionView: UICollectionView! = nil
-    
+
     fileprivate var tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
         $0.isHidden = true
     }
-
-
 
     init(
         textPopUpFactory: TextPopUpFactory,
@@ -87,7 +82,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         tableView.snp.makeConstraints {
             $0.horizontalEdges.verticalEdges.equalToSuperview()
         }
-        
+
         collectionView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
@@ -125,19 +120,19 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 2)
-        
+
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
             .withUnretained(self)
-            .bind { (owner, flag) in
+            .bind { owner, flag in
                 owner.tableView.isHidden = flag
                 owner.collectionView.isHidden = !flag
             }
             .disposed(by: disposeBag)
-        
+
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
-            .compactMap({ $0 ?? []})
+            .compactMap { $0 ?? [] }
             .bind(to: tableView.rx.items) { (
                 tableView: UITableView,
                 index: Int,
