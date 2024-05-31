@@ -6,15 +6,21 @@ let project = Project.module(
     name: ModulePaths.Feature.MyInfoFeature.rawValue,
     targets: [
         .interface(module: .feature(.MyInfoFeature)),
-        .implements(module: .feature(.MyInfoFeature), dependencies: [
-            .feature(target: .BaseFeature),
-            .feature(target: .MyInfoFeature, type: .interface),
-            .feature(target: .SignInFeature, type: .interface),
-            .domain(target: .FaqDomain, type: .interface),
-            .domain(target: .NoticeDomain, type: .interface),
-            .domain(target: .AuthDomain, type: .interface),
-            .domain(target: .UserDomain, type: .interface)
-        ]),
+        .implements(
+            module: .feature(.MyInfoFeature),
+            spec: .init(
+                resources: ["Resources/**"],
+                dependencies: [
+                    .feature(target: .BaseFeature),
+                    .feature(target: .MyInfoFeature, type: .interface),
+                    .feature(target: .SignInFeature, type: .interface),
+                    .domain(target: .FaqDomain, type: .interface),
+                    .domain(target: .NoticeDomain, type: .interface),
+                    .domain(target: .AuthDomain, type: .interface),
+                    .domain(target: .UserDomain, type: .interface)
+                ]
+            )
+        ),
         .testing(module: .feature(.MyInfoFeature), dependencies: [
             .feature(target: .MyInfoFeature, type: .interface)
         ]),

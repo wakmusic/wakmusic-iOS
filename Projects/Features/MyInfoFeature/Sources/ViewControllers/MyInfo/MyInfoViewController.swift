@@ -15,7 +15,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     let myInfoView = MyInfoView()
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-
+    private var faqComponent: FaqComponent! // 자주 묻는 질문
+    private var noticeComponent: NoticeComponent! // 공지사항
+    private var questionComponent: QuestionComponent! // 문의하기
+    // TODO: private var teamInfoComponent: TeamInfoComponent! // 팀 소개
+    
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }

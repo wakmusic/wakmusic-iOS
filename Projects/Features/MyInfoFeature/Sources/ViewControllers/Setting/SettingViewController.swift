@@ -16,6 +16,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
 
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
+    private var openSourceLicenseComponent: OpenSourceLicenseComponent!
 
     override func loadView() {
         view = settingView
@@ -42,6 +43,33 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$withDrawButtonDidTap)
             .compactMap { $0 }
             .bind { _ in print("회원탈퇴 버튼 눌림") }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$termsNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                let vc = ContractViewController.viewController(type: .service)
+                vc.modalPresentationStyle = .overFullScreen
+                owner.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$privacyNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                let vc = ContractViewController.viewController(type: .privacy)
+                vc.modalPresentationStyle = .overFullScreen
+                owner.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$openSourceNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+//                let vc = owner.openSourceLicenseComponent.makeView()
+//                vc.modalPresentationStyle = .overFullScreen
+//                owner.present(vc, animated: true)
+            })
             .disposed(by: disposeBag)
     }
 
