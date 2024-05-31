@@ -19,7 +19,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var noticeComponent: NoticeComponent! // 공지사항
     private var questionComponent: QuestionComponent! // 문의하기
     // TODO: private var teamInfoComponent: TeamInfoComponent! // 팀 소개
-    
+
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -50,18 +50,57 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind { _ in print("더보기 버튼 눌림") }
             .disposed(by: disposeBag)
 
-        reactor.state.compactMap(\.navigateType)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, navigateType in
-                print("navigateType:", navigateType)
-                if navigateType == .setting {
-                    let reactor = SettingReactor()
-                    owner.navigationController?.pushViewController(
-                        SettingViewController(reactor: reactor),
-                        animated: true
-                    )
-                }
-                // owner.navigationController?.pushViewController(UIViewController(), animated: true)
+        reactor.pulse(\.$drawButtonDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("뽑기 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$likeNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("좋아요 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$faqNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("자주믇는질문 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$notiNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("공지사항 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$mailNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("문의하기 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$teamNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("팀소개 버튼 눌림")
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$settingNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("설정 버튼 눌림")
+                let reactor = SettingReactor()
+                owner.navigationController?.pushViewController(
+                    SettingViewController(reactor: reactor),
+                    animated: true
+                )
             }
             .disposed(by: disposeBag)
     }
@@ -89,7 +128,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .disposed(by: disposeBag)
 
         myInfoView.rx.qnaNavigationButtonDidTap
-            .map { MyInfoReactor.Action.qnaNavigationDidTap }
+            .map { MyInfoReactor.Action.faqNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

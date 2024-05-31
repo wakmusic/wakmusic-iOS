@@ -9,28 +9,36 @@ final class MyInfoReactor: Reactor {
         case moreButtonDidTap
         case drawButtonDidTap
         case likeNavigationDidTap
-        case qnaNavigationDidTap
+        case faqNavigationDidTap
         case notiNavigationDidTap
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
     }
 
-    enum NavigateType {
-        case draw, like, qna, noti, mail, team, setting
-    }
-
     enum Mutation {
-        case navigate(NavigateType)
         case loginButtonDidTap
         case moreButtonDidTap
+        case drawButtonDidTap
+        case likeNavigationDidTap
+        case faqNavigationDidTap
+        case notiNavigationDidTap
+        case mailNavigationDidTap
+        case teamNavigationDidTap
+        case settingNavigationDidTap
     }
 
     struct State {
         var userInfo: UserInfo?
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var moreButtonDidTap: Bool?
-        var navigateType: NavigateType?
+        @Pulse var drawButtonDidTap: Bool?
+        @Pulse var likeNavigationDidTap: Bool?
+        @Pulse var faqNavigationDidTap: Bool?
+        @Pulse var notiNavigationDidTap: Bool?
+        @Pulse var mailNavigationDidTap: Bool?
+        @Pulse var teamNavigationDidTap: Bool?
+        @Pulse var settingNavigationDidTap: Bool?
     }
 
     var initialState: State
@@ -52,8 +60,8 @@ final class MyInfoReactor: Reactor {
             return drawButtonDidTap()
         case .likeNavigationDidTap:
             return likeNavigationDidTap()
-        case .qnaNavigationDidTap:
-            return qnaNavigationDidTap()
+        case .faqNavigationDidTap:
+            return faqNavigationDidTap()
         case .notiNavigationDidTap:
             return notiNavigationDidTap()
         case .mailNavigationDidTap:
@@ -74,8 +82,26 @@ final class MyInfoReactor: Reactor {
         case .moreButtonDidTap:
             newState.moreButtonDidTap = true
 
-        case let .navigate(navigateType):
-            newState.navigateType = navigateType
+        case .drawButtonDidTap:
+            newState.drawButtonDidTap = true
+
+        case .likeNavigationDidTap:
+            newState.likeNavigationDidTap = true
+
+        case .faqNavigationDidTap:
+            newState.faqNavigationDidTap = true
+
+        case .notiNavigationDidTap:
+            newState.notiNavigationDidTap = true
+
+        case .mailNavigationDidTap:
+            newState.mailNavigationDidTap = true
+
+        case .teamNavigationDidTap:
+            newState.teamNavigationDidTap = true
+
+        case .settingNavigationDidTap:
+            newState.settingNavigationDidTap = true
         }
         return newState
     }
@@ -91,30 +117,30 @@ private extension MyInfoReactor {
     }
 
     func drawButtonDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.draw))
+        return .just(.drawButtonDidTap)
     }
 
     func likeNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.like))
+        return .just(.likeNavigationDidTap)
     }
 
-    func qnaNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.qna))
+    func faqNavigationDidTap() -> Observable<Mutation> {
+        return .just(.faqNavigationDidTap)
     }
 
     func notiNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.noti))
+        return .just(.notiNavigationDidTap)
     }
 
     func mailNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.mail))
+        return .just(.mailNavigationDidTap)
     }
 
     func teamNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.team))
+        return .just(.teamNavigationDidTap)
     }
 
     func settingNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.setting))
+        return .just(.settingNavigationDidTap)
     }
 }
