@@ -70,8 +70,7 @@ internal final class PlaylistDetailReactor: Reactor {
             header: PlayListHeaderModel(
                 title: "",
                 songCount: "",
-                image: "",
-                version: 0
+                image: ""
             ),
             selectedItemCount: 0,
             isEditing: false
@@ -148,9 +147,7 @@ private extension PlaylistDetailReactor {
                     title: "",
                     songs: [],
                     image: "",
-                    image_square_version: 0,
-                    image_round_version: 0,
-                    version: 0
+                    private: false
                 )
             )
             .asObservable()
@@ -159,7 +156,7 @@ private extension PlaylistDetailReactor {
                 guard let self else {
                     return PlaylistMetaData(
                         list: [],
-                        header: PlayListHeaderModel(title: "", songCount: "", image: "", version: 0)
+                        header: PlayListHeaderModel(title: "", songCount: "", image: "")
                     )
                 }
                 return PlaylistMetaData(
@@ -167,8 +164,7 @@ private extension PlaylistDetailReactor {
                     header: PlayListHeaderModel(
                         title: result.title,
                         songCount: "\(result.songs.count)곡",
-                        image: self.type == .wmRecommend ? result.key : result.image,
-                        version: self.type == .wmRecommend ? result.image_square_version : result.version
+                        image: result.image
                     )
                 )
             }

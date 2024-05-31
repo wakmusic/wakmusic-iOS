@@ -87,9 +87,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                             title: "",
                             songs: [],
                             image: "",
-                            image_square_version: 0,
-                            image_round_version: 0,
-                            version: 0
+                            private: false
                         )
                     )
                     .asObservable()
@@ -99,9 +97,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                             PlayListHeaderModel(
                                 title: model.title,
                                 songCount: "\(model.songs.count)곡",
-                                image: self.type == .wmRecommend ?
-                                    model.key : model.image, version: self.type == .wmRecommend ?
-                                    model.image_square_version : model.version
+                                image: model.image
                             )
                         )
                         self.key = model.key
@@ -114,7 +110,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         input.playListNameLoad
             .skip(1)
             .withLatestFrom(output.headerInfo) { ($0, $1) }
-            .map { PlayListHeaderModel(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
+            .map { PlayListHeaderModel(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)
             }
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)
