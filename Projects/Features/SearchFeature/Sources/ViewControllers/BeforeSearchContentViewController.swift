@@ -119,7 +119,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share(replay: 1)
 
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
