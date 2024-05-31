@@ -34,7 +34,7 @@ public class OpenSourceLicenseViewController: UIViewController, ViewControllerFr
         viewModel: OpenSourceLicenseViewModel
     ) -> OpenSourceLicenseViewController {
         let viewController = OpenSourceLicenseViewController.viewController(
-            storyBoardName: "Storage",
+            storyBoardName: "OpenSourceAndServiceInfo",
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
