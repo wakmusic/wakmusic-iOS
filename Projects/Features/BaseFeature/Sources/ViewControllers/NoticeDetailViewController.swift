@@ -41,7 +41,7 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     public static func viewController(
         viewModel: NoticeDetailViewModel
     ) -> NoticeDetailViewController {
-        let viewController = NoticeDetailViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = NoticeDetailViewController.viewController(storyBoardName: "Notice", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
     }

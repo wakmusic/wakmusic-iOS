@@ -34,7 +34,7 @@ public class NoticeViewController: UIViewController, ViewControllerFromStoryBoar
         viewModel: NoticeViewModel,
         noticeDetailComponent: NoticeDetailComponent
     ) -> NoticeViewController {
-        let viewController = NoticeViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = NoticeViewController.viewController(storyBoardName: "Notice", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.noticeDetailComponent = noticeDetailComponent
         return viewController
