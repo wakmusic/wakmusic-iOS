@@ -16,7 +16,7 @@ public struct PlayListDetailEntity: Equatable {
         songs: [SongEntity],
         image: String,
         `private`: Bool
-  
+
     ) {
         self.key = key
         self.title = title

@@ -20,7 +20,6 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let `private`: Bool
 }
 
-
 public extension SinglePlayListDetailResponseDTO {
     func toDomain() -> PlayListDetailEntity {
         PlayListDetailEntity(
@@ -40,7 +39,6 @@ public extension SinglePlayListDetailResponseDTO {
             },
             image: imageUrl ?? "",
             private: `private`
-
         )
     }
 }
