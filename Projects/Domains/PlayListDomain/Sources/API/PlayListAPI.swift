@@ -31,6 +31,7 @@ public enum PlayListAPI {
     case addSongIntoPlayList(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: String)
+    case updateImage(key: String, type: Int)
 }
 
 extension PlayListAPI: WMAPI {

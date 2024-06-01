@@ -141,16 +141,13 @@ public final class PlayListDetailViewModel: ViewModelType {
                             logoutRelay.accept(wmError)
                             return logoutUseCase.execute()
                                 .andThen(.never())
-                        }
-                        else {
-                            
+                        } else {
                             output.showErrorToast.accept(BaseEntity(
                                 status: 0,
                                 description: error.asWMError.errorDescription ?? ""
                             ))
-
                         }
-                        
+
                         return .never()
                     }
             }
