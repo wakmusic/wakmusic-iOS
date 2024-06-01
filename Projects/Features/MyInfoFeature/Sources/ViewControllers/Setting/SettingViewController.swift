@@ -57,11 +57,19 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .compactMap { $0 }
             .bind { _ in print("회원탈퇴 버튼 눌림") }
             .disposed(by: disposeBag)
-
-        reactor.pulse(\.$termsNavigationDidTap)
+        
+        reactor.pulse(\.$appPushSettingButtonDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                let vc = ContractViewController.viewController(type: .service)
+                let vc = owner.appPushSettingComponent.makeView()
+                owner.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$serviceTermsNavigationDidTap)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                let vc = owner.serviceTermsComponent.makeView()
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
             })
@@ -70,7 +78,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$privacyNavigationDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                let vc = ContractViewController.viewController(type: .privacy)
+                let vc = owner.privacyComponent.makeView()
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
             })
@@ -79,9 +87,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$openSourceNavigationDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-//                let vc = owner.openSourceLicenseComponent.makeView()
-//                vc.modalPresentationStyle = .overFullScreen
-//                owner.present(vc, animated: true)
+                let vc = owner.openSourceLicenseComponent.makeView()
+                owner.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -103,7 +110,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .disposed(by: disposeBag)
 
         settingView.rx.termsNavigationButtonDidTap
-            .map { SettingReactor.Action.termsNavigationDidTap }
+            .map { SettingReactor.Action.serviceTermsNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
