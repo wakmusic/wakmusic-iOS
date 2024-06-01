@@ -30,7 +30,7 @@ public enum PlayListAPI {
     case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기
     case addSongIntoPlayList(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
-    case removeSongs(key: String, songs: [String])
+    case removeSongs(key: String, songs: String)
 }
 
 extension PlayListAPI: WMAPI {
@@ -71,9 +71,12 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlayList, .addSongIntoPlayList, .removeSongs:
+        case .createPlayList, .addSongIntoPlayList:
             return .post
 
+        case .removeSongs:
+            return .delete
+        
         case .updatePlaylist, .updateTitleAndPrivate:
             return .patch
         }
@@ -97,7 +100,7 @@ extension PlayListAPI: WMAPI {
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
 
         case let .removeSongs(_, songs: songs):
-            return .requestJSONEncodable(SongsKeyBody(songIds: songs))
+            return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString )
         }
     }
 
