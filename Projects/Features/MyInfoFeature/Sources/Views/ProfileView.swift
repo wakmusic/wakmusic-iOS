@@ -6,15 +6,14 @@ import Then
 import UIKit
 import Utility
 
+private protocol ProfileStateProtocol {
+    func updateNickName(nickname: String)
+    func updatePlatform(platform: String)
+}
+
 private protocol ProfileActionProtocol {}
 
 final class ProfileView: UIView {
-    enum PlatformType: String {
-        case naver = "네이버"
-        case google = "구글"
-        case apple = "애플"
-    }
-
     private let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.MyInfo.iconColor.image
@@ -30,7 +29,7 @@ final class ProfileView: UIView {
     }
 
     private let platformLabel: UILabel = UILabel().then {
-        $0.text = ""
+        $0.text = "로 로그인 중"
         $0.font = .setFont(.t6(weight: .light))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray600.color
         $0.textAlignment = .center
@@ -38,10 +37,8 @@ final class ProfileView: UIView {
         $0.numberOfLines = .zero
     }
 
-    init(name: String?, platform: PlatformType) {
+    init() {
         super.init(frame: .zero)
-        nameLabel.text = name
-        platformLabel.text = String("\(platform.rawValue)로 로그인 중")
         addView()
         setLayout()
         highlightName()
@@ -89,6 +86,27 @@ extension ProfileView {
             $0.horizontalEdges.equalToSuperview()
             $0.centerX.equalToSuperview()
         }
+    }
+}
+
+extension ProfileView: ProfileStateProtocol {
+    func updateNickName(nickname: String) {
+        nameLabel.text = nickname + "님"
+    }
+
+    func updatePlatform(platform: String) {
+        var platformStr = ""
+        switch platform {
+        case "naver":
+            platformStr = "네이버"
+        case "google":
+            platformStr = "구글"
+        case "apple":
+            platformStr = "애플"
+        default:
+            platformStr = "Unknown"
+        }
+        platformLabel.text = "\(platformStr)로 로그인 중"
     }
 }
 

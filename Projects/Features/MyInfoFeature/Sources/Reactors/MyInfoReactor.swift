@@ -1,6 +1,8 @@
+import BaseFeature
 import Foundation
 import LogManager
 import ReactorKit
+import UserDomainInterface
 import Utility
 
 final class MyInfoReactor: Reactor {
@@ -14,6 +16,7 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
+        case changeUserInfo(UserInfo?)
     }
 
     enum Mutation {
@@ -26,10 +29,15 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
+        case updateIsLoggedIn(Bool)
+        case updateNickname(String)
+        case updatePlatform(String)
     }
 
     struct State {
-        var userInfo: UserInfo?
+        var isLoggedIn: Bool
+        var nickname: String
+        var platform: String
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var moreButtonDidTap: Bool?
         @Pulse var drawButtonDidTap: Bool?
@@ -46,8 +54,11 @@ final class MyInfoReactor: Reactor {
 
     init() {
         self.initialState = .init(
-            userInfo: Utility.PreferenceManager.userInfo
+            isLoggedIn: false,
+            nickname: "",
+            platform: ""
         )
+        observeUserInfoChanges()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -70,6 +81,12 @@ final class MyInfoReactor: Reactor {
             return teamNavigationDidTap()
         case .settingNavigationDidTap:
             return settingNavigationDidTap()
+        case let .changeUserInfo(userInfo):
+            return .concat(
+                updateIsLoggedIn(userInfo),
+                updateNickname(userInfo),
+                updatePlatform(userInfo)
+            )
         }
     }
 
@@ -102,12 +119,44 @@ final class MyInfoReactor: Reactor {
 
         case .settingNavigationDidTap:
             newState.settingNavigationDidTap = true
+
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
+
+        case let .updateNickname(nickname):
+            newState.nickname = nickname
+
+        case let .updatePlatform(platform):
+            newState.platform = platform
         }
         return newState
     }
 }
 
 private extension MyInfoReactor {
+    func observeUserInfoChanges() {
+        PreferenceManager.$userInfo
+            .bind(with: self) { owner, userInfo in
+                owner.action.onNext(.changeUserInfo(userInfo))
+            }
+            .disposed(by: disposeBag)
+    }
+
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
+    }
+
+    func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        let nickname = userInfo?.name ?? ""
+        let decrypt = AES256.decrypt(encoded: nickname)
+        return .just(.updateNickname(decrypt))
+    }
+
+    func updatePlatform(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        let platform = userInfo?.platform ?? ""
+        return .just(.updatePlatform(platform))
+    }
+
     func loginButtonDidTap() -> Observable<Mutation> {
         return .just(.loginButtonDidTap)
     }
