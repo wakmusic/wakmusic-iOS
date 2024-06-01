@@ -53,16 +53,10 @@ public extension AppComponent {
             UpdatePlaylistUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase {
         shared {
             UpdateTitleAndPrivateeUseCaseImpl(playListRepository: playListRepository)
-        }
-    }
-
-    var loadPlayListUseCase: any LoadPlayListUseCase {
-        shared {
-            LoadPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
 

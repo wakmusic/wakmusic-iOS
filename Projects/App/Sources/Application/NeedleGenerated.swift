@@ -724,9 +724,6 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
     var createPlayListUseCase: any CreatePlayListUseCase {
         return appComponent.createPlayListUseCase
     }
-    var loadPlayListUseCase: any LoadPlayListUseCase {
-        return appComponent.loadPlayListUseCase
-    }
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
@@ -793,7 +790,6 @@ extension AppComponent: Registration {
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { [unowned self] in self.createPlayListUseCase as Any }
         localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { [unowned self] in self.updatePlaylistUseCase as Any }
         localTable["updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"] = { [unowned self] in self.updateTitleAndPrivateeUseCase as Any }
-        localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { [unowned self] in self.loadPlayListUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { [unowned self] in self.artistComponent as Any }
@@ -1114,7 +1110,6 @@ extension ContainSongsComponent: Registration {
 extension MultiPurposePopUpComponent: Registration {
     public func registerItems() {
         keyPathToName[\MultiPurposePopUpDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
-        keyPathToName[\MultiPurposePopUpDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopUpDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
         keyPathToName[\MultiPurposePopUpDependency.updateTitleAndPrivateeUseCase] = "updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"
         keyPathToName[\MultiPurposePopUpDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"

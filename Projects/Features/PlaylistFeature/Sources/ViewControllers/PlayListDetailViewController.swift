@@ -283,7 +283,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
                 guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
-                    type: .edit,
+                    type: .updatePlaylistTile,
                     key: owner.reactor?.key ?? "",
                     completion: nil
                 ) as? MultiPurposePopupViewController else {

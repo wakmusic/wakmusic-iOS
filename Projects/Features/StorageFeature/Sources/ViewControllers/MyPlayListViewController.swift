@@ -352,8 +352,6 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
         // TODO: UseCase 연결 후
         case .creation:
             break
-        case .share:
-            break
         default:
             break
         }

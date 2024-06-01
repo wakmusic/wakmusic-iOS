@@ -25,13 +25,12 @@ public struct TitleAndPrivateRequset: Encodable {
 public enum PlayListAPI {
     case fetchRecommendPlayList // 추천 플리 불러오기
     case fetchPlayListDetail(id: String, type: PlayListType) // 플리 상세 불러오기
-    case updateTitleAndPrivate(id: String, title: String?, isPrivate: Bool?) // private 업데이트
+    case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
     case createPlayList(title: String) // 플리 생성
-    case fetchPlaylistSongs(id: String) // 전체 재생 시 곡 데이터만 가져오기
+    case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기
     case addSongIntoPlayList(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String])
-    case loadPlayList(key: String)
 }
 
 extension PlayListAPI: WMAPI {
@@ -52,26 +51,16 @@ extension PlayListAPI: WMAPI {
                 return "/recommend/\(id)"
             }
 
-        case let .updateTitleAndPrivate(id: id, _, _):
-            return "/\(id)"
+        case let .updateTitleAndPrivate(key: key, _, _):
+            return "/\(key)"
 
-        case let .fetchPlaylistSongs(id: id):
-            return "/\(id)/songs"
 
         case .createPlayList:
             return "/create"
 
-        case let .addSongIntoPlayList(key: key, _):
+        case let.fetchPlaylistSongs(key: key), let .addSongIntoPlayList(key: key, _), let .updatePlaylist(key: key, _), let .removeSongs(key: key, _):
             return "/\(key)/songs"
 
-        case .loadPlayList:
-            return "/copy"
-
-        case let .updatePlaylist(key: key, _):
-            return "/\(key)/songs"
-
-        case let .removeSongs(key: key, _):
-            return "/\(key)/songs/remove"
         }
     }
 
@@ -80,7 +69,7 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlayList, .loadPlayList, .addSongIntoPlayList, .removeSongs:
+        case .createPlayList, .addSongIntoPlayList, .removeSongs:
             return .post
 
         case .updatePlaylist, .updateTitleAndPrivate:
@@ -96,8 +85,6 @@ extension PlayListAPI: WMAPI {
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
             return .requestJSONEncodable(TitleAndPrivateRequset(title: title, private: isPrivate))
 
-        case let .loadPlayList(key):
-            return .requestJSONEncodable(["key": key])
 
         case let .createPlayList(title: title):
             return .requestJSONEncodable(CreatePlayListRequset(title: title))
@@ -118,7 +105,7 @@ extension PlayListAPI: WMAPI {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .none
 
-        case .createPlayList, .updatePlaylist, .loadPlayList, .addSongIntoPlayList,
+        case .createPlayList, .updatePlaylist, .addSongIntoPlayList,
              .removeSongs, .updateTitleAndPrivate:
             return .accessToken
         }

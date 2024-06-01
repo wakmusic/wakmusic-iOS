@@ -1,11 +1,3 @@
-//
-//  CreatePlayListPopupViewController.swift
-//  DesignSystem
-//
-//  Created by yongbeomkwak on 2023/01/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
@@ -40,14 +32,8 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     @IBOutlet weak var cancelButtonWidth: NSLayoutConstraint!
 
     @IBAction func cancelAction(_ sender: UIButton) {
-        if viewModel.type == .share {
-            UIPasteboard.general.string = input.textString.value // 클립보드 복사
-            self.showToast(text: "복사가 완료되었습니다.", font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-
-        } else {
             textField.rx.text.onNext("")
             input.textString.accept("")
-        }
     }
 
     var viewModel: MultiPurposePopupViewModel!
@@ -101,60 +87,35 @@ extension MultiPurposePopupViewController {
 
 //        textField.becomeFirstResponder()
         self.textField.attributedPlaceholder = NSAttributedString(
-            string: viewModel.type == .creation || viewModel.type == .edit ?
+            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTile ?
                 "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요.",
             attributes: focusedplaceHolderAttributes
         ) // 플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
 
-        if viewModel.type == .share { // 공유는 오직 읽기 전용
-            self.textField.isEnabled = false
-            self.input.textString.accept(viewModel.key)
-            self.textField.text = viewModel.key
-        }
+
 
         self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
 
-        if viewModel.type == .share {
-            self.cancelButtonWidth.constant = 32
-            self.cancelButtonHeight.constant = 32
-            self.cancelButton.setImage(DesignSystemAsset.Storage.copy.image, for: .normal)
+        self.cancelButton.layer.cornerRadius = 12
+        self.cancelButton.titleLabel?.text = "취소"
+        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
+        self.cancelButton.layer.cornerRadius = 4
+        self.cancelButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        self.cancelButton.layer.borderWidth = 1
+        self.cancelButton.backgroundColor = .white
+        self.cancelButton.isHidden = true
+        
 
-        } else {
-            self.cancelButton.layer.cornerRadius = 12
-            self.cancelButton.titleLabel?.text = "취소"
-            self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
-            self.cancelButton.layer.cornerRadius = 4
-            self.cancelButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
-            self.cancelButton.layer.borderWidth = 1
-            self.cancelButton.backgroundColor = .white
-            self.cancelButton.isHidden = true
-        }
-
-        switch viewModel.type {
-        case .creation, .edit, .nickname:
-            self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-            self.confirmLabel.isHidden = true
-
-            self.limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-            self.limitLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-
-            self.countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-            self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-            bindRxCreationOrEditOrNickName()
-
-        case .load, .share:
-            self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-            self.confirmLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-            self.confirmLabel.isHidden = false
-            self.confirmLabel.text = viewModel
-                .type == .load ? "· 리스트 코드로 리스트를 가져올 수 있습니다." : "· 리스트 코드로 리스트를 공유할 수 있습니다."
-            self.confireLabelGap.constant = 12
-
-            self.limitLabel.isHidden = true
-            self.countLabel.isHidden = true
-            bindRxLoadOrShare()
-        }
+        self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        self.confirmLabel.isHidden = true
+        
+        self.limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        self.limitLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        
+        self.countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+        bindRx()
 
         bindRxEvent()
 
@@ -175,7 +136,7 @@ extension MultiPurposePopupViewController {
         self.indicator.color = .white
     }
 
-    private func bindRxCreationOrEditOrNickName() {
+    private func bindRx() {
         limitCount = viewModel.type == .nickname ? 8 : 12
         limitLabel.text = "/\(limitCount)"
 
@@ -236,26 +197,7 @@ extension MultiPurposePopupViewController {
             .disposed(by: disposeBag)
     }
 
-    private func bindRxLoadOrShare() {
-        input.textString
-            .subscribe { [weak self] (str: String) in
-                guard let self = self else {
-                    return
-                }
 
-                if str.isEmpty {
-                    self.cancelButton.isHidden = true
-                    self.saveButton.isEnabled = false
-                } else {
-                    self.cancelButton.isHidden = false
-                    if str.isWhiteSpace {
-                        self.saveButton.isEnabled = false
-                    } else {
-                        self.saveButton.isEnabled = true
-                    }
-                }
-            }.disposed(by: disposeBag)
-    }
 
     private func bindRxEvent() {
         textField.rx.text.orEmpty
@@ -286,12 +228,8 @@ extension MultiPurposePopupViewController {
                 switch self.viewModel.type {
                 case .creation:
                     description = "리스트가 생성되었습니다."
-                case .edit:
+                case .updatePlaylistTile:
                     description = "리스트가 수정되었습니다."
-                case .load:
-                    description = "리스트를 가져왔습니다."
-                case .share:
-                    SwiftEntryKit.dismiss()
                     return
                 case .nickname:
                     description = "닉네임이 수정되었습니다."
@@ -311,7 +249,7 @@ extension MultiPurposePopupViewController {
             owner.showToast(text: error.localizedDescription, font: toastFont)
             NotificationCenter.default.post(name: .movedTab, object: 4)
 
-            if owner.viewModel.type == .edit || owner.viewModel.type == .creation {
+            if owner.viewModel.type == .updatePlaylistTile || owner.viewModel.type == .creation {
                 owner.delegate?.didTokenExpired()
             }
         }
@@ -320,18 +258,6 @@ extension MultiPurposePopupViewController {
         saveButton.rx.tap.subscribe(onNext: { [weak self] in
             guard let self = self else {
                 return
-            }
-            if self.viewModel.type != .share {
-                self.indicator.startAnimating()
-                self.saveButton.setAttributedTitle(
-                    NSMutableAttributedString(
-                        string: "",
-                        attributes: [
-                            .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                            .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
-                        ]
-                    ), for: .normal
-                )
             }
             self.input.pressConfirm.onNext(())
         })

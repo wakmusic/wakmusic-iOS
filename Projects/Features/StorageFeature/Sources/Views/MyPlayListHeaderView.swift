@@ -1,16 +1,11 @@
-//
-//  MyPlayListHeaderView.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/27.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import UIKit
 
+
+#warning("가져오기 삭제")
+// TODO: 가져오기 관련 삭제
 public protocol MyPlayListHeaderViewDelegate: AnyObject {
     func action(_ type: PurposeType)
 }
@@ -31,7 +26,7 @@ class MyPlayListHeaderView: UIView {
     }
 
     @IBAction func loadPlayListAction(_ sender: UIButton) {
-        delegate?.action(.load)
+        delegate?.action(.creation)
     }
 
     override init(frame: CGRect) { // 코드쪽에서 생성 시 호출

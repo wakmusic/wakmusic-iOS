@@ -10,7 +10,6 @@ public protocol PlayListRepository {
     func createPlayList(title: String) -> Single<PlayListBaseEntity>
     func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
     func updatePlayList(key: String, songs: [String]) -> Single<BaseEntity>
-    func loadPlayList(key: String) -> Single<PlayListBaseEntity>
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Single<BaseEntity>
 }

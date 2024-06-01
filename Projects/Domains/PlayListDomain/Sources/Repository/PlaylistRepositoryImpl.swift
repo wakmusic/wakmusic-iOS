@@ -36,10 +36,6 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 
-    public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
-        remotePlayListDataSource.loadPlayList(key: key)
-    }
-
     public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
         remotePlayListDataSource.addSongIntoPlayList(key: key, songs: songs)
     }
