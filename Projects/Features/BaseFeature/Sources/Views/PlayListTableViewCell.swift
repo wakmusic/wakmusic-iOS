@@ -44,7 +44,7 @@ class PlayListTableViewCell: UITableViewCell {
 
         self.backgroundColor = .clear
         self.albumImageView.layer.cornerRadius = 4
-        self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        self.playButton.setImage(DesignSystemAsset.Home.playSmall.image, for: .normal)
     }
 }
 

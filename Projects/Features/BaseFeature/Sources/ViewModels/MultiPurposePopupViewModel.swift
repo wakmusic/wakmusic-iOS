@@ -117,7 +117,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             output.result.onNext(BaseEntity(status: 200, description: ""))
                         }).disposed(by: self.disposeBag)
 
-
                 case .updatePlaylistTile:
                     break
                     self.updateTitleAndPrivateeUseCase
@@ -143,7 +142,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             NotificationCenter.default.post(name: .playListNameRefresh, object: text)
                         })
                         .disposed(by: disposeBag)
-
                 }
             }).disposed(by: disposeBag)
 

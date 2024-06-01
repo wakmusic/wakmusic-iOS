@@ -32,8 +32,8 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     @IBOutlet weak var cancelButtonWidth: NSLayoutConstraint!
 
     @IBAction func cancelAction(_ sender: UIButton) {
-            textField.rx.text.onNext("")
-            input.textString.accept("")
+        textField.rx.text.onNext("")
+        input.textString.accept("")
     }
 
     var viewModel: MultiPurposePopupViewModel!
@@ -93,8 +93,6 @@ extension MultiPurposePopupViewController {
         ) // 플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
 
-
-
         self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
 
         self.cancelButton.layer.cornerRadius = 12
@@ -105,14 +103,13 @@ extension MultiPurposePopupViewController {
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
         self.cancelButton.isHidden = true
-        
 
         self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.confirmLabel.isHidden = true
-        
+
         self.limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.limitLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
-        
+
         self.countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         bindRx()
@@ -196,8 +193,6 @@ extension MultiPurposePopupViewController {
             })
             .disposed(by: disposeBag)
     }
-
-
 
     private func bindRxEvent() {
         textField.rx.text.orEmpty

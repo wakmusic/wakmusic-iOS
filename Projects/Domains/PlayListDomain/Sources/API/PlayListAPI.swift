@@ -54,13 +54,15 @@ extension PlayListAPI: WMAPI {
         case let .updateTitleAndPrivate(key: key, _, _):
             return "/\(key)"
 
-
         case .createPlayList:
             return "/create"
 
-        case let.fetchPlaylistSongs(key: key), let .addSongIntoPlayList(key: key, _), let .updatePlaylist(key: key, _), let .removeSongs(key: key, _):
+        case let .fetchPlaylistSongs(key: key), let .addSongIntoPlayList(key: key, _), let .updatePlaylist(key: key, _),
+             let .removeSongs(
+                 key: key,
+                 _
+             ):
             return "/\(key)/songs"
-
         }
     }
 
@@ -84,7 +86,6 @@ extension PlayListAPI: WMAPI {
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
             return .requestJSONEncodable(TitleAndPrivateRequset(title: title, private: isPrivate))
-
 
         case let .createPlayList(title: title):
             return .requestJSONEncodable(CreatePlayListRequset(title: title))
