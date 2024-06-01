@@ -19,7 +19,8 @@ let project = Project.module(
         .demo(
             module: .feature(.LyricHighlightingFeature),
             dependencies: [
-            .feature(target: .LyricHighlightingFeature)]
+                .feature(target: .LyricHighlightingFeature)
+            ]
         )
     ]
 )

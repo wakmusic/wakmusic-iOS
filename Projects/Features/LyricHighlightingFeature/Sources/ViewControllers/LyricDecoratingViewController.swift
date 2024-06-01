@@ -19,27 +19,33 @@ final class LyricDecoratingViewController: UIViewController {
         $0.tintColor = DesignSystemAsset.NewGrayColor.gray900.color
         $0.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
     }
+
     private let navigationTitleLabel = UILabel().then {
         $0.text = "내가 선택한 가사"
         $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)
     }
+
     private let decorateContentView = UIView().then {
         $0.backgroundColor = .clear
     }
+
     private let decorateImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
     }
+
     private let decorateBottomView = UIView().then {
         $0.backgroundColor = .clear
     }
+
     private let descriptionLabel = UILabel().then {
         $0.text = "배경을 선택해주세요"
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTextWithAttributes(kernValue: -0.5)
     }
+
     private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
         $0.minimumLineSpacing = 4
@@ -47,6 +53,7 @@ final class LyricDecoratingViewController: UIViewController {
         $0.itemSize = .init(width: 56, height: 64)
         $0.sectionInset = .init(top: 0, left: 20, bottom: 0, right: 20)
     }
+
     private lazy var collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: collectionViewFlowLayout
@@ -54,6 +61,7 @@ final class LyricDecoratingViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.showsHorizontalScrollIndicator = false
     }
+
     private let saveButton = UIButton(type: .system).then {
         $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray25.color, for: .normal)
@@ -85,6 +93,7 @@ final class LyricDecoratingViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("\(Self.self) has not been implemented")
     }
@@ -104,7 +113,7 @@ extension LyricDecoratingViewController: UICollectionViewDelegate, UICollectionV
         didSelectItemAt indexPath: IndexPath
     ) {
         guard let i = dataSource.firstIndex(where: { $0.isSelected }),
-            i != indexPath.item else {
+              i != indexPath.item else {
             return
         }
         dataSource[i].isSelected = false
