@@ -11,12 +11,10 @@ import UIKit
 import Utility
 
 final class TeamInfoViewController: BaseReactorViewController<TeamInfoReactor> {
-    private let emptyView = UIView().then {
-        $0.backgroundColor = .white
-    }
+    private let teamInfoView = TeamInfoView()
 
     override func loadView() {
-        view = emptyView
+        view = teamInfoView
     }
 
     public static func viewController(
@@ -28,5 +26,9 @@ final class TeamInfoViewController: BaseReactorViewController<TeamInfoReactor> {
 
     override func bindState(reactor: TeamInfoReactor) {}
 
-    override func bindAction(reactor: TeamInfoReactor) {}
+    override func bindAction(reactor: TeamInfoReactor) {
+        teamInfoView.rx.dismissButtonDidTap.bind(with: self) { owner, _ in
+            owner.navigationController?.popViewController(animated: true)
+        }.disposed(by: disposeBag)
+    }
 }
