@@ -14,4 +14,8 @@ extension AppComponent {
     var teamInfoComponent: TeamInfoComponent {
         TeamInfoComponent(parent: self)
     }
+
+    var appPushSettingComponent: AppPushSettingComponent {
+        AppPushSettingComponent(parent: self)
+    }
 }

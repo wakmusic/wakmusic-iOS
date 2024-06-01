@@ -657,6 +657,28 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
 private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class ServiceTermsDependencyd07df8dc0771e5580b47Provider: ServiceTermsDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->ServiceTermsComponent
+private func factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceTermsDependencyd07df8dc0771e5580b47Provider()
+}
+private class PrivacyDependency51c6df0186843bf53e9cProvider: PrivacyDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->PrivacyComponent
+private func factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PrivacyDependency51c6df0186843bf53e9cProvider()
+}
 private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
     var openSourceLicenseComponent: OpenSourceLicenseComponent {
         return appComponent.openSourceLicenseComponent
@@ -740,6 +762,21 @@ private class SettingDependency792c9caceb5cb097fbecProvider: SettingDependency {
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
+    var appPushSettingComponent: AppPushSettingComponent {
+        return appComponent.appPushSettingComponent
+    }
+    var serviceTermsComponent: ServiceTermsComponent {
+        return appComponent.serviceTermsComponent
+    }
+    var privacyComponent: PrivacyComponent {
+        return appComponent.privacyComponent
+    }
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -779,6 +816,17 @@ private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
 /// ^->AppComponent->RequestComponent
 private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class AppPushSettingDependency349ed4aa80d55fc2a148Provider: AppPushSettingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AppPushSettingComponent
+private func factory0fbf44459a0855a29e8be3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AppPushSettingDependency349ed4aa80d55fc2a148Provider()
 }
 private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
 
@@ -1161,6 +1209,16 @@ extension TextPopUpComponent: Registration {
 
     }
 }
+extension ServiceTermsComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension PrivacyComponent: Registration {
+    public func registerItems() {
+
+    }
+}
 extension ServiceInfoComponent: Registration {
     public func registerItems() {
         keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
@@ -1193,6 +1251,11 @@ extension MyInfoComponent: Registration {
 extension SettingComponent: Registration {
     public func registerItems() {
         keyPathToName[\SettingDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\SettingDependency.signInFactory] = "signInFactory-any SignInFactory"
+        keyPathToName[\SettingDependency.appPushSettingComponent] = "appPushSettingComponent-AppPushSettingComponent"
+        keyPathToName[\SettingDependency.serviceTermsComponent] = "serviceTermsComponent-ServiceTermsComponent"
+        keyPathToName[\SettingDependency.privacyComponent] = "privacyComponent-PrivacyComponent"
+        keyPathToName[\SettingDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
     }
 }
 extension RequestComponent: Registration {
@@ -1204,6 +1267,11 @@ extension RequestComponent: Registration {
         keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
         keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
         keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension AppPushSettingComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension NoticeDetailComponent: Registration {
@@ -1281,12 +1349,15 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->ServiceTermsComponent", factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PrivacyComponent", factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35df47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SettingComponent", factoryee0bbc0b920a7007e1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AppPushSettingComponent", factory0fbf44459a0855a29e8be3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
