@@ -11,8 +11,7 @@ extension AppComponent {
         SettingComponent(parent: self)
     }
 
-    #warning("팀 소개 페이지 만들때 추가 예정")
-//    var teamInfoComponent: TeamInfoComponent {
-//        TeamInfoComponent(parent: self)
-//    }
+    var teamInfoComponent: TeamInfoComponent {
+        TeamInfoComponent(parent: self)
+    }
 }

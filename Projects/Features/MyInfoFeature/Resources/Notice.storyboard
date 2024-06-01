@@ -13,7 +13,7 @@
         <!--Notice View Controller-->
         <scene sceneID="db8-sw-bty">
             <objects>
-                <viewController storyboardIdentifier="NoticeViewController" id="nXc-le-r87" customClass="NoticeViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NoticeViewController" id="nXc-le-r87" customClass="NoticeViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XWa-vC-pJx">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -166,7 +166,7 @@
         <!--Notice Detail View Controller-->
         <scene sceneID="rZ0-f5-wS3">
             <objects>
-                <viewController storyboardIdentifier="NoticeDetailViewController" id="ggn-Xt-rgR" customClass="NoticeDetailViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NoticeDetailViewController" id="ggn-Xt-rgR" customClass="NoticeDetailViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BSB-OM-oEZ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

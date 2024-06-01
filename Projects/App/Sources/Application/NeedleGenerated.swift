@@ -712,6 +712,21 @@ private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
+    }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
+    }
+    var teamInfoComponent: TeamInfoComponent {
+        return appComponent.teamInfoComponent
+    }
+    var settingComponent: SettingComponent {
+        return appComponent.settingComponent
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -802,6 +817,17 @@ private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
 /// ^->AppComponent->NoticeComponent
 private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class TeamInfoDependency94c25b4e5acfbc37741cProvider: TeamInfoDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->TeamInfoComponent
+private func factorybe60e92b5190e00abf41e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return TeamInfoDependency94c25b4e5acfbc37741cProvider()
 }
 
 #else
@@ -1157,6 +1183,11 @@ extension MyInfoComponent: Registration {
     public func registerItems() {
         keyPathToName[\MyInfoDependency.signInFactory] = "signInFactory-any SignInFactory"
         keyPathToName[\MyInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\MyInfoDependency.faqComponent] = "faqComponent-FaqComponent"
+        keyPathToName[\MyInfoDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\MyInfoDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\MyInfoDependency.teamInfoComponent] = "teamInfoComponent-TeamInfoComponent"
+        keyPathToName[\MyInfoDependency.settingComponent] = "settingComponent-SettingComponent"
     }
 }
 extension SettingComponent: Registration {
@@ -1192,6 +1223,11 @@ extension NoticeComponent: Registration {
     }
 }
 extension FaqContentComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension TeamInfoComponent: Registration {
     public func registerItems() {
 
     }
@@ -1255,6 +1291,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->TeamInfoComponent", factorybe60e92b5190e00abf41e3b0c44298fc1c149afb)
 }
 #endif
 

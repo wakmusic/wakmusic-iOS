@@ -11,7 +11,7 @@
         <!--Question View Controller-->
         <scene sceneID="fFj-gY-5lW">
             <objects>
-                <viewController storyboardIdentifier="QuestionViewController" id="PPf-Fq-94b" customClass="QuestionViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuestionViewController" id="PPf-Fq-94b" customClass="QuestionViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OQG-ha-dh0">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

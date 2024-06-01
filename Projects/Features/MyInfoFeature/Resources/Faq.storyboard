@@ -12,7 +12,7 @@
         <!--Faq View Controller-->
         <scene sceneID="PUb-OT-6hs">
             <objects>
-                <viewController storyboardIdentifier="FaqViewController" id="FZT-JP-AJA" customClass="FaqViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FaqViewController" id="FZT-JP-AJA" customClass="FaqViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B0x-Ie-O2B">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -87,7 +87,7 @@
         <!--Faq Content View Controller-->
         <scene sceneID="eI9-eD-3lf">
             <objects>
-                <viewController storyboardIdentifier="FaqContentViewController" id="h1R-Tf-jFs" customClass="FaqContentViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FaqContentViewController" id="h1R-Tf-jFs" customClass="FaqContentViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3P5-xh-1du">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

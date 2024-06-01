@@ -13,7 +13,7 @@
         <!--Open Source License View Controller-->
         <scene sceneID="cwc-4R-0o5">
             <objects>
-                <viewController storyboardIdentifier="OpenSourceLicenseViewController" id="xiW-tV-5v3" customClass="OpenSourceLicenseViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OpenSourceLicenseViewController" id="xiW-tV-5v3" customClass="OpenSourceLicenseViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uqI-hq-YgP">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

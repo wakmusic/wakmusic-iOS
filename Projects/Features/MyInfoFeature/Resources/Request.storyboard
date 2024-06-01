@@ -12,7 +12,7 @@
         <!--Request View Controller-->
         <scene sceneID="J4d-3p-5y8">
             <objects>
-                <viewController storyboardIdentifier="RequestViewController" id="Kfv-4k-d8J" customClass="RequestViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RequestViewController" id="Kfv-4k-d8J" customClass="RequestViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lKp-Cy-ldn">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
