@@ -168,14 +168,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             })
             .bind { owner, model in
 
-                guard let type = owner.reactor?.type else { return }
-
-                let imageURL = owner.reactor?.type == .wmRecommend ?
-                    WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image, version: model.version).toURL :
-                    WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL
-
                 owner.playListImage.kf.setImage(
-                    with: imageURL,
+                    with: URL(string: model.image),
                     placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )

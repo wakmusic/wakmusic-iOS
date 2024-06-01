@@ -1,13 +1,6 @@
-//
-//  ArtistRepositoryImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import PlayListDomainInterface
+import SongsDomainInterface
 import RxSwift
 
 public final class PlayListRepositoryImpl: PlayListRepository {
@@ -26,9 +19,17 @@ public final class PlayListRepositoryImpl: PlayListRepository {
     public func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
+    
+    public func updatePrivate(key: String) -> Completable {
+        remotePlayListDataSource.updatePrivate(key: key)
+    }
 
     public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.createPlayList(title: title)
+    }
+    
+    public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
+        remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }
 
     public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {

@@ -22,9 +22,11 @@ public struct EditPlayListNameRequset: Encodable {
 }
 
 public enum PlayListAPI {
-    case fetchRecommendPlayList
-    case fetchPlayListDetail(id: String, type: PlayListType)
-    case createPlayList(title: String)
+    case fetchRecommendPlayList // 추천 플리 불러오기
+    case fetchPlayListDetail(id: String, type: PlayListType) // 플리 상세 불러오기
+    case updatePrivateState(id: String) // private 업데이트
+    case createPlayList(title: String) // 플리 생성
+    case fetchPlaylistSongs(id: String) // 전체 재생 시 곡 데이터만 가져오기
     case editPlayList(key: String, songs: [String])
     case editPlayListName(key: String, title: String)
     case removeSongs(key: String, songs: [String])
@@ -41,7 +43,7 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList:
             return "/recommend/list"
-
+            
         case let .fetchPlayListDetail(id: id, type: type):
             switch type {
             case .custom:
@@ -49,47 +51,54 @@ extension PlayListAPI: WMAPI {
             case .wmRecommend:
                 return "/recommend/\(id)"
             }
-
+            
+            
+        case let .updatePrivateState(id: id):
+            return "/\(id)"
+            
+        case let .fetchPlaylistSongs(id: id):
+            return "/\(id)/songs"
+            
+            
         case .createPlayList:
             return "/create"
-
+            
         case .loadPlayList:
             return "/copy"
-
+            
         case let .editPlayList(key: key, _):
             return "/\(key)/songs"
-
+            
         case let .editPlayListName(key: key, _):
             return "/\(key)"
-
+            
         case let .addSongIntoPlayList(key: key, _):
             return "/\(key)/songs/add"
-
+            
         case let .removeSongs(key: key, _):
             return "/\(key)/songs/remove"
+            
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlayList, .fetchPlayListDetail:
+        case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .get
 
         case .createPlayList, .loadPlayList, .addSongIntoPlayList, .removeSongs:
             return .post
 
-        case .editPlayList, .editPlayListName:
+        case .editPlayList, .editPlayListName, .updatePrivateState:
             return .patch
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlayList:
+        case .fetchRecommendPlayList, .fetchPlayListDetail, .updatePrivateState, .fetchPlaylistSongs:
             return .requestPlain
 
-        case .fetchPlayListDetail:
-            return .requestPlain
 
         case let .loadPlayList(key):
             return .requestJSONEncodable(["key": key])
@@ -113,11 +122,11 @@ extension PlayListAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlayList, .fetchPlayListDetail:
+        case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .none
 
         case .createPlayList, .editPlayList, .loadPlayList, .editPlayListName, .addSongIntoPlayList,
-             .removeSongs:
+                .removeSongs, .updatePrivateState:
             return .accessToken
         }
     }

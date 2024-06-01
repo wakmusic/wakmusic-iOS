@@ -23,14 +23,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     enum DataSource: Hashable {
         case youtube(model: Model)
-        case recommand(model2: Model)
+        case recommend(model2: Model)
         case popularList(model: Model)
 
         var title: String {
             switch self {
             case let .youtube(model):
                 return model.title
-            case let .recommand(model2):
+            case let .recommend(model2):
                 return model2.title
             case let .popularList(model):
                 return model.title
@@ -299,7 +299,7 @@ extension BeforeSearchContentViewController {
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
-        let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
         )) { cell, indexPath, itemIdentifier in
@@ -341,10 +341,10 @@ extension BeforeSearchContentViewController {
                     for: indexPath,
                     item: model
                 )
-            case let .recommand(model2: model2):
+            case let .recommend(model2: model2):
                 return
                     collectionView.dequeueConfiguredReusableCell(
-                        using: recommandCellRegistration,
+                        using: recommendCellRegistration,
                         for: indexPath,
                         item: model2
                     )
@@ -369,10 +369,10 @@ extension BeforeSearchContentViewController {
         snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .top)
         snapshot.appendItems(
             [
-                .recommand(model2: Model(title: "123")),
-                .recommand(model2: Model(title: "456")),
-                .recommand(model2: Model(title: "4564")),
-                .recommand(model2: Model(title: "4516")),
+                .recommend(model2: Model(title: "123")),
+                .recommend(model2: Model(title: "456")),
+                .recommend(model2: Model(title: "4564")),
+                .recommend(model2: Model(title: "4516")),
             ],
             toSection: .mid
         )
@@ -398,8 +398,8 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         switch model {
         case let .youtube(model: model):
             LogManager.printDebug("youtube \(model)")
-        case let .recommand(model2: model2):
-            LogManager.printDebug("recommand \(model2)")
+        case let .recommend(model2: model2):
+            LogManager.printDebug("recommend \(model2)")
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }
