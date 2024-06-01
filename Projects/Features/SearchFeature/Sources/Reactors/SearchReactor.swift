@@ -7,7 +7,12 @@ import RxSwift
 import Utility
 
 final class SearchReactor: Reactor {
-    var disposeBag: DisposeBag = DisposeBag()
+    private var disposeBag: DisposeBag = DisposeBag()
+    
+    private let service: any SearchCommonService
+    
+    var initialState: State
+  
 
     enum Action {
         case switchTypingState(TypingStatus)
@@ -26,9 +31,8 @@ final class SearchReactor: Reactor {
         var text: String
     }
 
-    var initialState: State
-    private let service: any SearchCommonService
-    init(service: any SearchCommonService = DefaultSearchCommonService.shared) {
+
+    init(service: some SearchCommonService = DefaultSearchCommonService.shared) {
         self.service = service
         self.initialState = State(
             typingState: .before,
@@ -60,6 +64,7 @@ final class SearchReactor: Reactor {
         case let .updateText(text):
             newState.text = text
         case let .fetchRecentText(text):
+            #warning("추후 fetchRecentText 구현")
             break
         }
 
@@ -67,10 +72,10 @@ final class SearchReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let servicetypingState = DefaultSearchCommonService.shared.typingStatus
+        let servicetypingState = service.typingStatus
             .map { Mutation.updateTypingState(state: $0) }
 
-        let text = DefaultSearchCommonService.shared.recentText.map { Mutation.updateText($0) }
+        let text = service.recentText.map { Mutation.updateText($0) }
 
         return Observable.merge(mutation, servicetypingState, text)
     }

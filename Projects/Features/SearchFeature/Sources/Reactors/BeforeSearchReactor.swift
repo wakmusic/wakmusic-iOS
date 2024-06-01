@@ -8,6 +8,10 @@ public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
     private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    
+    public var initialState: State
+
+    private let service: any SearchCommonService
 
     public enum Action {
         case viewDidLoad
@@ -26,12 +30,11 @@ public final class BeforeSearchReactor: Reactor {
         var dataSource: [RecommendPlayListEntity]
     }
 
-    public var initialState: State
-
-    private let service: any SearchCommonService
+   
+    
     init(
         fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
-        service: any SearchCommonService = DefaultSearchCommonService.shared
+        service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         self.service = service
@@ -60,7 +63,7 @@ public final class BeforeSearchReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
-        case .updateRecentText(_):
+        case .updateRecentText:
             break
         }
 
