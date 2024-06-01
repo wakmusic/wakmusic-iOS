@@ -10,7 +10,6 @@ import LogManager
 import UIKit
 
 class LyricHighlightingViewController: UIViewController {
-
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
