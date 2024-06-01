@@ -12,15 +12,14 @@ import RxSwift
 import UIKit
 import Utility
 
-// DatSource model 실제 Entity로 교체
-
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
     fileprivate enum Section: Int {
-        case top
-        case mid
-        case bottom
+        case youtube
+        case recommend
+        case popularList
     }
 
+    #warning("실제 데이터 entity로 바꾸기")
     enum DataSource: Hashable {
         case youtube(model: Model)
         case recommand(model2: Model)
@@ -38,26 +37,26 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         }
     }
 
-    fileprivate var playlistDetailFactory: PlaylistDetailFactory!
-    fileprivate var textPopUpFactory: TextPopUpFactory!
-    fileprivate var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>! = nil
-
-    fileprivate var collectionView: UICollectionView! = nil
-
-    fileprivate var tableView: UITableView = UITableView().then {
+    private let playlistDetailFactory: PlaylistDetailFactory
+    private let textPopUpFactory: TextPopUpFactory
+    private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
         $0.isHidden = true
     }
+
+    private var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>?
+
+    private var collectionView: UICollectionView?
 
     init(
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
-        super.init(reactor: reactor)
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
+        super.init(reactor: reactor)
     }
 
     deinit {
@@ -83,7 +82,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             $0.horizontalEdges.verticalEdges.equalToSuperview()
         }
 
-        collectionView.snp.makeConstraints {
+        collectionView?.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
     }
@@ -126,7 +125,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             .withUnretained(self)
             .bind { owner, flag in
                 owner.tableView.isHidden = flag
-                owner.collectionView.isHidden = !flag
+                owner.collectionView?.isHidden = !flag
             }
             .disposed(by: disposeBag)
 
@@ -212,6 +211,10 @@ extension BeforeSearchContentViewController {
     func createCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
 
+        guard let collectionView = collectionView else {
+            return
+        }
+
         collectionView.backgroundColor = .systemGray
         collectionView.delegate = self
         view.addSubview(collectionView)
@@ -252,7 +255,7 @@ extension BeforeSearchContentViewController {
         header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
 
         switch layout {
-        case .top:
+        case .youtube:
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
@@ -263,7 +266,7 @@ extension BeforeSearchContentViewController {
             section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
 
-        case .mid:
+        case .recommend:
 
             let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
             let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
@@ -278,7 +281,7 @@ extension BeforeSearchContentViewController {
             section.boundarySupplementaryItems = [header]
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
-        case .bottom:
+        case .popularList:
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
 
@@ -295,6 +298,10 @@ extension BeforeSearchContentViewController {
     }
 
     private func configureDataSource() {
+        guard let collectionView = collectionView else {
+            return
+        }
+
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
@@ -355,15 +362,15 @@ extension BeforeSearchContentViewController {
             }
         }
 
-        dataSource.supplementaryViewProvider = { collectionView, kind, index in
+        dataSource?.supplementaryViewProvider = { collectionView, kind, index in
 
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<Section, DataSource>()
-        snapshot.appendSections([.top, .mid, .bottom])
-        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .top)
+        snapshot.appendSections([.youtube, .recommend, .popularList])
+        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
         snapshot.appendItems(
             [
                 .recommand(model2: Model(title: "123")),
@@ -371,7 +378,7 @@ extension BeforeSearchContentViewController {
                 .recommand(model2: Model(title: "4564")),
                 .recommand(model2: Model(title: "4516")),
             ],
-            toSection: .mid
+            toSection: .recommend
         )
         snapshot.appendItems(
             [
@@ -379,16 +386,16 @@ extension BeforeSearchContentViewController {
                 .popularList(model: Model(title: "Hello2")),
                 .popularList(model: Model(title: "Hello3")),
             ],
-            toSection: .bottom
+            toSection: .popularList
         )
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 }
 
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) as? DataSource else {
+        guard let model = dataSource?.itemIdentifier(for: indexPath) as? DataSource else {
             return
         }
 
