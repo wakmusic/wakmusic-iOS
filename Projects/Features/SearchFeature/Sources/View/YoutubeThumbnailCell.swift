@@ -4,8 +4,8 @@ import Then
 import UIKit
 import Utility
 
-class YoutubeThumbnailCell: UICollectionViewCell {
-    var thumbnailView: UIImageView = UIImageView().then {
+final class YoutubeThumbnailCell: UICollectionViewCell {
+    private let  thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
@@ -22,7 +22,7 @@ class YoutubeThumbnailCell: UICollectionViewCell {
 }
 
 extension YoutubeThumbnailCell {
-    func configureUI() {
+    private func configureUI() {
         contentView.addSubview(thumbnailView)
 
         thumbnailView.snp.makeConstraints {
