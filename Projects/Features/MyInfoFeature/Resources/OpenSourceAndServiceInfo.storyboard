@@ -48,7 +48,7 @@
                                 <rect key="frame" x="0.0" y="107" width="393" height="745"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OpenSourceLibraryCell" rowHeight="100" id="uuR-AP-e12" customClass="OpenSourceLibraryCell" customModule="StorageFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OpenSourceLibraryCell" rowHeight="100" id="uuR-AP-e12" customClass="OpenSourceLibraryCell" customModule="MyInfoFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uuR-AP-e12" id="0hI-xd-utK">
@@ -82,7 +82,7 @@
                                             <outlet property="titleStringLabel" destination="CJE-fW-KQY" id="lRJ-AI-Ttt"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OpenSourceLicenseCell" rowHeight="200" id="Kok-Yw-E0h" customClass="OpenSourceLicenseCell" customModule="StorageFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OpenSourceLicenseCell" rowHeight="200" id="Kok-Yw-E0h" customClass="OpenSourceLicenseCell" customModule="MyInfoFeature">
                                         <rect key="frame" x="0.0" y="150" width="393" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Kok-Yw-E0h" id="TgN-cR-aTZ">
@@ -157,7 +157,7 @@
         <!--Service Info View Controller-->
         <scene sceneID="II5-hL-ptC">
             <objects>
-                <viewController storyboardIdentifier="ServiceInfoViewController" id="mQi-uM-goN" customClass="ServiceInfoViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ServiceInfoViewController" id="mQi-uM-goN" customClass="ServiceInfoViewController" customModule="MyInfoFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VYn-cA-TsS">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -192,7 +192,7 @@
                                 <rect key="frame" x="0.0" y="107" width="393" height="745"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ServiceInfoCell" rowHeight="60" id="m69-W0-VOO" customClass="ServiceInfoCell" customModule="StorageFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ServiceInfoCell" rowHeight="60" id="m69-W0-VOO" customClass="ServiceInfoCell" customModule="MyInfoFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="m69-W0-VOO" id="aOQ-hV-0Ks">

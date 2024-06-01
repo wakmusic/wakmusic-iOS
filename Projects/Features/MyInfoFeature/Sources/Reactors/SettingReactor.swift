@@ -8,7 +8,7 @@ final class SettingReactor: Reactor {
         case dismissButtonDidTap
         case withDrawButtonDidTap
         case appPushSettingNavigationDidTap
-        case termsNavigationDidTap
+        case serviceTermsNavigationDidTap
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
         case removeCacheButtonDidTap
@@ -19,7 +19,7 @@ final class SettingReactor: Reactor {
         case dismissButtonDidTap
         case withDrawButtonDidTap
         case appPushSettingButtonDidTap
-        case termsNavigationDidTap
+        case serviceTermsNavigationDidTap
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
         case removeCacheButtonDidTap
@@ -31,7 +31,7 @@ final class SettingReactor: Reactor {
         @Pulse var dismissButtonDidTap: Bool?
         @Pulse var withDrawButtonDidTap: Bool?
         @Pulse var appPushSettingButtonDidTap: Bool?
-        @Pulse var termsNavigationDidTap: Bool?
+        @Pulse var serviceTermsNavigationDidTap: Bool?
         @Pulse var privacyNavigationDidTap: Bool?
         @Pulse var openSourceNavigationDidTap: Bool?
         @Pulse var removeCacheButtonDidTap: Bool?
@@ -54,9 +54,9 @@ final class SettingReactor: Reactor {
         case .withDrawButtonDidTap:
             return withDrawButtonDidTap()
         case .appPushSettingNavigationDidTap:
-            return notiButtonDidTap()
-        case .termsNavigationDidTap:
-            return termsNavigationDidTap()
+            return appPushSettingNavigationDidTap()
+        case .serviceTermsNavigationDidTap:
+            return serviceTermsNavigationDidTap()
         case .privacyNavigationDidTap:
             return privacyNavigationDidTap()
         case .openSourceNavigationDidTap:
@@ -77,8 +77,8 @@ final class SettingReactor: Reactor {
             newState.withDrawButtonDidTap = true
         case .appPushSettingButtonDidTap:
             newState.appPushSettingButtonDidTap = true
-        case .termsNavigationDidTap:
-            newState.termsNavigationDidTap = true
+        case .serviceTermsNavigationDidTap:
+            newState.serviceTermsNavigationDidTap = true
         case .privacyNavigationDidTap:
             newState.privacyNavigationDidTap = true
         case .openSourceNavigationDidTap:
@@ -101,12 +101,12 @@ private extension SettingReactor {
         return .just(.withDrawButtonDidTap)
     }
 
-    func notiButtonDidTap() -> Observable<Mutation> {
+    func appPushSettingNavigationDidTap() -> Observable<Mutation> {
         return .just(.appPushSettingButtonDidTap)
     }
 
-    func termsNavigationDidTap() -> Observable<Mutation> {
-        return .just(.termsNavigationDidTap)
+    func serviceTermsNavigationDidTap() -> Observable<Mutation> {
+        return .just(.serviceTermsNavigationDidTap)
     }
 
     func privacyNavigationDidTap() -> Observable<Mutation> {
