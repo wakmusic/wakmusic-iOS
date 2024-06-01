@@ -32,7 +32,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }
 
-    public func updatePlayList(key: String, songs: [String]) -> Single<BaseEntity> {
+    public func updatePlayList(key: String, songs: [String]) -> Completable {
         return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 

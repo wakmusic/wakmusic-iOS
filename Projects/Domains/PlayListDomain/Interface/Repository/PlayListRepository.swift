@@ -9,7 +9,7 @@ public protocol PlayListRepository {
     func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
     func createPlayList(title: String) -> Single<PlayListBaseEntity>
     func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
-    func updatePlayList(key: String, songs: [String]) -> Single<BaseEntity>
+    func updatePlayList(key: String, songs: [String]) -> Completable
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Single<BaseEntity>
 }

@@ -9,7 +9,7 @@ public protocol RemotePlayListDataSource {
     func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
     func createPlayList(title: String) -> Single<PlayListBaseEntity>
     func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
-    func updatePlaylist(key: String, songs: [String]) -> Single<BaseEntity>
+    func updatePlaylist(key: String, songs: [String]) -> Completable
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Single<BaseEntity>
 }

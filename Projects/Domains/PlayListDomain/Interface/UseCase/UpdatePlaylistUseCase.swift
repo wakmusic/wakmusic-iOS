@@ -3,5 +3,5 @@ import Foundation
 import RxSwift
 
 public protocol UpdatePlaylistUseCase {
-    func execute(key: String, songs: [String]) -> Single<BaseEntity>
+    func execute(key: String, songs: [String]) -> Completable
 }

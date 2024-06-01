@@ -76,7 +76,7 @@ extension PlayListAPI: WMAPI {
 
         case .removeSongs:
             return .delete
-        
+
         case .updatePlaylist, .updateTitleAndPrivate:
             return .patch
         }
@@ -100,7 +100,7 @@ extension PlayListAPI: WMAPI {
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
 
         case let .removeSongs(_, songs: songs):
-            return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString )
+            return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString)
         }
     }
 

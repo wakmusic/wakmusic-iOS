@@ -12,7 +12,7 @@ public struct UpdatePlaylistUseCaseImpl: UpdatePlaylistUseCase {
         self.playListRepository = playListRepository
     }
 
-    public func execute(key: String, songs: [String]) -> Single<BaseEntity> {
+    public func execute(key: String, songs: [String]) -> Completable {
         return playListRepository.updatePlayList(key: key, songs: songs)
     }
 }
