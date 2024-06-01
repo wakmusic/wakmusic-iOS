@@ -19,7 +19,7 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map { $0.toDomain() }
     }
 
-    public  func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable{
+    public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
         request(.updateTitleAndPrivate(id: key, title: title, isPrivate: isPrivate))
             .asCompletable()
     }

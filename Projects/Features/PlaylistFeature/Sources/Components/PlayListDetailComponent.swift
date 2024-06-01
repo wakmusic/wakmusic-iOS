@@ -10,7 +10,7 @@ import UIKit
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
 
-    var editPlayListUseCase: any UpdatePlaylist { get }
+    var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 
@@ -27,7 +27,7 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
                 key: id,
                 type: isCustom ? .custom : .wmRecommend,
                 fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
-                editPlayListUseCase: dependency.editPlayListUseCase,
+                updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),

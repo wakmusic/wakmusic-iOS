@@ -10,6 +10,7 @@ public protocol MultiPurposePopUpDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }
     var loadPlayListUseCase: any LoadPlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
+    var updateTitleAndPrivateeUseCase : any UpdateTitleAndPrivateeUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 
@@ -26,6 +27,7 @@ public final class MultiPurposePopUpComponent: Component<MultiPurposePopUpDepend
                 createPlayListUseCase: dependency.createPlayListUseCase,
                 loadPlayListUseCase: dependency.loadPlayListUseCase,
                 setUserNameUseCase: dependency.setUserNameUseCase,
+                updateTitleAndPrivateeUseCase: dependency.updateTitleAndPrivateeUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             completion: completion

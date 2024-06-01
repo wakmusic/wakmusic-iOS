@@ -247,8 +247,8 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
         return appComponent.fetchPlayListDetailUseCase
     }
-    var editPlayListUseCase: any UpdatePlaylist {
-        return appComponent.editPlayListUseCase
+    var updatePlaylistUseCase: any UpdatePlaylistUseCase {
+        return appComponent.updatePlaylistUseCase
     }
     var removeSongsUseCase: any RemoveSongsUseCase {
         return appComponent.removeSongsUseCase
@@ -730,6 +730,9 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
+    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase {
+        return appComponent.updateTitleAndPrivateeUseCase
+    }
     var logoutUseCase: any LogoutUseCase {
         return appComponent.logoutUseCase
     }
@@ -788,7 +791,8 @@ extension AppComponent: Registration {
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { [unowned self] in self.fetchRecommendPlayListUseCase as Any }
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { [unowned self] in self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { [unowned self] in self.createPlayListUseCase as Any }
-        localTable["editPlayListUseCase-any UpdatePlaylist"] = { [unowned self] in self.editPlayListUseCase as Any }
+        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { [unowned self] in self.updatePlaylistUseCase as Any }
+        localTable["updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"] = { [unowned self] in self.updateTitleAndPrivateeUseCase as Any }
         localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { [unowned self] in self.loadPlayListUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
@@ -923,7 +927,7 @@ extension NoticePopupComponent: Registration {
 extension PlayListDetailComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayListDetailDependency.fetchPlayListDetailUseCase] = "fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"
-        keyPathToName[\PlayListDetailDependency.editPlayListUseCase] = "editPlayListUseCase-any UpdatePlaylist"
+        keyPathToName[\PlayListDetailDependency.updatePlaylistUseCase] = "updatePlaylistUseCase-any UpdatePlaylistUseCase"
         keyPathToName[\PlayListDetailDependency.removeSongsUseCase] = "removeSongsUseCase-any RemoveSongsUseCase"
         keyPathToName[\PlayListDetailDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayListDetailDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
@@ -1112,6 +1116,7 @@ extension MultiPurposePopUpComponent: Registration {
         keyPathToName[\MultiPurposePopUpDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
         keyPathToName[\MultiPurposePopUpDependency.loadPlayListUseCase] = "loadPlayListUseCase-any LoadPlayListUseCase"
         keyPathToName[\MultiPurposePopUpDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.updateTitleAndPrivateeUseCase] = "updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"
         keyPathToName[\MultiPurposePopUpDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }

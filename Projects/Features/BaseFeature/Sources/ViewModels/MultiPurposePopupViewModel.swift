@@ -13,10 +13,11 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var key: String
     let disposeBag: DisposeBag = DisposeBag()
 
-    var createPlayListUseCase: CreatePlayListUseCase!
-    var loadPlayListUseCase: LoadPlayListUseCase!
-    var setUserNameUseCase: SetUserNameUseCase!
+    let createPlayListUseCase: CreatePlayListUseCase!
+    let loadPlayListUseCase: LoadPlayListUseCase!
+    let setUserNameUseCase: SetUserNameUseCase!
     // TODO: 플레이리스트 이름 변경 Usecase
+    private let updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase
     private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
@@ -37,6 +38,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         createPlayListUseCase: CreatePlayListUseCase,
         loadPlayListUseCase: LoadPlayListUseCase,
         setUserNameUseCase: SetUserNameUseCase,
+        updateTitleAndPrivateeUseCase : any UpdateTitleAndPrivateeUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
@@ -44,6 +46,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         self.createPlayListUseCase = createPlayListUseCase
         self.loadPlayListUseCase = loadPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
+        self.updateTitleAndPrivateeUseCase = updateTitleAndPrivateeUseCase
         self.logoutUseCase = logoutUseCase
     }
 
@@ -142,35 +145,29 @@ public final class MultiPurposePopupViewModel: ViewModelType {
 
                 case .edit:
                     break
-//                    self.editPlayListNameUseCase.execute(key: self.key, title: text)
-//                        .catch { (error: Error) in
-//                            let wmError = error.asWMError
-//                            if wmError == .tokenExpired {
-//                                logoutRelay.accept(error)
-//                                return logoutUseCase.execute()
-//                                    .andThen(.never())
-//                            } else {
-//                                return Single<EditPlayListNameEntity>.create { single in
-//                                    single(.success(EditPlayListNameEntity(
-//                                        title: "",
-//                                        status: 0,
-//                                        description: error.asWMError.errorDescription ?? ""
-//                                    )))
-//                                    return Disposables.create {}
-//                                }
-//                            }
-//                        }
-//                        .asObservable()
-//                        .subscribe(onNext: { result in
-//                            if result.status != 200 {
-//                                output.result.onNext(BaseEntity(status: result.status, description: result.description))
-//                                return
-//                            }
-//                            NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-//                            NotificationCenter.default.post(name: .playListNameRefresh, object: result.title)
-//                            output.result.onNext(BaseEntity(status: 200, description: ""))
-//                        })
-//                        .disposed(by: self.disposeBag)
+                    self.updateTitleAndPrivateeUseCase
+                        .execute(key: key, title: text, isPrivate: nil)
+                        .catch { (error: Error) in
+                            let wmError = error.asWMError
+                            
+                            switch wmError {
+                                case .tokenExpired:
+                                    logoutRelay.accept(error)
+                                    return logoutUseCase.execute()
+                                            .andThen(.never())
+                              default:
+                                output.result.onNext(BaseEntity(status: 400, description: wmError.errorDescription ??  "잘못된 요청입니다."))
+                            }
+                            return .never()
+                        }
+                        .subscribe(onCompleted: { 
+                            
+                            NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                            NotificationCenter.default.post(name: .playListNameRefresh, object: text)
+                        })
+                        .disposed(by: disposeBag)
+                    
+    
 
                 case .share:
                     output.result.onNext(BaseEntity(status: 200, description: ""))

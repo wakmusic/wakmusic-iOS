@@ -1,11 +1,3 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import BaseFeatureInterface
 import PlayListDomain
@@ -56,12 +48,17 @@ public extension AppComponent {
         }
     }
 
-    var editPlayListUseCase: any UpdatePlaylist {
+    var updatePlaylistUseCase: any UpdatePlaylistUseCase {
         shared {
-            EditPlayListUseCaseImpl(playListRepository: playListRepository)
+            UpdatePlaylistUseCaseImpl(playListRepository: playListRepository)
         }
     }
-
+    
+    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase {
+        shared {
+            UpdateTitleAndPrivateeUseCaseImpl(playListRepository: playListRepository)
+        }
+    }
 
     var loadPlayListUseCase: any LoadPlayListUseCase {
         shared {

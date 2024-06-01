@@ -46,7 +46,7 @@ internal final class PlaylistDetailReactor: Reactor {
 
     private var disposeBag = DisposeBag()
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
-    private let editPlayListUseCase: any UpdatePlaylist
+    private let updatePlaylistUseCase: any UpdatePlaylistUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let logoutUseCase: any LogoutUseCase
 
@@ -54,14 +54,14 @@ internal final class PlaylistDetailReactor: Reactor {
         key: String,
         type: PlayListType,
         fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase,
-        editPlayListUseCase: any UpdatePlaylist,
+        updatePlaylistUseCase: any UpdatePlaylistUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
-        self.editPlayListUseCase = editPlayListUseCase
+        self.updatePlaylistUseCase = updatePlaylistUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.logoutUseCase = logoutUseCase
         self.initialState = .init(
@@ -204,7 +204,7 @@ private extension PlaylistDetailReactor {
             return .empty()
         }
 
-        return editPlayListUseCase
+        return updatePlaylistUseCase
             .execute(key: key, songs: dataSource)
             .asObservable()
             .do(onNext: { _ in

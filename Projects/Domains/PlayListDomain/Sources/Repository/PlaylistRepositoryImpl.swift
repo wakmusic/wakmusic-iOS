@@ -36,7 +36,6 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 
-
     public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.loadPlayList(key: key)
     }

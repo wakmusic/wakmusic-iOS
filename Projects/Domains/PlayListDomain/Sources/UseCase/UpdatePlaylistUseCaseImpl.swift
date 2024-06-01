@@ -1,17 +1,9 @@
-//
-//  FetchArtistListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import Foundation
 import PlayListDomainInterface
 import RxSwift
 
-public struct EditPlayListUseCaseImpl: UpdatePlaylist {
+public struct UpdatePlaylistUseCaseImpl: UpdatePlaylistUseCase {
     private let playListRepository: any PlayListRepository
 
     public init(

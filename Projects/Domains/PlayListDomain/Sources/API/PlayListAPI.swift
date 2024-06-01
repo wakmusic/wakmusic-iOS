@@ -52,7 +52,7 @@ extension PlayListAPI: WMAPI {
                 return "/recommend/\(id)"
             }
 
-        case let .updateTitleAndPrivate(id: id,_ , _):
+        case let .updateTitleAndPrivate(id: id, _, _):
             return "/\(id)"
 
         case let .fetchPlaylistSongs(id: id):
@@ -83,7 +83,7 @@ extension PlayListAPI: WMAPI {
         case .createPlayList, .loadPlayList, .addSongIntoPlayList, .removeSongs:
             return .post
 
-        case .updatePlaylist , .updateTitleAndPrivate:
+        case .updatePlaylist, .updateTitleAndPrivate:
             return .patch
         }
     }
@@ -92,7 +92,7 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .requestPlain
-            
+
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
             return .requestJSONEncodable(TitleAndPrivateRequset(title: title, private: isPrivate))
 
