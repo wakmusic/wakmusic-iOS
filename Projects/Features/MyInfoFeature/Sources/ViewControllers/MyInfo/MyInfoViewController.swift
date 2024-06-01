@@ -107,6 +107,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(with: self) { owner, _ in
                 print("문의하기 버튼 눌림")
                 let vc = owner.questionComponent.makeView()
+                vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
             }
             .disposed(by: disposeBag)

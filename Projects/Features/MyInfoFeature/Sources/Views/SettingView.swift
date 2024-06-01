@@ -13,7 +13,7 @@ private protocol SettingStateProtocol {}
 private protocol SettingActionProtocol {
     var dismissButtonDidTap: Observable<Void> { get }
     var withDrawButtonDidTap: Observable<Void> { get }
-    var notiNavigationButtonDidTap: Observable<Void> { get }
+    var appPushSettingNavigationButtonDidTap: Observable<Void> { get }
     var termsNavigationButtonDidTap: Observable<Void> { get }
     var privacyNavigationButtonDidTap: Observable<Void> { get }
     var openSourceNavigationButtonDidTap: Observable<Void> { get }
@@ -171,7 +171,7 @@ extension SettingView: SettingStateProtocol {}
 extension Reactive: SettingActionProtocol where Base: SettingView {
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
     var withDrawButtonDidTap: Observable<Void> { base.withDrawButton.rx.tap.asObservable() }
-    var notiNavigationButtonDidTap: Observable<Void> { base.notiNavgationButton.rx.didTap }
+    var appPushSettingNavigationButtonDidTap: Observable<Void> { base.notiNavgationButton.rx.didTap }
     var termsNavigationButtonDidTap: Observable<Void> { base.termNavgationButton.rx.didTap }
     var privacyNavigationButtonDidTap: Observable<Void> { base.privacyNavgationButton.rx.didTap }
     var openSourceNavigationButtonDidTap: Observable<Void> { base.openSourceNavgationButton.rx.didTap }

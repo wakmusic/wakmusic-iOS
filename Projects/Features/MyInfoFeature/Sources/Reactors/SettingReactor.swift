@@ -7,7 +7,7 @@ final class SettingReactor: Reactor {
     enum Action {
         case dismissButtonDidTap
         case withDrawButtonDidTap
-        case notiNavigationDidTap
+        case appPushSettingNavigationDidTap
         case termsNavigationDidTap
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
@@ -18,7 +18,7 @@ final class SettingReactor: Reactor {
     enum Mutation {
         case dismissButtonDidTap
         case withDrawButtonDidTap
-        case notiButtonDidTap
+        case appPushSettingButtonDidTap
         case termsNavigationDidTap
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
@@ -30,7 +30,7 @@ final class SettingReactor: Reactor {
         var userInfo: UserInfo?
         @Pulse var dismissButtonDidTap: Bool?
         @Pulse var withDrawButtonDidTap: Bool?
-        @Pulse var notiButtonDidTap: Bool?
+        @Pulse var appPushSettingButtonDidTap: Bool?
         @Pulse var termsNavigationDidTap: Bool?
         @Pulse var privacyNavigationDidTap: Bool?
         @Pulse var openSourceNavigationDidTap: Bool?
@@ -53,7 +53,7 @@ final class SettingReactor: Reactor {
             return dismissButtonDidTap()
         case .withDrawButtonDidTap:
             return withDrawButtonDidTap()
-        case .notiNavigationDidTap:
+        case .appPushSettingNavigationDidTap:
             return notiButtonDidTap()
         case .termsNavigationDidTap:
             return termsNavigationDidTap()
@@ -75,8 +75,8 @@ final class SettingReactor: Reactor {
             newState.dismissButtonDidTap = true
         case .withDrawButtonDidTap:
             newState.withDrawButtonDidTap = true
-        case .notiButtonDidTap:
-            newState.notiButtonDidTap = true
+        case .appPushSettingButtonDidTap:
+            newState.appPushSettingButtonDidTap = true
         case .termsNavigationDidTap:
             newState.termsNavigationDidTap = true
         case .privacyNavigationDidTap:
@@ -102,7 +102,7 @@ private extension SettingReactor {
     }
 
     func notiButtonDidTap() -> Observable<Mutation> {
-        return .just(.notiButtonDidTap)
+        return .just(.appPushSettingButtonDidTap)
     }
 
     func termsNavigationDidTap() -> Observable<Mutation> {
