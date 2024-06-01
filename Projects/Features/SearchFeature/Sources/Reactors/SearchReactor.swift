@@ -8,11 +8,10 @@ import Utility
 
 final class SearchReactor: Reactor {
     private var disposeBag: DisposeBag = DisposeBag()
-    
+
     private let service: any SearchCommonService
-    
+
     var initialState: State
-  
 
     enum Action {
         case switchTypingState(TypingStatus)
@@ -30,7 +29,6 @@ final class SearchReactor: Reactor {
         var typingState: TypingStatus
         var text: String
     }
-
 
     init(service: some SearchCommonService = DefaultSearchCommonService.shared) {
         self.service = service

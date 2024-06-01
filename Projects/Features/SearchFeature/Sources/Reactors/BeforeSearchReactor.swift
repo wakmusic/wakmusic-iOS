@@ -8,7 +8,7 @@ public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
     private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
-    
+
     public var initialState: State
 
     private let service: any SearchCommonService
@@ -30,8 +30,6 @@ public final class BeforeSearchReactor: Reactor {
         var dataSource: [RecommendPlayListEntity]
     }
 
-   
-    
     init(
         fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
         service: some SearchCommonService = DefaultSearchCommonService.shared

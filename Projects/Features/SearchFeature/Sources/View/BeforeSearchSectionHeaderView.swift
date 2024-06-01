@@ -4,16 +4,16 @@ import Then
 import UIKit
 
 protocol BeforeSearchSectionHeaderViewDelegate: AnyObject {
-    func tap(_ section: Int?) -> Void
+    func tap(_ section: Int?)
 }
 
-class BeforeSearchSectionHeaderView:
+final class BeforeSearchSectionHeaderView:
     UICollectionReusableView {
     static let kind = "before-search-section-header"
 
     weak var delegate: BeforeSearchSectionHeaderViewDelegate?
 
-    var section: Int? = nil
+    var section: Int?
 
     var label: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
@@ -34,7 +34,11 @@ class BeforeSearchSectionHeaderView:
 
         self.addSubviews(label, button)
         configureUI()
-        button.addTarget(self, action: #selector(tap), for: .touchUpInside)
+
+        button.addAction { [weak self] in
+            guard let self else { return }
+            self.delegate?.tap(self.section)
+        }
 
         self.backgroundColor = .orange
     }
@@ -46,7 +50,12 @@ class BeforeSearchSectionHeaderView:
 }
 
 extension BeforeSearchSectionHeaderView {
-    func configureUI() {
+    public func update(_ title: String, _ section: Int) {
+        label.text = title
+        self.section = section
+    }
+
+    private func configureUI() {
         label.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview()
         }
@@ -54,14 +63,5 @@ extension BeforeSearchSectionHeaderView {
         button.snp.makeConstraints {
             $0.trailing.top.bottom.equalToSuperview()
         }
-    }
-
-    @objc func tap() {
-        delegate?.tap(self.section)
-    }
-
-    public func update(_ title: String, _ section: Int) {
-        label.text = title
-        self.section = section
     }
 }
