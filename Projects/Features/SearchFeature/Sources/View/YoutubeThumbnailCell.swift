@@ -5,7 +5,7 @@ import UIKit
 import Utility
 
 final class YoutubeThumbnailCell: UICollectionViewCell {
-    private let  thumbnailView: UIImageView = UIImageView().then {
+    private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
