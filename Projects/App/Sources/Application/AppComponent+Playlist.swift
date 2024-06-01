@@ -56,17 +56,12 @@ public extension AppComponent {
         }
     }
 
-    var editPlayListUseCase: any EditPlayListUseCase {
+    var editPlayListUseCase: any UpdatePlaylist {
         shared {
             EditPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
 
-    var editPlayListNameUseCase: any EditPlayListNameUseCase {
-        shared {
-            EditPlayListNameUseCaseImpl(playListRepository: playListRepository)
-        }
-    }
 
     var loadPlayListUseCase: any LoadPlayListUseCase {
         shared {

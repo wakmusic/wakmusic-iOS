@@ -23,7 +23,7 @@ public final class PlayListDetailViewModel: ViewModelType {
     var id: String!
     var key: String?
     var fetchPlayListDetailUseCase: FetchPlayListDetailUseCase!
-    var editPlayListUseCase: EditPlayListUseCase!
+    var editPlayListUseCase: UpdatePlaylist!
     var removeSongsUseCase: RemoveSongsUseCase!
     private let logoutUseCase: any LogoutUseCase
     var disposeBag = DisposeBag()
@@ -56,7 +56,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         id: String,
         type: PlayListType,
         fetchPlayListDetailUseCase: FetchPlayListDetailUseCase,
-        editPlayListUseCase: EditPlayListUseCase,
+        editPlayListUseCase: UpdatePlaylist,
         removeSongsUseCase: RemoveSongsUseCase,
         logoutUseCase: any LogoutUseCase
     ) {

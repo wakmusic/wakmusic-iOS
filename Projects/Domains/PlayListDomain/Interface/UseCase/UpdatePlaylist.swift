@@ -2,6 +2,6 @@ import BaseDomainInterface
 import Foundation
 import RxSwift
 
-public protocol EditPlayListUseCase {
+public protocol UpdatePlaylist {
     func execute(key: String, songs: [String]) -> Single<BaseEntity>
 }

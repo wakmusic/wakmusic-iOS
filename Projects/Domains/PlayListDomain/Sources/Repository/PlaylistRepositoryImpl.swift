@@ -20,8 +20,8 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
 
-    public func updatePrivate(key: String) -> Completable {
-        remotePlayListDataSource.updatePrivate(key: key)
+    public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
+        remotePlayListDataSource.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
     }
 
     public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
@@ -32,13 +32,10 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }
 
-    public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {
-        return remotePlayListDataSource.editPlayList(key: key, songs: songs)
+    public func updatePlayList(key: String, songs: [String]) -> Single<BaseEntity> {
+        return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 
-    public func editPlayListName(key: String, title: String) -> Single<EditPlayListNameEntity> {
-        remotePlayListDataSource.editPlayListName(key: key, title: title)
-    }
 
     public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.loadPlayList(key: key)

@@ -11,7 +11,7 @@ import Foundation
 import PlayListDomainInterface
 import RxSwift
 
-public struct EditPlayListUseCaseImpl: EditPlayListUseCase {
+public struct EditPlayListUseCaseImpl: UpdatePlaylist {
     private let playListRepository: any PlayListRepository
 
     public init(
@@ -21,6 +21,6 @@ public struct EditPlayListUseCaseImpl: EditPlayListUseCase {
     }
 
     public func execute(key: String, songs: [String]) -> Single<BaseEntity> {
-        return playListRepository.editPlayList(key: key, songs: songs)
+        return playListRepository.updatePlayList(key: key, songs: songs)
     }
 }

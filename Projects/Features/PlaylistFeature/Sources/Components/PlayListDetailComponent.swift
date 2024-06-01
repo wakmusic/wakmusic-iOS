@@ -10,7 +10,7 @@ import UIKit
 public protocol PlayListDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
 
-    var editPlayListUseCase: any EditPlayListUseCase { get }
+    var editPlayListUseCase: any UpdatePlaylist { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 

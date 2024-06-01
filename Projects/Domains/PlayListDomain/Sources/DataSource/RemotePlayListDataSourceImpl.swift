@@ -19,8 +19,8 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map { $0.toDomain() }
     }
 
-    public func updatePrivate(key: String) -> Completable {
-        request(.updatePrivateState(id: key))
+    public  func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable{
+        request(.updateTitleAndPrivate(id: key, title: title, isPrivate: isPrivate))
             .asCompletable()
     }
 
@@ -36,16 +36,10 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map { $0.map { $0.toDomain() } }
     }
 
-    public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {
-        request(.editPlayList(key: key, songs: songs))
+    public func updatePlaylist(key: String, songs: [String]) -> Single<BaseEntity> {
+        request(.updatePlaylist(key: key, songs: songs))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
-    }
-
-    public func editPlayListName(key: String, title: String) -> Single<EditPlayListNameEntity> {
-        request(.editPlayListName(key: key, title: title))
-            .map(EditPlayListNameResponseDTO.self)
-            .map { $0.toDomain(title: title) }
     }
 
     public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
