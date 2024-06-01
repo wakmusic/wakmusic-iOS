@@ -32,12 +32,11 @@ final class PopularPlayListCell: UICollectionViewCell {
 }
 
 extension PopularPlayListCell {
-    
     public func update(_ model: Model) {
         self.titleLabel.text = model.title
         self.nickNameLabel.text = "Hamp"
     }
-    
+
     private func configureUI() {
         imageView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -55,5 +54,4 @@ extension PopularPlayListCell {
             $0.bottom.equalToSuperview()
         }
     }
-
 }

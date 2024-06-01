@@ -36,14 +36,12 @@ final class RecentRecordTableViewCell: UITableViewCell {
         button.addAction {
             PreferenceManager.shared.removeRecentRecords(word: self.recentLabel.text!)
         }
-        
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension RecentRecordTableViewCell {
