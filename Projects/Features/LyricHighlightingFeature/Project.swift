@@ -10,7 +10,10 @@ let project = Project.module(
         ),
         .implements(
             module: .feature(.LyricHighlightingFeature),
-            dependencies: [.feature(target: .LyricHighlightingFeature, type: .interface)]
+            dependencies: [
+                .feature(target: .PlayerFeature),
+                .feature(target: .LyricHighlightingFeature, type: .interface)
+            ]
         ),
         .tests(
             module: .feature(.LyricHighlightingFeature),
