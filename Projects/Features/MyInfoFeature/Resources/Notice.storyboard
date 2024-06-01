@@ -51,7 +51,7 @@
                                 <rect key="frame" x="0.0" y="107" width="393" height="711"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoticeListCell" id="gtb-bx-VcH" customClass="NoticeListCell" customModule="StorageFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoticeListCell" id="gtb-bx-VcH" customClass="NoticeListCell" customModule="MyInfoFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gtb-bx-VcH" id="SN6-Hr-l7a">
@@ -210,7 +210,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NoticeDetailHeaderView" id="5OF-OF-P0S" customClass="NoticeDetailHeaderView" customModule="StorageFeature">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NoticeDetailHeaderView" id="5OF-OF-P0S" customClass="NoticeDetailHeaderView" customModule="MyInfoFeature">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
