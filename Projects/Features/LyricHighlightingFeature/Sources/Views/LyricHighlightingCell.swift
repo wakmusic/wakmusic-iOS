@@ -9,7 +9,6 @@
 import UIKit
 
 class LyricHighlightingCell: UITableViewCell {
-
     override func awakeFromNib() {
         super.awakeFromNib()
     }

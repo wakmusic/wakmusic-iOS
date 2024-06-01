@@ -9,7 +9,6 @@
 import UIKit
 
 class LyricHighlightingViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
     }
