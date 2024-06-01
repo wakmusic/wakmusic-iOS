@@ -14,4 +14,12 @@ public extension AppComponent {
     var containSongsFactory: any ContainSongsFactory {
         ContainSongsComponent(parent: self)
     }
+
+    var privacyComponent: PrivacyComponent {
+        PrivacyComponent(parent: self)
+    }
+
+    var serviceTermsComponent: ServiceTermsComponent {
+        ServiceTermsComponent(parent: self)
+    }
 }

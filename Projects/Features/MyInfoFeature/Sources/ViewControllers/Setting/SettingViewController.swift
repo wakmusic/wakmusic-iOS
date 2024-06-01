@@ -16,6 +16,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
 
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
+    private var appPushSettingComponent: AppPushSettingComponent!
+    private var serviceTermsComponent: ServiceTermsComponent!
+    private var privacyComponent: PrivacyComponent!
     private var openSourceLicenseComponent: OpenSourceLicenseComponent!
 
     override func loadView() {
@@ -24,10 +27,20 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
 
     public static func viewController(
         reactor: SettingReactor,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        signInFactory: SignInFactory,
+        appPushSettingComponent: AppPushSettingComponent,
+        serviceTermsComponent: ServiceTermsComponent,
+        privacyComponent: PrivacyComponent,
+        openSourceLicenseComponent: OpenSourceLicenseComponent
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.signInFactory = signInFactory
+        viewController.appPushSettingComponent = appPushSettingComponent
+        viewController.serviceTermsComponent = serviceTermsComponent
+        viewController.privacyComponent = privacyComponent
+        viewController.openSourceLicenseComponent = openSourceLicenseComponent
         return viewController
     }
 
@@ -84,8 +97,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        settingView.rx.notiNavigationButtonDidTap
-            .map { SettingReactor.Action.notiNavigationDidTap }
+        settingView.rx.appPushSettingNavigationButtonDidTap
+            .map { SettingReactor.Action.appPushSettingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
