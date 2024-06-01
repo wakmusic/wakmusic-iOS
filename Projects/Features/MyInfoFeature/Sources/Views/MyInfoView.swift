@@ -8,7 +8,9 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-private protocol MyInfoStateProtocol {}
+private protocol MyInfoStateProtocol {
+    func updateIsHiddenLoginWarningView(isLoggedIn: Bool)
+}
 
 private protocol MyInfoActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
@@ -23,7 +25,7 @@ private protocol MyInfoActionProtocol {
 
 final class MyInfoView: UIView {
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
-    let profileView = ProfileView(name: "닉네임님", platform: ProfileView.PlatformType.naver).then {
+    let profileView = ProfileView().then {
         $0.isHidden = true
     }
 
@@ -152,7 +154,17 @@ private extension MyInfoView {
     }
 }
 
-extension MyInfoView: MyInfoStateProtocol {}
+extension MyInfoView: MyInfoStateProtocol {
+    func updateIsHiddenLoginWarningView(isLoggedIn: Bool) {
+        if isLoggedIn {
+            loginWarningView.isHidden = true
+            profileView.isHidden = false
+        } else {
+            profileView.isHidden = true
+            loginWarningView.isHidden = false
+        }
+    }
+}
 
 extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }

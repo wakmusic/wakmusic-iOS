@@ -51,6 +51,27 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.state.map(\.isLoggedIn)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoggedIn in
+                owner.myInfoView.updateIsHiddenLoginWarningView(isLoggedIn: isLoggedIn)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map(\.nickname)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, nickname in
+                owner.myInfoView.profileView.updateNickName(nickname: nickname)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map(\.platform)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, platform in
+                owner.myInfoView.profileView.updatePlatform(platform: platform)
+            }
+            .disposed(by: disposeBag)
+
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
@@ -62,7 +83,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
 
         reactor.pulse(\.$moreButtonDidTap)
             .compactMap { $0 }
-            .bind { _ in print("더보기 버튼 눌림") }
+            .bind { _ in
+                print("더보기 버튼 눌림")
+            }
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$drawButtonDidTap)
@@ -76,7 +99,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
                 print("좋아요 버튼 눌림")
-                if reactor.currentState.userInfo != nil {
+                if reactor.currentState.isLoggedIn {
                     // TODO: 보관함 탭으로 이동, 좋아요 탭으로 이동
                 } else {
                     // TODO: 로그인이 필요한 서비스입니다. 팝업

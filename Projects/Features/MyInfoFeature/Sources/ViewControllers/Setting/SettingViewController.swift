@@ -12,14 +12,14 @@ import UIKit
 import Utility
 
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
-    let settingView = SettingView()
-
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
     private var appPushSettingComponent: AppPushSettingComponent!
     private var serviceTermsComponent: ServiceTermsComponent!
     private var privacyComponent: PrivacyComponent!
     private var openSourceLicenseComponent: OpenSourceLicenseComponent!
+
+    let settingView = SettingView()
 
     override func loadView() {
         view = settingView
@@ -57,7 +57,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .compactMap { $0 }
             .bind { _ in print("회원탈퇴 버튼 눌림") }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$appPushSettingButtonDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -65,7 +65,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$serviceTermsNavigationDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
