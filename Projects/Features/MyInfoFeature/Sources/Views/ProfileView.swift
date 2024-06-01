@@ -20,9 +20,7 @@ final class ProfileView: UIView {
     }
 
     private let nameLabel: UILabel = UILabel().then {
-        $0.text = "님"
-        $0.font = .setFont(.t3(weight: .medium))
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        $0.text = ""
         $0.textAlignment = .center
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero
@@ -41,7 +39,6 @@ final class ProfileView: UIView {
         super.init(frame: .zero)
         addView()
         setLayout()
-        highlightName()
     }
 
     @available(*, unavailable)
@@ -51,13 +48,18 @@ final class ProfileView: UIView {
 
     func highlightName() {
         guard let text = self.nameLabel.text else { return }
-        let attributeString = NSMutableAttributedString(string: text)
-        let range = (text as NSString).range(of: "님")
-        let color = DesignSystemAsset.BlueGrayColor.blueGray500.color
-        let font = UIFont.setFont(.t4(weight: .light))
-        attributeString.addAttribute(.foregroundColor, value: color, range: range)
-        attributeString.addAttribute(.font, value: font, range: range)
-        self.nameLabel.attributedText = attributeString
+        let attrStr = NSMutableAttributedString(string: text)
+        let fullRange = NSRange(location: 0, length: attrStr.length)
+        let lastRange = (text as NSString).range(of: "님")
+        let color = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        let lightColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
+        let font = UIFont.setFont(.t3(weight: .medium))
+        let lightFont = UIFont.setFont(.t4(weight: .light))
+        attrStr.addAttribute(.foregroundColor, value: color, range: fullRange)
+        attrStr.addAttribute(.font, value: font, range: fullRange)
+        attrStr.addAttribute(.foregroundColor, value: lightColor, range: lastRange)
+        attrStr.addAttribute(.font, value: lightFont, range: lastRange)
+        self.nameLabel.attributedText = attrStr
     }
 }
 
@@ -92,6 +94,7 @@ extension ProfileView {
 extension ProfileView: ProfileStateProtocol {
     func updateNickName(nickname: String) {
         nameLabel.text = nickname + "님"
+        highlightName()
     }
 
     func updatePlatform(platform: String) {

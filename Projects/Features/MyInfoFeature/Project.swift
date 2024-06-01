@@ -8,6 +8,7 @@ let project = Project.module(
         .interface(module: .feature(.MyInfoFeature)),
         .implements(
             module: .feature(.MyInfoFeature),
+            product: .staticFramework,
             spec: .init(
                 resources: ["Resources/**"],
                 dependencies: [
