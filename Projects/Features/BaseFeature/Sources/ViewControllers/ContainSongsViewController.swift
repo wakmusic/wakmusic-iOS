@@ -1,11 +1,3 @@
-//
-//  ContainSongsViewController.swift
-//  CommonFeature
-//
-//  Created by yongbeomkwak on 2023/03/11.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
@@ -13,6 +5,7 @@ import PlayListDomainInterface
 import RxSwift
 import UIKit
 import Utility
+import BaseDomainInterface
 
 public protocol ContainSongsViewDelegate: AnyObject {
     func tokenExpired()
@@ -108,7 +101,7 @@ extension ContainSongsViewController {
 
         output.showToastMessage
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (result: AddSongEntity) in
+            .subscribe(onNext: { [weak self] result in
                 guard let self = self else { return }
                 self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
 
