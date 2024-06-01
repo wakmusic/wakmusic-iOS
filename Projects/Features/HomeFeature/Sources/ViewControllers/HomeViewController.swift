@@ -1,6 +1,7 @@
 import BaseFeature
 import ChartDomainInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import PanModal
 import PlayListDomainInterface
@@ -72,6 +73,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .home))
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
@@ -134,6 +136,7 @@ extension HomeViewController {
             )
             }
             .subscribe(onNext: { song in
+                LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100))
                 PlayState.shared.loadAndAppendSongsToPlaylist([song])
             })
             .disposed(by: disposeBag)
@@ -152,6 +155,7 @@ extension HomeViewController {
             )
             }
             .subscribe(onNext: { song in
+                LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent))
                 PlayState.shared.loadAndAppendSongsToPlaylist([song])
             })
             .disposed(by: disposeBag)
@@ -373,6 +377,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlayListEntity) {
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
         let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
