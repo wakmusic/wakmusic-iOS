@@ -1,3 +1,4 @@
+import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
@@ -5,7 +6,6 @@ import PlayListDomainInterface
 import RxSwift
 import UIKit
 import Utility
-import BaseDomainInterface
 
 public protocol ContainSongsViewDelegate: AnyObject {
     func tokenExpired()

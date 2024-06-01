@@ -60,7 +60,7 @@ extension PlayListAPI: WMAPI {
 
         case .createPlayList:
             return "/create"
-            
+
         case let .addSongIntoPlayList(key: key, _):
             return "/\(key)/songs"
 
@@ -72,8 +72,6 @@ extension PlayListAPI: WMAPI {
 
         case let .editPlayListName(key: key, _):
             return "/\(key)"
-
-
 
         case let .removeSongs(key: key, _):
             return "/\(key)/songs/remove"
@@ -103,7 +101,7 @@ extension PlayListAPI: WMAPI {
 
         case let .createPlayList(title: title):
             return .requestJSONEncodable(CreatePlayListRequset(title: title))
-            
+
         case let .addSongIntoPlayList(_, songs: songs):
             return .requestJSONEncodable(AddSongRequest(songIds: songs))
 

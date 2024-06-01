@@ -1,11 +1,11 @@
 import AuthDomainInterface
+import BaseDomainInterface
 import ErrorModule
 import Foundation
 import PlayListDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
-import BaseDomainInterface
 
 public final class ContainSongsViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
@@ -79,24 +79,32 @@ public final class ContainSongsViewModel: ViewModelType {
                         let wmError = error.asWMError
 
                         switch wmError {
-                            case . tokenExpired:
-                                logoutRelay.accept(wmError)
-                                output.showToastMessage.onNext(BaseEntity(status: 401, description: wmError.errorDescription ?? wmError.localizedDescription ))
-                            case .conflict:
-                            
-                                output.showToastMessage.onNext(BaseEntity(status: 409, description: "이미 내 리스트에 담긴 곡들입니다."))
-                            default:
-                                output.showToastMessage.onNext(BaseEntity(status: 400, description: "잘못된 요청입니다."))
-                            
+                        case .tokenExpired:
+                            logoutRelay.accept(wmError)
+                            output.showToastMessage.onNext(BaseEntity(
+                                status: 401,
+                                description: wmError.errorDescription ?? wmError.localizedDescription
+                            ))
+                        case .conflict:
+
+                            output.showToastMessage.onNext(BaseEntity(
+                                status: 409,
+                                description: "이미 내 리스트에 담긴 곡들입니다."
+                            ))
+                        default:
+                            output.showToastMessage.onNext(BaseEntity(status: 400, description: "잘못된 요청입니다."))
                         }
-                        
+
                         return .never()
                     }
                     .asObservable()
             }
-            .map { (entity: AddSongEntity) -> BaseEntity in 
+            .map { (entity: AddSongEntity) -> BaseEntity in
                 if entity.duplicated {
-                    return BaseEntity(status: 200, description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다.")
+                    return BaseEntity(
+                        status: 200,
+                        description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다."
+                    )
                 } else {
                     return BaseEntity(status: 200, description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다.")
                 }
