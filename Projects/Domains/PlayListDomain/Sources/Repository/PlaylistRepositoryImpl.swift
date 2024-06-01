@@ -1,7 +1,7 @@
 import BaseDomainInterface
 import PlayListDomainInterface
-import SongsDomainInterface
 import RxSwift
+import SongsDomainInterface
 
 public final class PlayListRepositoryImpl: PlayListRepository {
     private let remotePlayListDataSource: any RemotePlayListDataSource
@@ -19,7 +19,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
     public func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
-    
+
     public func updatePrivate(key: String) -> Completable {
         remotePlayListDataSource.updatePrivate(key: key)
     }
@@ -27,7 +27,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
     public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.createPlayList(title: title)
     }
-    
+
     public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
         remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }

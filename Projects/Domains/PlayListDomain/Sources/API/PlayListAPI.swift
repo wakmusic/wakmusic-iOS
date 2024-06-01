@@ -43,7 +43,7 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList:
             return "/recommend/list"
-            
+
         case let .fetchPlayListDetail(id: id, type: type):
             switch type {
             case .custom:
@@ -51,33 +51,30 @@ extension PlayListAPI: WMAPI {
             case .wmRecommend:
                 return "/recommend/\(id)"
             }
-            
-            
+
         case let .updatePrivateState(id: id):
             return "/\(id)"
-            
+
         case let .fetchPlaylistSongs(id: id):
             return "/\(id)/songs"
-            
-            
+
         case .createPlayList:
             return "/create"
-            
+
         case .loadPlayList:
             return "/copy"
-            
+
         case let .editPlayList(key: key, _):
             return "/\(key)/songs"
-            
+
         case let .editPlayListName(key: key, _):
             return "/\(key)"
-            
+
         case let .addSongIntoPlayList(key: key, _):
             return "/\(key)/songs/add"
-            
+
         case let .removeSongs(key: key, _):
             return "/\(key)/songs/remove"
-            
         }
     }
 
@@ -98,7 +95,6 @@ extension PlayListAPI: WMAPI {
         switch self {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .updatePrivateState, .fetchPlaylistSongs:
             return .requestPlain
-
 
         case let .loadPlayList(key):
             return .requestJSONEncodable(["key": key])
@@ -126,7 +122,7 @@ extension PlayListAPI: WMAPI {
             return .none
 
         case .createPlayList, .editPlayList, .loadPlayList, .editPlayListName, .addSongIntoPlayList,
-                .removeSongs, .updatePrivateState:
+             .removeSongs, .updatePrivateState:
             return .accessToken
         }
     }
