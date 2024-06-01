@@ -15,13 +15,13 @@ final class BeforeSearchSectionHeaderView:
 
     var section: Int?
 
-    var label: UILabel = UILabel().then {
+    private let label: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
 
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
     }
 
-    var button: UIButton = UIButton().then {
+    private let button: UIButton = UIButton().then {
         $0.setTitle("전체보기", for: .normal)
 
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, for: .normal)
