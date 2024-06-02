@@ -19,6 +19,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     @IBOutlet weak var panelViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var safeAreaBottomView: UIView!
     @IBOutlet weak var safeAreaBottomViewHeightConstraint: NSLayoutConstraint!
+    private let playlistFloatingActionButton = PlayListFloatingActionButton()
 
     var originalPanelAlpha: CGFloat = 0
     var originalPanelPosition: CGFloat = 0
@@ -45,6 +46,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     override open func viewDidLoad() {
         super.viewDidLoad()
 
+        setLayout()
         configureUI()
         bindNotification()
     }
@@ -136,9 +138,13 @@ extension MainContainerViewController {
         self.lastPoint = point
     }
 
-    private func updatePlayerViewController(value: Float) {
-        if let playerViewController: PlayerViewController = self.children.last as? PlayerViewController {
-            playerViewController.updateOpacity(value: value)
+    private func setLayout() {
+        view.addSubview(playlistFloatingActionButton)
+
+        playlistFloatingActionButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalTo(bottomContainerView.snp.top).offset(-20)
+            $0.size.equalTo(56)
         }
     }
 
