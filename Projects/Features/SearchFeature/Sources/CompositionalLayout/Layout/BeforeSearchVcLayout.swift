@@ -1,7 +1,7 @@
 import UIKit
 import Utility
 
-class BeforeSearchVcLayout: UICollectionViewCompositionalLayout {
+final class BeforeSearchVcLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { sectionIndex, layoutEnvironment in
 
