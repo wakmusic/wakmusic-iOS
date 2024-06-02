@@ -8,9 +8,9 @@
 
 import DesignSystem
 import LogManager
-import UIKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 import Utility
 
 open class LyricHighlightingViewController: UIViewController {
@@ -34,6 +34,7 @@ open class LyricHighlightingViewController: UIViewController {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         $0.setTextWithAttributes(alignment: .center)
     }
+
     private let artistLabel = UILabel().then {
         $0.text = "이세계아이돌"
         $0.textColor = DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6)
@@ -80,18 +81,18 @@ open class LyricHighlightingViewController: UIViewController {
     }
 
     @available(*, unavailable)
-    required public init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("\(Self.self) has not been implemented")
     }
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         addSubViews()
         setAutoLayout()
     }
 
-    open override func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedLayer == nil {
             let dimmedLayer = DimmedGradientLayer(frame: dimmedBackgroundView.bounds)

@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import LyricHighlightingFeature
 import NeedleFoundation
 import NVActivityIndicatorView
 import ReactorKit
@@ -7,7 +8,6 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import LyricHighlightingFeature
 
 public final class ArtistViewController:
     BaseViewController,

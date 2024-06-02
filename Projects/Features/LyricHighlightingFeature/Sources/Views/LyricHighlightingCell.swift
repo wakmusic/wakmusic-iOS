@@ -6,11 +6,11 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
-import UIKit
 import DesignSystem
-import SongsDomainInterface
 import SnapKit
+import SongsDomainInterface
 import Then
+import UIKit
 
 final class LyricHighlightingCell: UICollectionViewCell {
     var lyricLabel = UILabel().then {
@@ -32,8 +32,7 @@ final class LyricHighlightingCell: UICollectionViewCell {
 }
 
 extension LyricHighlightingCell {
-    func update(entity: LyricsEntity) {
-    }
+    func update(entity: LyricsEntity) {}
 }
 
 private extension LyricHighlightingCell {
