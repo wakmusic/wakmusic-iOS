@@ -730,6 +730,12 @@ private func factoryec2cede3edc2a626b35df47b58f8f304c97af4d5(_ component: Needle
     return MyInfoDependency3b44bce00dab6fc2e345Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SettingDependency792c9caceb5cb097fbecProvider: SettingDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
     var textPopUpFactory: any TextPopUpFactory {
         return appComponent.textPopUpFactory
     }
@@ -1210,6 +1216,8 @@ extension MyInfoComponent: Registration {
 }
 extension SettingComponent: Registration {
     public func registerItems() {
+        keyPathToName[\SettingDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\SettingDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\SettingDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
         keyPathToName[\SettingDependency.signInFactory] = "signInFactory-any SignInFactory"
         keyPathToName[\SettingDependency.appPushSettingComponent] = "appPushSettingComponent-AppPushSettingComponent"
