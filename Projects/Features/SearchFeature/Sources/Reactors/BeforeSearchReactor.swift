@@ -9,6 +9,10 @@ public final class BeforeSearchReactor: Reactor {
 
     private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
 
+    public var initialState: State
+
+    private let service: any SearchCommonService
+
     public enum Action {
         case viewDidLoad
         case updateShowRecommend(Bool)
@@ -19,25 +23,25 @@ public final class BeforeSearchReactor: Reactor {
         case updateRecommend([RecommendPlayListEntity])
         case updateShowRecommend(Bool)
         case updateRecentText(String)
+        case updateLoadingState(Bool)
     }
 
     public struct State {
         var showRecommend: Bool
         var dataSource: [RecommendPlayListEntity]
+        var isLoading: Bool
     }
 
-    public var initialState: State
-
-    private let service: any SearchCommonService
     init(
         fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
-        service: any SearchCommonService = DefaultSearchCommonService.shared
+        service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         self.service = service
         self.initialState = State(
             showRecommend: true,
-            dataSource: []
+            dataSource: [],
+            isLoading: true
         )
     }
 
@@ -60,8 +64,11 @@ public final class BeforeSearchReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
-        case .updateRecentText(_):
+        case .updateRecentText:
+            #warning("유즈 케이스 연결 후 구현")
             break
+        case let .updateLoadingState(isLoading):
+            newState.isLoading = isLoading
         }
 
         return newState
@@ -76,10 +83,13 @@ public final class BeforeSearchReactor: Reactor {
 
 extension BeforeSearchReactor {
     func fetchRecommend() -> Observable<Mutation> {
-        return fetchRecommendPlayListUseCase
-            .execute()
-            .asObservable()
-            .map { Mutation.updateRecommend($0) }
+        return .concat([
+            fetchRecommendPlayListUseCase
+                .execute()
+                .asObservable()
+                .map { Mutation.updateRecommend($0) },
+            .just(.updateLoadingState(false))
+        ])
     }
 
     func updateRecentText(_ text: String) -> Observable<Mutation> {

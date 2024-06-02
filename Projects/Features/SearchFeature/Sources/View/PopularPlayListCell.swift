@@ -1,19 +1,19 @@
 import DesignSystem
 import UIKit
 
-class PopularPlayListCell: UICollectionViewCell {
-    let imageView: UIImageView = UIImageView().then {
+final class PopularPlayListCell: UICollectionViewCell {
+    private let imageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.PlayListTheme.theme10.image
         $0.contentMode = .scaleAspectFit
     }
 
-    let titleLabel: UILabel = UILabel().then {
+    private let titleLabel: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.backgroundColor = .red
     }
 
-    let nickNameLabel: UILabel = UILabel().then {
+    private let nickNameLabel: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
     }
@@ -32,7 +32,12 @@ class PopularPlayListCell: UICollectionViewCell {
 }
 
 extension PopularPlayListCell {
-    fileprivate func configureUI() {
+    public func update(_ model: Model) {
+        self.titleLabel.text = model.title
+        self.nickNameLabel.text = "Hamp"
+    }
+
+    private func configureUI() {
         imageView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
@@ -48,10 +53,5 @@ extension PopularPlayListCell {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-    }
-
-    public func update(_ model: Model) {
-        self.titleLabel.text = model.title
-        self.nickNameLabel.text = "Hamp"
     }
 }

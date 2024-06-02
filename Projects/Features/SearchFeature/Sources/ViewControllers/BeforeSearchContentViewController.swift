@@ -12,52 +12,31 @@ import RxSwift
 import UIKit
 import Utility
 
-// DatSource model 실제 Entity로 교체
+public struct Model: Hashable {
+    let title: String
+}
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-    fileprivate enum Section: Int {
-        case top
-        case mid
-        case bottom
-    }
-
-    enum DataSource: Hashable {
-        case youtube(model: Model)
-        case recommend(model2: Model)
-        case popularList(model: Model)
-
-        var title: String {
-            switch self {
-            case let .youtube(model):
-                return model.title
-            case let .recommend(model2):
-                return model2.title
-            case let .popularList(model):
-                return model.title
-            }
-        }
-    }
-
-    fileprivate var playlistDetailFactory: PlaylistDetailFactory!
-    fileprivate var textPopUpFactory: TextPopUpFactory!
-    fileprivate var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>! = nil
-
-    fileprivate var collectionView: UICollectionView! = nil
-
-    fileprivate var tableView: UITableView = UITableView().then {
+    private let playlistDetailFactory: PlaylistDetailFactory
+    private let textPopUpFactory: TextPopUpFactory
+    private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
         $0.isHidden = true
     }
+
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
+
+    private lazy var collectionView: UICollectionView = createCollectionView()
 
     init(
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
-        super.init(reactor: reactor)
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
+        super.init(reactor: reactor)
     }
 
     deinit {
@@ -67,44 +46,41 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
+        initDataSource()
     }
 
     override public func addView() {
         super.addView()
-        self.view.addSubviews(tableView)
-        createCollectionView()
-        configureDataSource()
+        self.view.addSubviews(collectionView, tableView)
     }
 
     override public func setLayout() {
         super.setLayout()
 
         tableView.snp.makeConstraints {
-            $0.horizontalEdges.verticalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
-            $0.verticalEdges.horizontalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
 
     override public func configureUI() {
         super.configureUI()
+
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
-        self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
     }
 
     override public func bind(reactor: BeforeSearchReactor) {
-        self.indicator.startAnimating()
         super.bind(reactor: reactor)
-        self.indicator.stopAnimating()
 
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        collectionView.delegate = self
     }
 
     override public func bindAction(reactor: BeforeSearchReactor) {
@@ -119,7 +95,18 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 1)
+        let sharedState = reactor.state.share(replay: 2)
+
+        sharedState.map(\.isLoading)
+            .withUnretained(self)
+            .bind(onNext: { onwer, isLoading in
+                if isLoading {
+                    onwer.indicator.startAnimating()
+                } else {
+                    onwer.indicator.stopAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
 
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
@@ -209,92 +196,13 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 // MARK: Compositional
 extension BeforeSearchContentViewController {
-    func createCollectionView() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-
-        collectionView.backgroundColor = .systemGray
-        collectionView.delegate = self
-        view.addSubview(collectionView)
+    private func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchCollectionViewLayout())
     }
 
-    func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+    private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
+        // MARK: Cell
 
-                guard let self else { return nil }
-
-                guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
-
-                return self.configureSection(layoutKind)
-        }
-
-        return layout
-    }
-
-    private func configureSection(_ layout: Section) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
-        )
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
-
-        var group: NSCollectionLayoutGroup! = nil
-        var section: NSCollectionLayoutSection! = nil
-        let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
-
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerLayout,
-            elementKind: BeforeSearchSectionHeaderView.kind,
-            alignment: .top
-        )
-
-        header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
-
-        switch layout {
-        case .top:
-
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.87)
-            )
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-            section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
-
-        case .mid:
-
-            let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
-
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(groupWidth),
-                heightDimension: .absolute(groupeight)
-            )
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-            section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [header]
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
-
-        case .bottom:
-
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
-
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-            section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [header]
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-        }
-
-        section.orthogonalScrollingBehavior = .continuous
-
-        return section
-    }
-
-    private func configureDataSource() {
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
@@ -320,6 +228,8 @@ extension BeforeSearchContentViewController {
                 cell.update(item)
             }
 
+        // MARK: Header
+
         let headerRegistration = UICollectionView
             .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
                 elementKind: BeforeSearchSectionHeaderView
@@ -331,8 +241,15 @@ extension BeforeSearchContentViewController {
                 supplementaryView.update("임시 타이틀", indexPath.section)
             }
 
-        dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
+        let dataSource = UICollectionViewDiffableDataSource<
+            Section,
+            BeforeVcDataSoruce
+        >(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -359,14 +276,17 @@ extension BeforeSearchContentViewController {
         }
 
         dataSource.supplementaryViewProvider = { collectionView, kind, index in
-
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
+        return dataSource
+    }
+
+    private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, DataSource>()
-        snapshot.appendSections([.top, .mid, .bottom])
-        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .top)
+        var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
+        snapshot.appendSections([.youtube, .recommend, .popularList])
+        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
         snapshot.appendItems(
             [
                 .recommend(model2: Model(title: "123")),
@@ -374,7 +294,7 @@ extension BeforeSearchContentViewController {
                 .recommend(model2: Model(title: "4564")),
                 .recommend(model2: Model(title: "4516")),
             ],
-            toSection: .mid
+            toSection: .recommend
         )
         snapshot.appendItems(
             [
@@ -382,7 +302,7 @@ extension BeforeSearchContentViewController {
                 .popularList(model: Model(title: "Hello2")),
                 .popularList(model: Model(title: "Hello3")),
             ],
-            toSection: .bottom
+            toSection: .popularList
         )
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -391,7 +311,7 @@ extension BeforeSearchContentViewController {
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) as? DataSource else {
+        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
             return
         }
 

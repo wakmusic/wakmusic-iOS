@@ -6,10 +6,10 @@ protocol RecentRecordDelegate: AnyObject {
     func selectedItems(_ keyword: String)
 }
 
-class RecentRecordTableViewCell: UITableViewCell {
+final class RecentRecordTableViewCell: UITableViewCell {
     private let recentLabel: UILabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+        $0.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         $0.setTextWithAttributes(kernValue: -0.5)
     }
 
@@ -33,16 +33,14 @@ class RecentRecordTableViewCell: UITableViewCell {
             $0.centerY.equalToSuperview()
         }
 
-        button.addTarget(self, action: #selector(removeButtonDidTap), for: .touchUpInside)
+        button.addAction {
+            PreferenceManager.shared.removeRecentRecords(word: self.recentLabel.text!)
+        }
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc func removeButtonDidTap() {
-        PreferenceManager.shared.removeRecentRecords(word: self.recentLabel.text!)
     }
 }
 
