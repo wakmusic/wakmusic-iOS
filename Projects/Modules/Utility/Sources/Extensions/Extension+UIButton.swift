@@ -42,7 +42,7 @@ public extension UIButton {
         imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + spacing), left: 0, bottom: 0, right: -titleSize.width)
     }
 
-    func addAction(for event: UIControl.Event = .touchUpInside, _ action: @escaping () -> Void) {
+    func addAction(for event: UIControl.Event = .primaryActionTriggered, _ action: @escaping () -> Void) {
         self.addAction(
             UIAction { _ in
                 action()
