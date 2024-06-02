@@ -25,7 +25,24 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.isHidden = true
     }
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>?
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
+        .then {
+            let headerRegistration = UICollectionView
+                .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
+                    elementKind: BeforeSearchSectionHeaderView
+                        .kind
+                ) { [weak self] supplementaryView, string, indexPath in
+
+                    guard let self else { return }
+                    supplementaryView.delegate = self
+                    supplementaryView.update("임시 타이틀", indexPath.section)
+                }
+
+            $0.supplementaryViewProvider = { collectionView, kind, index in
+
+                return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+            }
+        }
 
     private lazy var collectionView: UICollectionView = createCollectionView()
 
@@ -46,23 +63,23 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
+        initDataSource()
     }
 
     override public func addView() {
         super.addView()
         self.view.addSubviews(collectionView, tableView)
-        configureDataSource()
     }
 
     override public func setLayout() {
         super.setLayout()
 
         tableView.snp.makeConstraints {
-            $0.horizontalEdges.verticalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
-            $0.verticalEdges.horizontalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
 
@@ -189,11 +206,11 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 // MARK: Compositional
 extension BeforeSearchContentViewController {
-    func createCollectionView() -> UICollectionView {
-        return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchVcLayout())
+    private func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchCollectionViewLayout())
     }
 
-    private func configureDataSource() {
+    private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
@@ -216,18 +233,7 @@ extension BeforeSearchContentViewController {
                 cell.update(item)
             }
 
-        let headerRegistration = UICollectionView
-            .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
-                elementKind: BeforeSearchSectionHeaderView
-                    .kind
-            ) { [weak self] supplementaryView, string, indexPath in
-
-                guard let self else { return }
-                supplementaryView.delegate = self
-                supplementaryView.update("임시 타이틀", indexPath.section)
-            }
-
-        dataSource = UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>(collectionView: collectionView) {
+        return UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>(collectionView: collectionView) {
             (
                 collectionView: UICollectionView,
                 indexPath: IndexPath,
@@ -257,12 +263,9 @@ extension BeforeSearchContentViewController {
                 )
             }
         }
+    }
 
-        dataSource?.supplementaryViewProvider = { collectionView, kind, index in
-
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
-        }
-
+    private func initDataSource() {
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
         snapshot.appendSections([.youtube, .recommend, .popularList])
@@ -284,14 +287,14 @@ extension BeforeSearchContentViewController {
             ],
             toSection: .popularList
         )
-        dataSource?.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource?.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
+        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
             return
         }
 

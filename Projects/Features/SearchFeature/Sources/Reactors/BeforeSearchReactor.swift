@@ -62,6 +62,7 @@ public final class BeforeSearchReactor: Reactor {
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
         case .updateRecentText:
+            #warning("유즈 케이스 연결 후 구현")
             break
         }
 

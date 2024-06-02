@@ -26,7 +26,6 @@ extension BeforeSearchCollectionViewLayout {
         var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
 
-
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -39,7 +38,7 @@ extension BeforeSearchCollectionViewLayout {
 
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection
-        
+
         switch layoutKind {
         case .youtube:
 
@@ -55,11 +54,11 @@ extension BeforeSearchCollectionViewLayout {
         case .recommend:
 
             let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-//            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
+            let groupHeight: CGFloat = (80.0 * groupWidth) / 164.0
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(groupWidth),
-                heightDimension: .fractionalWidth(0.49)
+                heightDimension: .absolute(groupHeight)
             )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
