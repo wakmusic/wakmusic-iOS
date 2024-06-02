@@ -35,8 +35,7 @@ final class BeforeSearchSectionHeaderView:
         self.addSubviews(label, button)
         configureUI()
 
-        button.addAction { [weak self] in
-            guard let self else { return }
+        button.addAction { [delegate] in
             self.delegate?.tap(self.section)
         }
 

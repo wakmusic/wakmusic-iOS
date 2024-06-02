@@ -1,13 +1,13 @@
 import UIKit
 import Utility
 
-final class BeforeSearchVcLayout: UICollectionViewCompositionalLayout {
+final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { sectionIndex, layoutEnvironment in
 
             guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
 
-            return BeforeSearchVcLayout.configureLayoutSection(layoutKind)
+            return BeforeSearchCollectionViewLayout.configureLayoutSection(layoutKind)
         }
     }
 
@@ -17,7 +17,7 @@ final class BeforeSearchVcLayout: UICollectionViewCompositionalLayout {
     }
 }
 
-extension BeforeSearchVcLayout {
+extension BeforeSearchCollectionViewLayout {
     private static func configureLayoutSection(_ layoutKind: Section) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -26,8 +26,7 @@ extension BeforeSearchVcLayout {
         var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
 
-        var group: NSCollectionLayoutGroup! = nil
-        var section: NSCollectionLayoutSection! = nil
+
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -38,6 +37,9 @@ extension BeforeSearchVcLayout {
 
         header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
 
+        let group: NSCollectionLayoutGroup
+        let section: NSCollectionLayoutSection
+        
         switch layoutKind {
         case .youtube:
 
@@ -53,11 +55,11 @@ extension BeforeSearchVcLayout {
         case .recommend:
 
             let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
+//            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(groupWidth),
-                heightDimension: .absolute(groupeight)
+                heightDimension: .fractionalWidth(0.49)
             )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
