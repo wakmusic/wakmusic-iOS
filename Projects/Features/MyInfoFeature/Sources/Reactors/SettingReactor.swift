@@ -1,13 +1,18 @@
+import AuthDomainInterface
+import BaseDomainInterface
 import Foundation
 import Kingfisher
 import LogManager
+import NaverThirdPartyLogin
 import ReactorKit
+import UserDomainInterface
 import Utility
 
 final class SettingReactor: Reactor {
     enum Action {
         case dismissButtonDidTap
         case withDrawButtonDidTap
+        case confirmWithDrawButtonDidTap
         case appPushSettingNavigationDidTap
         case serviceTermsNavigationDidTap
         case privacyNavigationDidTap
@@ -29,6 +34,7 @@ final class SettingReactor: Reactor {
         case confirmRemoveCacheButtonDidTap
         case versionInfoButtonDidTap
         case showToast(String)
+        case withDrawResult(BaseEntity)
     }
 
     struct State {
@@ -43,15 +49,24 @@ final class SettingReactor: Reactor {
         @Pulse var openSourceNavigationDidTap: Bool?
         @Pulse var confirmRemoveCacheButtonDidTap: Bool?
         @Pulse var versionInfoButtonDidTap: Bool?
+        @Pulse var withDrawResult: BaseEntity?
     }
 
     var initialState: State
     private var disposeBag = DisposeBag()
+    private let withDrawUserInfoUseCase: any WithdrawUserInfoUseCase
+    private let logoutUseCase: any LogoutUseCase
+    private let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
-    init() {
+    init(
+        withDrawUserInfoUseCase: WithdrawUserInfoUseCase,
+        logoutUseCase: LogoutUseCase
+    ) {
         self.initialState = .init(
             userInfo: Utility.PreferenceManager.userInfo
         )
+        self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
+        self.logoutUseCase = logoutUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -76,6 +91,8 @@ final class SettingReactor: Reactor {
             return confirmRemoveCacheButtonDidTap()
         case let .showToast(message):
             return showToast(message: message)
+        case .confirmWithDrawButtonDidTap:
+            return confirmWithDrawButtonDidTap()
         }
     }
 
@@ -102,6 +119,8 @@ final class SettingReactor: Reactor {
             newState.confirmRemoveCacheButtonDidTap = true
         case let .showToast(message):
             newState.toastMessage = message
+        case let .withDrawResult(withDrawResult):
+            newState.withDrawResult = withDrawResult
         }
         return newState
     }
@@ -114,6 +133,28 @@ private extension SettingReactor {
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
         return .just(.withDrawButtonDidTap)
+    }
+
+    func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
+        // TODO: 회원탈퇴 처리
+        return withDrawUserInfoUseCase.execute()
+            .catch { error in
+                let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
+                return Single<BaseEntity>.just(baseEntity)
+            }
+            .asObservable()
+            .flatMap { [naverLoginInstance, logoutUseCase] entity in
+                let platform = Utility.PreferenceManager.userInfo?.platform
+                if platform == "naver" {
+                    naverLoginInstance?.requestDeleteToken()
+                }
+                return logoutUseCase.execute()
+                    .andThen(Single.just(entity))
+                    .map { entity in
+                        return Mutation.withDrawResult(entity)
+                    }
+                    .asObservable()
+            }
     }
 
     func appPushSettingNavigationDidTap() -> Observable<Mutation> {

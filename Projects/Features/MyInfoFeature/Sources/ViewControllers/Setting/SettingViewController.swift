@@ -124,6 +124,71 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 )
             })
             .disposed(by: disposeBag)
+
+        reactor.pulse(\.$withDrawButtonDidTap)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                guard let secondConfirmVC = owner.textPopUpFactory.makeView(
+                    text: "정말 탈퇴하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    allowsDragAndTapToDismiss: nil,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
+                    },
+                    cancelCompletion: nil
+                ) as? TextPopupViewController else {
+                    return
+                }
+                guard let firstConfirmVC = owner.textPopUpFactory.makeView(
+                    text: "회원탈퇴 신청을 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    allowsDragAndTapToDismiss: nil,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        #warning("팬모달 이슈 해결되면 변경 예정")
+                        secondConfirmVC.modalPresentationStyle = .popover
+                        owner.present(secondConfirmVC, animated: true)
+                        // owner.showPanModal(content: secondConfirmVC)
+                    },
+                    cancelCompletion: nil
+                ) as? TextPopupViewController else {
+                    return
+                }
+                #warning("팬모달 이슈 해결되면 변경 예정")
+                owner.present(firstConfirmVC, animated: true)
+                // self.showPanModal(content: firstConfirmVC)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$withDrawResult)
+            .compactMap { $0 }
+            .bind(with: self) { owner, withDrawResult in
+                let status = withDrawResult.status
+                let description = withDrawResult.description
+                guard let textPopUpVC = owner.textPopUpFactory.makeView(
+                    text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : description,
+                    cancelButtonIsHidden: true,
+                    allowsDragAndTapToDismiss: nil,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        if status == 200 {
+                            owner.navigationController?.popViewController(animated: true)
+                        }
+                    },
+                    cancelCompletion: nil
+                ) as? TextPopupViewController else {
+                    return
+                }
+                #warning("팬모달 이슈 해결되면 변경 예정")
+                textPopUpVC.modalPresentationStyle = .popover
+                owner.present(textPopUpVC, animated: true)
+                // owner.showPanModal(content: textPopUpVC)
+            }
+            .disposed(by: disposeBag)
     }
 
     override func bindAction(reactor: SettingReactor) {
