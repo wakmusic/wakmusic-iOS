@@ -9,7 +9,7 @@ import UIKit
 open class BaseReactorViewController<R: Reactor>: UIViewController, View {
     public var disposeBag = DisposeBag()
     open lazy var indicator = NVActivityIndicatorView(frame: .zero).then {
-        $0.color = DesignSystemAsset.PrimaryColor.point.color
+        $0.color = DesignSystemAsset.PrimaryColorV2.point.color
         $0.type = .circleStrokeSpin
         view.addSubview($0)
         $0.snp.makeConstraints {
