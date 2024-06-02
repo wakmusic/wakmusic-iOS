@@ -85,13 +85,11 @@ extension BeforeSearchReactor {
     func fetchRecommend() -> Observable<Mutation> {
         return .concat([
             fetchRecommendPlayListUseCase
-                    .execute()
-                    .asObservable()
-                    .map { Mutation.updateRecommend($0)},
+                .execute()
+                .asObservable()
+                .map { Mutation.updateRecommend($0) },
             .just(.updateLoadingState(false))
         ])
-
-               
     }
 
     func updateRecentText(_ text: String) -> Observable<Mutation> {

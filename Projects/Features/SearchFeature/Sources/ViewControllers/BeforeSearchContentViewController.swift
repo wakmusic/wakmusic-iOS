@@ -116,7 +116,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         sharedState.map(\.isLoading)
             .withUnretained(self)
-            .bind(onNext: { (onwer, isLoading) in
+            .bind(onNext: { onwer, isLoading in
                 if isLoading {
                     onwer.indicator.startAnimating()
                 } else {
@@ -124,7 +124,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
                 }
             })
             .disposed(by: disposeBag)
-        
+
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
             .withUnretained(self)

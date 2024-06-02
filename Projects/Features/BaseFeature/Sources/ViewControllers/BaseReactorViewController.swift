@@ -1,15 +1,14 @@
+import DesignSystem
 import NVActivityIndicatorView
 import ReactorKit
 import RxSwift
 import SnapKit
 import Then
 import UIKit
-import DesignSystem
 
 open class BaseReactorViewController<R: Reactor>: UIViewController, View {
     public var disposeBag = DisposeBag()
     open lazy var indicator = NVActivityIndicatorView(frame: .zero).then {
-
         $0.color = DesignSystemAsset.PrimaryColor.point.color
         $0.type = .circleStrokeSpin
         view.addSubview($0)
