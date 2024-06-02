@@ -24,7 +24,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.separatorStyle = .none
         $0.isHidden = true
     }
-    
+
     private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
 
     private lazy var collectionView: UICollectionView = createCollectionView()
@@ -201,13 +201,12 @@ extension BeforeSearchContentViewController {
     }
 
     private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
-        
-        //MARK: Cell
-        
+        // MARK: Cell
+
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
-    
+
         let recommandCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
@@ -225,10 +224,9 @@ extension BeforeSearchContentViewController {
 
                 cell.update(item)
             }
-        
-        
-        //MARK: Header
-        
+
+        // MARK: Header
+
         let headerRegistration = UICollectionView
             .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
                 elementKind: BeforeSearchSectionHeaderView
@@ -239,10 +237,11 @@ extension BeforeSearchContentViewController {
                 supplementaryView.delegate = self
                 supplementaryView.update("임시 타이틀", indexPath.section)
             }
-        
-        
 
-        let dataSource =  UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>(collectionView: collectionView) {
+        let dataSource = UICollectionViewDiffableDataSource<
+            Section,
+            BeforeVcDataSoruce
+        >(collectionView: collectionView) {
             (
                 collectionView: UICollectionView,
                 indexPath: IndexPath,
@@ -272,12 +271,11 @@ extension BeforeSearchContentViewController {
                 )
             }
         }
-        
-            
-        dataSource.supplementaryViewProvider =  {  (collectionView, kind, index) in
+
+        dataSource.supplementaryViewProvider = { collectionView, kind, index in
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
-        
+
         return dataSource
     }
 
