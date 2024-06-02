@@ -17,24 +17,6 @@ public struct Model: Hashable {
 }
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-    #warning("실제 데이터 entity로 바꾸기")
-    enum DataSource: Hashable {
-        case youtube(model: Model)
-        case recommand(model2: Model)
-        case popularList(model: Model)
-
-        var title: String {
-            switch self {
-            case let .youtube(model):
-                return model.title
-            case let .recommand(model2):
-                return model2.title
-            case let .popularList(model):
-                return model.title
-            }
-        }
-    }
-
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
     private let tableView: UITableView = UITableView().then {
@@ -43,7 +25,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.isHidden = true
     }
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>?
 
     private lazy var collectionView: UICollectionView = createCollectionView()
 
@@ -245,8 +227,12 @@ extension BeforeSearchContentViewController {
                 supplementaryView.update("임시 타이틀", indexPath.section)
             }
 
-        dataSource = UICollectionViewDiffableDataSource<Section, DataSource>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: DataSource) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce>(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -278,7 +264,7 @@ extension BeforeSearchContentViewController {
         }
 
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, DataSource>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
         snapshot.appendSections([.youtube, .recommend, .popularList])
         snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
         snapshot.appendItems(
@@ -305,7 +291,7 @@ extension BeforeSearchContentViewController {
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource?.itemIdentifier(for: indexPath) as? DataSource else {
+        guard let model = dataSource?.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
             return
         }
 
