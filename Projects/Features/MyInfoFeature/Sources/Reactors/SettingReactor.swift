@@ -24,31 +24,29 @@ final class SettingReactor: Reactor {
     }
 
     enum Mutation {
-        case dismissButtonDidTap
+        case navigate(NavigateType?)
         case withDrawButtonDidTap
-        case appPushSettingButtonDidTap
-        case serviceTermsNavigationDidTap
-        case privacyNavigationDidTap
-        case openSourceNavigationDidTap
         case removeCacheButtonDidTap(cacheSize: String)
         case confirmRemoveCacheButtonDidTap
-        case versionInfoButtonDidTap
         case showToast(String)
         case withDrawResult(BaseEntity)
+    }
+
+    enum NavigateType {
+        case dismiss
+        case appPushSetting
+        case serviceTerms
+        case privacy
+        case openSource
     }
 
     struct State {
         var userInfo: UserInfo?
         @Pulse var cacheSize: String?
         @Pulse var toastMessage: String?
-        @Pulse var dismissButtonDidTap: Bool?
+        @Pulse var navigateType: NavigateType?
         @Pulse var withDrawButtonDidTap: Bool?
-        @Pulse var appPushSettingButtonDidTap: Bool?
-        @Pulse var serviceTermsNavigationDidTap: Bool?
-        @Pulse var privacyNavigationDidTap: Bool?
-        @Pulse var openSourceNavigationDidTap: Bool?
         @Pulse var confirmRemoveCacheButtonDidTap: Bool?
-        @Pulse var versionInfoButtonDidTap: Bool?
         @Pulse var withDrawResult: BaseEntity?
     }
 
@@ -99,22 +97,12 @@ final class SettingReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .dismissButtonDidTap:
-            newState.dismissButtonDidTap = true
+        case let .navigate(navigate):
+            newState.navigateType = navigate
         case .withDrawButtonDidTap:
             newState.withDrawButtonDidTap = true
-        case .appPushSettingButtonDidTap:
-            newState.appPushSettingButtonDidTap = true
-        case .serviceTermsNavigationDidTap:
-            newState.serviceTermsNavigationDidTap = true
-        case .privacyNavigationDidTap:
-            newState.privacyNavigationDidTap = true
-        case .openSourceNavigationDidTap:
-            newState.openSourceNavigationDidTap = true
         case let .removeCacheButtonDidTap(cacheSize):
             newState.cacheSize = cacheSize
-        case .versionInfoButtonDidTap:
-            newState.versionInfoButtonDidTap = true
         case .confirmRemoveCacheButtonDidTap:
             newState.confirmRemoveCacheButtonDidTap = true
         case let .showToast(message):
@@ -128,7 +116,7 @@ final class SettingReactor: Reactor {
 
 private extension SettingReactor {
     func dismissButtonDidTap() -> Observable<Mutation> {
-        return .just(.dismissButtonDidTap)
+        return .just(.navigate(.dismiss))
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
@@ -161,19 +149,19 @@ private extension SettingReactor {
     }
 
     func appPushSettingNavigationDidTap() -> Observable<Mutation> {
-        return .just(.appPushSettingButtonDidTap)
+        return .just(.navigate(.appPushSetting))
     }
 
     func serviceTermsNavigationDidTap() -> Observable<Mutation> {
-        return .just(.serviceTermsNavigationDidTap)
+        return .just(.navigate(.serviceTerms))
     }
 
     func privacyNavigationDidTap() -> Observable<Mutation> {
-        return .just(.privacyNavigationDidTap)
+        return .just(.navigate(.privacy))
     }
 
     func openSourceNavigationDidTap() -> Observable<Mutation> {
-        return .just(.openSourceNavigationDidTap)
+        return .just(.navigate(.openSource))
     }
 
     func removeCacheButtonDidTap() -> Observable<Mutation> {
@@ -202,7 +190,7 @@ private extension SettingReactor {
     }
 
     func versionInfoButtonDidTap() -> Observable<Mutation> {
-        return .just(.versionInfoButtonDidTap)
+        return .empty()
     }
 
     func showToast(message: String) -> Observable<Mutation> {

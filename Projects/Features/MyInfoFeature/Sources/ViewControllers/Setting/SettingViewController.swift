@@ -45,51 +45,33 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     }
 
     override func bindState(reactor: SettingReactor) {
-        reactor.pulse(\.$dismissButtonDidTap)
+        reactor.pulse(\.$navigateType)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                print("뒤로가기 버튼 눌림")
-                owner.navigationController?.popViewController(animated: true)
-            })
+            .bind(with: self) { owner, navigate in
+                switch navigate {
+                case .dismiss:
+                    owner.navigationController?.popViewController(animated: true)
+                case .appPushSetting:
+                    let vc = owner.appPushSettingComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                case .serviceTerms:
+                    let vc = owner.serviceTermsComponent.makeView()
+                    vc.modalPresentationStyle = .overFullScreen
+                    owner.present(vc, animated: true)
+                case .privacy:
+                    let vc = owner.privacyComponent.makeView()
+                    vc.modalPresentationStyle = .overFullScreen
+                    owner.present(vc, animated: true)
+                case .openSource:
+                    let vc = owner.openSourceLicenseComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$withDrawButtonDidTap)
             .compactMap { $0 }
             .bind { _ in print("회원탈퇴 버튼 눌림") }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$appPushSettingButtonDidTap)
-            .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                let vc = owner.appPushSettingComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$serviceTermsNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                let vc = owner.serviceTermsComponent.makeView()
-                vc.modalPresentationStyle = .overFullScreen
-                owner.present(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$privacyNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                let vc = owner.privacyComponent.makeView()
-                vc.modalPresentationStyle = .overFullScreen
-                owner.present(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$openSourceNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                let vc = owner.openSourceLicenseComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
-            })
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$cacheSize)
