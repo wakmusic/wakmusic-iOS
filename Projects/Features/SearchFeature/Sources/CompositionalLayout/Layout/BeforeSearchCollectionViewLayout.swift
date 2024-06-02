@@ -53,12 +53,9 @@ extension BeforeSearchCollectionViewLayout {
 
         case .recommend:
 
-            let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-            let groupHeight: CGFloat = (80.0 * groupWidth) / 164.0
-
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(groupWidth),
-                heightDimension: .absolute(groupHeight)
+                widthDimension: .fractionalWidth(0.44),
+                heightDimension: .fractionalWidth(0.21)
             )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
@@ -67,7 +64,7 @@ extension BeforeSearchCollectionViewLayout {
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
         case .popularList:
-
+            #warning("fractional 고민하기")
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
 
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])

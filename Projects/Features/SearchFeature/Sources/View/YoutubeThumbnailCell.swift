@@ -4,6 +4,7 @@ import Then
 import UIKit
 import Utility
 
+#warning("로티 뷰 넣기")
 final class YoutubeThumbnailCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
