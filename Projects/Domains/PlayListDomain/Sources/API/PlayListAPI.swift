@@ -107,7 +107,7 @@ extension PlayListAPI: WMAPI {
         case let .removeSongs(_, songs: songs):
             return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString)
 
-        case let .uploadImage(key: key, model: model):
+        case let .uploadImage(_, model: model):
 
             var datas: [MultipartFormData] = []
 
