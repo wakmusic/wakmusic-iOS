@@ -102,6 +102,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                 if reactor.currentState.isLoggedIn {
                     // TODO: 보관함 탭으로 이동, 좋아요 탭으로 이동
                     NotificationCenter.default.post(name: .movedTab, object: 4)
+                    NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
                 } else {
                     // TODO: 로그인이 필요한 서비스입니다. 팝업
                 }

@@ -23,6 +23,7 @@ final class StorageReactor: Reactor {
     }
 
     let initialState: State
+    private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
 
     init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
@@ -31,8 +32,8 @@ final class StorageReactor: Reactor {
             tabIndex: 0,
             showLoginAlert: ()
         )
-
         self.storageCommonService = storageCommonService
+        observeMovedFavoriteTab()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -74,6 +75,14 @@ final class StorageReactor: Reactor {
 }
 
 extension StorageReactor {
+    func observeMovedFavoriteTab() {
+        NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
+            .bind(with: self) { owner, _ in
+                owner.action.onNext(.switchTab(1))
+            }
+            .disposed(by: disposeBag)
+    }
+
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
         return .just(.switchTabIndex(index))
     }
