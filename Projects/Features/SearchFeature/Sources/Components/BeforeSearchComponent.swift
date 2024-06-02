@@ -21,7 +21,7 @@ public protocol BeforeSearchDependency: Dependency {
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> BeforeSearchContentViewController {
-        return BeforeSearchContentViewController.viewController(
+        return BeforeSearchContentViewController(
             textPopUpFactory: dependency.textPopUpFactory,
             playlistDetailFactory: dependency.playlistDetailFactory,
             reactor: BeforeSearchReactor(fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)

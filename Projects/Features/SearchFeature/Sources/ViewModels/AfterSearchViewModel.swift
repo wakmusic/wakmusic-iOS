@@ -20,6 +20,10 @@ public final class AfterSearchViewModel: ViewModelType {
         DEBUG_LOG("✅ AfterSearchViewModel 생성")
     }
 
+    deinit {
+        DEBUG_LOG("❌ AfterSearchViewModel 제거")
+    }
+
     public struct Input {
         let text: BehaviorRelay<String> = BehaviorRelay<String>(value: "")
         let notiResult: PublishRelay<SongEntity> = PublishRelay()

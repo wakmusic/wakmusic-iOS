@@ -30,7 +30,7 @@ public class RecommendPlayListCell: UICollectionViewCell {
     }
 }
 
-extension RecommendPlayListCell {
+public extension RecommendPlayListCell {
     func update(model: RecommendPlayListEntity) {
         let attributedString = NSMutableAttributedString(
             string: model.title,
