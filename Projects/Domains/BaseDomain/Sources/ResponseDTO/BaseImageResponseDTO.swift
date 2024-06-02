@@ -1,12 +1,12 @@
-import Foundation
 import BaseDomainInterface
+import Foundation
 
 public struct BaseImageResponseDTO: Decodable {
     private let imageUrl: String
 }
 
-extension BaseImageResponseDTO {
-    public func toDomain() -> BaseImageEntity {
+public extension BaseImageResponseDTO {
+    func toDomain() -> BaseImageEntity {
         return BaseImageEntity(image: imageUrl)
     }
 }

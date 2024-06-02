@@ -43,4 +43,8 @@ public final class PlayListRepositoryImpl: PlayListRepository {
     public func removeSongs(key: String, songs: [String]) -> RxSwift.Single<BaseEntity> {
         remotePlayListDataSource.removeSongs(key: key, songs: songs)
     }
+    
+    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
+        remotePlayListDataSource.uploadImage(key: key, model: model)
+    }
 }

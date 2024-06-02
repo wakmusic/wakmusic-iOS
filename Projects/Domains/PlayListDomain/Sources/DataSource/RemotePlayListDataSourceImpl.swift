@@ -52,4 +52,10 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
+    
+    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
+        request(.uploadImage(key: key, model: model))
+            .map(BaseImageResponseDTO.self)
+            .map { $0.toDomain() }
+    }
 }
