@@ -20,6 +20,7 @@ import UIKit
 import Utility
 import YouTubePlayerKit
 
+@available(*, deprecated, message: "Player는 더이상 사용되지 않습니다. 미래에 삭제될 객체입니다.")
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
