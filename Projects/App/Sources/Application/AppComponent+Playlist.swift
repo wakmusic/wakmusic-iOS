@@ -71,7 +71,7 @@ public extension AppComponent {
             RemoveSongsUseCaseImpl(playListRepository: playListRepository)
         }
     }
-    
+
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase {
         shared {
             UploadPlaylistImageUseCaseImpl(playListRepository: playListRepository)
