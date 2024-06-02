@@ -13,7 +13,8 @@ open class DimmedGradientLayer: CAGradientLayer {
         self.opacity = 1.0
     }
 
-    required public init?(coder: NSCoder) {
+    @available(*, unavailable)
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
