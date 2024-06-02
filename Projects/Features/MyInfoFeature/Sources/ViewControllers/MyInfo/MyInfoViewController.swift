@@ -100,11 +100,28 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(with: self) { owner, _ in
                 print("좋아요 버튼 눌림")
                 if reactor.currentState.isLoggedIn {
-                    // TODO: 보관함 탭으로 이동, 좋아요 탭으로 이동
                     NotificationCenter.default.post(name: .movedTab, object: 4)
                     NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
                 } else {
-                    // TODO: 로그인이 필요한 서비스입니다. 팝업
+                    guard let vc = owner.textPopUpFactory.makeView(
+                        text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                        cancelButtonIsHidden: false,
+                        allowsDragAndTapToDismiss: nil,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: {
+                            let loginVC = owner.signInFactory.makeView()
+                            owner.present(loginVC, animated: true)
+                        },
+                        cancelCompletion: {}
+                    ) as? TextPopupViewController else {
+                        return
+                    }
+
+                    vc.modalPresentationStyle = .popover
+                    owner.present(vc, animated: true)
+                    #warning("팬모달 이슈 해결되면 변경 예정")
+                    // owner.showPanModal(content: vc)
                 }
             }
             .disposed(by: disposeBag)
