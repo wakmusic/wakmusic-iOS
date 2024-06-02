@@ -132,7 +132,10 @@ private extension SettingReactor {
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
-        return .just(.withDrawButtonDidTap)
+        let mutation: Mutation = currentState.userInfo == nil
+            ? .showToast("로그인이 필요합니다.")
+            : .withDrawButtonDidTap
+        return .just(mutation)
     }
 
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
