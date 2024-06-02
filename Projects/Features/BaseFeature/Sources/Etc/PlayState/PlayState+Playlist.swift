@@ -96,7 +96,6 @@ public class PlayList {
     public func removeAll() {
         list.removeAll()
         PlayState.shared.stop()
-        PlayState.shared.switchPlayerMode(to: .mini)
         listRemoved.send(list)
     }
 

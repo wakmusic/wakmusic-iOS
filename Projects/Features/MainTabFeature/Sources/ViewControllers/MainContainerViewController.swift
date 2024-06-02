@@ -39,12 +39,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     }()
 
     var isDarkContentBackground: Bool = false
-    var playerMode: PlayerMode = .mini {
-        didSet {
-            DEBUG_LOG("playerMode: \(playerMode)")
-            PlayState.shared.playerMode = playerMode
-        }
-    }
 
     var disposeBag = DisposeBag()
 
@@ -52,7 +46,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         super.viewDidLoad()
 
         configureUI()
-        configurePlayer()
         bindNotification()
     }
 
@@ -109,8 +102,6 @@ extension MainContainerViewController {
             self.panelViewTopConstraint.constant = newConstant
             self.bottomContainerViewBottomConstraint.constant = centerRatio * -self.originalTabBarPosition
 
-            updatePlayerViewController(value: Float(centerRatio))
-
         case .ended:
             let standard: CGFloat = direction.contains(.Down) ? 1.0 : direction.contains(.Up) ? 0.0 : 0.5
 
@@ -119,7 +110,6 @@ extension MainContainerViewController {
 
             self.panelViewTopConstraint.constant = expanded ? -screenHeight : self.originalPanelPosition
             self.bottomContainerView.isHidden = expanded ? true : false
-            self.playerMode = expanded ? .full : .mini
 
             UIView.animate(
                 withDuration: 0.35,
@@ -138,7 +128,6 @@ extension MainContainerViewController {
 
             centerRatio = (-panelViewTopConstraint.constant + originalPanelPosition) /
                 (screenHeight + originalPanelPosition)
-            updatePlayerViewController(value: Float(centerRatio))
 
         default:
             return
@@ -189,25 +178,6 @@ extension MainContainerViewController {
         self.safeAreaBottomViewHeightConstraint.constant = SAFEAREA_BOTTOM_HEIGHT()
         self.view.layoutIfNeeded()
     }
-
-    private func configurePlayer() {
-        let vc = playerComponent.makeView()
-        self.addChild(vc)
-        panelView.addSubview(vc.view)
-        vc.didMove(toParent: self)
-
-        vc.view.snp.makeConstraints {
-            $0.edges.equalTo(panelView)
-        }
-
-        // 미니 플레이어 상태: 0 - mini, 1 - full
-        updatePlayerViewController(value: Float(0))
-
-        // DB 조회 후 미니 플레이어 초기 상태 결정
-        let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
-        self.playerMode = allPlayedLists.isEmpty ? .close : .mini
-        updatePlayerMode(with: self.playerMode, animate: false)
-    }
 }
 
 extension MainContainerViewController: BottomTabBarViewDelegate {
@@ -226,121 +196,8 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
     }
 }
 
-public extension MainContainerViewController {
-    func updatePlayerMode(with mode: PlayerMode, animate: Bool) {
-        switch mode {
-        case .full, .mini:
-            expandPlayer(expanded: mode == .full, animate: animate)
-        case .close:
-            closePlayer(animate: animate)
-        }
-    }
-
-    /// 플레이어 확장, 축소
-    private func expandPlayer(expanded: Bool, animate: Bool) {
-        let screenHeight = APP_HEIGHT() - SAFEAREA_BOTTOM_HEIGHT()
-        self.panelViewTopConstraint.constant = expanded ? -screenHeight : self.originalPanelPosition
-        self.bottomContainerView.isHidden = expanded ? true : false
-
-        UIView.animate(
-            withDuration: animate ? 0.5 : 0,
-            delay: 0.0,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 0.8,
-            options: [.curveEaseInOut],
-            animations: {
-                self.bottomContainerViewBottomConstraint.constant = expanded ? -self.originalTabBarPosition : 0
-                self.view.layoutIfNeeded()
-
-            },
-            completion: { _ in
-            }
-        )
-
-        updatePlayerViewController(value: expanded ? Float(1) : Float(0))
-    }
-
-    /// 플레이어 닫기
-    private func closePlayer(animate: Bool) {
-        UIView.animate(
-            withDuration: animate ? 0.5 : 0,
-            delay: 0.0,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 0.8,
-            options: [.curveEaseInOut],
-            animations: {
-                self.panelViewTopConstraint.constant = 0
-                self.view.layoutIfNeeded()
-
-            },
-            completion: { _ in
-            }
-        )
-    }
-
-    /// 플레이어 생성 (현재 미사용, 추후에는 쓸지도..?)
-    private func makePlayer(songs: [SongEntity], expanded: Bool = false) {
-        let vc = playerComponent.makeView()
-        self.addChild(vc)
-        panelView.addSubview(vc.view)
-        vc.didMove(toParent: self)
-        panelView.isHidden = false
-
-        vc.view.snp.makeConstraints {
-            $0.edges.equalTo(panelView)
-        }
-
-        let screenHeight = APP_HEIGHT() - SAFEAREA_BOTTOM_HEIGHT()
-        self.panelViewTopConstraint.constant = expanded ? -screenHeight : self.originalPanelPosition
-        self.bottomContainerView.isHidden = expanded ? true : false
-
-        UIView.animate(
-            withDuration: 0.5,
-            delay: 0.0,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 0.8,
-            options: [.curveEaseInOut],
-            animations: {
-                self.bottomContainerViewBottomConstraint.constant = expanded ? -self.originalTabBarPosition : 0
-                self.view.layoutIfNeeded()
-
-            },
-            completion: { _ in
-            }
-        )
-
-        // 미니플레이어 상태는 0, 풀스크린이면 1
-        updatePlayerViewController(value: expanded ? Float(1) : Float(0))
-    }
-
-    /// 플레이어 삭제 (현재 미사용, 추후에는 쓸지도..?)
-    private func removePlayer() {
-        guard let playerViewController = self.children.last as? PlayerViewController else {
-            DEBUG_LOG("❌ Player Load Failed")
-            return
-        }
-
-        playerViewController.willMove(toParent: nil)
-        playerViewController.view.removeFromSuperview()
-        playerViewController.removeFromParent()
-
-        self.panelView.subviews.forEach { $0.removeFromSuperview() }
-        self.panelView.isHidden = true
-        DEBUG_LOG("❌ Player Closed")
-    }
-}
-
 extension MainContainerViewController {
     private func bindNotification() {
-        NotificationCenter.default.rx
-            .notification(.updatePlayerMode)
-            .debug("updatePlayerMode")
-            .subscribe(onNext: { [weak self] notification in
-                guard let mode = notification.object as? PlayerMode else { return }
-                self?.playerMode = mode
-                self?.updatePlayerMode(with: mode, animate: true)
-            }).disposed(by: disposeBag)
-
         NotificationCenter.default.rx
             .notification(.statusBarEnterDarkBackground)
             .subscribe(onNext: { [weak self] _ in

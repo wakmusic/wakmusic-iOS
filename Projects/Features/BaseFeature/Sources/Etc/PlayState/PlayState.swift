@@ -20,6 +20,7 @@ public final class PlayState {
         showRelatedVideos: false
     )))
 
+    @available(*, deprecated, message: "Youtube Player 관련 기능은 제거될 예정입니다.")
     @Published public var player: YouTubePlayer?
     @Published public var state: YouTubePlayer.PlaybackState = .unstarted
     @Published public var currentSong: SongEntity?

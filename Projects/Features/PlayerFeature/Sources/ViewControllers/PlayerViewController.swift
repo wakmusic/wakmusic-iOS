@@ -174,7 +174,6 @@ private extension PlayerViewController {
                     cancelButtonIsHidden: true,
                     completion: {
                         self?.logoutHandlerSubject.send(())
-                        self?.playState.switchPlayerMode(to: .mini)
                     }
                 )
             )
@@ -382,7 +381,6 @@ private extension PlayerViewController {
                 cancelButtonIsHidden: false,
                 completion: {
                     NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
-                    self?.playState.switchPlayerMode(to: .mini)
                 },
                 cancelCompletion: {}
             ))
