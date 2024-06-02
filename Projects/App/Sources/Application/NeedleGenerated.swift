@@ -792,6 +792,7 @@ extension AppComponent: Registration {
         localTable["updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"] = { [unowned self] in self.updateTitleAndPrivateeUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
+        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { [unowned self] in self.uploadPlaylistImageUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { [unowned self] in self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { [unowned self] in self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { [unowned self] in self.artistRepository as Any }
