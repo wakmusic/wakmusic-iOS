@@ -12,12 +12,14 @@ import RxSwift
 import UIKit
 import Utility
 
+public struct Model: Hashable {
+    let title: String
+}
+
+
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-    fileprivate enum Section: Int {
-        case youtube
-        case recommend
-        case popularList
-    }
+
+    
 
     #warning("실제 데이터 entity로 바꾸기")
     enum DataSource: Hashable {
@@ -47,7 +49,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, DataSource>?
 
-    private var collectionView: UICollectionView?
+    private lazy var collectionView: UICollectionView = createCollectionView()
 
     init(
         textPopUpFactory: TextPopUpFactory,
@@ -70,8 +72,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     override public func addView() {
         super.addView()
-        self.view.addSubviews(tableView)
-        createCollectionView()
+        self.view.addSubviews(collectionView,tableView)
         configureDataSource()
     }
 
@@ -82,13 +83,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             $0.horizontalEdges.verticalEdges.equalToSuperview()
         }
 
-        collectionView?.snp.makeConstraints {
+        collectionView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
     }
 
     override public func configureUI() {
         super.configureUI()
+        
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
@@ -104,6 +106,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        collectionView.delegate = self
     }
 
     override public func bindAction(reactor: BeforeSearchReactor) {
@@ -125,7 +128,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             .withUnretained(self)
             .bind { owner, flag in
                 owner.tableView.isHidden = flag
-                owner.collectionView?.isHidden = !flag
+                owner.collectionView.isHidden = !flag
             }
             .disposed(by: disposeBag)
 
@@ -208,100 +211,13 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
 
 // MARK: Compositional
 extension BeforeSearchContentViewController {
-    func createCollectionView() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-
-        guard let collectionView = collectionView else {
-            return
-        }
-
-        collectionView.backgroundColor = .systemGray
-        collectionView.delegate = self
-        view.addSubview(collectionView)
+    func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchVcLayout())
     }
 
-    func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self]
-            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-
-                guard let self else { return nil }
-
-                guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
-
-                return self.configureSection(layoutKind)
-        }
-
-        return layout
-    }
-
-    private func configureSection(_ layout: Section) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
-        )
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
-
-        var group: NSCollectionLayoutGroup! = nil
-        var section: NSCollectionLayoutSection! = nil
-        let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
-
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerLayout,
-            elementKind: BeforeSearchSectionHeaderView.kind,
-            alignment: .top
-        )
-
-        header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
-
-        switch layout {
-        case .youtube:
-
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.87)
-            )
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-            section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
-
-        case .recommend:
-
-            let groupWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-            let groupeight: CGFloat = (80.0 * groupWidth) / 164.0
-
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(groupWidth),
-                heightDimension: .absolute(groupeight)
-            )
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-            section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [header]
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
-
-        case .popularList:
-
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
-
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-            section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [header]
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-        }
-
-        section.orthogonalScrollingBehavior = .continuous
-
-        return section
-    }
 
     private func configureDataSource() {
-        guard let collectionView = collectionView else {
-            return
-        }
-
+ 
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
