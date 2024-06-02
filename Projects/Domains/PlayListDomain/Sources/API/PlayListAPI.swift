@@ -1,10 +1,10 @@
 import BaseDomain
+import BaseDomainInterface
 import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
 import PlayListDomainInterface
-import BaseDomainInterface
 
 public struct AddSongRequest: Encodable {
     var songIds: [String]
@@ -66,7 +66,7 @@ extension PlayListAPI: WMAPI {
              ):
             return "/\(key)/songs"
 
-        case let .uploadImage(key:key,_):
+        case let .uploadImage(key: key, _):
             return "/\(key)/image"
         }
     }
@@ -106,47 +106,42 @@ extension PlayListAPI: WMAPI {
 
         case let .removeSongs(_, songs: songs):
             return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString)
-            
+
         case let .uploadImage(key: key, model: model):
-            
-            var datas:[MultipartFormData] = []
+
+            var datas: [MultipartFormData] = []
 
             switch model {
-                case let .default(data: data):
-                    datas.append(MultipartFormData(provider: .data("default".data(using: .utf8)!), name: "type"))
-                    datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
-                
-                case let .custom(data: data):
-                    datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
-                    datas.append(MultipartFormData(provider: .data(data), name: "imageFile"))
+            case let .default(data: data):
+                datas.append(MultipartFormData(provider: .data("default".data(using: .utf8)!), name: "type"))
+                datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
+
+            case let .custom(data: data):
+                datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
+                datas.append(MultipartFormData(provider: .data(data), name: "imageFile"))
             }
             return .uploadMultipart(datas)
         }
     }
 
-    
-    public var headers: [String : String]? {
-        
+    public var headers: [String: String]? {
         switch self {
-            
         case .uploadImage:
-            
+
             return ["Content-Type": "multipart/form-data"]
-            
+
         default:
-            return  ["Content-Type": "application/json"]
-        
+            return ["Content-Type": "application/json"]
         }
-        
     }
-    
+
     public var jwtTokenType: JwtTokenType {
         switch self {
         case .fetchRecommendPlayList, .fetchPlayListDetail, .fetchPlaylistSongs:
             return .none
 
         case .createPlayList, .updatePlaylist, .addSongIntoPlayList,
-                .removeSongs, .updateTitleAndPrivate, .uploadImage:
+             .removeSongs, .updateTitleAndPrivate, .uploadImage:
             return .accessToken
         }
     }

@@ -8,5 +8,4 @@ public protocol ImageUploadable {
 
 public extension ImageUploadable where Self: UIViewController {
     #warning("Sheet 구현 시 연결")
-
 }
