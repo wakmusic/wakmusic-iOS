@@ -2,25 +2,22 @@ import UIKit
 import Utility
 
 class BeforeSearchVcLayout: UICollectionViewCompositionalLayout {
-    
     init() {
         super.init { sectionIndex, layoutEnvironment in
-            
+
             guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
 
             return BeforeSearchVcLayout.configureLayoutSection(layoutKind)
-            
         }
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-  
 }
 
 extension BeforeSearchVcLayout {
-  
     private static func configureLayoutSection(_ layoutKind: Section) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),

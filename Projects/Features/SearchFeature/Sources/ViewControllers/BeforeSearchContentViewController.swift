@@ -16,11 +16,7 @@ public struct Model: Hashable {
     let title: String
 }
 
-
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
-
-    
-
     #warning("실제 데이터 entity로 바꾸기")
     enum DataSource: Hashable {
         case youtube(model: Model)
@@ -72,7 +68,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     override public func addView() {
         super.addView()
-        self.view.addSubviews(collectionView,tableView)
+        self.view.addSubviews(collectionView, tableView)
         configureDataSource()
     }
 
@@ -90,7 +86,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
     override public func configureUI() {
         super.configureUI()
-        
+
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
@@ -215,9 +211,7 @@ extension BeforeSearchContentViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchVcLayout())
     }
 
-
     private func configureDataSource() {
- 
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
