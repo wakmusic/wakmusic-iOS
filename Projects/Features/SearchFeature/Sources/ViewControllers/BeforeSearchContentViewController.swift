@@ -89,14 +89,10 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
-        self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
     }
 
     override public func bind(reactor: BeforeSearchReactor) {
-        self.indicator.startAnimating()
         super.bind(reactor: reactor)
-        self.indicator.stopAnimating()
 
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
@@ -116,8 +112,19 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 1)
+        let sharedState = reactor.state.share(replay: 2)
 
+        sharedState.map(\.isLoading)
+            .withUnretained(self)
+            .bind(onNext: { (onwer, isLoading) in
+                if isLoading {
+                    onwer.indicator.startAnimating()
+                } else {
+                    onwer.indicator.stopAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
+        
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
             .withUnretained(self)
