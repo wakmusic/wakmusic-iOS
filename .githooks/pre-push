@@ -13,6 +13,8 @@ fi
 RESULT=$($FORMAT ./Projects --config .swiftformat)
 
 if [ "$RESULT" == '' ]; then
+    git add .
+    git commit -m "🎨 :: 코드 Formatting 적용"
     printf "\n 🎉 SwiftFormat 적용을 완료했습니다 !! \n"
 else
     echo ""

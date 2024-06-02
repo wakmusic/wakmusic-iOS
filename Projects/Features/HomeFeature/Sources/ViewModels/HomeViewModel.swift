@@ -9,6 +9,7 @@
 import BaseFeature
 import ChartDomainInterface
 import Foundation
+import LogManager
 import PlayListDomainInterface
 import RxCocoa
 import RxSwift
@@ -81,6 +82,7 @@ public final class HomeViewModel: ViewModelType {
         input.chartMoreTapped
             .map { _ in 1 }
             .subscribe(onNext: { index in
+                LogManager.analytics(HomeAnalyticsLog.clickChartTop100MusicsTitleButton)
                 NotificationCenter.default.post(name: .movedTab, object: index)
             }).disposed(by: disposeBag)
 
@@ -99,6 +101,7 @@ public final class HomeViewModel: ViewModelType {
                         date: $0.date
                     )
                 }
+                LogManager.analytics(HomeAnalyticsLog.clickAllChartTop100MusicsButton)
                 PlayState.shared.loadAndAppendSongsToPlaylist(songEntities)
             })
             .disposed(by: disposeBag)

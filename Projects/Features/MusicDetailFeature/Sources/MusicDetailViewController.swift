@@ -14,6 +14,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         view = musicDetailView
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .musicDetail))
+    }
+
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }

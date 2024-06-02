@@ -66,8 +66,6 @@
 		<string>$(BASE_PROD_URL)</string>
 		<key>GOOGLE_CLIENT_ID</key>
 		<string>$(GOOGLE_CLIENT_ID)</string>
-		<key>GOOGLE_SECRET_KEY</key>
-		<string>$(GOOGLE_SECRET_KEY)</string>
 		<key>GOOGLE_URL_SCHEME</key>
 		<string>$(GOOGLE_URL_SCHEME)</string>
 		<key>NAVER_APP_NAME</key>
