@@ -91,6 +91,39 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+
+        reactor.pulse(\.$cacheSize)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, cachSize in
+                guard let textPopupVC = owner.textPopUpFactory.makeView(
+                    text: "캐시 데이터(\(cachSize))를 지우시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    allowsDragAndTapToDismiss: nil,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.reactor?.action.onNext(.confirmRemoveCacheButtonDidTap)
+                    },
+                    cancelCompletion: nil
+                ) as? TextPopupViewController else {
+                    return
+                }
+                #warning("팬모달 이슈 해결되면 변경 예정")
+                textPopupVC.modalPresentationStyle = .popover
+                owner.present(textPopupVC, animated: true)
+                // owner.showPanModal(content: textPopupVC)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+            })
+            .disposed(by: disposeBag)
     }
 
     override func bindAction(reactor: SettingReactor) {

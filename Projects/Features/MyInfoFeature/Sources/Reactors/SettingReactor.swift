@@ -1,4 +1,5 @@
 import Foundation
+import Kingfisher
 import LogManager
 import ReactorKit
 import Utility
@@ -12,7 +13,9 @@ final class SettingReactor: Reactor {
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
         case removeCacheButtonDidTap
+        case confirmRemoveCacheButtonDidTap
         case versionInfoButtonDidTap
+        case showToast(String)
     }
 
     enum Mutation {
@@ -22,19 +25,23 @@ final class SettingReactor: Reactor {
         case serviceTermsNavigationDidTap
         case privacyNavigationDidTap
         case openSourceNavigationDidTap
-        case removeCacheButtonDidTap
+        case removeCacheButtonDidTap(cacheSize: String)
+        case confirmRemoveCacheButtonDidTap
         case versionInfoButtonDidTap
+        case showToast(String)
     }
 
     struct State {
         var userInfo: UserInfo?
+        @Pulse var cacheSize: String?
+        @Pulse var toastMessage: String?
         @Pulse var dismissButtonDidTap: Bool?
         @Pulse var withDrawButtonDidTap: Bool?
         @Pulse var appPushSettingButtonDidTap: Bool?
         @Pulse var serviceTermsNavigationDidTap: Bool?
         @Pulse var privacyNavigationDidTap: Bool?
         @Pulse var openSourceNavigationDidTap: Bool?
-        @Pulse var removeCacheButtonDidTap: Bool?
+        @Pulse var confirmRemoveCacheButtonDidTap: Bool?
         @Pulse var versionInfoButtonDidTap: Bool?
     }
 
@@ -65,6 +72,10 @@ final class SettingReactor: Reactor {
             return removeCacheButtonDidTap()
         case .versionInfoButtonDidTap:
             return versionInfoButtonDidTap()
+        case .confirmRemoveCacheButtonDidTap:
+            return confirmRemoveCacheButtonDidTap()
+        case let .showToast(message):
+            return showToast(message: message)
         }
     }
 
@@ -83,10 +94,14 @@ final class SettingReactor: Reactor {
             newState.privacyNavigationDidTap = true
         case .openSourceNavigationDidTap:
             newState.openSourceNavigationDidTap = true
-        case .removeCacheButtonDidTap:
-            newState.removeCacheButtonDidTap = true
+        case let .removeCacheButtonDidTap(cacheSize):
+            newState.cacheSize = cacheSize
         case .versionInfoButtonDidTap:
             newState.versionInfoButtonDidTap = true
+        case .confirmRemoveCacheButtonDidTap:
+            newState.confirmRemoveCacheButtonDidTap = true
+        case let .showToast(message):
+            newState.toastMessage = message
         }
         return newState
     }
@@ -118,10 +133,35 @@ private extension SettingReactor {
     }
 
     func removeCacheButtonDidTap() -> Observable<Mutation> {
-        return .just(.removeCacheButtonDidTap)
+        let cacheSize = calculateCacheSize()
+        return .just(.removeCacheButtonDidTap(cacheSize: cacheSize))
+    }
+
+    func confirmRemoveCacheButtonDidTap() -> Observable<Mutation> {
+        ImageCache.default.clearDiskCache()
+        action.onNext(.showToast("캐시 데이터가 삭제되었습니다."))
+        return .just(.confirmRemoveCacheButtonDidTap)
+    }
+
+    func calculateCacheSize() -> String {
+        var str = ""
+        ImageCache.default.calculateDiskStorageSize { result in
+            switch result {
+            case let .success(size):
+                let sizeString = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
+                str = sizeString
+            case let .failure(error):
+                str = ""
+            }
+        }
+        return str
     }
 
     func versionInfoButtonDidTap() -> Observable<Mutation> {
         return .just(.versionInfoButtonDidTap)
+    }
+
+    func showToast(message: String) -> Observable<Mutation> {
+        return .just(.showToast(message))
     }
 }
