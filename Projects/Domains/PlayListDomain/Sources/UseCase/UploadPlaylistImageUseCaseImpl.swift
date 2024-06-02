@@ -4,8 +4,6 @@ import PlayListDomainInterface
 import RxSwift
 
 public struct UploadPlaylistImageUseCaseImpl: UploadPlaylistImageUseCase {
-    
-    
     private let playListRepository: any PlayListRepository
 
     public init(
