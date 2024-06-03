@@ -11,5 +11,4 @@ public struct AddSongEntity: Equatable {
 
     public let addedSongCount: Int
     public let duplicated: Bool
-    
 }
