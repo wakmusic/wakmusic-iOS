@@ -1,6 +1,6 @@
 import Inject
-@testable import SearchFeature
 @testable import PlayListDomainTesting
+@testable import SearchFeature
 import UIKit
 
 @main
@@ -14,9 +14,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
 
         let fetchPlayListUseCase: FetchPlayListUseCaseSpy = .init()
-        
+
         let component =
-            WakmusicRecommendViewController(reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase:fetchPlayListUseCase))
+            WakmusicRecommendViewController(
+                reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
+            )
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: component)

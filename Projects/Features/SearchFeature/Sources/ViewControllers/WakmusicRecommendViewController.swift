@@ -8,7 +8,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
 
     private let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
-          //  .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
+        //  .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
 
