@@ -8,13 +8,13 @@
 
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 public final class LyricDecoratingViewController: UIViewController {
     private let navigationBarView = UIView()
