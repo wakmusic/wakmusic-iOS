@@ -103,8 +103,10 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .filter { !$0.filter { $0.isHighlighting }.isEmpty }
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
             .bind { items in
-                output.goDecoratingScene.onNext(.init(
-                    title: output.songTitle.value, artist: output.artist.value, highlightingItems: items)
+                output.goDecoratingScene.onNext(
+                    .init(
+                        title: output.songTitle.value, artist: output.artist.value, highlightingItems: items
+                    )
                 )
             }
             .disposed(by: disposeBag)
