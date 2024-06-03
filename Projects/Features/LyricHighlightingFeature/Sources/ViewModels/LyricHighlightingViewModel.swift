@@ -15,7 +15,7 @@ import SongsDomainInterface
 import Utility
 
 public final class LyricHighlightingViewModel: ViewModelType {
-    private var model: LyricHighlightingSenderModel = .init(songID: "", title: "", artist: "")
+    private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])
     private let fetchLyricsUseCase: FetchLyricsUseCase
     private let disposeBag = DisposeBag()
 
@@ -24,7 +24,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
     }
 
     public init(
-        model: LyricHighlightingSenderModel,
+        model: LyricHighlightingRequiredModel,
         fetchLyricsUseCase: any FetchLyricsUseCase
     ) {
         self.model = model
@@ -40,18 +40,18 @@ public final class LyricHighlightingViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        let goDecoratingScene: PublishSubject<LyricDecoratingSenderModel> = PublishSubject()
+        let goDecoratingScene: PublishSubject<LyricHighlightingRequiredModel> = PublishSubject()
         let songTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
         let artist: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let id: String = self.model.songID
+        let songID: String = self.model.songID
 
         input.fetchLyric
             .flatMap { [fetchLyricsUseCase] _ -> Observable<[LyricsEntity]> in
-                return fetchLyricsUseCase.execute(id: id)
+                return fetchLyricsUseCase.execute(id: songID)
                     .asObservable()
                     .catchAndReturn(
                         [
@@ -103,7 +103,8 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !$0.filter { $0.isHighlighting }.isEmpty }
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
-            .map { LyricDecoratingSenderModel(
+            .map { LyricHighlightingRequiredModel(
+                songID: songID,
                 title: output.songTitle.value,
                 artist: output.artist.value,
                 highlightingItems: $0

@@ -16,7 +16,7 @@ import UIKit
 import Utility
 
 final class LyricDecoratingViewModel: ViewModelType {
-    private var model: LyricDecoratingSenderModel = .init(title: "", artist: "", highlightingItems: [])
+    private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -24,7 +24,7 @@ final class LyricDecoratingViewModel: ViewModelType {
     }
 
     public init(
-        model: LyricDecoratingSenderModel
+        model: LyricHighlightingRequiredModel
     ) {
         self.model = model
     }

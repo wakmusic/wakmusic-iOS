@@ -80,7 +80,12 @@ extension LyricHighlightingViewController {
         output.goDecoratingScene
             .bind(with: self) { owner, model in
                 let viewController = owner.lyricDecoratingComponent.makeView(
-                    model: .init(title: model.title, artist: model.artist, highlightingItems: model.highlightingItems)
+                    model: .init(
+                        songID: model.songID,
+                        title: model.title,
+                        artist: model.artist,
+                        highlightingItems: model.highlightingItems
+                    )
                 )
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
