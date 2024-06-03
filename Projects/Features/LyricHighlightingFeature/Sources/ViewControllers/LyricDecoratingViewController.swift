@@ -94,7 +94,6 @@ public final class LyricDecoratingViewController: UIViewController {
     private let decorateBottomShadowImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
-        // $0.clipsToBounds = true
     }
 
     private let descriptionLabel = UILabel().then {
@@ -267,7 +266,8 @@ private extension LyricDecoratingViewController {
             $0.height.equalTo(206)
         }
         decorateBottomShadowImageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().offset(22)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(decorateBottomView.snp.top).offset(16)
