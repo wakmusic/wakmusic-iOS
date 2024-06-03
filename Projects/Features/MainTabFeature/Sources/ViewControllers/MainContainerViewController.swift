@@ -2,11 +2,11 @@ import ArtistFeature
 import BaseFeature
 import DesignSystem
 import PlayerFeature
+import PlaylistFeatureInterface
 import RxSwift
 import SnapKit
 import SongsDomainInterface
 import UIKit
-import PlaylistFeatureInterface
 import Utility
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
@@ -212,7 +212,7 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 
 extension MainContainerViewController {
     private func bind() {
-        let playlistButtonAction = UIAction { [navigationController, playlistFactory]  _ in
+        let playlistButtonAction = UIAction { [navigationController, playlistFactory] _ in
             guard let playlistFactory else { return }
             let playlistViewController = playlistFactory.makeViewController()
             playlistViewController.modalPresentationStyle = .overFullScreen

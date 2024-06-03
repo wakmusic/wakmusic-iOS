@@ -1,9 +1,9 @@
+import BaseFeature
 import Foundation
 import NeedleFoundation
 import PlayerFeature
 import PlaylistFeatureInterface
 import UIKit
-import BaseFeature
 
 public protocol MainContainerDependency: Dependency {
     var bottomTabBarComponent: BottomTabBarComponent { get }

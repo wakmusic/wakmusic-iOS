@@ -6,7 +6,7 @@ final class PlayListFloatingActionButton: UIButton {
         super.init(frame: .zero)
         setupButton()
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -17,7 +17,7 @@ final class PlayListFloatingActionButton: UIButton {
         self.layer.cornerRadius = self.frame.height / 2.0
         self.clipsToBounds = true
     }
-    
+
     private func setupButton() {
         self.setImage(
             DesignSystemAsset.Main.playlist.image
