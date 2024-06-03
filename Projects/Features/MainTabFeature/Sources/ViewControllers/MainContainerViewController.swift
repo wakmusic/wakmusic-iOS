@@ -6,6 +6,7 @@ import RxSwift
 import SnapKit
 import SongsDomainInterface
 import UIKit
+import PlaylistFeatureInterface
 import Utility
 
 open class MainContainerViewController: BaseViewController, ViewControllerFromStoryBoard {
@@ -29,6 +30,8 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     var bottomTabBarComponent: BottomTabBarComponent!
     var mainTabBarComponent: MainTabBarComponent!
     var playerComponent: PlayerComponent!
+    var playlistFactory: PlaylistFactory!
+    var playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol!
 
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(
@@ -49,6 +52,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
         setLayout()
         configureUI()
         bindNotification()
+        bind()
     }
 
     override open var preferredStatusBarStyle: UIStatusBarStyle {
@@ -58,13 +62,17 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     public static func viewController(
         bottomTabBarComponent: BottomTabBarComponent,
         mainTabBarComponent: MainTabBarComponent,
-        playerComponent: PlayerComponent
+        playerComponent: PlayerComponent,
+        playlistFactory: PlaylistFactory,
+        playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol
     ) -> MainContainerViewController {
         let viewController = MainContainerViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
 
         viewController.bottomTabBarComponent = bottomTabBarComponent
         viewController.mainTabBarComponent = mainTabBarComponent
         viewController.playerComponent = playerComponent
+        viewController.playlistFactory = playlistFactory
+        viewController.playlistPresenterGlobalState = playlistPresenterGlobalState
 
         return viewController
     }
@@ -203,6 +211,28 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 }
 
 extension MainContainerViewController {
+    private func bind() {
+        let playlistButtonAction = UIAction { [navigationController, playlistFactory]  _ in
+            guard let playlistFactory else { return }
+            let playlistViewController = playlistFactory.makeViewController()
+            playlistViewController.modalPresentationStyle = .overFullScreen
+            navigationController?.topViewController?.present(playlistViewController, animated: true)
+        }
+        playlistFloatingActionButton.addAction(
+            playlistButtonAction,
+            for: .primaryActionTriggered
+        )
+
+        playlistPresenterGlobalState.presentPlayListObservable
+            .bind { [navigationController, playlistFactory] _ in
+                guard let playlistFactory else { return }
+                let playlistViewController = playlistFactory.makeViewController()
+                playlistViewController.modalPresentationStyle = .overFullScreen
+                navigationController?.topViewController?.present(playlistViewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+
     private func bindNotification() {
         NotificationCenter.default.rx
             .notification(.statusBarEnterDarkBackground)

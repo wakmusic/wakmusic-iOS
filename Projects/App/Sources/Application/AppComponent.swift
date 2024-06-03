@@ -48,8 +48,8 @@ public extension AppComponent {
         PlayerComponent(parent: self)
     }
 
-    var playlistComponent: PlaylistComponent {
-        PlaylistComponent(parent: self)
+    var playlistComponent: LegacyPlaylistComponent {
+        LegacyPlaylistComponent(parent: self)
     }
 }
 

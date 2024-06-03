@@ -17,7 +17,6 @@ import YouTubePlayerKit
 
 internal typealias PlayListSectionModel = SectionModel<Int, PlayListItem>
 
-@available(*, deprecated, message: "PlaylistViewModel moved 'PlaylistFeature'")
 final class PlaylistViewModel: ViewModelType {
     struct Input {
         let viewWillAppearEvent: Observable<Void>

@@ -11,8 +11,7 @@ import SnapKit
 import UIKit
 import Utility
 
-@available(*, deprecated, message: "PlaylistViewController moved 'PlaylistFeature'")
-public class PlaylistViewController: UIViewController, SongCartViewType {
+public final class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared

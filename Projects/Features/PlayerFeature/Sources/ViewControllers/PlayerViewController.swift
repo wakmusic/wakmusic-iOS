@@ -34,12 +34,12 @@ public class PlayerViewController: UIViewController {
     }
 
     private let logoutHandlerSubject = PassthroughSubject<Void, Never>()
-    internal var playlistComponent: PlaylistComponent!
+    internal var playlistComponent: LegacyPlaylistComponent!
     internal var containSongsFactory: ContainSongsFactory!
 
     init(
         viewModel: PlayerViewModel,
-        playlistComponent: PlaylistComponent,
+        playlistComponent: LegacyPlaylistComponent,
         containSongsFactory: ContainSongsFactory
     ) {
         self.viewModel = viewModel

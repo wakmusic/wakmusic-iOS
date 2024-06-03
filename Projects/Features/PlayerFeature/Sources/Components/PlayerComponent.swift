@@ -14,7 +14,7 @@ public protocol PlayerDependency: Dependency {
     var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var playlistComponent: PlaylistComponent { get }
+    var playlistComponent: LegacyPlaylistComponent { get }
     var containSongsFactory: any ContainSongsFactory { get }
 }
 

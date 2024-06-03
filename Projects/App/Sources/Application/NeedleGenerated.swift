@@ -117,19 +117,6 @@ private class ArtistMusicDependencya0f5073287829dfbc260Provider: ArtistMusicDepe
 private func factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ArtistMusicDependencya0f5073287829dfbc260Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class PlaylistDependency6f376d117dc0f38671edProvider: PlaylistDependency {
-    var containSongsFactory: any ContainSongsFactory {
-        return appComponent.containSongsFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->PlaylistComponent
-private func factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PlaylistDependency6f376d117dc0f38671edProvider(appComponent: parent1(component) as! AppComponent)
-}
 private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase {
         return appComponent.fetchLyricsUseCase
@@ -149,7 +136,7 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
     var logoutUseCase: any LogoutUseCase {
         return appComponent.logoutUseCase
     }
-    var playlistComponent: PlaylistComponent {
+    var playlistComponent: LegacyPlaylistComponent {
         return appComponent.playlistComponent
     }
     var containSongsFactory: any ContainSongsFactory {
@@ -193,6 +180,19 @@ private class LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider: LyricDecora
 /// ^->AppComponent->LyricDecoratingComponent
 private func factory5d05db9eb4337d682097e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider()
+}
+private class LegacyPlaylistDependencyec965582e72ebd83150aProvider: LegacyPlaylistDependency {
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->LegacyPlaylistComponent
+private func factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LegacyPlaylistDependencyec965582e72ebd83150aProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase {
@@ -255,6 +255,12 @@ private class MainContainerDependencyd9d908a1d0cf8937bbadProvider: MainContainer
     var playerComponent: PlayerComponent {
         return appComponent.playerComponent
     }
+    var playlistFactory: any PlaylistFactory {
+        return appComponent.playlistFactory
+    }
+    var playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
+        return appComponent.playlistPresenterGlobalState
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -305,6 +311,19 @@ private class PlayListDetailDependencyb06fb5392859952b82a2Provider: PlayListDeta
 /// ^->AppComponent->PlayListDetailComponent
 private func factory9e077ee814ce180ea399f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayListDetailDependencyb06fb5392859952b82a2Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class PlaylistDependency6f376d117dc0f38671edProvider: PlaylistDependency {
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->PlaylistComponent
+private func factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlaylistDependency6f376d117dc0f38671edProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class ChartDependencyafd8882010751c9ef054Provider: ChartDependency {
     var chartContentComponent: ChartContentComponent {
@@ -1026,11 +1045,6 @@ extension ArtistMusicComponent: Registration {
         keyPathToName[\ArtistMusicDependency.artistMusicContentComponent] = "artistMusicContentComponent-ArtistMusicContentComponent"
     }
 }
-extension PlaylistComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\PlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
-    }
-}
 extension PlayerComponent: Registration {
     public func registerItems() {
         keyPathToName[\PlayerDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
@@ -1039,7 +1053,7 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.fetchLikeNumOfSongUseCase] = "fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"
         keyPathToName[\PlayerDependency.fetchFavoriteSongsUseCase] = "fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"
         keyPathToName[\PlayerDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-        keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
+        keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-LegacyPlaylistComponent"
         keyPathToName[\PlayerDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
@@ -1053,6 +1067,11 @@ extension LyricHighlightingComponent: Registration {
 extension LyricDecoratingComponent: Registration {
     public func registerItems() {
 
+    }
+}
+extension LegacyPlaylistComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\LegacyPlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension MainTabBarComponent: Registration {
@@ -1079,6 +1098,8 @@ extension MainContainerComponent: Registration {
         keyPathToName[\MainContainerDependency.bottomTabBarComponent] = "bottomTabBarComponent-BottomTabBarComponent"
         keyPathToName[\MainContainerDependency.mainTabBarComponent] = "mainTabBarComponent-MainTabBarComponent"
         keyPathToName[\MainContainerDependency.playerComponent] = "playerComponent-PlayerComponent"
+        keyPathToName[\MainContainerDependency.playlistFactory] = "playlistFactory-any PlaylistFactory"
+        keyPathToName[\MainContainerDependency.playlistPresenterGlobalState] = "playlistPresenterGlobalState-PlayListPresenterGlobalStateProtocol"
     }
 }
 extension NoticePopupComponent: Registration {
@@ -1095,6 +1116,11 @@ extension PlayListDetailComponent: Registration {
         keyPathToName[\PlayListDetailDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\PlayListDetailDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
         keyPathToName[\PlayListDetailDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension PlaylistComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\PlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension ChartComponent: Registration {
@@ -1362,15 +1388,16 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ArtistDetailComponent", factory35314797fadaf164ece6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ArtistMusicContentComponent", factory8b6ffa46033e2529b5daf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->PlaylistComponent", factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->LyricHighlightingComponent", factory57ee59e468bef412b173f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->LyricDecoratingComponent", factory5d05db9eb4337d682097e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->LegacyPlaylistComponent", factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NoticePopupComponent", factorycd081aacb61d6a707ca7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->PlaylistComponent", factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)

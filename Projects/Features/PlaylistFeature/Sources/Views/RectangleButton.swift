@@ -9,7 +9,6 @@
 import DesignSystem
 import UIKit
 
-@available(*, deprecated, message: "RectangleButton moved 'PlaylistFeature'")
 internal class RectangleButton: UIButton {
     func setColor(isHighlight: Bool) {
         let pointColor = DesignSystemAsset.PrimaryColor.point.color
