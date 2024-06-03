@@ -8,23 +8,64 @@
 
 import BaseFeature
 import Foundation
+import LogManager
 import RxRelay
 import RxSwift
 import SongsDomainInterface
 import Utility
+import UIKit
 
 final class LyricDecoratingViewModel: ViewModelType {
-    public init(
-        //        fetchArtistSongListUseCase: any FetchArtistSongListUseCase
-    ) {
-        //        self.fetchArtistSongListUseCase = fetchArtistSongListUseCase
+    private var model: LyricDecoratingSenderModel = .init(title: "", artist: "", highlightingItems: [])
+    private let disposeBag = DisposeBag()
+
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public struct Input {}
+    public init(
+        model: LyricDecoratingSenderModel
+    ) {
+        self.model = model
+    }
 
-    public struct Output {}
+    public struct Input {
+        let fetchBackgroundImage: PublishSubject<Void> = PublishSubject()
+        let didTapBackground: PublishSubject<Int> = PublishSubject()
+    }
+
+    public struct Output {
+        let dataSource: BehaviorRelay<[LyricDecoratingModel]> = BehaviorRelay(value: [])
+        let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
+    }
 
     public func transform(from input: Input) -> Output {
-        return Output()
+        let output = Output()
+
+        input.fetchBackgroundImage
+            .map { _ -> [LyricDecoratingModel] in
+                return Array(0...9).map { i -> LyricDecoratingModel in
+                    LyricDecoratingModel(imageURL: "", imageColor: UIColor.random(), isSelected: i == 0 ? true : false)
+                }
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        output.highlightingItems.accept(model.highlightingItems.joined(separator: "\n"))
+
+        input.didTapBackground
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { index, entities in
+                var newEntities = entities
+                if let i = entities.firstIndex(where: { $0.isSelected }) {
+                    newEntities[i].isSelected = false
+                }
+                newEntities[index].isSelected = true
+                return newEntities
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        return output
     }
 }

@@ -65,10 +65,7 @@ open class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray700.color
     }
 
-    let saveButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image, for: .normal)
-        $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image, for: .selected)
-    }
+    let saveButton = UIButton()
 
     let indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin

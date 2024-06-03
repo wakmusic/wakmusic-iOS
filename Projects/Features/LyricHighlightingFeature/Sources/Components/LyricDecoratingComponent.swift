@@ -12,7 +12,8 @@ import NeedleFoundation
 public protocol LyricDecoratingDependency: Dependency {}
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
-    public func makeView(items: [String]) -> LyricDecoratingViewController {
-        return LyricDecoratingViewController()
+    public func makeView(model: LyricDecoratingSenderModel) -> LyricDecoratingViewController {
+        let viewModel = LyricDecoratingViewModel(model: model)
+        return LyricDecoratingViewController(viewModel: viewModel)
     }
 }

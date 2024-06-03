@@ -58,14 +58,17 @@ extension LyricHighlightingViewController {
                 let color = isStorable ? DesignSystemAsset.PrimaryColorV2.point.color : DesignSystemAsset.NewGrayColor
                     .gray900.color
                 owner.saveButtonContentView.backgroundColor = color
-                owner.saveButton.isSelected = isStorable
+                let image = isStorable ? DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image : DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image
+                owner.saveButton.setImage(image, for: .normal)
             }
             .disposed(by: disposeBag)
 
         output.goDecoratingScene
             .skip(1)
             .bind(with: self) { owner, items in
-                let viewController = owner.lyricDecoratingComponent.makeView(items: items)
+                let viewController = owner.lyricDecoratingComponent.makeView(
+                    model: .init(title: "리와인드 (RE:WIND)", artist: "이세계아이돌", highlightingItems: items)
+                )
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
