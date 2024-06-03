@@ -52,9 +52,10 @@ extension LyricDecoratingViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .do(onNext: { [decorateImageView] entities in
+            .do(onNext: { [decorateImageView, indicator] entities in
                 decorateImageView.backgroundColor = entities.filter { $0.isSelected }.first?
                     .imageColor ?? DesignSystemAsset.PrimaryColorV2.point.color
+                indicator.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
                 guard let cell = collectionView.dequeueReusableCell(

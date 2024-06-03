@@ -14,6 +14,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import NVActivityIndicatorView
 
 public final class LyricDecoratingViewController: UIViewController {
     private let navigationBarView = UIView()
@@ -131,6 +132,11 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.clipsToBounds = true
     }
 
+    let indicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.type = .circleStrokeSpin
+        $0.color = DesignSystemAsset.PrimaryColorV2.point.color
+    }
+
     var viewModel: LyricDecoratingViewModel!
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -196,6 +202,8 @@ private extension LyricDecoratingViewController {
         decorateBottomView.addSubview(descriptionLabel)
         decorateBottomView.addSubview(collectionView)
         decorateBottomView.addSubview(saveButton)
+
+        view.addSubview(indicator)
     }
 
     func setAutoLayout() {
@@ -280,11 +288,16 @@ private extension LyricDecoratingViewController {
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(56)
         }
+        indicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(30)
+        }
     }
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = UIColor.white
         collectionView.register(LyricDecoratingCell.self, forCellWithReuseIdentifier: "\(LyricDecoratingCell.self)")
+        indicator.startAnimating()
     }
 }
