@@ -11,7 +11,7 @@ let project = Project.module(
         .implements(
             module: .feature(.LyricHighlightingFeature),
             dependencies: [
-                .feature(target: .PlayerFeature),
+                .feature(target: .BaseFeature),
                 .feature(target: .LyricHighlightingFeature, type: .interface)
             ]
         ),

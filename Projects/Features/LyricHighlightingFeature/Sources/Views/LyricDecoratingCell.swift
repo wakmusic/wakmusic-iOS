@@ -12,23 +12,23 @@ import Then
 import UIKit
 
 final class LyricDecoratingCell: UICollectionViewCell {
-    var decoImageView = UIImageView().then {
+    private let decoImageView = UIImageView().then {
         $0.clipsToBounds = true
     }
 
-    var checkBoxContentView = UIView().then {
+    private let checkBoxContentView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.4)
     }
 
-    var checkBoxImageView = UIImageView().then {
+    private let checkBoxImageView = UIImageView().then {
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingCheckBox.image
     }
 
-    var descriptionContentView = UIView().then {
+    private let descriptionContentView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.4)
     }
 
-    var descriptionLabel = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 11)
         $0.textColor = .white
     }

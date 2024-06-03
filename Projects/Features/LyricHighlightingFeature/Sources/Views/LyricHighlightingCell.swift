@@ -14,7 +14,7 @@ import UIKit
 import Utility
 
 final class LyricHighlightingCell: UICollectionViewCell {
-    var lyricLabel = UILabel().then {
+    private let lyricLabel = UILabel().then {
         $0.numberOfLines = 0
     }
 
