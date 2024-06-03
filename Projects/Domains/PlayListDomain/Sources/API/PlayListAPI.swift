@@ -32,7 +32,7 @@ public enum PlayListAPI {
     case addSongIntoPlayList(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
-     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
+    case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
 }
 
 extension PlayListAPI: WMAPI {
@@ -105,7 +105,10 @@ extension PlayListAPI: WMAPI {
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
 
         case let .removeSongs(_, songs: songs):
-            return .requestParameters(parameters: ["songIds": songs.joined(separator: ",")], encoding: URLEncoding.queryString)
+            return .requestParameters(
+                parameters: ["songIds": songs.joined(separator: ",")],
+                encoding: URLEncoding.queryString
+            )
 
         case let .uploadImage(_, model: model):
 
