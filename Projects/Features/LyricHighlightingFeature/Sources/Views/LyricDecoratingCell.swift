@@ -60,7 +60,7 @@ public struct LyricDecoratingModel {
 extension LyricDecoratingCell {
     func update(model: LyricDecoratingModel, index: Int) {
         decoImageView.backgroundColor = model.imageColor
-        descriptionLabel.text = "Color \(index+1)"
+        descriptionLabel.text = "Color \(index + 1)"
         descriptionLabel.setTextWithAttributes(alignment: .center)
         checkBoxContentView.isHidden = !model.isSelected
     }

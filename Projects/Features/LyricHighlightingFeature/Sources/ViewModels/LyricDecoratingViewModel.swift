@@ -12,8 +12,8 @@ import LogManager
 import RxRelay
 import RxSwift
 import SongsDomainInterface
-import Utility
 import UIKit
+import Utility
 
 final class LyricDecoratingViewModel: ViewModelType {
     private var model: LyricDecoratingSenderModel = .init(title: "", artist: "", highlightingItems: [])
@@ -44,7 +44,7 @@ final class LyricDecoratingViewModel: ViewModelType {
 
         input.fetchBackgroundImage
             .map { _ -> [LyricDecoratingModel] in
-                return Array(0...9).map { i -> LyricDecoratingModel in
+                return Array(0 ... 9).map { i -> LyricDecoratingModel in
                     LyricDecoratingModel(imageURL: "", imageColor: UIColor.random(), isSelected: i == 0 ? true : false)
                 }
             }

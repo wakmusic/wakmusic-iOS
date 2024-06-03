@@ -58,7 +58,8 @@ extension LyricHighlightingViewController {
                 let color = isStorable ? DesignSystemAsset.PrimaryColorV2.point.color : DesignSystemAsset.NewGrayColor
                     .gray900.color
                 owner.saveButtonContentView.backgroundColor = color
-                let image = isStorable ? DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image : DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image
+                let image = isStorable ? DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn
+                    .image : DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image
                 owner.saveButton.setImage(image, for: .normal)
             }
             .disposed(by: disposeBag)

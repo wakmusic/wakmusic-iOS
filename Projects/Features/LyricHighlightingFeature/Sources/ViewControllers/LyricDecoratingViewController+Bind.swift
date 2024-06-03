@@ -8,9 +8,9 @@
 
 import DesignSystem
 import Foundation
-import UIKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 extension LyricDecoratingViewController {
     func inputBind() {
@@ -53,7 +53,8 @@ extension LyricDecoratingViewController {
         output.dataSource
             .skip(1)
             .do(onNext: { [decorateImageView] entities in
-                decorateImageView.backgroundColor = entities.filter { $0.isSelected }.first?.imageColor ?? DesignSystemAsset.PrimaryColorV2.point.color
+                decorateImageView.backgroundColor = entities.filter { $0.isSelected }.first?
+                    .imageColor ?? DesignSystemAsset.PrimaryColorV2.point.color
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
                 guard let cell = collectionView.dequeueReusableCell(

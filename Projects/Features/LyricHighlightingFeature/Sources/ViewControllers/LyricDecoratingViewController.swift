@@ -34,6 +34,7 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
+
     let decorateImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
     }
@@ -46,18 +47,22 @@ public final class LyricDecoratingViewController: UIViewController {
     private let decorateTextContentView = UIView().then {
         $0.backgroundColor = .clear
     }
+
     private let decorateFirstStackView = UIStackView().then {
         $0.axis = .vertical
         $0.spacing = 16
         $0.distribution = .fill
     }
+
     private let decorateQuotationLeftImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingQuotationMarksLeft.image
     }
+
     let highlightingLyricLabel = UILabel().then {
         $0.numberOfLines = 0
     }
+
     private let decorateQuotationRightImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingQuotationMarksRight.image
@@ -68,12 +73,14 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.spacing = 0
         $0.distribution = .fill
     }
+
     private let songTitleLabel = UILabel().then {
         $0.text = "리와인드 (RE:WIND)"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
         $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)
     }
+
     private let artistLabel = UILabel().then {
         $0.text = "이세계아이돌"
         $0.textColor = .white
