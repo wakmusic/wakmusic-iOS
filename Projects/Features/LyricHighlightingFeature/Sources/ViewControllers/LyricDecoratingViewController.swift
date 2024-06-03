@@ -177,10 +177,13 @@ extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
 private extension LyricDecoratingViewController {
     func addSubViews() {
         view.addSubview(navigationBarView)
+        view.addSubview(decorateContentView)
+        view.addSubview(decorateBottomView)
+        view.addSubview(indicator)
+
         navigationBarView.addSubview(backButton)
         navigationBarView.addSubview(navigationTitleLabel)
 
-        view.addSubview(decorateContentView)
         decorateContentView.addSubview(decorateShareContentView)
         decorateShareContentView.addSubview(decorateImageView)
         decorateShareContentView.addSubview(decorateLogoImageView)
@@ -195,13 +198,10 @@ private extension LyricDecoratingViewController {
         decorateSecondStackView.addArrangedSubview(songTitleLabel)
         decorateSecondStackView.addArrangedSubview(artistLabel)
 
-        view.addSubview(decorateBottomView)
         decorateBottomView.addSubview(decorateBottomShadowImageView)
         decorateBottomView.addSubview(descriptionLabel)
         decorateBottomView.addSubview(collectionView)
         decorateBottomView.addSubview(saveButton)
-
-        view.addSubview(indicator)
     }
 
     func setAutoLayout() {
