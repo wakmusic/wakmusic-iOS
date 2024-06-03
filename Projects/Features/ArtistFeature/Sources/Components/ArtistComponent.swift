@@ -8,13 +8,11 @@
 
 import ArtistDomainInterface
 import Foundation
-import LyricHighlightingFeature
 import NeedleFoundation
 
 public protocol ArtistDependency: Dependency {
     var fetchArtistListUseCase: any FetchArtistListUseCase { get }
     var artistDetailComponent: ArtistDetailComponent { get }
-    var lyricHighlightingComponent: LyricHighlightingComponent { get }
 }
 
 public final class ArtistComponent: Component<ArtistDependency> {
@@ -22,8 +20,7 @@ public final class ArtistComponent: Component<ArtistDependency> {
         let reactor = ArtistReactor(fetchArtistListUseCase: dependency.fetchArtistListUseCase)
         return ArtistViewController.viewController(
             reactor: reactor,
-            artistDetailComponent: dependency.artistDetailComponent,
-            lyricHighlightingComponent: dependency.lyricHighlightingComponent
+            artistDetailComponent: dependency.artistDetailComponent
         )
     }
 }

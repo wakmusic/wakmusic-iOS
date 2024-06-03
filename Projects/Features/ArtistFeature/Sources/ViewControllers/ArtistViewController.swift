@@ -1,6 +1,5 @@
 import BaseFeature
 import DesignSystem
-import LyricHighlightingFeature
 import NeedleFoundation
 import NVActivityIndicatorView
 import ReactorKit
@@ -20,7 +19,6 @@ public final class ArtistViewController:
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     var artistDetailComponent: ArtistDetailComponent!
-    var lyricHighlightingComponent: LyricHighlightingComponent!
     public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
@@ -56,18 +54,8 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, artist in
-                let viewController = owner.lyricHighlightingComponent.makeView(
-                    model: .init(
-                        songID: "DPEtmqvaKqY",
-                        title: "리와인드 (RE:WIND)",
-                        artist: "이세계아이돌",
-                        highlightingItems: []
-                    )
-                ).wrapNavigationController
-                viewController.modalPresentationStyle = .fullScreen
-                owner.present(viewController, animated: true)
-//                let viewController = owner.artistDetailComponent.makeView(model: artist)
-//                owner.navigationController?.pushViewController(viewController, animated: true)
+                let viewController = owner.artistDetailComponent.makeView(model: artist)
+                owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
     }
@@ -95,13 +83,11 @@ public final class ArtistViewController:
 
     public static func viewController(
         reactor: ArtistReactor,
-        artistDetailComponent: ArtistDetailComponent,
-        lyricHighlightingComponent: LyricHighlightingComponent
+        artistDetailComponent: ArtistDetailComponent
     ) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.reactor = reactor
         viewController.artistDetailComponent = artistDetailComponent
-        viewController.lyricHighlightingComponent = lyricHighlightingComponent
         return viewController
     }
 }

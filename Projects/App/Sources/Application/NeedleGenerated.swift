@@ -65,9 +65,6 @@ private class ArtistDependency132a213bf62ad60c622cProvider: ArtistDependency {
     var artistDetailComponent: ArtistDetailComponent {
         return appComponent.artistDetailComponent
     }
-    var lyricHighlightingComponent: LyricHighlightingComponent {
-        return appComponent.lyricHighlightingComponent
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -891,7 +888,6 @@ extension ArtistComponent: Registration {
     public func registerItems() {
         keyPathToName[\ArtistDependency.fetchArtistListUseCase] = "fetchArtistListUseCase-any FetchArtistListUseCase"
         keyPathToName[\ArtistDependency.artistDetailComponent] = "artistDetailComponent-ArtistDetailComponent"
-        keyPathToName[\ArtistDependency.lyricHighlightingComponent] = "lyricHighlightingComponent-LyricHighlightingComponent"
     }
 }
 extension ArtistDetailComponent: Registration {
