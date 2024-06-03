@@ -42,6 +42,7 @@ final class LyricDecoratingViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
 
+        #warning("TO-DO: API 나오면 UseCase로 대체")
         input.fetchBackgroundImage
             .map { _ -> [LyricDecoratingModel] in
                 return Array(0 ... 9).map { i -> LyricDecoratingModel in

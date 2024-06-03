@@ -70,6 +70,7 @@ extension LyricDecoratingViewController {
             .disposed(by: disposeBag)
 
         output.highlightingItems
+            .filter { !$0.isEmpty }
             .bind(with: self) { owner, lyric in
                 let style = NSMutableParagraphStyle()
                 style.alignment = .center
