@@ -35,7 +35,7 @@ extension LyricHighlightingCell {
         return .init(
             width: APP_WIDTH(),
             height: entity.text.heightConstraintAt(
-                width: APP_WIDTH()-50,
+                width: APP_WIDTH() - 50,
                 font: DesignSystemFontFamily.Pretendard.light.font(size: 18)
             )
         )
@@ -49,7 +49,8 @@ extension LyricHighlightingCell {
             string: entity.text,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 18),
-                .backgroundColor: entity.isHighlighting ? DesignSystemAsset.PrimaryColorV2.point.color.withAlphaComponent(0.5) : .clear,
+                .backgroundColor: entity.isHighlighting ? DesignSystemAsset.PrimaryColorV2.point.color
+                    .withAlphaComponent(0.5) : .clear,
                 .foregroundColor: UIColor.white,
                 .kern: -0.5,
                 .paragraphStyle: style

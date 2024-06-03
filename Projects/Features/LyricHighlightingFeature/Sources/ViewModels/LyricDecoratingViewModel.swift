@@ -8,8 +8,8 @@
 
 import BaseFeature
 import Foundation
-import RxSwift
 import RxRelay
+import RxSwift
 import SongsDomainInterface
 import Utility
 
@@ -20,11 +20,9 @@ final class LyricDecoratingViewModel: ViewModelType {
         //        self.fetchArtistSongListUseCase = fetchArtistSongListUseCase
     }
 
-    public struct Input {
-    }
+    public struct Input {}
 
-    public struct Output {
-    }
+    public struct Output {}
 
     public func transform(from input: Input) -> Output {
         return Output()

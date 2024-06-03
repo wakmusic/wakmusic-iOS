@@ -9,8 +9,7 @@
 import Foundation
 import NeedleFoundation
 
-public protocol LyricDecoratingDependency: Dependency {
-}
+public protocol LyricDecoratingDependency: Dependency {}
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
     public func makeView() -> LyricDecoratingViewController {

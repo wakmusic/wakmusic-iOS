@@ -6,9 +6,9 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
-import SongsDomainInterface
 import Foundation
 import NeedleFoundation
+import SongsDomainInterface
 
 public protocol LyricHighlightingDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }

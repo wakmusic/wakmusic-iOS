@@ -8,11 +8,11 @@
 
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 open class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
@@ -69,7 +69,7 @@ open class LyricHighlightingViewController: UIViewController {
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image, for: .normal)
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image, for: .selected)
     }
-    
+
     let indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
@@ -185,7 +185,7 @@ private extension LyricHighlightingViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(56)
         }
-        
+
         indicator.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(30)
