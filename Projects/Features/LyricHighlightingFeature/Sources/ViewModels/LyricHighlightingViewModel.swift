@@ -34,10 +34,13 @@ public final class LyricHighlightingViewModel: ViewModelType {
     public struct Input {
         let fetchLyric: PublishSubject<Void> = PublishSubject()
         let didTapHighlighting: BehaviorRelay<Int> = BehaviorRelay(value: -1)
+        let didTapSaveButton: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
+        let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+        let goDecoratingScene: BehaviorRelay<[String]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
@@ -91,6 +94,18 @@ public final class LyricHighlightingViewModel: ViewModelType {
                 return newEntities
             }
             .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        input.didTapSaveButton
+            .withLatestFrom(output.dataSource)
+            .filter { !$0.filter { $0.isHighlighting }.isEmpty }
+            .map { $0.filter { $0.isHighlighting }.map { $0.text } }
+            .bind(to: output.goDecoratingScene)
+            .disposed(by: disposeBag)
+        
+        output.dataSource
+            .map { !$0.filter { $0.isHighlighting }.isEmpty }
+            .bind(to: output.isStorable)
             .disposed(by: disposeBag)
 
         return output

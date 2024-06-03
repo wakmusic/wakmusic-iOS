@@ -6,6 +6,7 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
+import DesignSystem
 import Foundation
 import LogManager
 import UIKit
@@ -21,6 +22,16 @@ extension LyricHighlightingViewController {
         collectionView.rx.itemSelected
             .map { $0.item }
             .bind(to: input.didTapHighlighting)
+            .disposed(by: disposeBag)
+
+        backButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        saveButton.rx.tap
+            .bind(to: input.didTapSaveButton)
             .disposed(by: disposeBag)
     }
 
@@ -39,6 +50,22 @@ extension LyricHighlightingViewController {
                 }
                 cell.update(entity: entity)
                 return cell
+            }
+            .disposed(by: disposeBag)
+
+        output.isStorable
+            .bind(with: self) { owner, isStorable in
+                let color = isStorable ? DesignSystemAsset.PrimaryColorV2.point.color : DesignSystemAsset.NewGrayColor.gray900.color
+                owner.saveButtonContentView.backgroundColor = color
+                owner.saveButton.isSelected = isStorable
+            }
+            .disposed(by: disposeBag)
+
+        output.goDecoratingScene
+            .skip(1)
+            .bind(with: self) { owner, items in
+                let viewController = owner.lyricDecoratingComponent.makeView(items: items)
+                owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
     }

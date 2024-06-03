@@ -12,7 +12,7 @@ import NeedleFoundation
 public protocol LyricDecoratingDependency: Dependency {}
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
-    public func makeView() -> LyricDecoratingViewController {
+    public func makeView(items: [String]) -> LyricDecoratingViewController {
         return LyricDecoratingViewController()
     }
 }

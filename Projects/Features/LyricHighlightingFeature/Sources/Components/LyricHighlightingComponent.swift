@@ -18,6 +18,9 @@ public protocol LyricHighlightingDependency: Dependency {
 public final class LyricHighlightingComponent: Component<LyricHighlightingDependency> {
     public func makeView(id: String) -> LyricHighlightingViewController {
         let viewModel = LyricHighlightingViewModel(id: id, fetchLyricsUseCase: dependency.fetchLyricsUseCase)
-        return LyricHighlightingViewController(viewModel: viewModel)
+        return LyricHighlightingViewController(
+            viewModel: viewModel,
+            lyricDecoratingComponent: dependency.lyricDecoratingComponent
+        )
     }
 }

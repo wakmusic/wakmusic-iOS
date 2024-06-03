@@ -17,7 +17,7 @@ import Utility
 open class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
 
-    private let backButton = UIButton(type: .system).then {
+    let backButton = UIButton(type: .system).then {
         $0.tintColor = .white
         $0.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
     }
@@ -57,7 +57,7 @@ open class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
-    private let saveButtonContentView = UIView().then {
+    let saveButtonContentView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
 
@@ -65,7 +65,7 @@ open class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray700.color
     }
 
-    private let saveButton = UIButton().then {
+    let saveButton = UIButton().then {
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image, for: .normal)
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image, for: .selected)
     }
@@ -76,6 +76,7 @@ open class LyricHighlightingViewController: UIViewController {
     }
 
     private var dimmedLayer: DimmedGradientLayer?
+    var lyricDecoratingComponent: LyricDecoratingComponent!
 
     var viewModel: LyricHighlightingViewModel!
     lazy var input = LyricHighlightingViewModel.Input()
@@ -86,9 +87,13 @@ open class LyricHighlightingViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init(viewModel: LyricHighlightingViewModel) {
+    public init(
+        viewModel: LyricHighlightingViewModel,
+        lyricDecoratingComponent: LyricDecoratingComponent
+    ) {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
+        self.lyricDecoratingComponent = lyricDecoratingComponent
     }
 
     @available(*, unavailable)
