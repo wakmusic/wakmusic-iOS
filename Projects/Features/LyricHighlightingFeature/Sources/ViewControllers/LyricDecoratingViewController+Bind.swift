@@ -22,6 +22,13 @@ extension LyricDecoratingViewController {
 
         collectionView.rx.itemSelected
             .map { $0.item }
+            .do(onNext: { [collectionView] index in
+                collectionView.scrollToItem(
+                    at: .init(item: index, section: 0),
+                    at: .centeredHorizontally,
+                    animated: true
+                )
+            })
             .bind(to: input.didTapBackground)
             .disposed(by: disposeBag)
 
