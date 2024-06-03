@@ -12,7 +12,8 @@ let project = Project.module(
             module: .feature(.LyricHighlightingFeature),
             dependencies: [
                 .feature(target: .BaseFeature),
-                .feature(target: .LyricHighlightingFeature, type: .interface)
+                .feature(target: .LyricHighlightingFeature, type: .interface),
+                .domain(target: .SongsDomain, type: .interface)
             ]
         ),
         .tests(
