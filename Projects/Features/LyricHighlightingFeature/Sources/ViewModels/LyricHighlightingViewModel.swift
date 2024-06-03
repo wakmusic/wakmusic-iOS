@@ -49,6 +49,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
         let output = Output()
         let songID: String = self.model.songID
 
+        #warning("TO-DO: catchAndReturn은 []로 수정해야함")
         input.fetchLyric
             .flatMap { [fetchLyricsUseCase] _ -> Observable<[LyricsEntity]> in
                 return fetchLyricsUseCase.execute(id: songID)
