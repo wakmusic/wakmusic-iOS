@@ -1,4 +1,5 @@
 import Inject
+@testable import SearchFeature
 import UIKit
 
 @main
@@ -10,8 +11,12 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
+
+        let component =
+            WakmusicRecommendViewController(reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase:))
+
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: UIViewController())
+            UINavigationController(rootViewController:)
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()

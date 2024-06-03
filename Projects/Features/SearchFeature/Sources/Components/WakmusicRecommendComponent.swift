@@ -4,7 +4,7 @@ import PlayListDomainInterface
 import UIKit
 
 public protocol WakmusicRecommendDependency: Dependency {
-    var fetchRecommendPlayListUseCase: any  FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
 }
 
 public final class WakmusicRecommendComponent: Component<WakmusicRecommendDependency> {

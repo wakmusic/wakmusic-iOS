@@ -1,12 +1,34 @@
-import UIKit
 import BaseFeature
+import DesignSystem
+import UIKit
+import Utility
 
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private let wmNavigationbarView = WMNavigationBarView()
 
+    private let dismissButton = UIButton().then {
+        let dismissImage = DesignSystemAsset.MusicDetail.dismiss.image
+            .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
+        $0.setImage(dismissImage, for: .normal)
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
 
+    override func addView() {
+        super.addView()
+        self.view.addSubviews(wmNavigationbarView)
+    }
+
+    override func setLayout() {
+        super.setLayout()
+
+        wmNavigationbarView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(48)
+        }
+        wmNavigationbarView.setLeftViews([dismissButton])
+    }
 }
