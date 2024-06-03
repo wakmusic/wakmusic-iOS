@@ -103,7 +103,11 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !$0.filter { $0.isHighlighting }.isEmpty }
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
-            .map { LyricDecoratingSenderModel(title: output.songTitle.value, artist: output.artist.value, highlightingItems: $0) }
+            .map { LyricDecoratingSenderModel(
+                title: output.songTitle.value,
+                artist: output.artist.value,
+                highlightingItems: $0
+            ) }
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 
