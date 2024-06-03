@@ -33,7 +33,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
 
     public struct Input {
         let fetchLyric: PublishSubject<Void> = PublishSubject()
-        let didTapHighlighting: BehaviorRelay<Int> = BehaviorRelay(value: -1)
+        let didTapHighlighting: BehaviorRelay<IndexPath> = BehaviorRelay(value: .init(row: -1, section: 0))
         let didTapSaveButton: PublishSubject<Void> = PublishSubject()
     }
 
@@ -85,6 +85,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.didTapHighlighting
+            .map { $0.item }
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
@@ -102,13 +103,8 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !$0.filter { $0.isHighlighting }.isEmpty }
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
-            .bind { items in
-                output.goDecoratingScene.onNext(
-                    .init(
-                        title: output.songTitle.value, artist: output.artist.value, highlightingItems: items
-                    )
-                )
-            }
+            .map { LyricDecoratingSenderModel(title: output.songTitle.value, artist: output.artist.value, highlightingItems: $0) }
+            .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 
         output.songTitle.accept(model.title)

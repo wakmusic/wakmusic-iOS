@@ -20,7 +20,6 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         collectionView.rx.itemSelected
-            .map { $0.item }
             .bind(to: input.didTapHighlighting)
             .disposed(by: disposeBag)
 

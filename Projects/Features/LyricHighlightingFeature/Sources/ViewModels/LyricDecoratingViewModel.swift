@@ -31,7 +31,7 @@ final class LyricDecoratingViewModel: ViewModelType {
 
     public struct Input {
         let fetchBackgroundImage: PublishSubject<Void> = PublishSubject()
-        let didTapBackground: PublishSubject<Int> = PublishSubject()
+        let didTapBackground: PublishSubject<IndexPath> = PublishSubject()
     }
 
     public struct Output {
@@ -60,6 +60,7 @@ final class LyricDecoratingViewModel: ViewModelType {
         output.artist.accept(model.artist)
 
         input.didTapBackground
+            .map { $0.item }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { index, entities in
                 var newEntities = entities
