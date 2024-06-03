@@ -103,10 +103,10 @@ public final class ContainSongsViewModel: ViewModelType {
                 if entity.duplicated {
                     return BaseEntity(
                         status: 200,
-                        description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다."
+                        description: "\(entity.addedSongCount)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다."
                     )
                 } else {
-                    return BaseEntity(status: 200, description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다.")
+                    return BaseEntity(status: 200, description: "\(entity.addedSongCount)곡이 내 리스트에 담겼습니다.")
                 }
             }
             .bind(to: output.showToastMessage)

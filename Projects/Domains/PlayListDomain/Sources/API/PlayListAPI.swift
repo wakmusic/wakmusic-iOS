@@ -60,10 +60,7 @@ extension PlayListAPI: WMAPI {
             return "/create"
 
         case let .fetchPlaylistSongs(key: key), let .addSongIntoPlayList(key: key, _), let .updatePlaylist(key: key, _),
-             let .removeSongs(
-                 key: key,
-                 _
-             ):
+             let .removeSongs(key: key,     _):
             return "/\(key)/songs"
 
         case let .uploadImage(key: key, _):
@@ -117,10 +114,8 @@ extension PlayListAPI: WMAPI {
             switch model {
             case let .default(imageName: data):
                 datas.append(MultipartFormData(
-                    provider: .data("default".data(using: .utf8)!),
-                    name: "type",
-                    fileName: "ㅅ"
-                ))
+                    provider: .data("default".data(using: .utf8)!), name: "type"))
+                
                 datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
 
             case let .custom(imageName: data):
@@ -128,9 +123,7 @@ extension PlayListAPI: WMAPI {
                 datas.append(MultipartFormData(
                     provider: .data(data),
                     name: "imageFile",
-                    fileName: "image.jpeg",
-                    mimeType: "image/jpeg, image/jpg, image/png"
-                ))
+                    fileName: "image.jpeg"))
             }
             return .uploadMultipart(datas)
         }
