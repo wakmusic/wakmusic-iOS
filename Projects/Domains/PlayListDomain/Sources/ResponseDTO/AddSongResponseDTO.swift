@@ -4,7 +4,6 @@ import PlayListDomainInterface
 public struct AddSongResponseDTO: Decodable {
     public let addedSongCount: Int
     public let isDuplicatedSongsExist: Bool
-        
 }
 
 public extension AddSongResponseDTO {
