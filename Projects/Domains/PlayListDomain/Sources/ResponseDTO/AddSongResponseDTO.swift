@@ -2,18 +2,15 @@ import Foundation
 import PlayListDomainInterface
 
 public struct AddSongResponseDTO: Decodable {
-    public let status: Int
-    public let addedSongsLength: Int
-    public let duplicated: Bool
+    public let addedSongCount: Int
+    public let isDuplicatedSongsExist: Bool
 }
 
 public extension AddSongResponseDTO {
     func toDomain() -> AddSongEntity {
         AddSongEntity(
-            status: status,
-            added_songs_length: addedSongsLength,
-            duplicated: duplicated,
-            description: ""
+            added_songs_length: addedSongCount,
+            duplicated: isDuplicatedSongsExist
         )
     }
 }

@@ -1,12 +1,5 @@
-//
-//  ContainSongsViewModel.swift
-//  CommonFeature
-//
-//  Created by yongbeomkwak on 2023/03/11.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
+import BaseDomainInterface
 import ErrorModule
 import Foundation
 import PlayListDomainInterface
@@ -29,7 +22,7 @@ public final class ContainSongsViewModel: ViewModelType {
 
     public struct Output {
         let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
-        let showToastMessage: PublishSubject<AddSongEntity> = PublishSubject()
+        let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
         let onLogout: PublishRelay<Error>
 
         init(onLogout: PublishRelay<Error> = PublishRelay()) {
@@ -85,62 +78,35 @@ public final class ContainSongsViewModel: ViewModelType {
                     .catch { (error: Error) in
                         let wmError = error.asWMError
 
-                        if wmError == .tokenExpired {
+                        switch wmError {
+                        case .tokenExpired:
                             logoutRelay.accept(wmError)
-                            return Single.never()
-                        } else if wmError == .badRequest {
-                            return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(
-                                    status: 400,
-                                    added_songs_length: 0,
-                                    duplicated: false,
-                                    description: wmError.errorDescription ?? ""
-                                )))
-                                return Disposables.create {}
-                            }
-                        } else if wmError == .conflict {
-                            return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(
-                                    status: 409,
-                                    added_songs_length: 0,
-                                    duplicated: true,
-                                    description: "이미 내 리스트에 담긴 곡들입니다."
-                                )))
-                                return Disposables.create {}
-                            }
-                        } else {
-                            return Single<AddSongEntity>.create { single in
-                                single(.success(AddSongEntity(
-                                    status: 500,
-                                    added_songs_length: 0,
-                                    duplicated: false,
-                                    description: "서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!"
-                                )))
-                                return Disposables.create {}
-                            }
+                            output.showToastMessage.onNext(BaseEntity(
+                                status: 401,
+                                description: wmError.errorDescription ?? wmError.localizedDescription
+                            ))
+                        case .conflict:
+
+                            output.showToastMessage.onNext(BaseEntity(
+                                status: 409,
+                                description: "이미 내 리스트에 담긴 곡들입니다."
+                            ))
+                        default:
+                            output.showToastMessage.onNext(BaseEntity(status: 400, description: "잘못된 요청입니다."))
                         }
+
+                        return .never()
                     }
                     .asObservable()
             }
-            .map { (entity: AddSongEntity) -> AddSongEntity in
-                if entity.status == 200 {
-                    if entity.duplicated {
-                        return AddSongEntity(
-                            status: 200,
-                            added_songs_length: entity.added_songs_length,
-                            duplicated: true,
-                            description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다."
-                        )
-                    } else {
-                        return AddSongEntity(
-                            status: 200,
-                            added_songs_length: entity.added_songs_length,
-                            duplicated: false,
-                            description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다."
-                        )
-                    }
+            .map { (entity: AddSongEntity) -> BaseEntity in
+                if entity.duplicated {
+                    return BaseEntity(
+                        status: 200,
+                        description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다. 중복 곡은 제외됩니다."
+                    )
                 } else {
-                    return entity
+                    return BaseEntity(status: 200, description: "\(entity.added_songs_length)곡이 내 리스트에 담겼습니다.")
                 }
             }
             .bind(to: output.showToastMessage)

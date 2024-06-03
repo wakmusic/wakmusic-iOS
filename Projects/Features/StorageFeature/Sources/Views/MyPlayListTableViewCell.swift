@@ -1,11 +1,3 @@
-//
-//  MyPlayListTableViewCell.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/27.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import Kingfisher
 import UIKit
@@ -45,7 +37,7 @@ class MyPlayListTableViewCell: UITableViewCell {
 
         self.backgroundColor = .clear
         self.playListImageView.layer.cornerRadius = 4
-        self.playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        self.playButton.setImage(DesignSystemAsset.Home.playSmall.image, for: .normal)
     }
 }
 

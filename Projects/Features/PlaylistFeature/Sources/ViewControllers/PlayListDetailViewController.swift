@@ -168,14 +168,8 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             })
             .bind { owner, model in
 
-                guard let type = owner.reactor?.type else { return }
-
-                let imageURL = owner.reactor?.type == .wmRecommend ?
-                    WMImageAPI.fetchRecommendPlayListWithSquare(id: model.image, version: model.version).toURL :
-                    WMImageAPI.fetchPlayList(id: model.image, version: model.version).toURL
-
                 owner.playListImage.kf.setImage(
-                    with: imageURL,
+                    with: URL(string: model.image),
                     placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )
@@ -289,7 +283,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
                 guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
-                    type: .edit,
+                    type: .updatePlaylistTile,
                     key: owner.reactor?.key ?? "",
                     completion: nil
                 ) as? MultiPurposePopupViewController else {

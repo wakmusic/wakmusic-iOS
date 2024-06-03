@@ -3,6 +3,8 @@ import BaseDomainInterface
 import Foundation
 import PlayListDomainInterface
 import RxSwift
+import SongsDomain
+import SongsDomainInterface
 
 public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
     public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {
@@ -17,28 +19,26 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map { $0.toDomain() }
     }
 
+    public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
+        request(.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate))
+            .asCompletable()
+    }
+
     public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
         request(.createPlayList(title: title))
             .map(PlayListBaseResponseDTO.self)
             .map { $0.toDomain() }
     }
 
-    public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {
-        request(.editPlayList(key: key, songs: songs))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+    public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
+        request(.fetchPlaylistSongs(key: id))
+            .map([SingleSongResponseDTO].self)
+            .map { $0.map { $0.toDomain() } }
     }
 
-    public func editPlayListName(key: String, title: String) -> Single<EditPlayListNameEntity> {
-        request(.editPlayListName(key: key, title: title))
-            .map(EditPlayListNameResponseDTO.self)
-            .map { $0.toDomain(title: title) }
-    }
-
-    public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
-        request(.loadPlayList(key: key))
-            .map(PlayListBaseResponseDTO.self)
-            .map { $0.toDomain() }
+    public func updatePlaylist(key: String, songs: [String]) -> Completable {
+        request(.updatePlaylist(key: key, songs: songs))
+            .asCompletable()
     }
 
     public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
@@ -50,6 +50,12 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
     public func removeSongs(key: String, songs: [String]) -> Single<BaseEntity> {
         request(.removeSongs(key: key, songs: songs))
             .map(BaseResponseDTO.self)
+            .map { $0.toDomain() }
+    }
+
+    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
+        request(.uploadImage(key: key, model: model))
+            .map(BaseImageResponseDTO.self)
             .map { $0.toDomain() }
     }
 }

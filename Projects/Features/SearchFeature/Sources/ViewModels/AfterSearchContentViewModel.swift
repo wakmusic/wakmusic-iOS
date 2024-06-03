@@ -29,6 +29,10 @@ public final class AfterSearchContentViewModel: ViewModelType {
         self.dataSource = dataSource
     }
 
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
+
     public struct Input {
         let indexPath: PublishRelay<IndexPath> = PublishRelay()
         let mandatoryLoadIndexPath: PublishRelay<[IndexPath]> = PublishRelay()
