@@ -54,9 +54,9 @@ public extension AppComponent {
         }
     }
 
-    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase {
+    var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase {
         shared {
-            UpdateTitleAndPrivateeUseCaseImpl(playListRepository: playListRepository)
+            UpdateTitleAndPrivateUseCaseImpl(playListRepository: playListRepository)
         }
     }
 

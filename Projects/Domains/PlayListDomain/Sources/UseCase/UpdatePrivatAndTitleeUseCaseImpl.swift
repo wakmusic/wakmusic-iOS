@@ -3,7 +3,7 @@ import Foundation
 import PlayListDomainInterface
 import RxSwift
 
-public struct UpdateTitleAndPrivateeUseCaseImpl: UpdateTitleAndPrivateeUseCase {
+public struct UpdateTitleAndPrivateUseCaseImpl: UpdateTitleAndPrivateUseCase {
     private let playListRepository: any PlayListRepository
 
     public init(

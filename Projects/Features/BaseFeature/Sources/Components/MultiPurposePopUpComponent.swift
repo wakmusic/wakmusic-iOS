@@ -9,7 +9,7 @@ import UserDomainInterface
 public protocol MultiPurposePopUpDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
-    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase { get }
+    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 

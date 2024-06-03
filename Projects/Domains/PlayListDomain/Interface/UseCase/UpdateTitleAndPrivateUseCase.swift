@@ -2,6 +2,6 @@ import BaseDomainInterface
 import Foundation
 import RxSwift
 
-public protocol UpdateTitleAndPrivateeUseCase {
+public protocol UpdateTitleAndPrivateUseCase {
     func execute(key: String, title: String?, isPrivate: Bool?) -> Completable
 }

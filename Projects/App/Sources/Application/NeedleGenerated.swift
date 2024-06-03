@@ -727,7 +727,7 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
-    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase {
+    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase {
         return appComponent.updateTitleAndPrivateeUseCase
     }
     var logoutUseCase: any LogoutUseCase {

@@ -16,7 +16,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     let createPlayListUseCase: CreatePlayListUseCase!
     let setUserNameUseCase: SetUserNameUseCase!
     // TODO: 플레이리스트 이름 변경 Usecase
-    private let updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase
+    private let updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase
     private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
@@ -36,7 +36,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         key: String,
         createPlayListUseCase: CreatePlayListUseCase,
         setUserNameUseCase: SetUserNameUseCase,
-        updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateeUseCase,
+        updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
