@@ -56,8 +56,9 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, artist in
-                let viewController = owner.lyricHighlightingComponent.makeView(id: "DPEtmqvaKqY")
-                    .wrapNavigationController
+                let viewController = owner.lyricHighlightingComponent.makeView(
+                    model: .init(songID: "DPEtmqvaKqY", title: "리와인드 (RE:WIND)", artist: "이세계아이돌")
+                ).wrapNavigationController
                 viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)
 //                let viewController = owner.artistDetailComponent.makeView(model: artist)

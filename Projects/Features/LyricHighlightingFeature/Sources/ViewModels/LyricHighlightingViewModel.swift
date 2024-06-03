@@ -15,7 +15,7 @@ import SongsDomainInterface
 import Utility
 
 public final class LyricHighlightingViewModel: ViewModelType {
-    private let id: String
+    private var model: LyricHighlightingSenderModel = .init(songID: "", title: "", artist: "")
     private let fetchLyricsUseCase: FetchLyricsUseCase
     private let disposeBag = DisposeBag()
 
@@ -24,10 +24,10 @@ public final class LyricHighlightingViewModel: ViewModelType {
     }
 
     public init(
-        id: String,
+        model: LyricHighlightingSenderModel,
         fetchLyricsUseCase: any FetchLyricsUseCase
     ) {
-        self.id = id
+        self.model = model
         self.fetchLyricsUseCase = fetchLyricsUseCase
     }
 
@@ -40,12 +40,14 @@ public final class LyricHighlightingViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        let goDecoratingScene: BehaviorRelay<[String]> = BehaviorRelay(value: [])
+        let goDecoratingScene: PublishSubject<LyricDecoratingSenderModel> = PublishSubject()
+        let songTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let artist: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let id: String = self.id
+        let id: String = self.model.songID
 
         input.fetchLyric
             .flatMap { [fetchLyricsUseCase] _ -> Observable<[LyricsEntity]> in
@@ -100,8 +102,15 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .withLatestFrom(output.dataSource)
             .filter { !$0.filter { $0.isHighlighting }.isEmpty }
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
-            .bind(to: output.goDecoratingScene)
+            .bind { items in
+                output.goDecoratingScene.onNext(.init(
+                    title: output.songTitle.value, artist: output.artist.value, highlightingItems: items)
+                )
+            }
             .disposed(by: disposeBag)
+
+        output.songTitle.accept(model.title)
+        output.artist.accept(model.artist)
 
         output.dataSource
             .map { !$0.filter { $0.isHighlighting }.isEmpty }

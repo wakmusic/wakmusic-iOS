@@ -50,6 +50,20 @@ extension LyricDecoratingViewController {
     }
 
     func outputBind() {
+        output.songTitle
+            .bind(with: self) { owner, song in
+                owner.songTitleLabel.text = song
+                owner.songTitleLabel.setTextWithAttributes(alignment: .center)
+            }
+            .disposed(by: disposeBag)
+
+        output.artist
+            .bind(with: self) { owner, artist in
+                owner.artistLabel.text = artist
+                owner.artistLabel.setTextWithAttributes(alignment: .center)
+            }
+            .disposed(by: disposeBag)
+
         output.dataSource
             .skip(1)
             .do(onNext: { [decorateImageView, indicator] entities in

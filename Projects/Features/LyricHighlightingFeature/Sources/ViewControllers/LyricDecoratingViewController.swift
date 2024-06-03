@@ -75,15 +75,13 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.distribution = .fill
     }
 
-    private let songTitleLabel = UILabel().then {
-        $0.text = "리와인드 (RE:WIND)"
+    let songTitleLabel = UILabel().then {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
         $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)
     }
 
-    private let artistLabel = UILabel().then {
-        $0.text = "이세계아이돌"
+    let artistLabel = UILabel().then {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
         $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)

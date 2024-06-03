@@ -37,6 +37,8 @@ final class LyricDecoratingViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[LyricDecoratingModel]> = BehaviorRelay(value: [])
         let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let songTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let artist: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
@@ -54,6 +56,8 @@ final class LyricDecoratingViewModel: ViewModelType {
 
         output.highlightingItems
             .accept(model.highlightingItems.joined(separator: "\n"))
+        output.songTitle.accept(model.title)
+        output.artist.accept(model.artist)
 
         input.didTapBackground
             .withLatestFrom(output.dataSource) { ($0, $1) }

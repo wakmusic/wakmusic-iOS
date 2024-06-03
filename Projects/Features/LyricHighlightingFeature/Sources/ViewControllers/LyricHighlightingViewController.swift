@@ -29,18 +29,14 @@ open class LyricHighlightingViewController: UIViewController {
         $0.spacing = 0
     }
 
-    private let songLabel = UILabel().then {
-        $0.text = "리와인드 (RE:WIND)"
+    let songLabel = UILabel().then {
         $0.textColor = DesignSystemAsset.BlueGrayColor.gray25.color
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        $0.setTextWithAttributes(alignment: .center)
     }
 
-    private let artistLabel = UILabel().then {
-        $0.text = "이세계아이돌"
+    let artistLabel = UILabel().then {
         $0.textColor = DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6)
         $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.setTextWithAttributes(alignment: .center)
     }
 
     private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {

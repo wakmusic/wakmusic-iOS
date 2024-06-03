@@ -36,6 +36,20 @@ extension LyricHighlightingViewController {
     }
 
     func outputBind() {
+        output.songTitle
+            .bind(with: self) { owner, song in
+                owner.songLabel.text = song
+                owner.songLabel.setTextWithAttributes(alignment: .center)
+            }
+            .disposed(by: disposeBag)
+
+        output.artist
+            .bind(with: self) { owner, artist in
+                owner.artistLabel.text = artist
+                owner.artistLabel.setTextWithAttributes(alignment: .center)
+            }
+            .disposed(by: disposeBag)
+
         output.dataSource
             .skip(1)
             .do(onNext: { [indicator] _ in
@@ -65,10 +79,9 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         output.goDecoratingScene
-            .skip(1)
-            .bind(with: self) { owner, items in
+            .bind(with: self) { owner, model in
                 let viewController = owner.lyricDecoratingComponent.makeView(
-                    model: .init(title: "리와인드 (RE:WIND)", artist: "이세계아이돌", highlightingItems: items)
+                    model: .init(title: model.title, artist: model.artist, highlightingItems: model.highlightingItems)
                 )
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
