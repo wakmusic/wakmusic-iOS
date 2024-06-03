@@ -116,12 +116,21 @@ extension PlayListAPI: WMAPI {
 
             switch model {
             case let .default(imageName: data):
-                datas.append(MultipartFormData(provider: .data("default".data(using: .utf8)!), name: "type",fileName: "ㅅ"))
+                datas.append(MultipartFormData(
+                    provider: .data("default".data(using: .utf8)!),
+                    name: "type",
+                    fileName: "ㅅ"
+                ))
                 datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
 
             case let .custom(imageName: data):
                 datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
-                datas.append(MultipartFormData(provider: .data(data), name: "imageFile", fileName: "image.jpeg" , mimeType: "image/jpeg, image/jpg, image/png"))
+                datas.append(MultipartFormData(
+                    provider: .data(data),
+                    name: "imageFile",
+                    fileName: "image.jpeg",
+                    mimeType: "image/jpeg, image/jpg, image/png"
+                ))
             }
             return .uploadMultipart(datas)
         }
