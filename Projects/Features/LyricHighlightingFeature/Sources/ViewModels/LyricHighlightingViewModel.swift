@@ -102,7 +102,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
-        
+
         output.dataSource
             .map { !$0.filter { $0.isHighlighting }.isEmpty }
             .bind(to: output.isStorable)

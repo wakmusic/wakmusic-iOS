@@ -55,7 +55,8 @@ extension LyricHighlightingViewController {
 
         output.isStorable
             .bind(with: self) { owner, isStorable in
-                let color = isStorable ? DesignSystemAsset.PrimaryColorV2.point.color : DesignSystemAsset.NewGrayColor.gray900.color
+                let color = isStorable ? DesignSystemAsset.PrimaryColorV2.point.color : DesignSystemAsset.NewGrayColor
+                    .gray900.color
                 owner.saveButtonContentView.backgroundColor = color
                 owner.saveButton.isSelected = isStorable
             }
