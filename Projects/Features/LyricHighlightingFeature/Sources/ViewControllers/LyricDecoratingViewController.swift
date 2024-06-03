@@ -135,7 +135,7 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
     }
 
-    var viewModel: LyricDecoratingViewModel!
+    private var viewModel: LyricDecoratingViewModel!
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let disposeBag = DisposeBag()
@@ -156,9 +156,9 @@ public final class LyricDecoratingViewController: UIViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         addSubViews()
         setAutoLayout()
+        configureUI()
         outputBind()
         inputBind()
     }

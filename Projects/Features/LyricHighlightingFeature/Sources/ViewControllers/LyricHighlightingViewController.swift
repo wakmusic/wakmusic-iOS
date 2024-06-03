@@ -71,7 +71,7 @@ open class LyricHighlightingViewController: UIViewController {
     private var dimmedLayer: DimmedGradientLayer?
     var lyricDecoratingComponent: LyricDecoratingComponent!
 
-    var viewModel: LyricHighlightingViewModel!
+    private var viewModel: LyricHighlightingViewModel!
     lazy var input = LyricHighlightingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let disposeBag = DisposeBag()
