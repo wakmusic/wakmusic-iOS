@@ -25,8 +25,8 @@ let project = Project.module(
             .feature(target: .SearchFeature),
             .domain(target: .PlayListDomain, type: .testing)
         ]),
-        
-        .demo(module: .feature(.SearchFeature), dependencies:[
+
+        .demo(module: .feature(.SearchFeature), dependencies: [
             .feature(target: .SearchFeature),
             .domain(target: .PlayListDomain, type: .testing)
         ])
