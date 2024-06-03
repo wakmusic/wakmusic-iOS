@@ -51,7 +51,7 @@ class FavoriteTableViewCell: UITableViewCell {
         self.artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
         self.artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
-        playButton.setImage(DesignSystemAsset.Storage.play.image, for: .normal)
+        playButton.setImage(DesignSystemAsset.Home.playSmall.image, for: .normal)
     }
 }
 

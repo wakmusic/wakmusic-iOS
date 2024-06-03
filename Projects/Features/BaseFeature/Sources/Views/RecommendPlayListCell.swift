@@ -44,7 +44,7 @@ public extension RecommendPlayListCell {
         titleStringLabel.numberOfLines = 3
 
         logoImageView.kf.setImage(
-            with: WMImageAPI.fetchRecommendPlayListWithRound(id: model.key, version: model.image_round_version).toURL,
+            with: URL(string: model.image),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
