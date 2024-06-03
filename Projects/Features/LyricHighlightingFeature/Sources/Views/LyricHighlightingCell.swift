@@ -11,12 +11,11 @@ import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
+import Utility
 
 final class LyricHighlightingCell: UICollectionViewCell {
     var lyricLabel = UILabel().then {
-        $0.textColor = .white
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
-        $0.setTextWithAttributes(alignment: .center)
+        $0.numberOfLines = 0
     }
 
     override init(frame: CGRect) {
@@ -32,7 +31,32 @@ final class LyricHighlightingCell: UICollectionViewCell {
 }
 
 extension LyricHighlightingCell {
-    func update(entity: LyricsEntity) {}
+    static func cellHeight(entity: LyricsEntity) -> CGSize {
+        return .init(
+            width: APP_WIDTH(),
+            height: entity.text.heightConstraintAt(
+                width: APP_WIDTH()-50,
+                font: DesignSystemFontFamily.Pretendard.light.font(size: 18)
+            )
+        )
+    }
+
+    func update(entity: LyricsEntity) {
+        let style = NSMutableParagraphStyle()
+        style.alignment = .center
+
+        let attributedString = NSMutableAttributedString(
+            string: entity.text,
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 18),
+                .backgroundColor: entity.isHighlighting ? DesignSystemAsset.PrimaryColorV2.point.color.withAlphaComponent(0.5) : .clear,
+                .foregroundColor: UIColor.white,
+                .kern: -0.5,
+                .paragraphStyle: style
+            ]
+        )
+        lyricLabel.attributedText = attributedString
+    }
 }
 
 private extension LyricHighlightingCell {
@@ -42,7 +66,9 @@ private extension LyricHighlightingCell {
 
     func setAutoLayout() {
         lyricLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalToSuperview().offset(25)
+            $0.trailing.equalToSuperview().offset(-25)
         }
     }
 }

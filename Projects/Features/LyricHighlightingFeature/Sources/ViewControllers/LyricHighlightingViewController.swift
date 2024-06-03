@@ -12,6 +12,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import NVActivityIndicatorView
 
 open class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
@@ -43,18 +44,17 @@ open class LyricHighlightingViewController: UIViewController {
     }
 
     private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
-        $0.scrollDirection = .horizontal
+        $0.scrollDirection = .vertical
         $0.minimumLineSpacing = 10
         $0.minimumInteritemSpacing = 10
-        $0.sectionInset = .init(top: 0, left: 20, bottom: 0, right: 20)
+        $0.sectionInset = .init(top: 16, left: 0, bottom: 28, right: 0)
     }
 
-    private lazy var collectionView = UICollectionView(
+    lazy var collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: collectionViewFlowLayout
     ).then {
         $0.backgroundColor = .clear
-        $0.showsVerticalScrollIndicator = false
     }
 
     private let saveButtonContentView = UIView().then {
@@ -69,15 +69,26 @@ open class LyricHighlightingViewController: UIViewController {
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image, for: .normal)
         $0.setImage(DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image, for: .selected)
     }
+    
+    let indicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.type = .circleStrokeSpin
+        $0.color = DesignSystemAsset.PrimaryColorV2.point.color
+    }
 
     private var dimmedLayer: DimmedGradientLayer?
+
+    var viewModel: LyricHighlightingViewModel!
+    lazy var input = LyricHighlightingViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
+    let disposeBag = DisposeBag()
 
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init() {
+    public init(viewModel: LyricHighlightingViewModel) {
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
     }
 
     @available(*, unavailable)
@@ -87,9 +98,11 @@ open class LyricHighlightingViewController: UIViewController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         addSubViews()
         setAutoLayout()
+        configureUI()
+        outputBind()
+        inputBind()
     }
 
     override open func viewDidLayoutSubviews() {
@@ -108,6 +121,7 @@ private extension LyricHighlightingViewController {
         view.addSubview(navigationBarView)
         view.addSubview(collectionView)
         view.addSubview(saveButtonContentView)
+        view.addSubview(indicator)
 
         navigationBarView.addSubview(backButton)
         navigationBarView.addSubview(navigationTitleStackView)
@@ -171,10 +185,27 @@ private extension LyricHighlightingViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(56)
         }
+        
+        indicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(30)
+        }
     }
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
+        collectionView.register(LyricHighlightingCell.self, forCellWithReuseIdentifier: "\(LyricHighlightingCell.self)")
+        indicator.startAnimating()
+    }
+}
+
+extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.item])
     }
 }

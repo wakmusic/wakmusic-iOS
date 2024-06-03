@@ -20,6 +20,7 @@ public final class ArtistViewController:
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     var artistDetailComponent: ArtistDetailComponent!
+    var lyricHighlightingComponent: LyricHighlightingComponent!
     public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
@@ -55,7 +56,7 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, artist in
-                let viewController = LyricHighlightingViewController.init()
+                let viewController = owner.lyricHighlightingComponent.makeView(id: "DPEtmqvaKqY")
                 viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)
 //                let viewController = owner.artistDetailComponent.makeView(model: artist)
@@ -87,11 +88,13 @@ public final class ArtistViewController:
 
     public static func viewController(
         reactor: ArtistReactor,
-        artistDetailComponent: ArtistDetailComponent
+        artistDetailComponent: ArtistDetailComponent,
+        lyricHighlightingComponent: LyricHighlightingComponent
     ) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.reactor = reactor
         viewController.artistDetailComponent = artistDetailComponent
+        viewController.lyricHighlightingComponent = lyricHighlightingComponent
         return viewController
     }
 }
