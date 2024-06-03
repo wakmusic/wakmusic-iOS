@@ -41,8 +41,8 @@ public final class LyricHighlightingViewModel: ViewModelType {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let goDecoratingScene: PublishSubject<LyricHighlightingRequiredModel> = PublishSubject()
-        let songTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let artist: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
@@ -105,15 +105,15 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
             .map { LyricHighlightingRequiredModel(
                 songID: songID,
-                title: output.songTitle.value,
-                artist: output.artist.value,
+                title: output.updateSongTitle.value,
+                artist: output.updateArtist.value,
                 highlightingItems: $0
             ) }
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 
-        output.songTitle.accept(model.title)
-        output.artist.accept(model.artist)
+        output.updateSongTitle.accept(model.title)
+        output.updateArtist.accept(model.artist)
 
         output.dataSource
             .map { !$0.filter { $0.isHighlighting }.isEmpty }

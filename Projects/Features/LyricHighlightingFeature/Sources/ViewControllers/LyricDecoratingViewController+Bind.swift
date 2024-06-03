@@ -56,14 +56,14 @@ extension LyricDecoratingViewController {
     }
 
     func outputBind() {
-        output.songTitle
+        output.updateSongTitle
             .bind(with: self) { owner, song in
                 owner.songTitleLabel.text = song
                 owner.songTitleLabel.setTextWithAttributes(alignment: .center)
             }
             .disposed(by: disposeBag)
 
-        output.artist
+        output.updateArtist
             .bind(with: self) { owner, artist in
                 owner.artistLabel.text = artist
                 owner.artistLabel.setTextWithAttributes(alignment: .center)
