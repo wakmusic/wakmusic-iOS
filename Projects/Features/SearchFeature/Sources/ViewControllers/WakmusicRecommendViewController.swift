@@ -7,13 +7,14 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     private let wmNavigationbarView = WMNavigationBarView()
 
     private let dismissButton = UIButton().then {
-        let dismissImage = DesignSystemAsset.MusicDetail.dismiss.image
-            .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
+        let dismissImage = DesignSystemAsset.Navigation.back.image
+          //  .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
     }
 
     override func addView() {
