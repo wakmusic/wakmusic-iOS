@@ -95,7 +95,7 @@ public final class LyricDecoratingViewController: UIViewController {
     private let decorateBottomShadowImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
-//        $0.clipsToBounds = true
+        // $0.clipsToBounds = true
     }
 
     private let descriptionLabel = UILabel().then {
@@ -157,6 +157,16 @@ public final class LyricDecoratingViewController: UIViewController {
         setAutoLayout()
         outputBind()
         inputBind()
+    }
+}
+
+extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return .init(width: 56, height: 64)
     }
 }
 
@@ -276,15 +286,5 @@ private extension LyricDecoratingViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = UIColor.white
         collectionView.register(LyricDecoratingCell.self, forCellWithReuseIdentifier: "\(LyricDecoratingCell.self)")
-    }
-}
-
-extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return .init(width: 56, height: 64)
     }
 }

@@ -51,7 +51,8 @@ final class LyricDecoratingViewModel: ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
-        output.highlightingItems.accept(model.highlightingItems.joined(separator: "\n"))
+        output.highlightingItems
+            .accept(model.highlightingItems.joined(separator: "\n"))
 
         input.didTapBackground
             .withLatestFrom(output.dataSource) { ($0, $1) }

@@ -107,6 +107,16 @@ open class LyricHighlightingViewController: UIViewController {
         inputBind()
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedLayer == nil {
@@ -209,5 +219,11 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.item])
+    }
+}
+
+extension LyricHighlightingViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
