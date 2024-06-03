@@ -48,7 +48,7 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
     }
 
     public func removeSongs(key: String, songs: [String]) -> Single<BaseEntity> {
-        request(.removeSongs(key: key, songs: songs.joined(separator: ",")))
+        request(.removeSongs(key: key, songs: songs))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }

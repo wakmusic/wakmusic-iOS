@@ -3,7 +3,6 @@ import Foundation
 public enum PurposeType {
     case creation
     case updatePlaylistTile
-
     case nickname
 }
 

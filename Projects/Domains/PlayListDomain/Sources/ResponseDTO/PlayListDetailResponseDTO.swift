@@ -16,7 +16,7 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let key: String?
     public let title: String
     public let songs: [SingleSongResponseDTO]?
-    public let imageUrl: String?
+    public let imageUrl: String
     public let `private`: Bool
 }
 
@@ -37,7 +37,7 @@ public extension SinglePlayListDetailResponseDTO {
                     date: dto.date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
                 )
             },
-            image: imageUrl ?? "",
+            image: imageUrl,
             private: `private`
         )
     }

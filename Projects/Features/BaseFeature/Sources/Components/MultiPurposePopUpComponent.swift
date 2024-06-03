@@ -9,7 +9,7 @@ import UserDomainInterface
 public protocol MultiPurposePopUpDependency: Dependency {
     var createPlayListUseCase: any CreatePlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
-    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase { get }
+    var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 
@@ -25,7 +25,7 @@ public final class MultiPurposePopUpComponent: Component<MultiPurposePopUpDepend
                 key: key,
                 createPlayListUseCase: dependency.createPlayListUseCase,
                 setUserNameUseCase: dependency.setUserNameUseCase,
-                updateTitleAndPrivateeUseCase: dependency.updateTitleAndPrivateeUseCase,
+                updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             completion: completion

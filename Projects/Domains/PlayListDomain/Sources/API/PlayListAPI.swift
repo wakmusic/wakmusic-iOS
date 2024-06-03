@@ -31,8 +31,8 @@ public enum PlayListAPI {
     case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기
     case addSongIntoPlayList(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
-    case removeSongs(key: String, songs: String)
-    case uploadImage(key: String, model: UploadImageType)
+    case removeSongs(key: String, songs: [String]) // 곡 삭제
+     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
 }
 
 extension PlayListAPI: WMAPI {
@@ -105,18 +105,18 @@ extension PlayListAPI: WMAPI {
             return .requestJSONEncodable(SongsKeyBody(songIds: songs))
 
         case let .removeSongs(_, songs: songs):
-            return .requestParameters(parameters: ["songIds": songs], encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: ["songIds": songs.joined(separator: ",")], encoding: URLEncoding.queryString)
 
         case let .uploadImage(_, model: model):
 
             var datas: [MultipartFormData] = []
 
             switch model {
-            case let .default(data: data):
+            case let .default(imageName: data):
                 datas.append(MultipartFormData(provider: .data("default".data(using: .utf8)!), name: "type"))
                 datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
 
-            case let .custom(data: data):
+            case let .custom(imageName: data):
                 datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
                 datas.append(MultipartFormData(provider: .data(data), name: "imageFile"))
             }

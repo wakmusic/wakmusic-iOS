@@ -16,7 +16,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     let createPlayListUseCase: CreatePlayListUseCase!
     let setUserNameUseCase: SetUserNameUseCase!
     // TODO: 플레이리스트 이름 변경 Usecase
-    private let updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase
+    private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
     private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
@@ -36,14 +36,14 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         key: String,
         createPlayListUseCase: CreatePlayListUseCase,
         setUserNameUseCase: SetUserNameUseCase,
-        updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase,
+        updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
         self.createPlayListUseCase = createPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
-        self.updateTitleAndPrivateeUseCase = updateTitleAndPrivateeUseCase
+        self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
         self.logoutUseCase = logoutUseCase
     }
 
@@ -119,7 +119,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
 
                 case .updatePlaylistTile:
                     break
-                    self.updateTitleAndPrivateeUseCase
+                    self.updateTitleAndPrivateUseCase
                         .execute(key: key, title: text, isPrivate: nil)
                         .catch { (error: Error) in
                             let wmError = error.asWMError

@@ -727,8 +727,8 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
     var setUserNameUseCase: any SetUserNameUseCase {
         return appComponent.setUserNameUseCase
     }
-    var updateTitleAndPrivateeUseCase: any UpdateTitleAndPrivateUseCase {
-        return appComponent.updateTitleAndPrivateeUseCase
+    var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase {
+        return appComponent.updateTitleAndPrivateUseCase
     }
     var logoutUseCase: any LogoutUseCase {
         return appComponent.logoutUseCase
@@ -789,7 +789,7 @@ extension AppComponent: Registration {
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { [unowned self] in self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { [unowned self] in self.createPlayListUseCase as Any }
         localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { [unowned self] in self.updatePlaylistUseCase as Any }
-        localTable["updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"] = { [unowned self] in self.updateTitleAndPrivateeUseCase as Any }
+        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { [unowned self] in self.updateTitleAndPrivateUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
         localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { [unowned self] in self.uploadPlaylistImageUseCase as Any }
@@ -1112,7 +1112,7 @@ extension MultiPurposePopUpComponent: Registration {
     public func registerItems() {
         keyPathToName[\MultiPurposePopUpDependency.createPlayListUseCase] = "createPlayListUseCase-any CreatePlayListUseCase"
         keyPathToName[\MultiPurposePopUpDependency.setUserNameUseCase] = "setUserNameUseCase-any SetUserNameUseCase"
-        keyPathToName[\MultiPurposePopUpDependency.updateTitleAndPrivateeUseCase] = "updateTitleAndPrivateeUseCase-any UpdateTitleAndPrivateeUseCase"
+        keyPathToName[\MultiPurposePopUpDependency.updateTitleAndPrivateUseCase] = "updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"
         keyPathToName[\MultiPurposePopUpDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
     }
 }
