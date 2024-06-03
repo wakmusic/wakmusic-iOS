@@ -1,4 +1,6 @@
 import XCTest
+import Quick
+import Nimble
 
 class TargetTests: XCTestCase {
     override func setUpWithError() throws {

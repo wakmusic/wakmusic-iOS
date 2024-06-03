@@ -21,6 +21,13 @@ let project = Project.module(
                 ]
             )
         ),
+        .testing(module: .feature(.SearchFeature), dependencies: [
+            .feature(target: .SearchFeature, type: .interface),
+            .domain(target: .PlayListDomain, type: .interface)
+        ]),
+        .tests(module: .feature(.SearchFeature), dependencies: [
+            .feature(target: .SearchFeature)
+        ]),
         .demo(module: .feature(.SearchFeature), dependencies: [
             .feature(target: .SearchFeature)
         ])
