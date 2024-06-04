@@ -98,6 +98,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         let sharedState = reactor.state.share(replay: 2)
 
         sharedState.map(\.isLoading)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { onwer, isLoading in
                 if isLoading {
@@ -110,6 +111,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
                 owner.tableView.isHidden = flag
