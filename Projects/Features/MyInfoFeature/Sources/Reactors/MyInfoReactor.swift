@@ -27,7 +27,7 @@ final class MyInfoReactor: Reactor {
         case updateNickname(String)
         case updatePlatform(String)
     }
-    
+
     enum NavigateType {
         case draw
         case like
@@ -96,10 +96,10 @@ final class MyInfoReactor: Reactor {
 
         case .moreButtonDidTap:
             newState.moreButtonDidTap = true
-        
+
         case let .navigate(navigate):
             newState.navigateType = navigate
-            
+
         case let .updateIsLoggedIn(isLoggedIn):
             newState.isLoggedIn = isLoggedIn
 
