@@ -13,6 +13,7 @@ final class SettingItemView: UIView {
     private let leftLabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     private let rightImageView = UIImageView().then {

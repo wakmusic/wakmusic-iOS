@@ -27,6 +27,7 @@ final class TeamInfoView: UIView {
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.text = "팀 소개"
         $0.font = .setFont(.t5(weight: .medium))
+        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     init() {
