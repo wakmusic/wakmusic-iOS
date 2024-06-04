@@ -4,9 +4,10 @@ import UIKit
 import Utility
 
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
-    private let wmNavigationbarView = WMNavigationBarView().then{
+    private let wmNavigationbarView = WMNavigationBarView().then {
         $0.setTitle("Hello")
     }
+
     private let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
         $0.setImage(dismissImage, for: .normal)
@@ -33,12 +34,8 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         }
         wmNavigationbarView.setLeftViews([dismissButton])
     }
-    
+
     override func bindAction(reactor: WakmusicRecommendReactor) {
-        
         let sharedState = reactor.state.share(replay: 1)
-        
     }
-    
-    
 }
