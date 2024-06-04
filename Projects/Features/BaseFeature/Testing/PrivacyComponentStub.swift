@@ -1,10 +1,8 @@
 import BaseFeatureInterface
-import NeedleFoundation
+import BaseFeature
 import UIKit
-
-public protocol PrivacyDependency: Dependency {}
-
-public final class PrivacyComponent: Component<PrivacyDependency>, PrivacyFactory {
+ 
+public final class PrivacyComponentStub: PrivacyFactory {
     public func makeView() -> UIViewController {
         return ContractViewController.viewController(type: .privacy)
     }
