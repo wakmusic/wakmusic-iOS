@@ -87,88 +87,61 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                 print("더보기 버튼 눌림")
             }
             .disposed(by: disposeBag)
-
-        reactor.pulse(\.$drawButtonDidTap)
+        
+        reactor.pulse(\.$navigateType)
             .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("뽑기 버튼 눌림")
-            }
-            .disposed(by: disposeBag)
+            .bind(with: self) { owner, navigate in
+                switch navigate {
+                case .draw:
+                    print("뽑기 버튼 눌림")
+                case .like:
+                    print("좋아요 버튼 눌림")
+                    if reactor.currentState.isLoggedIn {
+                        NotificationCenter.default.post(name: .movedTab, object: 4)
+                        NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
+                    } else {
+                        guard let vc = owner.textPopUpFactory.makeView(
+                            text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                            cancelButtonIsHidden: false,
+                            allowsDragAndTapToDismiss: nil,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: {
+                                let loginVC = owner.signInFactory.makeView()
+                                owner.present(loginVC, animated: true)
+                            },
+                            cancelCompletion: {}
+                        ) as? TextPopupViewController else {
+                            return
+                        }
 
-        reactor.pulse(\.$likeNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("좋아요 버튼 눌림")
-                if reactor.currentState.isLoggedIn {
-                    NotificationCenter.default.post(name: .movedTab, object: 4)
-                    NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
-                } else {
-                    guard let vc = owner.textPopUpFactory.makeView(
-                        text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
-                        cancelButtonIsHidden: false,
-                        allowsDragAndTapToDismiss: nil,
-                        confirmButtonText: nil,
-                        cancelButtonText: nil,
-                        completion: {
-                            let loginVC = owner.signInFactory.makeView()
-                            owner.present(loginVC, animated: true)
-                        },
-                        cancelCompletion: {}
-                    ) as? TextPopupViewController else {
-                        return
+                        vc.modalPresentationStyle = .popover
+                        owner.present(vc, animated: true)
+                        #warning("팬모달 이슈 해결되면 변경 예정")
+                        // owner.showPanModal(content: vc)
                     }
-
-                    vc.modalPresentationStyle = .popover
+                case .faq:
+                    print("자주믇는질문 버튼 눌림")
+                    let vc = owner.faqComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                case .noti:
+                    print("공지사항 버튼 눌림")
+                    let vc = owner.noticeComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                case .mail:
+                    print("문의하기 버튼 눌림")
+                    let vc = owner.questionComponent.makeView()
+                    vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
-                    #warning("팬모달 이슈 해결되면 변경 예정")
-                    // owner.showPanModal(content: vc)
+                case .team:
+                    print("팀소개 버튼 눌림")
+                    let vc = owner.teamInfoComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
+                case .setting:
+                    print("설정 버튼 눌림")
+                    let vc = owner.settingComponent.makeView()
+                    owner.navigationController?.pushViewController(vc, animated: true)
                 }
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$faqNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("자주믇는질문 버튼 눌림")
-                let vc = owner.faqComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$notiNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("공지사항 버튼 눌림")
-                let vc = owner.noticeComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$mailNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("문의하기 버튼 눌림")
-                let vc = owner.questionComponent.makeView()
-                vc.modalPresentationStyle = .overFullScreen
-                owner.present(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$teamNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("팀소개 버튼 눌림")
-                let vc = owner.teamInfoComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$settingNavigationDidTap)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                print("설정 버튼 눌림")
-                let vc = owner.settingComponent.makeView()
-                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }
