@@ -1,5 +1,5 @@
-import BaseFeatureInterface
 import BaseFeature
+import BaseFeatureInterface
 import UIKit
 
 public final class ServiceTermsStub: ServiceTermFactory {
