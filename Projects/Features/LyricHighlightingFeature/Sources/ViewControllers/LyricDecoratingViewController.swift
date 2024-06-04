@@ -1,7 +1,3 @@
-//
-//  LyricDecoratingViewController.swift
-//  ArtistFeature
-//
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
