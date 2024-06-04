@@ -30,6 +30,7 @@ final class ProfileView: UIView {
         $0.text = "로 로그인 중"
         $0.font = .setFont(.t6(weight: .light))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray600.color
+        $0.setTextWithAttributes(kernValue: -0.5)
         $0.textAlignment = .center
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero

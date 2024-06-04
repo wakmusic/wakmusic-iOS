@@ -34,11 +34,13 @@ final class SettingView: UIView {
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.text = "설정"
         $0.font = .setFont(.t5(weight: .medium))
+        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     fileprivate let withDrawButton = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
         $0.titleLabel?.font = .setFont(.t7(weight: .bold))
+        $0.titleLabel?.setTextWithAttributes(kernValue: -0.5)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray400.color, for: .normal)
         $0.layer.cornerRadius = 4
         $0.layer.borderWidth = 1
@@ -49,6 +51,7 @@ final class SettingView: UIView {
         $0.text = "0.0.0"
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
+        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     private let vStackView = UIStackView().then {
@@ -91,6 +94,7 @@ final class SettingView: UIView {
         $0.font = .setFont(.t7(weight: .light))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
         $0.lineBreakMode = .byWordWrapping
+        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     init() {

@@ -84,6 +84,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         reactor.pulse(\.$moreButtonDidTap)
             .compactMap { $0 }
             .bind { _ in
+                #warning("[프로필 변경, 닉네임 수정] 팝업 띄워야 함")
                 print("더보기 버튼 눌림")
             }
             .disposed(by: disposeBag)
@@ -93,6 +94,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
+                    #warning("뽑기 화면 이동 기능 필요")
                     print("뽑기 버튼 눌림")
                 case .like:
                     print("좋아요 버튼 눌림")
@@ -121,24 +123,19 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         // owner.showPanModal(content: vc)
                     }
                 case .faq:
-                    print("자주믇는질문 버튼 눌림")
                     let vc = owner.faqComponent.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .noti:
-                    print("공지사항 버튼 눌림")
                     let vc = owner.noticeComponent.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .mail:
-                    print("문의하기 버튼 눌림")
                     let vc = owner.questionComponent.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .team:
-                    print("팀소개 버튼 눌림")
                     let vc = owner.teamInfoComponent.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .setting:
-                    print("설정 버튼 눌림")
                     let vc = owner.settingComponent.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
