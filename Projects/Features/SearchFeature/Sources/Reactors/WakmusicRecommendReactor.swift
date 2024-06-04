@@ -16,10 +16,12 @@ final class WakmusicRecommendReactor: Reactor {
 
     enum Mutation {
         case updateDataSource([RecommendPlayListEntity])
+        case updateLodingState(Bool)
     }
 
     struct State {
         var dataSource: [RecommendPlayListEntity]
+       var isLoading: Bool
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -35,6 +37,8 @@ final class WakmusicRecommendReactor: Reactor {
         switch mutation {
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
+        case let .updateLodingState(isLoading):
+            newState.isLoading = isLoading
         }
 
         return newState
@@ -44,7 +48,8 @@ final class WakmusicRecommendReactor: Reactor {
         LogManager.printDebug("✅ \(Self.self)")
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         self.initialState = State(
-            dataSource: []
+            dataSource: [],
+            isLoading: true
         )
     }
 
@@ -55,9 +60,16 @@ final class WakmusicRecommendReactor: Reactor {
 
 extension WakmusicRecommendReactor {
     func updateDataSource() -> Observable<Mutation> {
-        return fetchRecommendPlayListUseCase
+        
+        return .concat([
+            fetchRecommendPlayListUseCase
             .execute()
             .asObservable()
-            .map { Mutation.updateDataSource($0) }
+            .map { Mutation.updateDataSource($0) },
+            .just(.updateLodingState(false))
+        ])
+    }
+    func updateLoadnigState(isLoading: Bool) -> Observable<Mutation> {
+        return .just(.updateLodingState(isLoading))
     }
 }
