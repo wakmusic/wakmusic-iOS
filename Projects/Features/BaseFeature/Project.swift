@@ -25,5 +25,9 @@ let project = Project.module(
                 ]
             )
         ),
+        .testing(
+            module: .feature(.BaseFeature),
+            dependencies: [.feature(target: .BaseFeature, type: .interface)]
+        )
     ]
 )

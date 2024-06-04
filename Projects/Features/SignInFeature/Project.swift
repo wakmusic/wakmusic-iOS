@@ -18,6 +18,10 @@ let project = Project.module(
                     .feature(target: .SignInFeature, type: .interface)
                 ]
             )
+        ),
+        .testing(
+            module: .feature(.SignInFeature),
+            dependencies: [.feature(target: .SignInFeature, type: .interface)]
         )
     ]
 )
