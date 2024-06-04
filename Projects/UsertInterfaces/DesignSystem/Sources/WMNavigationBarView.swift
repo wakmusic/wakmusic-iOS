@@ -32,7 +32,9 @@ public final class WMNavigationBarView: UIView {
 
     public func setTitle(_ text: String) {
         let titleLabel = UILabel()
+        titleLabel.text = text
         titleLabel.font = .setFont(.t5(weight: .medium))
+        titleLabel.textColor = DesignSystemAsset.NewGrayColor.gray900.color
         self.titleView = titleLabel
     }
 
