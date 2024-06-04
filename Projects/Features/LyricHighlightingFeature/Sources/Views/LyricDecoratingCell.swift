@@ -1,11 +1,3 @@
-//
-//  LyricDecoratingCell.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2024/05/11.
-//  Copyright © 2024 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import SnapKit
 import Then
