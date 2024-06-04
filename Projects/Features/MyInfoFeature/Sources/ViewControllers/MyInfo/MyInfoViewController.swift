@@ -87,7 +87,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                 print("더보기 버튼 눌림")
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
