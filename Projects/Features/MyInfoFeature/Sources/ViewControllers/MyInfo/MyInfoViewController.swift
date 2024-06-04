@@ -75,7 +75,6 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
-                print("로그인 버튼 눌림")
                 let vc = owner.signInFactory.makeView()
                 owner.present(vc, animated: true)
             }
@@ -85,7 +84,6 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .compactMap { $0 }
             .bind { _ in
                 #warning("[프로필 변경, 닉네임 수정] 팝업 띄워야 함")
-                print("더보기 버튼 눌림")
             }
             .disposed(by: disposeBag)
 
@@ -95,9 +93,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                 switch navigate {
                 case .draw:
                     #warning("뽑기 화면 이동 기능 필요")
-                    print("뽑기 버튼 눌림")
                 case .like:
-                    print("좋아요 버튼 눌림")
                     if reactor.currentState.isLoggedIn {
                         NotificationCenter.default.post(name: .movedTab, object: 4)
                         NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)

@@ -69,11 +69,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$withDrawButtonDidTap)
-            .compactMap { $0 }
-            .bind { _ in print("회원탈퇴 버튼 눌림") }
-            .disposed(by: disposeBag)
-
         reactor.pulse(\.$cacheSize)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, cachSize in
