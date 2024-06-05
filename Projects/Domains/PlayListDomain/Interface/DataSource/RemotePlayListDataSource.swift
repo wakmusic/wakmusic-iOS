@@ -11,6 +11,6 @@ public protocol RemotePlayListDataSource {
     func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
     func updatePlaylist(key: String, songs: [String]) -> Completable
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>
-    func removeSongs(key: String, songs: [String]) -> Single<BaseEntity>
+    func removeSongs(key: String, songs: [String]) -> Completable
     func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity>
 }
