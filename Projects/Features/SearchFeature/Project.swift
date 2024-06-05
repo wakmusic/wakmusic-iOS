@@ -28,7 +28,8 @@ let project = Project.module(
 
         .demo(module: .feature(.SearchFeature), dependencies: [
             .feature(target: .SearchFeature),
-            .domain(target: .PlayListDomain, type: .testing)
+            .domain(target: .PlayListDomain, type: .testing),
+            .feature(target: .PlaylistFeature, type: .testing)
         ])
     ]
 )

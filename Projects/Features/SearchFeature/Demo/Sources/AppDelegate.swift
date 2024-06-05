@@ -1,6 +1,6 @@
 import Inject
 @testable import PlayListDomainTesting
-@testable import PlaylistFeatureInterface
+@testable import PlaylistFeatureTesting
 @testable import SearchFeature
 import UIKit
 
@@ -32,8 +32,4 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-final class PlaylistDetailFactorySpy: PlaylistDetailFactory {
-    func makeView(id: String, isCustom: Bool) -> UIViewController {
-        return UIViewController()
-    }
-}
+
