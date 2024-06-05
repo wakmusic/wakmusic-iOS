@@ -33,7 +33,6 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        indicator.startAnimating()
         reactor?.action.onNext(.viewDidLoad)
     }
 
@@ -73,7 +72,6 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
             .withUnretained(self)
             .bind(onNext: { owner, dataSource in
 
-                LogManager.printDebug("WWW")
                 var snapShot = owner.dataSource.snapshot(for: .main)
                 snapShot.append(dataSource)
                 owner.dataSource.apply(snapShot, to: .main)
@@ -85,7 +83,6 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
             .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, isLoading in
-                LogManager.printDebug("WWW4 \(isLoading)")
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
@@ -118,9 +115,7 @@ extension WakmusicRecommendViewController {
             RecommendPlayListEntity
         >(collectionView: collectionView) {
             (
-                collectionView: UICollectionView,
-                indexPath: IndexPath,
-                item: RecommendPlayListEntity
+                collectionView: UICollectionView, indexPath: IndexPath, item: RecommendPlayListEntity
             ) -> UICollectionViewCell? in
 
             return
