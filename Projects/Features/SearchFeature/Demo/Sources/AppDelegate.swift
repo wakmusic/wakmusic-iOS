@@ -1,7 +1,7 @@
 import Inject
 @testable import PlayListDomainTesting
-@testable import SearchFeature
 @testable import PlaylistFeatureInterface
+@testable import SearchFeature
 import UIKit
 
 @main

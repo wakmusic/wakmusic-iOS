@@ -18,5 +18,3 @@ public final class WakmusicRecommendComponent: Component<WakmusicRecommendDepend
         )
     }
 }
-
-
