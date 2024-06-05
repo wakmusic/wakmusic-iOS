@@ -1,10 +1,3 @@
-
-import Foundation
-import RxDataSources
-import SongsDomainInterface
-
-public typealias SearchSectionModel = SectionModel<(TabPosition, Int), SongEntity>
-
 public enum TabPosition: Int {
     case all = 0
     case song

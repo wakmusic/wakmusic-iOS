@@ -9,6 +9,7 @@ import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
+import SearchFeatureInterface
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView,
     SongCartViewType {
@@ -16,7 +17,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var afterSearchContentComponent: AfterSearchContentComponent!
+    var searchResultFactory: SearchResultFactory!
     var containSongsFactory: ContainSongsFactory!
     public var disposeBag = DisposeBag()
 
@@ -42,12 +43,12 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     public static func viewController(
-        afterSearchContentComponent: AfterSearchContentComponent,
+        searchResultFactory: any SearchResultFactory,
         containSongsFactory: ContainSongsFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
-        viewController.afterSearchContentComponent = afterSearchContentComponent
+        viewController.searchResultFactory = searchResultFactory
         viewController.containSongsFactory = containSongsFactory
         viewController.reactor = reactor
         return viewController
@@ -73,7 +74,7 @@ extension AfterSearchViewController {
             .withUnretained(self)
             .bind { owner, dataSource in
 
-                guard let comp = owner.afterSearchContentComponent else {
+                guard let comp = owner.searchResultFactory else {
                     return
                 }
 
@@ -164,12 +165,12 @@ extension AfterSearchViewController {
 
     func clearSongCart() {
         // self.output.songEntityOfSelectedSongs.accept([])
-        self.viewControllers.forEach { vc in
-            guard let afterContentVc = vc as? AfterSearchContentViewController else {
-                return
-            }
-            afterContentVc.input.deSelectedAllSongs.accept(())
-        }
+//        self.viewControllers.forEach { vc in
+//            guard let afterContentVc = vc as? AfterSearchContentViewController else {
+//                return
+//            }
+//            afterContentVc.input.deSelectedAllSongs.accept(())
+//        }
     }
 }
 
@@ -242,9 +243,10 @@ extension AfterSearchViewController: SongCartViewDelegate {
 
 extension AfterSearchViewController {
     func scrollToTop() {
-        let current: Int = self.currentIndex ?? 0
-        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
-        guard searchContent.count > current else { return }
-        searchContent[current].scrollToTop()
+        #warning("구현이 끝난 후 연결")
+//        let current: Int = self.currentIndex ?? 0
+//        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
+//        guard searchContent.count > current else { return }
+//        searchContent[current].scrollToTop()
     }
 }

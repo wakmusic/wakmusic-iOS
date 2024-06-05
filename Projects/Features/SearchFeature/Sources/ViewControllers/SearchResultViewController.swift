@@ -1,0 +1,69 @@
+import BaseFeature
+import DesignSystem
+import RxCocoa
+import RxSwift
+import UIKit
+import Utility
+import SnapKit
+import Then
+
+final class SearchResultViewController: BaseReactorViewController<SearchResultReactor> {
+    
+    private let filterButton: UIButton = UIButton().then {
+        $0.setTitle("최신순", for: .normal)
+        $0.setImage(DesignSystemAsset.Search.arrowDown.image, for: .normal)
+    }
+    private lazy var collecionView: UICollectionView = createCollectionView()
+
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    
+    override func bind(reactor: SearchResultReactor) {
+        super.bind(reactor: reactor)
+    }
+    
+    override func bindAction(reactor: SearchResultReactor) {
+        super.bindAction(reactor: reactor)
+    }
+    
+    override func bindState(reactor: SearchResultReactor) {
+        super.bindState(reactor: reactor)
+    }
+    
+    override func addView() {
+        super.addView()
+    }
+    
+    override func setLayout() {
+        super.setLayout()
+    }
+    
+    override func configureUI() {
+        super.configureUI()
+    }
+
+
+
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
+}
+
+
+
+
+
+extension SearchResultViewController {
+    
+    private func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: RecommendCollectionViewLayout())
+    }
+
+    
+    public func scrollToTop() {
+
+    }
+}

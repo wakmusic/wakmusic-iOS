@@ -16,11 +16,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let fetchPlayListUseCase: FetchPlayListUseCaseStub = .init()
 
-        let component =
+        let wakMucomponent =
             WakmusicRecommendViewController(
                 playlistDetailFactory: PlaylistDetailFactoryStub(),
                 reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
             )
+        
+        let component = SearchResultViewController(reactor: SearchResultReactor())
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: component)

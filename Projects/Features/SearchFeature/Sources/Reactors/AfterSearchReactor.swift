@@ -12,11 +12,11 @@ public final class AfterSearchReactor: Reactor {
     }
 
     public enum Mutation {
-        case updateData([[SearchSectionModel]])
+        case updateData([[Int]])
     }
 
     public struct State {
-        var dataSource: [[SearchSectionModel]]
+        var dataSource: [[Int]]
         var text: String
     }
 
@@ -64,26 +64,26 @@ private extension AfterSearchReactor {
 
                 let limitCount: Int = 3
 
-                let all: [SearchSectionModel] = [
-                    SearchSectionModel(
-                        model: (.song, r1.count),
-                        items: r1.count > limitCount ? Array(r1[0 ... limitCount - 1]) : r1
-                    ),
-                    SearchSectionModel(
-                        model: (.artist, r2.count),
-                        items: r2.count > limitCount ? Array(r2[0 ... limitCount - 1]) : r2
-                    ),
-                    SearchSectionModel(
-                        model: (.remix, r3.count),
-                        items: r3.count > limitCount ? Array(r3[0 ... limitCount - 1]) : r3
-                    )
-                ]
-
-                var results: [[SearchSectionModel]] = []
-                results.append(all)
-                results.append([SearchSectionModel(model: (.song, r1.count), items: r1)])
-                results.append([SearchSectionModel(model: (.artist, r2.count), items: r2)])
-                results.append([SearchSectionModel(model: (.remix, r3.count), items: r3)])
+//                let all: [SearchSectionModel] = [
+//                    SearchSectionModel(
+//                        model: (.song, r1.count),
+//                        items: r1.count > limitCount ? Array(r1[0 ... limitCount - 1]) : r1
+//                    ),
+//                    SearchSectionModel(
+//                        model: (.artist, r2.count),
+//                        items: r2.count > limitCount ? Array(r2[0 ... limitCount - 1]) : r2
+//                    ),
+//                    SearchSectionModel(
+//                        model: (.remix, r3.count),
+//                        items: r3.count > limitCount ? Array(r3[0 ... limitCount - 1]) : r3
+//                    )
+//                ]
+//
+                var results: [[Int]] = []
+//                results.append(all)
+//                results.append([SearchSectionModel(model: (.song, r1.count), items: r1)])
+//                results.append([SearchSectionModel(model: (.artist, r2.count), items: r2)])
+//                results.append([SearchSectionModel(model: (.remix, r3.count), items: r3)])
 
                 return results
             }

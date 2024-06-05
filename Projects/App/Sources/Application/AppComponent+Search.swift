@@ -15,7 +15,7 @@ extension AppComponent {
         AfterSearchComponent(parent: self)
     }
 
-    var afterSearchContentComponent: AfterSearchContentComponent {
-        AfterSearchContentComponent(parent: self)
+    var searchResultFactory: any SearchResultFactory {
+        SearchResultComponent(parent: self)
     }
 }

@@ -1,13 +1,6 @@
-//
-//  EntireSectionHeader.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/12.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import UIKit
+import SearchFeatureInterface
 
 protocol EntireSectionHeaderDelegate: AnyObject {
     func switchTapEvent(_ type: TabPosition)

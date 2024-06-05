@@ -1,6 +1,6 @@
 import ReactorKit
 
-final class AfterSearchContentReactor : Reactor {
+final class SearchResultReactor : Reactor {
     
     enum Action {
         
@@ -43,6 +43,7 @@ final class AfterSearchContentReactor : Reactor {
     
 }
 
-extension AfterSearchContentReactor {
+extension SearchResultReactor {
+    
     
 }

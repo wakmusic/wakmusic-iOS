@@ -1,5 +1,6 @@
 import Foundation
 import RxSwift
+import SearchFeatureInterface
 
 protocol SearchCommonService {
     var typingStatus: BehaviorSubject<TypingStatus> { get }
