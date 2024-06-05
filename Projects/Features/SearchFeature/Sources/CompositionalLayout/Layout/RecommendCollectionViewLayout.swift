@@ -29,10 +29,10 @@ extension RecommendCollectionViewLayout {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         group.interItemSpacing = .fixed(8.0)
-        group.contentInsets = .init(top: 8.0, leading: .zero, bottom: 8.0, trailing: .zero)
+        group.contentInsets = .init(top: 8.0, leading: 20, bottom: 8.0, trailing: 20)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: .zero, bottom: .zero, trailing: .zero)
 
         return section
     }

@@ -28,6 +28,7 @@ public class RecommendPlayListCell: UICollectionViewCell {
         let itemHeight: CGFloat = (80.0 * itemWidth) / 164.0
         self.logoImageView.layer.cornerRadius = ((48 * itemHeight) / 80.0) / 2.0
     }
+    
 }
 
 public extension RecommendPlayListCell {
