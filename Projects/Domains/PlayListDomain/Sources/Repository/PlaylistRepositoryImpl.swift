@@ -40,7 +40,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.addSongIntoPlayList(key: key, songs: songs)
     }
 
-    public func removeSongs(key: String, songs: [String]) -> RxSwift.Single<BaseEntity> {
+    public func removeSongs(key: String, songs: [String]) -> Completable {
         remotePlayListDataSource.removeSongs(key: key, songs: songs)
     }
 
