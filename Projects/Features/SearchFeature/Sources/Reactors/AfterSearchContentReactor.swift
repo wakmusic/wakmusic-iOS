@@ -1,9 +1,48 @@
-//
-//  AfterSearchContentReactor.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 6/5/24.
-//  Copyright © 2024 yongbeomkwak. All rights reserved.
-//
+import ReactorKit
 
-import Foundation
+final class AfterSearchContentReactor : Reactor {
+    
+    enum Action {
+        
+    }
+    
+    enum Mutation {
+        
+    }
+    
+    struct State {
+        
+    }
+    
+    var initialState: State
+    
+    init() {
+        self.initialState = State(
+        )
+    }
+    
+    func mutate(action: Action) -> Observable<Mutation> {
+        
+        switch action {
+            
+        }
+        
+    }
+    
+    func reduce(state: State, mutation: Mutation) -> State {
+        
+        var newState = state
+        
+        switch mutation {
+            
+        }
+        
+        return newState
+        
+    }
+    
+}
+
+extension AfterSearchContentReactor {
+    
+}
