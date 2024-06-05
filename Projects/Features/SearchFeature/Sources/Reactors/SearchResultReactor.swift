@@ -1,6 +1,6 @@
 import ReactorKit
 
-final class SearchResultReactor : Reactor {
+final class IntegratedSearchResultReactor : Reactor {
     
     enum Action {
         
@@ -43,7 +43,7 @@ final class SearchResultReactor : Reactor {
     
 }
 
-extension SearchResultReactor {
+extension IntegratedSearchResultReactor {
     
     
 }

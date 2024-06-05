@@ -7,7 +7,7 @@ import Utility
 import SnapKit
 import Then
 
-final class SearchResultViewController: BaseReactorViewController<SearchResultReactor> {
+final class IntegratedSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
     
     private let filterButton: UIButton = UIButton().then {
         $0.setTitle("최신순", for: .normal)
@@ -21,15 +21,15 @@ final class SearchResultViewController: BaseReactorViewController<SearchResultRe
 
     }
     
-    override func bind(reactor: SearchResultReactor) {
+    override func bind(reactor: IntegratedSearchResultReactor) {
         super.bind(reactor: reactor)
     }
     
-    override func bindAction(reactor: SearchResultReactor) {
+    override func bindAction(reactor: IntegratedSearchResultReactor) {
         super.bindAction(reactor: reactor)
     }
     
-    override func bindState(reactor: SearchResultReactor) {
+    override func bindState(reactor: IntegratedSearchResultReactor) {
         super.bindState(reactor: reactor)
     }
     
@@ -56,7 +56,7 @@ final class SearchResultViewController: BaseReactorViewController<SearchResultRe
 
 
 
-extension SearchResultViewController {
+extension IntegratedSearchResultViewController {
     
     private func createCollectionView() -> UICollectionView {
         return UICollectionView(frame: .zero, collectionViewLayout: RecommendCollectionViewLayout())
