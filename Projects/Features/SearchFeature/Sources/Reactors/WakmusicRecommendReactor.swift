@@ -61,6 +61,7 @@ final class WakmusicRecommendReactor: Reactor {
 extension WakmusicRecommendReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
+            .just(.updateLodingState(true)),
             fetchRecommendPlayListUseCase
                 .execute()
                 .asObservable()
