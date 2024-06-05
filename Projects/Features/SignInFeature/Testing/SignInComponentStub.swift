@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 import UserDomainTesting
 
-public final class SignInComponentStub: SignInFactoryStub {
+public final class SignInComponentStub: SignInFactory {
     public func makeView() -> UIViewController {
         return LoginViewController.viewController(
             viewModel: .init(

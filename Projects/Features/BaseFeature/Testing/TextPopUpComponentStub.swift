@@ -2,7 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import UIKit
 
-public final class TextPopUpComponentStub: TextPopUpFactoryStub {
+public final class TextPopUpComponentStub: TextPopUpFactory {
     public func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
