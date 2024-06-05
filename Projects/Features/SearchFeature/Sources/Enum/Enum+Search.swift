@@ -1,10 +1,3 @@
-//
-//  Enum + Search .swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/14.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
 
 import Foundation
 import RxDataSources
