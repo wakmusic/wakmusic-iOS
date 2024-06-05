@@ -313,7 +313,7 @@ extension BeforeSearchContentViewController {
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 

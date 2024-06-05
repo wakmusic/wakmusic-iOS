@@ -4,6 +4,7 @@ import LogManager
 import PlayListDomainInterface
 import UIKit
 import Utility
+import PlaylistFeatureInterface
 
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
     private let wmNavigationbarView = WMNavigationBarView().then {
@@ -21,7 +22,14 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlayListEntity> =
         createDataSource()
+    
+    private let playlistDetailFactory: any PlaylistDetailFactory
 
+    init(playlistDetailFactory: any PlaylistDetailFactory,reactor: WakmusicRecommendReactor) {
+        self.playlistDetailFactory = playlistDetailFactory
+        super.init(reactor: reactor)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -49,6 +57,11 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+    }
+    
+    override func bind(reactor: WakmusicRecommendReactor) {
+        super.bind(reactor: reactor)
+        collectionView.delegate = self
     }
 
     override func bindState(reactor: WakmusicRecommendReactor) {
@@ -128,5 +141,16 @@ extension WakmusicRecommendViewController {
         snapshot.appendSections([.main])
 
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+}
+
+ 
+extension WakmusicRecommendViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: indexPath)  else {
+            return
+        }
+        
+        self.navigationController?.pushViewController(playlistDetailFactory.makeView(id: model.key, isCustom: false), animated: true)
     }
 }

@@ -1,6 +1,7 @@
 import Inject
 @testable import PlayListDomainTesting
 @testable import SearchFeature
+@testable import PlaylistFeatureInterface
 import UIKit
 
 @main
@@ -17,6 +18,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let component =
             WakmusicRecommendViewController(
+                playlistDetailFactory: PlaylistDetailFactorySpy(),
                 reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
             )
 
@@ -27,5 +29,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         return true
+    }
+}
+
+final class PlaylistDetailFactorySpy: PlaylistDetailFactory {
+    func makeView(id: String, isCustom: Bool) -> UIViewController {
+        return UIViewController()
     }
 }
