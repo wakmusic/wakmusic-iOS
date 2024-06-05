@@ -66,7 +66,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
 
     override func bindState(reactor: WakmusicRecommendReactor) {
         super.bindState(reactor: reactor)
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share()
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()

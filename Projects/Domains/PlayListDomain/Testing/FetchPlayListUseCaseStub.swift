@@ -1,7 +1,7 @@
 import PlayListDomainInterface
 import RxSwift
 
-final class FetchPlayListUseCaseSpy: FetchRecommendPlayListUseCase {
+final class FetchPlayListUseCaseStub: FetchRecommendPlayListUseCase {
     var fetchData = [
         RecommendPlayListEntity(
             key: "best",
@@ -132,13 +132,9 @@ final class FetchPlayListUseCaseSpy: FetchRecommendPlayListUseCase {
     ]
 
     func execute() -> Single<[RecommendPlayListEntity]> {
-        return Single.create { [weak self] single in
+        return Single.create { [fetchData] single in
 
-            guard let self else {
-                return Disposables.create()
-            }
-
-            single(.success(self.fetchData))
+            single(.success(fetchData))
             return Disposables.create()
         }
     }

@@ -14,11 +14,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let fetchPlayListUseCase: FetchPlayListUseCaseSpy = .init()
+        let fetchPlayListUseCase: FetchPlayListUseCaseStub = .init()
 
         let component =
             WakmusicRecommendViewController(
-                playlistDetailFactory: PlaylistDetailFactorySpy(),
+                playlistDetailFactory: PlaylistDetailFactoryStub(),
                 reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
             )
 
