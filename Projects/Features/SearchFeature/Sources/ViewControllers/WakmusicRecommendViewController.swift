@@ -70,10 +70,10 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
             .withUnretained(self)
-            .bind(onNext: { owner, dataSource in
+            .bind(onNext: { owner, recommendPlaylist in
 
                 var snapShot = owner.dataSource.snapshot(for: .main)
-                snapShot.append(dataSource)
+                snapShot.append(recommendPlaylist)
                 owner.dataSource.apply(snapShot, to: .main)
 
             })

@@ -11,10 +11,14 @@ public protocol WakmusicRecommendDependency: Dependency {
 
 public final class WakmusicRecommendComponent: Component<WakmusicRecommendDependency> {
     public func makeView() -> UIViewController {
+        
+        let reactor =  WakmusicRecommendReactor(
+            fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+        )
+        
         return WakmusicRecommendViewController(
-            playlistDetailFactory: dependency.playlistDetailFacotry, reactor: WakmusicRecommendReactor(
-                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
-            )
+            playlistDetailFactory: dependency.playlistDetailFacotry, 
+            reactor: reactor
         )
     }
 }
