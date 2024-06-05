@@ -62,36 +62,6 @@
             </objects>
             <point key="canvasLocation" x="1754.9618320610687" y="-2.1126760563380285"/>
         </scene>
-        <!--After Search Content View Controller-->
-        <scene sceneID="ewL-de-ykJ">
-            <objects>
-                <viewController storyboardIdentifier="AfterSearchContentViewController" id="wFs-UV-N8n" customClass="AfterSearchContentViewController" customModule="SearchFeature" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Xtf-ws-O1l">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AFm-fr-N46">
-                                <rect key="frame" x="0.0" y="115" width="393" height="703"/>
-                                <color key="backgroundColor" name="SUB 1"/>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="rcw-Ju-H6e"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="rcw-Ju-H6e" firstAttribute="trailing" secondItem="AFm-fr-N46" secondAttribute="trailing" id="7tt-pj-WAb"/>
-                            <constraint firstItem="AFm-fr-N46" firstAttribute="top" secondItem="rcw-Ju-H6e" secondAttribute="top" constant="56" id="eIZ-1L-S7b"/>
-                            <constraint firstItem="rcw-Ju-H6e" firstAttribute="bottom" secondItem="AFm-fr-N46" secondAttribute="bottom" id="fma-yd-7O3"/>
-                            <constraint firstItem="AFm-fr-N46" firstAttribute="leading" secondItem="rcw-Ju-H6e" secondAttribute="leading" id="saW-gc-dM6"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="tableView" destination="AFm-fr-N46" id="6Hf-WL-ueX"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IVM-sj-ICq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2491" y="-2"/>
-        </scene>
         <!--검색-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
@@ -189,9 +159,6 @@
         </scene>
     </scenes>
     <resources>
-        <namedColor name="SUB 1">
-            <color red="0.15294117647058825" green="0.37647058823529411" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
