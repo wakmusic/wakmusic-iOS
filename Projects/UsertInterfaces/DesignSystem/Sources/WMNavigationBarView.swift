@@ -8,7 +8,7 @@ public final class WMNavigationBarView: UIView {
         $0.alignment = .leading
     }
 
-    public private(set) var titleView = UIView()
+    public private(set) var titleView: UIView = UIView()
     private let rightStackView = UIStackView().then {
         $0.isUserInteractionEnabled = true
         $0.axis = .horizontal
@@ -30,14 +30,31 @@ public final class WMNavigationBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func setTitle(_ text: String) {
+    public func setTitle(
+        _ text: String,
+        textColor: UIColor = DesignSystemAsset.NewGrayColor.gray900.color
+    ) {
         let titleLabel = UILabel()
+        titleLabel.text = text
         titleLabel.font = .setFont(.t5(weight: .medium))
+        titleLabel.textColor = textColor
+        titleView.removeFromSuperview()
         self.titleView = titleLabel
+
+        self.addSubview(titleView)
+        titleView.snp.remakeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
 
     public func setTitleView(_ view: UIView) {
+        titleView.removeFromSuperview()
         self.titleView = view
+
+        self.addSubview(titleView)
+        titleView.snp.remakeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
 
     public func setRightViews(_ views: [UIView]) {
@@ -60,7 +77,6 @@ public final class WMNavigationBarView: UIView {
 private extension WMNavigationBarView {
     func addView() {
         self.addSubview(leftStackView)
-        self.addSubview(titleView)
         self.addSubview(rightStackView)
     }
 
@@ -68,9 +84,6 @@ private extension WMNavigationBarView {
         leftStackView.snp.makeConstraints {
             $0.left.equalToSuperview().inset(horizontalInset)
             $0.centerY.equalToSuperview()
-        }
-        titleView.snp.makeConstraints {
-            $0.center.equalToSuperview()
         }
         rightStackView.snp.makeConstraints {
             $0.right.equalToSuperview().inset(horizontalInset)
