@@ -17,3 +17,8 @@ enum BeforeVcDataSoruce: Hashable {
         }
     }
 }
+
+
+enum IntegratedResultDataSource {
+    
+}
