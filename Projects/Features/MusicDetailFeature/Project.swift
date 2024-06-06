@@ -9,7 +9,7 @@ let project = Project.module(
         .implements(module: .feature(.MusicDetailFeature), dependencies: [
             .feature(target: .MusicDetailFeature, type: .interface),
             .feature(target: .BaseFeature),
-            .feature(target: .LyricHighlightingFeature)
+            .feature(target: .LyricHighlightingFeature, type: .interface)
         ]),
         .tests(module: .feature(.MusicDetailFeature), dependencies: [
             .feature(target: .MusicDetailFeature)
