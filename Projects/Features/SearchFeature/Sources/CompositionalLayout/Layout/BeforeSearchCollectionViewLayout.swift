@@ -5,7 +5,7 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
     init() {
         super.init { sectionIndex, layoutEnvironment in
 
-            guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
+            guard let layoutKind = BeforeSearchSection(rawValue: sectionIndex) else { return nil }
 
             return BeforeSearchCollectionViewLayout.configureLayoutSection(layoutKind)
         }
@@ -18,7 +18,7 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
 }
 
 extension BeforeSearchCollectionViewLayout {
-    private static func configureLayoutSection(_ layoutKind: Section) -> NSCollectionLayoutSection {
+    private static func configureLayoutSection(_ layoutKind: BeforeSearchSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)

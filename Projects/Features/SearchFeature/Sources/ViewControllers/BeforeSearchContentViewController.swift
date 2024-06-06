@@ -25,7 +25,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.isHidden = true
     }
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
+    private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> = createDataSource()
 
     private lazy var collectionView: UICollectionView = createCollectionView()
 
@@ -202,7 +202,7 @@ extension BeforeSearchContentViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchCollectionViewLayout())
     }
 
-    private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
+    private func createDataSource() -> UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> {
         // MARK: Cell
 
         let youtubeCellRegistration = UICollectionView
@@ -244,7 +244,7 @@ extension BeforeSearchContentViewController {
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
-            Section,
+            BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
             (
@@ -286,7 +286,7 @@ extension BeforeSearchContentViewController {
 
     private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
+        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
         snapshot.appendSections([.youtube, .recommend, .popularList])
         snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
         snapshot.appendItems(
@@ -331,7 +331,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 // MARK: 전체보기
 extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
-        if let section = section, let layoutKind = Section(rawValue: section) {
+        if let section = section, let layoutKind = BeforeSearchSection(rawValue: section) {
             print(layoutKind)
         }
     }
