@@ -1,6 +1,6 @@
 import Foundation
 
-internal enum Section: Int {
+internal enum BeforeSearchSection: Int {
     case youtube
     case recommend
     case popularList
@@ -13,7 +13,6 @@ internal enum RecommendSection: Hashable {
 internal enum IntegratedSearchResultSection: Hashable {
     case song
     case artist
-    case remix
     case credit
     case list
 
@@ -23,8 +22,6 @@ internal enum IntegratedSearchResultSection: Hashable {
             "곡"
         case .artist:
             "아티스트"
-        case .remix:
-            "조교"
         case .credit:
             "크레딧"
         case .list:

@@ -2,7 +2,6 @@ public enum TabPosition: Int {
     case all = 0
     case song
     case artist
-    case remix
     case credit
     case list
 
@@ -14,8 +13,6 @@ public enum TabPosition: Int {
             "곡"
         case .artist:
             "아티스트"
-        case .remix:
-            "조교"
         case .credit:
             "크레딧"
         case .list:
