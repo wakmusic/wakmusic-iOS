@@ -1,4 +1,4 @@
-import BaseFeature
+@testable import BaseFeature
 import BaseFeatureInterface
 import UIKit
 
