@@ -28,6 +28,7 @@ let project = Project.module(
         .testing(
             module: .feature(.BaseFeature),
             dependencies: [
+                .feature(target: .BaseFeature),
                 .feature(target: .BaseFeature, type: .interface),
                 .domain(target: .BaseDomain, type: .testing)
             ]
