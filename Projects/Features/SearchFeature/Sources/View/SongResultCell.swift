@@ -3,6 +3,7 @@ import Kingfisher
 import SongsDomainInterface
 import UIKit
 import Utility
+import LogManager
 
 final class SongResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
@@ -47,12 +48,22 @@ extension SongResultCell {
     }
 
     private func setLayout() {
+        
+        LogManager.printDebug("프레임: \(frame)")
+        
+        let height = frame.height - 20
+        let ratio: CGFloat = 16.0/9.0
+        let width = ratio*height
+        
         thumbnailView.snp.makeConstraints {
-            $0.leading.top.bottom.equalToSuperview()
+            $0.width.equalTo(width)
+            $0.height.equalTo(height)
+            $0.top.bottom.equalToSuperview().inset(10)
+            $0.leading.equalToSuperview()
         }
 
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(thumbnailView.snp.top)
+            $0.top.equalTo(thumbnailView.snp.top).offset(-1)
             $0.leading.equalTo(thumbnailView.snp.trailing).offset(8)
         }
 
@@ -60,10 +71,12 @@ extension SongResultCell {
             $0.top.equalTo(titleLabel.snp.bottom).offset(2)
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalTo(titleLabel.snp.trailing)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(thumbnailView.snp.bottom)
         }
 
+        
         dateLabel.snp.makeConstraints {
+            $0.width.equalTo(70)
             $0.centerY.equalTo(thumbnailView.snp.centerY)
             $0.trailing.equalToSuperview()
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)

@@ -81,8 +81,8 @@ extension AfterSearchViewController {
                 owner.viewControllers = [
                     comp.makeIntegratedView(type: .all, dataSource: dataSource[0]),
                     comp.makeIntegratedView(type: .song, dataSource: dataSource[1]),
-                    comp.makeIntegratedView(type: .artist, dataSource: dataSource[2]),
-                    comp.makeIntegratedView(type: .remix, dataSource: dataSource[3])
+                    comp.makeIntegratedView(type: .artist, dataSource: dataSource[2])
+                  
                 ]
                 owner.indicator.stopAnimating()
                 owner.reloadData()
