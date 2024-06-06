@@ -61,6 +61,10 @@ extension IntegratedSearchResultViewController {
     private func createCollectionView() -> UICollectionView {
         return UICollectionView(frame: .zero, collectionViewLayout: IntegratedSearchResultCollectionViewLayout())
     }
+    
+    private func createDataSource() -> UICollectionViewDiffableDataSource<IntegratedSearchResultSection, IntegratedResultDataSource>  {
+        
+    }
 
     
     public func scrollToTop() {

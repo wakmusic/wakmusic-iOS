@@ -1,4 +1,5 @@
 import Foundation
+import SongsDomainInterface
 
 #warning("실제 데이터 entity로 바꾸기")
 enum BeforeVcDataSoruce: Hashable {
@@ -19,6 +20,6 @@ enum BeforeVcDataSoruce: Hashable {
 }
 
 
-enum IntegratedResultDataSource {
-    
+enum IntegratedResultDataSource: Hashable {
+    case song(mdeol: SongEntity)
 }
