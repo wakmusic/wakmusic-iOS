@@ -1,9 +1,9 @@
 import DesignSystem
 import Kingfisher
+import LogManager
 import SongsDomainInterface
 import UIKit
 import Utility
-import LogManager
 
 final class SongResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
@@ -48,13 +48,12 @@ extension SongResultCell {
     }
 
     private func setLayout() {
-        
         LogManager.printDebug("프레임: \(frame)")
-        
+
         let height = frame.height - 20
-        let ratio: CGFloat = 16.0/9.0
-        let width = ratio*height
-        
+        let ratio: CGFloat = 16.0 / 9.0
+        let width = ratio * height
+
         thumbnailView.snp.makeConstraints {
             $0.width.equalTo(width)
             $0.height.equalTo(height)
@@ -74,7 +73,6 @@ extension SongResultCell {
             $0.bottom.equalTo(thumbnailView.snp.bottom)
         }
 
-        
         dateLabel.snp.makeConstraints {
             $0.width.equalTo(70)
             $0.centerY.equalTo(thumbnailView.snp.centerY)

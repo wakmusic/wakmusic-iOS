@@ -25,7 +25,8 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.isHidden = true
     }
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> = createDataSource()
+    private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> =
+        createDataSource()
 
     private lazy var collectionView: UICollectionView = createCollectionView()
 

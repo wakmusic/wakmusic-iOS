@@ -3,19 +3,21 @@ import DesignSystem
 import RxCocoa
 import RxSwift
 import SnapKit
+import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import SongsDomainInterface
 
 final class IntegratedSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<IntegratedSearchResultSection, IntegratedResultDataSource> = createDataSource()
-    
-    
+    private lazy var dataSource: UICollectionViewDiffableDataSource<
+        IntegratedSearchResultSection,
+        IntegratedResultDataSource
+    > = createDataSource()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initDataSource()
@@ -40,11 +42,10 @@ final class IntegratedSearchResultViewController: BaseReactorViewController<Inte
 
     override func setLayout() {
         super.setLayout()
-        
+
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
     }
 
     override func configureUI() {
@@ -63,55 +64,57 @@ extension IntegratedSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<IntegratedSearchResultSection, IntegratedResultDataSource> {
-            
-            let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
-                cell.update(item)
-            }
-            
-            
-            let dataSource = UICollectionViewDiffableDataSource<
-                IntegratedSearchResultSection,
-                IntegratedResultDataSource
-            >(collectionView: collectionView) {
-                (
-                    collectionView: UICollectionView,
-                    indexPath: IndexPath,
-                    item: IntegratedResultDataSource
-                ) -> UICollectionViewCell? in
-
-                switch item {
-                    
-                case .song(model: let model):
-                    return collectionView.dequeueConfiguredReusableCell(
-                        using: songCellRegistration,
-                        for: indexPath,
-                        item: model
-                    )
-                case .list(model: let model):
-                    break
-                }
-                #warning("list 셀 이후 제거")
-                    return nil
-            }
-            
-            
-            
-            return dataSource
+        let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
+            cell.update(item)
         }
-    
-    
+
+        let dataSource = UICollectionViewDiffableDataSource<
+            IntegratedSearchResultSection,
+            IntegratedResultDataSource
+        >(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: IntegratedResultDataSource
+            ) -> UICollectionViewCell? in
+
+            switch item {
+            case let .song(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: songCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            case let .list(model: model):
+                break
+            }
+            #warning("list 셀 이후 제거")
+            return nil
+        }
+
+        return dataSource
+    }
+
     private func initDataSource() {
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<IntegratedSearchResultSection, IntegratedResultDataSource>()
-        
-        snapshot.appendSections([.song, .artist, .credit, .list])
-        
 
-        let model = SongEntity(id: "8KTFf2X-ago", title: "Another World", artist: "이세계아이돌", remix: "", reaction: "", views: 0, last: 0, date: "2020.12.12")
-        
+        snapshot.appendSections([.song, .artist, .credit, .list])
+
+        let model = SongEntity(
+            id: "8KTFf2X-ago",
+            title: "Another World",
+            artist: "이세계아이돌",
+            remix: "",
+            reaction: "",
+            views: 0,
+            last: 0,
+            date: "2020.12.12"
+        )
+
         snapshot.appendItems([.song(model: model)], toSection: .song)
 //        snapshot.appendItems([.song(model: model)], toSection: .song)
-        
+
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
