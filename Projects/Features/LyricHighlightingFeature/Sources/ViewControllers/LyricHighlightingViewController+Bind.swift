@@ -74,14 +74,7 @@ extension LyricHighlightingViewController {
 
         output.goDecoratingScene
             .bind(with: self) { owner, model in
-                let viewController = owner.lyricDecoratingComponent.makeView(
-                    model: .init(
-                        songID: model.songID,
-                        title: model.title,
-                        artist: model.artist,
-                        highlightingItems: model.highlightingItems
-                    )
-                )
+                let viewController = owner.lyricDecoratingComponent.makeView(model: model)
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
