@@ -1,14 +1,14 @@
 import AuthDomainInterface
 import AuthDomainTesting
 import BaseFeatureInterface
+@testable import BaseFeatureTesting
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
 import SignInFeatureInterface
+@testable import SignInFeatureTesting
 import UIKit
 import UserDomainInterface
 import UserDomainTesting
-@testable import MyInfoFeature
-@testable import BaseFeatureTesting
-@testable import SignInFeatureTesting
 
 public final class SettingComponentStub: SettingFactory {
     public func makeView() -> UIViewController {
