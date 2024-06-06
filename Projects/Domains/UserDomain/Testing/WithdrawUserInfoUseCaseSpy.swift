@@ -4,7 +4,6 @@ import RxSwift
 import UserDomainInterface
 
 public struct WithdrawUserInfoUseCaseSpy: WithdrawUserInfoUseCase {
-    public init() {}
     public func execute() -> Single<BaseEntity> {
         return .just(.init(status: 200))
     }
