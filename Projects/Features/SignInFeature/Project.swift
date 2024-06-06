@@ -22,6 +22,7 @@ let project = Project.module(
         .testing(
             module: .feature(.SignInFeature),
             dependencies: [
+                .feature(target: .SignInFeature),
                 .feature(target: .SignInFeature, type: .interface),
                 .domain(target: .AuthDomain, type: .testing),
                 .domain(target: .UserDomain, type: .testing)

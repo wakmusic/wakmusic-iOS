@@ -1,7 +1,7 @@
 import AuthDomainInterface
 import AuthDomainTesting
 import Foundation
-import SignInFeature
+@testable import SignInFeature
 import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
