@@ -10,7 +10,7 @@ public struct LyricHighlightingRequiredModel {
         songID: String,
         title: String,
         artist: String,
-        highlightingItems: [String]
+        highlightingItems: [String] = []
     ) {
         self.songID = songID
         self.title = title
