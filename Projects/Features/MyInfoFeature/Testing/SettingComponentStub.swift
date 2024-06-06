@@ -1,16 +1,14 @@
 import AuthDomainInterface
 import AuthDomainTesting
 import BaseFeatureInterface
-
-// import BaseFeature
-import BaseFeatureTesting
-import MyInfoFeature
 import MyInfoFeatureInterface
 import SignInFeatureInterface
-import SignInFeatureTesting
 import UIKit
 import UserDomainInterface
 import UserDomainTesting
+@testable import MyInfoFeature
+@testable import BaseFeatureTesting
+@testable import SignInFeatureTesting
 
 public final class SettingComponentStub: SettingFactory {
     public func makeView() -> UIViewController {
@@ -22,9 +20,9 @@ public final class SettingComponentStub: SettingFactory {
             textPopUpFactory: TextPopUpComponentStub(),
             signInFactory: SignInComponentStub(),
             appPushSettingFactory: AppPushSettingComponentStub(),
-            serviceTermsFactory: ServiceTermsComponentStub(),
+            serviceTermsFactory: ServiceTermComponentStub(),
             privacyFactory: PrivacyComponentStub(),
-            ppenSourceLicenseFactory: OpenSourceLicenseComponentStub()
+            openSourceLicenseFactory: OpenSourceLicenseComponentStub()
         )
     }
 }

@@ -1,5 +1,5 @@
 import Foundation
-import MyInfoFeature
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
 import UIKit
 
