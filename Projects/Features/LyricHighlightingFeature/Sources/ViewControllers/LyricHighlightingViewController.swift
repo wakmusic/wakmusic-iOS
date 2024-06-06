@@ -61,9 +61,9 @@ open class LyricHighlightingViewController: UIViewController {
     }
 
     private var dimmedLayer: DimmedGradientLayer?
-    var lyricDecoratingComponent: LyricDecoratingComponent!
+    var lyricDecoratingComponent: LyricDecoratingComponent
 
-    private var viewModel: LyricHighlightingViewModel!
+    private var viewModel: LyricHighlightingViewModel
     lazy var input = LyricHighlightingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let disposeBag = DisposeBag()
@@ -76,9 +76,9 @@ open class LyricHighlightingViewController: UIViewController {
         viewModel: LyricHighlightingViewModel,
         lyricDecoratingComponent: LyricDecoratingComponent
     ) {
-        super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
         self.lyricDecoratingComponent = lyricDecoratingComponent
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -117,20 +117,14 @@ open class LyricHighlightingViewController: UIViewController {
 
 private extension LyricHighlightingViewController {
     func addSubViews() {
-        view.addSubview(dimmedBackgroundView)
-        view.addSubview(navigationBarView)
-        view.addSubview(collectionView)
-        view.addSubview(saveButtonContentView)
-        view.addSubview(indicator)
+        view.addSubviews(dimmedBackgroundView, navigationBarView, collectionView, saveButtonContentView, indicator)
 
-        navigationBarView.addSubview(backButton)
-        navigationBarView.addSubview(navigationTitleStackView)
+        navigationBarView.addSubviews(backButton, navigationTitleStackView)
 
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
 
-        saveButtonContentView.addSubview(saveButton)
-        saveButtonContentView.addSubview(singleLineLabel)
+        saveButtonContentView.addSubviews(saveButton, singleLineLabel)
     }
 
     func setAutoLayout() {

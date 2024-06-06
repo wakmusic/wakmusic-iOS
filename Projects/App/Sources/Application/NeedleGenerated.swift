@@ -785,6 +785,7 @@ private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: Needle
 #else
 extension AppComponent: Registration {
     public func registerItems() {
+
         localTable["keychain-any Keychain"] = { self.keychain as Any }
         localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
@@ -817,11 +818,11 @@ extension AppComponent: Registration {
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
-        localTable["editPlayListUseCase-any EditPlayListUseCase"] = { self.editPlayListUseCase as Any }
-        localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
-        localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
+        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { self.updatePlaylistUseCase as Any }
+        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { self.updateTitleAndPrivateUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { self.removeSongsUseCase as Any }
+        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { self.uploadPlaylistImageUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }

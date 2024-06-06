@@ -126,7 +126,7 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
     }
 
-    private var viewModel: LyricDecoratingViewModel!
+    private var viewModel: LyricDecoratingViewModel
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let disposeBag = DisposeBag()
@@ -136,8 +136,8 @@ public final class LyricDecoratingViewController: UIViewController {
     }
 
     init(viewModel: LyricDecoratingViewModel) {
-        super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -167,18 +167,12 @@ extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
 
 private extension LyricDecoratingViewController {
     func addSubViews() {
-        view.addSubview(navigationBarView)
-        view.addSubview(decorateContentView)
-        view.addSubview(decorateBottomView)
-        view.addSubview(indicator)
+        view.addSubviews(navigationBarView, decorateContentView, decorateBottomView, indicator)
 
-        navigationBarView.addSubview(backButton)
-        navigationBarView.addSubview(navigationTitleLabel)
+        navigationBarView.addSubviews(backButton, navigationTitleLabel)
 
         decorateContentView.addSubview(decorateShareContentView)
-        decorateShareContentView.addSubview(decorateImageView)
-        decorateShareContentView.addSubview(decorateLogoImageView)
-        decorateShareContentView.addSubview(decorateTextContentView)
+        decorateShareContentView.addSubviews(decorateImageView, decorateLogoImageView, decorateTextContentView)
 
         decorateTextContentView.addSubview(decorateFirstStackView)
         decorateFirstStackView.addArrangedSubview(decorateQuotationLeftImageView)
@@ -189,10 +183,7 @@ private extension LyricDecoratingViewController {
         decorateSecondStackView.addArrangedSubview(songTitleLabel)
         decorateSecondStackView.addArrangedSubview(artistLabel)
 
-        decorateBottomView.addSubview(decorateBottomShadowImageView)
-        decorateBottomView.addSubview(descriptionLabel)
-        decorateBottomView.addSubview(collectionView)
-        decorateBottomView.addSubview(saveButton)
+        decorateBottomView.addSubviews(decorateBottomShadowImageView, descriptionLabel, collectionView, saveButton)
     }
 
     func setAutoLayout() {

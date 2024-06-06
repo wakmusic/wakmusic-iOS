@@ -83,7 +83,7 @@ extension LyricDecoratingViewController {
 
         output.highlightingItems
             .filter { !$0.isEmpty }
-            .bind(with: self) { owner, lyric in
+            .map { lyric in
                 let style = NSMutableParagraphStyle()
                 style.alignment = .center
                 style.lineSpacing = 8
@@ -96,8 +96,9 @@ extension LyricDecoratingViewController {
                         .paragraphStyle: style
                     ]
                 )
-                owner.highlightingLyricLabel.attributedText = attributedString
+                return attributedString
             }
+            .bind(to: highlightingLyricLabel.rx.attributedText)
             .disposed(by: disposeBag)
     }
 }
