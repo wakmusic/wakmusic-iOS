@@ -1,11 +1,11 @@
 import UIKit
 import Utility
 
-final class SearchResultCollecctionViewLayout: UICollectionViewCompositionalLayout {
+final class IntegratedSearchResultCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { _, _ in
 
-            return SearchResultCollecctionViewLayout.configureLayout()
+            return IntegratedSearchResultCollectionViewLayout.configureLayout()
         }
     }
 
@@ -15,24 +15,22 @@ final class SearchResultCollecctionViewLayout: UICollectionViewCompositionalLayo
     }
 }
 
-extension SearchResultCollecctionViewLayout {
+extension IntegratedSearchResultCollectionViewLayout {
     private static func configureLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
         var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(0.25)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(0.16)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
-        group.interItemSpacing = .fixed(8.0)
-        group.contentInsets = .init(top: 8.0, leading: 20, bottom: 8.0, trailing: 20)
-
+    
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: .zero, bottom: .zero, trailing: .zero)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20.0, bottom: .zero, trailing: 20.0)
 
         return section
     }

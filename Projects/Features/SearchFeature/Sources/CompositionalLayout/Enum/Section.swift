@@ -10,8 +10,7 @@ internal enum RecommendSection: Hashable {
     case main
 }
 
-internal enum SearchResultSection: Hashable {
-    case all
+internal enum IntegratedSearchResultSection: Hashable {
     case song
     case artist
     case remix
@@ -21,9 +20,7 @@ internal enum SearchResultSection: Hashable {
     var title: String {
         
         switch self {
-            
-        case .all:
-            "통합검색"
+        
         case .song:
             "곡"
         case .artist:
@@ -37,5 +34,5 @@ internal enum SearchResultSection: Hashable {
         }
         
     }
-    
+
 }

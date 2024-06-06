@@ -59,7 +59,7 @@ final class IntegratedSearchResultViewController: BaseReactorViewController<Inte
 extension IntegratedSearchResultViewController {
     
     private func createCollectionView() -> UICollectionView {
-        return UICollectionView(frame: .zero, collectionViewLayout: RecommendCollectionViewLayout())
+        return UICollectionView(frame: .zero, collectionViewLayout: IntegratedSearchResultCollectionViewLayout())
     }
 
     
