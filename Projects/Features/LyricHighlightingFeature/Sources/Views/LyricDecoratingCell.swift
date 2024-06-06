@@ -60,9 +60,7 @@ extension LyricDecoratingCell {
 
 private extension LyricDecoratingCell {
     func addSubViews() {
-        contentView.addSubview(decoImageView)
-        contentView.addSubview(checkBoxContentView)
-        contentView.addSubview(descriptionContentView)
+        contentView.addSubviews(decoImageView, checkBoxContentView, descriptionContentView)
         checkBoxContentView.addSubview(checkBoxImageView)
         descriptionContentView.addSubview(descriptionLabel)
     }
