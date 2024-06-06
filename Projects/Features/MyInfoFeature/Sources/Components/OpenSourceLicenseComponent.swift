@@ -1,7 +1,7 @@
 import Foundation
-import UIKit
-import NeedleFoundation
 import MyInfoFeatureInterface
+import NeedleFoundation
+import UIKit
 
 public protocol OpenSourceLicenseDependency: Dependency {}
 
