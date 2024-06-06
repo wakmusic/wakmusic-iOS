@@ -1,16 +1,8 @@
-//
-//  RecentRecordHeaderView.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import UIKit
 import Utility
 
-class RecentRecordHeaderView: UIView {
+final class RecentRecordHeaderView: UIView {
     @IBOutlet weak var removeAllButton: UIButton!
     @IBOutlet weak var removeAllLabel: UILabel!
     @IBOutlet weak var recentLabel: UILabel!

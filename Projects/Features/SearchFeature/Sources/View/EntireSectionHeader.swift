@@ -6,7 +6,7 @@ protocol EntireSectionHeaderDelegate: AnyObject {
     func switchTapEvent(_ type: TabPosition)
 }
 
-class EntireSectionHeader: UIView {
+final class EntireSectionHeader: UIView {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var moveTabButton: UIButton!
     @IBOutlet weak var numberOfSongLabel: UILabel!
