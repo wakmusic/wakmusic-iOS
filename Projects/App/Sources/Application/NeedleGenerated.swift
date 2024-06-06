@@ -21,6 +21,7 @@ import KeychainModule
 import LikeDomain
 import LikeDomainInterface
 import LyricHighlightingFeature
+import LyricHighlightingFeatureInterface
 import MainTabFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
@@ -169,6 +170,9 @@ private class LyricHighlightingDependency47c68b56cdde819901d2Provider: LyricHigh
     }
     var lyricDecoratingComponent: LyricDecoratingComponent {
         return appComponent.lyricDecoratingComponent
+    }
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
+        return appComponent.lyricHighlightingFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -790,7 +794,7 @@ extension AppComponent: Registration {
         localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
         localTable["newSongsContentComponent-NewSongsContentComponent"] = { self.newSongsContentComponent as Any }
-        localTable["lyricHighlightingComponent-LyricHighlightingComponent"] = { self.lyricHighlightingComponent as Any }
+        localTable["lyricHighlightingFactory-any LyricHighlightingFactory"] = { self.lyricHighlightingFactory as Any }
         localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { self.lyricDecoratingComponent as Any }
         localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
@@ -924,6 +928,7 @@ extension LyricHighlightingComponent: Registration {
     public func registerItems() {
         keyPathToName[\LyricHighlightingDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
         keyPathToName[\LyricHighlightingDependency.lyricDecoratingComponent] = "lyricDecoratingComponent-LyricDecoratingComponent"
+        keyPathToName[\LyricHighlightingDependency.lyricHighlightingFactory] = "lyricHighlightingFactory-any LyricHighlightingFactory"
     }
 }
 extension LyricDecoratingComponent: Registration {

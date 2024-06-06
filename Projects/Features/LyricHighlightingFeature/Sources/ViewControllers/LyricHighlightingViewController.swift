@@ -6,7 +6,7 @@ import RxSwift
 import UIKit
 import Utility
 
-open class LyricHighlightingViewController: UIViewController {
+public final class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
 
     let backButton = UIButton(type: .system).then {
@@ -86,7 +86,7 @@ open class LyricHighlightingViewController: UIViewController {
         fatalError("\(Self.self) has not been implemented")
     }
 
-    override open func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
         setAutoLayout()
@@ -105,7 +105,7 @@ open class LyricHighlightingViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
-    override open func viewDidLayoutSubviews() {
+    override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedLayer == nil {
             let dimmedLayer = DimmedGradientLayer(frame: dimmedBackgroundView.bounds)

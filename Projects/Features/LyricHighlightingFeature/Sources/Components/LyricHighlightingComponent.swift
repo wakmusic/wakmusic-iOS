@@ -1,14 +1,17 @@
 import Foundation
+import UIKit
 import NeedleFoundation
 import SongsDomainInterface
+import LyricHighlightingFeatureInterface
 
 public protocol LyricHighlightingDependency: Dependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase { get }
     var lyricDecoratingComponent: LyricDecoratingComponent { get }
+    var lyricHighlightingFactory: any LyricHighlightingFactory { get }
 }
 
-public final class LyricHighlightingComponent: Component<LyricHighlightingDependency> {
-    public func makeView(model: LyricHighlightingRequiredModel) -> LyricHighlightingViewController {
+public final class LyricHighlightingComponent: Component<LyricHighlightingDependency>, LyricHighlightingFactory {    
+    public func makeView(model: LyricHighlightingRequiredModel) -> UIViewController {
         let viewModel = LyricHighlightingViewModel(model: model, fetchLyricsUseCase: dependency.fetchLyricsUseCase)
         return LyricHighlightingViewController(
             viewModel: viewModel,

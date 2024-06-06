@@ -5,6 +5,7 @@ import RxRelay
 import RxSwift
 import SongsDomainInterface
 import Utility
+import LyricHighlightingFeatureInterface
 
 public final class LyricHighlightingViewModel: ViewModelType {
     private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])

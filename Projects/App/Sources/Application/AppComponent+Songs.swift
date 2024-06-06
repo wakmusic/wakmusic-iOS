@@ -3,6 +3,7 @@ import HomeFeature
 import LyricHighlightingFeature
 import SongsDomain
 import SongsDomainInterface
+import LyricHighlightingFeatureInterface
 
 public extension AppComponent {
     var homeComponent: HomeComponent {
@@ -17,7 +18,7 @@ public extension AppComponent {
         NewSongsContentComponent(parent: self)
     }
 
-    var lyricHighlightingComponent: LyricHighlightingComponent {
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
         LyricHighlightingComponent(parent: self)
     }
 

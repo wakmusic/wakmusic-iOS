@@ -1,10 +1,10 @@
 import Foundation
 
 public struct LyricHighlightingRequiredModel {
-    let songID: String
-    let title: String
-    let artist: String
-    let highlightingItems: [String]
+    public let songID: String
+    public let title: String
+    public let artist: String
+    public let highlightingItems: [String]
 
     public init(
         songID: String,

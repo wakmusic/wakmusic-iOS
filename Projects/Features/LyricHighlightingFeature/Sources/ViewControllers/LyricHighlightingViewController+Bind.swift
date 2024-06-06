@@ -2,6 +2,7 @@ import DesignSystem
 import Foundation
 import LogManager
 import UIKit
+import LyricHighlightingFeatureInterface
 
 extension LyricHighlightingViewController {
     func inputBind() {

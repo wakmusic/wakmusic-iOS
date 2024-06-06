@@ -1,5 +1,6 @@
 import Foundation
 import NeedleFoundation
+import LyricHighlightingFeatureInterface
 
 public protocol LyricDecoratingDependency: Dependency {}
 
