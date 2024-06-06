@@ -5,12 +5,9 @@ public enum TabPosition: Int {
     case remix
     case credit
     case list
-    
-    
+
     var title: String {
-        
         switch self {
-            
         case .all:
             "통합검색"
         case .song:
@@ -24,7 +21,6 @@ public enum TabPosition: Int {
         case .list:
             "리스트"
         }
-        
     }
 }
 

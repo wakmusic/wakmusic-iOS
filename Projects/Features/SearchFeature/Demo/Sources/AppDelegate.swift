@@ -21,7 +21,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 playlistDetailFactory: PlaylistDetailFactoryStub(),
                 reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
             )
-        
+
         let component = IntegratedSearchResultViewController(reactor: IntegratedSearchResultReactor())
 
         let viewController = Inject.ViewControllerHost(

@@ -7,10 +7,10 @@ import ReactorKit
 import RxCocoa
 import RxKeyboard
 import RxSwift
+import SearchFeatureInterface
 import SnapKit
 import UIKit
 import Utility
-import SearchFeatureInterface
 
 internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {

@@ -4,8 +4,8 @@ import LogManager
 import ReactorKit
 import RxRelay
 import RxSwift
-import Utility
 import SearchFeatureInterface
+import Utility
 
 final class SearchReactor: Reactor {
     private var disposeBag: DisposeBag = DisposeBag()

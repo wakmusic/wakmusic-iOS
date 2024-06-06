@@ -1,6 +1,6 @@
 import DesignSystem
-import UIKit
 import SearchFeatureInterface
+import UIKit
 
 protocol EntireSectionHeaderDelegate: AnyObject {
     func switchTapEvent(_ type: TabPosition)

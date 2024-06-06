@@ -5,11 +5,11 @@ import NVActivityIndicatorView
 import Pageboy
 import ReactorKit
 import RxSwift
+import SearchFeatureInterface
 import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import SearchFeatureInterface
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView,
     SongCartViewType {

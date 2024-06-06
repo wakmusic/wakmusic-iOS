@@ -19,7 +19,6 @@ enum BeforeVcDataSoruce: Hashable {
     }
 }
 
-
 enum IntegratedResultDataSource: Hashable {
     case song(mdeol: SongEntity)
 }

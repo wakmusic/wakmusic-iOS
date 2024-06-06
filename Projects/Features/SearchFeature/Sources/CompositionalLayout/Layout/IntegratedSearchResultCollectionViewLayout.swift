@@ -28,7 +28,6 @@ extension IntegratedSearchResultCollectionViewLayout {
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
-    
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 20.0, bottom: .zero, trailing: 20.0)
 

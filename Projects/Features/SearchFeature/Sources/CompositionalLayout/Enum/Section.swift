@@ -16,11 +16,9 @@ internal enum IntegratedSearchResultSection: Hashable {
     case remix
     case credit
     case list
-    
+
     var title: String {
-        
         switch self {
-        
         case .song:
             "곡"
         case .artist:
@@ -32,7 +30,5 @@ internal enum IntegratedSearchResultSection: Hashable {
         case .list:
             "리스트"
         }
-        
     }
-
 }
