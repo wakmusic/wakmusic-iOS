@@ -1,11 +1,11 @@
 import AuthDomainInterface
-import AuthDomainTesting
+@testable import AuthDomainTesting
 import Foundation
 @testable import SignInFeature
 import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
-import UserDomainTesting
+@testable import UserDomainTesting
 
 public final class SignInComponentStub: SignInFactory {
     public func makeView() -> UIViewController {
