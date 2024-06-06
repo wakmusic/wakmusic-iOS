@@ -1,5 +1,4 @@
-// import BaseFeatureInterface
-import MyInfoFeature
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
 import UIKit
 
