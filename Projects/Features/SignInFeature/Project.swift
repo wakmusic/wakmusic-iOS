@@ -13,6 +13,7 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .PlayerFeature),
+                    .module(target: .KeychainModule),
                     .domain(target: .AuthDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
                     .feature(target: .SignInFeature, type: .interface)
