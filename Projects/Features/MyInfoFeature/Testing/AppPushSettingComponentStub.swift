@@ -1,11 +1,9 @@
 //import BaseFeatureInterface
+import MyInfoFeature
 import MyInfoFeatureInterface
-import NeedleFoundation
 import UIKit
 
-public protocol AppPushSettingDependency: Dependency {}
-
-public final class AppPushSettingComponent: Component<AppPushSettingDependency>, AppPushSettingFactory {
+public final class AppPushSettingComponentStub: AppPushSettingFactory {
     public func makeView() -> UIViewController {
         return AppPushSettingViewController.viewController(
             reactor: AppPushSettingReactor()

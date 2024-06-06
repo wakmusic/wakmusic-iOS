@@ -14,10 +14,10 @@ import Utility
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-    private var appPushSettingComponent: AppPushSettingComponent!
-    private var serviceTermsComponent: ServiceTermsComponent!
-    private var privacyComponent: PrivacyComponent!
-    private var openSourceLicenseComponent: OpenSourceLicenseComponent!
+    private var appPushSettingFactory: AppPushSettingFactory!
+    private var serviceTermsFactory: ServiceTermFactory!
+    private var privacyFactory: PrivacyFactory!
+    private var openSourceLicenseFactory: OpenSourceLicenseFactory!
 
     let settingView = SettingView()
 
@@ -29,18 +29,18 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor: SettingReactor,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory,
-        appPushSettingComponent: AppPushSettingComponent,
-        serviceTermsComponent: ServiceTermsComponent,
-        privacyComponent: PrivacyComponent,
-        openSourceLicenseComponent: OpenSourceLicenseComponent
+        appPushSettingFactory: AppPushSettingFactory,
+        serviceTermsFactory: ServiceTermFactory,
+        privacyFactory: PrivacyFactory,
+        openSourceLicenseFactory: OpenSourceLicenseFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
-        viewController.appPushSettingComponent = appPushSettingComponent
-        viewController.serviceTermsComponent = serviceTermsComponent
-        viewController.privacyComponent = privacyComponent
-        viewController.openSourceLicenseComponent = openSourceLicenseComponent
+        viewController.appPushSettingFactory = appPushSettingFactory
+        viewController.serviceTermsFactory = serviceTermsFactory
+        viewController.privacyFactory = privacyFactory
+        viewController.openSourceLicenseFactory = openSourceLicenseFactory
         return viewController
     }
 
@@ -52,18 +52,18 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 case .dismiss:
                     owner.navigationController?.popViewController(animated: true)
                 case .appPushSetting:
-                    let vc = owner.appPushSettingComponent.makeView()
+                    let vc = owner.appPushSettingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .serviceTerms:
-                    let vc = owner.serviceTermsComponent.makeView()
+                    let vc = owner.serviceTermsFactory.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .privacy:
-                    let vc = owner.privacyComponent.makeView()
+                    let vc = owner.privacyFactory.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .openSource:
-                    let vc = owner.openSourceLicenseComponent.makeView()
+                    let vc = owner.openSourceLicenseFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
