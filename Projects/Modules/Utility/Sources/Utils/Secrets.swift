@@ -79,10 +79,6 @@ public func GOOGLE_CLIENT_ID() -> String {
     return config(key: "GOOGLE_CLIENT_ID")
 }
 
-public func GOOGLE_SECRET_KEY() -> String {
-    return config(key: "GOOGLE_SECRET_KEY")
-}
-
 /// WAKTAVERSEMUSIC
 public func WM_APP_ID() -> String {
     return config(key: "WM_APP_ID")

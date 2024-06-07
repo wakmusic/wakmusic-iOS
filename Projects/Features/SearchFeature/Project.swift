@@ -20,6 +20,9 @@ let project = Project.module(
                     .domain(target: .SongsDomain, type: .interface),
                 ]
             )
-        )
+        ),
+        .demo(module: .feature(.SearchFeature), dependencies: [
+            .feature(target: .SearchFeature)
+        ])
     ]
 )

@@ -1,11 +1,3 @@
-//
-//  SearchViewModel.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/05.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeatureInterface
@@ -21,10 +13,10 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var key: String
     let disposeBag: DisposeBag = DisposeBag()
 
-    var createPlayListUseCase: CreatePlayListUseCase!
-    var loadPlayListUseCase: LoadPlayListUseCase!
-    var setUserNameUseCase: SetUserNameUseCase!
-    var editPlayListNameUseCase: EditPlayListNameUseCase!
+    let createPlayListUseCase: CreatePlayListUseCase!
+    let setUserNameUseCase: SetUserNameUseCase!
+    // TODO: 플레이리스트 이름 변경 Usecase
+    private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
     private let logoutUseCase: any LogoutUseCase
 
     public struct Input {
@@ -43,17 +35,15 @@ public final class MultiPurposePopupViewModel: ViewModelType {
         type: PurposeType,
         key: String,
         createPlayListUseCase: CreatePlayListUseCase,
-        loadPlayListUseCase: LoadPlayListUseCase,
         setUserNameUseCase: SetUserNameUseCase,
-        editPlayListNameUseCase: EditPlayListNameUseCase,
+        updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
         self.createPlayListUseCase = createPlayListUseCase
-        self.loadPlayListUseCase = loadPlayListUseCase
         self.setUserNameUseCase = setUserNameUseCase
-        self.editPlayListNameUseCase = editPlayListNameUseCase
+        self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
         self.logoutUseCase = logoutUseCase
     }
 
@@ -84,28 +74,16 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                                 return logoutUseCase.execute()
                                     .andThen(.never())
                             } else {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 0,
-                                        key: "",
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
+                                output.result.onNext(BaseEntity(
+                                    status: 400,
+                                    description: wmError.asWMError.errorDescription ?? ""
+                                ))
+                                return .never()
                             }
                         }
                         .asObservable()
-                        .map { entity -> (BaseEntity, String) in
-                            return (BaseEntity(status: entity.status, description: entity.description), entity.key)
-                        }
-                        .subscribe(onNext: { (result: BaseEntity, key: String) in
-                            if result.status != 200 { // Created == 201
-                                output.result.onNext(result)
-                                return
-                            }
-                            // 리프래쉬 작업
-                            output.result.onNext(result)
-                            output.newPlayListKey.onNext(key)
+                        .subscribe(onNext: { _ in
+                            output.result.onNext(BaseEntity(status: 200, description: ""))
                             NotificationCenter.default.post(name: .playListRefresh, object: nil)
                         })
                         .disposed(by: self.disposeBag)
@@ -139,73 +117,31 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                             output.result.onNext(BaseEntity(status: 200, description: ""))
                         }).disposed(by: self.disposeBag)
 
-                case .load:
-                    self.loadPlayListUseCase.execute(key: text)
+                case .updatePlaylistTile:
+                    break
+                    self.updateTitleAndPrivateUseCase
+                        .execute(key: key, title: text, isPrivate: nil)
                         .catch { (error: Error) in
                             let wmError = error.asWMError
-                            if wmError == .tokenExpired {
-                                logoutRelay.accept(error)
-                                return logoutUseCase.execute()
-                                    .andThen(.never())
-                            } else {
-                                return Single<PlayListBaseEntity>.create { single in
-                                    single(.success(PlayListBaseEntity(
-                                        status: 0,
-                                        key: "",
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
-                            }
-                        }
-                        .asObservable()
-                        .map { entity -> BaseEntity in
-                            return BaseEntity(status: entity.status, description: entity.description)
-                        }
-                        .subscribe(onNext: { result in
-                            if result.status != 200 { // Created == 201
-                                output.result.onNext(result)
-                                return
-                            }
-                            // 리프래쉬 작업
-                            NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                            output.result.onNext(result)
-                        })
-                        .disposed(by: self.disposeBag)
 
-                case .edit:
-                    self.editPlayListNameUseCase.execute(key: self.key, title: text)
-                        .catch { (error: Error) in
-                            let wmError = error.asWMError
-                            if wmError == .tokenExpired {
+                            switch wmError {
+                            case .tokenExpired:
                                 logoutRelay.accept(error)
                                 return logoutUseCase.execute()
                                     .andThen(.never())
-                            } else {
-                                return Single<EditPlayListNameEntity>.create { single in
-                                    single(.success(EditPlayListNameEntity(
-                                        title: "",
-                                        status: 0,
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
+                            default:
+                                output.result.onNext(BaseEntity(
+                                    status: 400,
+                                    description: wmError.errorDescription ?? "잘못된 요청입니다."
+                                ))
                             }
+                            return .never()
                         }
-                        .asObservable()
-                        .subscribe(onNext: { result in
-                            if result.status != 200 {
-                                output.result.onNext(BaseEntity(status: result.status, description: result.description))
-                                return
-                            }
+                        .subscribe(onCompleted: {
                             NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                            NotificationCenter.default.post(name: .playListNameRefresh, object: result.title)
-                            output.result.onNext(BaseEntity(status: 200, description: ""))
+                            NotificationCenter.default.post(name: .playListNameRefresh, object: text)
                         })
-                        .disposed(by: self.disposeBag)
-
-                case .share:
-                    output.result.onNext(BaseEntity(status: 200, description: ""))
+                        .disposed(by: disposeBag)
                 }
             }).disposed(by: disposeBag)
 

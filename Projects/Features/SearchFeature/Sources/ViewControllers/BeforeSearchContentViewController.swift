@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
 import PlayListDomainInterface
@@ -11,32 +12,31 @@ import RxSwift
 import UIKit
 import Utility
 
-protocol BeforeSearchContentViewDelegate: AnyObject {
-    func itemSelected(_ keyword: String)
+public struct Model: Hashable {
+    let title: String
 }
 
-public final class BeforeSearchContentViewController: BaseStoryboardReactorViewController<BeforeSearchReactor> {
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var indicator: NVActivityIndicatorView!
+public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
+    private let playlistDetailFactory: PlaylistDetailFactory
+    private let textPopUpFactory: TextPopUpFactory
+    private let tableView: UITableView = UITableView().then {
+        $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
+        $0.separatorStyle = .none
+        $0.isHidden = true
+    }
 
-    weak var delegate: BeforeSearchContentViewDelegate?
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
 
-    var playlistDetailFactory: PlaylistDetailFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    private lazy var collectionView: UICollectionView = createCollectionView()
 
-    public static func viewController(
+    init(
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         reactor: BeforeSearchReactor
-    ) -> BeforeSearchContentViewController {
-        let viewController = BeforeSearchContentViewController.viewController(
-            storyBoardName: "Search",
-            bundle: Bundle.module
-        )
-        viewController.textPopUpFactory = textPopUpFactory
-        viewController.playlistDetailFactory = playlistDetailFactory
-        viewController.reactor = reactor
-        return viewController
+    ) {
+        self.textPopUpFactory = textPopUpFactory
+        self.playlistDetailFactory = playlistDetailFactory
+        super.init(reactor: reactor)
     }
 
     deinit {
@@ -46,6 +46,24 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
+        initDataSource()
+    }
+
+    override public func addView() {
+        super.addView()
+        self.view.addSubviews(collectionView, tableView)
+    }
+
+    override public func setLayout() {
+        super.setLayout()
+
+        tableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
+        collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 
     override public func configureUI() {
@@ -54,9 +72,6 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
-        self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.indicator.startAnimating()
     }
 
     override public func bind(reactor: BeforeSearchReactor) {
@@ -65,27 +80,14 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
         // 헤더 적용을 위한 델리게이트
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        collectionView.delegate = self
     }
 
     override public func bindAction(reactor: BeforeSearchReactor) {
         super.bindAction(reactor: reactor)
 
         tableView.rx.modelSelected(String.self)
-            .bind { [delegate] keyword in
-                delegate?.itemSelected(keyword)
-            }
-            .disposed(by: disposeBag)
-
-        guard let parent = self.parent as? SearchViewController else {
-            return
-        }
-
-        // TODO: #531
-        parent.reactor?.state
-            .map(\.typingState)
-            .asObservable()
-            .map { $0 == .before }
-            .map { Reactor.Action.updateShowRecommend($0) }
+            .map { Reactor.Action.rencentTextDidTap($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -93,26 +95,31 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let currentState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share(replay: 2)
 
-        let combine = Observable.combineLatest(
-            currentState.map(\.showRecommend),
-            Utility.PreferenceManager.$recentRecords,
-            currentState.map(\.dataSource)
-        )
-
-        combine
-            .map { (showRecommend: Bool, item: [String]?, _) -> [String] in
-                if showRecommend { // 만약 추천리스트면 검색목록 보여지면 안되므로 빈 배열
-                    return []
+        sharedState.map(\.isLoading)
+            .withUnretained(self)
+            .bind(onNext: { onwer, isLoading in
+                if isLoading {
+                    onwer.indicator.startAnimating()
                 } else {
-                    return item ?? []
+                    onwer.indicator.stopAnimating()
                 }
-            }
-            .do(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.indicator.stopAnimating()
             })
+            .disposed(by: disposeBag)
+
+        // 검색 전, 최근 검색어 스위칭
+        sharedState.map(\.showRecommend)
+            .withUnretained(self)
+            .bind { owner, flag in
+                owner.tableView.isHidden = flag
+                owner.collectionView.isHidden = !flag
+            }
+            .disposed(by: disposeBag)
+
+        // 최근 검색어 tableView 셋팅
+        Utility.PreferenceManager.$recentRecords
+            .compactMap { $0 ?? [] }
             .bind(to: tableView.rx.items) { (
                 tableView: UITableView,
                 index: Int,
@@ -125,7 +132,9 @@ public final class BeforeSearchContentViewController: BaseStoryboardReactorViewC
                     return RecentRecordTableViewCell()
                 }
                 cell.backgroundColor = .clear
-                cell.recentLabel.text = element
+                cell.selectionStyle = .none
+                cell.update(element)
+
                 return cell
             }.disposed(by: disposeBag)
     }
@@ -141,12 +150,8 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             return .zero
         }
 
-        if state.showRecommend {
-            return RecommendPlayListView.getViewHeight(model: state.dataSource)
-
-        } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
             return (APP_HEIGHT() * 3) / 8
-
         } else {
             return 68
         }
@@ -180,21 +185,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             self.showPanModal(content: textPopupViewController)
         }
 
-        let recommendView = RecommendPlayListView(
-            frame: CGRect(
-                x: 0,
-                y: 0,
-                width: APP_WIDTH(),
-                height: RecommendPlayListView.getViewHeight(model: state.dataSource)
-            )
-        )
-        recommendView.dataSource = state.dataSource
-        recommendView.delegate = self
-
-        if state.showRecommend {
-            return recommendView
-
-        } else if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
             return warningView
 
         } else {
@@ -203,13 +194,144 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     }
 }
 
-extension BeforeSearchContentViewController: RecommendPlayListViewDelegate {
-    public func itemSelected(model: RecommendPlayListEntity) {
-        lazy var playListDetailVc = playlistDetailFactory.makeView(
-            id: model.key,
-            isCustom: false
+// MARK: Compositional
+extension BeforeSearchContentViewController {
+    private func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchCollectionViewLayout())
+    }
+
+    private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
+        // MARK: Cell
+
+        let youtubeCellRegistration = UICollectionView
+            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+            }
+
+        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+            nibName: "RecommendPlayListCell",
+            bundle: BaseFeatureResources.bundle
+        )) { cell, indexPath, itemIdentifier in
+            cell.update(
+                model: RecommendPlayListEntity(
+                    key: "best",
+                    title: "임시 플레이리스트",
+                    image: "",
+                    private: true,
+                    count: 0
+                )
+            )
+        }
+
+        let popularListCellRegistration = UICollectionView
+            .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
+
+                cell.update(item)
+            }
+
+        // MARK: Header
+
+        let headerRegistration = UICollectionView
+            .SupplementaryRegistration<BeforeSearchSectionHeaderView>(
+                elementKind: BeforeSearchSectionHeaderView
+                    .kind
+            ) { [weak self] supplementaryView, string, indexPath in
+
+                guard let self else { return }
+                supplementaryView.delegate = self
+                supplementaryView.update("임시 타이틀", indexPath.section)
+            }
+
+        let dataSource = UICollectionViewDiffableDataSource<
+            Section,
+            BeforeVcDataSoruce
+        >(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
+
+            switch item {
+            case let .youtube(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: youtubeCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            case let .recommend(model2: model2):
+                return
+                    collectionView.dequeueConfiguredReusableCell(
+                        using: recommendCellRegistration,
+                        for: indexPath,
+                        item: model2
+                    )
+
+            case let .popularList(model: model):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: popularListCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            }
+        }
+
+        dataSource.supplementaryViewProvider = { collectionView, kind, index in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
+
+        return dataSource
+    }
+
+    private func initDataSource() {
+        // initial data
+        var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
+        snapshot.appendSections([.youtube, .recommend, .popularList])
+        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
+        snapshot.appendItems(
+            [
+                .recommend(model2: Model(title: "123")),
+                .recommend(model2: Model(title: "456")),
+                .recommend(model2: Model(title: "4564")),
+                .recommend(model2: Model(title: "4516")),
+            ],
+            toSection: .recommend
         )
-        self.navigationController?.pushViewController(playListDetailVc, animated: true)
+        snapshot.appendItems(
+            [
+                .popularList(model: Model(title: "Hello1")),
+                .popularList(model: Model(title: "Hello2")),
+                .popularList(model: Model(title: "Hello3")),
+            ],
+            toSection: .popularList
+        )
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+}
+
+// MARK: CollectionView Deleagte
+extension BeforeSearchContentViewController: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
+            return
+        }
+
+        switch model {
+        case let .youtube(model: model):
+            LogManager.printDebug("youtube \(model)")
+        case let .recommend(model2: model2):
+            LogManager.printDebug("recommend \(model2)")
+        case let .popularList(model: model):
+            LogManager.printDebug("popular \(model)")
+        }
+    }
+}
+
+// MARK: 전체보기
+extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
+    func tap(_ section: Int?) {
+        if let section = section, let layoutKind = Section(rawValue: section) {
+            print(layoutKind)
+        }
     }
 }
 

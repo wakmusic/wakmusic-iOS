@@ -46,7 +46,7 @@ internal final class PlaylistDetailReactor: Reactor {
 
     private var disposeBag = DisposeBag()
     private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
-    private let editPlayListUseCase: any EditPlayListUseCase
+    private let updatePlaylistUseCase: any UpdatePlaylistUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let logoutUseCase: any LogoutUseCase
 
@@ -54,14 +54,14 @@ internal final class PlaylistDetailReactor: Reactor {
         key: String,
         type: PlayListType,
         fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase,
-        editPlayListUseCase: any EditPlayListUseCase,
+        updatePlaylistUseCase: any UpdatePlaylistUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
-        self.editPlayListUseCase = editPlayListUseCase
+        self.updatePlaylistUseCase = updatePlaylistUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.logoutUseCase = logoutUseCase
         self.initialState = .init(
@@ -70,8 +70,7 @@ internal final class PlaylistDetailReactor: Reactor {
             header: PlayListHeaderModel(
                 title: "",
                 songCount: "",
-                image: "",
-                version: 0
+                image: ""
             ),
             selectedItemCount: 0,
             isEditing: false
@@ -148,9 +147,7 @@ private extension PlaylistDetailReactor {
                     title: "",
                     songs: [],
                     image: "",
-                    image_square_version: 0,
-                    image_round_version: 0,
-                    version: 0
+                    private: false
                 )
             )
             .asObservable()
@@ -159,7 +156,7 @@ private extension PlaylistDetailReactor {
                 guard let self else {
                     return PlaylistMetaData(
                         list: [],
-                        header: PlayListHeaderModel(title: "", songCount: "", image: "", version: 0)
+                        header: PlayListHeaderModel(title: "", songCount: "", image: "")
                     )
                 }
                 return PlaylistMetaData(
@@ -167,8 +164,7 @@ private extension PlaylistDetailReactor {
                     header: PlayListHeaderModel(
                         title: result.title,
                         songCount: "\(result.songs.count)곡",
-                        image: self.type == .wmRecommend ? result.key : result.image,
-                        version: self.type == .wmRecommend ? result.image_square_version : result.version
+                        image: result.image
                     )
                 )
             }
@@ -208,7 +204,7 @@ private extension PlaylistDetailReactor {
             return .empty()
         }
 
-        return editPlayListUseCase
+        return updatePlaylistUseCase
             .execute(key: key, songs: dataSource)
             .asObservable()
             .do(onNext: { _ in

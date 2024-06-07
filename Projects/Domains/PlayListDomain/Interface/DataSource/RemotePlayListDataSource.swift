@@ -1,14 +1,16 @@
 import BaseDomainInterface
 import Foundation
 import RxSwift
+import SongsDomainInterface
 
 public protocol RemotePlayListDataSource {
     func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
     func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity>
+    func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
     func createPlayList(title: String) -> Single<PlayListBaseEntity>
-    func editPlayList(key: String, songs: [String]) -> Single<BaseEntity>
-    func editPlayListName(key: String, title: String) -> Single<EditPlayListNameEntity>
-    func loadPlayList(key: String) -> Single<PlayListBaseEntity>
+    func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
+    func updatePlaylist(key: String, songs: [String]) -> Completable
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Single<BaseEntity>
+    func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity>
 }

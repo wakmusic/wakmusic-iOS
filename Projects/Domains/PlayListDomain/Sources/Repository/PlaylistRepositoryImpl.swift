@@ -1,14 +1,7 @@
-//
-//  ArtistRepositoryImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import PlayListDomainInterface
 import RxSwift
+import SongsDomainInterface
 
 public final class PlayListRepositoryImpl: PlayListRepository {
     private let remotePlayListDataSource: any RemotePlayListDataSource
@@ -27,20 +20,20 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
 
+    public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
+        remotePlayListDataSource.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
+    }
+
     public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
         remotePlayListDataSource.createPlayList(title: title)
     }
 
-    public func editPlayList(key: String, songs: [String]) -> Single<BaseEntity> {
-        return remotePlayListDataSource.editPlayList(key: key, songs: songs)
+    public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
+        remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }
 
-    public func editPlayListName(key: String, title: String) -> Single<EditPlayListNameEntity> {
-        remotePlayListDataSource.editPlayListName(key: key, title: title)
-    }
-
-    public func loadPlayList(key: String) -> Single<PlayListBaseEntity> {
-        remotePlayListDataSource.loadPlayList(key: key)
+    public func updatePlayList(key: String, songs: [String]) -> Completable {
+        return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 
     public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
@@ -49,5 +42,9 @@ public final class PlayListRepositoryImpl: PlayListRepository {
 
     public func removeSongs(key: String, songs: [String]) -> RxSwift.Single<BaseEntity> {
         remotePlayListDataSource.removeSongs(key: key, songs: songs)
+    }
+
+    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
+        remotePlayListDataSource.uploadImage(key: key, model: model)
     }
 }

@@ -1,11 +1,3 @@
-//
-//  Extension+UIButton.swift
-//  Utility
-//
-//  Created by yongbeomkwak on 2023/01/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Combine
 import Foundation
 import UIKit
@@ -48,5 +40,14 @@ public extension UIButton {
 
         titleEdgeInsets = UIEdgeInsets(top: spacing, left: -image.size.width, bottom: -image.size.height, right: 0)
         imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + spacing), left: 0, bottom: 0, right: -titleSize.width)
+    }
+
+    func addAction(for event: UIControl.Event = .primaryActionTriggered, _ action: @escaping () -> Void) {
+        self.addAction(
+            UIAction { _ in
+                action()
+            },
+            for: event
+        )
     }
 }

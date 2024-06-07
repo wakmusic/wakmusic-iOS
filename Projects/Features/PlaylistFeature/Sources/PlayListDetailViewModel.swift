@@ -23,7 +23,7 @@ public final class PlayListDetailViewModel: ViewModelType {
     var id: String!
     var key: String?
     var fetchPlayListDetailUseCase: FetchPlayListDetailUseCase!
-    var editPlayListUseCase: EditPlayListUseCase!
+    var updatePlaylistUseCase: UpdatePlaylistUseCase!
     var removeSongsUseCase: RemoveSongsUseCase!
     private let logoutUseCase: any LogoutUseCase
     var disposeBag = DisposeBag()
@@ -56,14 +56,14 @@ public final class PlayListDetailViewModel: ViewModelType {
         id: String,
         type: PlayListType,
         fetchPlayListDetailUseCase: FetchPlayListDetailUseCase,
-        editPlayListUseCase: EditPlayListUseCase,
+        updatePlaylistUseCase: UpdatePlaylistUseCase,
         removeSongsUseCase: RemoveSongsUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.id = id
         self.type = type
         self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
-        self.editPlayListUseCase = editPlayListUseCase
+        self.updatePlaylistUseCase = updatePlaylistUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.logoutUseCase = logoutUseCase
     }
@@ -87,9 +87,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                             title: "",
                             songs: [],
                             image: "",
-                            image_square_version: 0,
-                            image_round_version: 0,
-                            version: 0
+                            private: false
                         )
                     )
                     .asObservable()
@@ -99,9 +97,7 @@ public final class PlayListDetailViewModel: ViewModelType {
                             PlayListHeaderModel(
                                 title: model.title,
                                 songCount: "\(model.songs.count)곡",
-                                image: self.type == .wmRecommend ?
-                                    model.key : model.image, version: self.type == .wmRecommend ?
-                                    model.image_square_version : model.version
+                                image: model.image
                             )
                         )
                         self.key = model.key
@@ -114,7 +110,7 @@ public final class PlayListDetailViewModel: ViewModelType {
         input.playListNameLoad
             .skip(1)
             .withLatestFrom(output.headerInfo) { ($0, $1) }
-            .map { PlayListHeaderModel(title: $0.0, songCount: $0.1.songCount, image: $0.1.image, version: $0.1.version)
+            .map { PlayListHeaderModel(title: $0.0, songCount: $0.1.songCount, image: $0.1.image)
             }
             .bind(to: output.headerInfo)
             .disposed(by: disposeBag)
@@ -133,11 +129,11 @@ public final class PlayListDetailViewModel: ViewModelType {
                 DEBUG_LOG(elementsEqual ? "❌ 변경된 내용이 없습니다." : "✅ 리스트가 변경되었습니다.")
                 return elementsEqual == false
             }
-            .flatMap { [weak self] (songs: [String]) -> Observable<BaseEntity> in
+            .flatMap { [weak self] (songs: [String]) -> Completable in
                 guard let self = self, let key = self.key else {
-                    return Observable.empty()
+                    return .empty()
                 }
-                return self.editPlayListUseCase.execute(key: key, songs: songs)
+                return self.updatePlaylistUseCase.execute(key: key, songs: songs)
                     .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
 
@@ -145,28 +141,21 @@ public final class PlayListDetailViewModel: ViewModelType {
                             logoutRelay.accept(wmError)
                             return logoutUseCase.execute()
                                 .andThen(.never())
+                        } else {
+                            output.showErrorToast.accept(BaseEntity(
+                                status: 0,
+                                description: error.asWMError.errorDescription ?? ""
+                            ))
                         }
 
-                        else {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(
-                                    status: 0,
-                                    description: error.asWMError.errorDescription ?? ""
-                                )))
-                                return Disposables.create {}
-                            }
-                        }
+                        return .never()
                     }
-                    .asObservable()
             }
-            .subscribe(onNext: { model in
-                if model.status != 200 {
-                    output.showErrorToast.accept(model)
-                    return
-                }
+            .subscribe(onCompleted: {
                 output.refreshPlayList.accept(())
                 NotificationCenter.default.post(name: .playListRefresh, object: nil) // 바깥 플리 업데이트
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
 
         input.cancelEdit
             .withLatestFrom(output.backUpdataSource)
