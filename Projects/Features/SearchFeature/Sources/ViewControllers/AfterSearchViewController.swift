@@ -82,7 +82,7 @@ extension AfterSearchViewController {
     func bindAction(reactor: AfterSearchReactor) {}
 
     private func configureUI() {
-        self.fakeView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.dataSource = self // dateSource
@@ -98,15 +98,15 @@ extension AfterSearchViewController {
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
-            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            button.tintColor = DesignSystemAsset.BlueGrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            button.font = .setFont(.t5(weight: .medium))
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
 
         // indicator
         bar.indicator.weight = .custom(value: 2)
-        bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
+        bar.indicator.tintColor = DesignSystemAsset.PrimaryColorV2.point.color
         bar.indicator.overscrollBehavior = .compress
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         bar.layer.addBorder(
@@ -115,9 +115,6 @@ extension AfterSearchViewController {
             height: 1
         )
     }
-
-
-
 }
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
@@ -149,7 +146,6 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
         }
     }
 }
-
 
 
 extension AfterSearchViewController {
