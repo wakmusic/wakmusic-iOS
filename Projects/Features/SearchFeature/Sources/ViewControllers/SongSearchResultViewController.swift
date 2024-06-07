@@ -95,13 +95,11 @@ extension SongSearchResultViewController {
                 item: SongEntity
             ) -> UICollectionViewCell? in
 
-
             return collectionView.dequeueConfiguredReusableCell(
                 using: songCellRegistration,
                 for: indexPath,
                 item: item
             )
-
         }
 
         dataSource.supplementaryViewProvider = { collectionView, _, index in
