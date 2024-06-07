@@ -9,5 +9,4 @@ public final class SongSearchResultComponent: Component<EmptyDependency>, SongSe
     public func makeView() -> UIViewController {
         SongSearchResultViewController(reactor: SongSearchResultReactor())
     }
-
 }
