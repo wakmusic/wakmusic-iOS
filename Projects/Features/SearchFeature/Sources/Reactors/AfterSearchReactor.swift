@@ -6,19 +6,16 @@ import SongsDomainInterface
 
 public final class AfterSearchReactor: Reactor {
     var disposeBag: DisposeBag = DisposeBag()
-    
+
     private let service: any SearchCommonService
 
-    public enum Action {
-    
-    }
+    public enum Action {}
 
     public enum Mutation {
         case updateText(String)
     }
 
     public struct State {
-      
         var text: String
     }
 
@@ -46,23 +43,20 @@ public final class AfterSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-            case let .updateText(text):
-                newState.text = text
+        case let .updateText(text):
+            newState.text = text
         }
 
         return newState
     }
 
     public func mutate(action: Action) -> Observable<Mutation> {}
-    
+
     public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        
         let text = service.text.map { Mutation.updateText($0) }
-        
+
         return Observable.merge(mutation, text)
     }
 }
 
-private extension AfterSearchReactor {
-   
-}
+private extension AfterSearchReactor {}

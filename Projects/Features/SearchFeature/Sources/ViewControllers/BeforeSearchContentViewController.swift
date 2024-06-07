@@ -102,7 +102,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { onwer, isLoading in
-      
+
                 if isLoading {
                     onwer.indicator.startAnimating()
                 } else {

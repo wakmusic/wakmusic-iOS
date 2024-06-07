@@ -11,10 +11,10 @@ final class SongSearchResultReactor: Reactor {
     var initialState: State
     private let text: String
 
-    init(_ text:String) {
+    init(_ text: String) {
         self.initialState = State(
         )
-        
+
         self.text = text
     }
 

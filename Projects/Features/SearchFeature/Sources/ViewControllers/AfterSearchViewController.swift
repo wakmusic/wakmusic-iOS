@@ -57,9 +57,9 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-        
+
         currentState.map(\.text)
-            .filter{ !$0.isEmpty }
+            .filter { !$0.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { owner, text in
@@ -139,7 +139,6 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
         }
     }
 }
-
 
 extension AfterSearchViewController {
     func scrollToTop() {

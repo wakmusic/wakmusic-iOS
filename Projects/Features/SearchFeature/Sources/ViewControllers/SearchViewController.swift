@@ -211,7 +211,6 @@ extension SearchViewController {
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
 
-           
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             guard state == .before || state == .typing else {
                 return
