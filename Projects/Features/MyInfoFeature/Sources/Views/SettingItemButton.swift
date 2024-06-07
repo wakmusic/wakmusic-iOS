@@ -25,13 +25,13 @@ final class SettingItemButton: UIButton {
     }
 
     private let horizontalInset: CGFloat
-    
+
     override var isHighlighted: Bool {
         didSet {
             updateIsHighlighted(isHighlighted)
         }
     }
-    
+
     public init(horizontalInset: CGFloat = 20) {
         self.horizontalInset = horizontalInset
         super.init(frame: .zero)
