@@ -45,7 +45,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.setLayout()
 
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().offset(56)
+            $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
 
