@@ -70,7 +70,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func configureUI() {
         super.configureUI()
 
-        self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.tableView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
     }
@@ -124,11 +124,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
             .compactMap { $0 ?? [] }
-            .bind(to: tableView.rx.items) { (
-                tableView: UITableView,
-                index: Int,
-                element: String
-            ) -> RecentRecordTableViewCell in
+            .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "RecentRecordTableViewCell",
                     for: IndexPath(row: index, section: 0)
@@ -207,8 +203,7 @@ extension BeforeSearchContentViewController {
     private func createDataSource() -> UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> {
         // MARK: Cell
 
-        let youtubeCellRegistration = UICollectionView
-            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+        let youtubeCellRegistration = UICollectionView.CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
         let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
@@ -249,11 +244,7 @@ extension BeforeSearchContentViewController {
             BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
-            (
-                collectionView: UICollectionView,
-                indexPath: IndexPath,
-                item: BeforeVcDataSoruce
-            ) -> UICollectionViewCell? in
+            (collectionView: UICollectionView, indexPath: IndexPath, item: BeforeVcDataSoruce) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -296,7 +287,7 @@ extension BeforeSearchContentViewController {
                 .recommend(model2: Model(title: "123")),
                 .recommend(model2: Model(title: "456")),
                 .recommend(model2: Model(title: "4564")),
-                .recommend(model2: Model(title: "4516")),
+                .recommend(model2: Model(title: "4516"))
             ],
             toSection: .recommend
         )
@@ -304,7 +295,7 @@ extension BeforeSearchContentViewController {
             [
                 .popularList(model: Model(title: "Hello1")),
                 .popularList(model: Model(title: "Hello2")),
-                .popularList(model: Model(title: "Hello3")),
+                .popularList(model: Model(title: "Hello3"))
             ],
             toSection: .popularList
         )
