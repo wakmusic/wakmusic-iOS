@@ -7,6 +7,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import LogManager
 
 final class IntegratedSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
     private lazy var collectionView: UICollectionView = createCollectionView().then {
@@ -67,6 +68,22 @@ extension IntegratedSearchResultViewController {
         let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
             cell.update(item)
         }
+            
+        // MARK: Header
+
+        let headerRegistration = UICollectionView
+            .SupplementaryRegistration<IntegratedSearchResultHeaderView>(
+                elementKind: IntegratedSearchResultHeaderView
+                    .kind
+            ) { [weak self] supplementaryView, string, indexPath in
+
+                guard let self else { return }
+                guard let section = IntegratedSearchResultSection(rawValue: indexPath.section+1) else {
+                    return
+                }
+                supplementaryView.delegate = self
+                supplementaryView.update(count: 1, section: section)
+            }
 
         let dataSource = UICollectionViewDiffableDataSource<
             IntegratedSearchResultSection,
@@ -91,6 +108,10 @@ extension IntegratedSearchResultViewController {
             #warning("list 셀 이후 제거")
             return nil
         }
+            
+        dataSource.supplementaryViewProvider = { collectionView, _, index in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
 
         return dataSource
     }
@@ -99,7 +120,7 @@ extension IntegratedSearchResultViewController {
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<IntegratedSearchResultSection, IntegratedResultDataSource>()
 
-        snapshot.appendSections([.song, .artist, .credit, .list])
+        snapshot.appendSections([.song, .list])
 
         let model = SongEntity(
             id: "8KTFf2X-ago",
@@ -111,12 +132,19 @@ extension IntegratedSearchResultViewController {
             last: 0,
             date: "2020.12.12"
         )
-
+        
         snapshot.appendItems([.song(model: model)], toSection: .song)
-//        snapshot.appendItems([.song(model: model)], toSection: .song)
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     public func scrollToTop() {}
+}
+
+
+extension IntegratedSearchResultViewController: IntegratedSearchResultHeaderViewDelegate {
+    func tap(_ section: IntegratedSearchResultSection?) {
+    
+    }
+    
 }

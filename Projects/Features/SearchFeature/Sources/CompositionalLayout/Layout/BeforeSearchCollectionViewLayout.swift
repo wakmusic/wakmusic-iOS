@@ -23,9 +23,7 @@ extension BeforeSearchCollectionViewLayout {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
-
+        
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -35,6 +33,11 @@ extension BeforeSearchCollectionViewLayout {
         )
 
         header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
+        
+        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
+
+
 
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection

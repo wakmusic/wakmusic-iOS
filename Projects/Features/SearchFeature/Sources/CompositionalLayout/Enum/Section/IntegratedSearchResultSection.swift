@@ -1,5 +1,7 @@
-public enum TabPosition: Int {
-    case song = 0
+import Foundation
+
+internal enum IntegratedSearchResultSection: Int {
+    case song =  0
     case list
 
     var title: String {
@@ -10,10 +12,4 @@ public enum TabPosition: Int {
             "리스트"
         }
     }
-}
-
-public enum TypingStatus {
-    case before
-    case typing
-    case search
 }

@@ -77,11 +77,10 @@ extension AfterSearchViewController {
                 guard let comp = owner.searchResultFactory else {
                     return
                 }
-                #warning("전체를 제외한 다른 탭 makeSingleView로 바꾸기")
+                #warning("없얘기")
                 owner.viewControllers = [
-                    comp.makeIntegratedView(type: .all, dataSource: dataSource[0]),
                     comp.makeIntegratedView(type: .song, dataSource: dataSource[1]),
-                    comp.makeIntegratedView(type: .artist, dataSource: dataSource[2])
+                    comp.makeIntegratedView(type: .list, dataSource: dataSource[2])
                 ]
                 owner.indicator.stopAnimating()
                 owner.reloadData()
