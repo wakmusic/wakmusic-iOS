@@ -138,10 +138,8 @@ extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
     func tapFilter() {
         LogManager.printDebug("filter")
     }
-    
+
     func tapSort() {
         LogManager.printDebug("sort")
     }
-    
-    
 }

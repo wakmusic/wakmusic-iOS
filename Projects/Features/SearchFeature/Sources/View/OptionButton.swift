@@ -33,7 +33,6 @@ final class OptionButton: UIView {
     public func setLeftTitle(_ title: String) {
         leftLabel.text = title
     }
-
 }
 
 extension OptionButton {

@@ -5,10 +5,9 @@ enum FilterType {
     case title
     case artist
     case credit
-    
+
     var title: String {
         switch self {
-            
         case .all:
             "전체"
         case .title:
@@ -27,11 +26,9 @@ enum SortType {
     case likes
     case views
     case alphabeticalOrder
-    
+
     var title: String {
-        
         switch self {
-            
         case .newest:
             "최신순"
         case .oldest:
@@ -43,6 +40,5 @@ enum SortType {
         case .alphabeticalOrder:
             "가나다순"
         }
-
     }
 }
