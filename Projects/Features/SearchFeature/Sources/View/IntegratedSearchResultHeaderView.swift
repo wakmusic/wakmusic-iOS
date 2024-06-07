@@ -20,7 +20,7 @@ final class IntegratedSearchResultHeaderView:
 
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
     }
-    
+
     private let countLabel: UILabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
 
@@ -44,9 +44,8 @@ final class IntegratedSearchResultHeaderView:
         button.addAction { [delegate] in
             delegate?.tap(self.section)
         }
-        
-        self.backgroundColor = .orange
 
+        self.backgroundColor = .orange
     }
 
     @available(*, unavailable)
@@ -66,7 +65,7 @@ extension IntegratedSearchResultHeaderView {
         titleLabel.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview()
         }
-        
+
         countLabel.snp.makeConstraints {
             $0.leading.equalTo(titleLabel.snp.trailing).offset(4)
             $0.top.bottom.equalTo(titleLabel)

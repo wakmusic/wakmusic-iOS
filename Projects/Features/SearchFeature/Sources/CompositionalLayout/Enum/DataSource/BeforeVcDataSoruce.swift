@@ -1,4 +1,5 @@
 import Foundation
+
 #warning("실제 데이터 entity로 바꾸기")
 
 enum BeforeVcDataSoruce: Hashable {

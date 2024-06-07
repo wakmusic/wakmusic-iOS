@@ -21,7 +21,7 @@ extension IntegratedSearchResultCollectionViewLayout {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
-        
+
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -30,7 +30,6 @@ extension IntegratedSearchResultCollectionViewLayout {
             alignment: .top
         )
 
-        
         var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -41,7 +40,7 @@ extension IntegratedSearchResultCollectionViewLayout {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 20.0, bottom: 20.0, trailing: 20.0)
         section.boundarySupplementaryItems = [header]
-    
+
         return section
     }
 }

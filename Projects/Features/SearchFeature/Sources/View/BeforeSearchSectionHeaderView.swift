@@ -38,7 +38,6 @@ final class BeforeSearchSectionHeaderView:
         button.addAction { [delegate] in
             delegate?.tap(self.section)
         }
-
     }
 
     @available(*, unavailable)

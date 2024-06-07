@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import LogManager
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -7,7 +8,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import LogManager
 
 final class IntegratedSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
     private lazy var collectionView: UICollectionView = createCollectionView().then {
@@ -68,7 +68,7 @@ extension IntegratedSearchResultViewController {
         let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
             cell.update(item)
         }
-            
+
         // MARK: Header
 
         let headerRegistration = UICollectionView
@@ -78,7 +78,7 @@ extension IntegratedSearchResultViewController {
             ) { [weak self] supplementaryView, string, indexPath in
 
                 guard let self else { return }
-                guard let section = IntegratedSearchResultSection(rawValue: indexPath.section+1) else {
+                guard let section = IntegratedSearchResultSection(rawValue: indexPath.section + 1) else {
                     return
                 }
                 supplementaryView.delegate = self
@@ -108,7 +108,7 @@ extension IntegratedSearchResultViewController {
             #warning("list 셀 이후 제거")
             return nil
         }
-            
+
         dataSource.supplementaryViewProvider = { collectionView, _, index in
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
@@ -132,7 +132,7 @@ extension IntegratedSearchResultViewController {
             last: 0,
             date: "2020.12.12"
         )
-        
+
         snapshot.appendItems([.song(model: model)], toSection: .song)
 
         dataSource.apply(snapshot, animatingDifferences: false)
@@ -141,10 +141,6 @@ extension IntegratedSearchResultViewController {
     public func scrollToTop() {}
 }
 
-
 extension IntegratedSearchResultViewController: IntegratedSearchResultHeaderViewDelegate {
-    func tap(_ section: IntegratedSearchResultSection?) {
-    
-    }
-    
+    func tap(_ section: IntegratedSearchResultSection?) {}
 }

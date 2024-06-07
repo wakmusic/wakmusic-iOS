@@ -1,7 +1,7 @@
 import Foundation
 
 internal enum IntegratedSearchResultSection: Int {
-    case song =  0
+    case song = 0
     case list
 
     var title: String {
