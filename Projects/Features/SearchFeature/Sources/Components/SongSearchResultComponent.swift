@@ -6,7 +6,7 @@ import SearchFeatureInterface
 import UIKit
 
 public final class SongSearchResultComponent: Component<EmptyDependency>, SongSearchResultFactory {
-    public func makeView() -> UIViewController {
-        SongSearchResultViewController(reactor: SongSearchResultReactor())
+    public func makeView(_ text: String) -> UIViewController {
+        SongSearchResultViewController(reactor: SongSearchResultReactor(text))
     }
 }

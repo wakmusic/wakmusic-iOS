@@ -9,10 +9,13 @@ final class SongSearchResultReactor: Reactor {
     struct State {}
 
     var initialState: State
+    private let text: String
 
-    init() {
+    init(_ text:String) {
         self.initialState = State(
         )
+        
+        self.text = text
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

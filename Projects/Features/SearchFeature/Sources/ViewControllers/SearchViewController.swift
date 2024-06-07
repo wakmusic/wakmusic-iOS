@@ -19,8 +19,8 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     }
 
     private enum Color {
-        static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
-        static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
+        static let pointColor: UIColor = DesignSystemAsset.PrimaryColorV2.point.color
+        static let grayColor: UIColor = DesignSystemAsset.BlueGrayColor.gray400.color
     }
 
     @IBOutlet weak var searchImageView: UIImageView!
@@ -211,11 +211,7 @@ extension SearchViewController {
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
 
-            guard let childReactor = afterVC.reactor else {
-                return
-            }
-
-            childReactor.action.onNext(.updateData(text))
+           
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             guard state == .before || state == .typing else {
                 return

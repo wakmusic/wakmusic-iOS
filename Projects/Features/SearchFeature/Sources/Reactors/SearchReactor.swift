@@ -23,7 +23,6 @@ final class SearchReactor: Reactor {
     enum Mutation {
         case updateTypingState(state: TypingStatus)
         case updateText(String)
-        case fetchRecentText(String)
     }
 
     struct State {
@@ -62,9 +61,7 @@ final class SearchReactor: Reactor {
             newState.typingState = state
         case let .updateText(text):
             newState.text = text
-        case let .fetchRecentText(text):
-            #warning("추후 fetchRecentText 구현")
-            break
+            service.text.onNext(text) // 검색 결과 화면 리엑터에 전달하기 위해
         }
 
         return newState
