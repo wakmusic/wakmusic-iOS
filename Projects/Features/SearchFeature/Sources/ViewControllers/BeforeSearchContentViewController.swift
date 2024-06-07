@@ -124,7 +124,11 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
             .compactMap { $0 ?? [] }
-            .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
+            .bind(to: tableView.rx.items) { (
+                tableView: UITableView,
+                index: Int,
+                element: String
+            ) -> RecentRecordTableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "RecentRecordTableViewCell",
                     for: IndexPath(row: index, section: 0)
@@ -203,7 +207,8 @@ extension BeforeSearchContentViewController {
     private func createDataSource() -> UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> {
         // MARK: Cell
 
-        let youtubeCellRegistration = UICollectionView.CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+        let youtubeCellRegistration = UICollectionView
+            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
         let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
@@ -244,7 +249,11 @@ extension BeforeSearchContentViewController {
             BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: BeforeVcDataSoruce) -> UICollectionViewCell? in
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):

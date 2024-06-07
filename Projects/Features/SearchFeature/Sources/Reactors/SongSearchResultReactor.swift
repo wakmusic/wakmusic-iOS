@@ -7,8 +7,6 @@ final class SongSearchResultReactor: Reactor {
         case changeSortType(SortType)
         case changeFilterType(FilterType)
         #warning("무한 스크롤을 고려한 스크롤 액션")
-        
-        
     }
 
     enum Mutation {
@@ -40,16 +38,13 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        
         switch action {
-            
         case .viewDidLoad:
             return .empty()
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
             return updateFilterType(type)
-
         }
     }
 
@@ -57,7 +52,6 @@ final class SongSearchResultReactor: Reactor {
         var newState = state
 
         switch mutation {
-            
         case let .updateSortType(type):
             newState.sortType = type
         case let .updateFilterType(type):
@@ -69,15 +63,13 @@ final class SongSearchResultReactor: Reactor {
 }
 
 extension SongSearchResultReactor {
-    
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
         #warning("데이터 소스 가져오기")
         return .just(.updateSortType(type))
     }
-    
+
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
         #warning("데이터 소스 가져오기")
         return .just(.updateFilterType(type))
     }
-    
 }
