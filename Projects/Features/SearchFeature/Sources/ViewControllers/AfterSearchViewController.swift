@@ -11,25 +11,19 @@ import Tabman
 import UIKit
 import Utility
 
-public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView,
-    SongCartViewType {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView {
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     var songSearchResultFactory: SongSearchResultFactory!
-    var containSongsFactory: ContainSongsFactory!
     public var disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
         UIViewController(),
-        UIViewController(),
-        UIViewController(),
         UIViewController()
     ]
 
-    public var songCartView: SongCartView!
-    public var bottomSheetView: BottomSheetView!
     let playState = PlayState.shared
 
     override public func viewDidLoad() {
@@ -44,12 +38,10 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     public static func viewController(
         songSearchResultFactory: any SongSearchResultFactory,
-        containSongsFactory: ContainSongsFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.songSearchResultFactory = songSearchResultFactory
-        viewController.containSongsFactory = containSongsFactory
         viewController.reactor = reactor
         return viewController
     }
@@ -68,7 +60,6 @@ extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share(replay: 2)
 
-        // TODO: 검색 결과 화면 나올 때 , Content쪽 tableView hidden처리 및 indicator start 시점 고려
         currentState.map(\.dataSource)
             .filter { !$0.isEmpty }
             .withUnretained(self)
@@ -120,56 +111,13 @@ extension AfterSearchViewController {
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         bar.layer.addBorder(
             [.bottom],
-            color: DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4),
+            color: DesignSystemAsset.BlueGrayColor.gray300.color.withAlphaComponent(0.4),
             height: 1
         )
     }
 
-    // TODO: 검색 결과 화면 나오면 이어서 작업
-//    private func bindRx() {
-//
-//        output.isFetchStart
-//            .subscribe(onNext: { [weak self] _ in
-//                guard let self = self else {
-//                    return
-//                }
-//                self.indicator.startAnimating()
-//                guard let child = self.viewControllers.first as? AfterSearchContentViewController else {
-//                    return
-//                }
-//                child.tableView.isHidden = true // 검색 시작 시 테이블 뷰 숨김
-//            })
-//            .disposed(by: disposeBag)
-//
-//        output.songEntityOfSelectedSongs
-//            .skip(1)
-//            .subscribe(onNext: { [weak self] (songs: [SongEntity]) in
-//                guard let self = self else { return }
-//                if !songs.isEmpty {
-//                    self.showSongCart(
-//                        in: self.view,
-//                        type: .searchSong,
-//                        selectedSongCount: songs.count,
-//                        totalSongCount: 100,
-//                        useBottomSpace: false
-//                    )
-//                    self.songCartView.delegate = self
-//                } else {
-//                    self.hideSongCart()
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//    }
 
-    func clearSongCart() {
-        // self.output.songEntityOfSelectedSongs.accept([])
-//        self.viewControllers.forEach { vc in
-//            guard let afterContentVc = vc as? AfterSearchContentViewController else {
-//                return
-//            }
-//            afterContentVc.input.deSelectedAllSongs.accept(())
-//        }
-    }
+
 }
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
@@ -192,13 +140,9 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
     public func barItem(for bar: Tabman.TMBar, at index: Int) -> Tabman.TMBarItemable {
         switch index {
         case 0:
-            return TMBarItem(title: "전체")
-        case 1:
             return TMBarItem(title: "노래")
-        case 2:
-            return TMBarItem(title: "가수")
-        case 3:
-            return TMBarItem(title: "조교")
+        case 1:
+            return TMBarItem(title: "리스트")
         default:
             let title = "Page \(index)"
             return TMBarItem(title: title)
@@ -206,38 +150,7 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
     }
 }
 
-extension AfterSearchViewController: SongCartViewDelegate {
-    public func buttonTapped(type: SongCartSelectType) {
-        switch type {
-        case .allSelect(_):
-            return
 
-        case .addSong:
-//            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-//            let viewController = containSongsFactory.makeView(songs: songs)
-//            viewController.modalPresentationStyle = .overFullScreen
-//            self.present(viewController, animated: true) { [weak self] in
-//                guard let self = self else { return }
-//                self.clearSongCart()
-//            }
-            break
-
-        case .addPlayList:
-//            let songs = output.songEntityOfSelectedSongs.value
-//            playState.appendSongsToPlaylist(songs)
-//            self.clearSongCart()
-            break
-        case .play:
-//            let songs = output.songEntityOfSelectedSongs.value
-//            playState.loadAndAppendSongsToPlaylist(songs)
-//            self.clearSongCart()
-            break
-
-        case .remove:
-            return
-        }
-    }
-}
 
 extension AfterSearchViewController {
     func scrollToTop() {

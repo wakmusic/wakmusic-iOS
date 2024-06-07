@@ -680,9 +680,6 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var songSearchResultFactory: any SongSearchResultFactory {
         return appComponent.songSearchResultFactory
     }
-    var containSongsFactory: any ContainSongsFactory {
-        return appComponent.containSongsFactory
-    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1124,7 +1121,6 @@ extension NewSongsContentComponent: Registration {
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.songSearchResultFactory] = "songSearchResultFactory-any SongSearchResultFactory"
-        keyPathToName[\AfterSearchDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension SongSearchResultComponent: Registration {
