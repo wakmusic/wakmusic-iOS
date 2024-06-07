@@ -140,9 +140,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
             .do(onNext: { owner, _ in
                 owner.view.endEditing(true)
                 owner.searchTextFiled.rx.text.onNext("")
-                if let nowChildVc = owner.children.first as? AfterSearchViewController {
-                    nowChildVc.clearSongCart()
-                }
             })
             .map { _ in SearchReactor.Action.cancelButtonDidTap }
             .bind(to: reactor.action)
