@@ -58,27 +58,27 @@ final class SettingView: UIView {
         $0.axis = .vertical
     }
 
-    fileprivate let notiNavgationButton = SettingItemView().then {
+    fileprivate let notiNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("앱 알림 받기")
     }
 
-    fileprivate let termNavgationButton = SettingItemView().then {
+    fileprivate let termNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("서비스 이용약관")
     }
 
-    fileprivate let privacyNavgationButton = SettingItemView().then {
+    fileprivate let privacyNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("개인정보 처리 방침")
     }
 
-    fileprivate let openSourceNavgationButton = SettingItemView().then {
+    fileprivate let openSourceNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("오픈소스 라이선스")
     }
 
-    fileprivate let removeCacheButton = SettingItemView().then {
+    fileprivate let removeCacheButton = SettingItemButton().then {
         $0.setLeftTitle("캐시 데이터 지우기")
     }
 
-    fileprivate let versionInfoButton = SettingItemView().then {
+    fileprivate let versionInfoButton = SettingItemButton().then {
         $0.setLeftTitle("버전 정보")
         $0.setRightImage(nil)
     }
