@@ -9,7 +9,11 @@ import Then
 import UIKit
 import Utility
 
-final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor> {
+final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
+    var songCartView: SongCartView!
+    
+    var bottomSheetView: BottomSheetView!
+    
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -90,11 +94,7 @@ extension SongSearchResultViewController {
             SongSearchResultSection,
             SongEntity
         >(collectionView: collectionView) {
-            (
-                collectionView: UICollectionView,
-                indexPath: IndexPath,
-                item: SongEntity
-            ) -> UICollectionViewCell? in
+            ( collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: songCellRegistration,
@@ -143,4 +143,26 @@ extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
     func tapSort() {
         LogManager.printDebug("sort")
     }
+}
+
+extension SongSearchResultViewController: SongCartViewDelegate {
+    func buttonTapped(type: SongCartSelectType) {
+        
+        switch type {
+            
+        case .allSelect(flag: let flag):
+            break
+        case .addSong:
+            break
+        case .addPlayList:
+            break
+        case .play:
+            break
+        case .remove:
+            break
+        }
+        
+    }
+    
+    
 }
