@@ -16,15 +16,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var songSearchResultFactory: SongSearchResultFactory!
+    private var songSearchResultFactory: SongSearchResultFactory!
     public var disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
         UIViewController(),
         UIViewController()
     ]
-
-    let playState = PlayState.shared
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -58,24 +56,19 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
-        let currentState = reacotr.state.share(replay: 2)
-
-        currentState.map(\.dataSource)
-            .filter { !$0.isEmpty }
+        let currentState = reacotr.state.share()
+        
+        currentState.map(\.text)
+            .filter{ !$0.isEmpty }
+            .distinctUntilChanged()
             .withUnretained(self)
-            .bind { owner, dataSource in
-
-                guard let comp = owner.songSearchResultFactory else {
-                    return
-                }
-                #warning("없얘기")
+            .bind(onNext: { owner, text in
                 owner.viewControllers = [
-                    comp.makeView(),
-                    comp.makeView()
+                    owner.songSearchResultFactory.makeView(text),
+                    owner.songSearchResultFactory.makeView(text)
                 ]
-                owner.indicator.stopAnimating()
                 owner.reloadData()
-            }
+            })
             .disposed(by: disposeBag)
     }
 
