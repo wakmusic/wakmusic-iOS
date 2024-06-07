@@ -9,7 +9,7 @@ import Then
 import UIKit
 import Utility
 
-final class SongSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
+final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor> {
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -24,15 +24,15 @@ final class SongSearchResultViewController: BaseReactorViewController<Integrated
         initDataSource()
     }
 
-    override func bind(reactor: IntegratedSearchResultReactor) {
+    override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
     }
 
-    override func bindAction(reactor: IntegratedSearchResultReactor) {
+    override func bindAction(reactor: SongSearchResultReactor) {
         super.bindAction(reactor: reactor)
     }
 
-    override func bindState(reactor: IntegratedSearchResultReactor) {
+    override func bindState(reactor: SongSearchResultReactor) {
         super.bindState(reactor: reactor)
     }
 

@@ -1,6 +1,6 @@
 import ReactorKit
 
-final class IntegratedSearchResultReactor: Reactor {
+final class SongSearchResultReactor: Reactor {
     enum Action {}
 
     enum Mutation {}
@@ -27,4 +27,4 @@ final class IntegratedSearchResultReactor: Reactor {
     }
 }
 
-extension IntegratedSearchResultReactor {}
+extension SongSearchResultReactor {}
