@@ -6,14 +6,14 @@ import SearchFeatureInterface
 import SongsDomainInterface
 
 public protocol AfterSearchDependency: Dependency {
-    var searchResultFactory: any SearchResultFactory { get }
+    var songSearchResultFactory: any SongSearchResultFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class AfterSearchComponent: Component<AfterSearchDependency> {
     public func makeView() -> AfterSearchViewController {
         return AfterSearchViewController.viewController(
-            searchResultFactory: dependency.searchResultFactory,
+            songSearchResultFactory: dependency.songSearchResultFactory,
             containSongsFactory: dependency.containSongsFactory,
             reactor: .init()
         )

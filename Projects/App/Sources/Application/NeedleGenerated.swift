@@ -645,8 +645,8 @@ private func factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5(_ component: Needle
     return NewSongsContentDependency93a05f20fa300c5bbec3Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
-    var searchResultFactory: any SearchResultFactory {
-        return appComponent.searchResultFactory
+    var songSearchResultFactory: any SongSearchResultFactory {
+        return appComponent.songSearchResultFactory
     }
     var containSongsFactory: any ContainSongsFactory {
         return appComponent.containSongsFactory
@@ -1077,11 +1077,11 @@ extension NewSongsContentComponent: Registration {
 }
 extension AfterSearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\AfterSearchDependency.searchResultFactory] = "searchResultFactory-any SearchResultFactory"
+        keyPathToName[\AfterSearchDependency.songSearchResultFactory] = "songSearchResultFactory-any SongSearchResultFactory"
         keyPathToName[\AfterSearchDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
-extension SearchResultComponent: Registration {
+extension SongSearchResultComponent: Registration {
     public func registerItems() {
 
     }
@@ -1175,7 +1175,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SearchResultComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->SongSearchResultComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)

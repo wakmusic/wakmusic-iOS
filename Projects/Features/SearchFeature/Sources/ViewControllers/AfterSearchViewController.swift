@@ -17,7 +17,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var searchResultFactory: SearchResultFactory!
+    var songSearchResultFactory: SongSearchResultFactory!
     var containSongsFactory: ContainSongsFactory!
     public var disposeBag = DisposeBag()
 
@@ -43,12 +43,12 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     public static func viewController(
-        searchResultFactory: any SearchResultFactory,
+        songSearchResultFactory: any SongSearchResultFactory,
         containSongsFactory: ContainSongsFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
-        viewController.searchResultFactory = searchResultFactory
+        viewController.songSearchResultFactory = songSearchResultFactory
         viewController.containSongsFactory = containSongsFactory
         viewController.reactor = reactor
         return viewController
@@ -74,13 +74,13 @@ extension AfterSearchViewController {
             .withUnretained(self)
             .bind { owner, dataSource in
 
-                guard let comp = owner.searchResultFactory else {
+                guard let comp = owner.songSearchResultFactory else {
                     return
                 }
                 #warning("없얘기")
                 owner.viewControllers = [
-                    comp.makeIntegratedView(type: .song, dataSource: dataSource[1]),
-                    comp.makeIntegratedView(type: .list, dataSource: dataSource[2])
+                    comp.makeView(),
+                    comp.makeView()
                 ]
                 owner.indicator.stopAnimating()
                 owner.reloadData()
