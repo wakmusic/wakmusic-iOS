@@ -5,11 +5,15 @@ import SnapKit
 import Then
 import UIKit
 
+private protocol SettingItemStateProtocol {
+    func updateIsHighlighted(_ isHighlited: Bool)
+}
+
 private protocol SettingItemActionProtocol {
     var didTap: Observable<Void> { get }
 }
 
-final class SettingItemView: UIView {
+final class SettingItemView: UIButton {
     private let leftLabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
@@ -21,7 +25,13 @@ final class SettingItemView: UIView {
     }
 
     private let horizontalInset: CGFloat
-
+    
+    override var isHighlighted: Bool {
+        didSet {
+            updateIsHighlighted(isHighlighted)
+        }
+    }
+    
     public init(horizontalInset: CGFloat = 20) {
         self.horizontalInset = horizontalInset
         super.init(frame: .zero)
@@ -68,9 +78,12 @@ extension SettingItemView {
 
 extension Reactive: SettingItemActionProtocol where Base: SettingItemView {
     var didTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.addGestureRecognizer(tapGestureRecognizer)
-        base.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        return base.rx.tap.asObservable()
+    }
+}
+
+extension SettingItemView: SettingItemStateProtocol {
+    func updateIsHighlighted(_ isHighlited: Bool) {
+        self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
     }
 }
