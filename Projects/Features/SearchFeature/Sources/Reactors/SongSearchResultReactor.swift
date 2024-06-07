@@ -1,6 +1,7 @@
 import ReactorKit
 
 final class SongSearchResultReactor: Reactor {
+    #warning("유즈케이스는 추후 연결")
     enum Action {}
 
     enum Mutation {}
