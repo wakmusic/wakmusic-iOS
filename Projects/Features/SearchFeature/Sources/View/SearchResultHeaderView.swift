@@ -4,7 +4,7 @@ import Then
 import UIKit
 
 protocol SearchResultHeaderViewDelegate: AnyObject {
-    func tap(_ section: IntegratedSearchResultSection?)
+    func tap(_ section: SongSearchResultSection?)
 }
 
 final class SearchResultHeaderView:
@@ -13,7 +13,7 @@ final class SearchResultHeaderView:
 
     weak var delegate: SearchResultHeaderViewDelegate?
 
-    var section: IntegratedSearchResultSection?
+    var section: SongSearchResultSection?
 
     private let titleLabel: UILabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
@@ -55,7 +55,7 @@ final class SearchResultHeaderView:
 }
 
 extension SearchResultHeaderView {
-    public func update(count: Int, section: IntegratedSearchResultSection) {
+    public func update(count: Int, section: SongSearchResultSection) {
         titleLabel.text = section.title
         countLabel.text = "\(count)"
         self.section = section

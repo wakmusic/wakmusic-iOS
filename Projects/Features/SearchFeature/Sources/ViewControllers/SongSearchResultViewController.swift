@@ -15,8 +15,8 @@ final class SongSearchResultViewController: BaseReactorViewController<Integrated
     }
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
-        IntegratedSearchResultSection,
-        IntegratedResultDataSource
+        SongSearchResultSection,
+        SongEntity
     > = createDataSource()
 
     override func viewDidLoad() {
@@ -60,11 +60,11 @@ final class SongSearchResultViewController: BaseReactorViewController<Integrated
 
 extension SongSearchResultViewController {
     private func createCollectionView() -> UICollectionView {
-        return UICollectionView(frame: .zero, collectionViewLayout: IntegratedSearchResultCollectionViewLayout())
+        return UICollectionView(frame: .zero, collectionViewLayout: SongSearchResultCollectionViewLayout())
     }
 
     private func createDataSource()
-        -> UICollectionViewDiffableDataSource<IntegratedSearchResultSection, IntegratedResultDataSource> {
+        -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
         let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
             cell.update(item)
         }
@@ -78,7 +78,7 @@ extension SongSearchResultViewController {
             ) { [weak self] supplementaryView, string, indexPath in
 
                 guard let self else { return }
-                guard let section = IntegratedSearchResultSection(rawValue: indexPath.section + 1) else {
+                guard let section = SongSearchResultSection(rawValue: indexPath.section + 1) else {
                     return
                 }
                 supplementaryView.delegate = self
@@ -86,27 +86,22 @@ extension SongSearchResultViewController {
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
-            IntegratedSearchResultSection,
-            IntegratedResultDataSource
+            SongSearchResultSection,
+            SongEntity
         >(collectionView: collectionView) {
             (
                 collectionView: UICollectionView,
                 indexPath: IndexPath,
-                item: IntegratedResultDataSource
+                item: SongEntity
             ) -> UICollectionViewCell? in
 
-            switch item {
-            case let .song(model: model):
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: songCellRegistration,
-                    for: indexPath,
-                    item: model
-                )
-            case let .list(model: model):
-                break
-            }
-            #warning("list 셀 이후 제거")
-            return nil
+
+            return collectionView.dequeueConfiguredReusableCell(
+                using: songCellRegistration,
+                for: indexPath,
+                item: item
+            )
+
         }
 
         dataSource.supplementaryViewProvider = { collectionView, _, index in
@@ -118,9 +113,9 @@ extension SongSearchResultViewController {
 
     private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<IntegratedSearchResultSection, IntegratedResultDataSource>()
+        var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
-        snapshot.appendSections([.song, .list])
+        snapshot.appendSections([.song])
 
         let model = SongEntity(
             id: "8KTFf2X-ago",
@@ -133,7 +128,7 @@ extension SongSearchResultViewController {
             date: "2020.12.12"
         )
 
-        snapshot.appendItems([.song(model: model)], toSection: .song)
+        snapshot.appendItems([model], toSection: .song)
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -142,5 +137,5 @@ extension SongSearchResultViewController {
 }
 
 extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tap(_ section: IntegratedSearchResultSection?) {}
+    func tap(_ section: SongSearchResultSection?) {}
 }
