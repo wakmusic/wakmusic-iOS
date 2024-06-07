@@ -41,7 +41,7 @@ public final class BeforeSearchReactor: Reactor {
         self.initialState = State(
             showRecommend: true,
             dataSource: [],
-            isLoading: true
+            isLoading: false
         )
     }
 
