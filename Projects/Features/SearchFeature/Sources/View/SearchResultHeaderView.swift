@@ -2,9 +2,11 @@ import DesignSystem
 import SnapKit
 import Then
 import UIKit
+import RxSwift
 
 protocol SearchResultHeaderViewDelegate: AnyObject {
-    func tap(_ section: SongSearchResultSection?)
+    func tapFilter()
+    func tapSort()
 }
 
 final class SearchResultHeaderView:
@@ -12,38 +14,27 @@ final class SearchResultHeaderView:
     static let kind = "search-result-section-header"
 
     weak var delegate: SearchResultHeaderViewDelegate?
+    
+    var disposeBag = DisposeBag()
 
-    var section: SongSearchResultSection?
+    private let filterButton: OptionButton = OptionButton()
 
-    private let titleLabel: UILabel = UILabel().then {
-        $0.font = .setFont(.t5(weight: .medium))
-
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-    }
-
-    private let countLabel: UILabel = UILabel().then {
-        $0.font = .setFont(.t5(weight: .medium))
-
-        $0.textColor = DesignSystemAsset.PrimaryColorV2.point.color
-    }
-
-    private let button: UIButton = UIButton().then {
-        $0.setTitle("전체보기", for: .normal)
-
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray900.color, for: .normal)
-
-        $0.titleLabel?.font = .setFont(.t6(weight: .medium))
+    private let sortButton: OptionButton = OptionButton()
+    
+    private lazy var stackView: UIStackView = UIStackView().then {
+        $0.addArrangedSubviews(filterButton, sortButton)
+        $0.axis = .horizontal
+        $0.spacing = 20
+        $0.distribution = .equalSpacing
+        $0.backgroundColor = .yellow
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.addSubviews(titleLabel, countLabel, button)
+        self.addSubviews(stackView)
         setLayout()
-
-        button.addAction { [delegate] in
-            delegate?.tap(self.section)
-        }
+        bindAction()
 
         self.backgroundColor = .orange
     }
@@ -55,24 +46,41 @@ final class SearchResultHeaderView:
 }
 
 extension SearchResultHeaderView {
-    public func update(count: Int, section: SongSearchResultSection) {
-        titleLabel.text = section.title
-        countLabel.text = "\(count)"
-        self.section = section
+    public func update(sortType: SortType, filterType: FilterType?) {
+        
+        sortButton.setLeftTitle(sortType.title)
+    
+        guard let filterType = filterType else {
+            filterButton.isHidden = true
+            return
+        }
+        filterButton.setLeftTitle(filterType.title)
+    }
+    
+    private func  bindAction() {
+        
+        filterButton.rx.didTap
+            .withUnretained(self)
+            .bind { (owner, _) in
+                owner.delegate?.tapFilter()
+            }
+            .disposed(by: disposeBag)
+        
+        sortButton.rx.didTap
+            .withUnretained(self)
+            .bind { (owner, _) in
+                owner.delegate?.tapSort()
+            }
+            .disposed(by: disposeBag)
     }
 
     private func setLayout() {
-        titleLabel.snp.makeConstraints {
-            $0.leading.top.bottom.equalToSuperview()
+        
+        stackView.snp.makeConstraints {
+            $0.top.bottom.trailing.equalToSuperview()
         }
-
-        countLabel.snp.makeConstraints {
-            $0.leading.equalTo(titleLabel.snp.trailing).offset(4)
-            $0.top.bottom.equalTo(titleLabel)
-        }
-
-        button.snp.makeConstraints {
-            $0.trailing.top.bottom.equalToSuperview()
-        }
+            
     }
+
+
 }

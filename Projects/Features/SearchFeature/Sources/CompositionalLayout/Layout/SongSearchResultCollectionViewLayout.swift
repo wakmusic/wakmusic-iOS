@@ -30,7 +30,7 @@ extension SongSearchResultCollectionViewLayout {
             alignment: .top
         )
 
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalWidth(0.16)

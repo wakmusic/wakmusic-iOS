@@ -78,11 +78,11 @@ extension SongSearchResultViewController {
             ) { [weak self] supplementaryView, string, indexPath in
 
                 guard let self else { return }
-                guard let section = SongSearchResultSection(rawValue: indexPath.section + 1) else {
+                guard let section = SongSearchResultSection(rawValue: indexPath.section) else {
                     return
                 }
                 supplementaryView.delegate = self
-                supplementaryView.update(count: 1, section: section)
+                supplementaryView.update(sortType: .newest, filterType: .all)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
@@ -135,5 +135,13 @@ extension SongSearchResultViewController {
 }
 
 extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tap(_ section: SongSearchResultSection?) {}
+    func tapFilter() {
+        LogManager.printDebug("filter")
+    }
+    
+    func tapSort() {
+        LogManager.printDebug("sort")
+    }
+    
+    
 }
