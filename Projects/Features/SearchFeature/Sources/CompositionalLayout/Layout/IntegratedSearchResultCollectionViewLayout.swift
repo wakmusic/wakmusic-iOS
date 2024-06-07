@@ -26,7 +26,7 @@ extension IntegratedSearchResultCollectionViewLayout {
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerLayout,
-            elementKind: IntegratedSearchResultHeaderView.kind,
+            elementKind: SearchResultHeaderView.kind,
             alignment: .top
         )
 

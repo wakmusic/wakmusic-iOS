@@ -9,7 +9,7 @@ import Then
 import UIKit
 import Utility
 
-final class IntegratedSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
+final class SongSearchResultViewController: BaseReactorViewController<IntegratedSearchResultReactor> {
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -58,7 +58,7 @@ final class IntegratedSearchResultViewController: BaseReactorViewController<Inte
     }
 }
 
-extension IntegratedSearchResultViewController {
+extension SongSearchResultViewController {
     private func createCollectionView() -> UICollectionView {
         return UICollectionView(frame: .zero, collectionViewLayout: IntegratedSearchResultCollectionViewLayout())
     }
@@ -72,8 +72,8 @@ extension IntegratedSearchResultViewController {
         // MARK: Header
 
         let headerRegistration = UICollectionView
-            .SupplementaryRegistration<IntegratedSearchResultHeaderView>(
-                elementKind: IntegratedSearchResultHeaderView
+            .SupplementaryRegistration<SearchResultHeaderView>(
+                elementKind: SearchResultHeaderView
                     .kind
             ) { [weak self] supplementaryView, string, indexPath in
 
@@ -141,6 +141,6 @@ extension IntegratedSearchResultViewController {
     public func scrollToTop() {}
 }
 
-extension IntegratedSearchResultViewController: IntegratedSearchResultHeaderViewDelegate {
+extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
     func tap(_ section: IntegratedSearchResultSection?) {}
 }

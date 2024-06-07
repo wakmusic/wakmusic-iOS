@@ -3,15 +3,15 @@ import SnapKit
 import Then
 import UIKit
 
-protocol IntegratedSearchResultHeaderViewDelegate: AnyObject {
+protocol SearchResultHeaderViewDelegate: AnyObject {
     func tap(_ section: IntegratedSearchResultSection?)
 }
 
-final class IntegratedSearchResultHeaderView:
+final class SearchResultHeaderView:
     UICollectionReusableView {
     static let kind = "search-result-section-header"
 
-    weak var delegate: IntegratedSearchResultHeaderViewDelegate?
+    weak var delegate: SearchResultHeaderViewDelegate?
 
     var section: IntegratedSearchResultSection?
 
@@ -54,7 +54,7 @@ final class IntegratedSearchResultHeaderView:
     }
 }
 
-extension IntegratedSearchResultHeaderView {
+extension SearchResultHeaderView {
     public func update(count: Int, section: IntegratedSearchResultSection) {
         titleLabel.text = section.title
         countLabel.text = "\(count)"
