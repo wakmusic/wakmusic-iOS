@@ -13,7 +13,7 @@ private protocol SettingItemActionProtocol {
     var didTap: Observable<Void> { get }
 }
 
-final class SettingItemView: UIButton {
+final class SettingItemButton: UIButton {
     private let leftLabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
@@ -53,7 +53,7 @@ final class SettingItemView: UIButton {
     }
 }
 
-extension SettingItemView {
+extension SettingItemButton {
     func addView() {
         self.addSubviews(
             leftLabel,
@@ -76,13 +76,13 @@ extension SettingItemView {
     }
 }
 
-extension Reactive: SettingItemActionProtocol where Base: SettingItemView {
+extension Reactive: SettingItemActionProtocol where Base: SettingItemButton {
     var didTap: Observable<Void> {
         return base.rx.tap.asObservable()
     }
 }
 
-extension SettingItemView: SettingItemStateProtocol {
+extension SettingItemButton: SettingItemStateProtocol {
     func updateIsHighlighted(_ isHighlited: Bool) {
         self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
     }
