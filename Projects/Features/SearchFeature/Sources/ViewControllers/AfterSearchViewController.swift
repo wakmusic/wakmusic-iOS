@@ -17,6 +17,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     private var songSearchResultFactory: SongSearchResultFactory!
+    private var listSearchResultFactory: ListSearchResultFactory!
     public var disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
@@ -35,11 +36,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     public static func viewController(
-        songSearchResultFactory: any SongSearchResultFactory,
+        songSearchResultFactory:  SongSearchResultFactory,
+        listSearchResultFactory:  ListSearchResultFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.songSearchResultFactory = songSearchResultFactory
+        viewController.listSearchResultFactory = listSearchResultFactory
         viewController.reactor = reactor
         return viewController
     }
@@ -65,7 +68,7 @@ extension AfterSearchViewController {
             .bind(onNext: { owner, text in
                 owner.viewControllers = [
                     owner.songSearchResultFactory.makeView(text),
-                    owner.songSearchResultFactory.makeView(text)
+                    owner.listSearchResultFactory.makeView(text)
                 ]
                 owner.reloadData()
             })

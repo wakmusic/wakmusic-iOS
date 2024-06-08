@@ -648,6 +648,9 @@ private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDepe
     var songSearchResultFactory: any SongSearchResultFactory {
         return appComponent.songSearchResultFactory
     }
+    var listSearchResultFactory: any ListSearchResultFactory {
+        return appComponent.listSearchResultFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -1075,6 +1078,12 @@ extension NewSongsContentComponent: Registration {
 extension AfterSearchComponent: Registration {
     public func registerItems() {
         keyPathToName[\AfterSearchDependency.songSearchResultFactory] = "songSearchResultFactory-any SongSearchResultFactory"
+        keyPathToName[\AfterSearchDependency.listSearchResultFactory] = "listSearchResultFactory-any ListSearchResultFactory"
+    }
+}
+extension ListSearchResultComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension SongSearchResultComponent: Registration {
@@ -1171,6 +1180,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ListSearchResultComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->SongSearchResultComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
