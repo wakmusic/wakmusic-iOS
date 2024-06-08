@@ -1,7 +1,7 @@
 import Foundation
 
-internal enum ListSearchResultSection: Int {
-    case list = 1
+internal enum ListSearchResultSection: Hashable {
+    case list
 
     var title: String {
         switch self {

@@ -1,7 +1,7 @@
 import Foundation
 
-internal enum SongSearchResultSection: Int {
-    case song = 0
+internal enum SongSearchResultSection: Hashable {
+    case song 
 
     var title: String {
         switch self {
