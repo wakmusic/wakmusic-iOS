@@ -206,8 +206,7 @@ private extension LyricDecoratingViewController {
             $0.bottom.equalTo(decorateBottomView.snp.top)
         }
         decorateShareContentView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.center.equalToSuperview()
             $0.height.equalTo(decorateImageView.snp.width)
         }
@@ -221,8 +220,7 @@ private extension LyricDecoratingViewController {
         }
         decorateTextContentView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
         decorateFirstStackView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -254,8 +252,7 @@ private extension LyricDecoratingViewController {
         }
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(decorateBottomView.snp.top).offset(16)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(22)
         }
         collectionView.snp.makeConstraints {
@@ -265,8 +262,7 @@ private extension LyricDecoratingViewController {
         }
         saveButton.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(56)
         }
         indicator.snp.makeConstraints {
