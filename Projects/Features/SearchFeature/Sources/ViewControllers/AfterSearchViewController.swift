@@ -36,8 +36,8 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     public static func viewController(
-        songSearchResultFactory:  SongSearchResultFactory,
-        listSearchResultFactory:  ListSearchResultFactory,
+        songSearchResultFactory: SongSearchResultFactory,
+        listSearchResultFactory: ListSearchResultFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)

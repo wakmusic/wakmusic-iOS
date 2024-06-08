@@ -18,7 +18,7 @@ extension AppComponent {
     var songSearchResultFactory: any SongSearchResultFactory {
         SongSearchResultComponent(parent: self)
     }
-    
+
     var listSearchResultFactory: any ListSearchResultFactory {
         ListSearchResultComponent(parent: self)
     }
