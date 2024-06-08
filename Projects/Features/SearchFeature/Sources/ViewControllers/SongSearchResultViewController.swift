@@ -70,7 +70,7 @@ extension SongSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
-        let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
+        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
             cell.update(item)
         }
 
@@ -94,7 +94,7 @@ extension SongSearchResultViewController {
         >(collectionView: collectionView) { (collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
-                using: songCellRegistration,
+                using: cellRegistration,
                 for: indexPath,
                 item: item
             )
