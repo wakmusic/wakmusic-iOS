@@ -147,6 +147,7 @@ extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
 
 extension SongSearchResultViewController: SongCartViewDelegate {
     func buttonTapped(type: SongCartSelectType) {
+        #warning("유즈 케이스 연결 시 구현")
         switch type {
         case let .allSelect(flag: flag):
             break
