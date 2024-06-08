@@ -23,7 +23,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             )
 
         let component = SongSearchResultViewController(reactor: SongSearchResultReactor("1234"))
-
+        let componet = ListSearchResultViewController(reactor: ListSearchResultReactor("text") )
+        
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: component)
         )
