@@ -49,8 +49,6 @@ extension ListResultCell {
     }
 
     private func setLayout() {
-        
-
         let height = frame.height - 20
 
         thumbnailView.snp.makeConstraints {

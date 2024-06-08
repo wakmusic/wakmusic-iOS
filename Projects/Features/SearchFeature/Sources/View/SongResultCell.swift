@@ -48,8 +48,6 @@ extension SongResultCell {
     }
 
     private func setLayout() {
-        
-
         let height = frame.height - 20
         let ratio: CGFloat = 16.0 / 9.0
         let width = ratio * height
