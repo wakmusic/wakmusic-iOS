@@ -78,7 +78,6 @@ extension ListSearchResultViewController {
     #warning("Playlist Entity로 변경하기")
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<ListSearchResultSection, TmpPlaylistModel> {
-            
         let cellRegistration = UICollectionView.CellRegistration<ListResultCell, TmpPlaylistModel> { cell, _, item in
             cell.update(item)
         }
@@ -100,7 +99,11 @@ extension ListSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             ListSearchResultSection,
             TmpPlaylistModel
-        >(collectionView: collectionView) { (collectionView: UICollectionView, indexPath: IndexPath, item: TmpPlaylistModel) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { (
+            collectionView: UICollectionView,
+            indexPath: IndexPath,
+            item: TmpPlaylistModel
+        ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
@@ -122,7 +125,13 @@ extension ListSearchResultViewController {
 
         snapshot.appendSections([.list])
 
-        snapshot.appendItems([TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳"), TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳2")], toSection: .list)
+        snapshot.appendItems(
+            [
+                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳"),
+                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳2")
+            ],
+            toSection: .list
+        )
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -132,13 +141,11 @@ extension ListSearchResultViewController {
 
 extension ListSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         #warning("플레이리스트 상세로 이동")
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         LogManager.printDebug(model)
-        
     }
 }
 
@@ -151,5 +158,3 @@ extension ListSearchResultViewController: SearchResultHeaderViewDelegate {
         LogManager.printDebug("sort")
     }
 }
-
-

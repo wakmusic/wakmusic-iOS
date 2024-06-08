@@ -83,7 +83,7 @@ extension SongSearchResultViewController {
             ) { [weak self] supplementaryView, _, _ in
 
                 guard let self else { return }
-   
+
                 supplementaryView.delegate = self
                 supplementaryView.update(sortType: .newest, filterType: .all)
             }
@@ -91,7 +91,11 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { (collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { (
+            collectionView: UICollectionView,
+            indexPath: IndexPath,
+            item: SongEntity
+        ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
