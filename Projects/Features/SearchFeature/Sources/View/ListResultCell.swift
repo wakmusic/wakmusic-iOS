@@ -5,10 +5,11 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-final class SongResultCell: UICollectionViewCell {
+final class ListResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.image = DesignSystemAsset.PlayListTheme.theme10.image
         $0.layer.cornerRadius = 4
     }
 
@@ -18,7 +19,7 @@ final class SongResultCell: UICollectionViewCell {
         $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
 
-    private let artistLabel: UILabel = UILabel().then {
+    private let creatorLabel: UILabel = UILabel().then {
         $0.numberOfLines = 1
         $0.font = .setFont(.t7(weight: .light))
         $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
@@ -42,20 +43,18 @@ final class SongResultCell: UICollectionViewCell {
     }
 }
 
-extension SongResultCell {
+extension ListResultCell {
     private func addSubview() {
-        self.contentView.addSubviews(thumbnailView, titleLabel, artistLabel, dateLabel)
+        self.contentView.addSubviews(thumbnailView, titleLabel, creatorLabel, dateLabel)
     }
 
     private func setLayout() {
         
 
         let height = frame.height - 20
-        let ratio: CGFloat = 16.0 / 9.0
-        let width = ratio * height
 
         thumbnailView.snp.makeConstraints {
-            $0.width.equalTo(width)
+            $0.width.equalTo(height)
             $0.height.equalTo(height)
             $0.top.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview()
@@ -66,7 +65,7 @@ extension SongResultCell {
             $0.leading.equalTo(thumbnailView.snp.trailing).offset(8)
         }
 
-        artistLabel.snp.makeConstraints {
+        creatorLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(2)
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalTo(titleLabel.snp.trailing)
@@ -81,14 +80,10 @@ extension SongResultCell {
         }
     }
 
-    public func update(_ model: SongEntity) {
-        thumbnailView.kf.setImage(
-            with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
-            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-            options: [.transition(.fade(0.2))]
-        )
-        titleLabel.text = model.title
-        artistLabel.text = model.artist
+    public func update(_ model: TmpPlaylistModel) {
+        #warning("플레이 리스트 이미지")
+        titleLabel.text = model.name
+        creatorLabel.text = model.creator
         dateLabel.text = model.date
     }
 }
