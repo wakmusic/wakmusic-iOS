@@ -10,9 +10,16 @@ private protocol OptionButtonActionProtocol {
 }
 
 final class OptionButton: UIView {
-    private let leftLabel = UILabel().then {
-        $0.font = .setFont(.t6(weight: .medium))
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+
+    private let leftLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t6(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
+        $0.numberOfLines = 1
     }
 
     private let rightImageView = UIImageView().then {
