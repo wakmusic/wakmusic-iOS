@@ -35,7 +35,6 @@ public extension UIFont {
         case t7_1(weight: WMFontWeight = .medium)
         /// size: 11 height: 16
         case t8(weight: WMFontWeight = .medium)
-        
         /// size: 12 height: 18
         case sc7(weight: WMFontWeight = .score3Light)
     }
