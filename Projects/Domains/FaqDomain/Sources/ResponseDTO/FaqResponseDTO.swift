@@ -10,11 +10,11 @@ import FaqDomainInterface
 import Foundation
 
 public struct FaqResponseDTO: Decodable {
-    public let question, description: String
+    public let question, answer: String
     public let category: String
 
     private enum CodingKeys: String, CodingKey {
-        case question, description, category
+        case question, answer, category
     }
 }
 
@@ -23,7 +23,7 @@ public extension FaqResponseDTO {
         FaqEntity(
             category: category,
             question: question,
-            description: description,
+            answer: answer,
             isOpen: false
         )
     }
