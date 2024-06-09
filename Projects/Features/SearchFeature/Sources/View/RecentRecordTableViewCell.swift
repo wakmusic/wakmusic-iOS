@@ -7,12 +7,17 @@ protocol RecentRecordDelegate: AnyObject {
 }
 
 final class RecentRecordTableViewCell: UITableViewCell {
-    private let recentLabel: UILabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        $0.setTextWithAttributes(kernValue: -0.5)
+    private let recentLabel =  WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t6(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
+        $0.numberOfLines = 1
     }
-
+    
     private let button: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Search.keywordRemove.image, for: .normal)
     }
