@@ -49,17 +49,11 @@ extension LyricDecoratingViewController {
 
     func outputBind() {
         output.updateSongTitle
-            .bind(with: self) { owner, song in
-                owner.songTitleLabel.text = song
-                owner.songTitleLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-            }
+            .bind(to: songTitleLabel.rx.text)
             .disposed(by: disposeBag)
 
         output.updateArtist
-            .bind(with: self) { owner, artist in
-                owner.artistLabel.text = artist
-                owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-            }
+            .bind(to: artistLabel.rx.text)
             .disposed(by: disposeBag)
 
         output.dataSource
