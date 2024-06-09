@@ -51,14 +51,14 @@ extension LyricDecoratingViewController {
         output.updateSongTitle
             .bind(with: self) { owner, song in
                 owner.songTitleLabel.text = song
-                owner.songTitleLabel.setTextWithAttributes(alignment: .center)
+                owner.songTitleLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             }
             .disposed(by: disposeBag)
 
         output.updateArtist
             .bind(with: self) { owner, artist in
                 owner.artistLabel.text = artist
-                owner.artistLabel.setTextWithAttributes(alignment: .center)
+                owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             }
             .disposed(by: disposeBag)
 

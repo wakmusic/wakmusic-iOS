@@ -31,14 +31,14 @@ extension LyricHighlightingViewController {
         output.updateSongTitle
             .bind(with: self) { owner, song in
                 owner.songLabel.text = song
-                owner.songLabel.setTextWithAttributes(alignment: .center)
+                owner.songLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             }
             .disposed(by: disposeBag)
 
         output.updateArtist
             .bind(with: self) { owner, artist in
                 owner.artistLabel.text = artist
-                owner.artistLabel.setTextWithAttributes(alignment: .center)
+                owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             }
             .disposed(by: disposeBag)
 

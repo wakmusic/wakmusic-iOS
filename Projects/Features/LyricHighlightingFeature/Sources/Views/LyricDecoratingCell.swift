@@ -53,7 +53,7 @@ extension LyricDecoratingCell {
     func update(model: LyricDecoratingModel, index: Int) {
         decoImageView.backgroundColor = model.imageColor
         descriptionLabel.text = "Color \(index + 1)"
-        descriptionLabel.setTextWithAttributes(alignment: .center)
+        descriptionLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
         checkBoxContentView.isHidden = !model.isSelected
     }
 }
