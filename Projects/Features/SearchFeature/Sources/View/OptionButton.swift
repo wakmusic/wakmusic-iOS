@@ -10,7 +10,6 @@ private protocol OptionButtonActionProtocol {
 }
 
 final class OptionButton: UIView {
-
     private let leftLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,

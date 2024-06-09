@@ -18,7 +18,7 @@ final class PopularPlayListCell: UICollectionViewCell {
         $0.numberOfLines = 1
     }
 
-    private let nickNameLabel  = WMLabel(
+    private let nickNameLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t7(weight: .light),
@@ -28,8 +28,6 @@ final class PopularPlayListCell: UICollectionViewCell {
     ).then {
         $0.numberOfLines = 1
     }
-    
-    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
