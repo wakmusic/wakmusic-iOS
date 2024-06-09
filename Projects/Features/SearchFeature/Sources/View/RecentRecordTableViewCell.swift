@@ -7,7 +7,7 @@ protocol RecentRecordDelegate: AnyObject {
 }
 
 final class RecentRecordTableViewCell: UITableViewCell {
-    private let recentLabel =  WMLabel(
+    private let recentLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t6(weight: .medium),
@@ -17,7 +17,7 @@ final class RecentRecordTableViewCell: UITableViewCell {
     ).then {
         $0.numberOfLines = 1
     }
-    
+
     private let button: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Search.keywordRemove.image, for: .normal)
     }

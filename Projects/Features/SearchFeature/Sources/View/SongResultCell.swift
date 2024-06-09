@@ -12,7 +12,7 @@ final class SongResultCell: UICollectionViewCell {
         $0.layer.cornerRadius = 4
     }
 
-    private let titleLabel  =  WMLabel(
+    private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t6(weight: .medium),
@@ -22,7 +22,7 @@ final class SongResultCell: UICollectionViewCell {
     ).then {
         $0.numberOfLines = 1
     }
-    
+
     private let artistLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
@@ -33,7 +33,7 @@ final class SongResultCell: UICollectionViewCell {
     ).then {
         $0.numberOfLines = 1
     }
-    
+
     private let dateLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
@@ -44,7 +44,7 @@ final class SongResultCell: UICollectionViewCell {
     ).then {
         $0.numberOfLines = 1
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview()
