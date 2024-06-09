@@ -12,24 +12,39 @@ final class SongResultCell: UICollectionViewCell {
         $0.layer.cornerRadius = 4
     }
 
-    private let titleLabel: UILabel = UILabel().then {
+    private let titleLabel  =  WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t6(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = 1
-        $0.font = .setFont(.t6(weight: .medium))
-        $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
-
-    private let artistLabel: UILabel = UILabel().then {
+    
+    private let artistLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t7(weight: .light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = 1
-        $0.font = .setFont(.t7(weight: .light))
-        $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
-
-    private let dateLabel: UILabel = UILabel().then {
+    
+    private let dateLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .sc7(weight: .score3Light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = 1
-        $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
-        $0.textColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview()
