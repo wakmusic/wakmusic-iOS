@@ -63,7 +63,7 @@ public extension UILabel {
     /// - Parameter lineHeightMultiple: 줄 간격의 배수 (lineSpacing *  lineHeightMultiple)
     func setTextWithAttributes(
         lineHeight: CGFloat? = nil,
-        kernValue: Double? = -0.5,
+        kernValue: Double? = nil,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
         alignment: NSTextAlignment = .left
