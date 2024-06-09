@@ -32,7 +32,7 @@ extension LyricDecoratingViewController {
         saveButton.rx.tap
             .bind(with: self) { owner, _ in
                 let activityViewController = UIActivityViewController(
-                    activityItems: [owner.decorateShareContentView.asImage],
+                    activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
                     applicationActivities: nil
                 )
                 activityViewController.popoverPresentationController?.sourceRect = CGRect(
@@ -49,11 +49,17 @@ extension LyricDecoratingViewController {
 
     func outputBind() {
         output.updateSongTitle
-            .bind(to: songTitleLabel.rx.text)
+            .bind(with: self, onNext: { owner, song in
+                owner.songTitleLabel.text = song
+                owner.songTitleLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
+            })
             .disposed(by: disposeBag)
 
         output.updateArtist
-            .bind(to: artistLabel.rx.text)
+            .bind(with: self, onNext: { owner, artist in
+                owner.artistLabel.text = artist
+                owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
+            })
             .disposed(by: disposeBag)
 
         output.dataSource

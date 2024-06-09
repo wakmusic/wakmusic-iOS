@@ -70,13 +70,11 @@ public final class LyricDecoratingViewController: UIViewController {
     let songTitleLabel = UILabel().then {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-        $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)
     }
 
     let artistLabel = UILabel().then {
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-        $0.setTextWithAttributes(kernValue: -0.5, alignment: .center)
     }
 
     private let decorateBottomView = UIView().then {
