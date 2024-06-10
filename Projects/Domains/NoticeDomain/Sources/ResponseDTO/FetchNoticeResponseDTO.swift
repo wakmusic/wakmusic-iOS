@@ -14,7 +14,7 @@ public struct FetchNoticeResponseDTO: Decodable, Equatable {
     public let category: String
     public let title: String
     public let content: String?
-    public let thumbnail: FetchNoticeResponseDTO.Image
+    public let thumbnail: FetchNoticeResponseDTO.Image?
     public let origins: [FetchNoticeResponseDTO.Image]
     public let createdAt: Double
 
@@ -33,8 +33,8 @@ public struct FetchNoticeResponseDTO: Decodable, Equatable {
 
 public extension FetchNoticeResponseDTO {
     struct Image: Decodable {
-        public let url: String
-        public let link: String
+        public let url: String?
+        public let link: String?
 
         enum CodingKeys: String, CodingKey {
             case url = "imageUrl"
@@ -51,11 +51,11 @@ public extension FetchNoticeResponseDTO {
             title: title,
             content: content ?? "",
             thumbnail: FetchNoticeEntity.Image(
-                url: thumbnail.url,
-                link: thumbnail.link
+                url: thumbnail?.url ?? "",
+                link: thumbnail?.link ?? ""
             ),
             origins: origins.map {
-                FetchNoticeEntity.Image(url: $0.url, link: $0.link)
+                FetchNoticeEntity.Image(url: $0.url ?? "", link: $0.link ?? "")
             },
             createdAt: createdAt
         )

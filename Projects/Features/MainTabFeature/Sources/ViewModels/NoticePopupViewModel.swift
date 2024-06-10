@@ -31,7 +31,7 @@ public final class NoticePopupViewModel {
     ) {
         self.fetchNoticeEntities = fetchNoticeEntities
 
-        let thumbnails: [FetchNoticeEntity.Image] = fetchNoticeEntities.map { $0.thumbnail }
+        let thumbnails: [FetchNoticeEntity.Image] = fetchNoticeEntities.map { $0.thumbnail }.filter { !$0.url.isEmpty }
         output.dataSource.accept(thumbnails)
 
         let ids: [Int] = self.fetchNoticeEntities.map { $0.id }

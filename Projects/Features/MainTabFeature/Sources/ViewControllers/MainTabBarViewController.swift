@@ -7,6 +7,7 @@ import MyInfoFeature
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
+import SafariServices
 import SearchFeature
 import SearchFeatureInterface
 import SnapKit
@@ -139,9 +140,15 @@ extension MainTabBarViewController {
 
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {
     public func noticeTapped(model: FetchNoticeEntity) {
-        let viewController = noticeDetailComponent.makeView(model: model)
-        viewController.modalPresentationStyle = .overFullScreen
-        self.present(viewController, animated: true)
+        if model.thumbnail.link.isEmpty {
+            let viewController = noticeDetailComponent.makeView(model: model)
+            viewController.modalPresentationStyle = .overFullScreen
+            present(viewController, animated: true)
+        } else {
+            guard let URL = URL(string: model.thumbnail.link) else { return }
+            let safari = SFSafariViewController(url: URL)
+            present(safari, animated: true)
+        }
     }
 }
 

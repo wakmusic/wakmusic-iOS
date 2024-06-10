@@ -9,6 +9,6 @@
 import Foundation
 
 public enum NoticeType: Int {
-    case activated = 1 // 노출기간 내 공지
+    case popup = 1 // 공지팝업
     case all // 전체공지
 }
