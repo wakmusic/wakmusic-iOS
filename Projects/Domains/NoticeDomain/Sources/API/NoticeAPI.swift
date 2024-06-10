@@ -45,7 +45,7 @@ extension NoticeAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchNotice(type):
+        case .fetchNotice:
             return .requestParameters(
                 parameters: [
                     "os": "ios",
