@@ -8,7 +8,7 @@ private protocol WithDrawLabelActionProtocol {
 }
 
 final class WithDrawLabel: UILabel {
-    let target = "여기"
+    private let target = "여기"
 
     init(_ text: String = "회원 탈퇴를 원하신다면 여기를 눌러주세요.") {
         super.init(frame: .zero)
