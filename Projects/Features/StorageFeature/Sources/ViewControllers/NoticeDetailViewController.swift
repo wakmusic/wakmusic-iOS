@@ -61,7 +61,7 @@ private extension NoticeDetailViewController {
             .map { $0.1[$0.0.section].items[$0.0.item] }
             .bind(with: self) { owner, model in
                 guard !model.link.isEmpty,
-                    let URL = URL(string: model.link) else { return }
+                      let URL = URL(string: model.link) else { return }
                 owner.present(SFSafariViewController(url: URL), animated: true)
             }
             .disposed(by: disposeBag)
