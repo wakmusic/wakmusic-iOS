@@ -16,14 +16,14 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
         $0.contentMode = .scaleAspectFit
     }
 
-    var mainContainerComponent: MainContainerComponent!
-    var permissionComponent: PermissionComponent!
-    var textPopUpFactory: TextPopUpFactory!
+    private var mainContainerComponent: MainContainerComponent!
+    private var permissionComponent: PermissionComponent!
+    private var textPopUpFactory: TextPopUpFactory!
 
     private var viewModel: IntroViewModel!
     lazy var input = IntroViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -218,7 +218,7 @@ private extension IntroViewController {
     }
 
     func showTabBar() {
-        let viewController = mainContainerComponent!.makeView()
+        let viewController = mainContainerComponent.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
