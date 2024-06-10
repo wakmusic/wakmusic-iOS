@@ -4,10 +4,10 @@ import DesignSystem
 import Lottie
 import MainTabFeature
 import RxSwift
-import UIKit
-import Utility
 import SnapKit
 import Then
+import UIKit
+import Utility
 
 open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var logoContentView: UIView!
@@ -152,7 +152,7 @@ private extension IntroViewController {
 
                     owner.showPanModal(content: textPopupVc)
 
-                #warning("도메인 변경으로 항상 failure")
+                    #warning("도메인 변경으로 항상 failure")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
