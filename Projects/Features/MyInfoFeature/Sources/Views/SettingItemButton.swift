@@ -86,5 +86,4 @@ extension SettingItemButton: SettingItemStateProtocol {
     fileprivate func updateIsHighlighted(_ isHighlited: Bool) {
         self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
     }
-    
 }
