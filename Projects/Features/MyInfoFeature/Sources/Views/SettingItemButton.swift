@@ -49,7 +49,7 @@ final class SettingItemButton: UIButton {
     public func setRightImage(_ image: UIImage?) {
         rightImageView.image = image
     }
-    
+
     private func updateIsHighlighted(_ isHighlited: Bool) {
         self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
     }
