@@ -33,7 +33,7 @@ public class MainTabBarViewModel {
         let igoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
         DEBUG_LOG("igoredNoticeIds: \(igoredNoticeIds)")
 
-        self.fetchNoticeUseCase.execute(type: .currently)
+        self.fetchNoticeUseCase.execute(type: .activated)
             .catchAndReturn([])
             .asObservable()
             .map { entities in

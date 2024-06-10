@@ -28,8 +28,8 @@ extension NoticeAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case let .fetchNotice(type):
-            return type.addPathString
+        case .fetchNotice:
+            return "/list"
         case .fetchNoticeCategories:
             return "/categories"
         }
@@ -45,9 +45,10 @@ extension NoticeAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchNotice:
+        case let .fetchNotice(type):
             return .requestParameters(
                 parameters: [
+                    "type": type.rawValue,
                     "os": "ios",
                     "version": Bundle.main
                         .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""

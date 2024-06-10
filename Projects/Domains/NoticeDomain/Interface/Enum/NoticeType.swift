@@ -8,16 +8,7 @@
 
 import Foundation
 
-public enum NoticeType: String {
+public enum NoticeType: Int {
+    case activated = 1
     case all
-    case currently
-
-    public var addPathString: String {
-        switch self {
-        case .all:
-            return "/all"
-        case .currently:
-            return ""
-        }
-    }
 }
