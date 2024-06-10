@@ -26,7 +26,7 @@ private protocol MyInfoActionProtocol {
 final class MyInfoView: UIView {
     let scrollView = UIScrollView()
     let contentView = UIView()
-    
+
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
     let profileView = ProfileView().then {
         $0.isHidden = true
@@ -130,7 +130,7 @@ private extension MyInfoView {
             $0.width.equalToSuperview()
             $0.edges.equalTo(scrollView.contentLayoutGuide)
         }
-        
+
         moreButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.top.equalToSuperview().offset(8)
