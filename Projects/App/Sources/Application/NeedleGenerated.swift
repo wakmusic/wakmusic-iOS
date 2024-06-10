@@ -151,6 +151,19 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
 private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class LegacyPlaylistDependencyec965582e72ebd83150aProvider: LegacyPlaylistDependency {
+    var containSongsFactory: any ContainSongsFactory {
+        return appComponent.containSongsFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->LegacyPlaylistComponent
+private func factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LegacyPlaylistDependencyec965582e72ebd83150aProvider(appComponent: parent1(component) as! AppComponent)
+}
 private class LyricHighlightingDependency47c68b56cdde819901d2Provider: LyricHighlightingDependency {
     var fetchLyricsUseCase: any FetchLyricsUseCase {
         return appComponent.fetchLyricsUseCase
@@ -180,19 +193,6 @@ private class LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider: LyricDecora
 /// ^->AppComponent->LyricDecoratingComponent
 private func factory5d05db9eb4337d682097e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider()
-}
-private class LegacyPlaylistDependencyec965582e72ebd83150aProvider: LegacyPlaylistDependency {
-    var containSongsFactory: any ContainSongsFactory {
-        return appComponent.containSongsFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->LegacyPlaylistComponent
-private func factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return LegacyPlaylistDependencyec965582e72ebd83150aProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase {
@@ -1057,6 +1057,11 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
+extension LegacyPlaylistComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\LegacyPlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
+    }
+}
 extension LyricHighlightingComponent: Registration {
     public func registerItems() {
         keyPathToName[\LyricHighlightingDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
@@ -1067,11 +1072,6 @@ extension LyricHighlightingComponent: Registration {
 extension LyricDecoratingComponent: Registration {
     public func registerItems() {
 
-    }
-}
-extension LegacyPlaylistComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\LegacyPlaylistDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
 extension MainTabBarComponent: Registration {
@@ -1389,9 +1389,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ArtistMusicContentComponent", factory8b6ffa46033e2529b5daf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->LegacyPlaylistComponent", factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->LyricHighlightingComponent", factory57ee59e468bef412b173f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->LyricDecoratingComponent", factory5d05db9eb4337d682097e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->LegacyPlaylistComponent", factoryb88c9f81151d3f2df9d6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)
