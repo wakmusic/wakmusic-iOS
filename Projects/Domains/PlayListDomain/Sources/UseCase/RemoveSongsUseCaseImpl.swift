@@ -20,7 +20,7 @@ public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase {
         self.playListRepository = playListRepository
     }
 
-    public func execute(key: String, songs: [String]) -> Single<BaseEntity> {
+    public func execute(key: String, songs: [String]) -> Completable {
         return playListRepository.removeSongs(key: key, songs: songs)
     }
 }

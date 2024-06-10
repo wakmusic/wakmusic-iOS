@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RecommendPlayListEntity: Equatable {
+public struct RecommendPlayListEntity: Hashable, Equatable {
     public init(
         key: String,
         title: String,
@@ -26,4 +26,13 @@ public struct RecommendPlayListEntity: Equatable {
     public let key, title, image: String
     public let `private`: Bool
     public let count: Int
+    private let id = UUID()
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (_ lhs: Self, _ rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

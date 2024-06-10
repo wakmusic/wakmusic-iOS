@@ -9,7 +9,7 @@ public struct AddSongResponseDTO: Decodable {
 public extension AddSongResponseDTO {
     func toDomain() -> AddSongEntity {
         AddSongEntity(
-            added_songs_length: addedSongCount,
+            addedSongCount: addedSongCount,
             duplicated: isDuplicatedSongsExist
         )
     }
