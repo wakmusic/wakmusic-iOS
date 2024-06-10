@@ -87,24 +87,26 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     }
 }
 
-extension MainTabBarViewController {
-    private func bind() {
+private extension MainTabBarViewController {
+    func bind() {
         viewModel.output
             .dataSource
             .filter { !$0.isEmpty }
-            .withUnretained(self)
-            .subscribe(onNext: { owner, model in
+            .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
                 owner.showPanModal(content: viewController)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
+    func configureUI() {
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
         add(asChildViewController: viewControllers[startPage])
     }
+}
 
+extension MainTabBarViewController {
     func updateContent(previous: Int, current: Int) {
         Utility.PreferenceManager.startPage = current
         remove(asChildViewController: viewControllers[previous])

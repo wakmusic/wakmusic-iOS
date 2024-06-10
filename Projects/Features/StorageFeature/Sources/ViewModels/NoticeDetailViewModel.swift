@@ -14,22 +14,22 @@ import RxCocoa
 import RxSwift
 import Utility
 
-public class NoticeDetailViewModel {
+public final class NoticeDetailViewModel {
     let input = Input()
     let output = Output()
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
     }
 
     public struct Input {
-        var fetchNoticeDetail: PublishSubject<Void> = PublishSubject()
+        let fetchNoticeDetail: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
-        var imageSizes: BehaviorRelay<[CGSize]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
+        let imageSizes: BehaviorRelay<[CGSize]> = BehaviorRelay(value: [])
     }
 
     public init(
@@ -37,14 +37,10 @@ public class NoticeDetailViewModel {
     ) {
         let sectionModel = [NoticeDetailSectionModel(
             model: model,
-            items: model.images
+            items: model.origins
         )]
 
-        let imageURLs: [URL] =
-            model.images.map {
-                WMImageAPI.fetchNotice(id: $0).toURL
-            }
-            .compactMap { $0 }
+        let imageURLs: [URL] = model.origins.map { URL(string: $0.url) }.compactMap { $0 }
 
         input.fetchNoticeDetail
             .flatMap { [weak self] _ -> Observable<[CGSize]> in
@@ -59,8 +55,8 @@ public class NoticeDetailViewModel {
     }
 }
 
-extension NoticeDetailViewModel {
-    private func downloadImage(urls: [URL]) -> Observable<[CGSize]> {
+private extension NoticeDetailViewModel {
+    func downloadImage(urls: [URL]) -> Observable<[CGSize]> {
         var sizes: [CGSize] = []
         return Observable.create { observer -> Disposable in
             urls.forEach {

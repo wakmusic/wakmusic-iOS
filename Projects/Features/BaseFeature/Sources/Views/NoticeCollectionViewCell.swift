@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import NoticeDomainInterface
 import UIKit
 import Utility
 
@@ -20,9 +21,9 @@ public class NoticeCollectionViewCell: UICollectionViewCell {
 }
 
 public extension NoticeCollectionViewCell {
-    func update(model: String) {
+    func update(model: FetchNoticeEntity.Image) {
         contentImageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchNotice(id: model).toString),
+            with: URL(string: model.url),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )

@@ -13,17 +13,17 @@ import RxCocoa
 import RxSwift
 import Utility
 
-public class NoticePopupViewModel {
+public final class NoticePopupViewModel {
     let input = Input()
     let output = Output()
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     var fetchNoticeEntities: [FetchNoticeEntity]
 
     public struct Input {}
 
     public struct Output {
-        var dataSource: BehaviorRelay<[String]> = BehaviorRelay(value: [])
-        var ids: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[FetchNoticeEntity.Image]> = BehaviorRelay(value: [])
+        let ids: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
     }
 
     public init(
@@ -31,8 +31,8 @@ public class NoticePopupViewModel {
     ) {
         self.fetchNoticeEntities = fetchNoticeEntities
 
-        let images: [String] = self.fetchNoticeEntities.map { $0.thumbnail ?? "" }.filter { !$0.isEmpty }
-        output.dataSource.accept(images)
+        let thumbnails: [FetchNoticeEntity.Image] = fetchNoticeEntities.map { $0.thumbnail }
+        output.dataSource.accept(thumbnails)
 
         let ids: [Int] = self.fetchNoticeEntities.map { $0.id }
         output.ids.accept(ids)

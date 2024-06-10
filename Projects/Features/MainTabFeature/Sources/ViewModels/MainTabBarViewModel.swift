@@ -12,17 +12,16 @@ import RxCocoa
 import RxSwift
 import Utility
 
-public class MainTabBarViewModel {
-    var input = Input()
-    var output = Output()
-    var disposeBag = DisposeBag()
-
-    var fetchNoticeUseCase: FetchNoticeUseCase
+public final class MainTabBarViewModel {
+    let input = Input()
+    let output = Output()
+    private let disposeBag = DisposeBag()
+    private var fetchNoticeUseCase: FetchNoticeUseCase
 
     public struct Input {}
 
     public struct Output {
-        var dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
     }
 
     public init(

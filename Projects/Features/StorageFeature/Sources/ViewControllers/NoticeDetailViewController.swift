@@ -16,16 +16,16 @@ import RxSwift
 import UIKit
 import Utility
 
-typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, String>
+typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, FetchNoticeEntity.Image>
 
-public class NoticeDetailViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class NoticeDetailViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var viewModel: NoticeDetailViewModel!
-    var disposeBag = DisposeBag()
+    private var viewModel: NoticeDetailViewModel!
+    private let disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
@@ -51,12 +51,12 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     }
 }
 
-extension NoticeDetailViewController {
-    private func inputBind() {
+private extension NoticeDetailViewController {
+    func inputBind() {
         viewModel.input.fetchNoticeDetail.onNext(())
     }
 
-    private func outputBind() {
+    func outputBind() {
         viewModel.output.dataSource
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
             .disposed(by: disposeBag)
@@ -69,16 +69,17 @@ extension NoticeDetailViewController {
             .disposed(by: disposeBag)
     }
 
-    private func createDataSource() -> RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel> {
+    func createDataSource() -> RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel> {
         let dataSource = RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel>(
             configureCell: { _, collectionView, indexPath, item -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "NoticeCollectionViewCell",
                     for: indexPath
-                ) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                ) as? NoticeCollectionViewCell else { 
+                    return UICollectionViewCell()
+                }
                 cell.update(model: item)
                 return cell
-
             },
             configureSupplementaryView: { dataSource, collectionView, elementKind, indexPath -> UICollectionReusableView in
                 switch elementKind {
@@ -101,15 +102,15 @@ extension NoticeDetailViewController {
         return dataSource
     }
 
-    private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+    func configureUI() {
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
 
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
