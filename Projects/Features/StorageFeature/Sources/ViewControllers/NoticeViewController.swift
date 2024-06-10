@@ -68,7 +68,8 @@ private extension NoticeViewController {
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "NoticeListCell",
-                    for: indexPath) as? NoticeListCell else {
+                    for: indexPath
+                ) as? NoticeListCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
