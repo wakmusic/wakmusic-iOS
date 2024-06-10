@@ -11,9 +11,3 @@ public enum TabPosition: Int {
         }
     }
 }
-
-public enum TypingStatus {
-    case before
-    case typing
-    case search
-}
