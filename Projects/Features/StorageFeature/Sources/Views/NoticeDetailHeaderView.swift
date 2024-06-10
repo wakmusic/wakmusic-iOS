@@ -21,19 +21,19 @@ class NoticeDetailHeaderView: UICollectionReusableView {
         super.awakeFromNib()
 
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
 
         dateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        dateLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        dateLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
         dateLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
 
         timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        timeLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        timeLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
         timeLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
 
         contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        contentStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        contentStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         contentStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
     }
 }
@@ -48,19 +48,19 @@ extension NoticeDetailHeaderView {
             string: model.title,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5,
                 .paragraphStyle: paragraphStyle
             ]
         )
         let titleHeight: CGFloat = max(28, titleAttributedString.height(containerWidth: availableWidth))
 
-        let contentString: String = model.content ?? "팬치들 스샷 참고하세요! 🥰"
+        let contentString: String = model.content
         let contentAttributedString = NSMutableAttributedString(
             string: contentString,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5,
                 .paragraphStyle: paragraphStyle
             ]
@@ -76,6 +76,6 @@ extension NoticeDetailHeaderView {
         titleStringLabel.text = model.title
         dateLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
         timeLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "HH:mm")
-        contentStringLabel.text = model.content ?? "팬치들 스샷 참고하세요! 🥰"
+        contentStringLabel.text = model.content
     }
 }
