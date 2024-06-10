@@ -98,6 +98,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         let sharedState = reactor.state.share(replay: 2)
 
         sharedState.map(\.isLoading)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { onwer, isLoading in
                 if isLoading {
@@ -110,6 +111,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
                 owner.tableView.isHidden = flag
@@ -311,7 +313,7 @@ extension BeforeSearchContentViewController {
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 

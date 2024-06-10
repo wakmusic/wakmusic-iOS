@@ -84,6 +84,7 @@ public final class BeforeSearchReactor: Reactor {
 extension BeforeSearchReactor {
     func fetchRecommend() -> Observable<Mutation> {
         return .concat([
+            .just(.updateLoadingState(true)),
             fetchRecommendPlayListUseCase
                 .execute()
                 .asObservable()

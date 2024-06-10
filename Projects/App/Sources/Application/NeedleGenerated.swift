@@ -20,6 +20,8 @@ import HomeFeature
 import KeychainModule
 import LikeDomain
 import LikeDomainInterface
+import LyricHighlightingFeature
+import LyricHighlightingFeatureInterface
 import MainTabFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
@@ -161,6 +163,36 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
 /// ^->AppComponent->PlayerComponent
 private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class LyricHighlightingDependency47c68b56cdde819901d2Provider: LyricHighlightingDependency {
+    var fetchLyricsUseCase: any FetchLyricsUseCase {
+        return appComponent.fetchLyricsUseCase
+    }
+    var lyricDecoratingComponent: LyricDecoratingComponent {
+        return appComponent.lyricDecoratingComponent
+    }
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
+        return appComponent.lyricHighlightingFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->LyricHighlightingComponent
+private func factory57ee59e468bef412b173f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LyricHighlightingDependency47c68b56cdde819901d2Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider: LyricDecoratingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->LyricDecoratingComponent
+private func factory5d05db9eb4337d682097e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider()
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase {
@@ -860,6 +892,8 @@ extension AppComponent: Registration {
         localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
         localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
         localTable["newSongsContentComponent-NewSongsContentComponent"] = { self.newSongsContentComponent as Any }
+        localTable["lyricHighlightingFactory-any LyricHighlightingFactory"] = { self.lyricHighlightingFactory as Any }
+        localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { self.lyricDecoratingComponent as Any }
         localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
@@ -886,11 +920,11 @@ extension AppComponent: Registration {
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
         localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
         localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
-        localTable["editPlayListUseCase-any EditPlayListUseCase"] = { self.editPlayListUseCase as Any }
-        localTable["editPlayListNameUseCase-any EditPlayListNameUseCase"] = { self.editPlayListNameUseCase as Any }
-        localTable["loadPlayListUseCase-any LoadPlayListUseCase"] = { self.loadPlayListUseCase as Any }
+        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { self.updatePlaylistUseCase as Any }
+        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { self.updateTitleAndPrivateUseCase as Any }
         localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
         localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { self.removeSongsUseCase as Any }
+        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { self.uploadPlaylistImageUseCase as Any }
         localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
         localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
         localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
@@ -932,8 +966,6 @@ extension AppComponent: Registration {
         localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { self.multiPurposePopUpFactory as Any }
         localTable["textPopUpFactory-any TextPopUpFactory"] = { self.textPopUpFactory as Any }
         localTable["containSongsFactory-any ContainSongsFactory"] = { self.containSongsFactory as Any }
-        localTable["privacyComponent-PrivacyComponent"] = { self.privacyComponent as Any }
-        localTable["serviceTermsComponent-ServiceTermsComponent"] = { self.serviceTermsComponent as Any }
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["faqComponent-FaqComponent"] = { self.faqComponent as Any }
         localTable["faqContentComponent-FaqContentComponent"] = { self.faqContentComponent as Any }
@@ -988,6 +1020,18 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
         keyPathToName[\PlayerDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
+    }
+}
+extension LyricHighlightingComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\LyricHighlightingDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
+        keyPathToName[\LyricHighlightingDependency.lyricDecoratingComponent] = "lyricDecoratingComponent-LyricDecoratingComponent"
+        keyPathToName[\LyricHighlightingDependency.lyricHighlightingFactory] = "lyricHighlightingFactory-any LyricHighlightingFactory"
+    }
+}
+extension LyricDecoratingComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension MainTabBarComponent: Registration {
@@ -1287,6 +1331,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlaylistComponent", factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->LyricHighlightingComponent", factory57ee59e468bef412b173f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->LyricDecoratingComponent", factory5d05db9eb4337d682097e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)

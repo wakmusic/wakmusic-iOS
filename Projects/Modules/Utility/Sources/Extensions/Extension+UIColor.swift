@@ -19,4 +19,13 @@ public extension UIColor {
             )
         }
     }
+
+    static func random() -> UIColor {
+        return UIColor(
+            red: CGFloat(Float.random(in: 0 ..< 1)),
+            green: CGFloat(Float.random(in: 0 ..< 1)),
+            blue: CGFloat(Float.random(in: 0 ..< 1)),
+            alpha: 1.0
+        )
+    }
 }

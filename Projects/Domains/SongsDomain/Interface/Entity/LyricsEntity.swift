@@ -16,4 +16,5 @@ public struct LyricsEntity: Equatable {
     }
 
     public let text: String
+    public var isHighlighting: Bool = false
 }

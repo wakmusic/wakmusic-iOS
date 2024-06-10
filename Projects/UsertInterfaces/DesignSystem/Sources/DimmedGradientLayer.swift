@@ -1,8 +1,7 @@
-import DesignSystem
 import UIKit
 
-final class MusicDetailDimmedGradientLayer: CAGradientLayer {
-    init(frame: CGRect) {
+open class DimmedGradientLayer: CAGradientLayer {
+    public init(frame: CGRect) {
         super.init()
         self.frame = frame
         self.colors = [
@@ -15,7 +14,7 @@ final class MusicDetailDimmedGradientLayer: CAGradientLayer {
     }
 
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

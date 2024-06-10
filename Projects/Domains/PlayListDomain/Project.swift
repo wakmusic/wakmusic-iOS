@@ -23,6 +23,9 @@ let project = Project.module(
         .tests(
             module: .domain(.PlayListDomain),
             dependencies: [.domain(target: .PlayListDomain)]
-        )
+        ),
+        .testing(module: .domain(.PlayListDomain), dependencies: [
+            .domain(target: .PlayListDomain, type: .interface)
+        ])
     ]
 )
