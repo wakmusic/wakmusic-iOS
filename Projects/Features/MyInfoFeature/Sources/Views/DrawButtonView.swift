@@ -17,7 +17,7 @@ final class DrawButtonView: UIView {
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
-    
+
     let titleLabel = WMLabel(
         text: "내 열매",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -26,7 +26,7 @@ final class DrawButtonView: UIView {
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
         kernValue: -0.5
     )
-    
+
     let countLabel = WMLabel(
         text: "0개",
         textColor: DesignSystemAsset.PrimaryColorV2.point.color,

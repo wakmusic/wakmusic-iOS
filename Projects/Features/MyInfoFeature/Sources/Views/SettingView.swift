@@ -47,7 +47,7 @@ final class SettingView: UIView {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray300.color.cgColor
     }
-    
+
     private let versionLabel = UILabel().then {
         $0.text = "0.0.0"
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)

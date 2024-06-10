@@ -14,7 +14,7 @@ final class LoginWarningView: UIView {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Search.warning.image
     }
-    
+
     private let label = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
