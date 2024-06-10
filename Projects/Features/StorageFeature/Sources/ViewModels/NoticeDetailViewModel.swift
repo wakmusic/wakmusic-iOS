@@ -9,11 +9,11 @@
 import BaseFeature
 import Foundation
 import Kingfisher
+import LogManager
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import Utility
-import LogManager
 
 public final class NoticeDetailViewModel {
     private let model: FetchNoticeEntity
