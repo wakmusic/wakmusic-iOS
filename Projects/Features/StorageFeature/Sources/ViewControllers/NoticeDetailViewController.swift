@@ -75,7 +75,7 @@ private extension NoticeDetailViewController {
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "NoticeCollectionViewCell",
                     for: indexPath
-                ) as? NoticeCollectionViewCell else { 
+                ) as? NoticeCollectionViewCell else {
                     return UICollectionViewCell()
                 }
                 cell.update(model: item)
