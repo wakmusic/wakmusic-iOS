@@ -138,10 +138,10 @@ extension ServiceInfoViewController: UITableViewDelegate {
 extension ServiceInfoViewController {
     private func configureUI() {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         titleStringLabel.text = "서비스 정보"
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleStringLabel.setTextWithAttributes(kernValue: -0.5)
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 20))
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))

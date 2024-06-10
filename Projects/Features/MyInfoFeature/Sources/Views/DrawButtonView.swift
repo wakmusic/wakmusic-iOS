@@ -17,18 +17,24 @@ final class DrawButtonView: UIView {
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
-
-    let titleLabel = UILabel().then {
-        $0.text = "내 열매"
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-    }
-
-    let countLabel = UILabel().then {
-        $0.text = "0개"
-        $0.font = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
-        $0.textColor = DesignSystemAsset.PrimaryColorV2.point.color
-    }
+    
+    let titleLabel = WMLabel(
+        text: "내 열매",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
+    
+    let countLabel = WMLabel(
+        text: "0개",
+        textColor: DesignSystemAsset.PrimaryColorV2.point.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
 
     let drawButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)

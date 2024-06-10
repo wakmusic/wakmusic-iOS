@@ -29,13 +29,14 @@ final class SettingView: UIView {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    private let titleLabel = UILabel().then {
-        $0.numberOfLines = .zero
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.text = "설정"
-        $0.font = .setFont(.t5(weight: .medium))
-        $0.setTextWithAttributes(kernValue: -0.5)
-    }
+    private let titleLabel = WMLabel(
+        text: "설정",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
 
     fileprivate let withDrawButton = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
@@ -46,7 +47,7 @@ final class SettingView: UIView {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray300.color.cgColor
     }
-
+    
     private let versionLabel = UILabel().then {
         $0.text = "0.0.0"
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
@@ -87,14 +88,17 @@ final class SettingView: UIView {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
 
-    private let descriptionLabel = UILabel().then {
+    private let descriptionLabel = WMLabel(
+        text: "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray500.color,
+        font: .t7(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = 0
         $0.textColor = .black
-        $0.text = "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다."
-        $0.font = .setFont(.t7(weight: .light))
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
         $0.lineBreakMode = .byWordWrapping
-        $0.setTextWithAttributes(kernValue: -0.5)
     }
 
     init() {

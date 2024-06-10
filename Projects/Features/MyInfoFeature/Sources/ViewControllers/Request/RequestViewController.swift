@@ -193,7 +193,7 @@ extension RequestViewController {
                 string: title,
                 attributes: [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                     .kern: -0.5
                 ]
             )
@@ -201,7 +201,7 @@ extension RequestViewController {
             superViews[i].backgroundColor = .white.withAlphaComponent(0.4)
             superViews[i].layer.borderWidth = 1
             superViews[i].layer.cornerRadius = 12
-            superViews[i].layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            superViews[i].layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
         }
 
         dotLabel.layer.cornerRadius = 2
@@ -215,14 +215,14 @@ extension RequestViewController {
         withDrawAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray400.color,
                 .kern: -0.5
             ],
             range: NSRange(location: 0, length: withDrawAttributedString.string.count)
         )
         withdrawButton.layer.borderWidth = 1
         withdrawButton.layer.cornerRadius = 4
-        withdrawButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+        withdrawButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
         withdrawButton.setAttributedTitle(withDrawAttributedString, for: .normal)
 
         #if DEBUG
@@ -272,7 +272,7 @@ extension RequestViewController {
 
         bombButton.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .subscribe(onNext: { _, _ in
                 let array: [Int] = [0]
                 let _ = array[1]
             }).disposed(by: disposeBag)

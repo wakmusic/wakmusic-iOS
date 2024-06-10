@@ -57,7 +57,11 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
 extension FaqViewController {
     private func configureUI() {
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
-        self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        self.titleLabel.font = .setFont(.t5(weight: .medium))
+        self.titleLabel.setTextWithAttributes(
+            lineHeight: UIFont.WMFontSystem.t5(weight: .medium).lineHeight,
+            kernValue: -0.5
+        )
         self.activityIndicator.type = .circleStrokeSpin
         self.activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIndicator.startAnimating()

@@ -10,11 +10,14 @@ private protocol SettingItemActionProtocol {
 }
 
 final class SettingItemView: UIView {
-    private let leftLabel = UILabel().then {
-        $0.font = .setFont(.t5(weight: .medium))
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.setTextWithAttributes(kernValue: -0.5)
-    }
+    private let leftLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
 
     private let rightImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Navigation.serviceInfoArrowRight.image
