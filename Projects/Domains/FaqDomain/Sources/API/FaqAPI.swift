@@ -11,7 +11,7 @@ public enum FaqAPI {
 
 extension FaqAPI: WMAPI {
     public var domain: WMDomain {
-        .faq
+        return .faq
     }
 
     public var urlPath: String {
@@ -19,7 +19,7 @@ extension FaqAPI: WMAPI {
         case .fetchFaqCategories:
             return "/categories"
         case .fetchFaq:
-            return ""
+            return "/list"
         }
     }
 
