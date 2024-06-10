@@ -146,8 +146,7 @@ extension MainTabBarViewController: NoticePopupViewControllerDelegate {
             present(viewController, animated: true)
         } else {
             guard let URL = URL(string: model.thumbnail.link) else { return }
-            let safari = SFSafariViewController(url: URL)
-            present(safari, animated: true)
+            present(SFSafariViewController(url: URL), animated: true)
         }
     }
 }

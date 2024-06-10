@@ -13,6 +13,7 @@ import NVActivityIndicatorView
 import RxCocoa
 import RxDataSources
 import RxSwift
+import SafariServices
 import UIKit
 import Utility
 
@@ -54,6 +55,16 @@ public final class NoticeDetailViewController: UIViewController, ViewControllerF
 private extension NoticeDetailViewController {
     func inputBind() {
         viewModel.input.fetchNoticeDetail.onNext(())
+
+        collectionView.rx.itemSelected
+            .withLatestFrom(viewModel.output.dataSource) { ($0, $1) }
+            .map { $0.1[$0.0.section].items[$0.0.item] }
+            .bind(with: self) { owner, model in
+                guard !model.link.isEmpty,
+                    let URL = URL(string: model.link) else { return }
+                owner.present(SFSafariViewController(url: URL), animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 
     func outputBind() {
