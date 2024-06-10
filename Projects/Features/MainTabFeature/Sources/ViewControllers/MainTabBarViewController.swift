@@ -30,10 +30,13 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         ]
     }()
 
-    var viewModel: MainTabBarViewModel!
+    private var viewModel: MainTabBarViewModel!
+    private lazy var input = MainTabBarViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag: DisposeBag = DisposeBag()
+
     private var previousIndex: Int?
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-    private var disposeBag: DisposeBag = DisposeBag()
 
     private var homeComponent: HomeComponent!
     private var chartComponent: ChartComponent!
@@ -48,7 +51,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -89,9 +93,12 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 }
 
 private extension MainTabBarViewController {
-    func bind() {
-        viewModel.output
-            .dataSource
+    func inputBind() {
+        input.fetchNoticePopup.onNext(())
+    }
+
+    func outputBind() {
+        output.dataSource
             .filter { !$0.isEmpty }
             .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
@@ -144,6 +151,7 @@ extension MainTabBarViewController: NoticePopupViewControllerDelegate {
             let viewController = noticeDetailComponent.makeView(model: model)
             viewController.modalPresentationStyle = .overFullScreen
             present(viewController, animated: true)
+
         } else {
             guard let URL = URL(string: model.thumbnail.link) else { return }
             present(SFSafariViewController(url: URL), animated: true)
