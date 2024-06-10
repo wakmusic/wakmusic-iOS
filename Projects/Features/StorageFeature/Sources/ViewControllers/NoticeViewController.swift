@@ -45,8 +45,8 @@ public class NoticeViewController: UIViewController, ViewControllerFromStoryBoar
     }
 }
 
-extension NoticeViewController {
-    private func bind() {
+private extension NoticeViewController {
+    func bind() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
         viewModel.output.dataSource
@@ -66,13 +66,15 @@ extension NoticeViewController {
             })
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "NoticeListCell", for: indexPath) as? NoticeListCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "NoticeListCell",
+                    for: indexPath) as? NoticeListCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
             .withLatestFrom(viewModel.output.dataSource) { ($0, $1) }
@@ -82,11 +84,12 @@ extension NoticeViewController {
                 let viewController = self.noticeDetailComponent.makeView(model: model[indexPath.row])
                 viewController.modalPresentationStyle = .overFullScreen
                 self.present(viewController, animated: true)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+    func configureUI() {
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
@@ -94,7 +97,7 @@ extension NoticeViewController {
             string: "공지사항",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
