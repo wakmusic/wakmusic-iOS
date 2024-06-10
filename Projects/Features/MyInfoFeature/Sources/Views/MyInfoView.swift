@@ -122,7 +122,7 @@ private extension MyInfoView {
 
     func setLayout() {
         scrollView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.top.equalTo(safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
