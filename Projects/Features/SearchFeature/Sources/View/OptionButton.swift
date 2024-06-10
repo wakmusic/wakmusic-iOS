@@ -18,11 +18,14 @@ final class OptionButton: UIView {
     private let rightImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Search.arrowDown.image
     }
+    fileprivate  let tapGestureRecognizer = UITapGestureRecognizer()
+   
 
     public init() {
         super.init(frame: .zero)
         addView()
         setLayout()
+        bindAction()
     }
 
     @available(*, unavailable)
@@ -57,13 +60,16 @@ extension OptionButton {
             $0.centerY.equalToSuperview()
         }
     }
+    
+    private func bindAction() {
+        self.addGestureRecognizer(tapGestureRecognizer)
+        self.isUserInteractionEnabled = true
+    }
 }
 
 extension Reactive: OptionButtonActionProtocol where Base: OptionButton {
     var didTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.addGestureRecognizer(tapGestureRecognizer)
-        base.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        
+        return base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
 }
