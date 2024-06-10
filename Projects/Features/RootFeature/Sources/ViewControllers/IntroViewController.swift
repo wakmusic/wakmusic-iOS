@@ -6,9 +6,15 @@ import MainTabFeature
 import RxSwift
 import UIKit
 import Utility
+import SnapKit
+import Then
 
 open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var logoContentView: UIView!
+    private let parableLogoImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Logo.splashParable.image
+        $0.contentMode = .scaleAspectFit
+    }
 
     var mainContainerComponent: MainContainerComponent!
     var permissionComponent: PermissionComponent!
@@ -21,6 +27,7 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
 
     override open func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
         outputBind()
         inputBind()
     }
@@ -40,20 +47,20 @@ open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard
     }
 }
 
-extension IntroViewController {
-    private func inputBind() {
+private extension IntroViewController {
+    func inputBind() {
         input.fetchPermissionCheck.onNext(())
     }
-}
 
-extension IntroViewController {
-    private func outputBind() {
+    func outputBind() {
         permissionResult()
         appInfoResult()
         userInfoAndLottieEnded()
     }
+}
 
-    private func permissionResult() {
+private extension IntroViewController {
+    func permissionResult() {
         output.permissionResult
             .do(onNext: { [weak self] permission in
                 guard let self = self else { return }
@@ -70,7 +77,7 @@ extension IntroViewController {
             .disposed(by: disposeBag)
     }
 
-    private func appInfoResult() {
+    func appInfoResult() {
         output.appInfoResult
             .withUnretained(self)
             .subscribe(onNext: { owner, result in
@@ -145,7 +152,7 @@ extension IntroViewController {
 
                     owner.showPanModal(content: textPopupVc)
 
-                    #warning("도메인 변경으로 항상 failure")
+                #warning("도메인 변경으로 항상 failure")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
@@ -167,7 +174,7 @@ extension IntroViewController {
             .disposed(by: disposeBag)
     }
 
-    private func userInfoAndLottieEnded() {
+    func userInfoAndLottieEnded() {
         Observable.zip(
             output.userInfoResult,
             output.endedLottieAnimation
@@ -201,13 +208,21 @@ extension IntroViewController {
     }
 }
 
-extension IntroViewController {
-    private func showTabBar() {
+private extension IntroViewController {
+    func configureUI() {
+        view.addSubview(parableLogoImageView)
+        parableLogoImageView.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-50)
+            $0.centerX.equalToSuperview()
+        }
+    }
+
+    func showTabBar() {
         let viewController = mainContainerComponent!.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
-    private func lottiePlay(specialLogo: Bool) {
+    func lottiePlay(specialLogo: Bool) {
         let animationView = LottieAnimationView(
             name: specialLogo ? "Splash_Logo_Special" : "Splash_Logo_Main",
             bundle: DesignSystemResources.bundle
