@@ -25,8 +25,8 @@ public struct FetchNoticeResponseDTO: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, category, title
         case content = "text"
-        case thumbnail = "thubnailUrl"
-        case origins = "imageUrls"
+        case thumbnail = "thubnail"
+        case origins = "images"
         case createdAt
     }
 }
@@ -38,7 +38,7 @@ public extension FetchNoticeResponseDTO {
 
         enum CodingKeys: String, CodingKey {
             case url = "imageUrl"
-            case link = "hyperLink"
+            case link = "hyperlinkUrl"
         }
     }
 }
