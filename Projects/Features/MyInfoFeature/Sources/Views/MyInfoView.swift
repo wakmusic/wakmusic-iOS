@@ -24,6 +24,9 @@ private protocol MyInfoActionProtocol {
 }
 
 final class MyInfoView: UIView {
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
     let profileView = ProfileView().then {
         $0.isHidden = true
@@ -37,16 +40,19 @@ final class MyInfoView: UIView {
 
     let vStackView = UIStackView().then {
         $0.axis = .vertical
+        $0.distribution = .fillEqually
     }
 
     let hStackViewTop = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 10
+        $0.distribution = .fillEqually
     }
 
     let hStackViewBottom = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 10
+        $0.distribution = .fillEqually
     }
 
     let likeNavigationButton = MyInfoNavigationButton(
@@ -89,7 +95,9 @@ final class MyInfoView: UIView {
 
 private extension MyInfoView {
     func addView() {
-        self.addSubviews(
+        self.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
             moreButton,
             loginWarningView,
             profileView,
@@ -113,21 +121,31 @@ private extension MyInfoView {
     }
 
     func setLayout() {
+        scrollView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        contentView.snp.makeConstraints {
+            $0.width.equalToSuperview()
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+        }
+        
         moreButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT() + 8)
+            $0.top.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-20)
         }
 
         loginWarningView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT() + 40)
+            $0.top.equalToSuperview().offset(40)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(164)
             $0.height.equalTo(154)
         }
 
         profileView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT() + 52)
+            $0.top.equalToSuperview().offset(52)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(162)
         }
@@ -142,6 +160,7 @@ private extension MyInfoView {
             $0.height.equalTo(200)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.top.equalTo(drawButtonView.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview()
         }
 
         hStackViewTop.snp.makeConstraints {
