@@ -35,8 +35,8 @@ final class BeforeSearchSectionHeaderView:
         self.addSubviews(label, button)
         setLayout()
 
-        button.addAction { [delegate] in
-            delegate?.tap(self.section)
+        button.addAction { [delegate, section] in
+            delegate?.tap(section)
         }
     }
 
