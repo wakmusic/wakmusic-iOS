@@ -58,13 +58,13 @@ extension SearchResultHeaderView {
 
     private func bindAction() {
         filterButton.rx.didTap
-            .bind(with:self) { owner, _ in
+            .bind(with: self) { owner, _ in
                 owner.delegate?.tapFilter()
             }
             .disposed(by: disposeBag)
 
         sortButton.rx.didTap
-            .bind(with:self) { owner, _ in
+            .bind(with: self) { owner, _ in
                 owner.delegate?.tapSort()
             }
             .disposed(by: disposeBag)

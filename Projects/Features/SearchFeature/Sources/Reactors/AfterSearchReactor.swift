@@ -32,7 +32,7 @@ public final class AfterSearchReactor: Reactor {
     deinit {
         LogManager.printDebug("\(Self.self)")
     }
-    
+
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case let .updateData(text):
@@ -50,8 +50,6 @@ public final class AfterSearchReactor: Reactor {
 
         return newState
     }
-
-
 }
 
 private extension AfterSearchReactor {
