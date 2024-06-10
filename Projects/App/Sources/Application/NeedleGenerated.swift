@@ -20,6 +20,8 @@ import HomeFeature
 import KeychainModule
 import LikeDomain
 import LikeDomainInterface
+import LyricHighlightingFeature
+import LyricHighlightingFeatureInterface
 import MainTabFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
@@ -161,6 +163,36 @@ private class PlayerDependencyf8a3d594cc3b9254f8adProvider: PlayerDependency {
 /// ^->AppComponent->PlayerComponent
 private func factorybc7f802f601dd5913533f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return PlayerDependencyf8a3d594cc3b9254f8adProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class LyricHighlightingDependency47c68b56cdde819901d2Provider: LyricHighlightingDependency {
+    var fetchLyricsUseCase: any FetchLyricsUseCase {
+        return appComponent.fetchLyricsUseCase
+    }
+    var lyricDecoratingComponent: LyricDecoratingComponent {
+        return appComponent.lyricDecoratingComponent
+    }
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
+        return appComponent.lyricHighlightingFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->LyricHighlightingComponent
+private func factory57ee59e468bef412b173f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LyricHighlightingDependency47c68b56cdde819901d2Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider: LyricDecoratingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->LyricDecoratingComponent
+private func factory5d05db9eb4337d682097e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return LyricDecoratingDependencya7e8bf6f2f4ae447ba4eProvider()
 }
 private class MainTabBarDependencycd05b79389a6a7a6c20fProvider: MainTabBarDependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase {
@@ -758,97 +790,99 @@ private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: Needle
 extension AppComponent: Registration {
     public func registerItems() {
 
-        localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
-        localTable["homeComponent-HomeComponent"] = { [unowned self] in self.homeComponent as Any }
-        localTable["newSongsComponent-NewSongsComponent"] = { [unowned self] in self.newSongsComponent as Any }
-        localTable["newSongsContentComponent-NewSongsContentComponent"] = { [unowned self] in self.newSongsContentComponent as Any }
-        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { [unowned self] in self.remoteSongsDataSource as Any }
-        localTable["songsRepository-any SongsRepository"] = { [unowned self] in self.songsRepository as Any }
-        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
-        localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
-        localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
-        localTable["storageFactory-any StorageFactory"] = { [unowned self] in self.storageFactory as Any }
-        localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
-        localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
-        localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
-        localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
-        localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
-        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
-        localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
-        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { [unowned self] in self.checkIsExistAccessTokenUseCase as Any }
-        localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
-        localTable["likeRepository-any LikeRepository"] = { [unowned self] in self.likeRepository as Any }
-        localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
-        localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
-        localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
-        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
-        localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
-        localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
-        localTable["playListRepository-any PlayListRepository"] = { [unowned self] in self.playListRepository as Any }
-        localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { [unowned self] in self.fetchRecommendPlayListUseCase as Any }
-        localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { [unowned self] in self.fetchPlayListDetailUseCase as Any }
-        localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { [unowned self] in self.createPlayListUseCase as Any }
-        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { [unowned self] in self.updatePlaylistUseCase as Any }
-        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { [unowned self] in self.updateTitleAndPrivateUseCase as Any }
-        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
-        localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
-        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { [unowned self] in self.uploadPlaylistImageUseCase as Any }
-        localTable["artistComponent-ArtistComponent"] = { [unowned self] in self.artistComponent as Any }
-        localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { [unowned self] in self.remoteArtistDataSource as Any }
-        localTable["artistRepository-any ArtistRepository"] = { [unowned self] in self.artistRepository as Any }
-        localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { [unowned self] in self.fetchArtistListUseCase as Any }
-        localTable["artistDetailComponent-ArtistDetailComponent"] = { [unowned self] in self.artistDetailComponent as Any }
-        localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { [unowned self] in self.fetchArtistSongListUseCase as Any }
-        localTable["artistMusicComponent-ArtistMusicComponent"] = { [unowned self] in self.artistMusicComponent as Any }
-        localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { [unowned self] in self.artistMusicContentComponent as Any }
-        localTable["profilePopComponent-ProfilePopComponent"] = { [unowned self] in self.profilePopComponent as Any }
-        localTable["favoriteComponent-FavoriteComponent"] = { [unowned self] in self.favoriteComponent as Any }
-        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { [unowned self] in self.remoteUserDataSource as Any }
-        localTable["userRepository-any UserRepository"] = { [unowned self] in self.userRepository as Any }
-        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { [unowned self] in self.fetchProfileListUseCase as Any }
-        localTable["setProfileUseCase-any SetProfileUseCase"] = { [unowned self] in self.setProfileUseCase as Any }
-        localTable["setUserNameUseCase-any SetUserNameUseCase"] = { [unowned self] in self.setUserNameUseCase as Any }
-        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { [unowned self] in self.fetchPlayListUseCase as Any }
-        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { [unowned self] in self.fetchFavoriteSongsUseCase as Any }
-        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { [unowned self] in self.editFavoriteSongsOrderUseCase as Any }
-        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { [unowned self] in self.editPlayListOrderUseCase as Any }
-        localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { [unowned self] in self.deletePlayListUseCase as Any }
-        localTable["deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"] = { [unowned self] in self.deleteFavoriteListUseCase as Any }
-        localTable["fetchUserInfoUseCase-any FetchUserInfoUseCase"] = { [unowned self] in self.fetchUserInfoUseCase as Any }
-        localTable["withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"] = { [unowned self] in self.withdrawUserInfoUseCase as Any }
-        localTable["mainContainerComponent-MainContainerComponent"] = { [unowned self] in self.mainContainerComponent as Any }
-        localTable["bottomTabBarComponent-BottomTabBarComponent"] = { [unowned self] in self.bottomTabBarComponent as Any }
-        localTable["mainTabBarComponent-MainTabBarComponent"] = { [unowned self] in self.mainTabBarComponent as Any }
-        localTable["playerComponent-PlayerComponent"] = { [unowned self] in self.playerComponent as Any }
-        localTable["playlistComponent-PlaylistComponent"] = { [unowned self] in self.playlistComponent as Any }
-        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { [unowned self] in self.openSourceLicenseComponent as Any }
-        localTable["serviceInfoComponent-ServiceInfoComponent"] = { [unowned self] in self.serviceInfoComponent as Any }
-        localTable["permissionComponent-PermissionComponent"] = { [unowned self] in self.permissionComponent as Any }
-        localTable["noticePopupComponent-NoticePopupComponent"] = { [unowned self] in self.noticePopupComponent as Any }
-        localTable["noticeComponent-NoticeComponent"] = { [unowned self] in self.noticeComponent as Any }
-        localTable["noticeDetailComponent-NoticeDetailComponent"] = { [unowned self] in self.noticeDetailComponent as Any }
-        localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { [unowned self] in self.remoteNoticeDataSource as Any }
-        localTable["noticeRepository-any NoticeRepository"] = { [unowned self] in self.noticeRepository as Any }
-        localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { [unowned self] in self.fetchNoticeUseCase as Any }
-        localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
-        localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { [unowned self] in self.multiPurposePopUpFactory as Any }
-        localTable["textPopUpFactory-any TextPopUpFactory"] = { [unowned self] in self.textPopUpFactory as Any }
-        localTable["containSongsFactory-any ContainSongsFactory"] = { [unowned self] in self.containSongsFactory as Any }
-        localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
-        localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
-        localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
-        localTable["remoteFaqDataSource-any RemoteFaqDataSource"] = { [unowned self] in self.remoteFaqDataSource as Any }
-        localTable["faqRepository-any FaqRepository"] = { [unowned self] in self.faqRepository as Any }
-        localTable["fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"] = { [unowned self] in self.fetchFaqCategoriesUseCase as Any }
-        localTable["fetchFaqUseCase-any FetchFaqUseCase"] = { [unowned self] in self.fetchFaqUseCase as Any }
-        localTable["remoteAppDataSource-any RemoteAppDataSource"] = { [unowned self] in self.remoteAppDataSource as Any }
-        localTable["appRepository-any AppRepository"] = { [unowned self] in self.appRepository as Any }
-        localTable["fetchAppCheckUseCase-any FetchAppCheckUseCase"] = { [unowned self] in self.fetchAppCheckUseCase as Any }
-        localTable["chartComponent-ChartComponent"] = { [unowned self] in self.chartComponent as Any }
-        localTable["chartContentComponent-ChartContentComponent"] = { [unowned self] in self.chartContentComponent as Any }
-        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { [unowned self] in self.remoteChartDataSource as Any }
-        localTable["chartRepository-any ChartRepository"] = { [unowned self] in self.chartRepository as Any }
-        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { [unowned self] in self.fetchChartRankingUseCase as Any }
+        localTable["keychain-any Keychain"] = { self.keychain as Any }
+        localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
+        localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
+        localTable["newSongsContentComponent-NewSongsContentComponent"] = { self.newSongsContentComponent as Any }
+        localTable["lyricHighlightingFactory-any LyricHighlightingFactory"] = { self.lyricHighlightingFactory as Any }
+        localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { self.lyricDecoratingComponent as Any }
+        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
+        localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
+        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
+        localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
+        localTable["signInFactory-any SignInFactory"] = { self.signInFactory as Any }
+        localTable["storageFactory-any StorageFactory"] = { self.storageFactory as Any }
+        localTable["requestComponent-RequestComponent"] = { self.requestComponent as Any }
+        localTable["localAuthDataSource-any LocalAuthDataSource"] = { self.localAuthDataSource as Any }
+        localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
+        localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
+        localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
+        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { self.fetchNaverUserInfoUseCase as Any }
+        localTable["logoutUseCase-any LogoutUseCase"] = { self.logoutUseCase as Any }
+        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { self.checkIsExistAccessTokenUseCase as Any }
+        localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { self.remoteLikeDataSource as Any }
+        localTable["likeRepository-any LikeRepository"] = { self.likeRepository as Any }
+        localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { self.fetchLikeNumOfSongUseCase as Any }
+        localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { self.addLikeSongUseCase as Any }
+        localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { self.cancelLikeSongUseCase as Any }
+        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { self.playlistDetailFactory as Any }
+        localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
+        localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
+        localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
+        localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
+        localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
+        localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
+        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { self.updatePlaylistUseCase as Any }
+        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { self.updateTitleAndPrivateUseCase as Any }
+        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
+        localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { self.removeSongsUseCase as Any }
+        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { self.uploadPlaylistImageUseCase as Any }
+        localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
+        localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
+        localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
+        localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { self.fetchArtistListUseCase as Any }
+        localTable["artistDetailComponent-ArtistDetailComponent"] = { self.artistDetailComponent as Any }
+        localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
+        localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
+        localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
+        localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
+        localTable["favoriteComponent-FavoriteComponent"] = { self.favoriteComponent as Any }
+        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
+        localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
+        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
+        localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
+        localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
+        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { self.fetchPlayListUseCase as Any }
+        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
+        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
+        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
+        localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
+        localTable["deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"] = { self.deleteFavoriteListUseCase as Any }
+        localTable["fetchUserInfoUseCase-any FetchUserInfoUseCase"] = { self.fetchUserInfoUseCase as Any }
+        localTable["withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"] = { self.withdrawUserInfoUseCase as Any }
+        localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
+        localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
+        localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
+        localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
+        localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
+        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { self.openSourceLicenseComponent as Any }
+        localTable["serviceInfoComponent-ServiceInfoComponent"] = { self.serviceInfoComponent as Any }
+        localTable["permissionComponent-PermissionComponent"] = { self.permissionComponent as Any }
+        localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
+        localTable["noticeComponent-NoticeComponent"] = { self.noticeComponent as Any }
+        localTable["noticeDetailComponent-NoticeDetailComponent"] = { self.noticeDetailComponent as Any }
+        localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { self.remoteNoticeDataSource as Any }
+        localTable["noticeRepository-any NoticeRepository"] = { self.noticeRepository as Any }
+        localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { self.fetchNoticeUseCase as Any }
+        localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { self.fetchNoticeCategoriesUseCase as Any }
+        localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { self.multiPurposePopUpFactory as Any }
+        localTable["textPopUpFactory-any TextPopUpFactory"] = { self.textPopUpFactory as Any }
+        localTable["containSongsFactory-any ContainSongsFactory"] = { self.containSongsFactory as Any }
+        localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
+        localTable["faqComponent-FaqComponent"] = { self.faqComponent as Any }
+        localTable["faqContentComponent-FaqContentComponent"] = { self.faqContentComponent as Any }
+        localTable["remoteFaqDataSource-any RemoteFaqDataSource"] = { self.remoteFaqDataSource as Any }
+        localTable["faqRepository-any FaqRepository"] = { self.faqRepository as Any }
+        localTable["fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"] = { self.fetchFaqCategoriesUseCase as Any }
+        localTable["fetchFaqUseCase-any FetchFaqUseCase"] = { self.fetchFaqUseCase as Any }
+        localTable["remoteAppDataSource-any RemoteAppDataSource"] = { self.remoteAppDataSource as Any }
+        localTable["appRepository-any AppRepository"] = { self.appRepository as Any }
+        localTable["fetchAppCheckUseCase-any FetchAppCheckUseCase"] = { self.fetchAppCheckUseCase as Any }
+        localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
+        localTable["chartContentComponent-ChartContentComponent"] = { self.chartContentComponent as Any }
+        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
+        localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
+        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
@@ -888,6 +922,18 @@ extension PlayerComponent: Registration {
         keyPathToName[\PlayerDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\PlayerDependency.playlistComponent] = "playlistComponent-PlaylistComponent"
         keyPathToName[\PlayerDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
+    }
+}
+extension LyricHighlightingComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\LyricHighlightingDependency.fetchLyricsUseCase] = "fetchLyricsUseCase-any FetchLyricsUseCase"
+        keyPathToName[\LyricHighlightingDependency.lyricDecoratingComponent] = "lyricDecoratingComponent-LyricDecoratingComponent"
+        keyPathToName[\LyricHighlightingDependency.lyricHighlightingFactory] = "lyricHighlightingFactory-any LyricHighlightingFactory"
+    }
+}
+extension LyricDecoratingComponent: Registration {
+    public func registerItems() {
+
     }
 }
 extension MainTabBarComponent: Registration {
@@ -1149,6 +1195,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ArtistMusicComponent", factory382e7f8466df35a3f1d9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlaylistComponent", factory3a0a6eb1061d8d5a2deff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PlayerComponent", factorybc7f802f601dd5913533f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->LyricHighlightingComponent", factory57ee59e468bef412b173f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->LyricDecoratingComponent", factory5d05db9eb4337d682097e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainTabBarComponent", factorye547a52b3fce5887c8c7f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BottomTabBarComponent", factoryd34fa9e493604a6295bde3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->MainContainerComponent", factory8e19f48d5d573d3ea539f47b58f8f304c97af4d5)

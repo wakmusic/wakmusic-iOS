@@ -71,7 +71,7 @@ final class MusicDetailView: UIView {
     }
 
     private let dimmedBackgroundView = UIView()
-    private var dimmedLayer: MusicDetailDimmedGradientLayer?
+    private var dimmedLayer: DimmedGradientLayer?
     private let wmNavigationbarView = WMNavigationBarView()
     fileprivate let musicControlView = MusicControlView()
     fileprivate let musicToolbarView = MusicToolbarView()
@@ -92,7 +92,7 @@ final class MusicDetailView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         if dimmedLayer == nil {
-            let dimmedLayer = MusicDetailDimmedGradientLayer(frame: dimmedBackgroundView.bounds)
+            let dimmedLayer = DimmedGradientLayer(frame: dimmedBackgroundView.bounds)
             self.dimmedLayer = dimmedLayer
             dimmedBackgroundView.layer.addSublayer(dimmedLayer)
         }
