@@ -76,7 +76,7 @@ extension WMDomain {
         case .naver:
             return "/v1/nid/me"
         case .faq:
-            return WMDOMAIN_QNA()
+            return WMDOMAIN_FAQ()
         case .notice:
             return WMDOMAIN_NOTICE()
         case .app:

@@ -53,8 +53,8 @@ public func WMDOMAIN_LIKE() -> String {
     return config(key: "WMDOMAIN_LIKE")
 }
 
-public func WMDOMAIN_QNA() -> String {
-    return config(key: "WMDOMAIN_QNA")
+public func WMDOMAIN_FAQ() -> String {
+    return config(key: "WMDOMAIN_FAQ")
 }
 
 public func WMDOMAIN_NOTICE() -> String {

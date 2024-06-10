@@ -106,4 +106,26 @@ public extension UIView {
     func addSubviews(_ views: UIView...) {
         views.forEach(self.addSubview(_:))
     }
+
+    var asImage: UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
+
+    func asImage(size: CGSize? = nil) -> UIImage {
+        let originalSize = bounds.size
+        let targetSize = size ?? originalSize
+        let rendererFormat = UIGraphicsImageRendererFormat.default()
+        rendererFormat.scale = 1.0
+
+        let renderer = UIGraphicsImageRenderer(size: targetSize, format: rendererFormat)
+        return renderer.image { rendererContext in
+            let scaleX = targetSize.width / originalSize.width
+            let scaleY = targetSize.height / originalSize.height
+            rendererContext.cgContext.scaleBy(x: scaleX, y: scaleY)
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
 }
