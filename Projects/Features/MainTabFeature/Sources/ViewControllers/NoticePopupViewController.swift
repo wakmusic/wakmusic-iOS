@@ -30,6 +30,8 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
 
     public weak var delegate: NoticePopupViewControllerDelegate?
     private var viewModel: NoticePopupViewModel!
+    private lazy var input = NoticePopupViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -39,7 +41,8 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     public static func viewController(
@@ -52,7 +55,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
 
     @IBAction func ignoreButtonAction(_ sender: Any) {
         let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
-        let currentNoticeIds: [Int] = viewModel.output.ids.value
+        let currentNoticeIds: [Int] = output.originDataSource.value.map { $0.id }
 
         if savedIgoredNoticeIds.isEmpty {
             Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
@@ -68,9 +71,17 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
 }
 
 private extension NoticePopupViewController {
-    func bind() {
-        viewModel.output
-            .dataSource
+    func inputBind() {
+        input.fetchFilteredNotice.onNext(())
+
+        collectionView.rx.itemSelected
+            .bind(to: input.didTapPopup)
+            .disposed(by: disposeBag)
+    }
+
+    func outputBind() {
+        output.thumbnailDataSource
+            .filter { !$0.isEmpty }
             .do(onNext: { [pageCountLabel, pageCountView] model in
                 pageCountLabel?.text = "1/\(model.count)"
                 pageCountView?.isHidden = model.count <= 1
@@ -87,13 +98,12 @@ private extension NoticePopupViewController {
             }
             .disposed(by: disposeBag)
 
-        collectionView.rx.itemSelected
-            .withUnretained(self)
-            .subscribe(onNext: { owner, indexPath in
+        output.dismissAndCallDelegate
+            .bind(with: self) { owner, entity in
                 owner.dismiss(animated: true) {
-                    owner.delegate?.noticeTapped(model: owner.viewModel.fetchNoticeEntities[indexPath.row])
+                    owner.delegate?.noticeTapped(model: entity)
                 }
-            })
+            }
             .disposed(by: disposeBag)
     }
 
@@ -153,7 +163,7 @@ private extension NoticePopupViewController {
 extension NoticePopupViewController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let i = Int(scrollView.contentOffset.x / APP_WIDTH())
-        self.pageCountLabel.text = "\(i + 1)/\(viewModel.output.dataSource.value.count)"
+        pageCountLabel.text = "\(i + 1)/\(output.thumbnailDataSource.value.count)"
     }
 }
 
