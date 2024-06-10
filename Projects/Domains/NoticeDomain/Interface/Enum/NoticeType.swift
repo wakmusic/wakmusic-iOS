@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum NoticeType: Int {
-    case popup = 1 // 공지팝업
+public enum NoticeType: String {
+    case popup // 공지팝업
     case all // 전체공지
 }

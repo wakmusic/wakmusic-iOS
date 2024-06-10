@@ -28,8 +28,8 @@ extension NoticeAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case .fetchNotice:
-            return "/list"
+        case let .fetchNotice(type):
+            return "/\(type.rawValue)"
         case .fetchNoticeCategories:
             return "/categories"
         }
@@ -48,7 +48,6 @@ extension NoticeAPI: WMAPI {
         case let .fetchNotice(type):
             return .requestParameters(
                 parameters: [
-                    "type": type.rawValue,
                     "os": "ios",
                     "version": Bundle.main
                         .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
