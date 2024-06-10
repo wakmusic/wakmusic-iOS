@@ -26,6 +26,8 @@ public final class NoticeDetailViewController: UIViewController, ViewControllerF
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
     private var viewModel: NoticeDetailViewModel!
+    private lazy var input = NoticeDetailViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -54,29 +56,31 @@ public final class NoticeDetailViewController: UIViewController, ViewControllerF
 
 private extension NoticeDetailViewController {
     func inputBind() {
-        viewModel.input.fetchNoticeDetail.onNext(())
+        input.fetchNoticeDetail.onNext(())
 
         collectionView.rx.itemSelected
-            .withLatestFrom(viewModel.output.dataSource) { ($0, $1) }
-            .map { $0.1[$0.0.section].items[$0.0.item] }
-            .bind(with: self) { owner, model in
-                guard !model.link.isEmpty,
-                      let URL = URL(string: model.link) else { return }
-                owner.present(SFSafariViewController(url: URL), animated: true)
-            }
+            .bind(to: input.didTapImage)
             .disposed(by: disposeBag)
     }
 
     func outputBind() {
-        viewModel.output.dataSource
+        output.dataSource
+            .skip(1)
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
             .disposed(by: disposeBag)
 
-        viewModel.output.imageSizes
+        output.imageSizes
             .skip(1)
-            .subscribe(onNext: { [weak self] _ in
-                self?.indicator.stopAnimating()
+            .subscribe(onNext: { [indicator] _ in
+                indicator?.stopAnimating()
             })
+            .disposed(by: disposeBag)
+
+        output.goSafariScene
+            .bind(with: self) { owner, link in
+                guard let URL = URL(string: link) else { return }
+                owner.present(SFSafariViewController(url: URL), animated: true)
+            }
             .disposed(by: disposeBag)
     }
 
@@ -146,7 +150,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
+        let imageSize: CGSize = output.imageSizes.value[indexPath.row]
         let width: CGFloat = APP_WIDTH()
         let height: CGFloat = (imageSize.height * width) / max(1.0, imageSize.width)
         return CGSize(width: width, height: height)
@@ -182,7 +186,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let model: FetchNoticeEntity = viewModel.output.dataSource.value[section].model
+        let model: FetchNoticeEntity = output.dataSource.value[section].model
         return CGSize(width: APP_WIDTH(), height: NoticeDetailHeaderView.getCellHeight(model: model))
     }
 }
