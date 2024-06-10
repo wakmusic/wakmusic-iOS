@@ -5,7 +5,9 @@ import SnapKit
 import Then
 import UIKit
 
-private protocol SettingItemStateProtocol {}
+private protocol SettingItemStateProtocol {
+    func updateIsHighlighted(_ isHighlited: Bool)
+}
 
 private protocol SettingItemActionProtocol {
     var didTap: Observable<Void> { get }
@@ -49,10 +51,6 @@ final class SettingItemButton: UIButton {
     public func setRightImage(_ image: UIImage?) {
         rightImageView.image = image
     }
-
-    private func updateIsHighlighted(_ isHighlited: Bool) {
-        self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
-    }
 }
 
 extension SettingItemButton {
@@ -82,4 +80,11 @@ extension Reactive: SettingItemActionProtocol where Base: SettingItemButton {
     var didTap: Observable<Void> {
         return base.rx.tap.asObservable()
     }
+}
+
+extension SettingItemButton: SettingItemStateProtocol {
+    fileprivate func updateIsHighlighted(_ isHighlited: Bool) {
+        self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
+    }
+    
 }
