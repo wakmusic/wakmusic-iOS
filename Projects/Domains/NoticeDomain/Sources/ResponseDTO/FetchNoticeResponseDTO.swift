@@ -25,7 +25,7 @@ public struct FetchNoticeResponseDTO: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, category, title
         case content = "text"
-        case thumbnail = "thubnail"
+        case thumbnail
         case origins = "images"
         case createdAt
     }
