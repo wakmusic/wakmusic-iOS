@@ -10,10 +10,10 @@ public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, Re
             .map { $0.map { $0.toDomain() }}
     }
 
-    public func fetchSongCredits(id: String) -> Single<SongCreditsEntity> {
+    public func fetchSongCredits(id: String) -> Single<[SongCreditsEntity]> {
         request(.fetchCredits(id: id))
-            .map(SongCreditsResponseDTO.self)
-            .map { $0.toDomain() }
+            .map([SongCreditsResponseDTO].self)
+            .map { $0.map { $0.toDomain() }}
     }
 
     public func fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]> {

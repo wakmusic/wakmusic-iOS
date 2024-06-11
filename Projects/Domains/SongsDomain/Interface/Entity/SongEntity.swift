@@ -10,7 +10,8 @@ public struct SongEntity: Equatable {
         views: Int,
         last: Int,
         date: String,
-        isSelected: Bool = false
+        isSelected: Bool = false,
+        karaokeNumber: SongEntity.KaraokeNumber = .init(TJ: 0, KY: 0)
     ) {
         self.id = id
         self.title = title
@@ -21,6 +22,7 @@ public struct SongEntity: Equatable {
         self.last = last
         self.date = date
         self.isSelected = isSelected
+        self.karaokeNumber = karaokeNumber
     }
 
     public let id, title, artist, remix: String
@@ -28,8 +30,19 @@ public struct SongEntity: Equatable {
     public let views, last: Int
     public let date: String
     public var isSelected: Bool
+    public let karaokeNumber: SongEntity.KaraokeNumber
 
     public static func == (lhs: SongEntity, rhs: SongEntity) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+public extension SongEntity {
+    struct KaraokeNumber {
+        public init (TJ: Int, KY: Int) {
+            self.TJ = TJ
+            self.KY = KY
+        }
+        public let TJ, KY: Int
     }
 }
