@@ -50,7 +50,6 @@ public final class AfterSearchReactor: Reactor {
         return newState
     }
 
-
     public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let text = service.text.map { Mutation.updateText($0) }
 
