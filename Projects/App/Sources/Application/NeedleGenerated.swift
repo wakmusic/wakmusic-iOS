@@ -966,6 +966,8 @@ extension AppComponent: Registration {
         localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { self.multiPurposePopUpFactory as Any }
         localTable["textPopUpFactory-any TextPopUpFactory"] = { self.textPopUpFactory as Any }
         localTable["containSongsFactory-any ContainSongsFactory"] = { self.containSongsFactory as Any }
+        localTable["privacyComponent-PrivacyComponent"] = { self.privacyComponent as Any }
+        localTable["serviceTermsComponent-ServiceTermsComponent"] = { self.serviceTermsComponent as Any }
         localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
         localTable["faqComponent-FaqComponent"] = { self.faqComponent as Any }
         localTable["faqContentComponent-FaqContentComponent"] = { self.faqContentComponent as Any }
