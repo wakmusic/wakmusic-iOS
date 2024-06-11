@@ -33,8 +33,8 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     @IBOutlet weak var nextButton: UIButton!
 
     let selectedColor: UIColor = DesignSystemAsset.PrimaryColor.decrease.color
-    let unSelectedTextColor: UIColor = DesignSystemAsset.GrayColor.gray900.color
-    let unSelectedColor: UIColor = DesignSystemAsset.GrayColor.gray200.color
+    let unSelectedTextColor: UIColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+    let unSelectedColor: UIColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
     let disposeBag = DisposeBag()
     var viewModel: QuestionViewModel!
     var textPopUpFactory: TextPopUpFactory!
@@ -65,7 +65,7 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
 extension QuestionViewController {
     private func configureUI() {
         self.titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        self.titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         self.titleLabel.text = "문의하기"
         self.titleLabel.setTextWithAttributes(kernValue: -0.5)
 
@@ -73,20 +73,20 @@ extension QuestionViewController {
 
         self.descriptionLabel.text = "어떤 것 관련해서 문의주셨나요?"
         self.descriptionLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 20)
-        self.descriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.descriptionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         self.descriptionLabel.setTextWithAttributes(kernValue: -0.5)
 
         self.nextButton.layer.cornerRadius = 12
         self.nextButton.clipsToBounds = true
         self.nextButton.isEnabled = false
         self.nextButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
-        self.nextButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
+        self.nextButton.setBackgroundColor(DesignSystemAsset.BlueGrayColor.gray300.color, for: .disabled)
         self.nextButton.setAttributedTitle(
             NSMutableAttributedString(
                 string: "다음",
                 attributes: [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                     .kern: -0.5
                 ]
             ), for: .normal
@@ -249,9 +249,10 @@ extension QuestionViewController {
                 guard let self = self else { return }
                 if source == .addSong {
                     let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
-
+                    let text =
+                        "· 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘왁타버스 뮤직’으로 왁물원 채팅 부탁드립니다.\n· 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
                     guard let textPopupViewController = self.textPopUpFactory.makeView(
-                        text: "· 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘왁타버스 뮤직’으로 왁물원 채팅 부탁드립니다.\n· 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요.",
+                        text: text,
                         cancelButtonIsHidden: false,
                         allowsDragAndTapToDismiss: nil,
                         confirmButtonText: "다음",

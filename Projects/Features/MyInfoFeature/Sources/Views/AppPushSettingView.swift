@@ -22,11 +22,15 @@ final class AppPushSettingView: UIView {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    private let titleLabel = UILabel().then {
+    private let titleLabel = WMLabel(
+        text: "앱 알림 설정",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.numberOfLines = .zero
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.text = "앱 알림 설정"
-        $0.font = .setFont(.t5(weight: .medium))
     }
 
     init() {
