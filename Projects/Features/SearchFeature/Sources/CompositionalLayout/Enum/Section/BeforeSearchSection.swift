@@ -1,6 +1,6 @@
 import Foundation
 
-internal enum Section: Int {
+internal enum BeforeSearchSection: Int {
     case youtube
     case recommend
     case popularList

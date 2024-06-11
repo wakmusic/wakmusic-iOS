@@ -1,4 +1,7 @@
 import Inject
+@testable import PlayListDomainTesting
+@testable import PlaylistFeatureTesting
+@testable import SearchFeature
 import UIKit
 
 @main
@@ -10,8 +13,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
+
+        let fetchPlayListUseCase: FetchPlayListUseCaseStub = .init()
+
+        let wakMucomponent =
+            WakmusicRecommendViewController(
+                playlistDetailFactory: PlaylistDetailFactoryStub(),
+                reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
+            )
+
+        let component = SongSearchResultViewController(reactor: SongSearchResultReactor())
+
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: UIViewController())
+            UINavigationController(rootViewController: component)
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()

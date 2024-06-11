@@ -25,7 +25,8 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         $0.isHidden = true
     }
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> = createDataSource()
+    private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> =
+        createDataSource()
 
     private lazy var collectionView: UICollectionView = createCollectionView()
 
@@ -98,6 +99,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         let sharedState = reactor.state.share(replay: 2)
 
         sharedState.map(\.isLoading)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { onwer, isLoading in
                 if isLoading {
@@ -110,6 +112,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
         // 검색 전, 최근 검색어 스위칭
         sharedState.map(\.showRecommend)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
                 owner.tableView.isHidden = flag
@@ -200,7 +203,7 @@ extension BeforeSearchContentViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: BeforeSearchCollectionViewLayout())
     }
 
-    private func createDataSource() -> UICollectionViewDiffableDataSource<Section, BeforeVcDataSoruce> {
+    private func createDataSource() -> UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> {
         // MARK: Cell
 
         let youtubeCellRegistration = UICollectionView
@@ -242,7 +245,7 @@ extension BeforeSearchContentViewController {
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
-            Section,
+            BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
             (
@@ -284,7 +287,7 @@ extension BeforeSearchContentViewController {
 
     private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, BeforeVcDataSoruce>()
+        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
         snapshot.appendSections([.youtube, .recommend, .popularList])
         snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
         snapshot.appendItems(
@@ -311,7 +314,7 @@ extension BeforeSearchContentViewController {
 // MARK: CollectionView Deleagte
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) as? BeforeVcDataSoruce else {
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
@@ -329,7 +332,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 // MARK: 전체보기
 extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
-        if let section = section, let layoutKind = Section(rawValue: section) {
+        if let section = section, let layoutKind = BeforeSearchSection(rawValue: section) {
             print(layoutKind)
         }
     }

@@ -47,10 +47,9 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .map { $0.toDomain() }
     }
 
-    public func removeSongs(key: String, songs: [String]) -> Single<BaseEntity> {
+    public func removeSongs(key: String, songs: [String]) -> Completable {
         request(.removeSongs(key: key, songs: songs))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
     public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
