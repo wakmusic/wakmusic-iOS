@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SongEntity: Equatable {
+public struct SongEntity: Hashable, Equatable {
     public init(
         id: String,
         title: String,
@@ -31,6 +31,10 @@ public struct SongEntity: Equatable {
     public let date: String
     public var isSelected: Bool
     public let karaokeNumber: SongEntity.KaraokeNumber
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 
     public static func == (lhs: SongEntity, rhs: SongEntity) -> Bool {
         lhs.id == rhs.id

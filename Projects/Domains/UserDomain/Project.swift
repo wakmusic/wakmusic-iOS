@@ -20,6 +20,10 @@ let project = Project.module(
                 .domain(target: .UserDomain, type: .interface)
             ]
         ),
+        .testing(
+            module: .domain(.UserDomain),
+            dependencies: [.domain(target: .UserDomain, type: .interface)]
+        ),
         .tests(
             module: .domain(.UserDomain),
             dependencies: [.domain(target: .UserDomain)]

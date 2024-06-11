@@ -33,13 +33,11 @@ final class BeforeSearchSectionHeaderView:
         super.init(frame: frame)
 
         self.addSubviews(label, button)
-        configureUI()
+        setLayout()
 
-        button.addAction { [delegate] in
-            self.delegate?.tap(self.section)
+        button.addAction { [delegate, section] in
+            delegate?.tap(section)
         }
-
-        self.backgroundColor = .orange
     }
 
     @available(*, unavailable)
@@ -54,7 +52,7 @@ extension BeforeSearchSectionHeaderView {
         self.section = section
     }
 
-    private func configureUI() {
+    private func setLayout() {
         label.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview()
         }

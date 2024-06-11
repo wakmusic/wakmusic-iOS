@@ -5,6 +5,7 @@ import NVActivityIndicatorView
 import Pageboy
 import ReactorKit
 import RxSwift
+import SearchFeatureInterface
 import SongsDomainInterface
 import Tabman
 import UIKit
@@ -16,7 +17,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var afterSearchContentComponent: AfterSearchContentComponent!
+    var songSearchResultFactory: SongSearchResultFactory!
     var containSongsFactory: ContainSongsFactory!
     public var disposeBag = DisposeBag()
 
@@ -42,12 +43,12 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     public static func viewController(
-        afterSearchContentComponent: AfterSearchContentComponent,
+        songSearchResultFactory: any SongSearchResultFactory,
         containSongsFactory: ContainSongsFactory,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
-        viewController.afterSearchContentComponent = afterSearchContentComponent
+        viewController.songSearchResultFactory = songSearchResultFactory
         viewController.containSongsFactory = containSongsFactory
         viewController.reactor = reactor
         return viewController
@@ -73,15 +74,13 @@ extension AfterSearchViewController {
             .withUnretained(self)
             .bind { owner, dataSource in
 
-                guard let comp = owner.afterSearchContentComponent else {
+                guard let comp = owner.songSearchResultFactory else {
                     return
                 }
-
+                #warning("없얘기")
                 owner.viewControllers = [
-                    comp.makeView(type: .all, dataSource: dataSource[0]),
-                    comp.makeView(type: .song, dataSource: dataSource[1]),
-                    comp.makeView(type: .artist, dataSource: dataSource[2]),
-                    comp.makeView(type: .remix, dataSource: dataSource[3])
+                    comp.makeView(),
+                    comp.makeView()
                 ]
                 owner.indicator.stopAnimating()
                 owner.reloadData()
@@ -164,12 +163,12 @@ extension AfterSearchViewController {
 
     func clearSongCart() {
         // self.output.songEntityOfSelectedSongs.accept([])
-        self.viewControllers.forEach { vc in
-            guard let afterContentVc = vc as? AfterSearchContentViewController else {
-                return
-            }
-            afterContentVc.input.deSelectedAllSongs.accept(())
-        }
+//        self.viewControllers.forEach { vc in
+//            guard let afterContentVc = vc as? AfterSearchContentViewController else {
+//                return
+//            }
+//            afterContentVc.input.deSelectedAllSongs.accept(())
+//        }
     }
 }
 
@@ -242,9 +241,10 @@ extension AfterSearchViewController: SongCartViewDelegate {
 
 extension AfterSearchViewController {
     func scrollToTop() {
-        let current: Int = self.currentIndex ?? 0
-        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
-        guard searchContent.count > current else { return }
-        searchContent[current].scrollToTop()
+        #warning("구현이 끝난 후 연결")
+//        let current: Int = self.currentIndex ?? 0
+//        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
+//        guard searchContent.count > current else { return }
+//        searchContent[current].scrollToTop()
     }
 }

@@ -9,8 +9,8 @@
 import BaseFeature
 import FaqDomain
 import FaqDomainInterface
+import MyInfoFeature
 import SignInFeature
-import StorageFeature
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함

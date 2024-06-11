@@ -5,7 +5,7 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
     init() {
         super.init { sectionIndex, layoutEnvironment in
 
-            guard let layoutKind = Section(rawValue: sectionIndex) else { return nil }
+            guard let layoutKind = BeforeSearchSection(rawValue: sectionIndex) else { return nil }
 
             return BeforeSearchCollectionViewLayout.configureLayoutSection(layoutKind)
         }
@@ -18,13 +18,11 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
 }
 
 extension BeforeSearchCollectionViewLayout {
-    private static func configureLayoutSection(_ layoutKind: Section) -> NSCollectionLayoutSection {
+    private static func configureLayoutSection(_ layoutKind: BeforeSearchSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
 
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
@@ -35,6 +33,9 @@ extension BeforeSearchCollectionViewLayout {
         )
 
         header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
+
+        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
 
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection

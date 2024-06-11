@@ -335,22 +335,6 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
-private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {
-        return appComponent.openSourceLicenseComponent
-    }
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->ServiceInfoComponent
-private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
-}
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInFactory: any SignInFactory {
         return appComponent.signInFactory
@@ -375,38 +359,6 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
 /// ^->AppComponent->StorageComponent
 private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class FaqDependency899aad15f17210a3af31Provider: FaqDependency {
-    var faqContentComponent: FaqContentComponent {
-        return appComponent.faqContentComponent
-    }
-    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
-        return appComponent.fetchFaqCategoriesUseCase
-    }
-    var fetchFaqUseCase: any FetchFaqUseCase {
-        return appComponent.fetchFaqUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->FaqComponent
-private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->QuestionComponent
-private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
@@ -472,75 +424,6 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
 /// ^->AppComponent->FavoriteComponent
 private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return FavoriteDependency8f7fd37aeb6f0e5d0e30Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
-    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
-        return appComponent.withdrawUserInfoUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    var faqComponent: FaqComponent {
-        return appComponent.faqComponent
-    }
-    var questionComponent: QuestionComponent {
-        return appComponent.questionComponent
-    }
-    var noticeComponent: NoticeComponent {
-        return appComponent.noticeComponent
-    }
-    var serviceInfoComponent: ServiceInfoComponent {
-        return appComponent.serviceInfoComponent
-    }
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->RequestComponent
-private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->NoticeDetailComponent
-private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticeDetailDependency714af3aed40eaebda420Provider()
-}
-private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->OpenSourceLicenseComponent
-private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
-}
-private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {
-        return appComponent.fetchNoticeUseCase
-    }
-    var noticeDetailComponent: NoticeDetailComponent {
-        return appComponent.noticeDetailComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->NoticeComponent
-private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase {
@@ -677,8 +560,8 @@ private func factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5(_ component: Needle
     return NewSongsContentDependency93a05f20fa300c5bbec3Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class AfterSearchDependency61822c19bc2eb46d7c52Provider: AfterSearchDependency {
-    var afterSearchContentComponent: AfterSearchContentComponent {
-        return appComponent.afterSearchContentComponent
+    var songSearchResultFactory: any SongSearchResultFactory {
+        return appComponent.songSearchResultFactory
     }
     var containSongsFactory: any ContainSongsFactory {
         return appComponent.containSongsFactory
@@ -774,116 +657,331 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
 private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+private class ServiceTermsDependencyd07df8dc0771e5580b47Provider: ServiceTermsDependency {
 
 
     init() {
 
     }
 }
+/// ^->AppComponent->ServiceTermsComponent
+private func factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceTermsDependencyd07df8dc0771e5580b47Provider()
+}
+private class PrivacyDependency51c6df0186843bf53e9cProvider: PrivacyDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->PrivacyComponent
+private func factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PrivacyDependency51c6df0186843bf53e9cProvider()
+}
+private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ServiceInfoComponent
+private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class FaqDependency899aad15f17210a3af31Provider: FaqDependency {
+    var faqContentComponent: FaqContentComponent {
+        return appComponent.faqContentComponent
+    }
+    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
+        return appComponent.fetchFaqCategoriesUseCase
+    }
+    var fetchFaqUseCase: any FetchFaqUseCase {
+        return appComponent.fetchFaqUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->FaqComponent
+private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->QuestionComponent
+private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
+    }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
+    }
+    var teamInfoComponent: TeamInfoComponent {
+        return appComponent.teamInfoComponent
+    }
+    var settingComponent: SettingComponent {
+        return appComponent.settingComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
 /// ^->AppComponent->MyInfoComponent
-private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return MyInfoDependency3b44bce00dab6fc2e345Provider()
+private func factoryec2cede3edc2a626b35df47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MyInfoDependency3b44bce00dab6fc2e345Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SettingDependency792c9caceb5cb097fbecProvider: SettingDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
+    var appPushSettingComponent: AppPushSettingComponent {
+        return appComponent.appPushSettingComponent
+    }
+    var serviceTermsComponent: ServiceTermsComponent {
+        return appComponent.serviceTermsComponent
+    }
+    var privacyComponent: PrivacyComponent {
+        return appComponent.privacyComponent
+    }
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SettingComponent
+private func factoryee0bbc0b920a7007e1a9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SettingDependency792c9caceb5cb097fbecProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
+    }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
+    var serviceInfoComponent: ServiceInfoComponent {
+        return appComponent.serviceInfoComponent
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->RequestComponent
+private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class AppPushSettingDependency349ed4aa80d55fc2a148Provider: AppPushSettingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AppPushSettingComponent
+private func factory0fbf44459a0855a29e8be3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AppPushSettingDependency349ed4aa80d55fc2a148Provider()
+}
+private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->NoticeDetailComponent
+private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDetailDependency714af3aed40eaebda420Provider()
+}
+private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OpenSourceLicenseComponent
+private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
+}
+private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
+        return appComponent.fetchNoticeUseCase
+    }
+    var noticeDetailComponent: NoticeDetailComponent {
+        return appComponent.noticeDetailComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NoticeComponent
+private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class TeamInfoDependency94c25b4e5acfbc37741cProvider: TeamInfoDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->TeamInfoComponent
+private func factorybe60e92b5190e00abf41e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return TeamInfoDependency94c25b4e5acfbc37741cProvider()
 }
 
 #else
 extension AppComponent: Registration {
     public func registerItems() {
-
-        localTable["keychain-any Keychain"] = { self.keychain as Any }
-        localTable["homeComponent-HomeComponent"] = { self.homeComponent as Any }
-        localTable["newSongsComponent-NewSongsComponent"] = { self.newSongsComponent as Any }
-        localTable["newSongsContentComponent-NewSongsContentComponent"] = { self.newSongsContentComponent as Any }
-        localTable["lyricHighlightingFactory-any LyricHighlightingFactory"] = { self.lyricHighlightingFactory as Any }
-        localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { self.lyricDecoratingComponent as Any }
-        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
-        localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
-        localTable["fetchSongUseCase-any FetchSongUseCase"] = { self.fetchSongUseCase as Any }
-        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
-        localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
-        localTable["signInFactory-any SignInFactory"] = { self.signInFactory as Any }
-        localTable["storageFactory-any StorageFactory"] = { self.storageFactory as Any }
-        localTable["requestComponent-RequestComponent"] = { self.requestComponent as Any }
-        localTable["localAuthDataSource-any LocalAuthDataSource"] = { self.localAuthDataSource as Any }
-        localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
-        localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
-        localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
-        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { self.fetchNaverUserInfoUseCase as Any }
-        localTable["logoutUseCase-any LogoutUseCase"] = { self.logoutUseCase as Any }
-        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { self.checkIsExistAccessTokenUseCase as Any }
-        localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { self.remoteLikeDataSource as Any }
-        localTable["likeRepository-any LikeRepository"] = { self.likeRepository as Any }
-        localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { self.fetchLikeNumOfSongUseCase as Any }
-        localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { self.addLikeSongUseCase as Any }
-        localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { self.cancelLikeSongUseCase as Any }
-        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { self.playlistDetailFactory as Any }
-        localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
-        localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
-        localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
-        localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
-        localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { self.fetchPlayListDetailUseCase as Any }
-        localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { self.createPlayListUseCase as Any }
-        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { self.updatePlaylistUseCase as Any }
-        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { self.updateTitleAndPrivateUseCase as Any }
-        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { self.addSongIntoPlayListUseCase as Any }
-        localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { self.removeSongsUseCase as Any }
-        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { self.uploadPlaylistImageUseCase as Any }
-        localTable["artistComponent-ArtistComponent"] = { self.artistComponent as Any }
-        localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { self.remoteArtistDataSource as Any }
-        localTable["artistRepository-any ArtistRepository"] = { self.artistRepository as Any }
-        localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { self.fetchArtistListUseCase as Any }
-        localTable["artistDetailComponent-ArtistDetailComponent"] = { self.artistDetailComponent as Any }
-        localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { self.fetchArtistSongListUseCase as Any }
-        localTable["artistMusicComponent-ArtistMusicComponent"] = { self.artistMusicComponent as Any }
-        localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { self.artistMusicContentComponent as Any }
-        localTable["profilePopComponent-ProfilePopComponent"] = { self.profilePopComponent as Any }
-        localTable["favoriteComponent-FavoriteComponent"] = { self.favoriteComponent as Any }
-        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { self.remoteUserDataSource as Any }
-        localTable["userRepository-any UserRepository"] = { self.userRepository as Any }
-        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { self.fetchProfileListUseCase as Any }
-        localTable["setProfileUseCase-any SetProfileUseCase"] = { self.setProfileUseCase as Any }
-        localTable["setUserNameUseCase-any SetUserNameUseCase"] = { self.setUserNameUseCase as Any }
-        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { self.fetchPlayListUseCase as Any }
-        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { self.fetchFavoriteSongsUseCase as Any }
-        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { self.editFavoriteSongsOrderUseCase as Any }
-        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { self.editPlayListOrderUseCase as Any }
-        localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { self.deletePlayListUseCase as Any }
-        localTable["deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"] = { self.deleteFavoriteListUseCase as Any }
-        localTable["fetchUserInfoUseCase-any FetchUserInfoUseCase"] = { self.fetchUserInfoUseCase as Any }
-        localTable["withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"] = { self.withdrawUserInfoUseCase as Any }
-        localTable["mainContainerComponent-MainContainerComponent"] = { self.mainContainerComponent as Any }
-        localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
-        localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
-        localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
-        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { self.openSourceLicenseComponent as Any }
-        localTable["serviceInfoComponent-ServiceInfoComponent"] = { self.serviceInfoComponent as Any }
-        localTable["permissionComponent-PermissionComponent"] = { self.permissionComponent as Any }
-        localTable["noticePopupComponent-NoticePopupComponent"] = { self.noticePopupComponent as Any }
-        localTable["noticeComponent-NoticeComponent"] = { self.noticeComponent as Any }
-        localTable["noticeDetailComponent-NoticeDetailComponent"] = { self.noticeDetailComponent as Any }
-        localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { self.remoteNoticeDataSource as Any }
-        localTable["noticeRepository-any NoticeRepository"] = { self.noticeRepository as Any }
-        localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { self.fetchNoticeUseCase as Any }
-        localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { self.fetchNoticeCategoriesUseCase as Any }
-        localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { self.multiPurposePopUpFactory as Any }
-        localTable["textPopUpFactory-any TextPopUpFactory"] = { self.textPopUpFactory as Any }
-        localTable["containSongsFactory-any ContainSongsFactory"] = { self.containSongsFactory as Any }
-        localTable["questionComponent-QuestionComponent"] = { self.questionComponent as Any }
-        localTable["faqComponent-FaqComponent"] = { self.faqComponent as Any }
-        localTable["faqContentComponent-FaqContentComponent"] = { self.faqContentComponent as Any }
-        localTable["remoteFaqDataSource-any RemoteFaqDataSource"] = { self.remoteFaqDataSource as Any }
-        localTable["faqRepository-any FaqRepository"] = { self.faqRepository as Any }
-        localTable["fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"] = { self.fetchFaqCategoriesUseCase as Any }
-        localTable["fetchFaqUseCase-any FetchFaqUseCase"] = { self.fetchFaqUseCase as Any }
-        localTable["remoteAppDataSource-any RemoteAppDataSource"] = { self.remoteAppDataSource as Any }
-        localTable["appRepository-any AppRepository"] = { self.appRepository as Any }
-        localTable["fetchAppCheckUseCase-any FetchAppCheckUseCase"] = { self.fetchAppCheckUseCase as Any }
-        localTable["chartComponent-ChartComponent"] = { self.chartComponent as Any }
-        localTable["chartContentComponent-ChartContentComponent"] = { self.chartContentComponent as Any }
-        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { self.remoteChartDataSource as Any }
-        localTable["chartRepository-any ChartRepository"] = { self.chartRepository as Any }
-        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { self.fetchChartRankingUseCase as Any }
+        localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
+        localTable["homeComponent-HomeComponent"] = { [unowned self] in self.homeComponent as Any }
+        localTable["newSongsComponent-NewSongsComponent"] = { [unowned self] in self.newSongsComponent as Any }
+        localTable["newSongsContentComponent-NewSongsContentComponent"] = { [unowned self] in self.newSongsContentComponent as Any }
+        localTable["lyricHighlightingFactory-any LyricHighlightingFactory"] = { [unowned self] in self.lyricHighlightingFactory as Any }
+        localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { [unowned self] in self.lyricDecoratingComponent as Any }
+        localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { [unowned self] in self.remoteSongsDataSource as Any }
+        localTable["songsRepository-any SongsRepository"] = { [unowned self] in self.songsRepository as Any }
+        localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
+        localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
+        localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
+        localTable["storageFactory-any StorageFactory"] = { [unowned self] in self.storageFactory as Any }
+        localTable["requestComponent-RequestComponent"] = { [unowned self] in self.requestComponent as Any }
+        localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
+        localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
+        localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
+        localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
+        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
+        localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
+        localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { [unowned self] in self.checkIsExistAccessTokenUseCase as Any }
+        localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
+        localTable["likeRepository-any LikeRepository"] = { [unowned self] in self.likeRepository as Any }
+        localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
+        localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
+        localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
+        localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
+        localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
+        localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
+        localTable["playListRepository-any PlayListRepository"] = { [unowned self] in self.playListRepository as Any }
+        localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { [unowned self] in self.fetchRecommendPlayListUseCase as Any }
+        localTable["fetchPlayListDetailUseCase-any FetchPlayListDetailUseCase"] = { [unowned self] in self.fetchPlayListDetailUseCase as Any }
+        localTable["createPlayListUseCase-any CreatePlayListUseCase"] = { [unowned self] in self.createPlayListUseCase as Any }
+        localTable["updatePlaylistUseCase-any UpdatePlaylistUseCase"] = { [unowned self] in self.updatePlaylistUseCase as Any }
+        localTable["updateTitleAndPrivateUseCase-any UpdateTitleAndPrivateUseCase"] = { [unowned self] in self.updateTitleAndPrivateUseCase as Any }
+        localTable["addSongIntoPlayListUseCase-any AddSongIntoPlayListUseCase"] = { [unowned self] in self.addSongIntoPlayListUseCase as Any }
+        localTable["removeSongsUseCase-any RemoveSongsUseCase"] = { [unowned self] in self.removeSongsUseCase as Any }
+        localTable["uploadPlaylistImageUseCase-any UploadPlaylistImageUseCase"] = { [unowned self] in self.uploadPlaylistImageUseCase as Any }
+        localTable["artistComponent-ArtistComponent"] = { [unowned self] in self.artistComponent as Any }
+        localTable["remoteArtistDataSource-RemoteArtistDataSourceImpl"] = { [unowned self] in self.remoteArtistDataSource as Any }
+        localTable["artistRepository-any ArtistRepository"] = { [unowned self] in self.artistRepository as Any }
+        localTable["fetchArtistListUseCase-any FetchArtistListUseCase"] = { [unowned self] in self.fetchArtistListUseCase as Any }
+        localTable["artistDetailComponent-ArtistDetailComponent"] = { [unowned self] in self.artistDetailComponent as Any }
+        localTable["fetchArtistSongListUseCase-any FetchArtistSongListUseCase"] = { [unowned self] in self.fetchArtistSongListUseCase as Any }
+        localTable["artistMusicComponent-ArtistMusicComponent"] = { [unowned self] in self.artistMusicComponent as Any }
+        localTable["artistMusicContentComponent-ArtistMusicContentComponent"] = { [unowned self] in self.artistMusicContentComponent as Any }
+        localTable["profilePopComponent-ProfilePopComponent"] = { [unowned self] in self.profilePopComponent as Any }
+        localTable["favoriteComponent-FavoriteComponent"] = { [unowned self] in self.favoriteComponent as Any }
+        localTable["remoteUserDataSource-any RemoteUserDataSource"] = { [unowned self] in self.remoteUserDataSource as Any }
+        localTable["userRepository-any UserRepository"] = { [unowned self] in self.userRepository as Any }
+        localTable["fetchProfileListUseCase-any FetchProfileListUseCase"] = { [unowned self] in self.fetchProfileListUseCase as Any }
+        localTable["setProfileUseCase-any SetProfileUseCase"] = { [unowned self] in self.setProfileUseCase as Any }
+        localTable["setUserNameUseCase-any SetUserNameUseCase"] = { [unowned self] in self.setUserNameUseCase as Any }
+        localTable["fetchPlayListUseCase-any FetchPlayListUseCase"] = { [unowned self] in self.fetchPlayListUseCase as Any }
+        localTable["fetchFavoriteSongsUseCase-any FetchFavoriteSongsUseCase"] = { [unowned self] in self.fetchFavoriteSongsUseCase as Any }
+        localTable["editFavoriteSongsOrderUseCase-any EditFavoriteSongsOrderUseCase"] = { [unowned self] in self.editFavoriteSongsOrderUseCase as Any }
+        localTable["editPlayListOrderUseCase-any EditPlayListOrderUseCase"] = { [unowned self] in self.editPlayListOrderUseCase as Any }
+        localTable["deletePlayListUseCase-any DeletePlayListUseCase"] = { [unowned self] in self.deletePlayListUseCase as Any }
+        localTable["deleteFavoriteListUseCase-any DeleteFavoriteListUseCase"] = { [unowned self] in self.deleteFavoriteListUseCase as Any }
+        localTable["fetchUserInfoUseCase-any FetchUserInfoUseCase"] = { [unowned self] in self.fetchUserInfoUseCase as Any }
+        localTable["withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"] = { [unowned self] in self.withdrawUserInfoUseCase as Any }
+        localTable["mainContainerComponent-MainContainerComponent"] = { [unowned self] in self.mainContainerComponent as Any }
+        localTable["bottomTabBarComponent-BottomTabBarComponent"] = { [unowned self] in self.bottomTabBarComponent as Any }
+        localTable["mainTabBarComponent-MainTabBarComponent"] = { [unowned self] in self.mainTabBarComponent as Any }
+        localTable["playerComponent-PlayerComponent"] = { [unowned self] in self.playerComponent as Any }
+        localTable["playlistComponent-PlaylistComponent"] = { [unowned self] in self.playlistComponent as Any }
+        localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { [unowned self] in self.openSourceLicenseComponent as Any }
+        localTable["serviceInfoComponent-ServiceInfoComponent"] = { [unowned self] in self.serviceInfoComponent as Any }
+        localTable["permissionComponent-PermissionComponent"] = { [unowned self] in self.permissionComponent as Any }
+        localTable["noticePopupComponent-NoticePopupComponent"] = { [unowned self] in self.noticePopupComponent as Any }
+        localTable["noticeComponent-NoticeComponent"] = { [unowned self] in self.noticeComponent as Any }
+        localTable["noticeDetailComponent-NoticeDetailComponent"] = { [unowned self] in self.noticeDetailComponent as Any }
+        localTable["remoteNoticeDataSource-any RemoteNoticeDataSource"] = { [unowned self] in self.remoteNoticeDataSource as Any }
+        localTable["noticeRepository-any NoticeRepository"] = { [unowned self] in self.noticeRepository as Any }
+        localTable["fetchNoticeUseCase-any FetchNoticeUseCase"] = { [unowned self] in self.fetchNoticeUseCase as Any }
+        localTable["fetchNoticeCategoriesUseCase-any FetchNoticeCategoriesUseCase"] = { [unowned self] in self.fetchNoticeCategoriesUseCase as Any }
+        localTable["multiPurposePopUpFactory-any MultiPurposePopUpFactory"] = { [unowned self] in self.multiPurposePopUpFactory as Any }
+        localTable["textPopUpFactory-any TextPopUpFactory"] = { [unowned self] in self.textPopUpFactory as Any }
+        localTable["containSongsFactory-any ContainSongsFactory"] = { [unowned self] in self.containSongsFactory as Any }
+        localTable["privacyComponent-PrivacyComponent"] = { [unowned self] in self.privacyComponent as Any }
+        localTable["serviceTermsComponent-ServiceTermsComponent"] = { [unowned self] in self.serviceTermsComponent as Any }
+        localTable["questionComponent-QuestionComponent"] = { [unowned self] in self.questionComponent as Any }
+        localTable["faqComponent-FaqComponent"] = { [unowned self] in self.faqComponent as Any }
+        localTable["faqContentComponent-FaqContentComponent"] = { [unowned self] in self.faqContentComponent as Any }
+        localTable["remoteFaqDataSource-any RemoteFaqDataSource"] = { [unowned self] in self.remoteFaqDataSource as Any }
+        localTable["faqRepository-any FaqRepository"] = { [unowned self] in self.faqRepository as Any }
+        localTable["fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"] = { [unowned self] in self.fetchFaqCategoriesUseCase as Any }
+        localTable["fetchFaqUseCase-any FetchFaqUseCase"] = { [unowned self] in self.fetchFaqUseCase as Any }
+        localTable["remoteAppDataSource-any RemoteAppDataSource"] = { [unowned self] in self.remoteAppDataSource as Any }
+        localTable["appRepository-any AppRepository"] = { [unowned self] in self.appRepository as Any }
+        localTable["fetchAppCheckUseCase-any FetchAppCheckUseCase"] = { [unowned self] in self.fetchAppCheckUseCase as Any }
+        localTable["chartComponent-ChartComponent"] = { [unowned self] in self.chartComponent as Any }
+        localTable["chartContentComponent-ChartContentComponent"] = { [unowned self] in self.chartContentComponent as Any }
+        localTable["remoteChartDataSource-any RemoteChartDataSource"] = { [unowned self] in self.remoteChartDataSource as Any }
+        localTable["chartRepository-any ChartRepository"] = { [unowned self] in self.chartRepository as Any }
+        localTable["fetchChartRankingUseCase-any FetchChartRankingUseCase"] = { [unowned self] in self.fetchChartRankingUseCase as Any }
     }
 }
 extension ArtistComponent: Registration {
@@ -990,12 +1088,6 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
-extension ServiceInfoComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
-        keyPathToName[\ServiceInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
 extension StorageComponent: Registration {
     public func registerItems() {
         keyPathToName[\StorageDependency.signInFactory] = "signInFactory-any SignInFactory"
@@ -1003,18 +1095,6 @@ extension StorageComponent: Registration {
         keyPathToName[\StorageDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\StorageDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
         keyPathToName[\StorageDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
-extension FaqComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\FaqDependency.faqContentComponent] = "faqContentComponent-FaqContentComponent"
-        keyPathToName[\FaqDependency.fetchFaqCategoriesUseCase] = "fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"
-        keyPathToName[\FaqDependency.fetchFaqUseCase] = "fetchFaqUseCase-any FetchFaqUseCase"
-    }
-}
-extension QuestionComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\QuestionDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -1038,38 +1118,6 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\FavoriteDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
         keyPathToName[\FavoriteDependency.signInFactory] = "signInFactory-any SignInFactory"
-    }
-}
-extension RequestComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
-        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-        keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
-        keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
-        keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
-        keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
-        keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
-extension NoticeDetailComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension OpenSourceLicenseComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension NoticeComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
-        keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
-    }
-}
-extension FaqContentComponent: Registration {
-    public func registerItems() {
-
     }
 }
 extension ProfilePopComponent: Registration {
@@ -1124,11 +1172,11 @@ extension NewSongsContentComponent: Registration {
 }
 extension AfterSearchComponent: Registration {
     public func registerItems() {
-        keyPathToName[\AfterSearchDependency.afterSearchContentComponent] = "afterSearchContentComponent-AfterSearchContentComponent"
+        keyPathToName[\AfterSearchDependency.songSearchResultFactory] = "songSearchResultFactory-any SongSearchResultFactory"
         keyPathToName[\AfterSearchDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
-extension AfterSearchContentComponent: Registration {
+extension SongSearchResultComponent: Registration {
     public func registerItems() {
 
     }
@@ -1168,7 +1216,95 @@ extension TextPopUpComponent: Registration {
 
     }
 }
+extension ServiceTermsComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension PrivacyComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension ServiceInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+        keyPathToName[\ServiceInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension FaqComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\FaqDependency.faqContentComponent] = "faqContentComponent-FaqContentComponent"
+        keyPathToName[\FaqDependency.fetchFaqCategoriesUseCase] = "fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"
+        keyPathToName[\FaqDependency.fetchFaqUseCase] = "fetchFaqUseCase-any FetchFaqUseCase"
+    }
+}
+extension QuestionComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\QuestionDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
 extension MyInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\MyInfoDependency.signInFactory] = "signInFactory-any SignInFactory"
+        keyPathToName[\MyInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\MyInfoDependency.faqComponent] = "faqComponent-FaqComponent"
+        keyPathToName[\MyInfoDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\MyInfoDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\MyInfoDependency.teamInfoComponent] = "teamInfoComponent-TeamInfoComponent"
+        keyPathToName[\MyInfoDependency.settingComponent] = "settingComponent-SettingComponent"
+    }
+}
+extension SettingComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\SettingDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\SettingDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\SettingDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\SettingDependency.signInFactory] = "signInFactory-any SignInFactory"
+        keyPathToName[\SettingDependency.appPushSettingComponent] = "appPushSettingComponent-AppPushSettingComponent"
+        keyPathToName[\SettingDependency.serviceTermsComponent] = "serviceTermsComponent-ServiceTermsComponent"
+        keyPathToName[\SettingDependency.privacyComponent] = "privacyComponent-PrivacyComponent"
+        keyPathToName[\SettingDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+    }
+}
+extension RequestComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
+        keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
+        keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension AppPushSettingComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension NoticeDetailComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension OpenSourceLicenseComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension NoticeComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
+        keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
+    }
+}
+extension FaqContentComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension TeamInfoComponent: Registration {
     public func registerItems() {
 
     }
@@ -1205,17 +1341,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
@@ -1224,13 +1352,26 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AfterSearchContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->SongSearchResultComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
-    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35de3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ServiceTermsComponent", factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PrivacyComponent", factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35df47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SettingComponent", factoryee0bbc0b920a7007e1a9f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AppPushSettingComponent", factory0fbf44459a0855a29e8be3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->TeamInfoComponent", factorybe60e92b5190e00abf41e3b0c44298fc1c149afb)
 }
 #endif
 
