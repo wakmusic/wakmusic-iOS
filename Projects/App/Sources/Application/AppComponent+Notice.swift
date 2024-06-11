@@ -8,6 +8,7 @@
 
 import BaseFeature
 import MainTabFeature
+import MyInfoFeature
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature

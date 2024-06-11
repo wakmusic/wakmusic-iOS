@@ -335,22 +335,6 @@ private class ChartContentDependency3b8e41cfba060e4d16caProvider: ChartContentDe
 private func factoryc9a137630ce76907f36ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return ChartContentDependency3b8e41cfba060e4d16caProvider(appComponent: parent1(component) as! AppComponent)
 }
-private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {
-        return appComponent.openSourceLicenseComponent
-    }
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->ServiceInfoComponent
-private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
-}
 private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
     var signInFactory: any SignInFactory {
         return appComponent.signInFactory
@@ -375,38 +359,6 @@ private class StorageDependency1447167c38e97ef97427Provider: StorageDependency {
 /// ^->AppComponent->StorageComponent
 private func factory2415399d25299b97b98bf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return StorageDependency1447167c38e97ef97427Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class FaqDependency899aad15f17210a3af31Provider: FaqDependency {
-    var faqContentComponent: FaqContentComponent {
-        return appComponent.faqContentComponent
-    }
-    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
-        return appComponent.fetchFaqCategoriesUseCase
-    }
-    var fetchFaqUseCase: any FetchFaqUseCase {
-        return appComponent.fetchFaqUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->FaqComponent
-private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->QuestionComponent
-private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class MyPlayListDependency067bbf42b28f80e413acProvider: MyPlayListDependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory {
@@ -472,75 +424,6 @@ private class FavoriteDependency8f7fd37aeb6f0e5d0e30Provider: FavoriteDependency
 /// ^->AppComponent->FavoriteComponent
 private func factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return FavoriteDependency8f7fd37aeb6f0e5d0e30Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
-    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
-        return appComponent.withdrawUserInfoUseCase
-    }
-    var logoutUseCase: any LogoutUseCase {
-        return appComponent.logoutUseCase
-    }
-    var faqComponent: FaqComponent {
-        return appComponent.faqComponent
-    }
-    var questionComponent: QuestionComponent {
-        return appComponent.questionComponent
-    }
-    var noticeComponent: NoticeComponent {
-        return appComponent.noticeComponent
-    }
-    var serviceInfoComponent: ServiceInfoComponent {
-        return appComponent.serviceInfoComponent
-    }
-    var textPopUpFactory: any TextPopUpFactory {
-        return appComponent.textPopUpFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->RequestComponent
-private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->NoticeDetailComponent
-private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticeDetailDependency714af3aed40eaebda420Provider()
-}
-private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->OpenSourceLicenseComponent
-private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
-}
-private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {
-        return appComponent.fetchNoticeUseCase
-    }
-    var noticeDetailComponent: NoticeDetailComponent {
-        return appComponent.noticeDetailComponent
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->NoticeComponent
-private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class ProfilePopDependency081172e20caa75abdb54Provider: ProfilePopDependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase {
@@ -774,16 +657,231 @@ private class MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider: MultiPurp
 private func factorya77269be267fb568bd4ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return MultiPurposePopUpDependencyfb7ce9f5d0057e8159d7Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+private class ServiceTermsDependencyd07df8dc0771e5580b47Provider: ServiceTermsDependency {
 
 
     init() {
 
     }
 }
+/// ^->AppComponent->ServiceTermsComponent
+private func factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceTermsDependencyd07df8dc0771e5580b47Provider()
+}
+private class PrivacyDependency51c6df0186843bf53e9cProvider: PrivacyDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->PrivacyComponent
+private func factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PrivacyDependency51c6df0186843bf53e9cProvider()
+}
+private class ServiceInfoDependency17ccca17be0fc87c9a2eProvider: ServiceInfoDependency {
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ServiceInfoComponent
+private func factory3afd170b9974b0dbd863f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ServiceInfoDependency17ccca17be0fc87c9a2eProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class FaqDependency899aad15f17210a3af31Provider: FaqDependency {
+    var faqContentComponent: FaqContentComponent {
+        return appComponent.faqContentComponent
+    }
+    var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase {
+        return appComponent.fetchFaqCategoriesUseCase
+    }
+    var fetchFaqUseCase: any FetchFaqUseCase {
+        return appComponent.fetchFaqUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->FaqComponent
+private func factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FaqDependency899aad15f17210a3af31Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class QuestionDependencyf7010567c2d88e76d191Provider: QuestionDependency {
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->QuestionComponent
+private func factoryedad1813a36115eec11ef47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return QuestionDependencyf7010567c2d88e76d191Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class MyInfoDependency3b44bce00dab6fc2e345Provider: MyInfoDependency {
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
+    }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
+    }
+    var teamInfoComponent: TeamInfoComponent {
+        return appComponent.teamInfoComponent
+    }
+    var settingComponent: SettingComponent {
+        return appComponent.settingComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
 /// ^->AppComponent->MyInfoComponent
-private func factoryec2cede3edc2a626b35de3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return MyInfoDependency3b44bce00dab6fc2e345Provider()
+private func factoryec2cede3edc2a626b35df47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return MyInfoDependency3b44bce00dab6fc2e345Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SettingDependency792c9caceb5cb097fbecProvider: SettingDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    var signInFactory: any SignInFactory {
+        return appComponent.signInFactory
+    }
+    var appPushSettingComponent: AppPushSettingComponent {
+        return appComponent.appPushSettingComponent
+    }
+    var serviceTermsComponent: ServiceTermsComponent {
+        return appComponent.serviceTermsComponent
+    }
+    var privacyComponent: PrivacyComponent {
+        return appComponent.privacyComponent
+    }
+    var openSourceLicenseComponent: OpenSourceLicenseComponent {
+        return appComponent.openSourceLicenseComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SettingComponent
+private func factoryee0bbc0b920a7007e1a9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SettingDependency792c9caceb5cb097fbecProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class RequestDependencyd4f6f0030dbf2a90cf21Provider: RequestDependency {
+    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
+        return appComponent.withdrawUserInfoUseCase
+    }
+    var logoutUseCase: any LogoutUseCase {
+        return appComponent.logoutUseCase
+    }
+    var faqComponent: FaqComponent {
+        return appComponent.faqComponent
+    }
+    var questionComponent: QuestionComponent {
+        return appComponent.questionComponent
+    }
+    var noticeComponent: NoticeComponent {
+        return appComponent.noticeComponent
+    }
+    var serviceInfoComponent: ServiceInfoComponent {
+        return appComponent.serviceInfoComponent
+    }
+    var textPopUpFactory: any TextPopUpFactory {
+        return appComponent.textPopUpFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->RequestComponent
+private func factory13954fb3ec537bab80bcf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RequestDependencyd4f6f0030dbf2a90cf21Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class AppPushSettingDependency349ed4aa80d55fc2a148Provider: AppPushSettingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AppPushSettingComponent
+private func factory0fbf44459a0855a29e8be3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AppPushSettingDependency349ed4aa80d55fc2a148Provider()
+}
+private class NoticeDetailDependency714af3aed40eaebda420Provider: NoticeDetailDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->NoticeDetailComponent
+private func factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDetailDependency714af3aed40eaebda420Provider()
+}
+private class OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider: OpenSourceLicenseDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OpenSourceLicenseComponent
+private func factoryd505894818021731340ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OpenSourceLicenseDependencyb6842dcc36b26380b91aProvider()
+}
+private class NoticeDependencyaec92ef53617a421bdf3Provider: NoticeDependency {
+    var fetchNoticeUseCase: any FetchNoticeUseCase {
+        return appComponent.fetchNoticeUseCase
+    }
+    var noticeDetailComponent: NoticeDetailComponent {
+        return appComponent.noticeDetailComponent
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NoticeComponent
+private func factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NoticeDependencyaec92ef53617a421bdf3Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class TeamInfoDependency94c25b4e5acfbc37741cProvider: TeamInfoDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->TeamInfoComponent
+private func factorybe60e92b5190e00abf41e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return TeamInfoDependency94c25b4e5acfbc37741cProvider()
 }
 
 #else
@@ -989,12 +1087,6 @@ extension ChartContentComponent: Registration {
         keyPathToName[\ChartContentDependency.containSongsFactory] = "containSongsFactory-any ContainSongsFactory"
     }
 }
-extension ServiceInfoComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
-        keyPathToName[\ServiceInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
 extension StorageComponent: Registration {
     public func registerItems() {
         keyPathToName[\StorageDependency.signInFactory] = "signInFactory-any SignInFactory"
@@ -1002,18 +1094,6 @@ extension StorageComponent: Registration {
         keyPathToName[\StorageDependency.multiPurposePopUpFactory] = "multiPurposePopUpFactory-any MultiPurposePopUpFactory"
         keyPathToName[\StorageDependency.favoriteComponent] = "favoriteComponent-FavoriteComponent"
         keyPathToName[\StorageDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
-extension FaqComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\FaqDependency.faqContentComponent] = "faqContentComponent-FaqContentComponent"
-        keyPathToName[\FaqDependency.fetchFaqCategoriesUseCase] = "fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"
-        keyPathToName[\FaqDependency.fetchFaqUseCase] = "fetchFaqUseCase-any FetchFaqUseCase"
-    }
-}
-extension QuestionComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\QuestionDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
     }
 }
 extension MyPlayListComponent: Registration {
@@ -1037,38 +1117,6 @@ extension FavoriteComponent: Registration {
         keyPathToName[\FavoriteDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
         keyPathToName[\FavoriteDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
         keyPathToName[\FavoriteDependency.signInFactory] = "signInFactory-any SignInFactory"
-    }
-}
-extension RequestComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
-        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
-        keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
-        keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
-        keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
-        keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
-        keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
-    }
-}
-extension NoticeDetailComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension OpenSourceLicenseComponent: Registration {
-    public func registerItems() {
-
-    }
-}
-extension NoticeComponent: Registration {
-    public func registerItems() {
-        keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
-        keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
-    }
-}
-extension FaqContentComponent: Registration {
-    public func registerItems() {
-
     }
 }
 extension ProfilePopComponent: Registration {
@@ -1167,7 +1215,95 @@ extension TextPopUpComponent: Registration {
 
     }
 }
+extension ServiceTermsComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension PrivacyComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension ServiceInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\ServiceInfoDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+        keyPathToName[\ServiceInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension FaqComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\FaqDependency.faqContentComponent] = "faqContentComponent-FaqContentComponent"
+        keyPathToName[\FaqDependency.fetchFaqCategoriesUseCase] = "fetchFaqCategoriesUseCase-any FetchFaqCategoriesUseCase"
+        keyPathToName[\FaqDependency.fetchFaqUseCase] = "fetchFaqUseCase-any FetchFaqUseCase"
+    }
+}
+extension QuestionComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\QuestionDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
 extension MyInfoComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\MyInfoDependency.signInFactory] = "signInFactory-any SignInFactory"
+        keyPathToName[\MyInfoDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\MyInfoDependency.faqComponent] = "faqComponent-FaqComponent"
+        keyPathToName[\MyInfoDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\MyInfoDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\MyInfoDependency.teamInfoComponent] = "teamInfoComponent-TeamInfoComponent"
+        keyPathToName[\MyInfoDependency.settingComponent] = "settingComponent-SettingComponent"
+    }
+}
+extension SettingComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\SettingDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\SettingDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\SettingDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+        keyPathToName[\SettingDependency.signInFactory] = "signInFactory-any SignInFactory"
+        keyPathToName[\SettingDependency.appPushSettingComponent] = "appPushSettingComponent-AppPushSettingComponent"
+        keyPathToName[\SettingDependency.serviceTermsComponent] = "serviceTermsComponent-ServiceTermsComponent"
+        keyPathToName[\SettingDependency.privacyComponent] = "privacyComponent-PrivacyComponent"
+        keyPathToName[\SettingDependency.openSourceLicenseComponent] = "openSourceLicenseComponent-OpenSourceLicenseComponent"
+    }
+}
+extension RequestComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\RequestDependency.withdrawUserInfoUseCase] = "withdrawUserInfoUseCase-any WithdrawUserInfoUseCase"
+        keyPathToName[\RequestDependency.logoutUseCase] = "logoutUseCase-any LogoutUseCase"
+        keyPathToName[\RequestDependency.faqComponent] = "faqComponent-FaqComponent"
+        keyPathToName[\RequestDependency.questionComponent] = "questionComponent-QuestionComponent"
+        keyPathToName[\RequestDependency.noticeComponent] = "noticeComponent-NoticeComponent"
+        keyPathToName[\RequestDependency.serviceInfoComponent] = "serviceInfoComponent-ServiceInfoComponent"
+        keyPathToName[\RequestDependency.textPopUpFactory] = "textPopUpFactory-any TextPopUpFactory"
+    }
+}
+extension AppPushSettingComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension NoticeDetailComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension OpenSourceLicenseComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension NoticeComponent: Registration {
+    public func registerItems() {
+        keyPathToName[\NoticeDependency.fetchNoticeUseCase] = "fetchNoticeUseCase-any FetchNoticeUseCase"
+        keyPathToName[\NoticeDependency.noticeDetailComponent] = "noticeDetailComponent-NoticeDetailComponent"
+    }
+}
+extension FaqContentComponent: Registration {
+    public func registerItems() {
+
+    }
+}
+extension TeamInfoComponent: Registration {
     public func registerItems() {
 
     }
@@ -1204,17 +1340,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->PlayListDetailComponent", factory9e077ee814ce180ea399f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartComponent", factoryeac6a4df54bbd391d31bf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChartContentComponent", factoryc9a137630ce76907f36ff47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->StorageComponent", factory2415399d25299b97b98bf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MyPlayListComponent", factory51a57a92f76af93a9ec2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->FavoriteComponent", factory8e4acb90bd0d9b48604af47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->ProfilePopComponent", factorybd14b11ccce6dac94a24f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PermissionComponent", factoryc1d4d80afbccf86bf1c0e3b0c44298fc1c149afb)
@@ -1229,7 +1357,20 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->MultiPurposePopUpComponent", factorya77269be267fb568bd4ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->TextPopUpComponent", factoryEmptyDependencyProvider)
-    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35de3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ServiceTermsComponent", factory8014909e2d8dba4e4f20e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PrivacyComponent", factorye7f5d59533cfdd1614b0e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ServiceInfoComponent", factory3afd170b9974b0dbd863f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqComponent", factory4e13cc6545633ffc2ed5f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->QuestionComponent", factoryedad1813a36115eec11ef47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->MyInfoComponent", factoryec2cede3edc2a626b35df47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SettingComponent", factoryee0bbc0b920a7007e1a9f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->RequestComponent", factory13954fb3ec537bab80bcf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AppPushSettingComponent", factory0fbf44459a0855a29e8be3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->NoticeDetailComponent", factory3db143c2f80d621d5a7fe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->OpenSourceLicenseComponent", factoryd505894818021731340ae3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->NoticeComponent", factoryaf8e5665e5b9217918f5f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->FaqContentComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->TeamInfoComponent", factorybe60e92b5190e00abf41e3b0c44298fc1c149afb)
 }
 #endif
 

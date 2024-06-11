@@ -1,6 +1,8 @@
 import AuthDomain
 import AuthDomainInterface
 import BaseFeature
+import MyInfoFeature
+import MyInfoFeatureInterface
 import SignInFeature
 import SignInFeatureInterface
 import StorageFeature

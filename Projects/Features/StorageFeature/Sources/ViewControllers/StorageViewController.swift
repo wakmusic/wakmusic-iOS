@@ -139,6 +139,12 @@ extension StorageViewController {
     func bindState(reactor: Reactor) {
         let sharedState = reactor.state.share(replay: 1)
 
+        sharedState.map(\.tabIndex)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, tabIndex in
+                owner.scrollToPage(.at(index: tabIndex), animated: true)
+            }.disposed(by: disposeBag)
+
         sharedState.map(\.isEditing)
             .withUnretained(self)
             .bind { owner, flag in
