@@ -798,6 +798,7 @@ extension AppComponent: Registration {
         localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { self.lyricDecoratingComponent as Any }
         localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { self.songsRepository as Any }
+        localTable["fetchSongUseCase-any FetchSongUseCase"] = { self.fetchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { self.fetchNewSongsUseCase as Any }
         localTable["signInFactory-any SignInFactory"] = { self.signInFactory as Any }
