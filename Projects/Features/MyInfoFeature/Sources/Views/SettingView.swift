@@ -38,16 +38,6 @@ final class SettingView: UIView {
         kernValue: -0.5
     )
 
-    fileprivate let withDrawButton = UIButton().then {
-        $0.setTitle("회원탈퇴", for: .normal)
-        $0.titleLabel?.font = .setFont(.t7(weight: .bold))
-        $0.titleLabel?.setTextWithAttributes(kernValue: -0.5)
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray400.color, for: .normal)
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray300.color.cgColor
-    }
-
     private let versionLabel = UILabel().then {
         $0.text = "0.0.0"
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
@@ -59,27 +49,27 @@ final class SettingView: UIView {
         $0.axis = .vertical
     }
 
-    fileprivate let notiNavgationButton = SettingItemView().then {
+    fileprivate let notiNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("앱 알림 받기")
     }
 
-    fileprivate let termNavgationButton = SettingItemView().then {
+    fileprivate let termNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("서비스 이용약관")
     }
 
-    fileprivate let privacyNavgationButton = SettingItemView().then {
+    fileprivate let privacyNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("개인정보 처리 방침")
     }
 
-    fileprivate let openSourceNavgationButton = SettingItemView().then {
+    fileprivate let openSourceNavgationButton = SettingItemButton().then {
         $0.setLeftTitle("오픈소스 라이선스")
     }
 
-    fileprivate let removeCacheButton = SettingItemView().then {
+    fileprivate let removeCacheButton = SettingItemButton().then {
         $0.setLeftTitle("캐시 데이터 지우기")
     }
 
-    fileprivate let versionInfoButton = SettingItemView().then {
+    fileprivate let versionInfoButton = SettingItemButton().then {
         $0.setLeftTitle("버전 정보")
         $0.setRightImage(nil)
     }
@@ -88,18 +78,7 @@ final class SettingView: UIView {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
 
-    private let descriptionLabel = WMLabel(
-        text: "왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라 내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray500.color,
-        font: .t7(weight: .light),
-        alignment: .center,
-        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
-        kernValue: -0.5
-    ).then {
-        $0.numberOfLines = 0
-        $0.textColor = .black
-        $0.lineBreakMode = .byWordWrapping
-    }
+    fileprivate let withDrawLabel = WithDrawLabel()
 
     init() {
         super.init(frame: .zero)
@@ -122,7 +101,7 @@ private extension SettingView {
             vStackView,
             versionLabel,
             dotImageView,
-            descriptionLabel
+            withDrawLabel
         )
         vStackView.addArrangedSubviews(
             notiNavgationButton,
@@ -141,16 +120,11 @@ private extension SettingView {
             $0.height.equalTo(48)
         }
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([withDrawButton])
 
         titleLabel.snp.makeConstraints {
             $0.center.equalTo(wmNavigationbarView.snp.center)
         }
 
-        withDrawButton.snp.makeConstraints {
-            $0.width.equalTo(64)
-            $0.height.equalTo(24)
-        }
         vStackView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
@@ -164,9 +138,10 @@ private extension SettingView {
         dotImageView.snp.makeConstraints {
             $0.top.equalTo(vStackView.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(20)
+            $0.width.height.equalTo(16)
         }
 
-        descriptionLabel.snp.makeConstraints {
+        withDrawLabel.snp.makeConstraints {
             $0.top.equalTo(vStackView.snp.bottom).offset(12)
             $0.left.equalTo(dotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
@@ -178,7 +153,7 @@ extension SettingView: SettingStateProtocol {}
 
 extension Reactive: SettingActionProtocol where Base: SettingView {
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
-    var withDrawButtonDidTap: Observable<Void> { base.withDrawButton.rx.tap.asObservable() }
+    var withDrawButtonDidTap: Observable<Void> { base.withDrawLabel.rx.didTap }
     var appPushSettingNavigationButtonDidTap: Observable<Void> { base.notiNavgationButton.rx.didTap }
     var termsNavigationButtonDidTap: Observable<Void> { base.termNavgationButton.rx.didTap }
     var privacyNavigationButtonDidTap: Observable<Void> { base.privacyNavgationButton.rx.didTap }

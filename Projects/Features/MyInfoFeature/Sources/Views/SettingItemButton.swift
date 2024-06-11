@@ -5,25 +5,32 @@ import SnapKit
 import Then
 import UIKit
 
+private protocol SettingItemStateProtocol {
+    func updateIsHighlighted(_ isHighlited: Bool)
+}
+
 private protocol SettingItemActionProtocol {
     var didTap: Observable<Void> { get }
 }
 
-final class SettingItemView: UIView {
-    private let leftLabel = WMLabel(
-        text: "",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t5(weight: .medium),
-        alignment: .center,
-        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
-        kernValue: -0.5
-    )
+final class SettingItemButton: UIButton {
+    private let leftLabel = UILabel().then {
+        $0.font = .setFont(.t5(weight: .medium))
+        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        $0.setTextWithAttributes(kernValue: -0.5)
+    }
 
     private let rightImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Navigation.serviceInfoArrowRight.image
     }
 
     private let horizontalInset: CGFloat
+
+    override var isHighlighted: Bool {
+        didSet {
+            updateIsHighlighted(isHighlighted)
+        }
+    }
 
     public init(horizontalInset: CGFloat = 20) {
         self.horizontalInset = horizontalInset
@@ -46,7 +53,7 @@ final class SettingItemView: UIView {
     }
 }
 
-extension SettingItemView {
+extension SettingItemButton {
     func addView() {
         self.addSubviews(
             leftLabel,
@@ -69,11 +76,14 @@ extension SettingItemView {
     }
 }
 
-extension Reactive: SettingItemActionProtocol where Base: SettingItemView {
+extension Reactive: SettingItemActionProtocol where Base: SettingItemButton {
     var didTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.addGestureRecognizer(tapGestureRecognizer)
-        base.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        return base.rx.tap.asObservable()
+    }
+}
+
+extension SettingItemButton: SettingItemStateProtocol {
+    fileprivate func updateIsHighlighted(_ isHighlited: Bool) {
+        self.backgroundColor = isHighlighted ? .black.withAlphaComponent(0.2) : .clear
     }
 }

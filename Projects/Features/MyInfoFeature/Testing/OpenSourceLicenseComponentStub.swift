@@ -1,11 +1,9 @@
 import Foundation
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
-import NeedleFoundation
 import UIKit
 
-public protocol OpenSourceLicenseDependency: Dependency {}
-
-public final class OpenSourceLicenseComponent: Component<OpenSourceLicenseDependency>, OpenSourceLicenseFactory {
+public final class OpenSourceLicenseComponentStub: OpenSourceLicenseFactory {
     public func makeView() -> UIViewController {
         return OpenSourceLicenseViewController.viewController(
             viewModel: OpenSourceLicenseViewModel()

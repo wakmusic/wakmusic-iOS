@@ -27,10 +27,10 @@ public final class SettingComponent: Component<SettingDependency>, SettingFactor
             ),
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory,
-            appPushSettingComponent: dependency.appPushSettingComponent,
-            serviceTermsComponent: dependency.serviceTermsComponent,
-            privacyComponent: dependency.privacyComponent,
-            openSourceLicenseComponent: dependency.openSourceLicenseComponent
+            appPushSettingFactory: dependency.appPushSettingComponent,
+            serviceTermsFactory: dependency.serviceTermsComponent,
+            privacyFactory: dependency.privacyComponent,
+            openSourceLicenseFactory: dependency.openSourceLicenseComponent
         )
     }
 }
