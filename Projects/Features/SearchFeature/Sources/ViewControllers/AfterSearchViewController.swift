@@ -80,7 +80,7 @@ extension AfterSearchViewController {
     private func configureUI() {
         self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.indicator.color = DesignSystemAsset.PrimaryColorV2.point.color
         self.dataSource = self // dateSource
         let bar = TMBar.ButtonBar()
 
@@ -115,7 +115,7 @@ extension AfterSearchViewController {
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
-        viewControllers.count
+        2
     }
 
     public func viewController(

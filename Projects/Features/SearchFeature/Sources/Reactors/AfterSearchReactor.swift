@@ -33,10 +33,7 @@ public final class AfterSearchReactor: Reactor {
     }
 
     public func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case let .updateData(text):
-            return fetchData(text)
-        }
+    
     }
 
     public func reduce(state: State, mutation: Mutation) -> State {
@@ -57,4 +54,6 @@ public final class AfterSearchReactor: Reactor {
     }
 }
 
-private extension AfterSearchReactor {}
+private extension AfterSearchReactor {
+    #warning("유즈케이스 주입")
+}
