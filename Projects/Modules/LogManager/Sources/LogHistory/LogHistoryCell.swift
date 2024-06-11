@@ -14,18 +14,18 @@
         }()
 
         private let logTitleLabel: UILabel = {
-            let label = UILabel()
-            label.font = .systemFont(ofSize: 20)
-            label.numberOfLines = 0
-            return label
+            let titleLabel = UILabel()
+            titleLabel.font = .systemFont(ofSize: 20)
+            titleLabel.numberOfLines = 0
+            return titleLabel
         }()
 
         private let logParametersLabel: UILabel = {
-            let label = UILabel()
-            label.font = .systemFont(ofSize: 16)
-            label.textColor = .gray
-            label.numberOfLines = 0
-            return label
+            let titleLabel = UILabel()
+            titleLabel.font = .systemFont(ofSize: 16)
+            titleLabel.textColor = .gray
+            titleLabel.numberOfLines = 0
+            return titleLabel
         }()
 
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

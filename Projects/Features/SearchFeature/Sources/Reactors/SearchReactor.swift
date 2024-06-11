@@ -4,6 +4,7 @@ import LogManager
 import ReactorKit
 import RxRelay
 import RxSwift
+import SearchFeatureInterface
 import Utility
 
 final class SearchReactor: Reactor {

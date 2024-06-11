@@ -1,0 +1,145 @@
+import BaseFeature
+import DesignSystem
+import LogManager
+import RxCocoa
+import RxSwift
+import SnapKit
+import SongsDomainInterface
+import Then
+import UIKit
+import Utility
+
+final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor> {
+    private lazy var collectionView: UICollectionView = createCollectionView().then {
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+    }
+
+    private lazy var dataSource: UICollectionViewDiffableDataSource<
+        SongSearchResultSection,
+        SongEntity
+    > = createDataSource()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initDataSource()
+    }
+
+    override func bind(reactor: SongSearchResultReactor) {
+        super.bind(reactor: reactor)
+    }
+
+    override func bindAction(reactor: SongSearchResultReactor) {
+        super.bindAction(reactor: reactor)
+    }
+
+    override func bindState(reactor: SongSearchResultReactor) {
+        super.bindState(reactor: reactor)
+    }
+
+    override func addView() {
+        super.addView()
+        self.view.addSubviews(collectionView)
+    }
+
+    override func setLayout() {
+        super.setLayout()
+
+        collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+
+    override func configureUI() {
+        super.configureUI()
+    }
+
+    deinit {
+        DEBUG_LOG("❌ \(Self.self) 소멸")
+    }
+}
+
+extension SongSearchResultViewController {
+    private func createCollectionView() -> UICollectionView {
+        return UICollectionView(frame: .zero, collectionViewLayout: SongSearchResultCollectionViewLayout())
+    }
+
+    private func createDataSource()
+        -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
+        let songCellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
+            cell.update(item)
+        }
+
+        // MARK: Header
+
+        let headerRegistration = UICollectionView
+            .SupplementaryRegistration<SearchResultHeaderView>(
+                elementKind: SearchResultHeaderView
+                    .kind
+            ) { [weak self] supplementaryView, string, indexPath in
+
+                guard let self else { return }
+                guard let section = SongSearchResultSection(rawValue: indexPath.section) else {
+                    return
+                }
+                supplementaryView.delegate = self
+                supplementaryView.update(sortType: .newest, filterType: .all)
+            }
+
+        let dataSource = UICollectionViewDiffableDataSource<
+            SongSearchResultSection,
+            SongEntity
+        >(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: SongEntity
+            ) -> UICollectionViewCell? in
+
+            return collectionView.dequeueConfiguredReusableCell(
+                using: songCellRegistration,
+                for: indexPath,
+                item: item
+            )
+        }
+
+        dataSource.supplementaryViewProvider = { collectionView, _, index in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
+
+        return dataSource
+    }
+
+    private func initDataSource() {
+        // initial data
+        var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
+
+        snapshot.appendSections([.song])
+
+        let model = SongEntity(
+            id: "8KTFf2X-ago",
+            title: "Another World",
+            artist: "이세계아이돌",
+            remix: "",
+            reaction: "",
+            views: 0,
+            last: 0,
+            date: "2020.12.12"
+        )
+
+        snapshot.appendItems([model], toSection: .song)
+
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    public func scrollToTop() {}
+}
+
+extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
+    func tapFilter() {
+        LogManager.printDebug("filter")
+    }
+
+    func tapSort() {
+        LogManager.printDebug("sort")
+    }
+}
