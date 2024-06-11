@@ -43,6 +43,7 @@ public extension SongEntity {
             self.TJ = TJ
             self.KY = KY
         }
+
         public let TJ, KY: Int
     }
 }
