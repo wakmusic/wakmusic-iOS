@@ -23,13 +23,16 @@ let project = Project.module(
             )
         ),
         .testing(module: .feature(.MyInfoFeature), dependencies: [
-            .feature(target: .MyInfoFeature, type: .interface)
+            .feature(target: .MyInfoFeature, type: .interface),
+            .feature(target: .BaseFeature, type: .testing),
+            .feature(target: .SignInFeature, type: .testing)
         ]),
         .tests(module: .feature(.MyInfoFeature), dependencies: [
             .feature(target: .MyInfoFeature)
         ]),
         .demo(module: .feature(.MyInfoFeature), dependencies: [
-            .feature(target: .MyInfoFeature)
+            .feature(target: .MyInfoFeature),
+            .feature(target: .MyInfoFeature, type: .testing)
         ])
     ]
 )
