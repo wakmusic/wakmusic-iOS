@@ -51,9 +51,6 @@ public final class AfterSearchReactor: Reactor {
     }
 
 
-    public func mutate(action: Action) -> Observable<Mutation> {}
-
-
     public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let text = service.text.map { Mutation.updateText($0) }
 
