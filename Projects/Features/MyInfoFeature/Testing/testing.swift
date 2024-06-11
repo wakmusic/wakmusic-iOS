@@ -1,1 +1,1 @@
-// for ㅅuist
+// for tuist
