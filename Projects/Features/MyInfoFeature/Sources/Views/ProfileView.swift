@@ -19,19 +19,26 @@ final class ProfileView: UIView {
         $0.image = DesignSystemAsset.MyInfo.iconColor.image
     }
 
-    private let nameLabel: UILabel = UILabel().then {
-        $0.text = ""
-        $0.textAlignment = .center
+    private let nameLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t4(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t4().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero
     }
 
-    private let platformLabel: UILabel = UILabel().then {
-        $0.text = "로 로그인 중"
-        $0.font = .setFont(.t6(weight: .light))
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray600.color
-        $0.setTextWithAttributes(kernValue: -0.5)
-        $0.textAlignment = .center
+    private let platformLabel = WMLabel(
+        text: "로 로그인 중",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray600.color,
+        font: .t6(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero
     }

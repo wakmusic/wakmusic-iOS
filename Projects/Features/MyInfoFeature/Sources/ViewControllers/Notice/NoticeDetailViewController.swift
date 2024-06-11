@@ -102,14 +102,14 @@ extension NoticeDetailViewController {
     }
 
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
 
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
                 .kern: -0.5
             ]
         )

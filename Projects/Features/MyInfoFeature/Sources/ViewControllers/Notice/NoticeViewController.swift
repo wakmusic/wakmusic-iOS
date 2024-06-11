@@ -86,7 +86,7 @@ extension NoticeViewController {
     }
 
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
@@ -94,7 +94,7 @@ extension NoticeViewController {
             string: "공지사항",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
                 .kern: -0.5
             ]
         )

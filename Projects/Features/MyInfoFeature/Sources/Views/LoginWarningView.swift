@@ -15,10 +15,14 @@ final class LoginWarningView: UIView {
         $0.image = DesignSystemAsset.Search.warning.image
     }
 
-    private let label: UILabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.textAlignment = .center
+    private let label = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t6(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
         $0.backgroundColor = .clear
         $0.numberOfLines = .zero
     }

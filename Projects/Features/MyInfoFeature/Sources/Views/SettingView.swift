@@ -29,13 +29,14 @@ final class SettingView: UIView {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    private let titleLabel = UILabel().then {
-        $0.numberOfLines = .zero
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.text = "설정"
-        $0.font = .setFont(.t5(weight: .medium))
-        $0.setTextWithAttributes(kernValue: -0.5)
-    }
+    private let titleLabel = WMLabel(
+        text: "설정",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t5().lineHeight,
+        kernValue: -0.5
+    )
 
     private let versionLabel = UILabel().then {
         $0.text = "0.0.0"
