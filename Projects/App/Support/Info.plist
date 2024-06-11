@@ -106,8 +106,8 @@
 		<string>$(WMDOMAIN_NOTICE)</string>
 		<key>WMDOMAIN_PLAYLIST</key>
 		<string>$(WMDOMAIN_PLAYLIST)</string>
-		<key>WMDOMAIN_QNA</key>
-		<string>$(WMDOMAIN_QNA)</string>
+		<key>WMDOMAIN_FAQ</key>
+		<string>$(WMDOMAIN_FAQ)</string>
 		<key>WMDOMAIN_SONGS</key>
 		<string>$(WMDOMAIN_SONGS)</string>
 		<key>WMDOMAIN_USER</key>

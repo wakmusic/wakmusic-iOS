@@ -2,6 +2,7 @@ import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+#warning("에러 모듈위치 변경 필요")
 let project = Project.module(
     name: ModulePaths.Feature.BaseFeature.rawValue,
     targets: [
@@ -24,5 +25,13 @@ let project = Project.module(
                 ]
             )
         ),
+        .testing(
+            module: .feature(.BaseFeature),
+            dependencies: [
+                .feature(target: .BaseFeature),
+                .feature(target: .BaseFeature, type: .interface),
+                .domain(target: .BaseDomain, type: .testing)
+            ]
+        )
     ]
 )

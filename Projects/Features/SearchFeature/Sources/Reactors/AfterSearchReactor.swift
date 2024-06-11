@@ -32,6 +32,13 @@ public final class AfterSearchReactor: Reactor {
         LogManager.printDebug("\(Self.self)")
     }
 
+    public func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case let .updateData(text):
+            return fetchData(text)
+        }
+    }
+
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
@@ -43,7 +50,9 @@ public final class AfterSearchReactor: Reactor {
         return newState
     }
 
+
     public func mutate(action: Action) -> Observable<Mutation> {}
+
 
     public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let text = service.text.map { Mutation.updateText($0) }
