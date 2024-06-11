@@ -32,9 +32,7 @@ public final class AfterSearchReactor: Reactor {
         LogManager.printDebug("\(Self.self)")
     }
 
-    public func mutate(action: Action) -> Observable<Mutation> {
-    
-    }
+    public func mutate(action: Action) -> Observable<Mutation> {}
 
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
