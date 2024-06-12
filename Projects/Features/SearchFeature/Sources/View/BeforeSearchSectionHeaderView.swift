@@ -2,6 +2,7 @@ import DesignSystem
 import SnapKit
 import Then
 import UIKit
+import Utility
 
 protocol BeforeSearchSectionHeaderViewDelegate: AnyObject {
     func tap(_ section: Int?)
@@ -35,8 +36,11 @@ final class BeforeSearchSectionHeaderView:
         self.addSubviews(label, button)
         setLayout()
 
-        button.addAction { [delegate] in
-            delegate?.tap(self.section)
+        button.addAction { [weak self] in
+
+            guard let self else { return }
+
+            self.delegate?.tap(self.section)
         }
     }
 

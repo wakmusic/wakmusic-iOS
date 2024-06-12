@@ -25,10 +25,13 @@ final class OptionButton: UIView {
         $0.image = DesignSystemAsset.Search.arrowDown.image
     }
 
+    fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
+
     public init() {
         super.init(frame: .zero)
-        addView()
+        addSubviews()
         setLayout()
+        bindAction()
     }
 
     @available(*, unavailable)
@@ -42,7 +45,7 @@ final class OptionButton: UIView {
 }
 
 extension OptionButton {
-    private func addView() {
+    private func addSubviews() {
         self.addSubviews(
             leftLabel,
             rightImageView
@@ -50,9 +53,6 @@ extension OptionButton {
     }
 
     private func setLayout() {
-        self.snp.makeConstraints {
-            $0.height.equalTo(22)
-        }
         leftLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
@@ -63,13 +63,15 @@ extension OptionButton {
             $0.centerY.equalToSuperview()
         }
     }
+
+    private func bindAction() {
+        self.addGestureRecognizer(tapGestureRecognizer)
+        self.isUserInteractionEnabled = true
+    }
 }
 
 extension Reactive: OptionButtonActionProtocol where Base: OptionButton {
     var didTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.addGestureRecognizer(tapGestureRecognizer)
-        base.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        return base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
 }

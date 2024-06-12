@@ -1,5 +1,7 @@
 import BaseFeature
 import HomeFeature
+import LyricHighlightingFeature
+import LyricHighlightingFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 
@@ -14,6 +16,14 @@ public extension AppComponent {
 
     var newSongsContentComponent: NewSongsContentComponent {
         NewSongsContentComponent(parent: self)
+    }
+
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
+        LyricHighlightingComponent(parent: self)
+    }
+
+    var lyricDecoratingComponent: LyricDecoratingComponent {
+        LyricDecoratingComponent(parent: self)
     }
 
     var remoteSongsDataSource: any RemoteSongsDataSource {

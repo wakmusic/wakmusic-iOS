@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import Pageboy
 import ReactorKit
@@ -30,11 +31,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         configureUI()
     }
 
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.scrollToPage(.at(index: 0), animated: false)
-    }
-
     public static func viewController(
         songSearchResultFactory: SongSearchResultFactory,
         listSearchResultFactory: ListSearchResultFactory,
@@ -60,12 +56,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-
+        #warning("첫 진입 시 text가 안내려옴 바인딩이 안되서")
         currentState.map(\.text)
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { owner, text in
+                LogManager.printDebug("Text: \(text)")
                 owner.viewControllers = [
                     owner.songSearchResultFactory.makeView(text),
                     owner.listSearchResultFactory.makeView(text)
@@ -80,7 +77,7 @@ extension AfterSearchViewController {
     private func configureUI() {
         self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
+        self.indicator.color = DesignSystemAsset.PrimaryColorV2.point.color
         self.dataSource = self // dateSource
         let bar = TMBar.ButtonBar()
 
@@ -115,7 +112,7 @@ extension AfterSearchViewController {
 
 extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
-        viewControllers.count
+        2
     }
 
     public func viewController(

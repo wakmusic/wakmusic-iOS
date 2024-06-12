@@ -1,3 +1,4 @@
+import LogManager
 import ReactorKit
 
 final class SongSearchResultReactor: Reactor {
@@ -26,6 +27,8 @@ final class SongSearchResultReactor: Reactor {
     private let text: String
 
     init(_ text: String) {
+        LogManager.printDebug("\(Self.self) init with Text :\(text)")
+
         self.initialState = State(
             isLoading: false,
             sortType: .newest,
@@ -39,6 +42,7 @@ final class SongSearchResultReactor: Reactor {
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+            #warning("데이터 소스 가져오기")
         case .viewDidLoad:
             return .empty()
         case let .changeSortType(type):

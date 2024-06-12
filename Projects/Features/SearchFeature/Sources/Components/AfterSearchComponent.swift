@@ -11,11 +11,11 @@ public protocol AfterSearchDependency: Dependency {
 }
 
 public final class AfterSearchComponent: Component<AfterSearchDependency> {
-    public func makeView() -> AfterSearchViewController {
+    public func makeView(text: String) -> AfterSearchViewController {
         return AfterSearchViewController.viewController(
             songSearchResultFactory: dependency.songSearchResultFactory,
             listSearchResultFactory: dependency.listSearchResultFactory,
-            reactor: .init()
+            reactor: .init(text: text)
         )
     }
 }
