@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import Pageboy
 import ReactorKit
@@ -10,7 +11,6 @@ import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
-import LogManager 
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView {
     @IBOutlet weak var tabBarView: UIView!

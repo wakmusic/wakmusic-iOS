@@ -103,7 +103,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                 let (state, text) = data
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
-                owner.bindSubView(state:state,text: text)
+                owner.bindSubView(state: state, text: text)
 
                 guard state == .search else {
                     return
@@ -123,11 +123,11 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
-                  //  owner.searchTextFiled.rx.text.onNext(text)
+                    //  owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
-                  //  UIView.setAnimationsEnabled(false)
+                    //  UIView.setAnimationsEnabled(false)
                     owner.view.endEditing(true)
-                   //  UIView.setAnimationsEnabled(true)
+                    //  UIView.setAnimationsEnabled(true)
                 }
             }
             .disposed(by: disposeBag)
@@ -205,10 +205,10 @@ extension SearchViewController {
                 return
             }
 
-            guard let text =  text,  !text.isEmpty else {
+            guard let text = text, !text.isEmpty else {
                 return
             }
-            
+
             afterVC = afterSearchComponent.makeView(text: text)
 
             self.remove(asChildViewController: beforeVC)
@@ -219,7 +219,7 @@ extension SearchViewController {
                 return
             }
             self.remove(asChildViewController: afterVC)
-            afterVC = nil 
+            afterVC = nil
             self.add(asChildViewController: beforeVC)
         }
     }

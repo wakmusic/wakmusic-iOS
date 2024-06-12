@@ -1,5 +1,5 @@
-import ReactorKit
 import LogManager
+import ReactorKit
 
 final class SongSearchResultReactor: Reactor {
     #warning("유즈케이스는 추후 연결")
@@ -28,7 +28,7 @@ final class SongSearchResultReactor: Reactor {
 
     init(_ text: String) {
         LogManager.printDebug("\(Self.self) init with Text :\(text)")
-        
+
         self.initialState = State(
             isLoading: false,
             sortType: .newest,
@@ -42,7 +42,7 @@ final class SongSearchResultReactor: Reactor {
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        #warning("데이터 소스 가져오기")
+            #warning("데이터 소스 가져오기")
         case .viewDidLoad:
             return .empty()
         case let .changeSortType(type):

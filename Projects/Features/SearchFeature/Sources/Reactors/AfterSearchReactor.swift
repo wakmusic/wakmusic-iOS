@@ -44,7 +44,6 @@ public final class AfterSearchReactor: Reactor {
 
         return newState
     }
-
 }
 
 private extension AfterSearchReactor {
