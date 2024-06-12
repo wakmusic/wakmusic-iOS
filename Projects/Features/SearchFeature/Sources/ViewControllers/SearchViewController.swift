@@ -210,7 +210,6 @@ extension SearchViewController {
             }
             afterVC = afterSearchComponent.makeView(text: text)
 
-            
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
 

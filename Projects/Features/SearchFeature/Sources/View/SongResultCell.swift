@@ -48,7 +48,6 @@ extension SongResultCell {
     }
 
     private func setLayout() {
- 
         thumbnailView.snp.makeConstraints {
             $0.width.equalTo(72)
             $0.height.equalTo(40)

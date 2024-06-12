@@ -47,7 +47,6 @@ extension OptionButton {
     }
 
     private func setLayout() {
-
         leftLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()

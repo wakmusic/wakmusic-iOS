@@ -49,7 +49,6 @@ extension ListResultCell {
     }
 
     private func setLayout() {
-
         thumbnailView.snp.makeConstraints {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
