@@ -15,7 +15,12 @@ public protocol ContainerViewType {
 }
 
 public extension ContainerViewType where Self: UIViewController {
-    func add(asChildViewController viewController: UIViewController) {
+    func add(asChildViewController viewController: UIViewController?) {
+        
+        guard let viewController = viewController else {
+            return
+        }
+        
         addChild(viewController)
         contentView.addSubview(viewController.view)
         viewController.didMove(toParent: self)
@@ -25,7 +30,12 @@ public extension ContainerViewType where Self: UIViewController {
         }
     }
 
-    func remove(asChildViewController viewController: UIViewController) {
+    func remove(asChildViewController viewController: UIViewController?) {
+        
+        guard let viewController = viewController else {
+            return
+        }
+        
         viewController.willMove(toParent: nil)
         viewController.view.removeFromSuperview()
         viewController.removeFromParent()

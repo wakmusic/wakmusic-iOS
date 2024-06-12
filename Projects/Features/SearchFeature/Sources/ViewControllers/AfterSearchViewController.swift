@@ -10,6 +10,7 @@ import SongsDomainInterface
 import Tabman
 import UIKit
 import Utility
+import LogManager 
 
 public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView {
     @IBOutlet weak var tabBarView: UIView!
@@ -28,11 +29,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-    }
-
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.scrollToPage(.at(index: 0), animated: false)
     }
 
     public static func viewController(
@@ -60,12 +56,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-
+        #warning("첫 진입 시 text가 안내려옴 바인딩이 안되서")
         currentState.map(\.text)
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { owner, text in
+                LogManager.printDebug("Text: \(text)")
                 owner.viewControllers = [
                     owner.songSearchResultFactory.makeView(text),
                     owner.listSearchResultFactory.makeView(text)

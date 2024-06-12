@@ -36,7 +36,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
-    private lazy var afterVC = afterSearchComponent.makeView()
+    private var afterVC: AfterSearchViewController?
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -97,12 +97,13 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
+            .observe(on: MainScheduler.asyncInstance)
             .bind { owner, data in
 
                 let (state, text) = data
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
-                owner.bindSubView(state)
+                owner.bindSubView(state:state,text: text)
 
                 guard state == .search else {
                     return
@@ -122,11 +123,11 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
-                    owner.searchTextFiled.rx.text.onNext(text)
+                  //  owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
-                    UIView.setAnimationsEnabled(false)
+                  //  UIView.setAnimationsEnabled(false)
                     owner.view.endEditing(true)
-                    UIView.setAnimationsEnabled(true)
+                   //  UIView.setAnimationsEnabled(true)
                 }
             }
             .disposed(by: disposeBag)
@@ -198,15 +199,17 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 }
 
 extension SearchViewController {
-    private func bindSubView(_ state: TypingStatus) {
+    private func bindSubView(state: TypingStatus, text: String?) {
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
             guard state == .search else {
                 return
             }
 
-            guard let text = reactor?.currentState.text, !text.isEmpty else {
+            guard let text =  text,  !text.isEmpty else {
                 return
             }
+            
+            afterVC = afterSearchComponent.makeView(text: text)
 
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
@@ -216,6 +219,7 @@ extension SearchViewController {
                 return
             }
             self.remove(asChildViewController: afterVC)
+            afterVC = nil 
             self.add(asChildViewController: beforeVC)
         }
     }
