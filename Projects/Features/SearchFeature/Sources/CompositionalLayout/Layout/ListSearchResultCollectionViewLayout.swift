@@ -1,11 +1,11 @@
 import UIKit
 import Utility
 
-final class SongSearchResultCollectionViewLayout: UICollectionViewCompositionalLayout {
+final class ListSearchResultCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { _, _ in
 
-            return SongSearchResultCollectionViewLayout.configureLayout()
+            return ListSearchResultCollectionViewLayout.configureLayout()
         }
     }
 
@@ -15,7 +15,7 @@ final class SongSearchResultCollectionViewLayout: UICollectionViewCompositionalL
     }
 }
 
-extension SongSearchResultCollectionViewLayout {
+extension ListSearchResultCollectionViewLayout {
     private static func configureLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),

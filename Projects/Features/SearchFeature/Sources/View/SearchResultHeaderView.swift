@@ -46,7 +46,7 @@ final class SearchResultHeaderView:
 }
 
 extension SearchResultHeaderView {
-    public func update(sortType: SortType, filterType: FilterType?) {
+    public func update(sortType: SortType, filterType: FilterType? = nil) {
         sortButton.setLeftTitle(sortType.title)
 
         guard let filterType = filterType else {
@@ -72,6 +72,7 @@ extension SearchResultHeaderView {
 
     private func setLayout() {
         stackView.snp.makeConstraints {
+            $0.height.equalTo(30)
             $0.top.bottom.trailing.equalToSuperview()
         }
     }

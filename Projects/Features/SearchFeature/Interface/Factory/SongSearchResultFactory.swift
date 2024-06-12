@@ -1,6 +1,5 @@
-import Foundation
 import UIKit
 
 public protocol SongSearchResultFactory {
-    func makeView() -> UIViewController
+    func makeView(_ text: String) -> UIViewController
 }

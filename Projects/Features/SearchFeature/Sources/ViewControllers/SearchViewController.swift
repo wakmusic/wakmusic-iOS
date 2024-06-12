@@ -19,8 +19,8 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     }
 
     private enum Color {
-        static let pointColor: UIColor = DesignSystemAsset.PrimaryColor.point.color
-        static let grayColor: UIColor = DesignSystemAsset.GrayColor.gray400.color
+        static let pointColor: UIColor = DesignSystemAsset.PrimaryColorV2.point.color
+        static let grayColor: UIColor = DesignSystemAsset.BlueGrayColor.gray400.color
     }
 
     @IBOutlet weak var searchImageView: UIImageView!
@@ -36,7 +36,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
-    private lazy var afterVC = afterSearchComponent.makeView()
+    private var afterVC: AfterSearchViewController?
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -97,12 +97,13 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         sharedState
             .map { ($0.typingState, $0.text) }
             .withUnretained(self)
+            .observe(on: MainScheduler.asyncInstance)
             .bind { owner, data in
 
                 let (state, text) = data
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
-                owner.bindSubView(state)
+                owner.bindSubView(state: state, text: text)
 
                 guard state == .search else {
                     return
@@ -122,11 +123,11 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
-                    owner.searchTextFiled.rx.text.onNext(text)
+                    //  owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
-                    UIView.setAnimationsEnabled(false)
+                    //  UIView.setAnimationsEnabled(false)
                     owner.view.endEditing(true)
-                    UIView.setAnimationsEnabled(true)
+                    //  UIView.setAnimationsEnabled(true)
                 }
             }
             .disposed(by: disposeBag)
@@ -140,9 +141,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
             .do(onNext: { owner, _ in
                 owner.view.endEditing(true)
                 owner.searchTextFiled.rx.text.onNext("")
-                if let nowChildVc = owner.children.first as? AfterSearchViewController {
-                    nowChildVc.clearSongCart()
-                }
             })
             .map { _ in SearchReactor.Action.cancelButtonDidTap }
             .bind(to: reactor.action)
@@ -201,29 +199,26 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 }
 
 extension SearchViewController {
-    private func bindSubView(_ state: TypingStatus) {
+    private func bindSubView(state: TypingStatus, text: String?) {
         if let nowChildVc = children.first as? BeforeSearchContentViewController {
             guard state == .search else {
                 return
             }
 
-            guard let text = reactor?.currentState.text, !text.isEmpty else {
+            guard let text = text, !text.isEmpty else {
                 return
             }
+            afterVC = afterSearchComponent.makeView(text: text)
 
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
 
-            guard let childReactor = afterVC.reactor else {
-                return
-            }
-
-            childReactor.action.onNext(.updateData(text))
         } else if let nowChildVc = children.first as? AfterSearchViewController {
             guard state == .before || state == .typing else {
                 return
             }
             self.remove(asChildViewController: afterVC)
+            afterVC = nil
             self.add(asChildViewController: beforeVC)
         }
     }

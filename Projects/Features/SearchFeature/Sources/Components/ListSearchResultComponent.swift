@@ -5,8 +5,8 @@ import NeedleFoundation
 import SearchFeatureInterface
 import UIKit
 
-public final class SongSearchResultComponent: Component<EmptyDependency>, SongSearchResultFactory {
+public final class ListSearchResultComponent: Component<EmptyDependency>, ListSearchResultFactory {
     public func makeView(_ text: String) -> UIViewController {
-        SongSearchResultViewController(reactor: SongSearchResultReactor(text))
+        ListSearchResultViewController(reactor: ListSearchResultReactor(text))
     }
 }

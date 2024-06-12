@@ -1,11 +1,11 @@
 import Foundation
 
-internal enum SongSearchResultSection: Hashable {
-    case song
+internal enum ListSearchResultSection: Hashable {
+    case list
 
     var title: String {
         switch self {
-        case .song:
+        case .list:
             "노래"
         }
     }

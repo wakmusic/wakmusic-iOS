@@ -23,7 +23,6 @@ final class SearchReactor: Reactor {
     enum Mutation {
         case updateTypingState(state: TypingStatus)
         case updateText(String)
-        case fetchRecentText(String)
     }
 
     struct State {
@@ -62,9 +61,6 @@ final class SearchReactor: Reactor {
             newState.typingState = state
         case let .updateText(text):
             newState.text = text
-        case let .fetchRecentText(text):
-            #warning("추후 fetchRecentText 구현")
-            break
         }
 
         return newState
@@ -74,9 +70,9 @@ final class SearchReactor: Reactor {
         let servicetypingState = service.typingStatus
             .map { Mutation.updateTypingState(state: $0) }
 
-        let text = service.recentText.map { Mutation.updateText($0) }
+        let recentText = service.recentText.map { Mutation.updateText($0) }
 
-        return Observable.merge(mutation, servicetypingState, text)
+        return Observable.merge(mutation, servicetypingState, recentText)
     }
 }
 

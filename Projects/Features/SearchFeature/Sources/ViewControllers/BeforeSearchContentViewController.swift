@@ -17,6 +17,7 @@ public struct Model: Hashable {
 }
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
+    private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
     private let tableView: UITableView = UITableView().then {
@@ -31,12 +32,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private lazy var collectionView: UICollectionView = createCollectionView()
 
     init(
+        wakmusicRecommendComponent: WakmusicRecommendComponent,
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
+        self.wakmusicRecommendComponent = wakmusicRecommendComponent
         super.init(reactor: reactor)
     }
 
@@ -70,7 +73,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func configureUI() {
         super.configureUI()
 
-        self.tableView.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.tableView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.tableView.tableFooterView = UIView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
     }
@@ -102,6 +105,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { onwer, isLoading in
+
                 if isLoading {
                     onwer.indicator.startAnimating()
                 } else {
@@ -295,7 +299,7 @@ extension BeforeSearchContentViewController {
                 .recommend(model2: Model(title: "123")),
                 .recommend(model2: Model(title: "456")),
                 .recommend(model2: Model(title: "4564")),
-                .recommend(model2: Model(title: "4516")),
+                .recommend(model2: Model(title: "4516"))
             ],
             toSection: .recommend
         )
@@ -303,7 +307,7 @@ extension BeforeSearchContentViewController {
             [
                 .popularList(model: Model(title: "Hello1")),
                 .popularList(model: Model(title: "Hello2")),
-                .popularList(model: Model(title: "Hello3")),
+                .popularList(model: Model(title: "Hello3"))
             ],
             toSection: .popularList
         )
@@ -333,7 +337,16 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
         if let section = section, let layoutKind = BeforeSearchSection(rawValue: section) {
-            print(layoutKind)
+            #warning("네비게이션 연결")
+            switch layoutKind {
+            case .youtube:
+                break
+            case .recommend:
+                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+
+            case .popularList:
+                break
+            }
         }
     }
 }

@@ -34,6 +34,7 @@ public final class WMNavigationBarView: UIView {
         _ text: String,
         textColor: UIColor = DesignSystemAsset.NewGrayColor.gray900.color
     ) {
+        #warning("왁뮤 레이블로 바꾸기")
         let titleLabel = UILabel()
         titleLabel.text = text
         titleLabel.font = .setFont(.t5(weight: .medium))

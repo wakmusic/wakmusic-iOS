@@ -7,15 +7,15 @@ import SongsDomainInterface
 
 public protocol AfterSearchDependency: Dependency {
     var songSearchResultFactory: any SongSearchResultFactory { get }
-    var containSongsFactory: any ContainSongsFactory { get }
+    var listSearchResultFactory: any ListSearchResultFactory { get }
 }
 
 public final class AfterSearchComponent: Component<AfterSearchDependency> {
-    public func makeView() -> AfterSearchViewController {
+    public func makeView(text: String) -> AfterSearchViewController {
         return AfterSearchViewController.viewController(
             songSearchResultFactory: dependency.songSearchResultFactory,
-            containSongsFactory: dependency.containSongsFactory,
-            reactor: .init()
+            listSearchResultFactory: dependency.listSearchResultFactory,
+            reactor: .init(text: text)
         )
     }
 }

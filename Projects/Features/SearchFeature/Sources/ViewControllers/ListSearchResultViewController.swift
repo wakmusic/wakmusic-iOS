@@ -9,7 +9,13 @@ import Then
 import UIKit
 import Utility
 
-final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
+struct TmpPlaylistModel: Hashable {
+    let name: String
+    let date: String
+    let creator: String
+}
+
+final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -19,8 +25,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
-        SongSearchResultSection,
-        SongEntity
+        ListSearchResultSection,
+        TmpPlaylistModel
     > = createDataSource()
 
     override func viewDidLoad() {
@@ -28,15 +34,16 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         initDataSource()
     }
 
-    override func bind(reactor: SongSearchResultReactor) {
+    override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
+        collectionView.delegate = self
     }
 
-    override func bindAction(reactor: SongSearchResultReactor) {
+    override func bindAction(reactor: ListSearchResultReactor) {
         super.bindAction(reactor: reactor)
     }
 
-    override func bindState(reactor: SongSearchResultReactor) {
+    override func bindState(reactor: ListSearchResultReactor) {
         super.bindState(reactor: reactor)
     }
 
@@ -63,14 +70,15 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 }
 
-extension SongSearchResultViewController {
+extension ListSearchResultViewController {
     private func createCollectionView() -> UICollectionView {
-        return UICollectionView(frame: .zero, collectionViewLayout: SongSearchResultCollectionViewLayout())
+        return UICollectionView(frame: .zero, collectionViewLayout: ListSearchResultCollectionViewLayout())
     }
 
+    #warning("Playlist Entity로 변경하기")
     private func createDataSource()
-        -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
-        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
+        -> UICollectionViewDiffableDataSource<ListSearchResultSection, TmpPlaylistModel> {
+        let cellRegistration = UICollectionView.CellRegistration<ListResultCell, TmpPlaylistModel> { cell, _, item in
             cell.update(item)
         }
 
@@ -80,21 +88,21 @@ extension SongSearchResultViewController {
             .SupplementaryRegistration<SearchResultHeaderView>(
                 elementKind: SearchResultHeaderView
                     .kind
-            ) { [weak self] supplementaryView, _, _ in
+            ) { [weak self] supplementaryView, string, indexPath in
 
                 guard let self else { return }
 
                 supplementaryView.delegate = self
-                supplementaryView.update(sortType: .newest, filterType: .all)
+                supplementaryView.update(sortType: .newest)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
-            SongSearchResultSection,
-            SongEntity
+            ListSearchResultSection,
+            TmpPlaylistModel
         >(collectionView: collectionView) { (
             collectionView: UICollectionView,
             indexPath: IndexPath,
-            item: SongEntity
+            item: TmpPlaylistModel
         ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
@@ -113,22 +121,17 @@ extension SongSearchResultViewController {
 
     private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
+        var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, TmpPlaylistModel>()
 
-        snapshot.appendSections([.song])
+        snapshot.appendSections([.list])
 
-        let model = SongEntity(
-            id: "8KTFf2X-ago",
-            title: "Another World",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 0,
-            last: 0,
-            date: "2020.12.12"
+        snapshot.appendItems(
+            [
+                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳"),
+                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳2")
+            ],
+            toSection: .list
         )
-
-        snapshot.appendItems([model], toSection: .song)
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -136,30 +139,22 @@ extension SongSearchResultViewController {
     public func scrollToTop() {}
 }
 
-extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
+extension ListSearchResultViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        #warning("플레이리스트 상세로 이동")
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        LogManager.printDebug(model)
+    }
+}
+
+extension ListSearchResultViewController: SearchResultHeaderViewDelegate {
     func tapFilter() {
         LogManager.printDebug("filter")
     }
 
     func tapSort() {
         LogManager.printDebug("sort")
-    }
-}
-
-extension SongSearchResultViewController: SongCartViewDelegate {
-    func buttonTapped(type: SongCartSelectType) {
-        #warning("유즈 케이스 연결 시 구현")
-        switch type {
-        case let .allSelect(flag: flag):
-            break
-        case .addSong:
-            break
-        case .addPlayList:
-            break
-        case .play:
-            break
-        case .remove:
-            break
-        }
     }
 }

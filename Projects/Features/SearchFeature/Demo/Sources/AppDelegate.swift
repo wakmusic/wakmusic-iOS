@@ -22,10 +22,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
             )
 
-        let component = SongSearchResultViewController(reactor: SongSearchResultReactor())
+        let component = SongSearchResultViewController(reactor: SongSearchResultReactor("1234"))
+        let component2 = ListSearchResultViewController(reactor: ListSearchResultReactor("text"))
 
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: component)
+            UINavigationController(rootViewController: component2)
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
