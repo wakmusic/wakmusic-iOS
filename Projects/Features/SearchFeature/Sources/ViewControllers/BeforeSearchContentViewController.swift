@@ -17,6 +17,7 @@ public struct Model: Hashable {
 }
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
+    private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
     private let tableView: UITableView = UITableView().then {
@@ -31,12 +32,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private lazy var collectionView: UICollectionView = createCollectionView()
 
     init(
+        wakmusicRecommendComponent: WakmusicRecommendComponent,
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
+        self.wakmusicRecommendComponent = wakmusicRecommendComponent
         super.init(reactor: reactor)
     }
 
@@ -333,8 +336,22 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 // MARK: 전체보기
 extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
+        
         if let section = section, let layoutKind = BeforeSearchSection(rawValue: section) {
-            print(layoutKind)
+
+            #warning("네비게이션 연결")
+            switch layoutKind {
+
+            case .youtube:
+                break
+            case .recommend:
+                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+            
+            
+            case .popularList:
+                break
+            }
+            
         }
     }
 }

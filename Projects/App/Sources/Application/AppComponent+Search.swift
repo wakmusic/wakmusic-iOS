@@ -22,4 +22,8 @@ extension AppComponent {
     var listSearchResultFactory: any ListSearchResultFactory {
         ListSearchResultComponent(parent: self)
     }
+    
+    var wakmusicRecommendComponent: WakmusicRecommendComponent {
+        WakmusicRecommendComponent(parent: self)
+    }
 }
