@@ -336,22 +336,17 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 // MARK: 전체보기
 extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelegate {
     func tap(_ section: Int?) {
-        
         if let section = section, let layoutKind = BeforeSearchSection(rawValue: section) {
-
             #warning("네비게이션 연결")
             switch layoutKind {
-
             case .youtube:
                 break
             case .recommend:
                 self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
-            
-            
+
             case .popularList:
                 break
             }
-            
         }
     }
 }

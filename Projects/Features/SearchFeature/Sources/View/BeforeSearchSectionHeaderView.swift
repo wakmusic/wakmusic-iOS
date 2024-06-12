@@ -37,9 +37,9 @@ final class BeforeSearchSectionHeaderView:
         setLayout()
 
         button.addAction { [weak self] in
-           
+
             guard let self else { return }
-            
+
             self.delegate?.tap(self.section)
         }
     }

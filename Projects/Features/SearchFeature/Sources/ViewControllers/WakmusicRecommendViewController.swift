@@ -6,7 +6,6 @@ import PlaylistFeatureInterface
 import UIKit
 import Utility
 
-
 #warning("실제 데이터 및 이벤트 연결")
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
     private let wmNavigationbarView = WMNavigationBarView().then {
@@ -37,7 +36,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
-    
+
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
