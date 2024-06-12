@@ -48,13 +48,10 @@ extension SongResultCell {
     }
 
     private func setLayout() {
-        let height = frame.height - 20
-        let ratio: CGFloat = 16.0 / 9.0
-        let width = ratio * height
-
+ 
         thumbnailView.snp.makeConstraints {
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
+            $0.width.equalTo(72)
+            $0.height.equalTo(40)
             $0.top.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview()
         }

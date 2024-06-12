@@ -13,6 +13,8 @@ final class YoutubeThumbnailCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addSubviews()
+        setLayout()
         configureUI()
     }
 
@@ -23,12 +25,21 @@ final class YoutubeThumbnailCell: UICollectionViewCell {
 }
 
 extension YoutubeThumbnailCell {
-    private func configureUI() {
+    
+    private func addSubviews() {
         contentView.addSubview(thumbnailView)
-
+    }
+    private func setLayout() {
         thumbnailView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
+    }
+    private func configureUI() {
+       
+
+        #warning("실제 도입 시 frame 변수 제거 고민")
+        
+
 
         thumbnailView.layer.cornerRadius = frame.height * 50 / 292
 

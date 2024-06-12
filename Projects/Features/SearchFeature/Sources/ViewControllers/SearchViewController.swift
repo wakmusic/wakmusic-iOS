@@ -208,9 +208,9 @@ extension SearchViewController {
             guard let text = text, !text.isEmpty else {
                 return
             }
-
             afterVC = afterSearchComponent.makeView(text: text)
 
+            
             self.remove(asChildViewController: beforeVC)
             self.add(asChildViewController: afterVC)
 

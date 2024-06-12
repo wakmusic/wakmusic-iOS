@@ -23,7 +23,7 @@ final class OptionButton: UIView {
 
     public init() {
         super.init(frame: .zero)
-        addView()
+        addSubviews()
         setLayout()
         bindAction()
     }
@@ -39,7 +39,7 @@ final class OptionButton: UIView {
 }
 
 extension OptionButton {
-    private func addView() {
+    private func addSubviews() {
         self.addSubviews(
             leftLabel,
             rightImageView
@@ -47,9 +47,7 @@ extension OptionButton {
     }
 
     private func setLayout() {
-        self.snp.makeConstraints {
-            $0.height.equalTo(22)
-        }
+
         leftLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()

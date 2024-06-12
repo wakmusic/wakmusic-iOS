@@ -33,7 +33,7 @@ extension SongSearchResultCollectionViewLayout {
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(0.16)
+            heightDimension: .absolute(60.0)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
