@@ -7,15 +7,26 @@ final class PopularPlayListCell: UICollectionViewCell {
         $0.contentMode = .scaleAspectFit
     }
 
-    private let titleLabel: UILabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.backgroundColor = .red
+    private let titleLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t6(weight: .medium),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        kernValue: -0.5
+    ).then {
+        $0.numberOfLines = 1
     }
 
-    private let nickNameLabel: UILabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+    private let nickNameLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.NewGrayColor.gray900.color,
+        font: .t7(weight: .light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7(weight: .light).lineHeight,
+        kernValue: -0.5
+    ).then {
+        $0.numberOfLines = 1
     }
 
     override init(frame: CGRect) {

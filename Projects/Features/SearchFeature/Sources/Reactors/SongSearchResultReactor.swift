@@ -41,15 +41,8 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-            #warning("데이터 소스 가져오기")
-        case .viewDidLoad:
-            return .empty()
-        case let .changeSortType(type):
-            return updateSortType(type)
-        case let .changeFilterType(type):
-            return updateFilterType(type)
-        }
+        #warning("추후 구현하기")
+        return .empty()
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
