@@ -15,7 +15,7 @@ public final class AfterSearchComponent: Component<AfterSearchDependency> {
         return AfterSearchViewController.viewController(
             songSearchResultFactory: dependency.songSearchResultFactory,
             listSearchResultFactory: dependency.listSearchResultFactory,
-            reactor: .init(text:text)
+            reactor: .init(text: text)
         )
     }
 }
