@@ -41,7 +41,8 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action {}
+        #warning("추후 구현하기")
+        return .empty()
     }
 
     func reduce(state: State, mutation: Mutation) -> State {

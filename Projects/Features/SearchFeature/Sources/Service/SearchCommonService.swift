@@ -5,7 +5,7 @@ import SearchFeatureInterface
 protocol SearchCommonService {
     var typingStatus: BehaviorSubject<TypingStatus> { get }
     var recentText: PublishSubject<String> { get }
-    var text: PublishSubject<String> { get }
+
 }
 
 final class DefaultSearchCommonService: SearchCommonService {

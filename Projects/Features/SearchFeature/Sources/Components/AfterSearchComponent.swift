@@ -14,8 +14,8 @@ public final class AfterSearchComponent: Component<AfterSearchDependency> {
     public func makeView(text: String) -> AfterSearchViewController {
         return AfterSearchViewController.viewController(
             songSearchResultFactory: dependency.songSearchResultFactory,
-            containSongsFactory: dependency.containSongsFactory,
-            reactor: .init()
+            listSearchResultFactory: dependency.listSearchResultFactory,
+            reactor: .init(text:text)
         )
     }
 }
