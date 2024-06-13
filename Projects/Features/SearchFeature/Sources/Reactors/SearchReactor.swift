@@ -61,7 +61,6 @@ final class SearchReactor: Reactor {
             newState.typingState = state
         case let .updateText(text):
             newState.text = text
-            service.text.onNext(text) // 검색 결과 화면 리엑터에 전달하기 위해
         }
 
         return newState
@@ -71,9 +70,9 @@ final class SearchReactor: Reactor {
         let servicetypingState = service.typingStatus
             .map { Mutation.updateTypingState(state: $0) }
 
-        let text = service.recentText.map { Mutation.updateText($0) }
+        let recentText = service.recentText.map { Mutation.updateText($0) }
 
-        return Observable.merge(mutation, servicetypingState, text)
+        return Observable.merge(mutation, servicetypingState, recentText)
     }
 }
 

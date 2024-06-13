@@ -2,6 +2,7 @@ import BaseFeature
 import Foundation
 import KeychainModule
 import MainTabFeature
+import MyInfoFeature
 import NeedleFoundation
 import PlayerFeature
 import RootFeature

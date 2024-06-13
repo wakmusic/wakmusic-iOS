@@ -21,9 +21,9 @@ public final class AfterSearchReactor: Reactor {
 
     public var initialState: State
 
-    init(service: some SearchCommonService = DefaultSearchCommonService.shared) {
+    init(service: some SearchCommonService = DefaultSearchCommonService.shared, text: String) {
         self.initialState = State(
-            text: ""
+            text: text
         )
         self.service = service
     }
@@ -32,12 +32,7 @@ public final class AfterSearchReactor: Reactor {
         LogManager.printDebug("\(Self.self)")
     }
 
-    public func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case let .updateData(text):
-            return fetchData(text)
-        }
-    }
+    public func mutate(action: Action) -> Observable<Mutation> {}
 
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -50,13 +45,8 @@ public final class AfterSearchReactor: Reactor {
         return newState
     }
 
-    public func mutate(action: Action) -> Observable<Mutation> {}
-
-    public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let text = service.text.map { Mutation.updateText($0) }
-
-        return Observable.merge(mutation, text)
-    }
+private extension AfterSearchReactor {
+    #warning("유즈케이스 주입")
 }
 
 private extension AfterSearchReactor {}

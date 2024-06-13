@@ -6,9 +6,10 @@ import PlaylistFeatureInterface
 import UIKit
 import Utility
 
+#warning("실제 데이터 및 이벤트 연결")
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
     private let wmNavigationbarView = WMNavigationBarView().then {
-        $0.setTitle("Hello")
+        $0.setTitle("왁뮤팀이 추천하는 리스트")
     }
 
     private let dismissButton = UIButton().then {
@@ -17,7 +18,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     }
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
-        $0.backgroundColor = .black
+        $0.backgroundColor = .clear
     }
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlayListEntity> =
@@ -32,8 +33,13 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
     override func addView() {
