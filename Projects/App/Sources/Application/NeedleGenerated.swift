@@ -952,8 +952,10 @@ extension AppComponent: Registration {
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { self.fetchLikeNumOfSongUseCase as Any }
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { self.cancelLikeSongUseCase as Any }
+        localTable["playlistPresenterGlobalState-PlayListPresenterGlobalStateProtocol"] = { self.playlistPresenterGlobalState as Any }
         localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { self.myPlayListComponent as Any }
+        localTable["playlistFactory-any PlaylistFactory"] = { self.playlistFactory as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { self.fetchRecommendPlayListUseCase as Any }
@@ -991,7 +993,7 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { self.playerComponent as Any }
-        localTable["playlistComponent-PlaylistComponent"] = { self.playlistComponent as Any }
+        localTable["playlistComponent-LegacyPlaylistComponent"] = { self.playlistComponent as Any }
         localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { self.openSourceLicenseComponent as Any }
         localTable["serviceInfoComponent-ServiceInfoComponent"] = { self.serviceInfoComponent as Any }
         localTable["permissionComponent-PermissionComponent"] = { self.permissionComponent as Any }
