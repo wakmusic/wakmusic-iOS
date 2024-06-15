@@ -21,7 +21,7 @@ public struct SearchPlaylistDTO: Decodable {
 
     public let key, title, userName, imageUrl: String
     public let `private`: Bool
-    public let  songCount: Int
+    public let songCount: Int
 }
 
 public extension SearchPlaylistDTO {
@@ -32,7 +32,7 @@ public extension SearchPlaylistDTO {
             userName: userName,
             image: imageUrl,
             count: songCount,
-            private: self.`private`)
+            private: self.`private`
+        )
     }
 }
-

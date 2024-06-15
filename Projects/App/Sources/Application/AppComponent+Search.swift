@@ -1,8 +1,8 @@
 import Foundation
+import SearchDomain
+import SearchDomainInterface
 import SearchFeature
 import SearchFeatureInterface
-import SearchDomainInterface
-import SearchDomain
 
 extension AppComponent {
     var searchFactory: any SearchFactory {
@@ -28,10 +28,9 @@ extension AppComponent {
     var wakmusicRecommendComponent: WakmusicRecommendComponent {
         WakmusicRecommendComponent(parent: self)
     }
-    
-    
+
     // 도메인 영역
-    
+
     var remoteSearchDataSource: any RemoteSearchDataSource {
         shared {
             RemoteSearchDataSourceImpl(keychain: keychain)
@@ -49,7 +48,7 @@ extension AppComponent {
             FetchSearchSongsUseCaseImpl(searchRepository: searchRepository)
         }
     }
-    
+
     var fetchSearcPlaylistsUseCaseImpl: any FetchSearchPlaylistsUseCase {
         shared {
             FetchSearchPlaylistsUseCaseImpl(searchRepository: searchRepository)

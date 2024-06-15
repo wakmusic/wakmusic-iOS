@@ -19,7 +19,6 @@ public struct SearchPlaylistEntity: Equatable {
     }
 
     public let key, title, userName, image: String
-    public let  count: Int
+    public let count: Int
     public let `private`: Bool
 }
-
