@@ -26,8 +26,8 @@ final class ListSearchResultReactor: Reactor {
     init(text: String, fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
             isLoading: false,
-            sortType: .lastest,
-            scrollPage: 0
+            sortType: .latest,
+            scrollPage: 1
         )
 
         self.text = text
