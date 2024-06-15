@@ -3,12 +3,12 @@ import DesignSystem
 import LogManager
 import RxCocoa
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import SearchDomainInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
