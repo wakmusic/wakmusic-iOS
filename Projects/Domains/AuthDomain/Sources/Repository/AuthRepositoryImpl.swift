@@ -24,6 +24,10 @@ public final class AuthRepositoryImpl: AuthRepository {
     public func fetchToken(providerType: ProviderType, token: String) -> Single<AuthLoginEntity> {
         remoteAuthDataSource.fetchToken(providerType: providerType, token: token)
     }
+    
+    public func reGenerateAccessToken() -> Single<AuthLoginEntity> {
+        remoteAuthDataSource.
+    }
 
     public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
         remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)

@@ -6,6 +6,8 @@ import Moya
 
 public enum AuthAPI {
     case fetchToken(providerType: ProviderType, token: String)
+    case reGenerateAccessToken
+    
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
 }
 
@@ -19,6 +21,11 @@ extension AuthAPI: WMAPI {
         switch self {
         case .fetchToken:
             return URL(string: BASE_URL())!
+        
+        case .reGenerateAccessToken:
+            return URL(string: BASE_URL())!
+            
+        
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
@@ -30,6 +37,8 @@ extension AuthAPI: WMAPI {
             return .auth
         case .fetchNaverUserInfo:
             return .naver
+        case .reGenerateAccessToken:
+            return .auth
         }
     }
 
@@ -39,6 +48,8 @@ extension AuthAPI: WMAPI {
             return "/app"
         case .fetchNaverUserInfo:
             return ""
+        case .reGenerateAccessToken:
+            return "/token"
         }
     }
 
@@ -48,6 +59,8 @@ extension AuthAPI: WMAPI {
             return .post
         case .fetchNaverUserInfo:
             return .get
+        case .reGenerateAccessToken:
+            return .post
         }
     }
 
@@ -70,6 +83,8 @@ extension AuthAPI: WMAPI {
                 )
             )
         case .fetchNaverUserInfo:
+            return .requestPlain
+        case .reGenerateAccessToken:
             return .requestPlain
         }
     }

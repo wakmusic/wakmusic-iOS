@@ -4,7 +4,7 @@ import Foundation
 public struct AuthLoginResponseDTO: Decodable, Equatable {
     public let accessToken: String
     public let expiresIn: TimeInterval
-    public let refreshToken: String
+    public let refreshToken: String?
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.accessToken == rhs.accessToken
