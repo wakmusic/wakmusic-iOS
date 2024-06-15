@@ -27,7 +27,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     override func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        // initDataSource()
     }
 
     override func bind(reactor: SongSearchResultReactor) {
@@ -44,6 +43,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         let sharedState = reactor.state.share()
 
         sharedState.map(\.dataSource)
+            .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
@@ -56,6 +56,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map(\.isLoading)
+            .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
 
                 if isLoading {

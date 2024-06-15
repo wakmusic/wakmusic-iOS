@@ -77,8 +77,8 @@ final class SongSearchResultReactor: Reactor {
         case let .updateSelectedCount(count):
             break
 
-        case let .updateLoadingState(flag):
-            newState.isLoading = flag
+        case let .updateLoadingState(isLoading):
+            newState.isLoading = isLoading
         }
 
         return newState

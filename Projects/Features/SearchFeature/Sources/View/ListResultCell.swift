@@ -1,9 +1,9 @@
 import DesignSystem
 import Kingfisher
 import LogManager
-import SongsDomainInterface
 import UIKit
 import Utility
+import SearchDomainInterface
 
 final class ListResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
@@ -91,10 +91,10 @@ extension ListResultCell {
         }
     }
 
-    public func update(_ model: TmpPlaylistModel) {
+    public func update(_ model: SearchPlaylistEntity) {
         #warning("플레이 리스트 이미지")
-        titleLabel.text = model.name
-        creatorLabel.text = model.creator
+        titleLabel.text = model.title
+        creatorLabel.text = model.userName
         dateLabel.text = model.date
     }
 }

@@ -8,12 +8,8 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import SearchDomainInterface
 
-struct TmpPlaylistModel: Hashable {
-    let name: String
-    let date: String
-    let creator: String
-}
 
 final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
     var songCartView: SongCartView!
@@ -26,12 +22,12 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         ListSearchResultSection,
-        TmpPlaylistModel
+        SearchPlaylistEntity
     > = createDataSource()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDataSource()
+        reactor?.action.onNext(.viewDidLoad)
     }
 
     override func bind(reactor: ListSearchResultReactor) {
@@ -45,6 +41,37 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func bindState(reactor: ListSearchResultReactor) {
         super.bindState(reactor: reactor)
+        
+        let sharedState = reactor.state.share()
+        
+        sharedState.map(\.dataSource)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, dataSource in
+                
+                var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+
+                snapshot.appendSections([.list])
+
+                snapshot.appendItems(dataSource,toSection: .list)
+
+                owner.dataSource.apply(snapshot, animatingDifferences: false)
+                
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.isLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoading in
+
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
     }
 
     override func addView() {
@@ -75,10 +102,9 @@ extension ListSearchResultViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: ListSearchResultCollectionViewLayout())
     }
 
-    #warning("Playlist Entity로 변경하기")
     private func createDataSource()
-        -> UICollectionViewDiffableDataSource<ListSearchResultSection, TmpPlaylistModel> {
-        let cellRegistration = UICollectionView.CellRegistration<ListResultCell, TmpPlaylistModel> { cell, _, item in
+        -> UICollectionViewDiffableDataSource<ListSearchResultSection, SearchPlaylistEntity> {
+        let cellRegistration = UICollectionView.CellRegistration<ListResultCell, SearchPlaylistEntity> { cell, _, item in
             cell.update(item)
         }
 
@@ -98,11 +124,11 @@ extension ListSearchResultViewController {
 
         let dataSource = UICollectionViewDiffableDataSource<
             ListSearchResultSection,
-            TmpPlaylistModel
+            SearchPlaylistEntity
         >(collectionView: collectionView) { (
             collectionView: UICollectionView,
             indexPath: IndexPath,
-            item: TmpPlaylistModel
+            item: SearchPlaylistEntity
         ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
@@ -119,22 +145,6 @@ extension ListSearchResultViewController {
         return dataSource
     }
 
-    private func initDataSource() {
-        // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, TmpPlaylistModel>()
-
-        snapshot.appendSections([.list])
-
-        snapshot.appendItems(
-            [
-                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳"),
-                TmpPlaylistModel(name: "임시 플리이름", date: "2012.12.12", creator: "우왁굳2")
-            ],
-            toSection: .list
-        )
-
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
 
     public func scrollToTop() {}
 }
