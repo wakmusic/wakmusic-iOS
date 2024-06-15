@@ -2,11 +2,12 @@ import Foundation
 import SearchDomainInterface
 import Utility
 
+#warning("서버에서 username nullable빠지면 옵셔널 제거하기")
 public struct SearchPlaylistDTO: Decodable {
     public init(
         key: String,
         title: String,
-        userName: String,
+        userName: String?,
         imageUrl: String,
         songCount: Int,
         createdAt: Int,
@@ -21,7 +22,8 @@ public struct SearchPlaylistDTO: Decodable {
         self.private = `private`
     }
 
-    public let key, title, userName, imageUrl: String
+    public let key, title, imageUrl: String
+    public let userName: String?
     public let `private`: Bool
     public let songCount, createdAt: Int
 }
@@ -31,7 +33,7 @@ public extension SearchPlaylistDTO {
         SearchPlaylistEntity(
             key: key,
             title: title,
-            userName: userName,
+            userName: userName ?? "임시 닉네임",
             image: imageUrl,
             date: createdAt.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
             count: songCount,

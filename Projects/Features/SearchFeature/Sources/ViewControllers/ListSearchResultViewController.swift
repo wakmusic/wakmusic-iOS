@@ -52,8 +52,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
                 snapshot.appendSections([.list])
 
-                snapshot.appendItems(dataSource,toSection: .list)
-
+                snapshot.appendItems(dataSource, toSection: .list)
                 owner.dataSource.apply(snapshot, animatingDifferences: false)
                 
             }
