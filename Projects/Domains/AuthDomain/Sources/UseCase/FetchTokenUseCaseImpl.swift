@@ -17,7 +17,7 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
         self.authRepository = authRepository
     }
 
-    public func execute(token: String, type: ProviderType) -> Single<AuthLoginEntity> {
-        authRepository.fetchToken(token: token, type: type)
+    public func execute(providerType: ProviderType, token: String) -> Single<AuthLoginEntity> {
+        authRepository.fetchToken(providerType: providerType, token: token)
     }
 }

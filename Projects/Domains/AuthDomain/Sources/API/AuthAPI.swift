@@ -5,13 +5,13 @@ import Foundation
 import Moya
 
 public enum AuthAPI {
-    case fetchToken(token: String, type: ProviderType)
+    case fetchToken(providerType: ProviderType, token: String)
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
 }
 
-public struct AuthRequset: Encodable {
-    var token: String
+private struct FetchTokenRequestParameters: Encodable {
     var provider: String
+    var token: String
 }
 
 extension AuthAPI: WMAPI {
@@ -36,7 +36,7 @@ extension AuthAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case .fetchToken:
-            return "/login/mobile"
+            return "/app"
         case .fetchNaverUserInfo:
             return ""
         }
@@ -62,8 +62,13 @@ extension AuthAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchToken(token: id, type: type):
-            return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
+        case let .fetchToken(providerType: providerType, token: id):
+            return .requestJSONEncodable(
+                FetchTokenRequestParameters(
+                    provider: providerType.rawValue,
+                    token: id
+                )
+            )
         case .fetchNaverUserInfo:
             return .requestPlain
         }

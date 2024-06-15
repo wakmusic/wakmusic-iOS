@@ -2,5 +2,5 @@ import Foundation
 import RxSwift
 
 public protocol FetchTokenUseCase {
-    func execute(token: String, type: ProviderType) -> Single<AuthLoginEntity>
+    func execute(providerType: ProviderType, token: String) -> Single<AuthLoginEntity>
 }
