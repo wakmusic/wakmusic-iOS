@@ -10,30 +10,15 @@ import Foundation
 import SongsDomainInterface
 
 public struct SongCreditsResponseDTO: Decodable {
-    let vocal, featuring: [String]
-    let original: String
-    let producing, lyrics, relyrics, compose: [String]
-    let arrange, mixing, mastering, session: [String]
-    let chorus, vocalGuide, trainer: [String]
+    let type: String
+    let names: [String]
 }
 
 public extension SongCreditsResponseDTO {
     func toDomain() -> SongCreditsEntity {
         return SongCreditsEntity(
-            vocal: vocal,
-            featuring: featuring,
-            original: original,
-            producing: producing,
-            lyrics: lyrics,
-            relyrics: relyrics,
-            compose: compose,
-            arrange: arrange,
-            mixing: mixing,
-            mastering: mastering,
-            session: session,
-            chorus: chorus,
-            vocalGuide: vocalGuide,
-            trainer: trainer
+            type: type,
+            names: names
         )
     }
 }

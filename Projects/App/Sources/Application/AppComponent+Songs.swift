@@ -38,6 +38,12 @@ public extension AppComponent {
         }
     }
 
+    var fetchSongUseCase: any FetchSongUseCase {
+        shared {
+            FetchSongUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+
     var fetchLyricsUseCase: any FetchLyricsUseCase {
         shared {
             FetchLyricsUseCaseImpl(songsRepository: songsRepository)
