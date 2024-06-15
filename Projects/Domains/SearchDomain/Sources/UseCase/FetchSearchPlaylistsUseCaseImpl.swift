@@ -2,10 +2,8 @@ import SearchDomainInterface
 import SongsDomainInterface
 import RxSwift
 
-public struct FetchSearchPlaylistUseCaseImpl: FetchSearchPlaylistUseCase {
+public struct FetchSearchPlaylistsUseCaseImpl: FetchSearchPlaylistsUseCase {
  
-    
-
     private let searchRepository: any SearchRepository
 
     public init(

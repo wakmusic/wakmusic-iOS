@@ -34,6 +34,8 @@ import PlayerFeature
 import PlaylistFeature
 import PlaylistFeatureInterface
 import RootFeature
+import SearchDomain
+import SearchDomainInterface
 import SearchFeature
 import SearchFeatureInterface
 import SignInFeature

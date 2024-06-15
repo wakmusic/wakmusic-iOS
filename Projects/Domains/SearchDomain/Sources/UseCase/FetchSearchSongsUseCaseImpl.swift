@@ -2,7 +2,7 @@ import SearchDomainInterface
 import SongsDomainInterface
 import RxSwift
 
-public struct FetchSearchSongUseCaseImpl: FetchSearchSongUseCase {
+public struct FetchSearchSongsUseCaseImpl: FetchSearchSongsUseCase {
 
     private let searchRepository: any SearchRepository
 

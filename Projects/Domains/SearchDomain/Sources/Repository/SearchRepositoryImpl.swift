@@ -6,7 +6,7 @@ public final class SearchRepositoryImpl: SearchRepository {
     
     private let remoteSearchDataSource: any RemoteSearchDataSource
     
-    init(remoteSearchDataSource: any RemoteSearchDataSource) {
+    public init(remoteSearchDataSource: any RemoteSearchDataSource) {
         self.remoteSearchDataSource = remoteSearchDataSource
     }
     
