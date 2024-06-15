@@ -9,18 +9,18 @@ import SearchDomainInterface
 import SongsDomainInterface
 
 public struct SearchSongRequest: Encodable {
-    var order: String
-    var filter: String
-    var text: String
-    var page: Int
-    var limit: Int
+    let order: String
+    let filter: String
+    let text: String
+    let page: Int
+    let limit: Int
 }
 
 public struct SearchPlaylistRequest: Encodable {
-    var order: String
-    var text: String
-    var page: Int
-    var limit: Int
+    let order: String
+    let text: String
+    let page: Int
+    let limit: Int
 }
 
 public enum SearchAPI {
