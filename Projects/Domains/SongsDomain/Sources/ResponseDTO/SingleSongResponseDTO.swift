@@ -14,7 +14,7 @@ public struct SingleSongResponseDTO: Decodable {
     public let songID, title: String
     public let artists: [String]
     public let date, views, likes: Int
-    public let karaokeNumber: SingleSongResponseDTO.KaraokeNumber?
+    public let karaokeNumber: SingleSongResponseDTO.KaraokeNumber
 
     enum CodingKeys: String, CodingKey {
         case title, artists, date, views, likes
@@ -40,7 +40,7 @@ public extension SingleSongResponseDTO {
             views: views,
             last: 0,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
-            karaokeNumber: karaokeNumber == nil ? nil : .init(TJ: karaokeNumber?.TJ ?? 0, KY: karaokeNumber?.KY ?? 0)
+            karaokeNumber: .init(TJ: karaokeNumber.TJ, KY: karaokeNumber.KY)
         )
     }
 }

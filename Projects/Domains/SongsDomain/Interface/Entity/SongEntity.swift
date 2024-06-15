@@ -11,7 +11,7 @@ public struct SongEntity: Hashable, Equatable {
         last: Int,
         date: String,
         isSelected: Bool = false,
-        karaokeNumber: SongEntity.KaraokeNumber? = nil
+        karaokeNumber: SongEntity.KaraokeNumber = .init(TJ: nil, KY: nil)
     ) {
         self.id = id
         self.title = title
@@ -30,7 +30,7 @@ public struct SongEntity: Hashable, Equatable {
     public let views, last: Int
     public let date: String
     public var isSelected: Bool
-    public let karaokeNumber: SongEntity.KaraokeNumber?
+    public let karaokeNumber: SongEntity.KaraokeNumber
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -43,11 +43,11 @@ public struct SongEntity: Hashable, Equatable {
 
 public extension SongEntity {
     struct KaraokeNumber {
-        public init (TJ: Int, KY: Int) {
+        public init (TJ: Int?, KY: Int?) {
             self.TJ = TJ
             self.KY = KY
         }
 
-        public let TJ, KY: Int
+        public let TJ, KY: Int?
     }
 }
