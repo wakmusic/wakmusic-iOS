@@ -19,7 +19,7 @@ public enum FilterType: String, Encodable {
 }
 
 public enum SortType: String, Encodable {
-    case lastest
+    case latest
     case oldest
     case likes
     case views
@@ -27,7 +27,7 @@ public enum SortType: String, Encodable {
 
     public var title: String {
         switch self {
-        case .lastest:
+        case .latest:
             "최신순"
         case .oldest:
             "과거순"

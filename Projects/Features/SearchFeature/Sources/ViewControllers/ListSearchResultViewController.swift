@@ -93,7 +93,7 @@ extension ListSearchResultViewController {
                 guard let self else { return }
 
                 supplementaryView.delegate = self
-                supplementaryView.update(sortType: .lastest)
+                supplementaryView.update(sortType: .latest)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
