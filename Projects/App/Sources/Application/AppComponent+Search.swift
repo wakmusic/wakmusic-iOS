@@ -43,13 +43,13 @@ extension AppComponent {
         }
     }
 
-    var fetchSearchSongsUseCaseImpl: any FetchSearchSongsUseCase {
+    var fetchSearchSongsUseCase: any FetchSearchSongsUseCase {
         shared {
             FetchSearchSongsUseCaseImpl(searchRepository: searchRepository)
         }
     }
 
-    var fetchSearcPlaylistsUseCaseImpl: any FetchSearchPlaylistsUseCase {
+    var fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
         shared {
             FetchSearchPlaylistsUseCaseImpl(searchRepository: searchRepository)
         }

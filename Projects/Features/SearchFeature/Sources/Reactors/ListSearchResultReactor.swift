@@ -21,8 +21,9 @@ final class ListSearchResultReactor: Reactor {
 
     var initialState: State
     private let text: String
+    private let fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase
 
-    init(_ text: String) {
+    init(text: String, fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
             isLoading: false,
             sortType: .lastest,
@@ -30,6 +31,7 @@ final class ListSearchResultReactor: Reactor {
         )
 
         self.text = text
+        self.fetchSearcPlaylistsUseCase = fetchSearcPlaylistsUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

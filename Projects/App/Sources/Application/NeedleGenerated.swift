@@ -612,6 +612,32 @@ private class WakmusicRecommendDependency7d2e1de16b5802ae90ceProvider: WakmusicR
 private func factoryaf1c3535530356714983f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return WakmusicRecommendDependency7d2e1de16b5802ae90ceProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class ListSearchResultDependencyd64afa403e14dc980d2fProvider: ListSearchResultDependency {
+    var fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
+        return appComponent.fetchSearcPlaylistsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ListSearchResultComponent
+private func factory2c8e2a50d1fcf9efc9f8f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ListSearchResultDependencyd64afa403e14dc980d2fProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class SongSearchResultDependency7224c47222c188cd3de5Provider: SongSearchResultDependency {
+    var fetchSearchSongsUseCase: any FetchSearchSongsUseCase {
+        return appComponent.fetchSearchSongsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SongSearchResultComponent
+private func factory182af2382ca6172f89c1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SongSearchResultDependency7224c47222c188cd3de5Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class SearchDependencya86903a2c751a4f762e8Provider: SearchDependency {
     var beforeSearchComponent: BeforeSearchComponent {
         return appComponent.beforeSearchComponent
@@ -1234,12 +1260,12 @@ extension WakmusicRecommendComponent: Registration {
 }
 extension ListSearchResultComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\ListSearchResultDependency.fetchSearcPlaylistsUseCase] = "fetchSearcPlaylistsUseCase-any FetchSearchPlaylistsUseCase"
     }
 }
 extension SongSearchResultComponent: Registration {
     public func registerItems() {
-
+        keyPathToName[\SongSearchResultDependency.fetchSearchSongsUseCase] = "fetchSearchSongsUseCase-any FetchSearchSongsUseCase"
     }
 }
 extension SearchComponent: Registration {
@@ -1416,8 +1442,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->NewSongsContentComponent", factorye130e1fbfcbc622a4c38f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AfterSearchComponent", factoryeb2da679e35e2c4fb9a5f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->WakmusicRecommendComponent", factoryaf1c3535530356714983f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ListSearchResultComponent", factoryEmptyDependencyProvider)
-    registerProviderFactory("^->AppComponent->SongSearchResultComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->ListSearchResultComponent", factory2c8e2a50d1fcf9efc9f8f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SongSearchResultComponent", factory182af2382ca6172f89c1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SearchComponent", factorye3d049458b2ccbbcb3b6f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BeforeSearchComponent", factory9bb852337d5550979293f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ContainSongsComponent", factory4d4f4455414271fee232f47b58f8f304c97af4d5)

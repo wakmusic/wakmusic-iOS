@@ -25,9 +25,11 @@ final class SongSearchResultReactor: Reactor {
     }
 
     var initialState: State
+    
+    private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
 
-    init(_ text: String) {
+    init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         LogManager.printDebug("\(Self.self) init with Text :\(text)")
 
         self.initialState = State(
@@ -37,8 +39,9 @@ final class SongSearchResultReactor: Reactor {
             selectedCount: 0,
             scrollPage: 0
         )
-
+        
         self.text = text
+        self.fetchSearchSongsUseCase = fetchSearchSongsUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
