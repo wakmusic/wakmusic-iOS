@@ -40,7 +40,7 @@ public extension SingleSongResponseDTO {
             views: views,
             last: 0,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
-            karaokeNumber: .init(TJ: karaokeNumber?.TJ ?? 0, KY: karaokeNumber?.KY ?? 0)
+            karaokeNumber: karaokeNumber == nil ? nil : .init(TJ: karaokeNumber?.TJ ?? 0, KY: karaokeNumber?.KY ?? 0)
         )
     }
 }
