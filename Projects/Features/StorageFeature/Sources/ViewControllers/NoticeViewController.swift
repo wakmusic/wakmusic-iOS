@@ -14,20 +14,23 @@ import RxSwift
 import UIKit
 import Utility
 
-public class NoticeViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class NoticeViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var viewModel: NoticeViewModel!
-    var noticeDetailComponent: NoticeDetailComponent!
-    var disposeBag = DisposeBag()
+    private var noticeDetailComponent: NoticeDetailComponent!
+    private var viewModel: NoticeViewModel!
+    private lazy var input = NoticeViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag = DisposeBag()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     public static func viewController(
@@ -46,18 +49,27 @@ public class NoticeViewController: UIViewController, ViewControllerFromStoryBoar
 }
 
 private extension NoticeViewController {
-    func bind() {
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+    func inputBind() {
+        input.fetchNotice.onNext(())
 
-        viewModel.output.dataSource
+        tableView.rx.itemSelected
+            .do(onNext: { [tableView] indexPath in
+                tableView?.deselectRow(at: indexPath, animated: true)
+            })
+            .bind(to: input.didTapList)
+            .disposed(by: disposeBag)
+    }
+
+    func outputBind() {
+        output.dataSource
             .skip(1)
-            .do(onNext: { [weak self] model in
-                self?.indicator.stopAnimating()
+            .do(onNext: { [indicator, tableView] model in
+                indicator?.stopAnimating()
                 let space = APP_HEIGHT() - 48 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
                 let height = space / 3 * 2
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "공지사항이 없습니다."
-                self?.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(
+                tableView?.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(
                     x: 0,
                     y: 0,
                     width: APP_WIDTH(),
@@ -77,23 +89,23 @@ private extension NoticeViewController {
             }
             .disposed(by: disposeBag)
 
-        tableView.rx.itemSelected
-            .withLatestFrom(viewModel.output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] indexPath, model in
-                guard let self = self else { return }
-                self.tableView.deselectRow(at: indexPath, animated: true)
-                let viewController = self.noticeDetailComponent.makeView(model: model[indexPath.row])
+        output.goNoticeDetailScene
+            .bind(with: self) { owner, model in
+                let viewController = owner.noticeDetailComponent.makeView(model: model)
                 viewController.modalPresentationStyle = .overFullScreen
-                self.present(viewController, animated: true)
-            })
+                owner.present(viewController, animated: true)
+            }
             .disposed(by: disposeBag)
     }
 
     func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
+        tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [
@@ -102,10 +114,11 @@ private extension NoticeViewController {
                 .kern: -0.5
             ]
         )
-        self.titleStringLabel.attributedText = attributedString
-        self.indicator.type = .circleStrokeSpin
-        self.indicator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.indicator.startAnimating()
+        titleStringLabel.attributedText = attributedString
+
+        indicator.type = .circleStrokeSpin
+        indicator.color = DesignSystemAsset.PrimaryColor.point.color
+        indicator.startAnimating()
     }
 }
 

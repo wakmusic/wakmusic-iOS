@@ -10,7 +10,7 @@ import NoticeDomainInterface
 import UIKit
 import Utility
 
-public class NoticeCollectionViewCell: UICollectionViewCell {
+public final class NoticeCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var contentImageView: UIImageView!
 
     override public func awakeFromNib() {
