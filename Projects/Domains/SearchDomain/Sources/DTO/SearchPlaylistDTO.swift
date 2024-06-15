@@ -32,7 +32,7 @@ public extension SearchPlaylistDTO {
             userName: userName,
             image: imageUrl,
             count: songCount,
-            private: self.`private`
+            isPrivate: self.`private`
         )
     }
 }

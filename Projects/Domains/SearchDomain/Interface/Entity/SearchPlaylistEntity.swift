@@ -7,7 +7,7 @@ public struct SearchPlaylistEntity: Equatable {
         userName: String,
         image: String,
         count: Int,
-        `private`: Bool
+        isPrivate: Bool
 
     ) {
         self.key = key
@@ -15,10 +15,10 @@ public struct SearchPlaylistEntity: Equatable {
         self.userName = userName
         self.image = image
         self.count = count
-        self.private = `private`
+        self.isPrivate = isPrivate
     }
 
     public let key, title, userName, image: String
     public let count: Int
-    public let `private`: Bool
+    public let isPrivate: Bool
 }
