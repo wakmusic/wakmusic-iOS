@@ -34,22 +34,26 @@ extension SearchAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case let .fetchPlaylists(order: order, text: text, page: page, limit: limit):
-            return .requestParameters(parameters: [
-                "order": order.rawValue,
-                "query": text,
-                "page": page,
-                "limit": limit
-            ], encoding: URLEncoding.queryString
+            return .requestParameters(
+                parameters: [
+                    "order": order.rawValue,
+                    "query": text,
+                    "page": page,
+                    "limit": limit
+                ],
+                encoding: URLEncoding.queryString
             )
 
         case let .fetchSongs(order: order, filter: filter, text: text, page: page, limit: limit):
-            return .requestParameters(parameters: [
-                "order": order.rawValue,
-                "filter": filter.rawValue,
-                "query": text,
-                "page": page,
-                "limit": limit
-            ], encoding: URLEncoding.queryString
+            return .requestParameters(
+                parameters: [
+                    "order": order.rawValue,
+                    "filter": filter.rawValue,
+                    "query": text,
+                    "page": page,
+                    "limit": limit
+                ],
+                encoding: URLEncoding.queryString
             )
         }
     }

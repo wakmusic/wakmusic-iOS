@@ -27,7 +27,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     override func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        //initDataSource()
+        // initDataSource()
     }
 
     override func bind(reactor: SongSearchResultReactor) {
@@ -36,39 +36,35 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func bindAction(reactor: SongSearchResultReactor) {
         super.bindAction(reactor: reactor)
-        
     }
 
     override func bindState(reactor: SongSearchResultReactor) {
         super.bindState(reactor: reactor)
-        
+
         let sharedState = reactor.state.share()
-        
+
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
                 snapshot.appendSections([.song])
 
-
                 snapshot.appendItems(dataSource, toSection: .song)
 
                 self.dataSource.apply(snapshot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isLoading)
             .bind(with: self) { owner, isLoading in
-                
+
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
                 }
-                
             }
             .disposed(by: disposeBag)
-
     }
 
     override func addView() {
@@ -141,7 +137,6 @@ extension SongSearchResultViewController {
 
         return dataSource
     }
-
 
     public func scrollToTop() {}
 }

@@ -51,19 +51,16 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        
         let state = self.currentState
-        
+
         switch action {
-            
         case .viewDidLoad:
-            return updateDataSource(order: state.sortType , filter: state.filterType, text: self.text, scrollPage: 1    )
+            return updateDataSource(order: state.sortType, filter: state.filterType, text: self.text, scrollPage: 1)
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
             return updateFilterType(type)
         }
-        
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -79,7 +76,7 @@ final class SongSearchResultReactor: Reactor {
 
         case let .updateSelectedCount(count):
             break
-            
+
         case let .updateLoadingState(flag):
             newState.isLoading = flag
         }
@@ -96,10 +93,13 @@ extension SongSearchResultReactor {
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
         return .just(.updateFilterType(type))
     }
-    
-    
-    private func updateDataSource(order: SortType, filter: FilterType, text: String, scrollPage: Int) -> Observable<Mutation> {
-        
+
+    private func updateDataSource(
+        order: SortType,
+        filter: FilterType,
+        text: String,
+        scrollPage: Int
+    ) -> Observable<Mutation> {
         return .concat([
             .just(Mutation.updateLoadingState(true)),
             fetchSearchSongsUseCase
@@ -110,6 +110,5 @@ extension SongSearchResultReactor {
                 },
             .just(Mutation.updateLoadingState(false))
         ])
-        
     }
 }
