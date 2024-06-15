@@ -25,7 +25,7 @@ final class SongSearchResultReactor: Reactor {
     }
 
     var initialState: State
-    
+
     private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
 
@@ -39,7 +39,7 @@ final class SongSearchResultReactor: Reactor {
             selectedCount: 0,
             scrollPage: 0
         )
-        
+
         self.text = text
         self.fetchSearchSongsUseCase = fetchSearchSongsUseCase
     }
