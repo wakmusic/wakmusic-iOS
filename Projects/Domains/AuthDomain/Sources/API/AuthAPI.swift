@@ -7,7 +7,7 @@ import Moya
 public enum AuthAPI {
     case fetchToken(providerType: ProviderType, token: String)
     case reGenerateAccessToken
-    
+
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
 }
 
@@ -21,11 +21,10 @@ extension AuthAPI: WMAPI {
         switch self {
         case .fetchToken:
             return URL(string: BASE_URL())!
-        
+
         case .reGenerateAccessToken:
             return URL(string: BASE_URL())!
-            
-        
+
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }

@@ -9,7 +9,7 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map(AuthLoginResponseDTO.self)
             .map { $0.toDomain() }
     }
-    
+
     public func reGenerateAccessToken() -> Single<AuthLoginEntity> {
         request(.reGenerateAccessToken)
             .map(AuthLoginResponseDTO.self)
