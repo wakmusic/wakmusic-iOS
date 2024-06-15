@@ -49,7 +49,7 @@ extension AppComponent {
         }
     }
 
-    var fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
+    var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
         shared {
             FetchSearchPlaylistsUseCaseImpl(searchRepository: searchRepository)
         }

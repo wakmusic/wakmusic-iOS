@@ -7,7 +7,7 @@ import SearchFeatureInterface
 import UIKit
 
 public protocol ListSearchResultDependency: Dependency {
-    var fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase { get }
+    var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase { get }
 }
 
 public final class ListSearchResultComponent: Component<ListSearchResultDependency>, ListSearchResultFactory {
@@ -15,7 +15,7 @@ public final class ListSearchResultComponent: Component<ListSearchResultDependen
         ListSearchResultViewController(
             reactor: ListSearchResultReactor(
                 text: text,
-                fetchSearcPlaylistsUseCase: dependency.fetchSearcPlaylistsUseCase
+                fetchSearchPlaylistsUseCase: dependency.fetchSearchPlaylistsUseCase
             )
         )
     }

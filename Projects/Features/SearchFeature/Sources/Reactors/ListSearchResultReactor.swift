@@ -11,27 +11,31 @@ final class ListSearchResultReactor: Reactor {
 
     enum Mutation {
         case updateSortType(SortType)
+        case updateDataSource([SearchPlaylistEntity])
+        case updateLoadingState(Bool)
     }
 
     struct State {
         var isLoading: Bool
         var sortType: SortType
         var scrollPage: Int
+        var dataSource: [SearchPlaylistEntity]
     }
 
     var initialState: State
     private let text: String
-    private let fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase
+    private let fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase
 
-    init(text: String, fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
+    init(text: String, fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
             isLoading: false,
             sortType: .latest,
-            scrollPage: 1
+            scrollPage: 1,
+            dataSource: []
         )
 
         self.text = text
-        self.fetchSearcPlaylistsUseCase = fetchSearcPlaylistsUseCase
+        self.fetchSearchPlaylistsUseCase = fetchSearchPlaylistsUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -49,6 +53,11 @@ final class ListSearchResultReactor: Reactor {
         switch mutation {
         case let .updateSortType(type):
             newState.sortType = type
+        case let .updateDataSource(dataSource):
+            newState.dataSource = dataSource
+        case let .updateLoadingState(isLoading):
+            newState.isLoading = isLoading
+            break
         }
 
         return newState
@@ -59,5 +68,22 @@ extension ListSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
         #warning("데이터 소스 가져오기")
         return .just(.updateSortType(type))
+    }
+    
+    private func updateDataSource(
+        order: SortType,
+        text: String,
+        scrollPage: Int
+    ) -> Observable<Mutation> {
+        return .concat([
+            .just(Mutation.updateLoadingState(true)),
+            fetchSearchPlaylistsUseCase
+                .execute(order: order,text: text, page: scrollPage, limit: 20)
+                .asObservable()
+                .map { dataSource -> Mutation in
+                    return Mutation.updateDataSource(dataSource)
+                },
+            .just(Mutation.updateLoadingState(false))
+        ])
     }
 }

@@ -613,8 +613,8 @@ private func factoryaf1c3535530356714983f47b58f8f304c97af4d5(_ component: Needle
     return WakmusicRecommendDependency7d2e1de16b5802ae90ceProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class ListSearchResultDependencyd64afa403e14dc980d2fProvider: ListSearchResultDependency {
-    var fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
-        return appComponent.fetchSearcPlaylistsUseCase
+    var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase {
+        return appComponent.fetchSearchPlaylistsUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -1260,7 +1260,7 @@ extension WakmusicRecommendComponent: Registration {
 }
 extension ListSearchResultComponent: Registration {
     public func registerItems() {
-        keyPathToName[\ListSearchResultDependency.fetchSearcPlaylistsUseCase] = "fetchSearcPlaylistsUseCase-any FetchSearchPlaylistsUseCase"
+        keyPathToName[\ListSearchResultDependency.fetchSearchPlaylistsUseCase] = "fetchSearchPlaylistsUseCase-any FetchSearchPlaylistsUseCase"
     }
 }
 extension SongSearchResultComponent: Registration {
