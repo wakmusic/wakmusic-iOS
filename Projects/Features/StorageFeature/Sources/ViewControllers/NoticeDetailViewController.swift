@@ -77,9 +77,9 @@ private extension NoticeDetailViewController {
             .disposed(by: disposeBag)
 
         output.goSafariScene
-            .bind(with: self) { owner, link in
-                guard let URL = URL(string: link) else { return }
-                owner.present(SFSafariViewController(url: URL), animated: true)
+            .compactMap { URL(string: $0)
+            .bind(with: self) { owner, url in
+                owner.present(SFSafariViewController(url: url), animated: true)
             }
             .disposed(by: disposeBag)
     }
