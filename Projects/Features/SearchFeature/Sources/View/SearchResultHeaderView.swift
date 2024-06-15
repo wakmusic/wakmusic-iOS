@@ -3,6 +3,7 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import SearchDomainInterface
 
 protocol SearchResultHeaderViewDelegate: AnyObject {
     func tapFilter()

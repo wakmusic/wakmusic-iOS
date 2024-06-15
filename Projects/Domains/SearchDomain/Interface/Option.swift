@@ -1,12 +1,10 @@
-import Foundation
-
-enum FilterType {
+public enum FilterType: String, Encodable {
     case all
     case title
     case artist
     case credit
 
-    var title: String {
+    public var title: String {
         switch self {
         case .all:
             "전체"
@@ -20,16 +18,16 @@ enum FilterType {
     }
 }
 
-enum SortType {
-    case newest
+public enum SortType: String, Encodable {
+    case lastest
     case oldest
     case likes
     case views
-    case alphabeticalOrder
+    case alphabetical
 
-    var title: String {
+    public var title: String {
         switch self {
-        case .newest:
+        case .lastest:
             "최신순"
         case .oldest:
             "과거순"
@@ -37,7 +35,7 @@ enum SortType {
             "좋아요순"
         case .views:
             "조회수순"
-        case .alphabeticalOrder:
+        case .alphabetical:
             "가나다순"
         }
     }

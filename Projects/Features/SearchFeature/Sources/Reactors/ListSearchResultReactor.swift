@@ -1,4 +1,5 @@
 import ReactorKit
+import SearchDomainInterface
 
 final class ListSearchResultReactor: Reactor {
     #warning("유즈케이스는 추후 연결")
@@ -24,7 +25,7 @@ final class ListSearchResultReactor: Reactor {
     init(_ text: String) {
         self.initialState = State(
             isLoading: false,
-            sortType: .newest,
+            sortType: .lastest,
             scrollPage: 0
         )
 

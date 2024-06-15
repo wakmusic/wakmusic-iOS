@@ -8,6 +8,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import SearchDomainInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
@@ -85,7 +86,7 @@ extension SongSearchResultViewController {
                 guard let self else { return }
 
                 supplementaryView.delegate = self
-                supplementaryView.update(sortType: .newest, filterType: .all)
+                supplementaryView.update(sortType: .lastest, filterType: .all)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<

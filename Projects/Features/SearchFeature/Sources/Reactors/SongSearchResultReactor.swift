@@ -1,5 +1,6 @@
 import LogManager
 import ReactorKit
+import SearchDomainInterface
 
 final class SongSearchResultReactor: Reactor {
     #warning("유즈케이스는 추후 연결")
@@ -31,7 +32,7 @@ final class SongSearchResultReactor: Reactor {
 
         self.initialState = State(
             isLoading: false,
-            sortType: .newest,
+            sortType: .lastest,
             filterType: .all,
             selectedCount: 0,
             scrollPage: 0
