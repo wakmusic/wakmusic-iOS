@@ -58,6 +58,8 @@
 	<string>[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다.</string>
 	<key>Secrets</key>
 	<dict>
+		<key>WMDOMAIN_SEARCH</key>
+		<string>$(WMDOMAIN_SEARCH)</string>
 		<key>BASE_IMAGE_URL</key>
 		<string>$(BASE_IMAGE_URL)</string>
 		<key>BASE_DEV_URL</key>

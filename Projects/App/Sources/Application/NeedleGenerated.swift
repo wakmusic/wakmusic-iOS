@@ -951,8 +951,10 @@ extension AppComponent: Registration {
         localTable["fetchLikeNumOfSongUseCase-any FetchLikeNumOfSongUseCase"] = { [unowned self] in self.fetchLikeNumOfSongUseCase as Any }
         localTable["addLikeSongUseCase-any AddLikeSongUseCase"] = { [unowned self] in self.addLikeSongUseCase as Any }
         localTable["cancelLikeSongUseCase-any CancelLikeSongUseCase"] = { [unowned self] in self.cancelLikeSongUseCase as Any }
+        localTable["playlistPresenterGlobalState-PlayListPresenterGlobalStateProtocol"] = { [unowned self] in self.playlistPresenterGlobalState as Any }
         localTable["playlistDetailFactory-any PlaylistDetailFactory"] = { [unowned self] in self.playlistDetailFactory as Any }
         localTable["myPlayListComponent-MyPlayListComponent"] = { [unowned self] in self.myPlayListComponent as Any }
+        localTable["playlistFactory-any PlaylistFactory"] = { [unowned self] in self.playlistFactory as Any }
         localTable["remotePlayListDataSource-any RemotePlayListDataSource"] = { [unowned self] in self.remotePlayListDataSource as Any }
         localTable["playListRepository-any PlayListRepository"] = { [unowned self] in self.playListRepository as Any }
         localTable["fetchRecommendPlayListUseCase-any FetchRecommendPlayListUseCase"] = { [unowned self] in self.fetchRecommendPlayListUseCase as Any }
@@ -990,7 +992,7 @@ extension AppComponent: Registration {
         localTable["bottomTabBarComponent-BottomTabBarComponent"] = { [unowned self] in self.bottomTabBarComponent as Any }
         localTable["mainTabBarComponent-MainTabBarComponent"] = { [unowned self] in self.mainTabBarComponent as Any }
         localTable["playerComponent-PlayerComponent"] = { [unowned self] in self.playerComponent as Any }
-        localTable["playlistComponent-PlaylistComponent"] = { [unowned self] in self.playlistComponent as Any }
+        localTable["playlistComponent-LegacyPlaylistComponent"] = { [unowned self] in self.playlistComponent as Any }
         localTable["openSourceLicenseComponent-OpenSourceLicenseComponent"] = { [unowned self] in self.openSourceLicenseComponent as Any }
         localTable["serviceInfoComponent-ServiceInfoComponent"] = { [unowned self] in self.serviceInfoComponent as Any }
         localTable["permissionComponent-PermissionComponent"] = { [unowned self] in self.permissionComponent as Any }
