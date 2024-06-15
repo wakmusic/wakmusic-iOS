@@ -68,7 +68,7 @@ extension ListSearchResultReactor {
         #warning("데이터 소스 가져오기")
         return .just(.updateSortType(type))
     }
-    
+
     private func updateDataSource(
         order: SortType,
         text: String,

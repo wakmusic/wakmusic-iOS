@@ -1,9 +1,9 @@
 import DesignSystem
 import Kingfisher
 import LogManager
+import SearchDomainInterface
 import UIKit
 import Utility
-import SearchDomainInterface
 
 final class ListResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {

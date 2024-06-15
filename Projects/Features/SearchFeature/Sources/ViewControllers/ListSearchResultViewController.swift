@@ -3,13 +3,12 @@ import DesignSystem
 import LogManager
 import RxCocoa
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import SearchDomainInterface
-
 
 final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
     var songCartView: SongCartView!
@@ -41,23 +40,22 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func bindState(reactor: ListSearchResultReactor) {
         super.bindState(reactor: reactor)
-        
+
         let sharedState = reactor.state.share()
-        
+
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
-                
+
                 var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
 
                 snapshot.appendSections([.list])
 
                 snapshot.appendItems(dataSource, toSection: .list)
                 owner.dataSource.apply(snapshot, animatingDifferences: false)
-                
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
@@ -69,8 +67,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                 }
             }
             .disposed(by: disposeBag)
-        
-        
     }
 
     override func addView() {
@@ -103,9 +99,10 @@ extension ListSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<ListSearchResultSection, SearchPlaylistEntity> {
-        let cellRegistration = UICollectionView.CellRegistration<ListResultCell, SearchPlaylistEntity> { cell, _, item in
-            cell.update(item)
-        }
+        let cellRegistration = UICollectionView
+            .CellRegistration<ListResultCell, SearchPlaylistEntity> { cell, _, item in
+                cell.update(item)
+            }
 
         // MARK: Header
 
@@ -143,7 +140,6 @@ extension ListSearchResultViewController {
 
         return dataSource
     }
-
 
     public func scrollToTop() {}
 }
