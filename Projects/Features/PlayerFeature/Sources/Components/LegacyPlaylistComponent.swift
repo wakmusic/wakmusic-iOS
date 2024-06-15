@@ -3,11 +3,11 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 
-public protocol PlaylistDependency: Dependency {
+public protocol LegacyPlaylistDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
 }
 
-public final class PlaylistComponent: Component<PlaylistDependency> {
+public final class LegacyPlaylistComponent: Component<LegacyPlaylistDependency> {
     public func makeView() -> PlaylistViewController {
         return PlaylistViewController(
             viewModel: .init(),

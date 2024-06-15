@@ -19,7 +19,6 @@ internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)
 }
 
-@available(*, deprecated, message: "PlaylistTableViewCell moved 'PlaylistFeature'")
 internal class PlaylistTableViewCell: UITableViewCell {
     static let identifier = "PlaylistTableViewCell"
 

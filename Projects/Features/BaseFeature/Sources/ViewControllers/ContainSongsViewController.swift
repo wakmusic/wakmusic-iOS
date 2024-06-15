@@ -116,7 +116,6 @@ extension ContainSongsViewController {
                 owner.showToast(text: error.localizedDescription, font: toastFont)
                 NotificationCenter.default.post(name: .movedTab, object: 4)
 
-                PlayState.shared.switchPlayerMode(to: .mini)
                 owner.dismiss(animated: true) {
                     owner.delegate?.tokenExpired()
                 }
@@ -184,7 +183,6 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
 
 extension ContainSongsViewController: MultiPurposePopupViewDelegate {
     public func didTokenExpired() {
-        PlayState.shared.switchPlayerMode(to: .mini)
         self.dismiss(animated: true) { [weak self] in
 
             guard let self else { return }

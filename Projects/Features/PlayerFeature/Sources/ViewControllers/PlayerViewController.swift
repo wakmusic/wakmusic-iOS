@@ -20,6 +20,7 @@ import UIKit
 import Utility
 import YouTubePlayerKit
 
+@available(*, deprecated, message: "Player는 더이상 사용되지 않습니다. 미래에 삭제될 객체입니다.")
 public class PlayerViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private var subscription = Set<AnyCancellable>()
@@ -33,12 +34,12 @@ public class PlayerViewController: UIViewController {
     }
 
     private let logoutHandlerSubject = PassthroughSubject<Void, Never>()
-    internal var playlistComponent: PlaylistComponent!
+    internal var playlistComponent: LegacyPlaylistComponent!
     internal var containSongsFactory: ContainSongsFactory!
 
     init(
         viewModel: PlayerViewModel,
-        playlistComponent: PlaylistComponent,
+        playlistComponent: LegacyPlaylistComponent,
         containSongsFactory: ContainSongsFactory
     ) {
         self.viewModel = viewModel
@@ -173,7 +174,6 @@ private extension PlayerViewController {
                     cancelButtonIsHidden: true,
                     completion: {
                         self?.logoutHandlerSubject.send(())
-                        self?.playState.switchPlayerMode(to: .mini)
                     }
                 )
             )
@@ -381,7 +381,6 @@ private extension PlayerViewController {
                 cancelButtonIsHidden: false,
                 completion: {
                     NotificationCenter.default.post(name: .movedTab, object: 4) // 보관함 탭으로 이동
-                    self?.playState.switchPlayerMode(to: .mini)
                 },
                 cancelCompletion: {}
             ))

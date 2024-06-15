@@ -18,6 +18,7 @@ import UserDomainInterface
 import Utility
 import YouTubePlayerKit
 
+@available(*, deprecated, message: "Player는 Deprecated되었습니다. 차후 미래에 삭제될 예정입니다.")
 final class PlayerViewModel: ViewModelType {
     struct Input {
         let viewWillAppearEvent: Observable<Void>
@@ -122,14 +123,6 @@ final class PlayerViewModel: ViewModelType {
             } else {
                 self.playState.play()
             }
-        }.store(in: &subscription)
-
-        input.closeButtonDidTapEvent.sink { [weak self] _ in
-            self?.playState.switchPlayerMode(to: .mini)
-        }.store(in: &subscription)
-
-        input.miniExtendButtonDidTapEvent.sink { [weak self] _ in
-            self?.playState.switchPlayerMode(to: .full)
         }.store(in: &subscription)
 
         input.repeatButtonDidTapEvent.sink { [weak self] _ in

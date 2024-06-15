@@ -19,7 +19,7 @@ public enum PlayListCellDelegateConstant {
     case playTapped(song: SongEntity)
 }
 
-class PlayListTableViewCell: UITableViewCell {
+class PlayListDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playButtonTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
@@ -48,7 +48,7 @@ class PlayListTableViewCell: UITableViewCell {
     }
 }
 
-extension PlayListTableViewCell {
+extension PlayListDetailTableViewCell {
     func update(_ model: SongEntity, _ isEditing: Bool, index: Int) {
         self.passToModel = (index, model)
 
@@ -66,7 +66,7 @@ extension PlayListTableViewCell {
             font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
         )
 
-        self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
         self.superButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
         self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
@@ -80,7 +80,7 @@ extension PlayListTableViewCell {
             string: text,
             attributes: [
                 .font: font,
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
                 .kern: -0.5
             ]
         )

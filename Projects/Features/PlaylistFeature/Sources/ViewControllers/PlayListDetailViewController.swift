@@ -309,7 +309,7 @@ extension PlayListDetailViewController {
                     guard let cell = tableView.dequeueReusableCell(
                         withIdentifier: "PlayListTableViewCell",
                         for: IndexPath(row: indexPath.row, section: 0)
-                    ) as? PlayListTableViewCell else {
+                    ) as? PlayListDetailTableViewCell else {
                         return UITableViewCell()
                     }
                     cell.update(model, isEditing, index: indexPath.row)
