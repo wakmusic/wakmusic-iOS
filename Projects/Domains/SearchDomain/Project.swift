@@ -6,7 +6,6 @@ let project = Project.module(
     name: ModulePaths.Domain.SearchDomain.rawValue,
     targets: [
         .interface(module: .domain(.SearchDomain), dependencies: [
-        
             .domain(target: .SongsDomain, type: .interface),
             .domain(target: .BaseDomain, type: .interface)
         ]),
