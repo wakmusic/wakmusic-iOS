@@ -10,6 +10,7 @@ import Then
 import UIKit
 import Utility
 
+#warning("오버 스크롤 처리")
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
 
@@ -79,10 +80,10 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                     owner.dataSource.apply(snapshot, animatingDifferences: false)
       
-                    let warningView = WarningV2View(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()), text: "검색결과가 없습니다.")
+                    let warningView = WMWarningView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()), text: "검색결과가 없습니다.")
 
                     if dataSource.isEmpty {
-                        owner.collectionView.setBackgroundView(warningView)
+                        owner.collectionView.setBackgroundView(warningView, 100)
                     } else {
                         owner.collectionView.restore()
                     }
