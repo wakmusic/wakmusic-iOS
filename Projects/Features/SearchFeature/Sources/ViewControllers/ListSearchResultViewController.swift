@@ -18,6 +18,10 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
+    
+    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
+        $0.delegate = self
+    }
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         ListSearchResultSection,
@@ -59,6 +63,14 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
+        sharedState.map {$0.sortType}
+            .bind(with: self) { owner, sortType in
+                
+                owner.headerView.update(sortType: sortType)
+                
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
             .bind(with: self) { owner, info in
@@ -94,14 +106,20 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(collectionView)
+        self.view.addSubviews(headerView, collectionView)
     }
 
     override func setLayout() {
         super.setLayout()
+      
+        headerView.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalToSuperview().offset(56)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(56)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
@@ -127,20 +145,6 @@ extension ListSearchResultViewController {
                 cell.update(item)
             }
 
-        // MARK: Header
-
-        let headerRegistration = UICollectionView
-            .SupplementaryRegistration<SearchResultHeaderView>(
-                elementKind: SearchResultHeaderView
-                    .kind
-            ) { [weak self] supplementaryView, string, indexPath in
-
-                guard let self else { return }
-
-                supplementaryView.delegate = self
-                supplementaryView.update(sortType: .latest)
-            }
-
         let dataSource = UICollectionViewDiffableDataSource<
             ListSearchResultSection,
             SearchPlaylistEntity
@@ -155,10 +159,6 @@ extension ListSearchResultViewController {
                 for: indexPath,
                 item: item
             )
-        }
-
-        dataSource.supplementaryViewProvider = { collectionView, _, index in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
         return dataSource

@@ -19,6 +19,11 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
+    
+    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
+        $0.delegate = self
+    }
+
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         SongSearchResultSection,
@@ -27,6 +32,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
 
@@ -59,6 +65,16 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
+        sharedState.map {($0.sortType, $0.filterType)}
+            .bind(with: self) { owner, info in
+                
+                let (sortType, filterType) = (info.0, info.1)
+                
+                owner.headerView.update(sortType: sortType, filterType: filterType)
+                
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
             .bind(with: self) { owner, info in
@@ -95,14 +111,20 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(collectionView)
+        self.view.addSubviews(headerView, collectionView)
     }
 
     override func setLayout() {
         super.setLayout()
+        
+        headerView.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalToSuperview().offset(56)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(56)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
@@ -127,19 +149,6 @@ extension SongSearchResultViewController {
             cell.update(item)
         }
 
-        // MARK: Header
-
-        let headerRegistration = UICollectionView
-            .SupplementaryRegistration<SearchResultHeaderView>(
-                elementKind: SearchResultHeaderView
-                    .kind
-            ) { [weak self] supplementaryView, _, _ in
-
-                guard let self else { return }
-
-                supplementaryView.delegate = self
-                supplementaryView.update(sortType: .latest, filterType: .all)
-            }
 
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
@@ -155,10 +164,6 @@ extension SongSearchResultViewController {
                 for: indexPath,
                 item: item
             )
-        }
-
-        dataSource.supplementaryViewProvider = { collectionView, _, index in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
         return dataSource

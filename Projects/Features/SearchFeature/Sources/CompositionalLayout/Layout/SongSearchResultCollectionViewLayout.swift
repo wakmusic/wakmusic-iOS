@@ -21,15 +21,7 @@ extension SongSearchResultCollectionViewLayout {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
-
-        let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
-
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerLayout,
-            elementKind: SearchResultHeaderView.kind,
-            alignment: .top
-        )
-
+        
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -39,9 +31,6 @@ extension SongSearchResultCollectionViewLayout {
 
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 20.0, bottom: 20.0, trailing: 20.0)
-        header.pinToVisibleBounds = true
-        header.zIndex = 2
-        section.boundarySupplementaryItems = [header]
 
         return section
     }

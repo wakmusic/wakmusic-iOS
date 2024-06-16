@@ -12,6 +12,7 @@ import SnapKit
 import UIKit
 import Utility
 
+#warning("비어있을 때 검색 방지")
 internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {
     private enum Font {
