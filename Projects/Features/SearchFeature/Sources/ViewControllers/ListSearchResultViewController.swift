@@ -60,8 +60,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
-
-        
         sharedState.map { ($0.isLoading, $0.dataSource) }
             .bind(with: self) { owner, info in
 
@@ -92,8 +90,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                 }
             }
             .disposed(by: disposeBag)
-
-    
     }
 
     override func addView() {
