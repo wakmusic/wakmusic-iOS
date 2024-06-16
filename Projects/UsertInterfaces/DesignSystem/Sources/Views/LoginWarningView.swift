@@ -1,6 +1,7 @@
 import SnapKit
 import Then
 import UIKit
+import Utility
 
 public final class LoginWarningView: UIView {
     private let completion: () -> Void
@@ -10,14 +11,13 @@ public final class LoginWarningView: UIView {
         $0.image = DesignSystemAsset.Search.warning.image
     }
 
-    private let label: UILabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        $0.textAlignment = .center
-        $0.backgroundColor = .clear
-        $0.numberOfLines = .zero
-    }
-
+    private let label: WMLabel = WMLabel(
+        text:"",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t6(weight: .medium),
+        kernValue: -0.5
+    )
+    
     private let button: UIButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTitle("로그인", for: .normal)
@@ -31,7 +31,6 @@ public final class LoginWarningView: UIView {
     public init(
         frame: CGRect = CGRect(
             x: .zero,
-
             y: .zero,
             width: 164,
             height: 176
@@ -42,15 +41,19 @@ public final class LoginWarningView: UIView {
         self.completion = completion
         super.init(frame: frame)
 
-        self.addSubview(imageView)
-        self.addSubview(label)
-        self.addSubview(button)
+        addSubviews()
 
         label.text = text
 
-        configureUI()
+        setLayout()
 
-        button.addTarget(self, action: #selector(tapLoginButton), for: .touchUpInside)
+        
+        button.addAction { [weak self] _ in
+            
+            guard let self else { return }
+            self.completion()
+        }
+        
     }
 
     @available(*, unavailable)
@@ -60,7 +63,14 @@ public final class LoginWarningView: UIView {
 }
 
 extension LoginWarningView {
-    private func configureUI() {
+    
+    private func addSubviews() {
+        self.addSubview(imageView)
+        self.addSubview(label)
+        self.addSubview(button)
+    }
+    
+    private func setLayout() {
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(80)
             $0.top.equalToSuperview()
@@ -81,7 +91,4 @@ extension LoginWarningView {
         }
     }
 
-    @objc func tapLoginButton() {
-        completion()
-    }
 }
