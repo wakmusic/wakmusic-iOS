@@ -29,7 +29,7 @@ extension NoticeAPI: WMAPI {
     public var urlPath: String {
         switch self {
         case let .fetchNotice(type):
-            return type.addPathString
+            return "/\(type.rawValue)"
         case .fetchNoticeCategories:
             return "/categories"
         }

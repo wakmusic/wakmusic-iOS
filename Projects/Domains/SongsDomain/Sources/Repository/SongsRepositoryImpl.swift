@@ -10,11 +10,15 @@ public final class SongsRepositoryImpl: SongsRepository {
         self.remoteSongsDataSource = remoteSongsDataSource
     }
 
+    public func fetchSong(id: String) -> Single<SongEntity> {
+        remoteSongsDataSource.fetchSong(id: id)
+    }
+
     public func fetchLyrics(id: String) -> Single<[LyricsEntity]> {
         remoteSongsDataSource.fetchLyrics(id: id)
     }
 
-    public func fetchSongCredits(id: String) -> Single<SongCreditsEntity> {
+    public func fetchSongCredits(id: String) -> Single<[SongCreditsEntity]> {
         remoteSongsDataSource.fetchSongCredits(id: id)
     }
 

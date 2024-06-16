@@ -1,11 +1,3 @@
-//
-//  FetchArtistListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import Foundation
 import RxSwift
@@ -17,7 +9,7 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
         self.authRepository = authRepository
     }
 
-    public func execute(token: String, type: ProviderType) -> Single<AuthLoginEntity> {
-        authRepository.fetchToken(token: token, type: type)
+    public func execute(providerType: ProviderType, token: String) -> Single<AuthLoginEntity> {
+        authRepository.fetchToken(providerType: providerType, token: token)
     }
 }

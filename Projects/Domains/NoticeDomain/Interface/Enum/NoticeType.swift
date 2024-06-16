@@ -9,15 +9,6 @@
 import Foundation
 
 public enum NoticeType: String {
-    case all
-    case currently
-
-    public var addPathString: String {
-        switch self {
-        case .all:
-            return "/all"
-        case .currently:
-            return ""
-        }
-    }
+    case popup // 공지팝업
+    case all // 전체공지
 }

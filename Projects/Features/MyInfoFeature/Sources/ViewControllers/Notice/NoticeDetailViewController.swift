@@ -13,19 +13,22 @@ import NVActivityIndicatorView
 import RxCocoa
 import RxDataSources
 import RxSwift
+import SafariServices
 import UIKit
 import Utility
 
-typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, String>
+typealias NoticeDetailSectionModel = SectionModel<FetchNoticeEntity, FetchNoticeEntity.Image>
 
-public class NoticeDetailViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class NoticeDetailViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    var viewModel: NoticeDetailViewModel!
-    var disposeBag = DisposeBag()
+    private var viewModel: NoticeDetailViewModel!
+    private lazy var input = NoticeDetailViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
@@ -51,34 +54,47 @@ public class NoticeDetailViewController: UIViewController, ViewControllerFromSto
     }
 }
 
-extension NoticeDetailViewController {
-    private func inputBind() {
-        viewModel.input.fetchNoticeDetail.onNext(())
+private extension NoticeDetailViewController {
+    func inputBind() {
+        input.fetchNoticeDetail.onNext(())
+
+        collectionView.rx.itemSelected
+            .bind(to: input.didTapImage)
+            .disposed(by: disposeBag)
     }
 
-    private func outputBind() {
-        viewModel.output.dataSource
+    func outputBind() {
+        output.dataSource
+            .skip(1)
             .bind(to: collectionView.rx.items(dataSource: createDataSource()))
             .disposed(by: disposeBag)
 
-        viewModel.output.imageSizes
+        output.imageSizes
             .skip(1)
-            .subscribe(onNext: { [weak self] _ in
-                self?.indicator.stopAnimating()
+            .subscribe(onNext: { [indicator] _ in
+                indicator?.stopAnimating()
             })
+            .disposed(by: disposeBag)
+
+        output.goSafariScene
+            .compactMap { URL(string: $0) }
+            .bind(with: self) { owner, url in
+                owner.present(SFSafariViewController(url: url), animated: true)
+            }
             .disposed(by: disposeBag)
     }
 
-    private func createDataSource() -> RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel> {
+    func createDataSource() -> RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel> {
         let dataSource = RxCollectionViewSectionedReloadDataSource<NoticeDetailSectionModel>(
             configureCell: { _, collectionView, indexPath, item -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "NoticeCollectionViewCell",
                     for: indexPath
-                ) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                ) as? NoticeCollectionViewCell else {
+                    return UICollectionViewCell()
+                }
                 cell.update(model: item)
                 return cell
-
             },
             configureSupplementaryView: { dataSource, collectionView, elementKind, indexPath -> UICollectionReusableView in
                 switch elementKind {
@@ -101,15 +117,15 @@ extension NoticeDetailViewController {
         return dataSource
     }
 
-    private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
+    func configureUI() {
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
 
         let attributedString: NSAttributedString = NSAttributedString(
             string: "공지사항",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -134,7 +150,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let imageSize: CGSize = viewModel.output.imageSizes.value[indexPath.row]
+        let imageSize: CGSize = output.imageSizes.value[indexPath.row]
         let width: CGFloat = APP_WIDTH()
         let height: CGFloat = (imageSize.height * width) / max(1.0, imageSize.width)
         return CGSize(width: width, height: height)
@@ -170,7 +186,7 @@ extension NoticeDetailViewController: UICollectionViewDelegate, UICollectionView
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let model: FetchNoticeEntity = viewModel.output.dataSource.value[section].model
+        let model: FetchNoticeEntity = output.dataSource.value[section].model
         return CGSize(width: APP_WIDTH(), height: NoticeDetailHeaderView.getCellHeight(model: model))
     }
 }
