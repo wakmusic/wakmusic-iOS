@@ -13,28 +13,46 @@ import RxCocoa
 import RxSwift
 import Utility
 
-public class NoticePopupViewModel {
-    let input = Input()
-    let output = Output()
-    var disposeBag = DisposeBag()
-    var fetchNoticeEntities: [FetchNoticeEntity]
-
-    public struct Input {}
-
-    public struct Output {
-        var dataSource: BehaviorRelay<[String]> = BehaviorRelay(value: [])
-        var ids: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
-    }
+public final class NoticePopupViewModel {
+    private let disposeBag = DisposeBag()
+    private let noticeEntities: [FetchNoticeEntity]
 
     public init(
-        fetchNoticeEntities: [FetchNoticeEntity]
+        noticeEntities: [FetchNoticeEntity]
     ) {
-        self.fetchNoticeEntities = fetchNoticeEntities
+        self.noticeEntities = noticeEntities
+    }
 
-        let images: [String] = self.fetchNoticeEntities.map { $0.thumbnail ?? "" }.filter { !$0.isEmpty }
-        output.dataSource.accept(images)
+    public struct Input {
+        let fetchFilteredNotice: PublishSubject<Void> = PublishSubject()
+        let didTapPopup: PublishSubject<IndexPath> = PublishSubject()
+    }
 
-        let ids: [Int] = self.fetchNoticeEntities.map { $0.id }
-        output.ids.accept(ids)
+    public struct Output {
+        let originDataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
+        let thumbnailDataSource: BehaviorRelay<[FetchNoticeEntity.Image]> = BehaviorRelay(value: [])
+        let dismissAndCallDelegate: PublishSubject<FetchNoticeEntity> = PublishSubject()
+    }
+
+    public func transform(from input: Input) -> Output {
+        let output = Output()
+        let noticeEntities: [FetchNoticeEntity] = self.noticeEntities
+
+        input.fetchFilteredNotice
+            .bind {
+                output.thumbnailDataSource.accept(
+                    noticeEntities.map { $0.thumbnail }.filter { !$0.url.isEmpty }
+                )
+                output.originDataSource.accept(noticeEntities)
+            }
+            .disposed(by: disposeBag)
+
+        input.didTapPopup
+            .withLatestFrom(output.originDataSource) { ($0, $1) }
+            .map { $0.1[$0.0.item] }
+            .bind(to: output.dismissAndCallDelegate)
+            .disposed(by: disposeBag)
+
+        return output
     }
 }

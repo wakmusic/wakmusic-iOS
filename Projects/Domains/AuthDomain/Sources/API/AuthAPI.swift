@@ -5,40 +5,30 @@ import Foundation
 import Moya
 
 public enum AuthAPI {
-    case fetchToken(token: String, type: ProviderType)
-    case fetchNaverUserInfo(tokenType: String, accessToken: String)
+    case fetchToken(providerType: ProviderType, token: String)
+    case reGenerateAccessToken
 }
 
-public struct AuthRequset: Encodable {
-    var token: String
+private struct FetchTokenRequestParameters: Encodable {
     var provider: String
+    var token: String
 }
 
 extension AuthAPI: WMAPI {
     public var baseURL: URL {
-        switch self {
-        case .fetchToken:
-            return URL(string: BASE_URL())!
-        case .fetchNaverUserInfo:
-            return URL(string: "https://openapi.naver.com")!
-        }
+        return URL(string: BASE_URL())!
     }
 
     public var domain: WMDomain {
-        switch self {
-        case .fetchToken:
-            return .auth
-        case .fetchNaverUserInfo:
-            return .naver
-        }
+        return .auth
     }
 
     public var urlPath: String {
         switch self {
         case .fetchToken:
-            return "/login/mobile"
-        case .fetchNaverUserInfo:
-            return ""
+            return "/app"
+        case .reGenerateAccessToken:
+            return "/token"
         }
     }
 
@@ -46,34 +36,31 @@ extension AuthAPI: WMAPI {
         switch self {
         case .fetchToken:
             return .post
-        case .fetchNaverUserInfo:
-            return .get
+        case .reGenerateAccessToken:
+            return .post
         }
     }
 
     public var headers: [String: String]? {
-        switch self {
-        case let .fetchNaverUserInfo(tokenType, accessToken):
-            return ["Authorization": "\(tokenType) \(accessToken)"]
-        default:
-            return ["Content-Type": "application/json"]
-        }
+        return ["Content-Type": "application/json"]
     }
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchToken(token: id, type: type):
-            return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
-        case .fetchNaverUserInfo:
+        case let .fetchToken(providerType: providerType, token: id):
+            return .requestJSONEncodable(
+                FetchTokenRequestParameters(
+                    provider: providerType.rawValue,
+                    token: id
+                )
+            )
+        case .reGenerateAccessToken:
             return .requestPlain
         }
     }
 
     public var jwtTokenType: JwtTokenType {
-        switch self {
-        default:
-            return .none
-        }
+        return .none
     }
 
     public var errorMap: [Int: WMError] {

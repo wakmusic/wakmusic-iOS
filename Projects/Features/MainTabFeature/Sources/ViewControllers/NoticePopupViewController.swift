@@ -29,8 +29,10 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var confirmButton: UIButton!
 
     public weak var delegate: NoticePopupViewControllerDelegate?
-    var viewModel: NoticePopupViewModel!
-    var disposeBag = DisposeBag()
+    private var viewModel: NoticePopupViewModel!
+    private lazy var input = NoticePopupViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -39,7 +41,8 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     public static func viewController(
@@ -52,7 +55,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
 
     @IBAction func ignoreButtonAction(_ sender: Any) {
         let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
-        let currentNoticeIds: [Int] = viewModel.output.ids.value
+        let currentNoticeIds: [Int] = output.originDataSource.value.map { $0.id }
 
         if savedIgoredNoticeIds.isEmpty {
             Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
@@ -67,41 +70,51 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     }
 }
 
-extension NoticePopupViewController {
-    private func bind() {
-        viewModel.output
-            .dataSource
-            .do(onNext: { [weak self] model in
-                self?.pageCountLabel.text = "1/\(model.count)"
-                self?.pageCountView.isHidden = model.count <= 1
+private extension NoticePopupViewController {
+    func inputBind() {
+        input.fetchFilteredNotice.onNext(())
+
+        collectionView.rx.itemSelected
+            .bind(to: input.didTapPopup)
+            .disposed(by: disposeBag)
+    }
+
+    func outputBind() {
+        output.thumbnailDataSource
+            .filter { !$0.isEmpty }
+            .do(onNext: { [pageCountLabel, pageCountView] model in
+                pageCountLabel?.text = "1/\(model.count)"
+                pageCountView?.isHidden = model.count <= 1
             })
             .bind(to: collectionView.rx.items) { collectionView, row, model -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "NoticeCollectionViewCell",
                     for: IndexPath(row: row, section: 0)
-                ) as? NoticeCollectionViewCell else { return UICollectionViewCell() }
+                ) as? NoticeCollectionViewCell else {
+                    return UICollectionViewCell()
+                }
                 cell.update(model: model)
                 return cell
             }
             .disposed(by: disposeBag)
 
-        collectionView.rx.itemSelected
-            .withUnretained(self)
-            .subscribe(onNext: { owner, indexPath in
+        output.dismissAndCallDelegate
+            .bind(with: self) { owner, entity in
                 owner.dismiss(animated: true) {
-                    owner.delegate?.noticeTapped(model: owner.viewModel.fetchNoticeEntities[indexPath.row])
+                    owner.delegate?.noticeTapped(model: entity)
                 }
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
+    func configureUI() {
         self.view.backgroundColor = .white
 
         let ignoreButtonAttributedString = NSMutableAttributedString.init(string: "다시보지 않기")
         ignoreButtonAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ],
             range: NSRange(
@@ -109,7 +122,7 @@ extension NoticePopupViewController {
                 length: ignoreButtonAttributedString.string.count
             )
         )
-        ignoreButton.backgroundColor = DesignSystemAsset.GrayColor.gray400.color
+        ignoreButton.backgroundColor = DesignSystemAsset.BlueGrayColor.gray400.color
         ignoreButton.layer.cornerRadius = 12
         ignoreButton.setAttributedTitle(ignoreButtonAttributedString, for: .normal)
 
@@ -117,7 +130,7 @@ extension NoticePopupViewController {
         confirmButtonAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ],
             range: NSRange(
@@ -130,11 +143,11 @@ extension NoticePopupViewController {
         confirmButton.setAttributedTitle(confirmButtonAttributedString, for: .normal)
 
         pageCountView.layer.cornerRadius = 12
-        pageCountView.backgroundColor = DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.2)
+        pageCountView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.2)
         pageCountView.clipsToBounds = true
         pageCountView.isHidden = true
 
-        pageCountLabel.textColor = DesignSystemAsset.GrayColor.gray25.color
+        pageCountLabel.textColor = DesignSystemAsset.BlueGrayColor.gray25.color
         pageCountLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 14)
 
         collectionView.register(
@@ -150,7 +163,7 @@ extension NoticePopupViewController {
 extension NoticePopupViewController: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let i = Int(scrollView.contentOffset.x / APP_WIDTH())
-        self.pageCountLabel.text = "\(i + 1)/\(viewModel.output.dataSource.value.count)"
+        pageCountLabel.text = "\(i + 1)/\(output.thumbnailDataSource.value.count)"
     }
 }
 

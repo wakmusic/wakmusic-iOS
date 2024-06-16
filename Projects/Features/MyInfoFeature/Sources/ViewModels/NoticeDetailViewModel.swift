@@ -9,83 +9,83 @@
 import BaseFeature
 import Foundation
 import Kingfisher
+import LogManager
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
 import Utility
 
-public class NoticeDetailViewModel {
-    let input = Input()
-    let output = Output()
-    var disposeBag = DisposeBag()
+public final class NoticeDetailViewModel {
+    private let model: FetchNoticeEntity
+    private let disposeBag = DisposeBag()
 
     deinit {
         DEBUG_LOG("❌ \(Self.self) Deinit")
     }
 
+    public init(model: FetchNoticeEntity) {
+        self.model = model
+    }
+
     public struct Input {
-        var fetchNoticeDetail: PublishSubject<Void> = PublishSubject()
+        let fetchNoticeDetail: PublishSubject<Void> = PublishSubject()
+        let didTapImage: PublishSubject<IndexPath> = PublishSubject()
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
-        var imageSizes: BehaviorRelay<[CGSize]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[NoticeDetailSectionModel]> = BehaviorRelay(value: [])
+        let imageSizes: BehaviorRelay<[CGSize]> = BehaviorRelay(value: [])
+        let goSafariScene: PublishSubject<String> = PublishSubject()
     }
 
-    public init(
-        model: FetchNoticeEntity
-    ) {
-        let sectionModel = [NoticeDetailSectionModel(
-            model: model,
-            items: model.images
-        )]
-
-        let imageURLs: [URL] =
-            model.images.map {
-                WMImageAPI.fetchNotice(id: $0).toURL
-            }
-            .compactMap { $0 }
+    public func transform(from input: Input) -> Output {
+        let output = Output()
+        let sectionModel = [NoticeDetailSectionModel(model: model, items: model.origins)]
+        let imageURLs: [URL] = model.origins.map { URL(string: $0.url) }.compactMap { $0 }
 
         input.fetchNoticeDetail
             .flatMap { [weak self] _ -> Observable<[CGSize]> in
-                guard let self else { return Observable.empty() }
-                return imageURLs.isEmpty ? Observable.just([]) : self.downloadImage(urls: imageURLs)
+                guard let self = self else { return .never() }
+                return Observable.zip(
+                    imageURLs.map { self.downloadImageSize(url: $0) }
+                )
             }
-            .subscribe(onNext: { [weak self] imageSizes in
-                self?.output.imageSizes.accept(imageSizes)
-                self?.output.dataSource.accept(sectionModel)
-            })
+            .bind { imageSizes in
+                output.imageSizes.accept(imageSizes)
+                output.dataSource.accept(sectionModel)
+            }
             .disposed(by: disposeBag)
+
+        input.didTapImage
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { $0.1[$0.0.section].items[$0.0.item] }
+            .filter { !$0.link.isEmpty }
+            .map { $0.link }
+            .bind(to: output.goSafariScene)
+            .disposed(by: disposeBag)
+
+        return output
     }
 }
 
-extension NoticeDetailViewModel {
-    private func downloadImage(urls: [URL]) -> Observable<[CGSize]> {
-        var sizes: [CGSize] = []
-        return Observable.create { observer -> Disposable in
-            urls.forEach {
-                KingfisherManager.shared.retrieveImage(
-                    with: $0,
-                    completionHandler: { result in
-                        switch result {
-                        case let .success(value):
-                            sizes.append(CGSize(width: value.image.size.width, height: value.image.size.height))
-                            if urls.count == sizes.count {
-                                observer.onNext(sizes)
-                                observer.onCompleted()
-                            }
-                        case let .failure(error):
-                            DEBUG_LOG(error.localizedDescription)
-                            sizes.append(.zero)
-                            if urls.count == sizes.count {
-                                observer.onNext(sizes)
-                                observer.onCompleted()
-                            }
-                        }
-                    }
-                )
+private extension NoticeDetailViewModel {
+    func downloadImageSize(url: URL) -> Observable<CGSize> {
+        return Observable.create { observer in
+            KingfisherManager.shared.retrieveImage(
+                with: url
+            ) { result in
+                switch result {
+                case let .success(value):
+                    observer.onNext(value.image.size)
+                    observer.onCompleted()
+
+                case let .failure(error):
+                    LogManager.printDebug(error.localizedDescription)
+                    observer.onNext(.zero)
+                    observer.onCompleted()
+                }
             }
-            return Disposables.create {}
+            return Disposables.create()
         }
     }
 }

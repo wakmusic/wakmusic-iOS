@@ -23,7 +23,6 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     private let disposeBag = DisposeBag()
 
     private var fetchTokenUseCase: FetchTokenUseCase
-    private var fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase
     private var fetchUserInfoUseCase: FetchUserInfoUseCase
 
     let googleLoginManager = GoogleLoginManager.shared
@@ -45,11 +44,9 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
 
     public init(
         fetchTokenUseCase: FetchTokenUseCase,
-        fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCase,
         fetchUserInfoUseCase: FetchUserInfoUseCase
     ) {
         self.fetchTokenUseCase = fetchTokenUseCase
-        self.fetchNaverUserInfoUseCase = fetchNaverUserInfoUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         super.init()
         self.googleLoginManager.googleOAuthLoginDelegate = self
@@ -65,7 +62,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .debug("🚚 oauthToken")
             .filter { !$0.1.isEmpty }
             .flatMap { [fetchTokenUseCase] provider, token in
-                fetchTokenUseCase.execute(token: token, type: provider)
+                fetchTokenUseCase.execute(providerType: provider, token: token)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }
