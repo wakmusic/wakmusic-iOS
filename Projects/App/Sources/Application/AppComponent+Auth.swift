@@ -51,12 +51,6 @@ public extension AppComponent {
         }
     }
 
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
-        shared {
-            FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
-        }
-    }
-
     var logoutUseCase: any LogoutUseCase {
         shared {
             LogoutUseCaseImpl(authRepository: authRepository)

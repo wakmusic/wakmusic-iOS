@@ -15,10 +15,4 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             .map(AuthLoginResponseDTO.self)
             .map { $0.toDomain() }
     }
-
-    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
-        request(.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken))
-            .map(NaverUserInfoResponseDTO.self)
-            .map { $0.toDomain() }
-    }
 }

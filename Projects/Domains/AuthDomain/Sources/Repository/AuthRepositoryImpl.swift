@@ -26,11 +26,7 @@ public final class AuthRepositoryImpl: AuthRepository {
     }
 
     public func reGenerateAccessToken() -> Single<AuthLoginEntity> {
-        remoteAuthDataSource.
-    }
-
-    public func fetchNaverUserInfo(tokenType: String, accessToken: String) -> Single<NaverUserInfoEntity> {
-        remoteAuthDataSource.fetchNaverUserInfo(tokenType: tokenType, accessToken: accessToken)
+        remoteAuthDataSource.reGenerateAccessToken()
     }
 
     public func logout() -> Completable {
