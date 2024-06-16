@@ -9,7 +9,6 @@ final class ListResultCell: UICollectionViewCell {
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.image = DesignSystemAsset.PlayListTheme.theme10.image
         $0.layer.cornerRadius = 4
     }
 
@@ -92,9 +91,9 @@ extension ListResultCell {
     }
 
     public func update(_ model: SearchPlaylistEntity) {
-        #warning("플레이 리스트 이미지")
         titleLabel.text = model.title
         creatorLabel.text = model.userName
         dateLabel.text = model.date
+        thumbnailView.kf.setImage(with:URL(string: model.image),placeholder: nil,options: [.transition(.fade(0.2))])
     }
 }
