@@ -2,17 +2,17 @@ import ReactorKit
 import SearchDomainInterface
 
 final class ListSearchResultReactor: Reactor {
-    #warning("유즈케이스는 추후 연결")
     enum Action {
         case viewDidLoad
         case changeSortType(SortType)
-        #warning("무한 스크롤을 고려한 스크롤 액션")
+        case askLoadMore
     }
 
     enum Mutation {
         case updateSortType(SortType)
-        case updateDataSource([SearchPlaylistEntity])
+        case updateDataSource(dataSource: [SearchPlaylistEntity], canLoad: Bool)
         case updateLoadingState(Bool)
+        case updateScrollPage
     }
 
     struct State {
@@ -20,18 +20,21 @@ final class ListSearchResultReactor: Reactor {
         var sortType: SortType
         var scrollPage: Int
         var dataSource: [SearchPlaylistEntity]
+        var canLoad: Bool
     }
 
     var initialState: State
     private let text: String
     private let fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase
+    private let limit: Int = 20
 
     init(text: String, fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
             isLoading: false,
             sortType: .latest,
             scrollPage: 1,
-            dataSource: []
+            dataSource: [],
+            canLoad: true
         )
 
         self.text = text
@@ -39,9 +42,11 @@ final class ListSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
+        let state = self.currentState
+
         switch action {
-        case .viewDidLoad:
-            return updateDataSource(order: .latest, text: self.text, scrollPage: 1)
+        case .viewDidLoad, .askLoadMore:
+            return updateDataSource(order: state.sortType, text: self.text, scrollPage: state.scrollPage)
         case let .changeSortType(type):
             return updateSortType(type)
         }
@@ -53,10 +58,13 @@ final class ListSearchResultReactor: Reactor {
         switch mutation {
         case let .updateSortType(type):
             newState.sortType = type
-        case let .updateDataSource(dataSource):
-            newState.dataSource = dataSource
+        case let .updateDataSource(dataSource, canLoad):
+            newState.dataSource += dataSource
+            newState.canLoad = canLoad
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
+        case .updateScrollPage:
+            newState.scrollPage += 1
         }
 
         return newState
@@ -76,11 +84,12 @@ extension ListSearchResultReactor {
         return .concat([
             .just(Mutation.updateLoadingState(true)),
             fetchSearchPlaylistsUseCase
-                .execute(order: order, text: text, page: scrollPage, limit: 20)
+                .execute(order: order, text: text, page: scrollPage, limit: limit)
                 .asObservable()
-                .map { dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource)
+                .map { [limit] dataSource -> Mutation in
+                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
+            .just(Mutation.updateScrollPage),
             .just(Mutation.updateLoadingState(false))
         ])
     }

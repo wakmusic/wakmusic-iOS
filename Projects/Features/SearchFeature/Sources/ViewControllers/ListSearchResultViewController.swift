@@ -19,6 +19,10 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
+    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
+        $0.delegate = self
+    }
+
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         ListSearchResultSection,
         SearchPlaylistEntity
@@ -36,6 +40,23 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func bindAction(reactor: ListSearchResultReactor) {
         super.bindAction(reactor: reactor)
+
+        let sharedState = reactor.state.share()
+
+        collectionView.rx.willDisplayCell
+            .map { $1 }
+            .withLatestFrom(
+                sharedState.map(\.dataSource),
+                resultSelector: { indexPath, datasource -> (IndexPath, Int) in
+                    return (indexPath, datasource.count)
+                }
+            )
+            .filter { $0.0.row == $0.1 - 1 } // 마지막 인덱스 접근
+            .withLatestFrom(sharedState.map(\.canLoad)) { $1 } // 더 가져올께 있나?
+            .filter { $0 }
+            .map { _ in ListSearchResultReactor.Action.askLoadMore }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     override func bindState(reactor: ListSearchResultReactor) {
@@ -43,27 +64,40 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
-        sharedState.map(\.dataSource)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, dataSource in
+        sharedState.map { $0.sortType }
+            .bind(with: self) { owner, sortType in
 
-                var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
-
-                snapshot.appendSections([.list])
-
-                snapshot.appendItems(dataSource, toSection: .list)
-                owner.dataSource.apply(snapshot, animatingDifferences: false)
+                owner.headerView.update(sortType: sortType)
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.isLoading)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, isLoading in
+        sharedState.map { ($0.isLoading, $0.dataSource) }
+            .bind(with: self) { owner, info in
+
+                let (isLoading, dataSource) = (info.0, info.1)
 
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
+
+                    var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+
+                    snapshot.appendSections([.list])
+
+                    snapshot.appendItems(dataSource, toSection: .list)
+                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+
+                    let warningView = WMWarningView(
+                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
+                        text: "검색결과가 없습니다."
+                    )
+
+                    if dataSource.isEmpty {
+                        owner.collectionView.setBackgroundView(warningView, 100)
+                    } else {
+                        owner.collectionView.restore()
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -71,14 +105,20 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(collectionView)
+        self.view.addSubviews(headerView, collectionView)
     }
 
     override func setLayout() {
         super.setLayout()
 
-        collectionView.snp.makeConstraints {
+        headerView.snp.makeConstraints {
+            $0.height.equalTo(30)
             $0.top.equalToSuperview().offset(56)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
@@ -104,20 +144,6 @@ extension ListSearchResultViewController {
                 cell.update(item)
             }
 
-        // MARK: Header
-
-        let headerRegistration = UICollectionView
-            .SupplementaryRegistration<SearchResultHeaderView>(
-                elementKind: SearchResultHeaderView
-                    .kind
-            ) { [weak self] supplementaryView, string, indexPath in
-
-                guard let self else { return }
-
-                supplementaryView.delegate = self
-                supplementaryView.update(sortType: .latest)
-            }
-
         let dataSource = UICollectionViewDiffableDataSource<
             ListSearchResultSection,
             SearchPlaylistEntity
@@ -132,10 +158,6 @@ extension ListSearchResultViewController {
                 for: indexPath,
                 item: item
             )
-        }
-
-        dataSource.supplementaryViewProvider = { collectionView, _, index in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
         return dataSource

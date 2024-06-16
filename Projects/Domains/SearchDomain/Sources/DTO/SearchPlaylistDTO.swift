@@ -10,7 +10,7 @@ public struct SearchPlaylistDTO: Decodable {
         userName: String?,
         imageUrl: String,
         songCount: Int,
-        createdAt: Int,
+        createdAt: Double,
         `private`: Bool
     ) {
         self.key = key
@@ -25,7 +25,8 @@ public struct SearchPlaylistDTO: Decodable {
     public let key, title, imageUrl: String
     public let userName: String?
     public let `private`: Bool
-    public let songCount, createdAt: Int
+    public let songCount: Int
+    public let createdAt: Double
 }
 
 public extension SearchPlaylistDTO {
@@ -35,7 +36,7 @@ public extension SearchPlaylistDTO {
             title: title,
             userName: userName ?? "임시 닉네임",
             image: imageUrl,
-            date: createdAt.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
+            date: (createdAt / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             count: songCount,
             isPrivate: self.`private`
         )

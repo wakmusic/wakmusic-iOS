@@ -11,7 +11,7 @@ protocol SearchResultHeaderViewDelegate: AnyObject {
 }
 
 final class SearchResultHeaderView:
-    UICollectionReusableView {
+    UIView {
     static let kind = "search-result-section-header"
 
     weak var delegate: SearchResultHeaderViewDelegate?
