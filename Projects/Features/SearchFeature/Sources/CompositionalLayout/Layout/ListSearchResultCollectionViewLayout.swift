@@ -39,6 +39,8 @@ extension ListSearchResultCollectionViewLayout {
 
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 20.0, bottom: 20.0, trailing: 20.0)
+        header.pinToVisibleBounds = true
+        header.zIndex = 2
         section.boundarySupplementaryItems = [header]
 
         return section

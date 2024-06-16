@@ -51,7 +51,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .filter{ $0 }
             .map{ _ in SongSearchResultReactor.Action.askLoadMore }
             .bind(to: reactor.action )
-            .disposed(by:disposeBag)
+            .disposed(by: disposeBag)
         
     }
 
