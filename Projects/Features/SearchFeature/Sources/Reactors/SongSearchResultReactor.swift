@@ -115,7 +115,7 @@ extension SongSearchResultReactor {
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: 20)
                 .asObservable()
                 .map { dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: !dataSource.isEmpty)
+                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == 20 )
                 },
             .just(Mutation.updateScrollPage), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
