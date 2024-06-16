@@ -71,7 +71,7 @@ extension SongResultCell {
         }
 
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(thumbnailView.snp.top).offset(-1)
+            $0.top.equalTo(thumbnailView.snp.top)
             $0.leading.equalTo(thumbnailView.snp.trailing).offset(8)
         }
 
