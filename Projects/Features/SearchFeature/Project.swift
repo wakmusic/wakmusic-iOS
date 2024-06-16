@@ -17,7 +17,7 @@ let project = Project.module(
                     .feature(target: .PlayerFeature),
                     .feature(target: .SearchFeature, type: .interface),
                     .feature(target: .PlaylistFeature, type: .interface),
-                    .domain(target: .SongsDomain, type: .interface),
+                    .domain(target: .SearchDomain, type: .interface),
                 ]
             )
         ),

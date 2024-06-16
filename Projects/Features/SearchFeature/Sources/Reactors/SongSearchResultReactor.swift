@@ -1,5 +1,6 @@
 import LogManager
 import ReactorKit
+import SearchDomainInterface
 
 final class SongSearchResultReactor: Reactor {
     #warning("유즈케이스는 추후 연결")
@@ -24,20 +25,23 @@ final class SongSearchResultReactor: Reactor {
     }
 
     var initialState: State
+
+    private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
 
-    init(_ text: String) {
+    init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         LogManager.printDebug("\(Self.self) init with Text :\(text)")
 
         self.initialState = State(
             isLoading: false,
-            sortType: .newest,
+            sortType: .lastest,
             filterType: .all,
             selectedCount: 0,
             scrollPage: 0
         )
 
         self.text = text
+        self.fetchSearchSongsUseCase = fetchSearchSongsUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

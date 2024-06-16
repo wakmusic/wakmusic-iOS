@@ -48,6 +48,7 @@ public enum WMDomain: String {
     case faq
     case notice
     case app
+    case search
 }
 
 extension WMDomain {
@@ -81,6 +82,8 @@ extension WMDomain {
             return WMDOMAIN_NOTICE()
         case .app:
             return WMDOMAIN_APP()
+        case .search:
+            return WMDOMAIN_SEARCH()
         }
     }
 }

@@ -1,4 +1,5 @@
 import ReactorKit
+import SearchDomainInterface
 
 final class ListSearchResultReactor: Reactor {
     #warning("유즈케이스는 추후 연결")
@@ -20,15 +21,17 @@ final class ListSearchResultReactor: Reactor {
 
     var initialState: State
     private let text: String
+    private let fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase
 
-    init(_ text: String) {
+    init(text: String, fetchSearcPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
             isLoading: false,
-            sortType: .newest,
+            sortType: .lastest,
             scrollPage: 0
         )
 
         self.text = text
+        self.fetchSearcPlaylistsUseCase = fetchSearcPlaylistsUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

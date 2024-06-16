@@ -1,5 +1,6 @@
 import DesignSystem
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import Then
 import UIKit

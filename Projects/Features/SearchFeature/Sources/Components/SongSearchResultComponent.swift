@@ -2,11 +2,21 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
+import SearchDomainInterface
 import SearchFeatureInterface
 import UIKit
 
-public final class SongSearchResultComponent: Component<EmptyDependency>, SongSearchResultFactory {
+public protocol SongSearchResultDependency: Dependency {
+    var fetchSearchSongsUseCase: any FetchSearchSongsUseCase { get }
+}
+
+public final class SongSearchResultComponent: Component<SongSearchResultDependency>, SongSearchResultFactory {
     public func makeView(_ text: String) -> UIViewController {
-        SongSearchResultViewController(reactor: SongSearchResultReactor(text))
+        SongSearchResultViewController(
+            reactor: SongSearchResultReactor(
+                text: text,
+                fetchSearchSongsUseCase: dependency.fetchSearchSongsUseCase
+            )
+        )
     }
 }

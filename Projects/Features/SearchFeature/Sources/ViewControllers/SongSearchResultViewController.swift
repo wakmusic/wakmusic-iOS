@@ -3,6 +3,7 @@ import DesignSystem
 import LogManager
 import RxCocoa
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import SongsDomainInterface
 import Then
@@ -85,7 +86,7 @@ extension SongSearchResultViewController {
                 guard let self else { return }
 
                 supplementaryView.delegate = self
-                supplementaryView.update(sortType: .newest, filterType: .all)
+                supplementaryView.update(sortType: .lastest, filterType: .all)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
