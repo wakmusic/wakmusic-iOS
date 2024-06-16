@@ -93,7 +93,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     override public func bindState(reactor: SearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share()
 
         sharedState
             .map { ($0.typingState, $0.text) }
@@ -110,7 +110,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     return
                 }
 
-                if text.isEmpty {
+                if text.isWhiteSpace {
                     guard let textPopupViewController = owner.textPopUpFactory.makeView(
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true,
@@ -124,11 +124,9 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
-                    //  owner.searchTextFiled.rx.text.onNext(text)
+ 
                     PreferenceManager.shared.addRecentRecords(word: text)
-                    //  UIView.setAnimationsEnabled(false)
                     owner.view.endEditing(true)
-                    //  UIView.setAnimationsEnabled(true)
                 }
             }
             .disposed(by: disposeBag)
@@ -206,7 +204,7 @@ extension SearchViewController {
                 return
             }
 
-            guard let text = text, !text.isEmpty else {
+            guard let text = text, !text.isWhiteSpace else {
                 return
             }
             afterVC = afterSearchComponent.makeView(text: text)
