@@ -65,7 +65,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .debug("🚚 oauthToken")
             .filter { !$0.1.isEmpty }
             .flatMap { [fetchTokenUseCase] provider, token in
-                fetchTokenUseCase.execute(token: token, type: provider)
+                fetchTokenUseCase.execute(providerType: provider, token: token)
                     .catchAndReturn(AuthLoginEntity(token: ""))
                     .asObservable()
             }

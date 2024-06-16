@@ -5,13 +5,15 @@ import Foundation
 import Moya
 
 public enum AuthAPI {
-    case fetchToken(token: String, type: ProviderType)
+    case fetchToken(providerType: ProviderType, token: String)
+    case reGenerateAccessToken
+
     case fetchNaverUserInfo(tokenType: String, accessToken: String)
 }
 
-public struct AuthRequset: Encodable {
-    var token: String
+private struct FetchTokenRequestParameters: Encodable {
     var provider: String
+    var token: String
 }
 
 extension AuthAPI: WMAPI {
@@ -19,6 +21,10 @@ extension AuthAPI: WMAPI {
         switch self {
         case .fetchToken:
             return URL(string: BASE_URL())!
+
+        case .reGenerateAccessToken:
+            return URL(string: BASE_URL())!
+
         case .fetchNaverUserInfo:
             return URL(string: "https://openapi.naver.com")!
         }
@@ -30,15 +36,19 @@ extension AuthAPI: WMAPI {
             return .auth
         case .fetchNaverUserInfo:
             return .naver
+        case .reGenerateAccessToken:
+            return .auth
         }
     }
 
     public var urlPath: String {
         switch self {
         case .fetchToken:
-            return "/login/mobile"
+            return "/app"
         case .fetchNaverUserInfo:
             return ""
+        case .reGenerateAccessToken:
+            return "/token"
         }
     }
 
@@ -48,6 +58,8 @@ extension AuthAPI: WMAPI {
             return .post
         case .fetchNaverUserInfo:
             return .get
+        case .reGenerateAccessToken:
+            return .post
         }
     }
 
@@ -62,9 +74,16 @@ extension AuthAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .fetchToken(token: id, type: type):
-            return .requestJSONEncodable(AuthRequset(token: id, provider: type.rawValue))
+        case let .fetchToken(providerType: providerType, token: id):
+            return .requestJSONEncodable(
+                FetchTokenRequestParameters(
+                    provider: providerType.rawValue,
+                    token: id
+                )
+            )
         case .fetchNaverUserInfo:
+            return .requestPlain
+        case .reGenerateAccessToken:
             return .requestPlain
         }
     }
