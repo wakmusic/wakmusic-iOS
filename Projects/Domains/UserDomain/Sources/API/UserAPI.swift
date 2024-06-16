@@ -48,19 +48,19 @@ extension UserAPI: WMAPI {
             return "/profile"
         case .fetchPlayList:
             return "/playlists"
-        case .editPlayListOrder(let ids):
+        case .editPlayListOrder:
             return "/playlists"
-        case .deletePlayList(let ids):
+        case .deletePlayList:
             return "/playlists"
         case .fetchFavoriteSongs:
             return "/likes"
-        case .editFavoriteSongsOrder(let ids):
+        case .editFavoriteSongsOrder:
             return "/likes"
-        case .deleteFavoriteList(let ids):
+        case .deleteFavoriteList:
             return "/likes"
-        case .setProfile(let image):
+        case .setProfile:
             return ""
-        case .setUserName(let name):
+        case .setUserName:
             return ""
         case .withdrawUserInfo:
             return ""
@@ -75,19 +75,19 @@ extension UserAPI: WMAPI {
             return .get
         case .fetchPlayList:
             return .get
-        case .editPlayListOrder(let ids):
+        case .editPlayListOrder:
             return .patch
-        case .deletePlayList(let ids):
+        case .deletePlayList:
             return .delete
         case .fetchFavoriteSongs:
             return .get
-        case .editFavoriteSongsOrder(let ids):
+        case .editFavoriteSongsOrder:
             return .patch
-        case .deleteFavoriteList(let ids):
+        case .deleteFavoriteList:
             return .delete
-        case .setProfile(let image):
+        case .setProfile:
             return .patch
-        case .setUserName(let name):
+        case .setUserName:
             return .patch
         case .withdrawUserInfo:
             return .delete
