@@ -4,19 +4,17 @@ import SearchDomainInterface
 import SongsDomainInterface
 
 final class SongSearchResultReactor: Reactor {
-   
     enum Action {
         case viewDidLoad
         case changeSortType(SortType)
         case changeFilterType(FilterType)
         case askLoadMore
-        
     }
 
     enum Mutation {
         case updateSortType(SortType)
         case updateFilterType(FilterType)
-        case updateDataSource(dataSource:[SongEntity], canLoad: Bool)
+        case updateDataSource(dataSource: [SongEntity], canLoad: Bool)
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
         case updateScrollPage
@@ -57,7 +55,12 @@ final class SongSearchResultReactor: Reactor {
 
         switch action {
         case .viewDidLoad, .askLoadMore:
-            return updateDataSource(order: state.sortType, filter: state.filterType, text: self.text, scrollPage: state.scrollPage)
+            return updateDataSource(
+                order: state.sortType,
+                filter: state.filterType,
+                text: self.text,
+                scrollPage: state.scrollPage
+            )
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
@@ -73,7 +76,7 @@ final class SongSearchResultReactor: Reactor {
             newState.sortType = type
         case let .updateFilterType(type):
             newState.filterType = type
-        case let .updateDataSource(dataSource,canLoad):
+        case let .updateDataSource(dataSource, canLoad):
             newState.dataSource += dataSource
             newState.canLoad = canLoad
 
@@ -82,7 +85,7 @@ final class SongSearchResultReactor: Reactor {
 
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
-            
+
         case .updateScrollPage:
             newState.scrollPage += 1
         }
@@ -99,8 +102,13 @@ extension SongSearchResultReactor {
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
         return .just(.updateFilterType(type))
     }
-    
-    private func updateDataSource(order: SortType, filter: FilterType, text: String,scrollPage: Int) -> Observable<Mutation> {
+
+    private func updateDataSource(
+        order: SortType,
+        filter: FilterType,
+        text: String,
+        scrollPage: Int
+    ) -> Observable<Mutation> {
         return .concat([
             .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
@@ -113,6 +121,4 @@ extension SongSearchResultReactor {
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }
-    
-
 }

@@ -2,17 +2,15 @@ import ReactorKit
 import SearchDomainInterface
 
 final class ListSearchResultReactor: Reactor {
-   
     enum Action {
         case viewDidLoad
         case changeSortType(SortType)
         case askLoadMore
-      
     }
 
     enum Mutation {
         case updateSortType(SortType)
-        case updateDataSource(dataSource:[SearchPlaylistEntity], canLoad:Bool)
+        case updateDataSource(dataSource: [SearchPlaylistEntity], canLoad: Bool)
         case updateLoadingState(Bool)
         case updateScrollPage
     }
@@ -43,15 +41,13 @@ final class ListSearchResultReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-        
         let state = self.currentState
-        
+
         switch action {
         case .viewDidLoad, .askLoadMore:
-            return updateDataSource(order: state.sortType, text: self.text, scrollPage: state.scrollPage )
+            return updateDataSource(order: state.sortType, text: self.text, scrollPage: state.scrollPage)
         case let .changeSortType(type):
             return updateSortType(type)
-        
         }
     }
 
@@ -61,7 +57,7 @@ final class ListSearchResultReactor: Reactor {
         switch mutation {
         case let .updateSortType(type):
             newState.sortType = type
-        case let .updateDataSource(dataSource,canLoad):
+        case let .updateDataSource(dataSource, canLoad):
             newState.dataSource += dataSource
             newState.canLoad = canLoad
         case let .updateLoadingState(isLoading):

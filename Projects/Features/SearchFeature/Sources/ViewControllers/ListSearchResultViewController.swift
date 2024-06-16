@@ -36,22 +36,22 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func bindAction(reactor: ListSearchResultReactor) {
         super.bindAction(reactor: reactor)
-        
+
         let sharedState = reactor.state.share()
-        
+
         collectionView.rx.willDisplayCell
-            .map{ $1 }
+            .map { $1 }
             .withLatestFrom(
                 sharedState.map(\.dataSource),
-                resultSelector: { (indexPath, datasource) -> (IndexPath, Int) in
+                resultSelector: { indexPath, datasource -> (IndexPath, Int) in
                     return (indexPath, datasource.count)
                 }
             )
-            .filter{ $0.0.row == $0.1-1 } // 마지막 인덱스 접근
-            .withLatestFrom(sharedState.map(\.canLoad)){ $1 } // 더 가져올께 있나?
-            .filter{ $0 }
-            .map{ _ in ListSearchResultReactor.Action.askLoadMore }
-            .bind(to: reactor.action )
+            .filter { $0.0.row == $0.1 - 1 } // 마지막 인덱스 접근
+            .withLatestFrom(sharedState.map(\.canLoad)) { $1 } // 더 가져올께 있나?
+            .filter { $0 }
+            .map { _ in ListSearchResultReactor.Action.askLoadMore }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 

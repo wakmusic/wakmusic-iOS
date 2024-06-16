@@ -11,13 +11,13 @@ public final class LoginWarningView: UIView {
     }
 
     private let label: WMLabel = WMLabel(
-        text:"",
+        text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t6(weight: .medium),
         alignment: .center,
         kernValue: -0.5
     )
-    
+
     private let button: UIButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTitle("로그인", for: .normal)
@@ -46,12 +46,11 @@ public final class LoginWarningView: UIView {
         label.text = text
 
         setLayout()
-    
+
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             self.completion()
         }), for: .primaryActionTriggered)
-        
     }
 
     @available(*, unavailable)
@@ -61,13 +60,12 @@ public final class LoginWarningView: UIView {
 }
 
 extension LoginWarningView {
-    
     private func addSubviews() {
         self.addSubview(imageView)
         self.addSubview(label)
         self.addSubview(button)
     }
-    
+
     private func setLayout() {
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(80)
@@ -88,5 +86,4 @@ extension LoginWarningView {
             $0.centerX.equalToSuperview()
         }
     }
-
 }

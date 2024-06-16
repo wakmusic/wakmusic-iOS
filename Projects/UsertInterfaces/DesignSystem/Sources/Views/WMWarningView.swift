@@ -3,14 +3,13 @@ import Then
 import UIKit
 
 public final class WMWarningView: UIView {
-
     private let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Search.warning.image
     }
 
     private let label: WMLabel = WMLabel(
-        text:"",
+        text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t6(weight: .medium),
         alignment: .center,
@@ -28,7 +27,6 @@ public final class WMWarningView: UIView {
         label.text = text
 
         setLayout()
-    
     }
 
     @available(*, unavailable)
@@ -38,12 +36,11 @@ public final class WMWarningView: UIView {
 }
 
 extension WMWarningView {
-    
     private func addSubviews() {
         self.addSubview(imageView)
         self.addSubview(label)
     }
-    
+
     private func setLayout() {
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(80)
@@ -56,7 +53,5 @@ extension WMWarningView {
             $0.leading.trailing.equalToSuperview()
             $0.centerX.equalTo(imageView.snp.centerX)
         }
-
     }
 }
-

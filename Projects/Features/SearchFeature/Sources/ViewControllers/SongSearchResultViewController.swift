@@ -36,42 +36,40 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func bindAction(reactor: SongSearchResultReactor) {
         super.bindAction(reactor: reactor)
-        
+
         let sharedState = reactor.state.share()
-        
+
         collectionView.rx.willDisplayCell
-            .map{ $1 }
+            .map { $1 }
             .withLatestFrom(
                 sharedState.map(\.dataSource),
-                resultSelector: { (indexPath, datasource) -> (IndexPath, Int) in
+                resultSelector: { indexPath, datasource -> (IndexPath, Int) in
                     return (indexPath, datasource.count)
                 }
             )
-            .filter{ $0.0.row == $0.1-1 } // 마지막 인덱스 접근
-            .withLatestFrom(sharedState.map(\.canLoad)){ $1 } // 더 가져올께 있나?
-            .filter{ $0 }
-            .map{ _ in SongSearchResultReactor.Action.askLoadMore }
-            .bind(to: reactor.action )
+            .filter { $0.0.row == $0.1 - 1 } // 마지막 인덱스 접근
+            .withLatestFrom(sharedState.map(\.canLoad)) { $1 } // 더 가져올께 있나?
+            .filter { $0 }
+            .map { _ in SongSearchResultReactor.Action.askLoadMore }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
     }
 
     override func bindState(reactor: SongSearchResultReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
-        sharedState.map{($0.isLoading, $0.dataSource)}
-            .bind(with: self) { owner, info  in
+
+        sharedState.map { ($0.isLoading, $0.dataSource) }
+            .bind(with: self) { owner, info in
 
                 let (isLoading, dataSource) = (info.0, info.1)
-                
+
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
-                
                     owner.indicator.stopAnimating()
-    
+
                     var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
                     snapshot.appendSections([.song])
@@ -79,15 +77,17 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     snapshot.appendItems(dataSource, toSection: .song)
 
                     owner.dataSource.apply(snapshot, animatingDifferences: false)
-      
-                    let warningView = WMWarningView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()), text: "검색결과가 없습니다.")
+
+                    let warningView = WMWarningView(
+                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
+                        text: "검색결과가 없습니다."
+                    )
 
                     if dataSource.isEmpty {
                         owner.collectionView.setBackgroundView(warningView, 100)
                     } else {
                         owner.collectionView.restore()
                     }
-                    
                 }
             }
             .disposed(by: disposeBag)
