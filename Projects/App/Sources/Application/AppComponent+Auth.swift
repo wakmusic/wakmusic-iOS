@@ -51,6 +51,12 @@ public extension AppComponent {
         }
     }
 
+    var regenerateAccessTokenUseCase: any ReGenerateAccessTokenUseCase {
+        shared {
+            ReGenerateAccessTokenUseCaseImpl(authRepository: authRepository)
+        }
+    }
+
     var logoutUseCase: any LogoutUseCase {
         shared {
             LogoutUseCaseImpl(authRepository: authRepository)

@@ -18,7 +18,7 @@ public struct FetchSongCreditsUseCaseImpl: FetchSongCreditsUseCase {
         self.songsRepository = songsRepository
     }
 
-    public func execute(id: String) -> RxSwift.Single<SongCreditsEntity> {
+    public func execute(id: String) -> Single<[SongCreditsEntity]> {
         songsRepository.fetchSongCredits(id: id)
     }
 }

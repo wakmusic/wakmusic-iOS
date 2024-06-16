@@ -55,7 +55,7 @@ extension NoticeDetailHeaderView {
         )
         let titleHeight: CGFloat = max(28, titleAttributedString.height(containerWidth: availableWidth))
 
-        let contentString: String = model.content ?? "팬치들 스샷 참고하세요! 🥰"
+        let contentString: String = model.content
         let contentAttributedString = NSMutableAttributedString(
             string: contentString,
             attributes: [
@@ -76,6 +76,6 @@ extension NoticeDetailHeaderView {
         titleStringLabel.text = model.title
         dateLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
         timeLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "HH:mm")
-        contentStringLabel.text = model.content ?? "팬치들 스샷 참고하세요! 🥰"
+        contentStringLabel.text = model.content
     }
 }

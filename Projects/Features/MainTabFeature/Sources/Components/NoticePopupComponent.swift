@@ -15,9 +15,7 @@ public protocol NoticePopupDependency: Dependency {}
 public final class NoticePopupComponent: Component<NoticePopupDependency> {
     public func makeView(model: [FetchNoticeEntity]) -> NoticePopupViewController {
         return NoticePopupViewController.viewController(
-            viewModel: .init(
-                fetchNoticeEntities: model
-            )
+            viewModel: .init(noticeEntities: model)
         )
     }
 }
