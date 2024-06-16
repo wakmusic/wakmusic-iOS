@@ -12,7 +12,6 @@ public final class SignInComponentStub: SignInFactory {
         return LoginViewController.viewController(
             viewModel: .init(
                 fetchTokenUseCase: FetchTokenUseCaseSpy(),
-                fetchNaverUserInfoUseCase: FetchNaverUserInfoUseCaseSpy(),
                 fetchUserInfoUseCase: FetchUserInfoUseCaseSpy()
             )
         )
