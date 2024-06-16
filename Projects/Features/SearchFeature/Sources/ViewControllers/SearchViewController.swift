@@ -124,7 +124,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
- 
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)
                 }
