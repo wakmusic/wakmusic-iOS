@@ -36,7 +36,7 @@ public extension SearchPlaylistDTO {
             title: title,
             userName: userName ?? "임시 닉네임",
             image: imageUrl,
-            date: (createdAt/1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
+            date: (createdAt / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             count: songCount,
             isPrivate: self.`private`
         )
