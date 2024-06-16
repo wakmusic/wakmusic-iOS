@@ -102,9 +102,9 @@ extension UserAPI: WMAPI {
             return .requestPlain
         case .fetchPlayList:
             return .requestPlain
-        case .editPlayListOrder(let ids):
+        case let .editPlayListOrder(ids):
             return .requestJSONEncodable(RequsetEditPlayList(playlistKeys: ids))
-        case .deletePlayList(let ids):
+        case let .deletePlayList(ids):
             return .requestParameters(
                 parameters: [
                     "playlistKeys": ids.joined(separator: ",")
@@ -113,18 +113,18 @@ extension UserAPI: WMAPI {
             )
         case .fetchFavoriteSongs:
             return .requestPlain
-        case .editFavoriteSongsOrder(let ids):
+        case let .editFavoriteSongsOrder(ids):
             return .requestJSONEncodable(RequsetEditFavoriteSongs(songIds: ids))
-        case .deleteFavoriteList(let ids):
+        case let .deleteFavoriteList(ids):
             return .requestParameters(
                 parameters: [
                     "songIds": ids.joined(separator: ",")
                 ],
                 encoding: URLEncoding.queryString
             )
-        case .setProfile(let image):
+        case let .setProfile(image):
             return .requestJSONEncodable(RequsetProfileModel(type: image))
-        case .setUserName(let name):
+        case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(name: name))
         case .withdrawUserInfo:
             return .requestPlain
