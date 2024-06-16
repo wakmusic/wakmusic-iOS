@@ -94,6 +94,6 @@ extension ListResultCell {
         titleLabel.text = model.title
         creatorLabel.text = model.userName
         dateLabel.text = model.date
-        thumbnailView.kf.setImage(with:URL(string: model.image),placeholder: nil,options: [.transition(.fade(0.2))])
+        thumbnailView.kf.setImage(with: URL(string: model.image), placeholder: nil, options: [.transition(.fade(0.2))])
     }
 }
