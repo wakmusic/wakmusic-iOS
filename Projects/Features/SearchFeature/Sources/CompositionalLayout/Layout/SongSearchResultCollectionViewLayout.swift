@@ -21,7 +21,7 @@ extension SongSearchResultCollectionViewLayout {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
-        
+
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),

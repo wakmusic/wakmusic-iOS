@@ -18,7 +18,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
-    
+
     private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
         $0.delegate = self
     }
@@ -63,12 +63,11 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
-        sharedState.map {$0.sortType}
+
+        sharedState.map { $0.sortType }
             .bind(with: self) { owner, sortType in
-                
+
                 owner.headerView.update(sortType: sortType)
-                
             }
             .disposed(by: disposeBag)
 
@@ -111,7 +110,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func setLayout() {
         super.setLayout()
-      
+
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalToSuperview().offset(56)

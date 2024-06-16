@@ -19,11 +19,10 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
-    
+
     private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
         $0.delegate = self
     }
-
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         SongSearchResultSection,
@@ -65,14 +64,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
-        sharedState.map {($0.sortType, $0.filterType)}
+
+        sharedState.map { ($0.sortType, $0.filterType) }
             .bind(with: self) { owner, info in
-                
+
                 let (sortType, filterType) = (info.0, info.1)
-                
+
                 owner.headerView.update(sortType: sortType, filterType: filterType)
-                
             }
             .disposed(by: disposeBag)
 
@@ -116,7 +114,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func setLayout() {
         super.setLayout()
-        
+
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalToSuperview().offset(56)
@@ -148,7 +146,6 @@ extension SongSearchResultViewController {
         let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
             cell.update(item)
         }
-
 
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
