@@ -511,9 +511,6 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
     var fetchTokenUseCase: any FetchTokenUseCase {
         return appComponent.fetchTokenUseCase
     }
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
-        return appComponent.fetchNaverUserInfoUseCase
-    }
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
@@ -1222,7 +1219,6 @@ extension PermissionComponent: Registration {
 extension SignInComponent: Registration {
     public func registerItems() {
         keyPathToName[\SignInDependency.fetchTokenUseCase] = "fetchTokenUseCase-any FetchTokenUseCase"
-        keyPathToName[\SignInDependency.fetchNaverUserInfoUseCase] = "fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"
         keyPathToName[\SignInDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
