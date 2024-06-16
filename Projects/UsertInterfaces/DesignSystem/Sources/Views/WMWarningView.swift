@@ -2,7 +2,7 @@ import SnapKit
 import Then
 import UIKit
 
-public final class WarningV2View: UIView {
+public final class WMWarningView: UIView {
 
     private let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -37,7 +37,7 @@ public final class WarningV2View: UIView {
     }
 }
 
-extension WarningV2View {
+extension WMWarningView {
     
     private func addSubviews() {
         self.addSubview(imageView)
