@@ -65,7 +65,6 @@ final class ListSearchResultReactor: Reactor {
 
 extension ListSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
-        #warning("데이터 소스 가져오기")
         return .just(.updateSortType(type))
     }
 
