@@ -509,9 +509,6 @@ private class SignInDependency5dda0dd015447272446cProvider: SignInDependency {
     var fetchTokenUseCase: any FetchTokenUseCase {
         return appComponent.fetchTokenUseCase
     }
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
-        return appComponent.fetchNaverUserInfoUseCase
-    }
     var fetchUserInfoUseCase: any FetchUserInfoUseCase {
         return appComponent.fetchUserInfoUseCase
     }
@@ -944,7 +941,7 @@ extension AppComponent: Registration {
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { self.authRepository as Any }
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { self.fetchTokenUseCase as Any }
-        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { self.fetchNaverUserInfoUseCase as Any }
+        localTable["regenerateAccessTokenUseCase-any ReGenerateAccessTokenUseCase"] = { self.regenerateAccessTokenUseCase as Any }
         localTable["logoutUseCase-any LogoutUseCase"] = { self.logoutUseCase as Any }
         localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { self.checkIsExistAccessTokenUseCase as Any }
         localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { self.remoteLikeDataSource as Any }
@@ -1195,7 +1192,6 @@ extension PermissionComponent: Registration {
 extension SignInComponent: Registration {
     public func registerItems() {
         keyPathToName[\SignInDependency.fetchTokenUseCase] = "fetchTokenUseCase-any FetchTokenUseCase"
-        keyPathToName[\SignInDependency.fetchNaverUserInfoUseCase] = "fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"
         keyPathToName[\SignInDependency.fetchUserInfoUseCase] = "fetchUserInfoUseCase-any FetchUserInfoUseCase"
     }
 }
