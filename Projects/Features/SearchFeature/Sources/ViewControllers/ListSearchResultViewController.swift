@@ -60,30 +60,40 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
-        sharedState.map(\.dataSource)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, dataSource in
 
-                var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+        
+        sharedState.map { ($0.isLoading, $0.dataSource) }
+            .bind(with: self) { owner, info in
 
-                snapshot.appendSections([.list])
-
-                snapshot.appendItems(dataSource, toSection: .list)
-                owner.dataSource.apply(snapshot, animatingDifferences: false)
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.isLoading)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, isLoading in
+                let (isLoading, dataSource) = (info.0, info.1)
 
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
+
+                    var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+
+                    snapshot.appendSections([.list])
+
+                    snapshot.appendItems(dataSource, toSection: .list)
+                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+
+                    let warningView = WMWarningView(
+                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
+                        text: "검색결과가 없습니다."
+                    )
+
+                    if dataSource.isEmpty {
+                        owner.collectionView.setBackgroundView(warningView, 100)
+                    } else {
+                        owner.collectionView.restore()
+                    }
                 }
             }
             .disposed(by: disposeBag)
+
+    
     }
 
     override func addView() {
