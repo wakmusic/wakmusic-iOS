@@ -34,6 +34,7 @@ final class SongSearchResultReactor: Reactor {
 
     private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
+    private let limit: Int = 20
 
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
@@ -112,10 +113,10 @@ extension SongSearchResultReactor {
         return .concat([
             .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
-                .execute(order: order, filter: filter, text: text, page: scrollPage, limit: 20)
+                .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
-                .map { dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == 20)
+                .map { [limit] dataSource -> Mutation in
+                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
             .just(Mutation.updateScrollPage), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료

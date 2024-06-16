@@ -26,6 +26,7 @@ final class ListSearchResultReactor: Reactor {
     var initialState: State
     private let text: String
     private let fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase
+    private let limit: Int = 20
 
     init(text: String, fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase) {
         self.initialState = State(
@@ -83,10 +84,10 @@ extension ListSearchResultReactor {
         return .concat([
             .just(Mutation.updateLoadingState(true)),
             fetchSearchPlaylistsUseCase
-                .execute(order: order, text: text, page: scrollPage, limit: 20)
+                .execute(order: order, text: text, page: scrollPage, limit: limit)
                 .asObservable()
-                .map { dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == 20)
+                .map { [limit] dataSource -> Mutation in
+                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
             .just(Mutation.updateScrollPage),
             .just(Mutation.updateLoadingState(false))
