@@ -26,7 +26,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDataSource()
+        reactor?.action.onNext(.viewDidLoad)
     }
 
     override func bind(reactor: SongSearchResultReactor) {
@@ -39,6 +39,33 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func bindState(reactor: SongSearchResultReactor) {
         super.bindState(reactor: reactor)
+
+        let sharedState = reactor.state.share()
+
+        sharedState.map(\.dataSource)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, dataSource in
+                var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
+
+                snapshot.appendSections([.song])
+
+                snapshot.appendItems(dataSource, toSection: .song)
+
+                self.dataSource.apply(snapshot, animatingDifferences: false)
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.isLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoading in
+
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
     override func addView() {
@@ -86,7 +113,7 @@ extension SongSearchResultViewController {
                 guard let self else { return }
 
                 supplementaryView.delegate = self
-                supplementaryView.update(sortType: .lastest, filterType: .all)
+                supplementaryView.update(sortType: .latest, filterType: .all)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
@@ -110,28 +137,6 @@ extension SongSearchResultViewController {
         }
 
         return dataSource
-    }
-
-    private func initDataSource() {
-        // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
-
-        snapshot.appendSections([.song])
-
-        let model = SongEntity(
-            id: "8KTFf2X-ago",
-            title: "Another World",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 0,
-            last: 0,
-            date: "2020.12.12"
-        )
-
-        snapshot.appendItems([model], toSection: .song)
-
-        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     public func scrollToTop() {}
