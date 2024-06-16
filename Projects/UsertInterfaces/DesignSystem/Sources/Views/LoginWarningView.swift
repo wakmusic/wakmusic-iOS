@@ -1,7 +1,6 @@
 import SnapKit
 import Then
 import UIKit
-import Utility
 
 public final class LoginWarningView: UIView {
     private let completion: () -> Void
@@ -15,6 +14,7 @@ public final class LoginWarningView: UIView {
         text:"",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t6(weight: .medium),
+        alignment: .center,
         kernValue: -0.5
     )
     
@@ -46,13 +46,11 @@ public final class LoginWarningView: UIView {
         label.text = text
 
         setLayout()
-
-        
-        button.addAction { [weak self] _ in
-            
+    
+        button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }
             self.completion()
-        }
+        }), for: .primaryActionTriggered)
         
     }
 

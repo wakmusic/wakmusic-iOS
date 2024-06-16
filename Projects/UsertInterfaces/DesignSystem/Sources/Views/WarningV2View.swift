@@ -13,10 +13,9 @@ public final class WarningV2View: UIView {
         text:"",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t6(weight: .medium),
+        alignment: .center,
         kernValue: -0.5
     )
-    
-
 
     public init(
         frame: CGRect,
@@ -29,7 +28,7 @@ public final class WarningV2View: UIView {
         label.text = text
 
         setLayout()
-
+    
     }
 
     @available(*, unavailable)
@@ -56,7 +55,6 @@ extension WarningV2View {
             $0.top.equalTo(imageView.snp.bottom).offset(-8)
             $0.leading.trailing.equalToSuperview()
             $0.centerX.equalTo(imageView.snp.centerX)
-            $0.bottom.equalToSuperview()
         }
 
     }
