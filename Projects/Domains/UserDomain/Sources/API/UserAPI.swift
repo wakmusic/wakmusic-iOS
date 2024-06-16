@@ -6,40 +6,33 @@ import Moya
 
 public enum UserAPI {
     case fetchProfileList
-    case setProfile(image: String)
-    case setUserName(name: String)
+    case fetchUserInfo
     case fetchPlayList
-    case fetchFavoriteSongs
-    case editFavoriteSongsOrder(ids: [String])
     case editPlayListOrder(ids: [String])
     case deletePlayList(ids: [String])
+    case fetchFavoriteSongs
+    case editFavoriteSongsOrder(ids: [String])
     case deleteFavoriteList(ids: [String])
-    case fetchUserInfo
+    #warning("엔드포인트 구현되면 추가 필요")
+    case setProfile(image: String)
+    case setUserName(name: String)
     case withdrawUserInfo
 }
 
-public struct RequsetProfileModel: Encodable {
+private struct RequsetProfileModel: Encodable {
     var type: String
 }
 
-public struct RequsetUserNameModel: Encodable {
+private struct RequsetUserNameModel: Encodable {
     var name: String
 }
 
-public struct RequsetEditFavoriteSongs: Encodable {
+private struct RequsetEditFavoriteSongs: Encodable {
     var songIds: [String]
 }
 
-public struct RequsetEditPlayList: Encodable {
+private struct RequsetEditPlayList: Encodable {
     var playlistKeys: [String]
-}
-
-public struct RequsetDeletePlayList: Encodable {
-    var playlistKeys: [String]
-}
-
-public struct RequestDeleteFavoriteList: Encodable {
-    var songIds: [String]
 }
 
 extension UserAPI: WMAPI {
@@ -51,64 +44,90 @@ extension UserAPI: WMAPI {
         switch self {
         case .fetchProfileList:
             return "/profile/list"
-        case .setProfile:
+        case .fetchUserInfo:
             return "/profile"
-        case .setUserName:
-            return "/name"
         case .fetchPlayList:
+            return "/playlists"
+        case .editPlayListOrder:
+            return "/playlists"
+        case .deletePlayList:
             return "/playlists"
         case .fetchFavoriteSongs:
             return "/likes"
         case .editFavoriteSongsOrder:
             return "/likes"
         case .deleteFavoriteList:
-            return "/likes/delete"
-        case .editPlayListOrder:
-            return "/playlists"
-        case .deletePlayList:
-            return "/playlists/delete"
-
-        case .fetchUserInfo:
-            return "/profile"
-
+            return "/likes"
+        case .setProfile:
+            return ""
+        case .setUserName:
+            return ""
         case .withdrawUserInfo:
-            return "/remove"
+            return ""
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchProfileList, .fetchPlayList, .fetchFavoriteSongs, .fetchUserInfo:
+        case .fetchProfileList:
             return .get
-        case .setProfile, .setUserName:
+        case .fetchUserInfo:
+            return .get
+        case .fetchPlayList:
+            return .get
+        case .editPlayListOrder:
+            return .patch
+        case .deletePlayList:
+            return .delete
+        case .fetchFavoriteSongs:
+            return .get
+        case .editFavoriteSongsOrder:
+            return .patch
+        case .deleteFavoriteList:
+            return .delete
+        case .setProfile:
+            return .patch
+        case .setUserName:
             return .patch
         case .withdrawUserInfo:
             return .delete
-
-        case .editPlayListOrder, .editFavoriteSongsOrder:
-            return .put
-
-        case .deletePlayList, .deleteFavoriteList:
-            return .post
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case let .setProfile(type):
-            return .requestJSONEncodable(RequsetProfileModel(type: type))
-        case let .setUserName(name):
-            return .requestJSONEncodable(RequsetUserNameModel(name: name))
-        case .fetchProfileList, .fetchPlayList, .fetchFavoriteSongs, .fetchUserInfo, .withdrawUserInfo:
+        case .fetchProfileList:
             return .requestPlain
-        case let .editFavoriteSongsOrder(ids: ids):
-            return .requestJSONEncodable(RequsetEditFavoriteSongs(songIds: ids))
-        case let .editPlayListOrder(ids: ids):
+        case .fetchUserInfo:
+            return .requestPlain
+        case .fetchPlayList:
+            return .requestPlain
+        case let .editPlayListOrder(ids):
             return .requestJSONEncodable(RequsetEditPlayList(playlistKeys: ids))
         case let .deletePlayList(ids):
-            return .requestJSONEncodable(RequsetDeletePlayList(playlistKeys: ids))
+            return .requestParameters(
+                parameters: [
+                    "playlistKeys": ids.joined(separator: ",")
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case .fetchFavoriteSongs:
+            return .requestPlain
+        case let .editFavoriteSongsOrder(ids):
+            return .requestJSONEncodable(RequsetEditFavoriteSongs(songIds: ids))
         case let .deleteFavoriteList(ids):
-            return .requestJSONEncodable(RequestDeleteFavoriteList(songIds: ids))
+            return .requestParameters(
+                parameters: [
+                    "songIds": ids.joined(separator: ",")
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case let .setProfile(image):
+            return .requestJSONEncodable(RequsetProfileModel(type: image))
+        case let .setUserName(name):
+            return .requestJSONEncodable(RequsetUserNameModel(name: name))
+        case .withdrawUserInfo:
+            return .requestPlain
         }
     }
 

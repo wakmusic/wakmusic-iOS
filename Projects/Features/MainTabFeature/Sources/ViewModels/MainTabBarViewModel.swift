@@ -8,34 +8,38 @@
 
 import Foundation
 import NoticeDomainInterface
-import RxCocoa
+import RxRelay
 import RxSwift
 import Utility
 
-public class MainTabBarViewModel {
-    var input = Input()
-    var output = Output()
-    var disposeBag = DisposeBag()
-
-    var fetchNoticeUseCase: FetchNoticeUseCase
-
-    public struct Input {}
-
-    public struct Output {
-        var dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
-    }
+public final class MainTabBarViewModel {
+    private let fetchNoticeUseCase: FetchNoticeUseCase
+    private let disposeBag = DisposeBag()
 
     public init(
         fetchNoticeUseCase: any FetchNoticeUseCase
     ) {
         self.fetchNoticeUseCase = fetchNoticeUseCase
+    }
 
+    public struct Input {
+        let fetchNoticePopup: PublishSubject<Void> = PublishSubject()
+    }
+
+    public struct Output {
+        let dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
+    }
+
+    public func transform(from input: Input) -> Output {
+        let output = Output()
         let igoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
         DEBUG_LOG("igoredNoticeIds: \(igoredNoticeIds)")
 
-        self.fetchNoticeUseCase.execute(type: .currently)
-            .catchAndReturn([])
-            .asObservable()
+        input.fetchNoticePopup
+            .flatMap { [fetchNoticeUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticeUseCase.execute(type: .popup)
+                    .catchAndReturn([])
+            }
             .map { entities in
                 guard !igoredNoticeIds.isEmpty else { return entities }
                 return entities.filter { entity in
@@ -45,5 +49,7 @@ public class MainTabBarViewModel {
             .debug("igoredNoticeIds")
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+
+        return output
     }
 }

@@ -9,32 +9,43 @@
 import Foundation
 
 public struct FetchNoticeEntity {
-    public init (
+    public init(
         id: Int,
         category: String,
         title: String,
-        thumbnail: String?,
-        content: String?,
-        images: [String],
-        createdAt: Double,
-        startAt: Double,
-        endAt: Double
+        content: String,
+        thumbnail: FetchNoticeEntity.Image,
+        origins: [FetchNoticeEntity.Image],
+        createdAt: Double
     ) {
         self.id = id
         self.category = category
         self.title = title
-        self.thumbnail = thumbnail
         self.content = content
-        self.images = images
+        self.thumbnail = thumbnail
+        self.origins = origins
         self.createdAt = createdAt
-        self.startAt = startAt
-        self.endAt = endAt
     }
 
     public let id: Int
     public let category, title: String
-    public let thumbnail: String?
-    public let content: String?
-    public let images: [String]
-    public let createdAt, startAt, endAt: Double
+    public let content: String
+    public let thumbnail: FetchNoticeEntity.Image
+    public let origins: [FetchNoticeEntity.Image]
+    public let createdAt: Double
+}
+
+public extension FetchNoticeEntity {
+    struct Image {
+        public init (
+            url: String,
+            link: String
+        ) {
+            self.url = url
+            self.link = link
+        }
+
+        public let url: String
+        public let link: String
+    }
 }

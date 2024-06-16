@@ -51,9 +51,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
+    var regenerateAccessTokenUseCase: any ReGenerateAccessTokenUseCase {
         shared {
-            FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
+            ReGenerateAccessTokenUseCaseImpl(authRepository: authRepository)
         }
     }
 

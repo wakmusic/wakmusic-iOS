@@ -7,6 +7,7 @@ import MyInfoFeature
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
+import SafariServices
 import SearchFeature
 import SearchFeatureInterface
 import SnapKit
@@ -29,10 +30,13 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         ]
     }()
 
-    var viewModel: MainTabBarViewModel!
+    private var viewModel: MainTabBarViewModel!
+    private lazy var input = MainTabBarViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag: DisposeBag = DisposeBag()
+
     private var previousIndex: Int?
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-    private var disposeBag: DisposeBag = DisposeBag()
 
     private var homeComponent: HomeComponent!
     private var chartComponent: ChartComponent!
@@ -47,7 +51,8 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -87,24 +92,29 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     }
 }
 
-extension MainTabBarViewController {
-    private func bind() {
-        viewModel.output
-            .dataSource
+private extension MainTabBarViewController {
+    func inputBind() {
+        input.fetchNoticePopup.onNext(())
+    }
+
+    func outputBind() {
+        output.dataSource
             .filter { !$0.isEmpty }
-            .withUnretained(self)
-            .subscribe(onNext: { owner, model in
+            .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
                 owner.showPanModal(content: viewController)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
+    func configureUI() {
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
         add(asChildViewController: viewControllers[startPage])
     }
+}
 
+extension MainTabBarViewController {
     func updateContent(previous: Int, current: Int) {
         Utility.PreferenceManager.startPage = current
         remove(asChildViewController: viewControllers[previous])
@@ -137,9 +147,15 @@ extension MainTabBarViewController {
 
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {
     public func noticeTapped(model: FetchNoticeEntity) {
-        let viewController = noticeDetailComponent.makeView(model: model)
-        viewController.modalPresentationStyle = .overFullScreen
-        self.present(viewController, animated: true)
+        if model.thumbnail.link.isEmpty {
+            let viewController = noticeDetailComponent.makeView(model: model)
+            viewController.modalPresentationStyle = .overFullScreen
+            present(viewController, animated: true)
+
+        } else {
+            guard let URL = URL(string: model.thumbnail.link) else { return }
+            present(SFSafariViewController(url: URL), animated: true)
+        }
     }
 }
 

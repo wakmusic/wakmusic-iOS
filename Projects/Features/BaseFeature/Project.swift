@@ -18,6 +18,7 @@ let project = Project.module(
                     .domain(target: .AuthDomain, type: .interface),
                     .domain(target: .PlayListDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
+                    .domain(target: .NoticeDomain, type: .interface),
                     .module(target: .ErrorModule),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
