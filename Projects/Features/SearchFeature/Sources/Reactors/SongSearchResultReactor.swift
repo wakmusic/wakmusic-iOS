@@ -16,7 +16,7 @@ final class SongSearchResultReactor: Reactor {
     enum Mutation {
         case updateSortType(SortType)
         case updateFilterType(FilterType)
-        case updateDataSource(dataSource:[SongEntity], canLoad:Bool)
+        case updateDataSource(dataSource:[SongEntity], canLoad: Bool)
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
         case updateScrollPage
@@ -39,7 +39,7 @@ final class SongSearchResultReactor: Reactor {
 
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
-            isLoading: false,
+            isLoading: true,
             sortType: .latest,
             filterType: .all,
             selectedCount: 0,

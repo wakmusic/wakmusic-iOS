@@ -59,28 +59,34 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
+        sharedState.map{($0.isLoading, $0.dataSource)}
+            .bind(with: self) { owner, info  in
 
-        sharedState.map(\.dataSource)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, dataSource in
-                var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
-
-                snapshot.appendSections([.song])
-
-                snapshot.appendItems(dataSource, toSection: .song)
-
-                self.dataSource.apply(snapshot, animatingDifferences: false)
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.isLoading)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, isLoading in
-
+                let (isLoading, dataSource) = (info.0, info.1)
+                
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
+                
                     owner.indicator.stopAnimating()
+    
+                    var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
+
+                    snapshot.appendSections([.song])
+
+                    snapshot.appendItems(dataSource, toSection: .song)
+
+                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+      
+                    let warningView = WarningV2View(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()), text: "검색결과가 없습니다.")
+
+                    if dataSource.isEmpty {
+                        owner.collectionView.setBackgroundView(warningView)
+                    } else {
+                        owner.collectionView.restore()
+                    }
+                    
                 }
             }
             .disposed(by: disposeBag)
