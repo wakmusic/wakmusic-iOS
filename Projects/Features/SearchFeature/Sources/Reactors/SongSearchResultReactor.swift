@@ -4,20 +4,22 @@ import SearchDomainInterface
 import SongsDomainInterface
 
 final class SongSearchResultReactor: Reactor {
-    #warning("유즈케이스는 추후 연결")
+   
     enum Action {
         case viewDidLoad
         case changeSortType(SortType)
         case changeFilterType(FilterType)
+        case askLoadMore
         #warning("무한 스크롤을 고려한 스크롤 액션")
     }
 
     enum Mutation {
         case updateSortType(SortType)
         case updateFilterType(FilterType)
-        case updateDataSource([SongEntity])
+        case updateDataSource(dataSource:[SongEntity], canLoad:Bool)
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
+        case updateScrollPage
     }
 
     struct State {
@@ -27,6 +29,7 @@ final class SongSearchResultReactor: Reactor {
         var selectedCount: Int
         var scrollPage: Int
         var dataSource: [SongEntity]
+        var canLoad: Bool
     }
 
     var initialState: State
@@ -35,15 +38,14 @@ final class SongSearchResultReactor: Reactor {
     private let text: String
 
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
-        LogManager.printDebug("\(Self.self) init with Text :\(text)")
-
         self.initialState = State(
             isLoading: false,
             sortType: .latest,
             filterType: .all,
             selectedCount: 0,
             scrollPage: 1,
-            dataSource: []
+            dataSource: [],
+            canLoad: true
         )
 
         self.text = text
@@ -54,8 +56,8 @@ final class SongSearchResultReactor: Reactor {
         let state = self.currentState
 
         switch action {
-        case .viewDidLoad:
-            return updateDataSource(order: state.sortType, filter: state.filterType, text: self.text, scrollPage: 1)
+        case .viewDidLoad, .askLoadMore:
+            return updateDataSource(order: state.sortType, filter: state.filterType, text: self.text, scrollPage: state.scrollPage)
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
@@ -71,14 +73,18 @@ final class SongSearchResultReactor: Reactor {
             newState.sortType = type
         case let .updateFilterType(type):
             newState.filterType = type
-        case let .updateDataSource(dataSource):
-            newState.dataSource = dataSource
+        case let .updateDataSource(dataSource,canLoad):
+            newState.dataSource += dataSource
+            newState.canLoad = canLoad
 
         case let .updateSelectedCount(count):
             break
 
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
+            
+        case .updateScrollPage:
+            newState.scrollPage += 1
         }
 
         return newState
@@ -93,22 +99,20 @@ extension SongSearchResultReactor {
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
         return .just(.updateFilterType(type))
     }
-
-    private func updateDataSource(
-        order: SortType,
-        filter: FilterType,
-        text: String,
-        scrollPage: Int
-    ) -> Observable<Mutation> {
+    
+    private func updateDataSource(order: SortType, filter: FilterType, text: String,scrollPage: Int) -> Observable<Mutation> {
         return .concat([
-            .just(Mutation.updateLoadingState(true)),
+            .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: 20)
                 .asObservable()
                 .map { dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource)
+                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: !dataSource.isEmpty)
                 },
-            .just(Mutation.updateLoadingState(false))
+            .just(Mutation.updateScrollPage), // 스크롤 페이지 증가
+            .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }
+    
+
 }

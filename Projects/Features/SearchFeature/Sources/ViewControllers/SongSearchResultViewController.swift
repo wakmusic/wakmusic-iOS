@@ -35,6 +35,24 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func bindAction(reactor: SongSearchResultReactor) {
         super.bindAction(reactor: reactor)
+        
+        let sharedState = reactor.state.share()
+        
+        collectionView.rx.willDisplayCell
+            .map{ $1 }
+            .withLatestFrom(
+                sharedState.map(\.dataSource),
+                resultSelector: { (indexPath, datasource) -> (IndexPath, Int) in
+                    return (indexPath, datasource.count)
+                }
+            )
+            .filter{ $0.0.row == $0.1-1 } // 마지막 인덱스 접근
+            .withLatestFrom(sharedState.map(\.canLoad)){ $1 } // 더 가져올께 있나?
+            .filter{ $0 }
+            .map{ _ in SongSearchResultReactor.Action.askLoadMore }
+            .bind(to: reactor.action )
+            .disposed(by:disposeBag)
+        
     }
 
     override func bindState(reactor: SongSearchResultReactor) {
