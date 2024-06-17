@@ -55,10 +55,6 @@ public extension AppComponent {
 
 // MARK: - ETC
 public extension AppComponent {
-    var serviceInfoComponent: ServiceInfoComponent {
-        ServiceInfoComponent(parent: self)
-    }
-
     var permissionComponent: PermissionComponent {
         PermissionComponent(parent: self)
     }

@@ -12,7 +12,7 @@ public protocol RequestDependency: Dependency {
     var faqFactory: any FaqFactory { get }
     var questionFactory: any QuestionFactory { get }
     var noticeFactory: any NoticeFactory { get }
-    var serviceInfoComponent: ServiceInfoComponent { get }
+    var serviceInfoFactory: ServiceInfoFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
@@ -26,7 +26,7 @@ public final class RequestComponent: Component<RequestDependency> {
             faqFactory: dependency.faqFactory,
             questionFactory: dependency.questionFactory,
             noticeFactory: dependency.noticeFactory,
-            serviceInfoComponent: dependency.serviceInfoComponent,
+            serviceInfoFactory: dependency.serviceInfoFactory,
             textPopUpFactory: dependency.textPopUpFactory
         )
     }

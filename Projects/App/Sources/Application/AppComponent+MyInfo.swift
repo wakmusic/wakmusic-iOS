@@ -34,4 +34,8 @@ extension AppComponent {
     var faqContentFactory: any FaqContentFactory {
         FaqContentComponent(parent: self)
     }
+    
+    var serviceInfoFactory: any ServiceInfoFactory {
+        ServiceInfoComponent(parent: self)
+    }
 }

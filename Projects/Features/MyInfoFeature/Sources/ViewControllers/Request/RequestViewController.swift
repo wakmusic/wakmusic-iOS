@@ -104,7 +104,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     var faqFactory: FaqFactory!
     var questionFactory: QuestionFactory!
     var noticeFactory: NoticeFactory!
-    var serviceInfoComponent: ServiceInfoComponent!
+    var serviceInfoFactory: ServiceInfoFactory!
 
     var disposeBag = DisposeBag()
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
@@ -125,7 +125,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         faqFactory: FaqFactory,
         questionFactory: QuestionFactory,
         noticeFactory: NoticeFactory,
-        serviceInfoComponent: ServiceInfoComponent,
+        serviceInfoFactory: ServiceInfoFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
@@ -133,7 +133,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         viewController.faqFactory = faqFactory
         viewController.questionFactory = questionFactory
         viewController.noticeFactory = noticeFactory
-        viewController.serviceInfoComponent = serviceInfoComponent
+        viewController.serviceInfoFactory = serviceInfoFactory
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
@@ -267,7 +267,7 @@ extension RequestViewController {
         serviceButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-                let viewController = owner.serviceInfoComponent.makeView()
+                let viewController = owner.serviceInfoFactory.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }).disposed(by: disposeBag)
 
