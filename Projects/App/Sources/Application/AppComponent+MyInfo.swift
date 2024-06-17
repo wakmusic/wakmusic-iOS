@@ -22,7 +22,7 @@ extension AppComponent {
     var openSourceLicenseFactory: any OpenSourceLicenseFactory {
         OpenSourceLicenseComponent(parent: self)
     }
-    
+
     var questionFactory: any QuestionFactory {
         QuestionComponent(parent: self)
     }

@@ -1,7 +1,7 @@
 import BaseFeatureInterface
 import Foundation
-import NeedleFoundation
 import MyInfoFeatureInterface
+import NeedleFoundation
 import UIKit
 
 public protocol QuestionDependency: Dependency {
