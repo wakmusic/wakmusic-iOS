@@ -122,7 +122,9 @@ jobs:
           echo "${{ secrets.GOOGLE_INFO_PLIST }}" > ${{ env.GOOGLE_SERVICE_INFO_PLIST_PATH }}
 
       - name: Generate NeedleGenerated.swift
-        run:  sh Scripts/NeedleRunScript.sh
+        run:  |
+          sh Scripts/NeedleRunScript.sh ci
+          echo finish NeedleRunScript
 
       - name: Test with tuist
         run: make test
