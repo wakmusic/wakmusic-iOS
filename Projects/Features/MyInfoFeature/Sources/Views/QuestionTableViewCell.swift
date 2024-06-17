@@ -1,5 +1,5 @@
 import DesignSystem
-import MyInfoFeatureInterface
+import FaqDomainInterface
 import UIKit
 
 class QuestionTableViewCell: UITableViewCell {
@@ -17,7 +17,7 @@ class QuestionTableViewCell: UITableViewCell {
 }
 
 extension QuestionTableViewCell {
-    public func update(model: FaqModel) {
+    public func update(model: FaqEntity) {
         categoryLabel.text = model.category
         titleLabel.text = model.question
         expandImageView.image = model.isOpen ? DesignSystemAsset.Navigation.fold.image : DesignSystemAsset.Navigation

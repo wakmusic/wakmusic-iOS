@@ -1,4 +1,6 @@
 import UIKit
+import NoticeDomainInterface
+import FaqDomainInterface
 
 public protocol MyInfoFactory {
     func makeView() -> UIViewController
@@ -21,7 +23,7 @@ public protocol FaqFactory {
 }
 
 public protocol FaqContentFactory {
-    func makeView(dataSource: [FaqModel]) -> UIViewController
+    func makeView(dataSource: [FaqEntity]) -> UIViewController
 }
 
 public protocol NoticeFactory {
@@ -29,7 +31,7 @@ public protocol NoticeFactory {
 }
 
 public protocol NoticeDetailFactory {
-    func makeView(model: FetchNoticeModel) -> UIViewController
+    func makeView(model: FetchNoticeEntity) -> UIViewController
 }
 
 public protocol QuestionFactory {

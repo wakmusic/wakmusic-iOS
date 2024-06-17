@@ -1,5 +1,5 @@
 import DesignSystem
-import MyInfoFeatureInterface
+import FaqDomainInterface
 import UIKit
 
 class AnswerTableViewCell: UITableViewCell {
@@ -13,7 +13,7 @@ class AnswerTableViewCell: UITableViewCell {
 }
 
 extension AnswerTableViewCell {
-    public func update(model: FaqModel) {
+    public func update(model: FaqEntity) {
         answerLabel.text = model.answer
     }
 }

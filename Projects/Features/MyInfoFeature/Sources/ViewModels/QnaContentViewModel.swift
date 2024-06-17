@@ -1,20 +1,20 @@
 import BaseFeature
 import Foundation
-import MyInfoFeatureInterface
+import FaqDomainInterface
 import RxRelay
 import RxSwift
 import Utility
 
 public final class QnaContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var dataSource: [FaqModel]
+    var dataSource: [FaqEntity]
 
     public struct Input {}
 
     public struct Output {}
 
     public init(
-        dataSource: [FaqModel]
+        dataSource: [FaqEntity]
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.dataSource = dataSource

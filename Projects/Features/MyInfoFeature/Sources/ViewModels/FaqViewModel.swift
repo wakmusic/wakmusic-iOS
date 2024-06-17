@@ -14,7 +14,7 @@ public final class FaqViewModel: ViewModelType {
     public struct Input {}
 
     public struct Output {
-        let dataSource: BehaviorRelay<([String], [FaqModel])> = BehaviorRelay(value: ([], []))
+        let dataSource: BehaviorRelay<([String], [FaqEntity])> = BehaviorRelay(value: ([], []))
     }
 
     public init(
@@ -43,16 +43,6 @@ public final class FaqViewModel: ViewModelType {
 
         let zip2 = fetchQnaUseCase.execute()
             .catchAndReturn([])
-            .map {
-                $0.map {
-                    FaqModel(
-                        category: $0.category,
-                        question: $0.question,
-                        answer: $0.answer,
-                        isOpen: $0.isOpen
-                    )
-                }
-            }
             .asObservable()
 
         Observable.zip(zip1, zip2)
