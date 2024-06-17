@@ -23,3 +23,19 @@ public protocol FaqFactory {
 public protocol FaqContentFactory {
     func makeView(dataSource: [FaqModel]) -> UIViewController
 }
+
+public protocol NoticeFactory {
+    func makeView() -> UIViewController
+}
+
+public protocol NoticeDetailFactory {
+    func makeView(model: FetchNoticeModel) -> UIViewController
+}
+
+public protocol QuestionFactory {
+    func makeView() -> UIViewController
+}
+
+public protocol TeamInfoFactory {
+    func makeView() -> UIViewController
+}
