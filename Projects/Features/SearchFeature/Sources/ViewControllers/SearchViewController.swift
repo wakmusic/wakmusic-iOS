@@ -100,8 +100,9 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
             .withUnretained(self)
             .observe(on: MainScheduler.asyncInstance)
             .bind { owner, data in
-
+            
                 let (state, text) = data
+                
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state: state, text: text)
@@ -124,6 +125,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     }
                     owner.showPanModal(content: textPopupViewController)
                 } else {
+                    owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)
                 }
