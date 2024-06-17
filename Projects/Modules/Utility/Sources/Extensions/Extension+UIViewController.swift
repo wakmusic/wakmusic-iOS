@@ -117,10 +117,10 @@ public extension UIViewController {
         // Disable the ability to pull down to dismiss the modal
         sheetController.dismissOnPull = dismissOnOverlayTapAndPull
 
-        /// Allow pulling past the maximum height and bounce back. Defaults to true.
+        // Allow pulling past the maximum height and bounce back. Defaults to true.
         sheetController.allowPullingPastMaxHeight = false
 
-        /// Automatically grow/move the sheet to accomidate the keyboard. Defaults to true.
+        // Automatically grow/move the sheet to accomidate the keyboard. Defaults to true.
         sheetController.autoAdjustToKeyboard = true
 
         // Color of the sheet anywhere the child view controller may not show (or is transparent),

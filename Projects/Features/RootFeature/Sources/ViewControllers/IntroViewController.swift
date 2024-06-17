@@ -154,23 +154,23 @@ private extension IntroViewController {
                         dismissOnOverlayTapAndPull: false
                     )
 
-                #warning("도메인 변경으로 항상 failure > showTabBar() 호출은 추후 지워야 함")
+                    #warning("도메인 변경으로 항상 failure > showTabBar() 호출은 추후 지워야 함")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
                     /*
-                    owner.showFittedSheets(
-                        content: owner.textPopUpFactory.makeView(
-                            text: error.asWMError.errorDescription ?? "",
-                            cancelButtonIsHidden: true,
-                            confirmButtonText: nil,
-                            cancelButtonText: nil,
-                            completion: nil,
-                            cancelCompletion: nil
-                        ),
-                        dismissOnOverlayTapAndPull: false
-                    )
-                     */
+                     owner.showFittedSheets(
+                         content: owner.textPopUpFactory.makeView(
+                             text: error.asWMError.errorDescription ?? "",
+                             cancelButtonIsHidden: true,
+                             confirmButtonText: nil,
+                             cancelButtonText: nil,
+                             completion: nil,
+                             cancelCompletion: nil
+                         ),
+                         dismissOnOverlayTapAndPull: false
+                     )
+                      */
                 }
             })
             .disposed(by: disposeBag)
