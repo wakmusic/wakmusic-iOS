@@ -1,10 +1,10 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import MyInfoFeatureInterface
 import RxSwift
 import UIKit
 import Utility
-import MyInfoFeatureInterface
 
 public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!

@@ -1,6 +1,6 @@
 import BaseFeature
-import Foundation
 import FaqDomainInterface
+import Foundation
 import RxRelay
 import RxSwift
 import Utility

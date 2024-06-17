@@ -1,6 +1,6 @@
 import Foundation
-import NeedleFoundation
 import MyInfoFeatureInterface
+import NeedleFoundation
 import NoticeDomainInterface
 import UIKit
 

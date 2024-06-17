@@ -1,6 +1,6 @@
-import MyInfoFeatureInterface
 import BaseFeature
 import DesignSystem
+import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift

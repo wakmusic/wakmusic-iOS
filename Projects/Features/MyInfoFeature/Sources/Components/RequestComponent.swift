@@ -2,9 +2,9 @@ import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
 import UserDomainInterface
-import MyInfoFeatureInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }

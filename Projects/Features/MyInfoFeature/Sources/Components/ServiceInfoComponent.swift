@@ -1,7 +1,7 @@
 import BaseFeatureInterface
 import Foundation
-import NeedleFoundation
 import MyInfoFeatureInterface
+import NeedleFoundation
 
 public protocol ServiceInfoDependency: Dependency {
     var openSourceLicenseFactory: any OpenSourceLicenseFactory { get }

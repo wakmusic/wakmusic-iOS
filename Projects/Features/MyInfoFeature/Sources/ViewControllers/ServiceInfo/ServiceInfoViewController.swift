@@ -2,11 +2,11 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
+import MyInfoFeatureInterface
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import MyInfoFeatureInterface
 
 public class ServiceInfoViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
