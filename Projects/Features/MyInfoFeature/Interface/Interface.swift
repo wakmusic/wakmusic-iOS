@@ -15,3 +15,11 @@ public protocol AppPushSettingFactory {
 public protocol OpenSourceLicenseFactory {
     func makeView() -> UIViewController
 }
+
+public protocol FaqFactory {
+    func makeView() -> UIViewController
+}
+
+public protocol FaqContentFactory {
+    func makeView(dataSource: [FaqModel]) -> UIViewController
+}
