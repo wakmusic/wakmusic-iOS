@@ -1,7 +1,8 @@
 import BaseFeatureInterface
 import NeedleFoundation
-import SearchDomainInterface
 import UIKit
+import SearchDomainInterface
+
 
 public final class SearchOptionComponent: Component<EmptyDependency> {
     public func makeView(_ sortType: SortType) -> UIViewController {

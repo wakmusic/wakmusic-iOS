@@ -1,60 +1,61 @@
-import DesignSystem
-import SearchDomainInterface
+import UIKit
 import SnapKit
 import Then
-import UIKit
+import DesignSystem
+import SearchDomainInterface
 
 final class SearchOptionCell: UITableViewCell {
+    
     static let identifer: String = "SearchOptionCell"
-    private let label: WMLabel = WMLabel(
-        text: "",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t4(weight: .light)
-    )
-    private let checkImageView: UIImageView = UIImageView().then {
+    private var label: WMLabel = WMLabel(text:"",
+                                         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+                                         font: .t4(weight: .light))
+    private var checkImageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.checkBox.image
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleToFill
     }
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews()
         setLayout()
     }
-
-    @available(*, unavailable)
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 extension SearchOptionCell {
+    
     private func addSubviews() {
         self.contentView.addSubviews(label, checkImageView)
     }
-
+    
     private func setLayout() {
+        
         label.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(checkImageView.snp.leading).offset(-10)
-            $0.top.bottom.equalToSuperview()
+            $0.leading.centerX.equalToSuperview()
         }
-
+        
         checkImageView.snp.makeConstraints {
             $0.height.width.equalTo(25)
             $0.centerY.equalTo(label.snp.centerY)
-            $0.trailing.equalToSuperview().inset(20)
+            $0.trailing.equalToSuperview()
         }
+        
     }
-
+    
     public func update(_ model: SortType, _ selectedModel: SortType) {
+        
         self.label.text = model.title
         if model == selectedModel {
             label.font = .setFont(.t4(weight: .medium))
         } else {
             label.font = .setFont(.t4(weight: .light))
         }
-
+        
         checkImageView.isHidden = model != selectedModel
+        
     }
 }
