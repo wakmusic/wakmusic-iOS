@@ -18,6 +18,10 @@ let project = Project.module(
                 .domain(target: .NoticeDomain, type: .interface)
             ]
         ),
+        .testing(
+            module: .domain(.NoticeDomain),
+            dependencies: [.domain(target: .NoticeDomain, type: .interface)]
+        ),
         .tests(
             module: .domain(.NoticeDomain),
             dependencies: [.domain(target: .NoticeDomain)]
