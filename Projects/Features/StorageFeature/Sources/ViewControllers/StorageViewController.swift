@@ -76,7 +76,7 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
         direction: PageboyViewController.NavigationDirection,
         animated: Bool
     ) {
-        // TODO: 편집 모드 처리
+        self.reactor?.action.onNext(.switchTab(index))
     }
 
     public static func viewController(
