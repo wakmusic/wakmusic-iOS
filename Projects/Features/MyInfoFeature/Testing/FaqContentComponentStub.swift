@@ -1,5 +1,5 @@
-import Foundation
 import FaqDomainInterface
+import Foundation
 @testable import MyInfoFeature
 import MyInfoFeatureInterface
 import UIKit

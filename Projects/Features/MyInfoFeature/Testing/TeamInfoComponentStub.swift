@@ -1,6 +1,6 @@
 import BaseFeatureInterface
-import MyInfoFeatureInterface
 @testable import MyInfoFeature
+import MyInfoFeatureInterface
 import UIKit
 
 public final class TeamInfoComponentStub: TeamInfoFactory {

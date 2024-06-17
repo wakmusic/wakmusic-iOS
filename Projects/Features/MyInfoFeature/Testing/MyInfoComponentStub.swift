@@ -1,9 +1,9 @@
 import BaseFeatureInterface
-@testable import SignInFeatureTesting
 @testable import BaseFeatureTesting
 @testable import MyInfoFeature
 import MyInfoFeatureInterface
 import SignInFeatureInterface
+@testable import SignInFeatureTesting
 import UIKit
 
 public final class MyInfoComponentStub: MyInfoFactory {
