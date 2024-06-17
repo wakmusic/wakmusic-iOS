@@ -111,3 +111,6 @@ amplifytools.xcconfig
 
 ### Google
 GoogleService-Info.plist
+
+### Needle
+Projects/App/Sources/Application/NeedleGenerated.swift
