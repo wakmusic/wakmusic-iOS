@@ -254,7 +254,6 @@ extension QuestionViewController {
                     guard let textPopupViewController = self.textPopUpFactory.makeView(
                         text: text,
                         cancelButtonIsHidden: false,
-                        allowsDragAndTapToDismiss: nil,
                         confirmButtonText: "다음",
                         cancelButtonText: "충족 기준 보기",
                         completion: {
@@ -269,8 +268,8 @@ extension QuestionViewController {
                     ) as? TextPopupViewController else {
                         return
                     }
+                    self.showFittedSheets(content: textPopupViewController)
 
-                    self.showPanModal(content: textPopupViewController)
                 } else {
                     self.goToMail(source: source)
                 }
@@ -309,7 +308,6 @@ extension QuestionViewController {
             guard let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
                 cancelButtonIsHidden: true,
-                allowsDragAndTapToDismiss: nil,
                 confirmButtonText: "확인",
                 cancelButtonText: nil,
                 completion: nil,
@@ -318,7 +316,7 @@ extension QuestionViewController {
                 return
             }
 
-            self.showPanModal(content: textPopupViewController)
+            self.showFittedSheets(content: textPopupViewController)
         }
     }
 }

@@ -9,6 +9,7 @@ let project = Project.module(
         .implements(module: .module(.FeatureThirdPartyLib), product: .framework, dependencies: [
             .SPM.Needle,
             .SPM.PanModal,
+            .SPM.FittedSheets,
             .SPM.Lottie,
             .SPM.RxSwift,
             .SPM.RxCocoa,

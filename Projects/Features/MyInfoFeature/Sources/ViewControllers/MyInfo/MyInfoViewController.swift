@@ -101,7 +101,6 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         guard let vc = owner.textPopUpFactory.makeView(
                             text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
                             cancelButtonIsHidden: false,
-                            allowsDragAndTapToDismiss: nil,
                             confirmButtonText: nil,
                             cancelButtonText: nil,
                             completion: {
@@ -112,11 +111,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         ) as? TextPopupViewController else {
                             return
                         }
-
-                        vc.modalPresentationStyle = .popover
-                        owner.present(vc, animated: true)
-                        #warning("팬모달 이슈 해결되면 변경 예정")
-                        // owner.showPanModal(content: vc)
+                        owner.showFittedSheets(content: vc)
                     }
                 case .faq:
                     let vc = owner.faqComponent.makeView()

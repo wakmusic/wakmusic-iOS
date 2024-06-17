@@ -180,7 +180,6 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             guard let self = self, let textPopupViewController = self.textPopUpFactory.makeView(
                 text: "전체 내역을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false,
-                allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
                 completion: { Utility.PreferenceManager.recentRecords = nil },
@@ -189,7 +188,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
                 return
             }
 
-            self.showPanModal(content: textPopupViewController)
+            self.showFittedSheets(content: textPopupViewController)
         }
 
         if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {

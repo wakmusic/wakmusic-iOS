@@ -64,6 +64,15 @@
       }
     },
     {
+      "identity" : "fittedsheets",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gordontucker/FittedSheets.git",
+      "state" : {
+        "revision" : "5d7f5a6307ad510aa05de5a4a16ac40846d3b2d3",
+        "version" : "2.6.1"
+      }
+    },
+    {
       "identity" : "googleappmeasurement",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",

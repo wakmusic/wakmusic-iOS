@@ -12,7 +12,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var cancelButtonIsHidden: Bool = false
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
-    var allowsDragAndTapToDismiss: Bool = true
     var cancelButtonText: String = ""
     var confirmButtonText: String = ""
 
@@ -29,7 +28,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     public static func viewController(
         text: String = "",
         cancelButtonIsHidden: Bool,
-        allowsDragAndTapToDismiss: Bool = true,
         confirmButtonText: String = "확인",
         cancelButtonText: String = "취소",
         completion: (() -> Void)? = nil,
@@ -39,7 +37,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         let viewController = TextPopupViewController.viewController(storyBoardName: "Base", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
-        viewController.allowsDragAndTapToDismiss = allowsDragAndTapToDismiss
         viewController.completion = completion
         viewController.cancelCompletion = cancelCompletion
         viewController.confirmButtonText = confirmButtonText
@@ -48,13 +45,15 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     }
 
     @IBAction func cancelButtonAction(_ sender: Any) {
-        dismiss(animated: true)
-        cancelCompletion?()
+        dismiss(animated: true, completion: { [cancelCompletion] in
+            cancelCompletion?()
+        })
     }
 
     @IBAction func confirmButtonAction(_ sender: Any) {
-        dismiss(animated: true)
-        completion?()
+        dismiss(animated: true, completion: { [completion] in
+            completion?()
+        })
     }
 }
 
@@ -155,10 +154,10 @@ extension TextPopupViewController: PanModalPresentable {
     }
 
     public var allowsDragToDismiss: Bool {
-        return allowsDragAndTapToDismiss
+        return true
     }
 
     public var allowsTapToDismiss: Bool {
-        return allowsDragAndTapToDismiss
+        return true
     }
 }

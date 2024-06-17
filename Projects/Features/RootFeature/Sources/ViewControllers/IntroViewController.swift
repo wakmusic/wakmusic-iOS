@@ -95,17 +95,18 @@ private extension IntroViewController {
                         return
 
                     case .offline:
-                        owner.showPanModal(
+                        owner.showFittedSheets(
                             content: owner.textPopUpFactory.makeView(
                                 text: entity.description,
                                 cancelButtonIsHidden: true,
-                                allowsDragAndTapToDismiss: false,
                                 confirmButtonText: "재시도",
                                 cancelButtonText: nil,
                                 completion: {
                                     owner.input.fetchAppCheck.onNext(())
-                                }, cancelCompletion: nil
-                            ) as? TextPopupViewController ?? .init()
+                                },
+                                cancelCompletion: nil
+                            ),
+                            dismissOnOverlayTapAndPull: false
                         )
                         return
 
@@ -113,19 +114,18 @@ private extension IntroViewController {
                         textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
                             confirmButtonText: nil,
                             cancelButtonText: nil,
                             completion: {
                                 exit(0)
-                            }, cancelCompletion: nil
+                            },
+                            cancelCompletion: nil
                         ) as? TextPopupViewController ?? .init()
 
                     case .update:
                         textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
-                            allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
                             cancelButtonText: "나중에",
                             completion: {
@@ -140,7 +140,6 @@ private extension IntroViewController {
                         textPopupVc = owner.textPopUpFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
                             cancelButtonText: nil,
                             completion: {
@@ -150,25 +149,28 @@ private extension IntroViewController {
                         ) as? TextPopupViewController ?? .init()
                     }
 
-                    owner.showPanModal(content: textPopupVc)
+                    owner.showFittedSheets(
+                        content: textPopupVc,
+                        dismissOnOverlayTapAndPull: false
+                    )
 
-                    #warning("도메인 변경으로 항상 failure")
+                #warning("도메인 변경으로 항상 failure > showTabBar() 호출은 추후 지워야 함")
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
                     /*
-                     owner.showPanModal(
-                         content: owner.textPopUpFactory.makeView(
-                             text: error.asWMError.errorDescription ?? "",
-                             cancelButtonIsHidden: true,
-                             allowsDragAndTapToDismiss: false,
-                             confirmButtonText: nil,
-                             cancelButtonText: nil,
-                             completion: nil,
-                             cancelCompletion: nil
-                         ) as? TextPopupViewController ?? .init()
-                     )
-                      */
+                    owner.showFittedSheets(
+                        content: owner.textPopUpFactory.makeView(
+                            text: error.asWMError.errorDescription ?? "",
+                            cancelButtonIsHidden: true,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: nil,
+                            cancelCompletion: nil
+                        ),
+                        dismissOnOverlayTapAndPull: false
+                    )
+                     */
                 }
             })
             .disposed(by: disposeBag)
@@ -189,18 +191,18 @@ private extension IntroViewController {
                 owner.showTabBar()
 
             case let .failure(error):
-                owner.showPanModal(
+                owner.showFittedSheets(
                     content: owner.textPopUpFactory.makeView(
                         text: error.asWMError.errorDescription ?? "",
                         cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: {
                             owner.showTabBar()
                         },
                         cancelCompletion: nil
-                    ) as? TextPopupViewController ?? .init()
+                    ),
+                    dismissOnOverlayTapAndPull: false
                 )
             }
         })

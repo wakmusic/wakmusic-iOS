@@ -103,7 +103,7 @@ private extension MainTabBarViewController {
             .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
-                owner.showPanModal(content: viewController)
+                owner.showFittedSheets(content: viewController)
             }
             .disposed(by: disposeBag)
     }

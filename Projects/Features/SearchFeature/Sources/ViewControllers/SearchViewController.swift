@@ -114,7 +114,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     guard let textPopupViewController = owner.textPopUpFactory.makeView(
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: nil,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: nil,
@@ -122,7 +121,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     ) as? TextPopupViewController else {
                         return
                     }
-                    owner.showPanModal(content: textPopupViewController)
+                    owner.showFittedSheets(content: textPopupViewController)
                 } else {
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)

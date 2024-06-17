@@ -97,7 +97,6 @@ extension ServiceInfoViewController {
                 guard let textPopupVC = owner.textPopUpFactory.makeView(
                     text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: { owner.viewModel.input.removeCache.onNext(()) },
@@ -106,7 +105,7 @@ extension ServiceInfoViewController {
                     return
                 }
 
-                owner.showPanModal(content: textPopupVC)
+                owner.showFittedSheets(content: textPopupVC)
             }).disposed(by: disposeBag)
 
         viewModel.output
