@@ -49,7 +49,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func moveQuestionAction(_ sender: Any) {
-        let vc = questionComponent.makeView().wrapNavigationController
+        let vc = questionFactory.makeView().wrapNavigationController
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
@@ -102,7 +102,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var output = viewModel.transform(from: input)
 
     var faqFactory: FaqFactory!
-    var questionComponent: QuestionComponent!
+    var questionFactory: QuestionFactory!
     var noticeFactory: NoticeFactory!
     var serviceInfoComponent: ServiceInfoComponent!
 
@@ -123,7 +123,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     public static func viewController(
         viewModel: RequestViewModel,
         faqFactory: FaqFactory,
-        questionComponent: QuestionComponent,
+        questionFactory: QuestionFactory,
         noticeFactory: NoticeFactory,
         serviceInfoComponent: ServiceInfoComponent,
         textPopUpFactory: TextPopUpFactory
@@ -131,7 +131,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.faqFactory = faqFactory
-        viewController.questionComponent = questionComponent
+        viewController.questionFactory = questionFactory
         viewController.noticeFactory = noticeFactory
         viewController.serviceInfoComponent = serviceInfoComponent
         viewController.textPopUpFactory = textPopUpFactory

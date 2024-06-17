@@ -9,7 +9,7 @@ public protocol MyInfoDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
     var faqFactory: any FaqFactory { get }
     var noticeFactory: any NoticeFactory { get }
-    var questionComponent: QuestionComponent { get }
+    var questionFactory: any QuestionFactory { get }
     var teamInfoFactory: any TeamInfoFactory { get }
     var settingFactory: any SettingFactory { get }
 }
@@ -22,7 +22,7 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             signInFactory: dependency.signInFactory,
             faqFactory: dependency.faqFactory,
             noticeFactory: dependency.noticeFactory,
-            questionComponent: dependency.questionComponent,
+            questionFactory: dependency.questionFactory,
             teamInfoFactory: dependency.teamInfoFactory,
             settingFactory: dependency.settingFactory
         )

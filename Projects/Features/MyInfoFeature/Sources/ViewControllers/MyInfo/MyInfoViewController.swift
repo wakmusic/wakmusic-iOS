@@ -17,7 +17,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
-    private var questionComponent: QuestionComponent! // 문의하기
+    private var questionFactory: QuestionFactory! // 문의하기
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
 
@@ -35,7 +35,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
-        questionComponent: QuestionComponent,
+        questionFactory: QuestionFactory,
         teamInfoFactory: TeamInfoFactory,
         settingFactory: SettingFactory
     ) -> MyInfoViewController {
@@ -44,7 +44,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
         viewController.noticeFactory = noticeFactory
-        viewController.questionComponent = questionComponent
+        viewController.questionFactory = questionFactory
         viewController.teamInfoFactory = teamInfoFactory
         viewController.settingFactory = settingFactory
         return viewController
@@ -125,7 +125,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                     let vc = owner.noticeFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .mail:
-                    let vc = owner.questionComponent.makeView()
+                    let vc = owner.questionFactory.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .team:

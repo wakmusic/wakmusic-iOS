@@ -22,4 +22,16 @@ extension AppComponent {
     var openSourceLicenseFactory: any OpenSourceLicenseFactory {
         OpenSourceLicenseComponent(parent: self)
     }
+    
+    var questionFactory: any QuestionFactory {
+        QuestionComponent(parent: self)
+    }
+
+    var faqFactory: any FaqFactory {
+        FaqComponent(parent: self)
+    }
+
+    var faqContentFactory: any FaqContentFactory {
+        FaqContentComponent(parent: self)
+    }
 }
