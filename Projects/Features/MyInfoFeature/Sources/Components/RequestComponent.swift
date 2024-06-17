@@ -4,13 +4,14 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
+import MyInfoFeatureInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var faqComponent: FaqComponent { get }
+    var faqFactory: any FaqFactory { get }
     var questionComponent: QuestionComponent { get }
-    var noticeComponent: NoticeComponent { get }
+    var noticeFactory: any NoticeFactory { get }
     var serviceInfoComponent: ServiceInfoComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -22,9 +23,9 @@ public final class RequestComponent: Component<RequestDependency> {
                 withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            faqComponent: dependency.faqComponent,
+            faqFactory: dependency.faqFactory,
             questionComponent: dependency.questionComponent,
-            noticeComponent: dependency.noticeComponent,
+            noticeFactory: dependency.noticeFactory,
             serviceInfoComponent: dependency.serviceInfoComponent,
             textPopUpFactory: dependency.textPopUpFactory
         )

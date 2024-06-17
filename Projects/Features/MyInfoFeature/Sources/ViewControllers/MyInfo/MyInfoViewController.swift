@@ -15,11 +15,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     let myInfoView = MyInfoView()
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-    private var faqComponent: FaqComponent! // 자주 묻는 질문
-    private var noticeComponent: NoticeComponent! // 공지사항
+    private var faqFactory: FaqFactory! // 자주 묻는 질문
+    private var noticeFactory: NoticeFactory! // 공지사항
     private var questionComponent: QuestionComponent! // 문의하기
-    private var teamInfoComponent: TeamInfoComponent! // 팀 소개
-    private var settingComponent: SettingComponent!
+    private var teamInfoFactory: TeamInfoFactory! // 팀 소개
+    private var settingFactory: SettingFactory!
 
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -33,20 +33,20 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         reactor: MyInfoReactor,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory,
-        faqComponent: FaqComponent,
-        noticeComponent: NoticeComponent,
+        faqFactory: FaqFactory,
+        noticeFactory: NoticeFactory,
         questionComponent: QuestionComponent,
-        teamInfoComponent: TeamInfoComponent,
-        settingComponent: SettingComponent
+        teamInfoFactory: TeamInfoFactory,
+        settingFactory: SettingFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
-        viewController.faqComponent = faqComponent
-        viewController.noticeComponent = noticeComponent
+        viewController.faqFactory = faqFactory
+        viewController.noticeFactory = noticeFactory
         viewController.questionComponent = questionComponent
-        viewController.teamInfoComponent = teamInfoComponent
-        viewController.settingComponent = settingComponent
+        viewController.teamInfoFactory = teamInfoFactory
+        viewController.settingFactory = settingFactory
         return viewController
     }
 
@@ -119,20 +119,20 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         // owner.showPanModal(content: vc)
                     }
                 case .faq:
-                    let vc = owner.faqComponent.makeView()
+                    let vc = owner.faqFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .noti:
-                    let vc = owner.noticeComponent.makeView()
+                    let vc = owner.noticeFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .mail:
                     let vc = owner.questionComponent.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .team:
-                    let vc = owner.teamInfoComponent.makeView()
+                    let vc = owner.teamInfoFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .setting:
-                    let vc = owner.settingComponent.makeView()
+                    let vc = owner.settingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }

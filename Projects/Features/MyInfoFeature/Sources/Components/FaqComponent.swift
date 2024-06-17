@@ -5,7 +5,7 @@ import NeedleFoundation
 import UIKit
 
 public protocol FaqDependency: Dependency {
-    var faqContentFactory: FaqContentFactory { get }
+    var faqContentFactory: any FaqContentFactory { get }
     var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase { get }
     var fetchFaqUseCase: any FetchFaqUseCase { get }
 }

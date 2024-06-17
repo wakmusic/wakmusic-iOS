@@ -6,7 +6,7 @@ import UIKit
 
 public protocol NoticeDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }
-    var noticeDetailFactory: NoticeDetailFactory { get }
+    var noticeDetailFactory: any NoticeDetailFactory { get }
 }
 
 public final class NoticeComponent: Component<NoticeDependency>, NoticeFactory {

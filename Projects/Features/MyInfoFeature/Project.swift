@@ -5,7 +5,10 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.MyInfoFeature.rawValue,
     targets: [
-        .interface(module: .feature(.MyInfoFeature)),
+        .interface(module: .feature(.MyInfoFeature), dependencies: [
+            .domain(target: .NoticeDomain, type: .interface),
+            .domain(target: .FaqDomain, type: .interface)
+        ]),
         .implements(
             module: .feature(.MyInfoFeature),
             product: .staticFramework,

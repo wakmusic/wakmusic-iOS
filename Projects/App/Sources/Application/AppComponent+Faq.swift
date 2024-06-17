@@ -10,6 +10,7 @@ import BaseFeature
 import FaqDomain
 import FaqDomainInterface
 import MyInfoFeature
+import MyInfoFeatureInterface
 import SignInFeature
 
 // MARK: 변수명 주의
@@ -20,11 +21,11 @@ public extension AppComponent {
         QuestionComponent(parent: self)
     }
 
-    var faqComponent: FaqComponent {
+    var faqFactory: any FaqFactory {
         FaqComponent(parent: self)
     }
 
-    var faqContentComponent: FaqContentComponent {
+    var faqContentFactory: any FaqContentFactory {
         FaqContentComponent(parent: self)
     }
 

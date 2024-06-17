@@ -4,6 +4,7 @@ import DesignSystem
 import RxSwift
 import UIKit
 import Utility
+import MyInfoFeatureInterface
 
 public final class RequestViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var backButton: UIButton!
@@ -43,7 +44,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = faqComponent.makeView()
+        let vc = faqFactory.makeView()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -54,7 +55,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func movenoticeAction(_ sender: Any) {
-        let viewController = noticeComponent.makeView()
+        let viewController = noticeFactory.makeView()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -100,9 +101,9 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
-    var faqComponent: FaqComponent!
+    var faqFactory: FaqFactory!
     var questionComponent: QuestionComponent!
-    var noticeComponent: NoticeComponent!
+    var noticeFactory: NoticeFactory!
     var serviceInfoComponent: ServiceInfoComponent!
 
     var disposeBag = DisposeBag()
@@ -121,17 +122,17 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     public static func viewController(
         viewModel: RequestViewModel,
-        faqComponent: FaqComponent,
+        faqFactory: FaqFactory,
         questionComponent: QuestionComponent,
-        noticeComponent: NoticeComponent,
+        noticeFactory: NoticeFactory,
         serviceInfoComponent: ServiceInfoComponent,
         textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.faqComponent = faqComponent
+        viewController.faqFactory = faqFactory
         viewController.questionComponent = questionComponent
-        viewController.noticeComponent = noticeComponent
+        viewController.noticeFactory = noticeFactory
         viewController.serviceInfoComponent = serviceInfoComponent
         viewController.textPopUpFactory = textPopUpFactory
         return viewController

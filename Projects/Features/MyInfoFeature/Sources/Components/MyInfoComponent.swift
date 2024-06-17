@@ -7,11 +7,11 @@ import UIKit
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    var faqComponent: FaqComponent { get }
-    var noticeComponent: NoticeComponent { get }
+    var faqFactory: any FaqFactory { get }
+    var noticeFactory: any NoticeFactory { get }
     var questionComponent: QuestionComponent { get }
-    var teamInfoComponent: TeamInfoComponent { get }
-    var settingComponent: SettingComponent { get }
+    var teamInfoFactory: any TeamInfoFactory { get }
+    var settingFactory: any SettingFactory { get }
 }
 
 public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
@@ -20,11 +20,11 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             reactor: MyInfoReactor(),
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory,
-            faqComponent: dependency.faqComponent,
-            noticeComponent: dependency.noticeComponent,
+            faqFactory: dependency.faqFactory,
+            noticeFactory: dependency.noticeFactory,
             questionComponent: dependency.questionComponent,
-            teamInfoComponent: dependency.teamInfoComponent,
-            settingComponent: dependency.settingComponent
+            teamInfoFactory: dependency.teamInfoFactory,
+            settingFactory: dependency.settingFactory
         )
     }
 }
