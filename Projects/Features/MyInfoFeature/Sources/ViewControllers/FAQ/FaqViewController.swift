@@ -1,5 +1,5 @@
-import MyInfoFeatureInterface
 import DesignSystem
+import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import Pageboy
 import RxSwift

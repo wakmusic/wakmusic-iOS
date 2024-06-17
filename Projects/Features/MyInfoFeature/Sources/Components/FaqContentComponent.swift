@@ -1,8 +1,8 @@
 import FaqDomainInterface
-import MyInfoFeatureInterface
-import UIKit
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
+import UIKit
 
 public final class FaqContentComponent: Component<EmptyDependency>, FaqContentFactory {
     public func makeView(dataSource: [FaqModel]) -> UIViewController {

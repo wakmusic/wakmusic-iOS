@@ -1,6 +1,6 @@
 import Foundation
-import MyInfoFeatureInterface
 @testable import MyInfoFeature
+import MyInfoFeatureInterface
 import UIKit
 
 public final class FaqContentComponentStub: FaqContentFactory {

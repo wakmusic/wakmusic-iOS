@@ -1,8 +1,8 @@
 import FaqDomainInterface
-import MyInfoFeatureInterface
-import UIKit
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
+import UIKit
 
 public protocol FaqDependency: Dependency {
     var faqContentComponent: FaqContentComponent { get }

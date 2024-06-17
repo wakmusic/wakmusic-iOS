@@ -1,6 +1,6 @@
 import BaseFeature
-import MyInfoFeatureInterface
 import Foundation
+import MyInfoFeatureInterface
 import RxRelay
 import RxSwift
 import Utility
