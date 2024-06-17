@@ -1,13 +1,5 @@
-//
-//  QuestionTableViewCell.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/30.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
-import FaqDomainInterface
+import MyInfoFeatureInterface
 import UIKit
 
 class QuestionTableViewCell: UITableViewCell {
@@ -25,7 +17,7 @@ class QuestionTableViewCell: UITableViewCell {
 }
 
 extension QuestionTableViewCell {
-    public func update(model: FaqEntity) {
+    public func update(model: FaqModel) {
         categoryLabel.text = model.category
         titleLabel.text = model.question
         expandImageView.image = model.isOpen ? DesignSystemAsset.Navigation.fold.image : DesignSystemAsset.Navigation

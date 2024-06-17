@@ -1,30 +1,20 @@
-//
-//  AfterLoginStorageViewModel.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
-import FaqDomainInterface
+import MyInfoFeatureInterface
 import Foundation
-
-// import KeychainModule
 import RxRelay
 import RxSwift
 import Utility
 
 public final class QnaContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
-    var dataSource: [FaqEntity]
+    var dataSource: [FaqModel]
 
     public struct Input {}
 
     public struct Output {}
 
     public init(
-        dataSource: [FaqEntity]
+        dataSource: [FaqModel]
     ) {
         DEBUG_LOG("✅ \(Self.self) 생성")
         self.dataSource = dataSource

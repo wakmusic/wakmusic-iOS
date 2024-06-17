@@ -1,13 +1,5 @@
-//
-//  AnswerTableViewCell.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/30.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
-import FaqDomainInterface
+import MyInfoFeatureInterface
 import UIKit
 
 class AnswerTableViewCell: UITableViewCell {
@@ -21,7 +13,7 @@ class AnswerTableViewCell: UITableViewCell {
 }
 
 extension AnswerTableViewCell {
-    public func update(model: FaqEntity) {
+    public func update(model: FaqModel) {
         answerLabel.text = model.answer
     }
 }

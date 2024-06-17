@@ -1,11 +1,4 @@
-//
-//  QnAViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/29.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import MyInfoFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
 import Pageboy
@@ -37,7 +30,7 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
 
     var disposeBag = DisposeBag()
     var viewModel: FaqViewModel!
-    var faqContentComponent: FaqContentComponent!
+    var faqContentFactory: FaqContentFactory!
     lazy var input = FaqViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
@@ -45,11 +38,11 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
 
     public static func viewController(
         viewModel: FaqViewModel,
-        faqContentComponent: FaqContentComponent
+        faqContentFactory: FaqContentFactory
     ) -> FaqViewController {
         let viewController = FaqViewController.viewController(storyBoardName: "Faq", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.faqContentComponent = faqContentComponent
+        viewController.faqContentFactory = faqContentFactory
         return viewController
     }
 }
@@ -107,18 +100,14 @@ extension FaqViewController {
                 self?.activityIndicator.stopAnimating()
             })
             .subscribe { [weak self] categories, qna in
-                guard let self = self else {
-                    return
-                }
-                guard let comp = self.faqContentComponent else {
-                    return
-                }
+                guard let self = self else { return }
+                guard let factory = self.faqContentFactory else { return }
 
                 self.viewControllers = categories.enumerated().map { i, c in
                     if i == 0 {
-                        return comp.makeView(dataSource: qna)
+                        return factory.makeView(dataSource: qna)
                     } else {
-                        return comp.makeView(dataSource: qna.filter {
+                        return factory.makeView(dataSource: qna.filter {
                             $0.category.replacingOccurrences(of: " ", with: "") == c
                                 .replacingOccurrences(of: " ", with: "")
                         })

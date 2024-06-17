@@ -1,16 +1,7 @@
-//
-//  AfterLoginStorageViewModel.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import FaqDomainInterface
+import MyInfoFeatureInterface
 import Foundation
-
-// import KeychainModule
 import RxRelay
 import RxSwift
 import Utility
@@ -23,7 +14,7 @@ public final class FaqViewModel: ViewModelType {
     public struct Input {}
 
     public struct Output {
-        let dataSource: BehaviorRelay<([String], [FaqEntity])> = BehaviorRelay(value: ([], []))
+        let dataSource: BehaviorRelay<([String], [FaqModel])> = BehaviorRelay(value: ([], []))
     }
 
     public init(
@@ -52,6 +43,16 @@ public final class FaqViewModel: ViewModelType {
 
         let zip2 = fetchQnaUseCase.execute()
             .catchAndReturn([])
+            .map {
+                $0.map {
+                    FaqModel(
+                        category: $0.category,
+                        question: $0.question,
+                        answer: $0.answer,
+                        isOpen: $0.isOpen
+                    )
+                }
+            }
             .asObservable()
 
         Observable.zip(zip1, zip2)
