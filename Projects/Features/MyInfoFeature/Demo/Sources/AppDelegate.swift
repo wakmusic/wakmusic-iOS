@@ -1,5 +1,5 @@
 import Inject
-@testable import MyInfoFeature
+@testable import MyInfoFeatureTesting
 import UIKit
 
 @main
@@ -12,9 +12,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let reactor = MyInfoReactor()
+        let vc = MyInfoComponentStub()
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: MyInfoViewController(reactor: reactor))
+            UINavigationController(rootViewController: vc.makeView())
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()

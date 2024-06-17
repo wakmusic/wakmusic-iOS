@@ -30,7 +30,8 @@ let project = Project.module(
             .feature(target: .MyInfoFeature, type: .interface),
             .feature(target: .BaseFeature, type: .testing),
             .feature(target: .SignInFeature, type: .testing),
-            .domain(target: .FaqDomain, type: .testing)
+            .domain(target: .FaqDomain, type: .testing),
+            .domain(target: .NoticeDomain, type: .testing)
         ]),
         .tests(module: .feature(.MyInfoFeature), dependencies: [
             .feature(target: .MyInfoFeature)
