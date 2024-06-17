@@ -5,7 +5,9 @@ fi
 export PATH
 
 if which needle > /dev/null; then
-	needle generate Sources/Application/NeedleGenerated.swift ../
+	ROOT= Projects/App/
+	touch $ROOT/Sources/Application/NeedleGenerated.swift
+	needle generate $ROOT/Sources/Application/NeedleGenerated.swift ../
 else
 	echo "warning: Needle not installed, plz run 'brew install needle'"
 fi
