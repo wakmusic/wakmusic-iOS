@@ -959,6 +959,7 @@ extension AppComponent: Registration {
         localTable["lyricDecoratingComponent-LyricDecoratingComponent"] = { [unowned self] in self.lyricDecoratingComponent as Any }
         localTable["remoteSongsDataSource-any RemoteSongsDataSource"] = { [unowned self] in self.remoteSongsDataSource as Any }
         localTable["songsRepository-any SongsRepository"] = { [unowned self] in self.songsRepository as Any }
+        localTable["fetchSongUseCase-any FetchSongUseCase"] = { [unowned self] in self.fetchSongUseCase as Any }
         localTable["fetchLyricsUseCase-any FetchLyricsUseCase"] = { [unowned self] in self.fetchLyricsUseCase as Any }
         localTable["fetchNewSongsUseCase-any FetchNewSongsUseCase"] = { [unowned self] in self.fetchNewSongsUseCase as Any }
         localTable["signInFactory-any SignInFactory"] = { [unowned self] in self.signInFactory as Any }
@@ -968,7 +969,7 @@ extension AppComponent: Registration {
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["fetchTokenUseCase-any FetchTokenUseCase"] = { [unowned self] in self.fetchTokenUseCase as Any }
-        localTable["fetchNaverUserInfoUseCase-any FetchNaverUserInfoUseCase"] = { [unowned self] in self.fetchNaverUserInfoUseCase as Any }
+        localTable["regenerateAccessTokenUseCase-any ReGenerateAccessTokenUseCase"] = { [unowned self] in self.regenerateAccessTokenUseCase as Any }
         localTable["logoutUseCase-any LogoutUseCase"] = { [unowned self] in self.logoutUseCase as Any }
         localTable["checkIsExistAccessTokenUseCase-any CheckIsExistAccessTokenUseCase"] = { [unowned self] in self.checkIsExistAccessTokenUseCase as Any }
         localTable["remoteLikeDataSource-any RemoteLikeDataSource"] = { [unowned self] in self.remoteLikeDataSource as Any }
