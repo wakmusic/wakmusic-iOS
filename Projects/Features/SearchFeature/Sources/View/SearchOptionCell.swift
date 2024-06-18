@@ -13,7 +13,7 @@ final class SearchOptionCell: UITableViewCell {
     )
     private let checkImageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.checkBox.image
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFit
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -36,7 +36,7 @@ extension SearchOptionCell {
     private func setLayout() {
         label.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(checkImageView.snp.leading)
+            $0.trailing.equalTo(checkImageView.snp.leading).offset(-10)
             $0.centerX.equalToSuperview()
         }
 
