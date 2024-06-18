@@ -20,11 +20,11 @@ final class SearchOptionHeaderView:
     private let searchFilterCellRegistration = UICollectionView.CellRegistration<
         SearchFilterCell, FilterType
     > { cell, indexPath, itemIdentifier in
-                
+
         cell.update(itemIdentifier)
     }
 
-    fileprivate let  dataSource: [FilterType] = [.all, .title, .artist, .credit]
+    fileprivate let dataSource: [FilterType] = [.all, .title, .artist, .credit]
     private lazy var searchFilterDiffableDataSource = UICollectionViewDiffableDataSource<Int, FilterType>(
         collectionView: collectionView
     ) { [searchFilterCellRegistration] collectionView, indexPath, itemIdentifier in
@@ -33,12 +33,12 @@ final class SearchOptionHeaderView:
             for: indexPath,
             item: itemIdentifier
         )
-        
+
         if indexPath.row == .zero {
             cell.isSelected = true
-            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init() )
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init())
         }
-        
+
         return cell
     }
 
@@ -121,22 +121,16 @@ extension SearchOptionHeaderView: SearchOptionHeaderStateProtocol {
     func updateSortState(_ sortType: SortType) {
         sortButton.updateSortrState(sortType)
     }
-    
-    
 }
-
 
 extension Reactive: SearchOptionHeaderActionProtocol where Base: SearchOptionHeaderView {
     var selectedFilterItem: Observable<FilterType> {
         base.collectionView.rx.itemSelected
-            .map{ base.dataSource[$0.row] }
+            .map { base.dataSource[$0.row] }
             .asObservable()
     }
-    
+
     var tapSortButton: Observable<Void> {
         base.sortButton.rx.didTap
     }
-    
 }
-
-

@@ -55,7 +55,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
             .map { _ in ListSearchResultReactor.Action.askLoadMore }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         headerView.rx.tapSortButton
             .bind(with: self) { owner, _ in
                 #warning("모달 띄우기")
