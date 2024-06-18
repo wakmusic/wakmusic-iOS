@@ -36,6 +36,7 @@ final class LyricDecoratingViewModel: ViewModelType {
         let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let updateDecoratingImage: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
@@ -66,6 +67,13 @@ final class LyricDecoratingViewModel: ViewModelType {
                 return newEntities
             }
             .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        output.dataSource
+            .filter { !$0.isEmpty }
+            .map { $0.filter { $0.isSelected }.first?.image ?? "" }
+            .filter { !$0.isEmpty }
+            .bind(to: output.updateDecoratingImage)
             .disposed(by: disposeBag)
 
         output.highlightingItems

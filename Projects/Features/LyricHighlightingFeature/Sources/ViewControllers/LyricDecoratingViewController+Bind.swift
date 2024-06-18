@@ -3,6 +3,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 import UIKit
+import Kingfisher
 
 extension LyricDecoratingViewController {
     func inputBind() {
@@ -62,12 +63,31 @@ extension LyricDecoratingViewController {
             })
             .disposed(by: disposeBag)
 
+        output.updateDecoratingImage
+            .filter { !$0.isEmpty }
+            .map { URL(string: $0) }
+            .compactMap { $0 }
+            .bind(with: self) { owner, url in
+                KingfisherManager.shared.retrieveImage(
+                    with: url
+                ) { result in
+                    switch result {
+                    case let .success(value):
+                        owner.decorateImageView.image = value.image
+
+                    case let .failure(error):
+                        owner.showToast(
+                            text: error.localizedDescription,
+                            font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                        )
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+
         output.dataSource
             .skip(1)
-            .do(onNext: { [decorateImageView, indicator] entities in
-                decorateImageView.kf.setImage(
-                    with: URL(string: entities.filter { $0.isSelected }.first?.image ?? "")
-                )
+            .do(onNext: { [indicator] _ in
                 indicator.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in

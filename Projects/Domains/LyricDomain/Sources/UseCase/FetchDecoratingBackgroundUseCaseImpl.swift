@@ -1,11 +1,3 @@
-//
-//  FetchDecoratingBackgroundUseCaseImpl.swift
-//  LyricDomain
-//
-//  Created by KTH on 6/19/24.
-//  Copyright © 2024 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import LyricDomainInterface
 import RxSwift
