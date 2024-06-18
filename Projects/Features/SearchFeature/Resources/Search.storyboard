@@ -19,16 +19,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e54-rK-aGI">
-                                <rect key="frame" x="0.0" y="59" width="393" height="12"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="12" id="nJ5-2M-ZsW"/>
+                                    <constraint firstAttribute="height" constant="16" id="nJ5-2M-ZsW"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nx-1t-MMz">
-                                <rect key="frame" x="0.0" y="71" width="393" height="40"/>
+                                <rect key="frame" x="0.0" y="75" width="393" height="36"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="ykE-p1-BQh"/>
+                                    <constraint firstAttribute="height" constant="36" id="ykE-p1-BQh"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQz-yK-5DK" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
