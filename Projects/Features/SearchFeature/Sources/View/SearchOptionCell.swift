@@ -35,13 +35,14 @@ extension SearchOptionCell {
 
     private func setLayout() {
         label.snp.makeConstraints {
-            $0.leading.centerX.equalToSuperview()
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerX.equalToSuperview()
         }
 
         checkImageView.snp.makeConstraints {
             $0.height.width.equalTo(25)
             $0.centerY.equalTo(label.snp.centerY)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 
