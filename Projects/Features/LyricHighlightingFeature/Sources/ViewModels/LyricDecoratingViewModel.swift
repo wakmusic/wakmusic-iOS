@@ -5,11 +5,13 @@ import LyricHighlightingFeatureInterface
 import RxRelay
 import RxSwift
 import SongsDomainInterface
+import LyricDomainInterface
 import UIKit
 import Utility
 
 final class LyricDecoratingViewModel: ViewModelType {
     private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])
+    private let fetchDecoratingBackgroundUseCase: FetchDecoratingBackgroundUseCase
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -17,9 +19,11 @@ final class LyricDecoratingViewModel: ViewModelType {
     }
 
     public init(
-        model: LyricHighlightingRequiredModel
+        model: LyricHighlightingRequiredModel,
+        fetchDecoratingBackgroundUseCase: any FetchDecoratingBackgroundUseCase
     ) {
         self.model = model
+        self.fetchDecoratingBackgroundUseCase = fetchDecoratingBackgroundUseCase
     }
 
     public struct Input {

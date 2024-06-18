@@ -16,7 +16,7 @@ public enum LyricAPI {
     case fetchDecoratingBackground
 }
 
-extension ArtistAPI: WMAPI {
+extension LyricAPI: WMAPI {
     public var domain: WMDomain {
         switch self {
         case .fetchDecoratingBackground:
