@@ -107,7 +107,7 @@ extension SearchOptionHeaderView {
         dimView.layer.addSublayer(gradientLayer)
     }
 
-    func initDataSource() {
+    private func initDataSource() {
         var snapShot = NSDiffableDataSourceSnapshot<Int, FilterType>()
 
         snapShot.appendSections([0])
