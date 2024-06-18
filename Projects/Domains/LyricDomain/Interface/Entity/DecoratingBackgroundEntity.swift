@@ -8,6 +8,6 @@ public struct DecoratingBackgroundEntity {
         self.name = name
         self.image = image
     }
-    
+
     public let name, image: String
 }

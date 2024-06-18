@@ -6,10 +6,10 @@
 //  Copyright © 2024 yongbeomkwak. All rights reserved.
 //
 
-import LyricDomainInterface
 import BaseDomain
 import ErrorModule
 import Foundation
+import LyricDomainInterface
 import Moya
 
 public enum LyricAPI {

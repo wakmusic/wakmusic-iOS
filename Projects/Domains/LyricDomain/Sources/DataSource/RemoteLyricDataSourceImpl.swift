@@ -1,6 +1,6 @@
+import BaseDomain
 import Foundation
 import LyricDomainInterface
-import BaseDomain
 import RxSwift
 
 public final class RemoteLyricDataSourceImpl: BaseRemoteDataSource<LyricAPI>, RemoteLyricDataSource {
