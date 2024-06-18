@@ -5,8 +5,15 @@ import BaseFeature
 import Utility
 import SearchDomainInterface
 
+protocol SearchOptionViewControllerDelegate: AnyObject {
+    func tap(_ option: SortType)
+}
+
 final class SearchOptionViewController: BaseViewController {
-        
+    
+    
+    weak var delegate: SearchOptionViewControllerDelegate?
+    
     private let options: [SortType] = [.latest, .oldest, .alphabetical]
     
     private var selectedModel: SortType
@@ -55,6 +62,7 @@ extension SearchOptionViewController {
     private func configureUI() {
         self.view.backgroundColor = .white
         self.tableView.backgroundColor = .white
+        self.tableView.delegate = self
     }
     
     private func createDataSource() -> UITableViewDiffableDataSource<Int, SortType> {
@@ -91,5 +99,12 @@ extension SearchOptionViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 52.0
     }
-    
+ 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let option = options[indexPath.row]
+        
+        delegate?.tap(option)
+        #warning("dismiss")
+    }
 }
