@@ -19,9 +19,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
-    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
-        $0.delegate = self
-    }
+    private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(false)
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         ListSearchResultSection,
@@ -67,7 +65,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         sharedState.map { $0.sortType }
             .bind(with: self) { owner, sortType in
 
-                owner.headerView.update(sortType: sortType)
+//                owner.headerView.update(sortType: sortType)
             }
             .disposed(by: disposeBag)
 
@@ -113,7 +111,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalToSuperview().offset(56)
+            $0.top.equalToSuperview().offset(76)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -173,15 +171,5 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
         LogManager.printDebug(model)
-    }
-}
-
-extension ListSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tapFilter() {
-        LogManager.printDebug("filter")
-    }
-
-    func tapSort() {
-        LogManager.printDebug("sort")
     }
 }

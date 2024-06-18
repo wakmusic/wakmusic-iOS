@@ -5,31 +5,46 @@ import SnapKit
 import Then
 import UIKit
 
-private protocol SearchResultHeaderView
+private protocol SearchOptionHeaderStateProtocol {
+    func updateFilterState(_ filter: FilterType)
+}
+
+private protocol SearchOptionHeaderActionProtocol {
+    
+}
 
 final class SearchOptionHeaderView:
     UIView {
-
-
-    var disposeBag = DisposeBag()
     
-    private let sortButton: OptionButton = OptionButton()
-
-    private lazy var stackView: UIStackView = UIStackView().then {
-        $0.addArrangedSubviews(sortButton)
-        $0.axis = .horizontal
-        $0.spacing = 20
-        $0.distribution = .equalSpacing
-        $0.backgroundColor = .yellow
+    private let searchFilterCellRegistration = UICollectionView.CellRegistration<
+        SearchFilterCell, FilterType
+    > { cell, _, itemIdentifier in
+        cell.update(itemIdentifier)
     }
     
-    init(sortType: SortType, filterType: FilterType? = nil) {
+    private lazy var  searchFilterDiffableDataSource = UICollectionViewDiffableDataSource<Int, FilterType>(
+        collectionView: collectionView
+    ) { [searchFilterCellRegistration] collectionView, indexPath, itemIdentifier in
+        let cell = collectionView.dequeueConfiguredReusableCell(
+            using: searchFilterCellRegistration,
+            for: indexPath,
+            item: itemIdentifier
+        )
+        return cell
+    }
+    
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: SearchOptionCollectionViewLayout()).then {
+        $0.backgroundColor = .clear
+    }
+    private let sortButton: OptionButton = OptionButton(.latest)
+
+    
+    init(_ isContainFilter: Bool) {
         super.init(frame: .zero)
-        self.backgroundColor = .orange
-        self.addSubviews(stackView)
+        addSubviews()
         setLayout()
-        bindAction()
-        
+        initDataSource()
+        collectionView.isHidden  = !isContainFilter
     }
 
 
@@ -40,20 +55,33 @@ final class SearchOptionHeaderView:
     }
 }
 
-extension SearchResultHeaderView {
-    public func update(sortType: SortType, filterType: FilterType? = nil) {
-          sortButton.setTitle(sortType.title)
-      }
-
-    private func bindAction() {
-
-
+extension SearchOptionHeaderView {
+    
+    private func addSubviews() {
+        self.addSubviews(collectionView, sortButton)
     }
 
     private func setLayout() {
-        stackView.snp.makeConstraints {
-            $0.height.equalTo(30)
+        collectionView.snp.makeConstraints {
+            $0.leading.top.bottom.equalToSuperview()
+        }
+        
+        sortButton.snp.makeConstraints {
             $0.top.bottom.trailing.equalToSuperview()
+            $0.width.equalTo(60)
+            $0.leading.equalTo(collectionView.snp.trailing).offset(4)
         }
     }
+    
+    func initDataSource() {
+        
+        var snapShot = NSDiffableDataSourceSnapshot<Int,FilterType>()
+        
+        snapShot.appendSections([0])
+        snapShot.appendItems([.all, .title, .artist, .credit], toSection: 0)
+        
+        
+        searchFilterDiffableDataSource.apply(snapShot)
+    }
 }
+

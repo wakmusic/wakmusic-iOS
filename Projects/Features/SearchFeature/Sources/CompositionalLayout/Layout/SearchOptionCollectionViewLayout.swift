@@ -1,13 +1,41 @@
-//
-//  SearchOptionCollectionViewLayout.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 6/18/24.
-//  Copyright © 2024 yongbeomkwak. All rights reserved.
-//
-
 import UIKit
+import Utility
 
-class SearchOptionCollectionViewLayout: UICollectionViewLayout {
+final class SearchOptionCollectionViewLayout: UICollectionViewCompositionalLayout {
+    init() {
+        super.init { _, _ in
 
+            return SearchOptionCollectionViewLayout.configureLayout()
+        }
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SearchOptionCollectionViewLayout {
+    private static func configureLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(50),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        
+        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.5),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        group.interItemSpacing = .fixed(4.0)
+    
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+
+        return section
+    }
 }

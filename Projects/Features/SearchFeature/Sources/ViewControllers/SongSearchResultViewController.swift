@@ -20,9 +20,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
-    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
-        $0.delegate = self
-    }
+    private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         SongSearchResultSection,
@@ -65,12 +63,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         let sharedState = reactor.state.share()
 
+        
         sharedState.map { ($0.sortType, $0.filterType) }
             .bind(with: self) { owner, info in
 
-                let (sortType, filterType) = (info.0, info.1)
-
-                owner.headerView.update(sortType: sortType, filterType: filterType)
+//                let (sortType, filterType) = (info.0, info.1)
+//
+//                owner.headerView.update(sortType: sortType, filterType: filterType)
             }
             .disposed(by: disposeBag)
 
@@ -117,7 +116,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalToSuperview().offset(56)
+            $0.top.equalToSuperview().offset(76)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -167,19 +166,6 @@ extension SongSearchResultViewController {
     }
 
     public func scrollToTop() {}
-}
-
-extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tapFilter() {
-        self.showBottomSheet(
-            content: SearchOptionViewController(selectedModel: .latest),
-            size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
-        )
-    }
-
-    func tapSort() {
-        LogManager.printDebug("sort")
-    }
 }
 
 extension SongSearchResultViewController: SongCartViewDelegate {
