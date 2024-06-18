@@ -17,6 +17,7 @@ final class SearchOptionViewController: BaseViewController {
         $0.register(SearchOptionCell.self, forCellReuseIdentifier: SearchOptionCell.identifer)
         $0.separatorStyle = .none
         $0.isScrollEnabled = false
+        $0.delegate = self
     }
 
     init(selectedModel: SortType) {
@@ -45,8 +46,8 @@ extension SearchOptionViewController {
 
     private func setLayout() {
         self.tableView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview()
+            $0.top.equalToSuperview().inset(20)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 
