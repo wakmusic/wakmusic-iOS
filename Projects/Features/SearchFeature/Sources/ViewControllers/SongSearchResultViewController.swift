@@ -171,7 +171,10 @@ extension SongSearchResultViewController {
 
 extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
     func tapFilter() {
-        self.showBottomSheet(content: SearchOptionViewController(selectedModel: .latest), size: .fixed(240+SAFEAREA_BOTTOM_HEIGHT()))
+        self.showBottomSheet(
+            content: SearchOptionViewController(selectedModel: .latest),
+            size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
+        )
     }
 
     func tapSort() {
