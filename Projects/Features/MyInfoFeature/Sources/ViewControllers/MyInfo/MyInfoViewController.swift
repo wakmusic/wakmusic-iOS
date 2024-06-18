@@ -28,6 +28,17 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     override func loadView() {
         view = myInfoView
     }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
 
     public static func viewController(
         reactor: MyInfoReactor,
@@ -185,5 +196,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+}
+
+extension MyInfoViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
