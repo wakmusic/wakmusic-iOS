@@ -1,7 +1,7 @@
 import Foundation
+import LyricDomainInterface
 import LyricHighlightingFeatureInterface
 import NeedleFoundation
-import LyricDomainInterface
 
 public protocol LyricDecoratingDependency: Dependency {
     var fetchDecoratingBackgroundUseCase: any FetchDecoratingBackgroundUseCase { get }

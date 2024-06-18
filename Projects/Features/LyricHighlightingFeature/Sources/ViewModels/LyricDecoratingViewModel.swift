@@ -1,11 +1,11 @@
 import BaseFeature
 import Foundation
 import LogManager
+import LyricDomainInterface
 import LyricHighlightingFeatureInterface
 import RxRelay
 import RxSwift
 import SongsDomainInterface
-import LyricDomainInterface
 import UIKit
 import Utility
 
