@@ -47,17 +47,9 @@ public extension UIViewController {
         size: BottomSheetSize = .intrinsic,
         dismissOnOverlayTapAndPull: Bool = true
     ) {
-        var toSize: SheetSize = .intrinsic
-        switch size {
-        case .intrinsic:
-            toSize = SheetSize.intrinsic
-        case let .fixed(value):
-            toSize = SheetSize.fixed(value)
-        }
-
         showFittedSheets(
             content: content,
-            size: toSize,
+            size: size,
             dismissOnOverlayTapAndPull: dismissOnOverlayTapAndPull
         )
     }
@@ -159,9 +151,17 @@ public extension UIViewController {
 private extension UIViewController {
     func showFittedSheets(
         content: UIViewController,
-        size: SheetSize = .intrinsic,
-        dismissOnOverlayTapAndPull: Bool = true
+        size: BottomSheetSize,
+        dismissOnOverlayTapAndPull: Bool
     ) {
+        var toSize: SheetSize = .intrinsic
+        switch size {
+        case .intrinsic:
+            toSize = SheetSize.intrinsic
+        case let .fixed(value):
+            toSize = SheetSize.fixed(value)
+        }
+
         let options = SheetOptions(
             // The full height of the pull bar.
             // The presented view controller will treat this area as a safearea inset on the top
@@ -196,7 +196,7 @@ private extension UIViewController {
 
         let sheetController = SheetViewController(
             controller: content,
-            sizes: [size],
+            sizes: [toSize],
             options: options
         )
 
