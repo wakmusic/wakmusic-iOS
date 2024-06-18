@@ -100,9 +100,9 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
             .withUnretained(self)
             .observe(on: MainScheduler.asyncInstance)
             .bind { owner, data in
-            
+
                 let (state, text) = data
-                
+
                 owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state: state, text: text)
