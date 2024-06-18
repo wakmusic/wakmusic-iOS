@@ -1,8 +1,8 @@
 import DesignSystem
+import LyricDomainInterface
 import SnapKit
 import Then
 import UIKit
-import LyricDomainInterface
 
 final class LyricDecoratingCell: UICollectionViewCell {
     private let decoImageView = UIImageView().then {

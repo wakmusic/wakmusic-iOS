@@ -47,14 +47,15 @@ final class LyricDecoratingViewModel: ViewModelType {
                 return fetchDecoratingBackgroundUseCase.execute()
                     .asObservable()
                     .catchAndReturn(
-                        [.init(name: "Wm", image: ""),
-                         .init(name: "Wg", image: ""),
-                         .init(name: "Color1", image: ""),
-                         .init(name: "Color2", image: ""),
-                         .init(name: "Color3", image: ""),
-                         .init(name: "Color4", image: ""),
-                         .init(name: "Color5", image: ""),
-                         .init(name: "Color6", image: "")
+                        [
+                            .init(name: "Wm", image: ""),
+                            .init(name: "Wg", image: ""),
+                            .init(name: "Color1", image: ""),
+                            .init(name: "Color2", image: ""),
+                            .init(name: "Color3", image: ""),
+                            .init(name: "Color4", image: ""),
+                            .init(name: "Color5", image: ""),
+                            .init(name: "Color6", image: "")
                         ]
                     )
             }
