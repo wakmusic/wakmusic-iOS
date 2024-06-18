@@ -9,11 +9,9 @@ final class SearchFilterCell: UICollectionViewCell {
     override var isSelected: Bool {
         willSet(newState) {
             if newState == true {
-                label.font = .setFont(.t6(weight: .medium))
-                label.textColor = .white
+                updateSelectState()
             } else {
-                label.font = .setFont(.t6(weight: .light))
-                label.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+                updateDeSelectState()
             }
         }
     }
@@ -50,9 +48,26 @@ extension SearchFilterCell {
     }
 
     private func configureUI() {
-        self.backgroundColor = .orange
+        self.backgroundColor = .clear
         self.layer.cornerRadius = 15
         self.clipsToBounds = true
+        updateDeSelectState()
+    }
+    
+    private func updateDeSelectState() {
+        label.font = .setFont(.t6(weight: .light))
+        label.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        self.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
+        self.layer.borderWidth = 1
+        self.backgroundColor = .clear
+    }
+    
+    private func updateSelectState() {
+        self.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+        label.font = .setFont(.t6(weight: .medium))
+        label.textColor = .white
+        self.layer.borderColor = nil
+        self.layer.borderWidth = .zero
     }
 
     public func update(_ filterType: FilterType) {

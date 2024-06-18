@@ -92,7 +92,7 @@ extension SearchOptionHeaderView {
     private func configureUI() {
             let gradientLayer = CAGradientLayer()
         gradientLayer.frame = dimView.bounds
-            gradientLayer.colors = [colorFromRGB("F2F4F7",alpha: .zero).cgColor, colorFromRGB("F2F4F7").cgColor]
+            gradientLayer.colors = [colorFromRGB("F2F4F7",alpha: .zero).cgColor,  colorFromRGB("F2F4F7").cgColor]
             gradientLayer.type = .axial
             gradientLayer.startPoint = .init(x: .zero, y: 0.5)
             gradientLayer.endPoint = .init(x: 1.0, y: 0.5)
