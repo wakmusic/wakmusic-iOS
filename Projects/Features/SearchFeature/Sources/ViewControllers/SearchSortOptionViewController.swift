@@ -39,7 +39,7 @@ final class SearchOptionViewController: BaseViewController {
     }
 }
 
-extension SearchOptionViewController {
+extension SearchSortOptionViewController {
     private func addSubviews() {
         self.view.addSubviews(tableView)
     }
@@ -85,7 +85,7 @@ extension SearchOptionViewController {
     }
 }
 
-extension SearchOptionViewController: UITableViewDelegate {
+extension SearchSortOptionViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 52.0
     }
