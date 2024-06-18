@@ -8,7 +8,7 @@ public extension TargetDependency.SPM {
     // MARK: External
     static let Moya = TargetDependency.external(name: "Moya")
     static let RxMoya = TargetDependency.external(name: "RxMoya")
-    static let PanModal = TargetDependency.external(name: "PanModal")
+    static let FittedSheets = TargetDependency.external(name: "FittedSheets")
     static let RxSwift = TargetDependency.external(name: "RxSwift")
     static let RxCocoa = TargetDependency.external(name: "RxCocoa")
     static let Kingfisher = TargetDependency.external(name: "Kingfisher")

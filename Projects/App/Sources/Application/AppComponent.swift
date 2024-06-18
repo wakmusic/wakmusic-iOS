@@ -55,14 +55,6 @@ public extension AppComponent {
 
 // MARK: - ETC
 public extension AppComponent {
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {
-        OpenSourceLicenseComponent(parent: self)
-    }
-
-    var serviceInfoComponent: ServiceInfoComponent {
-        ServiceInfoComponent(parent: self)
-    }
-
     var permissionComponent: PermissionComponent {
         PermissionComponent(parent: self)
     }

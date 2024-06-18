@@ -447,6 +447,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="v0m-AI-tzJ" firstAttribute="top" secondItem="twt-QZ-fOG" secondAttribute="bottom" id="6Nm-Zd-Pdx"/>
+                            <constraint firstItem="bZq-II-vXy" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="twt-QZ-fOG" secondAttribute="bottom" id="E4I-Wl-36V"/>
                             <constraint firstItem="twt-QZ-fOG" firstAttribute="leading" secondItem="bZq-II-vXy" secondAttribute="leading" id="Fp9-5f-bv4"/>
                             <constraint firstItem="bZq-II-vXy" firstAttribute="trailing" secondItem="twt-QZ-fOG" secondAttribute="trailing" id="JDO-D3-tLq"/>
                             <constraint firstItem="bZq-II-vXy" firstAttribute="trailing" secondItem="v0m-AI-tzJ" secondAttribute="trailing" id="Pqu-3j-S8G"/>

@@ -218,7 +218,6 @@ extension FavoriteViewController: SongCartViewDelegate {
 //            guard let textPopupViewController = self.textPopUpFactory.makeView(
 //                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
 //                cancelButtonIsHidden: false,
-//                allowsDragAndTapToDismiss: nil,
 //                confirmButtonText: nil,
 //                cancelButtonText: nil,
 //                completion: { [weak self] in
@@ -233,7 +232,7 @@ extension FavoriteViewController: SongCartViewDelegate {
 //                return
 //            }
 
-        // self.showPanModal(content: textPopupViewController)
+        // self.showBottomSheet(content: textPopupViewController)
         default: return
         }
     }

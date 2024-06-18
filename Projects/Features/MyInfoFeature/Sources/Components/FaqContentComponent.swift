@@ -1,17 +1,11 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import FaqDomainInterface
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
+import UIKit
 
-public final class FaqContentComponent: Component<EmptyDependency> {
-    public func makeView(dataSource: [FaqEntity]) -> FaqContentViewController {
+public final class FaqContentComponent: Component<EmptyDependency>, FaqContentFactory {
+    public func makeView(dataSource: [FaqEntity]) -> UIViewController {
         return FaqContentViewController.viewController(viewModel: .init(dataSource: dataSource))
     }
 }

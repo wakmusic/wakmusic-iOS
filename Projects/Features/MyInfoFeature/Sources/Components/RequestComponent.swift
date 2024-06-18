@@ -2,16 +2,17 @@ import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
 import UserDomainInterface
 
 public protocol RequestDependency: Dependency {
     var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var faqComponent: FaqComponent { get }
-    var questionComponent: QuestionComponent { get }
-    var noticeComponent: NoticeComponent { get }
-    var serviceInfoComponent: ServiceInfoComponent { get }
+    var faqFactory: any FaqFactory { get }
+    var questionFactory: any QuestionFactory { get }
+    var noticeFactory: any NoticeFactory { get }
+    var serviceInfoFactory: any ServiceInfoFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
@@ -22,10 +23,10 @@ public final class RequestComponent: Component<RequestDependency> {
                 withDrawUserInfoUseCase: dependency.withdrawUserInfoUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            faqComponent: dependency.faqComponent,
-            questionComponent: dependency.questionComponent,
-            noticeComponent: dependency.noticeComponent,
-            serviceInfoComponent: dependency.serviceInfoComponent,
+            faqFactory: dependency.faqFactory,
+            questionFactory: dependency.questionFactory,
+            noticeFactory: dependency.noticeFactory,
+            serviceInfoFactory: dependency.serviceInfoFactory,
             textPopUpFactory: dependency.textPopUpFactory
         )
     }

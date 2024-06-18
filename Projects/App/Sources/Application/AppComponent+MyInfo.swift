@@ -3,19 +3,39 @@ import MyInfoFeature
 import MyInfoFeatureInterface
 
 extension AppComponent {
-    var myInfoComponent: MyInfoComponent {
+    var myInfoFactory: any MyInfoFactory {
         MyInfoComponent(parent: self)
     }
 
-    var settingComponent: SettingComponent {
+    var settingFactory: any SettingFactory {
         SettingComponent(parent: self)
     }
 
-    var teamInfoComponent: TeamInfoComponent {
+    var teamInfoFactory: any TeamInfoFactory {
         TeamInfoComponent(parent: self)
     }
 
-    var appPushSettingComponent: AppPushSettingComponent {
+    var appPushSettingFactory: any AppPushSettingFactory {
         AppPushSettingComponent(parent: self)
+    }
+
+    var openSourceLicenseFactory: any OpenSourceLicenseFactory {
+        OpenSourceLicenseComponent(parent: self)
+    }
+
+    var questionFactory: any QuestionFactory {
+        QuestionComponent(parent: self)
+    }
+
+    var faqFactory: any FaqFactory {
+        FaqComponent(parent: self)
+    }
+
+    var faqContentFactory: any FaqContentFactory {
+        FaqContentComponent(parent: self)
+    }
+
+    var serviceInfoFactory: any ServiceInfoFactory {
+        ServiceInfoComponent(parent: self)
     }
 }

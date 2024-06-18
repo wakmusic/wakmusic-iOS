@@ -1,5 +1,4 @@
 import DesignSystem
-import PanModal
 import UIKit
 import Utility
 
@@ -12,7 +11,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     var cancelButtonIsHidden: Bool = false
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
-    var allowsDragAndTapToDismiss: Bool = true
     var cancelButtonText: String = ""
     var confirmButtonText: String = ""
 
@@ -29,7 +27,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     public static func viewController(
         text: String = "",
         cancelButtonIsHidden: Bool,
-        allowsDragAndTapToDismiss: Bool = true,
         confirmButtonText: String = "확인",
         cancelButtonText: String = "취소",
         completion: (() -> Void)? = nil,
@@ -39,7 +36,6 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
         let viewController = TextPopupViewController.viewController(storyBoardName: "Base", bundle: Bundle.module)
         viewController.contentString = text
         viewController.cancelButtonIsHidden = cancelButtonIsHidden
-        viewController.allowsDragAndTapToDismiss = allowsDragAndTapToDismiss
         viewController.completion = completion
         viewController.cancelCompletion = cancelCompletion
         viewController.confirmButtonText = confirmButtonText
@@ -48,13 +44,15 @@ public final class TextPopupViewController: UIViewController, ViewControllerFrom
     }
 
     @IBAction func cancelButtonAction(_ sender: Any) {
-        dismiss(animated: true)
-        cancelCompletion?()
+        dismiss(animated: true, completion: { [cancelCompletion] in
+            cancelCompletion?()
+        })
     }
 
     @IBAction func confirmButtonAction(_ sender: Any) {
-        dismiss(animated: true)
-        completion?()
+        dismiss(animated: true, completion: { [completion] in
+            completion?()
+        })
     }
 }
 
@@ -106,59 +104,5 @@ extension TextPopupViewController {
             ]
         )
         contentLabel.attributedText = contentAttributedString
-    }
-}
-
-extension TextPopupViewController: PanModalPresentable {
-    override public var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    public var panModalBackgroundColor: UIColor {
-        return colorFromRGB(0x000000, alpha: 0.4)
-    }
-
-    public var panScrollable: UIScrollView? {
-        return nil
-    }
-
-    public var longFormHeight: PanModalHeight {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.3
-        paragraphStyle.alignment = .center
-
-        let contentAttributedString = NSMutableAttributedString(
-            string: contentString,
-            attributes: [
-                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                .kern: -0.5,
-                .paragraphStyle: paragraphStyle
-            ]
-        )
-
-        let contentHeight: CGFloat = contentAttributedString.height(containerWidth: APP_WIDTH() - 40)
-        let spacingHeight: CGFloat = 60 + 52 + 56 + 10
-        return .contentHeight(spacingHeight + contentHeight)
-    }
-
-    public var cornerRadius: CGFloat {
-        return 24.0
-    }
-
-    public var allowsExtendedPanScrolling: Bool {
-        return true
-    }
-
-    public var showDragIndicator: Bool {
-        return false
-    }
-
-    public var allowsDragToDismiss: Bool {
-        return allowsDragAndTapToDismiss
-    }
-
-    public var allowsTapToDismiss: Bool {
-        return allowsDragAndTapToDismiss
     }
 }

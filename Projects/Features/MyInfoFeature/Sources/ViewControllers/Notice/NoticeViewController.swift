@@ -1,13 +1,6 @@
-//
-//  NoticeViewController.swift
-//  StorageFeature
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
+import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
@@ -20,7 +13,7 @@ public final class NoticeViewController: UIViewController, ViewControllerFromSto
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
 
-    private var noticeDetailComponent: NoticeDetailComponent!
+    private var noticeDetailFactory: NoticeDetailFactory!
     private var viewModel: NoticeViewModel!
     private lazy var input = NoticeViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
@@ -35,11 +28,11 @@ public final class NoticeViewController: UIViewController, ViewControllerFromSto
 
     public static func viewController(
         viewModel: NoticeViewModel,
-        noticeDetailComponent: NoticeDetailComponent
+        noticeDetailFactory: NoticeDetailFactory
     ) -> NoticeViewController {
         let viewController = NoticeViewController.viewController(storyBoardName: "Notice", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.noticeDetailComponent = noticeDetailComponent
+        viewController.noticeDetailFactory = noticeDetailFactory
         return viewController
     }
 
@@ -91,7 +84,7 @@ private extension NoticeViewController {
 
         output.goNoticeDetailScene
             .bind(with: self) { owner, model in
-                let viewController = owner.noticeDetailComponent.makeView(model: model)
+                let viewController = owner.noticeDetailFactory.makeView(model: model)
                 viewController.modalPresentationStyle = .overFullScreen
                 owner.present(viewController, animated: true)
             }

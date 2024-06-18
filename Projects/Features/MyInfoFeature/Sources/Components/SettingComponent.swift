@@ -12,10 +12,10 @@ public protocol SettingDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
-    var appPushSettingComponent: AppPushSettingComponent { get }
-    var serviceTermsComponent: ServiceTermsComponent { get }
-    var privacyComponent: PrivacyComponent { get }
-    var openSourceLicenseComponent: OpenSourceLicenseComponent { get }
+    var appPushSettingFactory: any AppPushSettingFactory { get }
+    var serviceTermsFactory: any ServiceTermFactory { get }
+    var privacyFactory: any PrivacyFactory { get }
+    var openSourceLicenseFactory: any OpenSourceLicenseFactory { get }
 }
 
 public final class SettingComponent: Component<SettingDependency>, SettingFactory {
@@ -27,10 +27,10 @@ public final class SettingComponent: Component<SettingDependency>, SettingFactor
             ),
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory,
-            appPushSettingFactory: dependency.appPushSettingComponent,
-            serviceTermsFactory: dependency.serviceTermsComponent,
-            privacyFactory: dependency.privacyComponent,
-            openSourceLicenseFactory: dependency.openSourceLicenseComponent
+            appPushSettingFactory: dependency.appPushSettingFactory,
+            serviceTermsFactory: dependency.serviceTermsFactory,
+            privacyFactory: dependency.privacyFactory,
+            openSourceLicenseFactory: dependency.openSourceLicenseFactory
         )
     }
 }

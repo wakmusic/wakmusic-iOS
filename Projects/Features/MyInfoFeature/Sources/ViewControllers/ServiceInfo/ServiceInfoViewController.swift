@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
+import MyInfoFeatureInterface
 import RxCocoa
 import RxSwift
 import UIKit
@@ -12,7 +13,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
 
-    var openSourceLicenseComponent: OpenSourceLicenseComponent!
+    var openSourceLicenseFactory: OpenSourceLicenseFactory!
     var textPopUpFactory: TextPopUpFactory!
     var viewModel: ServiceInfoViewModel!
     var disposeBag: DisposeBag = DisposeBag()
@@ -29,7 +30,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
 
     public static func viewController(
         viewModel: ServiceInfoViewModel,
-        openSourceLicenseComponent: OpenSourceLicenseComponent,
+        openSourceLicenseFactory: OpenSourceLicenseFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> ServiceInfoViewController {
         let viewController = ServiceInfoViewController.viewController(
@@ -37,7 +38,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
-        viewController.openSourceLicenseComponent = openSourceLicenseComponent
+        viewController.openSourceLicenseFactory = openSourceLicenseFactory
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
@@ -65,7 +66,7 @@ extension ServiceInfoViewController {
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .openSourceLicense:
-                    let vc = owner.openSourceLicenseComponent.makeView()
+                    let vc = owner.openSourceLicenseFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .removeCache:
                     owner.viewModel.input.requestCacheSize.onNext(())
@@ -97,7 +98,6 @@ extension ServiceInfoViewController {
                 guard let textPopupVC = owner.textPopUpFactory.makeView(
                     text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: { owner.viewModel.input.removeCache.onNext(()) },
@@ -106,7 +106,7 @@ extension ServiceInfoViewController {
                     return
                 }
 
-                owner.showPanModal(content: textPopupVC)
+                owner.showBottomSheet(content: textPopupVC)
             }).disposed(by: disposeBag)
 
         viewModel.output

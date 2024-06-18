@@ -4,7 +4,6 @@ public protocol TextPopUpFactory {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
-        allowsDragAndTapToDismiss: Bool?,
         confirmButtonText: String?,
         cancelButtonText: String?,
         completion: (() -> Void)?,

@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import MyInfoFeatureInterface
 import RxSwift
 import UIKit
 import Utility
@@ -43,18 +44,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = faqComponent.makeView()
+        let vc = faqFactory.makeView()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
     @IBAction func moveQuestionAction(_ sender: Any) {
-        let vc = questionComponent.makeView().wrapNavigationController
+        let vc = questionFactory.makeView().wrapNavigationController
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
 
     @IBAction func movenoticeAction(_ sender: Any) {
-        let viewController = noticeComponent.makeView()
+        let viewController = noticeFactory.makeView()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -62,7 +63,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         guard let secondConfirmVc = textPopUpFactory.makeView(
             text: "정말 탈퇴하시겠습니까?",
             cancelButtonIsHidden: false,
-            allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
             completion: { [weak self] in
@@ -79,31 +79,30 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         guard let firstConfirmVc = textPopUpFactory.makeView(
             text: "회원탈퇴 신청을 하시겠습니까?",
             cancelButtonIsHidden: false,
-            allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
             completion: { [weak self] in
 
                 guard let self else { return }
 
-                self.showPanModal(content: secondConfirmVc)
+                self.showBottomSheet(content: secondConfirmVc)
             },
             cancelCompletion: nil
         ) as? TextPopupViewController else {
             return
         }
 
-        self.showPanModal(content: firstConfirmVc)
+        self.showBottomSheet(content: firstConfirmVc)
     }
 
     var viewModel: RequestViewModel!
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
-    var faqComponent: FaqComponent!
-    var questionComponent: QuestionComponent!
-    var noticeComponent: NoticeComponent!
-    var serviceInfoComponent: ServiceInfoComponent!
+    var faqFactory: FaqFactory!
+    var questionFactory: QuestionFactory!
+    var noticeFactory: NoticeFactory!
+    var serviceInfoFactory: ServiceInfoFactory!
 
     var disposeBag = DisposeBag()
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
@@ -121,18 +120,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     public static func viewController(
         viewModel: RequestViewModel,
-        faqComponent: FaqComponent,
-        questionComponent: QuestionComponent,
-        noticeComponent: NoticeComponent,
-        serviceInfoComponent: ServiceInfoComponent,
+        faqFactory: FaqFactory,
+        questionFactory: QuestionFactory,
+        noticeFactory: NoticeFactory,
+        serviceInfoFactory: ServiceInfoFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.faqComponent = faqComponent
-        viewController.questionComponent = questionComponent
-        viewController.noticeComponent = noticeComponent
-        viewController.serviceInfoComponent = serviceInfoComponent
+        viewController.faqFactory = faqFactory
+        viewController.questionFactory = questionFactory
+        viewController.noticeFactory = noticeFactory
+        viewController.serviceInfoFactory = serviceInfoFactory
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
@@ -243,7 +242,6 @@ extension RequestViewController {
             guard let textPopUpViewController = textPopUpFactory.makeView(
                 text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0.description,
                 cancelButtonIsHidden: true,
-                allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
                 completion: { [weak self] in
@@ -259,14 +257,14 @@ extension RequestViewController {
                 return
             }
 
-            self.showPanModal(content: textPopUpViewController)
+            self.showBottomSheet(content: textPopUpViewController)
         })
         .disposed(by: disposeBag)
 
         serviceButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-                let viewController = owner.serviceInfoComponent.makeView()
+                let viewController = owner.serviceInfoFactory.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }).disposed(by: disposeBag)
 

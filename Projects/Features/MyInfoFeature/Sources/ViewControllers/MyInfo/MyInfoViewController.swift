@@ -15,11 +15,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     let myInfoView = MyInfoView()
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-    private var faqComponent: FaqComponent! // 자주 묻는 질문
-    private var noticeComponent: NoticeComponent! // 공지사항
-    private var questionComponent: QuestionComponent! // 문의하기
-    private var teamInfoComponent: TeamInfoComponent! // 팀 소개
-    private var settingComponent: SettingComponent!
+    private var faqFactory: FaqFactory! // 자주 묻는 질문
+    private var noticeFactory: NoticeFactory! // 공지사항
+    private var questionFactory: QuestionFactory! // 문의하기
+    private var teamInfoFactory: TeamInfoFactory! // 팀 소개
+    private var settingFactory: SettingFactory!
 
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -29,24 +29,34 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         view = myInfoView
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
     public static func viewController(
         reactor: MyInfoReactor,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory,
-        faqComponent: FaqComponent,
-        noticeComponent: NoticeComponent,
-        questionComponent: QuestionComponent,
-        teamInfoComponent: TeamInfoComponent,
-        settingComponent: SettingComponent
+        faqFactory: FaqFactory,
+        noticeFactory: NoticeFactory,
+        questionFactory: QuestionFactory,
+        teamInfoFactory: TeamInfoFactory,
+        settingFactory: SettingFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
-        viewController.faqComponent = faqComponent
-        viewController.noticeComponent = noticeComponent
-        viewController.questionComponent = questionComponent
-        viewController.teamInfoComponent = teamInfoComponent
-        viewController.settingComponent = settingComponent
+        viewController.faqFactory = faqFactory
+        viewController.noticeFactory = noticeFactory
+        viewController.questionFactory = questionFactory
+        viewController.teamInfoFactory = teamInfoFactory
+        viewController.settingFactory = settingFactory
         return viewController
     }
 
@@ -101,7 +111,6 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         guard let vc = owner.textPopUpFactory.makeView(
                             text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
                             cancelButtonIsHidden: false,
-                            allowsDragAndTapToDismiss: nil,
                             confirmButtonText: nil,
                             cancelButtonText: nil,
                             completion: {
@@ -112,27 +121,23 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         ) as? TextPopupViewController else {
                             return
                         }
-
-                        vc.modalPresentationStyle = .popover
-                        owner.present(vc, animated: true)
-                        #warning("팬모달 이슈 해결되면 변경 예정")
-                        // owner.showPanModal(content: vc)
+                        owner.showBottomSheet(content: vc)
                     }
                 case .faq:
-                    let vc = owner.faqComponent.makeView()
+                    let vc = owner.faqFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .noti:
-                    let vc = owner.noticeComponent.makeView()
+                    let vc = owner.noticeFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .mail:
-                    let vc = owner.questionComponent.makeView()
+                    let vc = owner.questionFactory.makeView()
                     vc.modalPresentationStyle = .overFullScreen
                     owner.present(vc, animated: true)
                 case .team:
-                    let vc = owner.teamInfoComponent.makeView()
+                    let vc = owner.teamInfoFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .setting:
-                    let vc = owner.settingComponent.makeView()
+                    let vc = owner.settingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -185,5 +190,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+}
+
+extension MyInfoViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
