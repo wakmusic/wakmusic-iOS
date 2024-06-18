@@ -2,7 +2,6 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import NeedleFoundation
-import PanModal
 import ReactorKit
 import RxCocoa
 import RxKeyboard
@@ -114,7 +113,6 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     guard let textPopupViewController = owner.textPopUpFactory.makeView(
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: nil,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: nil,
@@ -122,7 +120,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     ) as? TextPopupViewController else {
                         return
                     }
-                    owner.showPanModal(content: textPopupViewController)
+                    owner.showBottomSheet(content: textPopupViewController)
                 } else {
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)

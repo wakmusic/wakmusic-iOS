@@ -75,7 +75,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 guard let textPopupVC = owner.textPopUpFactory.makeView(
                     text: "캐시 데이터(\(cachSize))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
@@ -85,10 +84,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                #warning("팬모달 이슈 해결되면 변경 예정")
-                textPopupVC.modalPresentationStyle = .popover
-                owner.present(textPopupVC, animated: true)
-                // owner.showPanModal(content: textPopupVC)
+                owner.showBottomSheet(content: textPopupVC)
             })
             .disposed(by: disposeBag)
 
@@ -108,7 +104,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 guard let secondConfirmVC = owner.textPopUpFactory.makeView(
                     text: "정말 탈퇴하시겠습니까?",
                     cancelButtonIsHidden: false,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
@@ -121,22 +116,16 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 guard let firstConfirmVC = owner.textPopUpFactory.makeView(
                     text: "회원탈퇴 신청을 하시겠습니까?",
                     cancelButtonIsHidden: false,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
-                        #warning("팬모달 이슈 해결되면 변경 예정")
-                        secondConfirmVC.modalPresentationStyle = .popover
-                        owner.present(secondConfirmVC, animated: true)
-                        // owner.showPanModal(content: secondConfirmVC)
+                        owner.showBottomSheet(content: secondConfirmVC)
                     },
                     cancelCompletion: nil
                 ) as? TextPopupViewController else {
                     return
                 }
-                #warning("팬모달 이슈 해결되면 변경 예정")
-                owner.present(firstConfirmVC, animated: true)
-                // self.showPanModal(content: firstConfirmVC)
+                owner.showBottomSheet(content: firstConfirmVC)
             })
             .disposed(by: disposeBag)
 
@@ -148,7 +137,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 guard let textPopUpVC = owner.textPopUpFactory.makeView(
                     text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : description,
                     cancelButtonIsHidden: true,
-                    allowsDragAndTapToDismiss: nil,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
@@ -160,10 +148,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                #warning("팬모달 이슈 해결되면 변경 예정")
-                textPopUpVC.modalPresentationStyle = .popover
-                owner.present(textPopUpVC, animated: true)
-                // owner.showPanModal(content: textPopUpVC)
+                owner.showBottomSheet(content: textPopUpVC)
             }
             .disposed(by: disposeBag)
     }

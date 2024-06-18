@@ -63,7 +63,6 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         guard let secondConfirmVc = textPopUpFactory.makeView(
             text: "정말 탈퇴하시겠습니까?",
             cancelButtonIsHidden: false,
-            allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
             completion: { [weak self] in
@@ -80,21 +79,20 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
         guard let firstConfirmVc = textPopUpFactory.makeView(
             text: "회원탈퇴 신청을 하시겠습니까?",
             cancelButtonIsHidden: false,
-            allowsDragAndTapToDismiss: nil,
             confirmButtonText: nil,
             cancelButtonText: nil,
             completion: { [weak self] in
 
                 guard let self else { return }
 
-                self.showPanModal(content: secondConfirmVc)
+                self.showBottomSheet(content: secondConfirmVc)
             },
             cancelCompletion: nil
         ) as? TextPopupViewController else {
             return
         }
 
-        self.showPanModal(content: firstConfirmVc)
+        self.showBottomSheet(content: firstConfirmVc)
     }
 
     var viewModel: RequestViewModel!
@@ -244,7 +242,6 @@ extension RequestViewController {
             guard let textPopUpViewController = textPopUpFactory.makeView(
                 text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : $0.description,
                 cancelButtonIsHidden: true,
-                allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
                 completion: { [weak self] in
@@ -260,7 +257,7 @@ extension RequestViewController {
                 return
             }
 
-            self.showPanModal(content: textPopUpViewController)
+            self.showBottomSheet(content: textPopUpViewController)
         })
         .disposed(by: disposeBag)
 

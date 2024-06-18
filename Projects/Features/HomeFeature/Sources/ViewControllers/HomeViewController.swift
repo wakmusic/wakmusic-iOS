@@ -3,7 +3,6 @@ import ChartDomainInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
-import PanModal
 import PlayListDomainInterface
 import PlaylistFeatureInterface
 import RxCocoa

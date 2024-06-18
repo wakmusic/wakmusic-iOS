@@ -9,7 +9,6 @@
 import BaseFeature
 import DesignSystem
 import NoticeDomainInterface
-import PanModal
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -190,35 +189,5 @@ extension NoticePopupViewController: UICollectionViewDelegateFlowLayout, UIColle
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return 0
-    }
-}
-
-extension NoticePopupViewController: PanModalPresentable {
-    override public var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    public var panModalBackgroundColor: UIColor {
-        return colorFromRGB(0x000000, alpha: 0.4)
-    }
-
-    public var panScrollable: UIScrollView? {
-        return nil
-    }
-
-    public var longFormHeight: PanModalHeight {
-        return PanModalHeight.contentHeight(APP_WIDTH() + 20 + 56 + 20)
-    }
-
-    public var cornerRadius: CGFloat {
-        return 24.0
-    }
-
-    public var allowsExtendedPanScrolling: Bool {
-        return true
-    }
-
-    public var showDragIndicator: Bool {
-        return false
     }
 }

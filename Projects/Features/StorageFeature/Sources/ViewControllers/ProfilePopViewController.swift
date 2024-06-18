@@ -8,7 +8,6 @@
 
 import DesignSystem
 import NVActivityIndicatorView
-import PanModal
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -166,8 +165,6 @@ extension ProfilePopViewController {
             .subscribe(onNext: { [weak self] height in
                 guard let self = self else { return }
                 self.collectionVIewHeight.constant = height
-                self.panModalSetNeedsLayoutUpdate()
-                self.panModalTransition(to: .longForm)
                 self.view.layoutIfNeeded()
             }).disposed(by: disposeBag)
 
@@ -180,36 +177,6 @@ extension ProfilePopViewController {
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
-    }
-}
-
-extension ProfilePopViewController: PanModalPresentable {
-    override public var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    public var panModalBackgroundColor: UIColor {
-        return colorFromRGB(0x000000, alpha: 0.4)
-    }
-
-    public var panScrollable: UIScrollView? {
-        return nil
-    }
-
-    public var longFormHeight: PanModalHeight {
-        return PanModalHeight.contentHeight(collectionVIewHeight.constant + 190)
-    }
-
-    public var cornerRadius: CGFloat {
-        return 24.0
-    }
-
-    public var allowsExtendedPanScrolling: Bool {
-        return true
-    }
-
-    public var showDragIndicator: Bool {
-        return false
     }
 }
 

@@ -6,7 +6,6 @@ public final class TextPopUpComponent: Component<EmptyDependency>, TextPopUpFact
     public func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
-        allowsDragAndTapToDismiss: Bool?,
         confirmButtonText: String?,
         cancelButtonText: String?,
         completion: (() -> Void)?,
@@ -15,7 +14,6 @@ public final class TextPopUpComponent: Component<EmptyDependency>, TextPopUpFact
         return TextPopupViewController.viewController(
             text: text ?? "",
             cancelButtonIsHidden: cancelButtonIsHidden,
-            allowsDragAndTapToDismiss: allowsDragAndTapToDismiss ?? true,
             confirmButtonText: confirmButtonText ?? "확인",
             cancelButtonText: cancelButtonText ?? "취소",
             completion: completion,

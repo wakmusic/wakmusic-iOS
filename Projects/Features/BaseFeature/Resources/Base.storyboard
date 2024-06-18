@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -339,6 +339,7 @@
                             <constraint firstItem="bzT-MY-nfF" firstAttribute="top" secondItem="gkT-eU-P4o" secondAttribute="top" id="7Sg-Qj-9ki"/>
                             <constraint firstItem="bzT-MY-nfF" firstAttribute="leading" secondItem="gkT-eU-P4o" secondAttribute="leading" id="TLo-M7-80o"/>
                             <constraint firstItem="gkT-eU-P4o" firstAttribute="trailing" secondItem="bzT-MY-nfF" secondAttribute="trailing" id="aJP-GL-FCF"/>
+                            <constraint firstItem="gkT-eU-P4o" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bzT-MY-nfF" secondAttribute="bottom" id="pm0-Cd-K6T"/>
                         </constraints>
                     </view>
                     <connections>
@@ -399,7 +400,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cfO-nl-nfD">
-                                        <rect key="frame" x="20" y="126" width="303" height="19"/>
+                                        <rect key="frame" x="20" y="126.33333333333336" width="303" height="18.666666666666671"/>
                                         <color key="textColor" name="gray800"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
@@ -426,13 +427,19 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXA-NK-1pe">
-                                        <rect key="frame" x="20" y="90" width="42" height="21"/>
+                                        <rect key="frame" x="20" y="84" width="42" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="9PB-tI-7We"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XrV-Zc-jwE">
-                                        <rect key="frame" x="20" y="24" width="42" height="21"/>
+                                        <rect key="frame" x="20" y="24" width="42" height="28"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="nPs-Zl-t09"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -442,6 +449,7 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="ij3-fi-jC1" secondAttribute="trailing" constant="20" id="0cV-AG-oXd"/>
                                     <constraint firstItem="Kn4-E0-QGV" firstAttribute="centerY" secondItem="AUz-tK-BNV" secondAttribute="centerY" id="3hl-TH-OSP"/>
+                                    <constraint firstItem="dXA-NK-1pe" firstAttribute="top" secondItem="XrV-Zc-jwE" secondAttribute="bottom" constant="32" id="6Ki-ib-7EC"/>
                                     <constraint firstItem="GKw-Bn-dI7" firstAttribute="centerX" secondItem="xs4-m5-Jmc" secondAttribute="centerX" id="6dJ-aL-Dwn"/>
                                     <constraint firstItem="O6b-uG-uWT" firstAttribute="leading" secondItem="cfO-nl-nfD" secondAttribute="trailing" constant="5" id="6yN-Iy-hpx"/>
                                     <constraint firstItem="ij3-fi-jC1" firstAttribute="bottom" secondItem="AUz-tK-BNV" secondAttribute="top" constant="4" id="ADz-D1-Znw"/>
@@ -451,7 +459,6 @@
                                     <constraint firstItem="Kn4-E0-QGV" firstAttribute="leading" secondItem="Iat-p0-Uk6" secondAttribute="trailing" id="J4h-q5-5bp"/>
                                     <constraint firstItem="dXA-NK-1pe" firstAttribute="leading" secondItem="rWb-JT-gub" secondAttribute="leading" constant="20" id="MiA-Vz-kXQ"/>
                                     <constraint firstAttribute="bottom" secondItem="xs4-m5-Jmc" secondAttribute="bottom" constant="10" id="NV4-CY-70Q"/>
-                                    <constraint firstItem="cfO-nl-nfD" firstAttribute="top" secondItem="dXA-NK-1pe" secondAttribute="bottom" constant="15" id="QQB-YJ-T3c"/>
                                     <constraint firstItem="ij3-fi-jC1" firstAttribute="leading" secondItem="rWb-JT-gub" secondAttribute="leading" constant="20" id="Vsd-1u-9UH"/>
                                     <constraint firstItem="ij3-fi-jC1" firstAttribute="top" secondItem="cfO-nl-nfD" secondAttribute="bottom" constant="11" id="Xob-yg-ouk"/>
                                     <constraint firstItem="GKw-Bn-dI7" firstAttribute="centerY" secondItem="xs4-m5-Jmc" secondAttribute="centerY" id="aJv-7M-AbD"/>
@@ -500,7 +507,7 @@
     <resources>
         <image name="cross_close" width="32" height="32"/>
         <namedColor name="POINT">
-            <color red="0.035999998450279236" green="0.7850000262260437" blue="0.94999998807907104" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.035294117647058823" green="0.78431372549019607" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="WAKTAVERSE">
             <color red="0.0" green="0.9570000171661377" blue="0.72899997234344482" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -512,7 +519,7 @@
             <color red="0.99199998378753662" green="0.99199998378753662" blue="0.99199998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray400">
-            <color red="0.59600001573562622" green="0.63499999046325684" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="gray800">
             <color red="0.11400000005960464" green="0.16099999845027924" blue="0.22400000691413879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

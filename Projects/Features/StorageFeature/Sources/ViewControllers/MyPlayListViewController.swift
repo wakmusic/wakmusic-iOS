@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
-import PanModal
 import PlaylistFeatureInterface
 import RxCocoa
 import RxDataSources
@@ -266,7 +265,6 @@ extension MyPlayListViewController: SongCartViewDelegate {
 //            guard let textPopupViewController = self.textPopUpFactory.makeView(
 //                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
 //                cancelButtonIsHidden: false,
-//                allowsDragAndTapToDismiss: nil,
 //                confirmButtonText: nil,
 //                cancelButtonText: nil,
 //                completion: { [weak self] in
@@ -328,7 +326,6 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
             guard let vc = self.textPopUpFactory.makeView(
                 text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
                 cancelButtonIsHidden: false,
-                allowsDragAndTapToDismiss: nil,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
                 completion: { [weak self] in
@@ -343,7 +340,7 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
                 return
             }
 
-            self.showPanModal(content: vc)
+            self.showBottomSheet(content: vc)
 
             return
         }

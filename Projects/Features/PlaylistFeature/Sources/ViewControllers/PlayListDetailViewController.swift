@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
 import NVActivityIndicatorView
-import PanModal
 import ReactorKit
 import RxCocoa
 import RxDataSources
@@ -262,7 +261,6 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                     guard let textPopUpVC = owner.textPopUpFactory.makeView(
                         text: "변경된 내용을 저장할까요?",
                         cancelButtonIsHidden: false,
-                        allowsDragAndTapToDismiss: nil,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: { owner.reactor?.action.onNext(.save) },
@@ -271,7 +269,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         return
                     }
 
-                    owner.showPanModal(content: textPopUpVC)
+                    owner.showBottomSheet(content: textPopUpVC)
 
                 } else {
                     owner.navigationController?.popViewController(animated: true)
