@@ -27,7 +27,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let component = SearchOptionViewController(selectedModel: .latest)
 
-        let component = SearchOptionViewController(selectedModel: .latest)
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: component)
