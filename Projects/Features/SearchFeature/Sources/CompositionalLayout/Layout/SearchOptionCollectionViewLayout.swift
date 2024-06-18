@@ -25,7 +25,7 @@ extension SearchOptionCollectionViewLayout {
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.5),
+            widthDimension: .fractionalWidth(1.3),
             heightDimension: .fractionalHeight(1.0)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
