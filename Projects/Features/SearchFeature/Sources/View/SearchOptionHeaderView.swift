@@ -7,19 +7,24 @@ import UIKit
 import Utility
 
 private protocol SearchOptionHeaderStateProtocol {
-    func updateFilterState(_ filter: FilterType)
+    func updateSortState(_ sortType: SortType)
 }
 
-private protocol SearchOptionHeaderActionProtocol {}
+private protocol SearchOptionHeaderActionProtocol {
+    var selectedFilterItem: Observable<FilterType> { get }
+    var tapSortButton: Observable<Void> { get }
+}
 
 final class SearchOptionHeaderView:
     UIView {
     private let searchFilterCellRegistration = UICollectionView.CellRegistration<
         SearchFilterCell, FilterType
-    > { cell, _, itemIdentifier in
+    > { cell, indexPath, itemIdentifier in
+                
         cell.update(itemIdentifier)
     }
 
+    fileprivate let  dataSource: [FilterType] = [.all, .title, .artist, .credit]
     private lazy var searchFilterDiffableDataSource = UICollectionViewDiffableDataSource<Int, FilterType>(
         collectionView: collectionView
     ) { [searchFilterCellRegistration] collectionView, indexPath, itemIdentifier in
@@ -28,10 +33,16 @@ final class SearchOptionHeaderView:
             for: indexPath,
             item: itemIdentifier
         )
+        
+        if indexPath.row == .zero {
+            cell.isSelected = true
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init() )
+        }
+        
         return cell
     }
 
-    private lazy var collectionView = UICollectionView(
+    fileprivate lazy var collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: SearchOptionCollectionViewLayout()
     ).then {
@@ -40,7 +51,7 @@ final class SearchOptionHeaderView:
 
     private let dimView = UIView()
 
-    private let sortButton: OptionButton = OptionButton(.latest)
+    fileprivate let sortButton: OptionButton = OptionButton(.latest)
 
     init(_ isContainFilter: Bool) {
         super.init(frame: .zero)
@@ -100,8 +111,32 @@ extension SearchOptionHeaderView {
         var snapShot = NSDiffableDataSourceSnapshot<Int, FilterType>()
 
         snapShot.appendSections([0])
-        snapShot.appendItems([.all, .title, .artist, .credit], toSection: 0)
+        snapShot.appendItems(dataSource, toSection: 0)
 
         searchFilterDiffableDataSource.apply(snapShot)
     }
 }
+
+extension SearchOptionHeaderView: SearchOptionHeaderStateProtocol {
+    func updateSortState(_ sortType: SortType) {
+        sortButton.updateSortrState(sortType)
+    }
+    
+    
+}
+
+
+extension Reactive: SearchOptionHeaderActionProtocol where Base: SearchOptionHeaderView {
+    var selectedFilterItem: Observable<FilterType> {
+        base.collectionView.rx.itemSelected
+            .map{ base.dataSource[$0.row] }
+            .asObservable()
+    }
+    
+    var tapSortButton: Observable<Void> {
+        base.sortButton.rx.didTap
+    }
+    
+}
+
+

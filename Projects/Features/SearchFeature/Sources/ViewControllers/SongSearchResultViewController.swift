@@ -56,6 +56,21 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .map { _ in SongSearchResultReactor.Action.askLoadMore }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        headerView.rx.tapSortButton
+            .bind(with: self) { owner, _ in
+                #warning("모달 띄우기")
+                print("tap tap")
+            }
+            .disposed(by: disposeBag)
+        
+        headerView.rx.selectedFilterItem
+            .bind(with: self) { owner, type in
+                print(type)
+            }
+            .disposed(by: disposeBag)
+        
+    
     }
 
     override func bindState(reactor: SongSearchResultReactor) {
@@ -63,6 +78,19 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.sortType)
+            .bind(with: self) { owner, type in
+                owner.headerView.updateSortState(type)
+            
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.filterType)
+            .bind(with: self) { owner, type in
+                
+            }
+            .disposed(by: disposeBag)
+        
         sharedState.map { ($0.sortType, $0.filterType) }
             .bind(with: self) { owner, info in
 
@@ -148,10 +176,7 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { (
-            collectionView: UICollectionView,
-            indexPath: IndexPath,
-            item: SongEntity
+        >(collectionView: collectionView) { (collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity
         ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
