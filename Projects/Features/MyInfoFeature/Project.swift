@@ -37,7 +37,6 @@ let project = Project.module(
             .feature(target: .MyInfoFeature)
         ]),
         .demo(module: .feature(.MyInfoFeature), dependencies: [
-            .feature(target: .MyInfoFeature),
             .feature(target: .MyInfoFeature, type: .testing)
         ])
     ]
