@@ -17,6 +17,7 @@ final class SearchOptionViewController: BaseViewController {
     private lazy var tableView: UITableView =  UITableView().then {
         $0.register(SearchOptionCell.self, forCellReuseIdentifier: SearchOptionCell.identifer)
         $0.separatorStyle = .none
+        $0.isScrollEnabled = false 
 
     }
     
@@ -59,7 +60,7 @@ extension SearchOptionViewController {
     
     private func createDataSource() -> UITableViewDiffableDataSource<Int, SortType> {
         return UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, _ -> UITableViewCell in
-            guard  let self , let cell = tableView.dequeueReusableCell(withIdentifier: SearchOptionCell.identifer,for: indexPath) as? SearchOptionCell else {
+            guard  let self , let cell = tableView.dequeueReusableCell(withIdentifier: SearchOptionCell.identifer, for: indexPath) as? SearchOptionCell else {
                 return UITableViewCell()
             }
             cell.update(self.options[indexPath.row], self.selectedModel)
