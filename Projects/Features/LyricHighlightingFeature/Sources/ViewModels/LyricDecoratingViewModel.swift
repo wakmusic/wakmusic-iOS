@@ -32,7 +32,7 @@ final class LyricDecoratingViewModel: ViewModelType {
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[LyricDecoratingModel]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[DecoratingBackgroundEntity]> = BehaviorRelay(value: [])
         let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -41,12 +41,28 @@ final class LyricDecoratingViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
 
-        #warning("TO-DO: API 나오면 UseCase로 대체")
+        #warning("TO-DO: catchAndReturn은 []로 수정해야함")
         input.fetchBackgroundImage
-            .map { _ -> [LyricDecoratingModel] in
-                return Array(0 ... 9).map { i -> LyricDecoratingModel in
-                    LyricDecoratingModel(imageURL: "", imageColor: UIColor.random(), isSelected: i == 0 ? true : false)
-                }
+            .flatMap { [fetchDecoratingBackgroundUseCase] _ -> Observable<[DecoratingBackgroundEntity]> in
+                return fetchDecoratingBackgroundUseCase.execute()
+                    .asObservable()
+                    .catchAndReturn(
+                        [.init(name: "Wm", image: ""),
+                         .init(name: "Wg", image: ""),
+                         .init(name: "Color1", image: ""),
+                         .init(name: "Color2", image: ""),
+                         .init(name: "Color3", image: ""),
+                         .init(name: "Color4", image: ""),
+                         .init(name: "Color5", image: ""),
+                         .init(name: "Color6", image: "")
+                        ]
+                    )
+            }
+            .map { entities in
+                guard !entities.isEmpty else { return entities }
+                var newEntities = entities
+                newEntities[0].isSelected = true
+                return newEntities
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)

@@ -65,8 +65,9 @@ extension LyricDecoratingViewController {
         output.dataSource
             .skip(1)
             .do(onNext: { [decorateImageView, indicator] entities in
-                decorateImageView.backgroundColor = entities.filter { $0.isSelected }.first?
-                    .imageColor ?? DesignSystemAsset.PrimaryColorV2.point.color
+                decorateImageView.kf.setImage(
+                    with: URL(string: entities.filter { $0.isSelected }.first?.image ?? "")
+                )
                 indicator.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
@@ -76,7 +77,7 @@ extension LyricDecoratingViewController {
                 ) as? LyricDecoratingCell else {
                     return UICollectionViewCell()
                 }
-                cell.update(model: model, index: index)
+                cell.update(model: model)
                 return cell
             }
             .disposed(by: disposeBag)
