@@ -37,7 +37,7 @@ final class SearchOptionHeaderView:
     ).then {
         $0.backgroundColor = .clear
     }
-    
+
     private let dimView = UIView()
 
     private let sortButton: OptionButton = OptionButton(.latest)
@@ -47,22 +47,20 @@ final class SearchOptionHeaderView:
         addSubviews()
         setLayout()
         initDataSource()
-      
+
         dimView.isHidden = !isContainFilter
         collectionView.isHidden = !isContainFilter
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         configureUI()
     }
-        
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 extension SearchOptionHeaderView {
@@ -71,32 +69,31 @@ extension SearchOptionHeaderView {
     }
 
     private func setLayout() {
-        
         dimView.snp.makeConstraints {
             $0.width.height.equalTo(30)
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalTo(collectionView.snp.trailing)
         }
-        
+
         collectionView.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview()
         }
-        
+
         sortButton.snp.makeConstraints {
             $0.top.bottom.trailing.equalToSuperview()
             $0.width.equalTo(60)
             $0.leading.equalTo(collectionView.snp.trailing).offset(4)
         }
     }
-    
+
     private func configureUI() {
-            let gradientLayer = CAGradientLayer()
+        let gradientLayer = CAGradientLayer()
         gradientLayer.frame = dimView.bounds
-            gradientLayer.colors = [colorFromRGB("F2F4F7",alpha: .zero).cgColor,  colorFromRGB("F2F4F7").cgColor]
-            gradientLayer.type = .axial
-            gradientLayer.startPoint = .init(x: .zero, y: 0.5)
-            gradientLayer.endPoint = .init(x: 1.0, y: 0.5)
-            dimView.layer.addSublayer(gradientLayer)
+        gradientLayer.colors = [colorFromRGB("F2F4F7", alpha: .zero).cgColor, colorFromRGB("F2F4F7").cgColor]
+        gradientLayer.type = .axial
+        gradientLayer.startPoint = .init(x: .zero, y: 0.5)
+        gradientLayer.endPoint = .init(x: 1.0, y: 0.5)
+        dimView.layer.addSublayer(gradientLayer)
     }
 
     func initDataSource() {

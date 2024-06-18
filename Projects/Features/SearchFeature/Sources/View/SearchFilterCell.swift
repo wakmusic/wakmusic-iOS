@@ -53,7 +53,7 @@ extension SearchFilterCell {
         self.clipsToBounds = true
         updateDeSelectState()
     }
-    
+
     private func updateDeSelectState() {
         label.font = .setFont(.t6(weight: .light))
         label.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
@@ -61,7 +61,7 @@ extension SearchFilterCell {
         self.layer.borderWidth = 1
         self.backgroundColor = .clear
     }
-    
+
     private func updateSelectState() {
         self.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
         label.font = .setFont(.t6(weight: .medium))
