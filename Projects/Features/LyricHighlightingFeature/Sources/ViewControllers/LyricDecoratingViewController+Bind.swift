@@ -1,9 +1,9 @@
 import DesignSystem
 import Foundation
+import Kingfisher
 import RxCocoa
 import RxSwift
 import UIKit
-import Kingfisher
 
 extension LyricDecoratingViewController {
     func inputBind() {
