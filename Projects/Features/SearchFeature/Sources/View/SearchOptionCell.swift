@@ -37,7 +37,7 @@ extension SearchOptionCell {
         label.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
             $0.trailing.equalTo(checkImageView.snp.leading).offset(-10)
-            $0.centerX.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
         }
 
         checkImageView.snp.makeConstraints {
