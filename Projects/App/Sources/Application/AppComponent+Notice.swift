@@ -9,6 +9,7 @@
 import BaseFeature
 import MainTabFeature
 import MyInfoFeature
+import MyInfoFeatureInterface
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
@@ -18,11 +19,11 @@ public extension AppComponent {
         NoticePopupComponent(parent: self)
     }
 
-    var noticeComponent: NoticeComponent {
+    var noticeFactory: any NoticeFactory {
         NoticeComponent(parent: self)
     }
 
-    var noticeDetailComponent: NoticeDetailComponent {
+    var noticeDetailFactory: any NoticeDetailFactory {
         NoticeDetailComponent(parent: self)
     }
 

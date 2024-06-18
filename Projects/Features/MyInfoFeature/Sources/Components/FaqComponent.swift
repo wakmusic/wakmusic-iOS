@@ -1,29 +1,23 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import FaqDomainInterface
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
+import UIKit
 
 public protocol FaqDependency: Dependency {
-    var faqContentComponent: FaqContentComponent { get }
+    var faqContentFactory: any FaqContentFactory { get }
     var fetchFaqCategoriesUseCase: any FetchFaqCategoriesUseCase { get }
     var fetchFaqUseCase: any FetchFaqUseCase { get }
 }
 
-public final class FaqComponent: Component<FaqDependency> {
-    public func makeView() -> FaqViewController {
+public final class FaqComponent: Component<FaqDependency>, FaqFactory {
+    public func makeView() -> UIViewController {
         return FaqViewController.viewController(
             viewModel: .init(
                 fetchFaqCategoriesUseCase: dependency.fetchFaqCategoriesUseCase,
                 fetchQnaUseCase: dependency.fetchFaqUseCase
             ),
-            faqContentComponent: dependency.faqContentComponent
+            faqContentFactory: dependency.faqContentFactory
         )
     }
 }

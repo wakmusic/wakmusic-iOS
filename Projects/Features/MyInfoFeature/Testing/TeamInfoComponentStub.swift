@@ -1,11 +1,9 @@
 import BaseFeatureInterface
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
-import NeedleFoundation
 import UIKit
 
-public protocol TeamInfoDependency: Dependency {}
-
-public final class TeamInfoComponent: Component<TeamInfoDependency>, TeamInfoFactory {
+public final class TeamInfoComponentStub: TeamInfoFactory {
     public func makeView() -> UIViewController {
         return TeamInfoViewController.viewController(
             reactor: TeamInfoReactor()

@@ -4,6 +4,7 @@ import ChartFeature
 import DesignSystem
 import HomeFeature
 import MyInfoFeature
+import MyInfoFeatureInterface
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
@@ -26,7 +27,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
             searchFactory.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
             storageFactory.makeView().wrapNavigationController,
-            myInfoComponent.makeView().wrapNavigationController
+            myInfoFactory.makeView().wrapNavigationController
         ]
     }()
 
@@ -43,10 +44,10 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var searchFactory: SearchFactory!
     private var artistComponent: ArtistComponent!
     private var storageFactory: StorageFactory!
-    private var myInfoComponent: MyInfoComponent!
+    private var myInfoFactory: MyInfoFactory!
     private var noticePopupComponent: NoticePopupComponent!
-    private var noticeComponent: NoticeComponent!
-    private var noticeDetailComponent: NoticeDetailComponent!
+    private var noticeFactory: NoticeFactory!
+    private var noticeDetailFactory: NoticeDetailFactory!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +73,10 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         searchFactory: SearchFactory,
         artistComponent: ArtistComponent,
         storageFactory: StorageFactory,
-        myInfoComponent: MyInfoComponent,
+        myInfoFactory: MyInfoFactory,
         noticePopupComponent: NoticePopupComponent,
-        noticeComponent: NoticeComponent,
-        noticeDetailComponent: NoticeDetailComponent
+        noticeFactory: NoticeFactory,
+        noticeDetailFactory: NoticeDetailFactory
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -84,10 +85,10 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.searchFactory = searchFactory
         viewController.artistComponent = artistComponent
         viewController.storageFactory = storageFactory
-        viewController.myInfoComponent = myInfoComponent
+        viewController.myInfoFactory = myInfoFactory
         viewController.noticePopupComponent = noticePopupComponent
-        viewController.noticeComponent = noticeComponent
-        viewController.noticeDetailComponent = noticeDetailComponent
+        viewController.noticeFactory = noticeFactory
+        viewController.noticeDetailFactory = noticeDetailFactory
         return viewController
     }
 }
@@ -148,7 +149,7 @@ extension MainTabBarViewController {
 extension MainTabBarViewController: NoticePopupViewControllerDelegate {
     public func noticeTapped(model: FetchNoticeEntity) {
         if model.thumbnail.link.isEmpty {
-            let viewController = noticeDetailComponent.makeView(model: model)
+            let viewController = noticeDetailFactory.makeView(model: model)
             viewController.modalPresentationStyle = .overFullScreen
             present(viewController, animated: true)
 

@@ -1,11 +1,3 @@
-//
-//  QuestionTableViewCell.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/30.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import FaqDomainInterface
 import UIKit

@@ -15,11 +15,11 @@ public extension AppComponent {
         ContainSongsComponent(parent: self)
     }
 
-    var privacyComponent: PrivacyComponent {
+    var privacyFactory: any PrivacyFactory {
         PrivacyComponent(parent: self)
     }
 
-    var serviceTermsComponent: ServiceTermsComponent {
+    var serviceTermsFactory: any ServiceTermFactory {
         ServiceTermsComponent(parent: self)
     }
 }

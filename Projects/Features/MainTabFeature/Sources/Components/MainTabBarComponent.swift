@@ -4,6 +4,7 @@ import ChartFeature
 import Foundation
 import HomeFeature
 import MyInfoFeature
+import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
 import SearchFeature
@@ -18,10 +19,10 @@ public protocol MainTabBarDependency: Dependency {
     var searchFactory: any SearchFactory { get }
     var artistComponent: ArtistComponent { get }
     var storageFactory: any StorageFactory { get }
-    var myInfoComponent: MyInfoComponent { get }
+    var myInfoFactory: any MyInfoFactory { get }
     var noticePopupComponent: NoticePopupComponent { get }
-    var noticeComponent: NoticeComponent { get }
-    var noticeDetailComponent: NoticeDetailComponent { get }
+    var noticeFactory: any NoticeFactory { get }
+    var noticeDetailFactory: any NoticeDetailFactory { get }
 }
 
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
@@ -35,10 +36,10 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
             searchFactory: self.dependency.searchFactory,
             artistComponent: self.dependency.artistComponent,
             storageFactory: self.dependency.storageFactory,
-            myInfoComponent: self.dependency.myInfoComponent,
+            myInfoFactory: self.dependency.myInfoFactory,
             noticePopupComponent: self.dependency.noticePopupComponent,
-            noticeComponent: self.dependency.noticeComponent,
-            noticeDetailComponent: self.dependency.noticeDetailComponent
+            noticeFactory: self.dependency.noticeFactory,
+            noticeDetailFactory: self.dependency.noticeDetailFactory
         )
     }
 }

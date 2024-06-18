@@ -1,27 +1,21 @@
-//
-//  NoticeComponent.swift
-//  StorageFeature
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
+import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
+import UIKit
 
 public protocol NoticeDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }
-    var noticeDetailComponent: NoticeDetailComponent { get }
+    var noticeDetailFactory: any NoticeDetailFactory { get }
 }
 
-public final class NoticeComponent: Component<NoticeDependency> {
-    public func makeView() -> NoticeViewController {
+public final class NoticeComponent: Component<NoticeDependency>, NoticeFactory {
+    public func makeView() -> UIViewController {
         return NoticeViewController.viewController(
             viewModel: .init(
                 fetchNoticeUseCase: dependency.fetchNoticeUseCase
             ),
-            noticeDetailComponent: dependency.noticeDetailComponent
+            noticeDetailFactory: dependency.noticeDetailFactory
         )
     }
 }

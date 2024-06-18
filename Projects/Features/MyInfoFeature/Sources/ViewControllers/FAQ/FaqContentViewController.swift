@@ -1,11 +1,3 @@
-//
-//  QnaContentViewController.swift
-//  StorageFeature
-//
-//  Created by yongbeomkwak on 2023/01/29.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import RxCocoa
 import RxRelay

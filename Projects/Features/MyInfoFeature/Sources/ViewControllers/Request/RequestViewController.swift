@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import MyInfoFeatureInterface
 import RxSwift
 import UIKit
 import Utility
@@ -43,18 +44,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     }
 
     @IBAction func moveQnaAction(_ sender: UIButton) {
-        let vc = faqComponent.makeView()
+        let vc = faqFactory.makeView()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
     @IBAction func moveQuestionAction(_ sender: Any) {
-        let vc = questionComponent.makeView().wrapNavigationController
+        let vc = questionFactory.makeView().wrapNavigationController
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
 
     @IBAction func movenoticeAction(_ sender: Any) {
-        let viewController = noticeComponent.makeView()
+        let viewController = noticeFactory.makeView()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -100,10 +101,10 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
     lazy var input = RequestViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
-    var faqComponent: FaqComponent!
-    var questionComponent: QuestionComponent!
-    var noticeComponent: NoticeComponent!
-    var serviceInfoComponent: ServiceInfoComponent!
+    var faqFactory: FaqFactory!
+    var questionFactory: QuestionFactory!
+    var noticeFactory: NoticeFactory!
+    var serviceInfoFactory: ServiceInfoFactory!
 
     var disposeBag = DisposeBag()
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
@@ -121,18 +122,18 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     public static func viewController(
         viewModel: RequestViewModel,
-        faqComponent: FaqComponent,
-        questionComponent: QuestionComponent,
-        noticeComponent: NoticeComponent,
-        serviceInfoComponent: ServiceInfoComponent,
+        faqFactory: FaqFactory,
+        questionFactory: QuestionFactory,
+        noticeFactory: NoticeFactory,
+        serviceInfoFactory: ServiceInfoFactory,
         textPopUpFactory: TextPopUpFactory
     ) -> RequestViewController {
         let viewController = RequestViewController.viewController(storyBoardName: "Request", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.faqComponent = faqComponent
-        viewController.questionComponent = questionComponent
-        viewController.noticeComponent = noticeComponent
-        viewController.serviceInfoComponent = serviceInfoComponent
+        viewController.faqFactory = faqFactory
+        viewController.questionFactory = questionFactory
+        viewController.noticeFactory = noticeFactory
+        viewController.serviceInfoFactory = serviceInfoFactory
         viewController.textPopUpFactory = textPopUpFactory
         return viewController
     }
@@ -266,7 +267,7 @@ extension RequestViewController {
         serviceButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-                let viewController = owner.serviceInfoComponent.makeView()
+                let viewController = owner.serviceInfoFactory.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }).disposed(by: disposeBag)
 

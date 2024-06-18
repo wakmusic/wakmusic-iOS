@@ -1,10 +1,10 @@
 import FaqDomainInterface
 import Foundation
+@testable import MyInfoFeature
 import MyInfoFeatureInterface
-import NeedleFoundation
 import UIKit
 
-public final class FaqContentComponent: Component<EmptyDependency>, FaqContentFactory {
+public final class FaqContentComponentStub: FaqContentFactory {
     public func makeView(dataSource: [FaqEntity]) -> UIViewController {
         return FaqContentViewController.viewController(viewModel: .init(dataSource: dataSource))
     }
