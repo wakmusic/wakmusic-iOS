@@ -1,7 +1,5 @@
 public protocol SearchOptionType {
-    
     var title: String { get }
-    
 }
 
 public enum FilterType: String, Encodable, SearchOptionType {

@@ -24,7 +24,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
 //        let component = SongSearchResultViewController(reactor: SongSearchResultReactor("1234"))
 //        let component2 = ListSearchResultViewController(reactor: ListSearchResultReactor("text"))
-        
+
         let component = SearchOptionViewController(selectedModel: .latest)
 
         let component = SearchOptionViewController(selectedModel: .latest)
