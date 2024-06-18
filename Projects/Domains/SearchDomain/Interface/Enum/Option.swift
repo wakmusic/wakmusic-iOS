@@ -1,4 +1,8 @@
-public enum FilterType: String, Encodable {
+public protocol SearchOptionType {
+    var title: String { get }
+}
+
+public enum FilterType: String, Encodable, SearchOptionType {
     case all
     case title
     case artist
@@ -18,7 +22,7 @@ public enum FilterType: String, Encodable {
     }
 }
 
-public enum SortType: String, Encodable {
+public enum SortType: String, Encodable, SearchOptionType {
     case latest
     case oldest
     case likes
