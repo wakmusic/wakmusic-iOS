@@ -22,7 +22,6 @@ final class SearchOptionViewController: BaseViewController {
     private lazy var tableView: UITableView = UITableView().then {
         $0.register(SearchOptionCell.self, forCellReuseIdentifier: SearchOptionCell.identifer)
         $0.separatorStyle = .none
-    
     }
 
     init(selectedModel: SortType) {
