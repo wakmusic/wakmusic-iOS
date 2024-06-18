@@ -1,10 +1,10 @@
 import DesignSystem
 import RxCocoa
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import Then
 import UIKit
-import SearchDomainInterface
 
 private protocol OptionButtonStateProtocol {
     func updateSortrState(_ filterType: SortType)
@@ -30,10 +30,9 @@ final class OptionButton: UIView {
     }
 
     private var sortType: SortType
-    
+
     fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
-    
-    
+
     public init(_ sortType: SortType) {
         self.sortType = sortType
         super.init(frame: .zero)
@@ -47,7 +46,6 @@ final class OptionButton: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension OptionButton {
@@ -69,7 +67,7 @@ extension OptionButton {
             $0.centerY.equalToSuperview()
         }
     }
-    
+
     private func configureUI() {
         leftLabel.text = sortType.title
     }

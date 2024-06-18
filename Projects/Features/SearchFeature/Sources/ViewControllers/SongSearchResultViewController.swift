@@ -63,7 +63,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         let sharedState = reactor.state.share()
 
-        
         sharedState.map { ($0.sortType, $0.filterType) }
             .bind(with: self) { owner, info in
 
