@@ -12,7 +12,7 @@ public protocol RequestDependency: Dependency {
     var faqFactory: any FaqFactory { get }
     var questionFactory: any QuestionFactory { get }
     var noticeFactory: any NoticeFactory { get }
-    var serviceInfoFactory: ServiceInfoFactory { get }
+    var serviceInfoFactory: any ServiceInfoFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
