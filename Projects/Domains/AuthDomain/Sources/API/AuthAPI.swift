@@ -60,7 +60,12 @@ extension AuthAPI: WMAPI {
     }
 
     public var jwtTokenType: JwtTokenType {
-        return .none
+        switch self {
+        case .fetchToken:
+            return .none
+        case .reGenerateAccessToken:
+            return .refreshToken
+        }
     }
 
     public var errorMap: [Int: WMError] {
