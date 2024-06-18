@@ -481,7 +481,6 @@
                             <constraint firstItem="rWb-JT-gub" firstAttribute="leading" secondItem="ybh-tp-dX5" secondAttribute="leading" id="Ahz-2H-L81"/>
                             <constraint firstItem="rWb-JT-gub" firstAttribute="top" secondItem="ybh-tp-dX5" secondAttribute="top" id="Gll-Rk-UHl"/>
                             <constraint firstItem="ybh-tp-dX5" firstAttribute="trailing" secondItem="rWb-JT-gub" secondAttribute="trailing" id="UDb-NZ-Y69"/>
-                            <constraint firstItem="ybh-tp-dX5" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="rWb-JT-gub" secondAttribute="bottom" id="jWU-1z-irD"/>
                         </constraints>
                     </view>
                     <connections>
