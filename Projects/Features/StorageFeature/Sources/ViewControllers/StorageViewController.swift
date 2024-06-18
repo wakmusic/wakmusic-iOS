@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import KeychainModule
 import Pageboy
-import PanModal
 import ReactorKit
 import RxSwift
 import SignInFeatureInterface

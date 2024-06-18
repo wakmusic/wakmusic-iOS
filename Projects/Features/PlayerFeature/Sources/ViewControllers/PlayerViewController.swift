@@ -11,7 +11,6 @@ import BaseFeatureInterface
 import Combine
 import DesignSystem
 import Kingfisher
-import PanModal
 import RxCocoa
 import RxSwift
 import SnapKit

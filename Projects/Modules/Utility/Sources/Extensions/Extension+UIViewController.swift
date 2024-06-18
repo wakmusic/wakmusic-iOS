@@ -8,7 +8,6 @@
 
 import FittedSheets
 import Foundation
-import PanModal
 import SwiftEntryKit
 import SwiftUI
 import UIKit
@@ -37,12 +36,6 @@ public extension UIViewController {
             Preview(viewController: self)
         }
     #endif
-
-    @available(*, deprecated, renamed: "showFittedSheets", message: "'showPanModal' renamed 'showFittedSheets'")
-    func showPanModal(content: UIViewController & PanModalPresentable) {
-        let viewController: PanModalPresentable.LayoutType = content
-        self.presentPanModal(viewController)
-    }
 
     /// PanModal의 대체
     /// - Parameter content: ViewController

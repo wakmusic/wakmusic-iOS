@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
-import PanModal
 import PlaylistFeatureInterface
 import RxCocoa
 import RxDataSources

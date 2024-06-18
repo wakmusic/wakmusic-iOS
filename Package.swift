@@ -22,7 +22,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.11.0"),
-        .package(url: "https://github.com/slackhq/PanModal.git", from: "1.2.0"),
         .package(url: "https://github.com/gordontucker/FittedSheets.git", from: "2.6.1"),
         .package(url: "https://github.com/ReactiveX/RxSwift.git",from: "6.7.1"),
         .package(url: "https://github.com/devxoul/Then", from: "3.0.0"),

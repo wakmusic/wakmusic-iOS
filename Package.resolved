@@ -235,15 +235,6 @@
       }
     },
     {
-      "identity" : "panmodal",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/slackhq/PanModal.git",
-      "state" : {
-        "revision" : "b012aecb6b67a8e46369227f893c12544846613f",
-        "version" : "1.2.7"
-      }
-    },
-    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",

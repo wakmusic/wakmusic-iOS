@@ -1,5 +1,4 @@
 import DesignSystem
-import PanModal
 import UIKit
 import Utility
 
@@ -105,59 +104,5 @@ extension TextPopupViewController {
             ]
         )
         contentLabel.attributedText = contentAttributedString
-    }
-}
-
-extension TextPopupViewController: PanModalPresentable {
-    override public var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    public var panModalBackgroundColor: UIColor {
-        return colorFromRGB(0x000000, alpha: 0.4)
-    }
-
-    public var panScrollable: UIScrollView? {
-        return nil
-    }
-
-    public var longFormHeight: PanModalHeight {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.3
-        paragraphStyle.alignment = .center
-
-        let contentAttributedString = NSMutableAttributedString(
-            string: contentString,
-            attributes: [
-                .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                .kern: -0.5,
-                .paragraphStyle: paragraphStyle
-            ]
-        )
-
-        let contentHeight: CGFloat = contentAttributedString.height(containerWidth: APP_WIDTH() - 40)
-        let spacingHeight: CGFloat = 60 + 52 + 56 + 10
-        return .contentHeight(spacingHeight + contentHeight)
-    }
-
-    public var cornerRadius: CGFloat {
-        return 24.0
-    }
-
-    public var allowsExtendedPanScrolling: Bool {
-        return true
-    }
-
-    public var showDragIndicator: Bool {
-        return false
-    }
-
-    public var allowsDragToDismiss: Bool {
-        return true
-    }
-
-    public var allowsTapToDismiss: Bool {
-        return true
     }
 }

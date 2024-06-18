@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import Kingfisher
 import NVActivityIndicatorView
-import PanModal
 import ReactorKit
 import RxCocoa
 import RxDataSources
