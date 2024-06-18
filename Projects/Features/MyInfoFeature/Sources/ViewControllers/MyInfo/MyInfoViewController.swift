@@ -111,7 +111,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
                         ) as? TextPopupViewController else {
                             return
                         }
-                        owner.showFittedSheets(content: vc)
+                        owner.showBottomSheet(content: vc)
                     }
                 case .faq:
                     let vc = owner.faqComponent.makeView()

@@ -120,7 +120,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     ) as? TextPopupViewController else {
                         return
                     }
-                    owner.showFittedSheets(content: textPopupViewController)
+                    owner.showBottomSheet(content: textPopupViewController)
                 } else {
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)

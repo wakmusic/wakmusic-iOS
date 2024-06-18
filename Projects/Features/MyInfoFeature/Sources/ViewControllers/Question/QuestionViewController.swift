@@ -268,7 +268,7 @@ extension QuestionViewController {
                     ) as? TextPopupViewController else {
                         return
                     }
-                    self.showFittedSheets(content: textPopupViewController)
+                    self.showBottomSheet(content: textPopupViewController)
 
                 } else {
                     self.goToMail(source: source)
@@ -316,7 +316,7 @@ extension QuestionViewController {
                 return
             }
 
-            self.showFittedSheets(content: textPopupViewController)
+            self.showBottomSheet(content: textPopupViewController)
         }
     }
 }

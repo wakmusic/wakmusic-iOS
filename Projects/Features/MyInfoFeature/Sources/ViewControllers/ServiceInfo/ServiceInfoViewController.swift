@@ -105,7 +105,7 @@ extension ServiceInfoViewController {
                     return
                 }
 
-                owner.showFittedSheets(content: textPopupVC)
+                owner.showBottomSheet(content: textPopupVC)
             }).disposed(by: disposeBag)
 
         viewModel.output

@@ -95,7 +95,7 @@ private extension IntroViewController {
                         return
 
                     case .offline:
-                        owner.showFittedSheets(
+                        owner.showBottomSheet(
                             content: owner.textPopUpFactory.makeView(
                                 text: entity.description,
                                 cancelButtonIsHidden: true,
@@ -149,7 +149,7 @@ private extension IntroViewController {
                         ) as? TextPopupViewController ?? .init()
                     }
 
-                    owner.showFittedSheets(
+                    owner.showBottomSheet(
                         content: textPopupVc,
                         dismissOnOverlayTapAndPull: false
                     )
@@ -159,7 +159,7 @@ private extension IntroViewController {
                     owner.lottiePlay(specialLogo: false)
                     owner.showTabBar()
                     /*
-                     owner.showFittedSheets(
+                     owner.showBottomSheet(
                          content: owner.textPopUpFactory.makeView(
                              text: error.asWMError.errorDescription ?? "",
                              cancelButtonIsHidden: true,
@@ -191,7 +191,7 @@ private extension IntroViewController {
                 owner.showTabBar()
 
             case let .failure(error):
-                owner.showFittedSheets(
+                owner.showBottomSheet(
                     content: owner.textPopUpFactory.makeView(
                         text: error.asWMError.errorDescription ?? "",
                         cancelButtonIsHidden: true,

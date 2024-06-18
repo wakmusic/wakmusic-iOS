@@ -182,7 +182,7 @@ extension StorageViewController {
                     return
                 }
 
-                owner.showFittedSheets(content: vc)
+                owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)
     }

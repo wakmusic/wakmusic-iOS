@@ -269,7 +269,7 @@ internal class PlayListDetailViewController: BaseStoryboardReactorViewController
                         return
                     }
 
-                    owner.showFittedSheets(content: textPopUpVC)
+                    owner.showBottomSheet(content: textPopUpVC)
 
                 } else {
                     owner.navigationController?.popViewController(animated: true)

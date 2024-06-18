@@ -84,7 +84,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                owner.showFittedSheets(content: textPopupVC)
+                owner.showBottomSheet(content: textPopupVC)
             })
             .disposed(by: disposeBag)
 
@@ -119,13 +119,13 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
-                        owner.showFittedSheets(content: secondConfirmVC)
+                        owner.showBottomSheet(content: secondConfirmVC)
                     },
                     cancelCompletion: nil
                 ) as? TextPopupViewController else {
                     return
                 }
-                owner.showFittedSheets(content: firstConfirmVC)
+                owner.showBottomSheet(content: firstConfirmVC)
             })
             .disposed(by: disposeBag)
 
@@ -148,7 +148,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                owner.showFittedSheets(content: textPopUpVC)
+                owner.showBottomSheet(content: textPopUpVC)
             }
             .disposed(by: disposeBag)
     }

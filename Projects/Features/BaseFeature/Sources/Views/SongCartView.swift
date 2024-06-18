@@ -243,6 +243,6 @@ extension SongCartView {
             }
         )
         guard let parent = self.parentViewController() else { return }
-        parent.showFittedSheets(content: viewController)
+        parent.showBottomSheet(content: viewController)
     }
 }

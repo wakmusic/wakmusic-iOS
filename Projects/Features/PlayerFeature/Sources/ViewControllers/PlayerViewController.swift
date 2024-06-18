@@ -167,7 +167,7 @@ private extension PlayerViewController {
 
     private func bindShowTokenModal(output: PlayerViewModel.Output) {
         output.showTokenModal.sink { [weak self] message in
-            self?.showFittedSheets(
+            self?.showBottomSheet(
                 content: TextPopupViewController.viewController(
                     text: message,
                     cancelButtonIsHidden: true,
@@ -375,7 +375,7 @@ private extension PlayerViewController {
 
     private func bindShowConfirmModal(output: PlayerViewModel.Output) {
         output.showConfirmModal.sink { [weak self] message in
-            self?.showFittedSheets(content: TextPopupViewController.viewController(
+            self?.showBottomSheet(content: TextPopupViewController.viewController(
                 text: message,
                 cancelButtonIsHidden: false,
                 completion: {

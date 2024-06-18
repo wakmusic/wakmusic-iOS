@@ -188,7 +188,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
                 return
             }
 
-            self.showFittedSheets(content: textPopupViewController)
+            self.showBottomSheet(content: textPopupViewController)
         }
 
         if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {

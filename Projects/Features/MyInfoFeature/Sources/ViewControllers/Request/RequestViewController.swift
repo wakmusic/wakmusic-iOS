@@ -84,14 +84,14 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
                 guard let self else { return }
 
-                self.showFittedSheets(content: secondConfirmVc)
+                self.showBottomSheet(content: secondConfirmVc)
             },
             cancelCompletion: nil
         ) as? TextPopupViewController else {
             return
         }
 
-        self.showFittedSheets(content: firstConfirmVc)
+        self.showBottomSheet(content: firstConfirmVc)
     }
 
     var viewModel: RequestViewModel!
@@ -256,7 +256,7 @@ extension RequestViewController {
                 return
             }
 
-            self.showFittedSheets(content: textPopUpViewController)
+            self.showBottomSheet(content: textPopUpViewController)
         })
         .disposed(by: disposeBag)
 

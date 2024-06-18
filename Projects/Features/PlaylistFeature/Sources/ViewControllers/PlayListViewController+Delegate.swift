@@ -32,7 +32,7 @@ extension PlaylistViewController: SongCartViewDelegate {
                     self.hideSongCart()
                 }
             )
-            self.showFittedSheets(content: popup)
+            self.showBottomSheet(content: popup)
         default:
             return
         }

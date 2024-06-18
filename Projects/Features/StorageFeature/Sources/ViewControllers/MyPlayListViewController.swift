@@ -340,7 +340,7 @@ extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
                 return
             }
 
-            self.showFittedSheets(content: vc)
+            self.showBottomSheet(content: vc)
 
             return
         }
