@@ -6,12 +6,12 @@ import UIKit
 
 final class SearchOptionCell: UITableViewCell {
     static let identifer: String = "SearchOptionCell"
-    private var label: WMLabel = WMLabel(
+    private let label: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t4(weight: .light)
     )
-    private var checkImageView: UIImageView = UIImageView().then {
+    private let checkImageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.checkBox.image
         $0.contentMode = .scaleToFill
     }
@@ -36,6 +36,7 @@ extension SearchOptionCell {
     private func setLayout() {
         label.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
+            $0.trailing.equalTo(checkImageView.snp.leading)
             $0.centerX.equalToSuperview()
         }
 
