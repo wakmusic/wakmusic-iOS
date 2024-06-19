@@ -1,10 +1,10 @@
 import BaseFeature
 import BaseFeatureInterface
+import ChartDomainInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
 import PlaylistFeatureInterface
-import ChartDomainInterface
 
 public protocol BeforeSearchDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
@@ -22,7 +22,8 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
             playlistDetailFactory: dependency.playlistDetailFactory,
             reactor: BeforeSearchReactor(
                 fetchCurrentVideoUseCase: dependency.fetchCurrentVideoUseCase,
-                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase)
+                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+            )
         )
     }
 }

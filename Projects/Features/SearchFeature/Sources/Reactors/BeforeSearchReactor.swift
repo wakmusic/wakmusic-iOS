@@ -1,11 +1,11 @@
+import ChartDomainInterface
 import Foundation
 import PlayListDomainInterface
 import ReactorKit
 import RxSwift
 import Utility
-import ChartDomainInterface
 
-public struct WrapperDataSourceModel  {
+public struct WrapperDataSourceModel {
     let currentVideo: CurrentVideoEntity
     let recommendPlayList: [RecommendPlayListEntity]
 }
@@ -68,10 +68,9 @@ public final class BeforeSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-        
         case let .updateDataSource(data):
             newState.dataSource = data
-        
+
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
         case let .updateLoadingState(isLoading):
@@ -92,17 +91,16 @@ extension BeforeSearchReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            
-            Observable.zip( 
+
+            Observable.zip(
                 fetchCurrentVideoUseCase
-                .execute()
-                .asObservable(),
+                    .execute()
+                    .asObservable(),
                 fetchRecommendPlayListUseCase
-                .execute()
-                .asObservable()
-            ).map{ Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) }
-            
-,
+                    .execute()
+                    .asObservable()
+            ).map { Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) },
+
             .just(.updateLoadingState(false))
         ])
     }

@@ -1,5 +1,6 @@
 import BaseFeature
 import BaseFeatureInterface
+import ChartDomainInterface
 import DesignSystem
 import LogManager
 import NeedleFoundation
@@ -11,7 +12,6 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import ChartDomainInterface
 
 public struct Model: Hashable {
     let title: String
@@ -150,19 +150,18 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
                 return cell
             }.disposed(by: disposeBag)
-        
+
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
-                
+
                 var snapShot = owner.dataSource.snapshot()
-                
+
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
-                snapShot.appendItems(dataSource.recommendPlayList.map{ .recommend(model: $0) }, toSection: .recommend)
-                
+                snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
+
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
-        
     }
 }
 
@@ -226,7 +225,7 @@ extension BeforeSearchContentViewController {
 
         let youtubeCellRegistration = UICollectionView
             .CellRegistration<YoutubeThumbnailCell, CurrentVideoEntity> { cell, indexPath, itemIdentifier in
-                
+
                 cell.update(model: itemIdentifier)
             }
 

@@ -1,5 +1,5 @@
-import Foundation
 import ChartDomainInterface
+import Foundation
 
 struct CurrentVideoDTO: Decodable {
     let data: String

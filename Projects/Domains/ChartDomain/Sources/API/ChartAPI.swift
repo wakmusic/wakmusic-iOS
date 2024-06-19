@@ -18,7 +18,7 @@ extension ChartAPI: WMAPI {
         switch self {
         case let .fetchChartRanking(type):
             return "/\(type.rawValue)"
-            
+
         case .fetchCurrentVideo:
             return "/current-video"
         }

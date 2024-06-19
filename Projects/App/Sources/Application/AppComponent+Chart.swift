@@ -29,9 +29,9 @@ public extension AppComponent {
             FetchChartRankingUseCaseImpl(chartRepository: chartRepository)
         }
     }
-    
+
     var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase {
-        shared{
+        shared {
             FetchCurrentVideoUseCaseImpl(chartRepository: chartRepository)
         }
     }

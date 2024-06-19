@@ -1,6 +1,6 @@
+import ChartDomainInterface
 import Foundation
 import PlayListDomainInterface
-import ChartDomainInterface
 
 #warning("실제 데이터 entity로 바꾸기")
 
