@@ -20,6 +20,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
+    
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
@@ -29,7 +30,9 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> =
         createDataSource()
 
-    private lazy var collectionView: UICollectionView = createCollectionView()
+    private lazy var collectionView: UICollectionView = createCollectionView().then{
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
+    }
 
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
@@ -50,7 +53,9 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        initDataSource()
+        var snapShot = dataSource.snapshot()
+        snapShot.appendSections([.youtube, .recommend, .popularList])
+        dataSource.apply(snapShot)
     }
 
     override public func addView() {
@@ -99,7 +104,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share()
 
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
@@ -127,10 +132,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
             .compactMap { $0 ?? [] }
-            .bind(to: tableView.rx.items) { (
-                tableView: UITableView,
-                index: Int,
-                element: String
+            .bind(to: tableView.rx.items) { ( tableView: UITableView, index: Int, element: String
             ) -> RecentRecordTableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "RecentRecordTableViewCell",
@@ -144,6 +146,17 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
                 return cell
             }.disposed(by: disposeBag)
+        
+        
+        sharedState.map(\.recommendPlaylists)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, recommendPlaylists in
+                
+                var snapShot = owner.dataSource.snapshot()
+                snapShot.appendItems(recommendPlaylists.map{.recommend(model: $0)}, toSection: .recommend)
+                owner.dataSource.apply(snapShot)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -167,10 +180,6 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
         warningView.text = "최근 검색 기록이 없습니다."
-
-        guard let state = reactor?.currentState else {
-            return nil
-        }
 
         let recentRecordHeaderView = RecentRecordHeaderView()
 
@@ -213,19 +222,11 @@ extension BeforeSearchContentViewController {
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
-        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, RecommendPlayListEntity>(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
         )) { cell, indexPath, itemIdentifier in
-            cell.update(
-                model: RecommendPlayListEntity(
-                    key: "best",
-                    title: "임시 플레이리스트",
-                    image: "",
-                    private: true,
-                    count: 0
-                )
-            )
+            cell.update(model: itemIdentifier)
         }
 
         let popularListCellRegistration = UICollectionView
@@ -242,9 +243,9 @@ extension BeforeSearchContentViewController {
                     .kind
             ) { [weak self] supplementaryView, string, indexPath in
 
-                guard let self else { return }
+                guard let self , let layoutKind =  BeforeSearchSection(rawValue: indexPath.row)  else { return }
                 supplementaryView.delegate = self
-                supplementaryView.update("임시 타이틀", indexPath.section)
+                supplementaryView.update(layoutKind.title, indexPath.section)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
@@ -264,12 +265,12 @@ extension BeforeSearchContentViewController {
                     for: indexPath,
                     item: model
                 )
-            case let .recommend(model2: model2):
+            case let .recommend(model: model):
                 return
                     collectionView.dequeueConfiguredReusableCell(
                         using: recommendCellRegistration,
                         for: indexPath,
-                        item: model2
+                        item: model
                     )
 
             case let .popularList(model: model):
@@ -288,30 +289,27 @@ extension BeforeSearchContentViewController {
         return dataSource
     }
 
-    private func initDataSource() {
-        // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
-        snapshot.appendSections([.youtube, .recommend, .popularList])
-        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
-        snapshot.appendItems(
-            [
-                .recommend(model2: Model(title: "123")),
-                .recommend(model2: Model(title: "456")),
-                .recommend(model2: Model(title: "4564")),
-                .recommend(model2: Model(title: "4516"))
-            ],
-            toSection: .recommend
-        )
-        snapshot.appendItems(
-            [
-                .popularList(model: Model(title: "Hello1")),
-                .popularList(model: Model(title: "Hello2")),
-                .popularList(model: Model(title: "Hello3"))
-            ],
-            toSection: .popularList
-        )
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
+//    private func initDataSource() {
+//        // initial data
+//        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
+//        snapshot.appendSections([.youtube, .recommend, .popularList])
+//        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
+//        snapshot.appendItems(
+//            [
+//
+//            ],
+//            toSection: .recommend
+//        )
+//        snapshot.appendItems(
+//            [
+//                .popularList(model: Model(title: "Hello1")),
+//                .popularList(model: Model(title: "Hello2")),
+//                .popularList(model: Model(title: "Hello3"))
+//            ],
+//            toSection: .popularList
+//        )
+//        dataSource.apply(snapshot, animatingDifferences: false)
+//    }
 }
 
 // MARK: CollectionView Deleagte
@@ -324,8 +322,8 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         switch model {
         case let .youtube(model: model):
             LogManager.printDebug("youtube \(model)")
-        case let .recommend(model2: model2):
-            LogManager.printDebug("recommend \(model2)")
+        case let .recommend(model: model):
+            LogManager.printDebug("recommend \(model)")
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }

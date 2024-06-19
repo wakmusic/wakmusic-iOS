@@ -28,7 +28,7 @@ public final class BeforeSearchReactor: Reactor {
 
     public struct State {
         var showRecommend: Bool
-        var dataSource: [RecommendPlayListEntity]
+        var recommendPlaylists: [RecommendPlayListEntity]
         var isLoading: Bool
     }
 
@@ -40,7 +40,7 @@ public final class BeforeSearchReactor: Reactor {
         self.service = service
         self.initialState = State(
             showRecommend: true,
-            dataSource: [],
+            recommendPlaylists: [],
             isLoading: false
         )
     }
@@ -60,8 +60,8 @@ public final class BeforeSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .updateRecommend(dataSource):
-            newState.dataSource = dataSource
+        case let .updateRecommend(recommendPlaylists):
+            newState.recommendPlaylists = recommendPlaylists
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
         case .updateRecentText:
