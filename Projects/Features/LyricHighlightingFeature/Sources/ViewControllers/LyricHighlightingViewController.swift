@@ -45,6 +45,14 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
+    let emptyLabel = UILabel().then {
+        $0.text = "가사가 없습니다."
+        $0.textColor = .white
+        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
+        $0.setTextWithAttributes(alignment: .center)
+        $0.isHidden = true
+    }
+
     let saveButtonContentView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
@@ -117,7 +125,7 @@ public final class LyricHighlightingViewController: UIViewController {
 
 private extension LyricHighlightingViewController {
     func addSubViews() {
-        view.addSubviews(dimmedBackgroundView, navigationBarView, collectionView, saveButtonContentView, indicator)
+        view.addSubviews(dimmedBackgroundView, navigationBarView, collectionView, emptyLabel, saveButtonContentView, indicator)
 
         navigationBarView.addSubviews(backButton, navigationTitleStackView)
 
@@ -163,6 +171,11 @@ private extension LyricHighlightingViewController {
             $0.top.equalTo(navigationBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(saveButtonContentView.snp.top)
+        }
+        
+        emptyLabel.snp.makeConstraints {
+            $0.top.bottom.equalTo(collectionView)
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
         saveButtonContentView.snp.makeConstraints {
