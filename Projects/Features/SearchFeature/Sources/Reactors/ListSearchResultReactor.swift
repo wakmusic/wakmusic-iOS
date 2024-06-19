@@ -59,7 +59,7 @@ final class ListSearchResultReactor: Reactor {
         case let .updateSortType(type):
             newState.sortType = type
         case let .updateDataSource(dataSource, canLoad):
-            newState.dataSource += dataSource
+            newState.dataSource = dataSource
             newState.canLoad = canLoad
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
