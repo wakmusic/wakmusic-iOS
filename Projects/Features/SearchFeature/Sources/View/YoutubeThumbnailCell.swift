@@ -3,6 +3,8 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import ChartDomainInterface
+import Kingfisher
 
 #warning("로티 뷰 넣기")
 final class YoutubeThumbnailCell: UICollectionViewCell {
@@ -39,7 +41,22 @@ extension YoutubeThumbnailCell {
         #warning("실제 도입 시 frame 변수 제거 고민")
 
         thumbnailView.layer.cornerRadius = frame.height * 50 / 292
-
-        thumbnailView.image = DesignSystemAsset.Search.testThumbnail.image
+    }
+    
+    public func update(model: CurrentVideoEntity) {
+        
+        let url = WMImageAPI.fetchYoutubeThumbnailHD(id: model.id ).toURL
+        let subUrl = WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL
+        
+        thumbnailView.kf.setImage(with: url) { [thumbnailView] result in
+            
+            switch result {
+                case let .failure(error):
+                thumbnailView.kf.setImage(with: subUrl)
+                default:
+                    break
+            }
+            
+        }
     }
 }

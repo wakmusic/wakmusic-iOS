@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CurrentVideoEntity {
+public struct CurrentVideoEntity: Hashable {
     public let id: String
     
     public init(id: String) {

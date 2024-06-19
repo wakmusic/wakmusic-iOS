@@ -11,6 +11,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import ChartDomainInterface
 
 public struct Model: Hashable {
     let title: String
@@ -149,16 +150,19 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
                 return cell
             }.disposed(by: disposeBag)
-
-        sharedState.map(\.recommendPlaylists)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, recommendPlaylists in
-
+        
+        sharedState.map(\.dataSource)
+            .bind(with: self) { owner, dataSource in
+                
                 var snapShot = owner.dataSource.snapshot()
-                snapShot.appendItems(recommendPlaylists.map { .recommend(model: $0) }, toSection: .recommend)
-                owner.dataSource.apply(snapShot)
+                
+                snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
+                snapShot.appendItems(dataSource.recommendPlayList.map{ .recommend(model: $0) }, toSection: .recommend)
+                
+                owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
+        
     }
 }
 
@@ -221,7 +225,9 @@ extension BeforeSearchContentViewController {
         // MARK: Cell
 
         let youtubeCellRegistration = UICollectionView
-            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+            .CellRegistration<YoutubeThumbnailCell, CurrentVideoEntity> { cell, indexPath, itemIdentifier in
+                
+                cell.update(model: itemIdentifier)
             }
 
         let recommendCellRegistration = UICollectionView.CellRegistration<

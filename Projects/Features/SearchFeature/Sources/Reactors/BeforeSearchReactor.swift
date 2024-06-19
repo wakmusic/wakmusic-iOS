@@ -3,11 +3,18 @@ import PlayListDomainInterface
 import ReactorKit
 import RxSwift
 import Utility
+import ChartDomainInterface
+
+public struct WrapperDataSourceModel  {
+    let currentVideo: CurrentVideoEntity
+    let recommendPlayList: [RecommendPlayListEntity]
+}
 
 public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
     private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    private let fetchCurrentVideoUseCase: FetchCurrentVideoUseCase
 
     public var initialState: State
 
@@ -20,35 +27,36 @@ public final class BeforeSearchReactor: Reactor {
     }
 
     public enum Mutation {
-        case updateRecommend([RecommendPlayListEntity])
+        case updateDataSource(WrapperDataSourceModel)
         case updateShowRecommend(Bool)
-        case updateRecentText(String)
         case updateLoadingState(Bool)
     }
 
     public struct State {
         var showRecommend: Bool
-        var recommendPlaylists: [RecommendPlayListEntity]
         var isLoading: Bool
+        var dataSource: WrapperDataSourceModel
     }
 
     init(
+        fetchCurrentVideoUseCase: FetchCurrentVideoUseCase,
         fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
         service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
+        self.fetchCurrentVideoUseCase = fetchCurrentVideoUseCase
         self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
         self.service = service
         self.initialState = State(
             showRecommend: true,
-            recommendPlaylists: [],
-            isLoading: false
+            isLoading: false,
+            dataSource: WrapperDataSourceModel(currentVideo: .init(id: ""), recommendPlayList: [])
         )
     }
 
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return fetchRecommend()
+            return updateDataSource()
         case let .updateShowRecommend(flag):
             return Observable.just(.updateShowRecommend(flag))
         case let .rencentTextDidTap(text):
@@ -60,13 +68,12 @@ public final class BeforeSearchReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .updateRecommend(recommendPlaylists):
-            newState.recommendPlaylists = recommendPlaylists
+        
+        case let .updateDataSource(data):
+            newState.dataSource = data
+        
         case let .updateShowRecommend(flag):
             newState.showRecommend = flag
-        case .updateRecentText:
-            #warning("유즈 케이스 연결 후 구현")
-            break
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
         }
@@ -82,13 +89,20 @@ public final class BeforeSearchReactor: Reactor {
 }
 
 extension BeforeSearchReactor {
-    func fetchRecommend() -> Observable<Mutation> {
+    func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchRecommendPlayListUseCase
+            
+            Observable.zip( 
+                fetchCurrentVideoUseCase
+                .execute()
+                .asObservable(),
+                fetchRecommendPlayListUseCase
                 .execute()
                 .asObservable()
-                .map { Mutation.updateRecommend($0) },
+            ).map{ Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) }
+            
+,
             .just(.updateLoadingState(false))
         ])
     }
