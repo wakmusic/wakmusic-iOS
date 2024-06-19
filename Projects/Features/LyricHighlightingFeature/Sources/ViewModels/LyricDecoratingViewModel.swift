@@ -60,11 +60,14 @@ final class LyricDecoratingViewModel: ViewModelType {
                         ]
                     )
             }
+            .do(onNext: { entities in
+                guard !entities.isEmpty else { return }
+                output.updateDecoratingImage.accept(entities[0].image)
+            })
             .map { entities in
                 guard !entities.isEmpty else { return entities }
                 var newEntities = entities
                 newEntities[0].isSelected = true
-                output.updateDecoratingImage.accept(newEntities[0].image)
                 return newEntities
             }
             .bind(to: output.dataSource)
@@ -78,13 +81,15 @@ final class LyricDecoratingViewModel: ViewModelType {
         input.didTapBackground
             .map { $0.item }
             .withLatestFrom(output.dataSource) { ($0, $1) }
+            .do(onNext: { index, entities in
+                output.updateDecoratingImage.accept(entities[index].image)
+            })
             .map { index, entities in
                 var newEntities = entities
                 if let i = entities.firstIndex(where: { $0.isSelected }) {
                     newEntities[i].isSelected = false
                 }
                 newEntities[index].isSelected = true
-                output.updateDecoratingImage.accept(newEntities[index].image)
                 return newEntities
             }
             .bind(to: output.dataSource)
