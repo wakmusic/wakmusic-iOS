@@ -152,6 +152,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             }.disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
+            .distinctUntilChanged({ $0.currentVideo == $1.currentVideo })
             .bind(with: self) { owner, dataSource in
 
                 var snapShot = owner.dataSource.snapshot()
@@ -262,11 +263,7 @@ extension BeforeSearchContentViewController {
             BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
-            (
-                collectionView: UICollectionView,
-                indexPath: IndexPath,
-                item: BeforeVcDataSoruce
-            ) -> UICollectionViewCell? in
+            ( collectionView: UICollectionView, indexPath: IndexPath, item: BeforeVcDataSoruce) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -299,27 +296,6 @@ extension BeforeSearchContentViewController {
         return dataSource
     }
 
-//    private func initDataSource() {
-//        // initial data
-//        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
-//        snapshot.appendSections([.youtube, .recommend, .popularList])
-//        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
-//        snapshot.appendItems(
-//            [
-//
-//            ],
-//            toSection: .recommend
-//        )
-//        snapshot.appendItems(
-//            [
-//                .popularList(model: Model(title: "Hello1")),
-//                .popularList(model: Model(title: "Hello2")),
-//                .popularList(model: Model(title: "Hello3"))
-//            ],
-//            toSection: .popularList
-//        )
-//        dataSource.apply(snapshot, animatingDifferences: false)
-//    }
 }
 
 // MARK: CollectionView Deleagte
