@@ -3,6 +3,7 @@ import Foundation
 import RxSwift
 
 public final class ChartRepositoryImpl: ChartRepository {
+    
     private let remoteChartDataSource: any RemoteChartDataSource
 
     public init(
@@ -13,5 +14,9 @@ public final class ChartRepositoryImpl: ChartRepository {
 
     public func fetchChartRanking(type: ChartDateType) -> Single<ChartEntity> {
         remoteChartDataSource.fetchChartRanking(type: type)
+    }
+    
+    public func fetchCurrentVideoUseCase() -> Single<CurrentVideoEntity> {
+        remoteChartDataSource.fetchCurrentVideoUseCase()
     }
 }
