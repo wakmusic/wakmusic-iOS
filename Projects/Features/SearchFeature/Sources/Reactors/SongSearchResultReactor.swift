@@ -121,9 +121,8 @@ extension SongSearchResultReactor {
         scrollPage: Int,
         byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
-        
         var prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
-        
+
         return .concat([
             .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
