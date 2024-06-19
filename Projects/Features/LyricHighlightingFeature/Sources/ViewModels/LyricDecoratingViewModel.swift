@@ -64,16 +64,10 @@ final class LyricDecoratingViewModel: ViewModelType {
                 guard !entities.isEmpty else { return entities }
                 var newEntities = entities
                 newEntities[0].isSelected = true
+                output.updateDecoratingImage.accept(newEntities[0].image)
                 return newEntities
             }
             .bind(to: output.dataSource)
-            .disposed(by: disposeBag)
-
-        output.dataSource
-            .filter { !$0.isEmpty }
-            .map { $0.filter { $0.isSelected }.first?.image ?? "" }
-            .filter { !$0.isEmpty }
-            .bind(to: output.updateDecoratingImage)
             .disposed(by: disposeBag)
 
         output.highlightingItems
@@ -90,6 +84,7 @@ final class LyricDecoratingViewModel: ViewModelType {
                     newEntities[i].isSelected = false
                 }
                 newEntities[index].isSelected = true
+                output.updateDecoratingImage.accept(newEntities[index].image)
                 return newEntities
             }
             .bind(to: output.dataSource)
