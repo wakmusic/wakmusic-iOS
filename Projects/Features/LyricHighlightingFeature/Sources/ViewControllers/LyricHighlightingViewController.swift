@@ -125,7 +125,14 @@ public final class LyricHighlightingViewController: UIViewController {
 
 private extension LyricHighlightingViewController {
     func addSubViews() {
-        view.addSubviews(dimmedBackgroundView, navigationBarView, collectionView, emptyLabel, saveButtonContentView, indicator)
+        view.addSubviews(
+            dimmedBackgroundView,
+            navigationBarView,
+            collectionView,
+            emptyLabel,
+            saveButtonContentView,
+            indicator
+        )
 
         navigationBarView.addSubviews(backButton, navigationTitleStackView)
 
@@ -172,7 +179,7 @@ private extension LyricHighlightingViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(saveButtonContentView.snp.top)
         }
-        
+
         emptyLabel.snp.makeConstraints {
             $0.top.bottom.equalTo(collectionView)
             $0.horizontalEdges.equalToSuperview().inset(20)
