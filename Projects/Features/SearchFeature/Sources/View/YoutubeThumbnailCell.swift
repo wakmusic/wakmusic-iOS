@@ -1,19 +1,18 @@
 import ChartDomainInterface
 import DesignSystem
 import Kingfisher
+import Lottie
 import SnapKit
 import Then
 import UIKit
 import Utility
-import Lottie
 
 #warning("로티 뷰 넣기")
 final class YoutubeThumbnailCell: UICollectionViewCell {
-    
     private let lottieView = LottieAnimationView(name: "Weekly_WM", bundle: DesignSystemResources.bundle).then {
         $0.loopMode = .loop
     }
-    
+
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -41,7 +40,7 @@ extension YoutubeThumbnailCell {
         thumbnailView.snp.makeConstraints {
             $0.verticalEdges.horizontalEdges.equalToSuperview()
         }
-        
+
         lottieView.snp.makeConstraints {
             $0.center.equalTo(thumbnailView.snp.center)
             $0.width.height.equalTo(124)
@@ -52,7 +51,7 @@ extension YoutubeThumbnailCell {
         #warning("실제 도입 시 frame 변수 제거 고민")
 
         thumbnailView.layer.cornerRadius = frame.height * 50 / 292
-        
+
         lottieView.play()
     }
 
