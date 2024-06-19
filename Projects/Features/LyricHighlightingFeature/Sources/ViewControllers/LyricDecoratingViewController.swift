@@ -166,7 +166,6 @@ extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
 private extension LyricDecoratingViewController {
     func addSubViews() {
         view.addSubviews(navigationBarView, decorateContentView, decorateBottomView, indicator)
-
         navigationBarView.addSubviews(backButton, navigationTitleLabel)
 
         decorateContentView.addSubview(decorateShareContentView)

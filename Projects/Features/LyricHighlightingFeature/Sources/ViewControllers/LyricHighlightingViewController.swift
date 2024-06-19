@@ -133,12 +133,9 @@ private extension LyricHighlightingViewController {
             saveButtonContentView,
             indicator
         )
-
         navigationBarView.addSubviews(backButton, navigationTitleStackView)
-
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
-
         saveButtonContentView.addSubviews(saveButton, singleLineLabel)
     }
 
