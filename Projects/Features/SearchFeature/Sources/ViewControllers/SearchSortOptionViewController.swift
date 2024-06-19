@@ -99,7 +99,7 @@ extension SearchSortOptionViewController {
         tableView.rx.itemSelected
             .map(\.row)
             .bind(with: self) { owner, index in
-                
+
                 owner.delegate?.updateSortType(owner.options[index])
                 owner.dismiss(animated: true)
             }

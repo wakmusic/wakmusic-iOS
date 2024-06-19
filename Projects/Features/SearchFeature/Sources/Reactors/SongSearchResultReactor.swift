@@ -97,20 +97,17 @@ final class SongSearchResultReactor: Reactor {
 
 extension SongSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
-        
         let state = self.currentState
-        
+
         return .concat([
             .just(.updateSortType(type)),
             updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1)
         ])
-      
     }
 
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
-        
         let state = self.currentState
-        
+
         return .concat([
             .just(.updateFilterType(type)),
             updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1)
@@ -131,7 +128,7 @@ extension SongSearchResultReactor {
                 .map { [limit] dataSource -> Mutation in
                     return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
-            .just(Mutation.updateScrollPage(scrollPage+1)), // 스크롤 페이지 증가
+            .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }
