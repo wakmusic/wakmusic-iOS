@@ -14,9 +14,9 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
-    
+
     private let searchSortOptionComponent: SearchSortOptionComponent
-    
+
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -27,7 +27,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         ListSearchResultSection,
         SearchPlaylistEntity
     > = createDataSource()
-    
+
     init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
         self.searchSortOptionComponent = searchSortOptionComponent
         super.init(reactor: reactor)
@@ -85,7 +85,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
+
         sharedState.map(\.sortType)
             .bind(with: self) { owner, type in
                 owner.headerView.updateSortState(type)
@@ -191,7 +191,6 @@ extension ListSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
         reactor?.action.onNext(.changeSortType(type))
     }
-    
 }
 
 extension ListSearchResultViewController: UICollectionViewDelegate {

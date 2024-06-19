@@ -73,11 +73,9 @@ final class ListSearchResultReactor: Reactor {
 
 extension ListSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
-        
-
         return .concat([
             .just(.updateSortType(type)),
-            updateDataSource(order: type,text: self.text, scrollPage: 1, byOption: true)
+            updateDataSource(order: type, text: self.text, scrollPage: 1, byOption: true)
         ])
     }
 
@@ -87,9 +85,8 @@ extension ListSearchResultReactor {
         scrollPage: Int,
         byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
-        
         let prev: [SearchPlaylistEntity] = byOption ? [] : self.currentState.dataSource
-        
+
         return .concat([
             .just(Mutation.updateLoadingState(true)),
             fetchSearchPlaylistsUseCase
@@ -98,7 +95,7 @@ extension ListSearchResultReactor {
                 .map { [limit] dataSource -> Mutation in
                     return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
-            .just(Mutation.updateScrollPage(scrollPage+1)),
+            .just(Mutation.updateScrollPage(scrollPage + 1)),
             .just(Mutation.updateLoadingState(false))
         ])
     }
