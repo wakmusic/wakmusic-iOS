@@ -152,7 +152,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             }.disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
-            .distinctUntilChanged({ $0.currentVideo == $1.currentVideo })
+            .distinctUntilChanged { $0.currentVideo == $1.currentVideo }
             .bind(with: self) { owner, dataSource in
 
                 var snapShot = owner.dataSource.snapshot()
@@ -263,7 +263,11 @@ extension BeforeSearchContentViewController {
             BeforeSearchSection,
             BeforeVcDataSoruce
         >(collectionView: collectionView) {
-            ( collectionView: UICollectionView, indexPath: IndexPath, item: BeforeVcDataSoruce) -> UICollectionViewCell? in
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -295,7 +299,6 @@ extension BeforeSearchContentViewController {
 
         return dataSource
     }
-
 }
 
 // MARK: CollectionView Deleagte
