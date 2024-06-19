@@ -78,7 +78,7 @@ final class SongSearchResultReactor: Reactor {
         case let .updateFilterType(type):
             newState.filterType = type
         case let .updateDataSource(dataSource, canLoad):
-            newState.dataSource += dataSource
+            newState.dataSource = dataSource
             newState.canLoad = canLoad
 
         case let .updateSelectedCount(count):
@@ -101,7 +101,7 @@ extension SongSearchResultReactor {
 
         return .concat([
             .just(.updateSortType(type)),
-            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1)
+            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1, byOption: true)
         ])
     }
 
@@ -110,7 +110,7 @@ extension SongSearchResultReactor {
 
         return .concat([
             .just(.updateFilterType(type)),
-            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1)
+            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
         ])
     }
 
@@ -118,15 +118,19 @@ extension SongSearchResultReactor {
         order: SortType,
         filter: FilterType,
         text: String,
-        scrollPage: Int
+        scrollPage: Int,
+        byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
+        
+        var prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
+        
         return .concat([
             .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
                 .map { [limit] dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
+                    return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료

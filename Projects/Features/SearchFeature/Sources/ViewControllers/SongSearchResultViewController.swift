@@ -113,9 +113,11 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                     snapshot.appendSections([.song])
 
-                    snapshot.appendItems(dataSource, toSection: .song)
-
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+                    
+                    snapshot.appendItems(dataSource)
+                    
+                    
+                    owner.dataSource.apply(snapshot, animatingDifferences: true)
 
                     let warningView = WMWarningView(
                         frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
