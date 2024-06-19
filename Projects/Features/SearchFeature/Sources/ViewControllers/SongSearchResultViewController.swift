@@ -16,6 +16,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     var bottomSheetView: BottomSheetView!
 
+    private let searchSortOptionComponent: SearchSortOptionComponent
+    
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -26,6 +28,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         SongSearchResultSection,
         SongEntity
     > = createDataSource()
+    
+    init(_ reactor:SongSearchResultReactor, _ searchSortOptionComponent:SearchSortOptionComponent) {
+        self.searchSortOptionComponent = searchSortOptionComponent
+        super.init(reactor: reactor)
+       
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,15 +66,24 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         headerView.rx.tapSortButton
-            .bind(with: self) { owner, _ in
-                #warning("모달 띄우기")
-                print("tap tap")
+            .withLatestFrom(sharedState.map(\.sortType))
+            .bind(with: self) { owner, sortType in
+                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController else  {
+                    return
+                }
+                
+                vc.delegate = owner
+                
+                owner.showBottomSheet(
+                    content: vc,
+                    size: .fixed(240+SAFEAREA_BOTTOM_HEIGHT())
+                )
             }
             .disposed(by: disposeBag)
 
         headerView.rx.selectedFilterItem
             .bind(with: self) { owner, type in
-                print(type)
+                reactor.action.onNext(.changeFilterType(type))
             }
             .disposed(by: disposeBag)
     }
@@ -82,19 +99,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.filterType)
-            .bind(with: self) { owner, type in
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map { ($0.sortType, $0.filterType) }
-            .bind(with: self) { owner, info in
-
-//                let (sortType, filterType) = (info.0, info.1)
-//
-//                owner.headerView.update(sortType: sortType, filterType: filterType)
-            }
-            .disposed(by: disposeBag)
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
             .bind(with: self) { owner, info in
@@ -189,6 +193,13 @@ extension SongSearchResultViewController {
     }
 
     public func scrollToTop() {}
+}
+
+extension SongSearchResultViewController: SearchSortOptionDelegate {
+    func updateSortType(_ type: SortType) {
+        reactor?.action.onNext(.changeSortType(type))
+    }
+    
 }
 
 extension SongSearchResultViewController: SongCartViewDelegate {

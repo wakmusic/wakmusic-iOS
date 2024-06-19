@@ -4,8 +4,21 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import RxCocoa
+import RxSwift
 
-final class SearchOptionViewController: BaseViewController {
+
+
+protocol SearchSortOptionDelegate: AnyObject {
+    func updateSortType(_ type: SortType)
+}
+
+final class SearchSortOptionViewController: BaseViewController {
+    
+    weak var delegate: SearchSortOptionDelegate?
+    
+    private var disposeBag = DisposeBag()
+
     private let options: [SortType] = [.latest, .oldest, .alphabetical]
 
     private var selectedModel: SortType
@@ -14,7 +27,7 @@ final class SearchOptionViewController: BaseViewController {
         createDataSource()
 
     private lazy var tableView: UITableView = UITableView().then {
-        $0.register(SearchOptionCell.self, forCellReuseIdentifier: SearchOptionCell.identifer)
+        $0.register(SearchSortOptionCell.self, forCellReuseIdentifier: SearchSortOptionCell.identifer)
         $0.separatorStyle = .none
         $0.isScrollEnabled = false
         $0.delegate = self
@@ -36,6 +49,7 @@ final class SearchOptionViewController: BaseViewController {
         setLayout()
         configureUI()
         initSnapShot()
+        bindAction()
     }
 }
 
@@ -61,9 +75,9 @@ extension SearchSortOptionViewController {
             weak self
         ] tableView, indexPath, _ -> UITableViewCell in
             guard let self, let cell = tableView.dequeueReusableCell(
-                withIdentifier: SearchOptionCell.identifer,
+                withIdentifier: SearchSortOptionCell.identifer,
                 for: indexPath
-            ) as? SearchOptionCell else {
+            ) as? SearchSortOptionCell else {
                 return UITableViewCell()
             }
             cell.update(self.options[indexPath.row], self.selectedModel)
@@ -82,6 +96,16 @@ extension SearchSortOptionViewController {
         snapShot.appendItems(options, toSection: 0)
 
         dataSource.apply(snapShot)
+    }
+    
+    private func bindAction() {
+        tableView.rx.itemSelected
+            .map(\.row)
+            .bind(with: self) { owner, index in
+                owner.delegate?.updateSortType(owner.options[index])
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

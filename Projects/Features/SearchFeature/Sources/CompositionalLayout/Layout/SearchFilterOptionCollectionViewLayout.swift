@@ -1,11 +1,11 @@
 import UIKit
 import Utility
 
-final class SearchOptionCollectionViewLayout: UICollectionViewCompositionalLayout {
+final class SearchFilterOptionCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { _, _ in
 
-            return SearchOptionCollectionViewLayout.configureLayout()
+            return SearchFilterOptionCollectionViewLayout.configureLayout()
         }
     }
 
@@ -15,7 +15,7 @@ final class SearchOptionCollectionViewLayout: UICollectionViewCompositionalLayou
     }
 }
 
-extension SearchOptionCollectionViewLayout {
+extension SearchFilterOptionCollectionViewLayout {
     private static func configureLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(50),

@@ -4,7 +4,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class SearchOptionCell: UITableViewCell {
+final class SearchSortOptionCell: UITableViewCell {
     static let identifer: String = "SearchOptionCell"
     private var label: WMLabel = WMLabel(
         text: "",
@@ -28,7 +28,7 @@ final class SearchOptionCell: UITableViewCell {
     }
 }
 
-extension SearchOptionCell {
+extension SearchSortOptionCell {
     private func addSubviews() {
         self.contentView.addSubviews(label, checkImageView)
     }

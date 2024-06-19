@@ -44,7 +44,7 @@ final class SearchOptionHeaderView:
 
     fileprivate lazy var collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: SearchOptionCollectionViewLayout()
+        collectionViewLayout: SearchFilterOptionCollectionViewLayout()
     ).then {
         $0.backgroundColor = .clear
     }
