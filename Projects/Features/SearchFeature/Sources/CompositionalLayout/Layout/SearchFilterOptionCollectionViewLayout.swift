@@ -31,9 +31,9 @@ extension SearchFilterOptionCollectionViewLayout {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        
+
         section.interGroupSpacing = 4
-        
+
         section.orthogonalScrollingBehavior = .continuous
 
         return section
