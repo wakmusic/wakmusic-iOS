@@ -20,7 +20,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
-    
+
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
@@ -30,7 +30,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> =
         createDataSource()
 
-    private lazy var collectionView: UICollectionView = createCollectionView().then{
+    private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
@@ -132,7 +132,10 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
             .compactMap { $0 ?? [] }
-            .bind(to: tableView.rx.items) { ( tableView: UITableView, index: Int, element: String
+            .bind(to: tableView.rx.items) { (
+                tableView: UITableView,
+                index: Int,
+                element: String
             ) -> RecentRecordTableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "RecentRecordTableViewCell",
@@ -146,14 +149,13 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
                 return cell
             }.disposed(by: disposeBag)
-        
-        
+
         sharedState.map(\.recommendPlaylists)
             .distinctUntilChanged()
             .bind(with: self) { owner, recommendPlaylists in
-                
+
                 var snapShot = owner.dataSource.snapshot()
-                snapShot.appendItems(recommendPlaylists.map{.recommend(model: $0)}, toSection: .recommend)
+                snapShot.appendItems(recommendPlaylists.map { .recommend(model: $0) }, toSection: .recommend)
                 owner.dataSource.apply(snapShot)
             }
             .disposed(by: disposeBag)
@@ -222,7 +224,10 @@ extension BeforeSearchContentViewController {
             .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
             }
 
-        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, RecommendPlayListEntity>(cellNib: UINib(
+        let recommendCellRegistration = UICollectionView.CellRegistration<
+            RecommendPlayListCell,
+            RecommendPlayListEntity
+        >(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
         )) { cell, indexPath, itemIdentifier in
@@ -243,7 +248,7 @@ extension BeforeSearchContentViewController {
                     .kind
             ) { [weak self] supplementaryView, string, indexPath in
 
-                guard let self , let layoutKind =  BeforeSearchSection(rawValue: indexPath.row)  else { return }
+                guard let self, let layoutKind = BeforeSearchSection(rawValue: indexPath.row) else { return }
                 supplementaryView.delegate = self
                 supplementaryView.update(layoutKind.title, indexPath.section)
             }

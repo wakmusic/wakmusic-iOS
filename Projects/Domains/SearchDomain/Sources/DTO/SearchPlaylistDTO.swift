@@ -2,7 +2,6 @@ import Foundation
 import SearchDomainInterface
 import Utility
 
-
 public struct SearchPlaylistDTO: Decodable {
     public init(
         key: String,

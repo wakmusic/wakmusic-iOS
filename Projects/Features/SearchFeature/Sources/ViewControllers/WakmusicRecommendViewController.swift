@@ -97,16 +97,16 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
             }
             .disposed(by: disposeBag)
     }
+
     override func bindAction(reactor: WakmusicRecommendReactor) {
         super.bindAction(reactor: reactor)
-        
+
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
-        
     }
 }
 

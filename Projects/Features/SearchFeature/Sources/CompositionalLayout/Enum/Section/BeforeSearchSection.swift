@@ -4,10 +4,9 @@ internal enum BeforeSearchSection: Int {
     case youtube
     case recommend
     case popularList
-    
+
     var title: String {
         switch self {
-            
         case .youtube:
             return ""
         case .recommend:
@@ -16,5 +15,4 @@ internal enum BeforeSearchSection: Int {
             return "인기 리스트"
         }
     }
-    
 }
