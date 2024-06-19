@@ -10,10 +10,7 @@ public enum LyricAPI {
 
 extension LyricAPI: WMAPI {
     public var domain: WMDomain {
-        switch self {
-        case .fetchDecoratingBackground:
-            return .lyric
-        }
+        return .lyric
     }
 
     public var urlPath: String {

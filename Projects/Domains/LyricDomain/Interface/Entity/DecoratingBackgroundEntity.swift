@@ -3,8 +3,7 @@ import Foundation
 public struct DecoratingBackgroundEntity {
     public init(
         name: String,
-        image: String,
-        isSelected: Bool = false
+        image: String
     ) {
         self.name = name
         self.image = image
