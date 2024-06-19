@@ -19,7 +19,7 @@ final class OptionButton: UIView {
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t6(weight: .medium),
-        alignment: .left,
+        alignment: .right,
         lineHeight: UIFont.WMFontSystem.t6().lineHeight
     ).then {
         $0.numberOfLines = 1

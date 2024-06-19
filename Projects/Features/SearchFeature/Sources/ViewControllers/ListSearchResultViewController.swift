@@ -14,7 +14,9 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
-
+    
+    private let searchSortOptionComponent: SearchSortOptionComponent
+    
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -25,6 +27,11 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         ListSearchResultSection,
         SearchPlaylistEntity
     > = createDataSource()
+    
+    init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+        self.searchSortOptionComponent = searchSortOptionComponent
+        super.init(reactor: reactor)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +64,19 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
             .disposed(by: disposeBag)
 
         headerView.rx.tapSortButton
-            .bind(with: self) { owner, _ in
-                #warning("모달 띄우기")
-                print("tap tap")
+            .withLatestFrom(sharedState.map(\.sortType))
+            .bind(with: self) { owner, sortType in
+                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
+                else {
+                    return
+                }
+
+                vc.delegate = owner
+
+                owner.showBottomSheet(
+                    content: vc,
+                    size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
+                )
             }
             .disposed(by: disposeBag)
     }
@@ -68,11 +85,10 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-
-        sharedState.map { $0.sortType }
-            .bind(with: self) { owner, sortType in
-
-//                owner.headerView.update(sortType: sortType)
+        
+        sharedState.map(\.sortType)
+            .bind(with: self) { owner, type in
+                owner.headerView.updateSortState(type)
             }
             .disposed(by: disposeBag)
 
@@ -91,7 +107,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     snapshot.appendSections([.list])
 
                     snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+                    owner.dataSource.apply(snapshot, animatingDifferences: true)
 
                     let warningView = WMWarningView(
                         frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
@@ -169,6 +185,13 @@ extension ListSearchResultViewController {
     }
 
     public func scrollToTop() {}
+}
+
+extension ListSearchResultViewController: SearchSortOptionDelegate {
+    func updateSortType(_ type: SortType) {
+        reactor?.action.onNext(.changeSortType(type))
+    }
+    
 }
 
 extension ListSearchResultViewController: UICollectionViewDelegate {
