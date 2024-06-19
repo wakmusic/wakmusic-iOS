@@ -17,7 +17,7 @@ final class SongSearchResultReactor: Reactor {
         case updateDataSource(dataSource: [SongEntity], canLoad: Bool)
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
-        case updateScrollPage
+        case updateScrollPage(Int)
     }
 
     struct State {
@@ -87,8 +87,8 @@ final class SongSearchResultReactor: Reactor {
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
 
-        case .updateScrollPage:
-            newState.scrollPage += 1
+        case let .updateScrollPage(page):
+            newState.scrollPage = page
         }
 
         return newState
@@ -97,11 +97,24 @@ final class SongSearchResultReactor: Reactor {
 
 extension SongSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
-        return .just(.updateSortType(type))
+        
+        let state = self.currentState
+        
+        return .concat([
+            .just(.updateSortType(type)),
+            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1)
+        ])
+      
     }
 
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
-        return .just(.updateFilterType(type))
+        
+        let state = self.currentState
+        
+        return .concat([
+            .just(.updateFilterType(type)),
+            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1)
+        ])
     }
 
     private func updateDataSource(
@@ -118,7 +131,7 @@ extension SongSearchResultReactor {
                 .map { [limit] dataSource -> Mutation in
                     return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
                 },
-            .just(Mutation.updateScrollPage), // 스크롤 페이지 증가
+            .just(Mutation.updateScrollPage(scrollPage+1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }
