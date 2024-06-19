@@ -28,7 +28,7 @@ extension AppComponent {
     var wakmusicRecommendComponent: WakmusicRecommendComponent {
         WakmusicRecommendComponent(parent: self)
     }
-    
+
     var searchSortOptionComponent: SearchSortOptionComponent {
         SearchSortOptionComponent(parent: self)
     }
@@ -58,5 +58,4 @@ extension AppComponent {
             FetchSearchPlaylistsUseCaseImpl(searchRepository: searchRepository)
         }
     }
-    
 }

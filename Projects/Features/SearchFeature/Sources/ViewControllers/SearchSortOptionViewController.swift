@@ -1,22 +1,19 @@
 import BaseFeature
+import RxCocoa
+import RxSwift
 import SearchDomainInterface
 import SnapKit
 import Then
 import UIKit
 import Utility
-import RxCocoa
-import RxSwift
-
-
 
 protocol SearchSortOptionDelegate: AnyObject {
     func updateSortType(_ type: SortType)
 }
 
 final class SearchSortOptionViewController: BaseViewController {
-    
     weak var delegate: SearchSortOptionDelegate?
-    
+
     private var disposeBag = DisposeBag()
 
     private let options: [SortType] = [.latest, .oldest, .alphabetical]
@@ -97,7 +94,7 @@ extension SearchSortOptionViewController {
 
         dataSource.apply(snapShot)
     }
-    
+
     private func bindAction() {
         tableView.rx.itemSelected
             .map(\.row)

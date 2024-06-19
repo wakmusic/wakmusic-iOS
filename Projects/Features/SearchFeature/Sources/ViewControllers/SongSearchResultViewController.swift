@@ -17,7 +17,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
-    
+
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -28,11 +28,10 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         SongSearchResultSection,
         SongEntity
     > = createDataSource()
-    
-    init(_ reactor:SongSearchResultReactor, _ searchSortOptionComponent:SearchSortOptionComponent) {
+
+    init(_ reactor: SongSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
         self.searchSortOptionComponent = searchSortOptionComponent
         super.init(reactor: reactor)
-       
     }
 
     override func viewDidLoad() {
@@ -68,15 +67,16 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         headerView.rx.tapSortButton
             .withLatestFrom(sharedState.map(\.sortType))
             .bind(with: self) { owner, sortType in
-                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController else  {
+                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
+                else {
                     return
                 }
-                
+
                 vc.delegate = owner
-                
+
                 owner.showBottomSheet(
                     content: vc,
-                    size: .fixed(240+SAFEAREA_BOTTOM_HEIGHT())
+                    size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
                 )
             }
             .disposed(by: disposeBag)
@@ -98,7 +98,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                 owner.headerView.updateSortState(type)
             }
             .disposed(by: disposeBag)
-
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
             .bind(with: self) { owner, info in
@@ -199,7 +198,6 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
         reactor?.action.onNext(.changeSortType(type))
     }
-    
 }
 
 extension SongSearchResultViewController: SongCartViewDelegate {
