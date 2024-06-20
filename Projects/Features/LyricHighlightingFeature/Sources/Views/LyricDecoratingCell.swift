@@ -1,4 +1,5 @@
 import DesignSystem
+import LyricDomainInterface
 import SnapKit
 import Then
 import UIKit
@@ -43,16 +44,10 @@ final class LyricDecoratingCell: UICollectionViewCell {
     }
 }
 
-public struct LyricDecoratingModel {
-    let imageURL: String
-    let imageColor: UIColor
-    var isSelected: Bool
-}
-
 extension LyricDecoratingCell {
-    func update(model: LyricDecoratingModel, index: Int) {
-        decoImageView.backgroundColor = model.imageColor
-        descriptionLabel.text = "Color \(index + 1)"
+    func update(model: DecoratingBackgroundEntity) {
+        decoImageView.kf.setImage(with: URL(string: model.image))
+        descriptionLabel.text = model.name
         descriptionLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
         checkBoxContentView.isHidden = !model.isSelected
     }

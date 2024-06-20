@@ -68,3 +68,7 @@ public func WMDOMAIN_APP() -> String {
 public func WMDOMAIN_SEARCH() -> String {
     return config(key: "WMDOMAIN_SEARCH")
 }
+
+public func WMDOMAIN_LYRIC() -> String {
+    return config(key: "WMDOMAIN_LYRIC")
+}

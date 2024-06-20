@@ -24,7 +24,7 @@ public final class LyricDecoratingViewController: UIViewController {
 
     private let decorateContentView = UIView()
     let decorateShareContentView = UIView().then {
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 32
         $0.clipsToBounds = true
     }
 
@@ -166,7 +166,6 @@ extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
 private extension LyricDecoratingViewController {
     func addSubViews() {
         view.addSubviews(navigationBarView, decorateContentView, decorateBottomView, indicator)
-
         navigationBarView.addSubviews(backButton, navigationTitleLabel)
 
         decorateContentView.addSubview(decorateShareContentView)

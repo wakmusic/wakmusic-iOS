@@ -4,7 +4,6 @@ import Utility
 final class SearchFilterOptionCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { _, _ in
-
             return SearchFilterOptionCollectionViewLayout.configureLayout()
         }
     }
@@ -25,14 +24,16 @@ extension SearchFilterOptionCollectionViewLayout {
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.3),
+            widthDimension: .estimated(50),
             heightDimension: .fractionalHeight(1.0)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
-        group.interItemSpacing = .fixed(4.0)
-
         let section = NSCollectionLayoutSection(group: group)
+
+        section.interGroupSpacing = 4
+        section.contentInsets = .init(top: .zero, leading: 20, bottom: .zero, trailing: 30)
+
         section.orthogonalScrollingBehavior = .continuous
 
         return section
