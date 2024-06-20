@@ -4,7 +4,7 @@ import UIKit
 final class PopularPlayListCell: UICollectionViewCell {
     private let imageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.PlayListTheme.theme10.image
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
     }
 
     private let titleLabel = WMLabel(
@@ -33,7 +33,6 @@ final class PopularPlayListCell: UICollectionViewCell {
         super.init(frame: frame)
         self.contentView.addSubviews(imageView, titleLabel, nickNameLabel)
         configureUI()
-        self.contentView.backgroundColor = .blue
     }
 
     @available(*, unavailable)
@@ -51,7 +50,7 @@ extension PopularPlayListCell {
     private func configureUI() {
         imageView.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
+            $0.width.height.equalTo(140)
         }
 
         titleLabel.snp.makeConstraints {

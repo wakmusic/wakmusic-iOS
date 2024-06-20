@@ -154,11 +154,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         sharedState.map(\.dataSource)
             .distinctUntilChanged { $0.currentVideo == $1.currentVideo }
             .bind(with: self) { owner, dataSource in
-
+                
                 var snapShot = owner.dataSource.snapshot()
-
+                
+                let tmp: [Model] = [Model(title: "임시플리1"),Model(title: "임시플리2"),Model(title: "임시플리3")]
+                
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
                 snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
+                snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
@@ -254,7 +257,7 @@ extension BeforeSearchContentViewController {
                     .kind
             ) { [weak self] supplementaryView, string, indexPath in
 
-                guard let self, let layoutKind = BeforeSearchSection(rawValue: indexPath.row) else { return }
+                guard let self, let layoutKind = BeforeSearchSection(rawValue: indexPath.section) else { return }
                 supplementaryView.delegate = self
                 supplementaryView.update(layoutKind.title, indexPath.section)
             }

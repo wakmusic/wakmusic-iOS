@@ -32,10 +32,10 @@ final class BeforeSearchSectionHeaderView:
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+    
         self.addSubviews(label, button)
         setLayout()
-
+        
         button.addAction { [weak self] in
 
             guard let self else { return }
