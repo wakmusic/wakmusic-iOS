@@ -1,5 +1,6 @@
 import DesignSystem
 import Foundation
+import Kingfisher
 import RxCocoa
 import RxSwift
 import UIKit
@@ -62,11 +63,31 @@ extension LyricDecoratingViewController {
             })
             .disposed(by: disposeBag)
 
+        output.updateDecoratingImage
+            .filter { !$0.isEmpty }
+            .map { URL(string: $0) }
+            .compactMap { $0 }
+            .bind(with: self) { owner, url in
+                KingfisherManager.shared.retrieveImage(
+                    with: url
+                ) { result in
+                    switch result {
+                    case let .success(value):
+                        owner.decorateImageView.image = value.image
+
+                    case let .failure(error):
+                        owner.showToast(
+                            text: error.localizedDescription,
+                            font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                        )
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+
         output.dataSource
             .skip(1)
-            .do(onNext: { [decorateImageView, indicator] entities in
-                decorateImageView.backgroundColor = entities.filter { $0.isSelected }.first?
-                    .imageColor ?? DesignSystemAsset.PrimaryColorV2.point.color
+            .do(onNext: { [indicator] _ in
                 indicator.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
@@ -76,7 +97,7 @@ extension LyricDecoratingViewController {
                 ) as? LyricDecoratingCell else {
                     return UICollectionViewCell()
                 }
-                cell.update(model: model, index: index)
+                cell.update(model: model)
                 return cell
             }
             .disposed(by: disposeBag)
