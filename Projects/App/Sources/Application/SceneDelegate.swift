@@ -26,22 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillResignActive(_ scene: UIScene) {}
 
-    private var statePublisher: AnyCancellable?
+    func sceneWillEnterForeground(_ scene: UIScene) {}
 
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        statePublisher?.cancel()
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        let isPlayed = PlayState.shared.state
-        statePublisher = PlayState.shared.$state.sink { state in
-            if state == .paused {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    if isPlayed == .playing { PlayState.shared.play() }
-                }
-            }
-        }
-    }
+    func sceneDidEnterBackground(_ scene: UIScene) {}
 
     // MARK: - Handling DeepLink
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

@@ -262,12 +262,6 @@ public final class FavoriteViewModel: ViewModelType {
 
                 if model.status == 200 {
                     output.showToast.accept(BaseEntity(status: 200, description: "좋아요 리스트에서 삭제되었습니다."))
-                    // 좋아요 삭제 시 > 노티피케이션
-                    guard let currentSong: SongEntity = PlayState.shared.currentSong else { return }
-                    let currentSongID: String = currentSong.id
-                    if self.tempDeleteLikeListIds.contains(currentSongID) {
-                        NotificationCenter.default.post(name: .updateCurrentSongLikeState, object: currentSong)
-                    }
                 } else {
                     output.showToast.accept(model)
                 }

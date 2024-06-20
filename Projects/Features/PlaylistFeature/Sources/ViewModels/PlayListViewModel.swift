@@ -13,7 +13,6 @@ import RxDataSources
 import RxRelay
 import RxSwift
 import Utility
-import YouTubePlayerKit
 
 internal typealias PlayListSectionModel = SectionModel<Int, PlayListItem>
 
@@ -22,11 +21,6 @@ final class PlaylistViewModel: ViewModelType {
         let viewWillAppearEvent: Observable<Void>
         let closeButtonDidTapEvent: AnyPublisher<Void, Never>
         let editButtonDidTapEvent: AnyPublisher<Void, Never>
-        let repeatButtonDidTapEvent: AnyPublisher<Void, Never>
-        let prevButtonDidTapEvent: AnyPublisher<Void, Never>
-        let playButtonDidTapEvent: AnyPublisher<Void, Never>
-        let nextButtonDidTapEvent: AnyPublisher<Void, Never>
-        let shuffleButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistTableviewCellDidTapEvent: Observable<IndexPath>
         let playlistTableviewCellDidTapInEditModeEvent: Observable<Int>
         let selectAllSongsButtonDidTapEvent: Observable<Bool>
@@ -36,15 +30,8 @@ final class PlaylistViewModel: ViewModelType {
     }
 
     struct Output {
-        var playerState = CurrentValueSubject<YouTubePlayer.PlaybackState, Never>(.unstarted)
         var willClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<Bool, Never>(false)
-        var thumbnailImageURL = CurrentValueSubject<String, Never>("")
-        var playTimeValue = CurrentValueSubject<Float, Never>(0.0)
-        var totalTimeValue = CurrentValueSubject<Float, Never>(0.0)
-        var currentSongIndex = CurrentValueSubject<Int, Never>(0)
-        var repeatMode = CurrentValueSubject<RepeatMode, Never>(.none)
-        var shuffleMode = CurrentValueSubject<ShuffleMode, Never>(.off)
         let dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let countOfSongs = CurrentValueSubject<Int, Never>(0)
@@ -69,11 +56,6 @@ final class PlaylistViewModel: ViewModelType {
 
         bindInput(input: input, output: output)
         bindTableView(output: output)
-        bindPlayStateChanged(output: output)
-        bindCurrentSongChanged(output: output)
-        bindProgress(output: output)
-        bindRepeatMode(output: output)
-        bindShuffleMode(output: output)
 
         output.indexOfSelectedSongs
             .map { $0.count }
@@ -101,47 +83,9 @@ final class PlaylistViewModel: ViewModelType {
             output.editState.send(self.isEditing)
         }.store(in: &subscription)
 
-        input.repeatButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            self.playState.repeatMode.rotate()
-        }.store(in: &subscription)
-
-        input.prevButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            switch self.playState.shuffleMode {
-            case .off:
-                self.playState.backward()
-            case .on:
-                self.playState.shufflePlay()
-            }
-        }.store(in: &subscription)
-
-        input.playButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            let state = self.playState.state
-            state == .playing ? self.playState.pause() : self.playState.play()
-        }.store(in: &subscription)
-
-        input.nextButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            switch self.playState.shuffleMode {
-            case .off:
-                self.playState.forward()
-            case .on:
-                self.playState.shufflePlay()
-            }
-        }.store(in: &subscription)
-
-        input.shuffleButtonDidTapEvent.sink { [weak self] _ in
-            guard let self else { return }
-            self.playState.shuffleMode.toggle()
-        }.store(in: &subscription)
-
         input.playlistTableviewCellDidTapEvent
             .filter { _ in output.editState.value == false }
-            .subscribe(onNext: { [weak self] indexPath in
-                self?.playState.playList.changeCurrentPlayIndex(to: indexPath.row)
-                self?.playState.loadInPlaylist(at: indexPath.row)
+            .subscribe(onNext: { indexPath in
             })
             .disposed(by: disposeBag)
 
@@ -267,42 +211,6 @@ final class PlaylistViewModel: ViewModelType {
                 let list = self.playState.playList.list
                 self.playState.playList.listReordered.send(list)
             }.store(in: &subscription)
-    }
-
-    private func bindPlayStateChanged(output: Output) {
-        playState.$state.sink { state in
-            output.playerState.send(state)
-        }.store(in: &subscription)
-    }
-
-    private func bindCurrentSongChanged(output: Output) {
-        playState.$currentSong.sink { [weak self] song in
-            guard let self else { return }
-            guard let song = song else { return }
-            let thumbnailURL = Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString
-            output.thumbnailImageURL.send(thumbnailURL)
-            guard let currentSongIndex = self.playState.playList.currentPlayIndex else { return }
-            output.currentSongIndex.send(currentSongIndex)
-        }.store(in: &subscription)
-    }
-
-    private func bindProgress(output: Output) {
-        playState.$progress.sink { progress in
-            output.playTimeValue.send(Float(progress.currentProgress))
-            output.totalTimeValue.send(Float(progress.endProgress))
-        }.store(in: &subscription)
-    }
-
-    private func bindRepeatMode(output: Output) {
-        playState.$repeatMode.sink { repeatMode in
-            output.repeatMode.send(repeatMode)
-        }.store(in: &subscription)
-    }
-
-    private func bindShuffleMode(output: Output) {
-        playState.$shuffleMode.sink { shuffleMode in
-            output.shuffleMode.send(shuffleMode)
-        }.store(in: &subscription)
     }
 
     private func pullForOriginalPlaylist(output: Output) {

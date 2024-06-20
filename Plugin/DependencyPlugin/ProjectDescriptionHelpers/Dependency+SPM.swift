@@ -33,14 +33,4 @@ public extension TargetDependency.SPM {
     static let Inject = TargetDependency.external(name: "Inject")
     static let Realm = TargetDependency.external(name: "Realm")
     static let RealmSwift = TargetDependency.external(name: "RealmSwift")
-
-// MARK: Native SPM
-    static let YouTubePlayerKit = TargetDependency.package(product: "YouTubePlayerKit")
-}
-
-public extension Package {
-    static let YouTubePlayerKit = Package.remote(
-        url: "https://github.com/SvenTiigi/YouTubePlayerKit.git",
-        requirement: .upToNextMajor(from: "1.3.1")
-    )
 }

@@ -25,4 +25,33 @@ public extension Int {
         let stringFromDate = formatter.string(from: dateFromString)
         return stringFromDate
     }
+
+    var toUnitNumber: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ""
+        formatter.decimalSeparator = "."
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.roundingMode = .floor
+
+        let correctNumber: Int = (self < 0) ? 0 : self
+
+        switch correctNumber {
+        case 0 ..< 1000:
+            return String(correctNumber)
+        case 1000 ..< 10000:
+            let thousands = Double(correctNumber) / 1000.0
+            return formatter.string(from: NSNumber(value: thousands))! + "천"
+        case 10000 ..< 1_000_000:
+            let tenThousands = Double(correctNumber) / 10000.0
+            return formatter.string(from: NSNumber(value: tenThousands))! + "만"
+        case 1_000_000 ..< 100_000_000:
+            let tenThousands = Int(correctNumber) / 10000
+            return formatter.string(from: NSNumber(value: tenThousands))! + "만"
+        default:
+            let millions = Double(correctNumber) / 100_000_000.0
+            return formatter.string(from: NSNumber(value: millions))! + "억"
+        }
+    }
 }

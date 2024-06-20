@@ -10,7 +10,6 @@ import Foundation
 import SongsDomainInterface
 import UIKit
 import Utility
-import YouTubePlayerKit
 
 public extension PlayState {
     /// 주어진 곡들을 재생목록에 추가하고 재생합니다.
@@ -27,11 +26,6 @@ public extension PlayState {
         self.playList.remove(indexs: existSongIndexs)
         let mappedSongs = songs.uniqueElements.map { PlayListItem(item: $0) }
         self.playList.append(mappedSongs)
-
-        if let firstSong = mappedSongs.first, let playSongIndex = self.playList.uniqueIndex(of: firstSong) {
-            self.playList.changeCurrentPlayIndex(to: playSongIndex)
-            self.load(at: firstSong.item)
-        }
     }
 
     /// 주어진 곡들을 재생목록에 추가합니다.
@@ -41,29 +35,5 @@ public extension PlayState {
         self.playList.remove(indexs: existSongIndexs)
         let mappedSongs = songs.uniqueElements.map { PlayListItem(item: $0) }
         self.playList.append(mappedSongs)
-
-        if self.playerMode == .close {
-            self.currentSong = self.playList.currentPlaySong
-            if let currentSong = currentSong {
-                self.player?.cue(source: .video(id: currentSong.id))
-            }
-        }
-    }
-
-    /// 플레이어의 상태를 체크합니다.
-    func checkForPlayerState(completion: ((YouTubePlayer.State) -> Void)? = nil) {
-        guard let playerState = self.player?.state else { return }
-        completion?(playerState)
-    }
-
-    /// 플레이어를 리셋합니다.
-    func resetPlayer() {
-        self.player = YouTubePlayer(configuration: .init(
-            autoPlay: false,
-            showControls: false,
-            showRelatedVideos: false
-        ))
-        self.player?.cue(source: .video(id: self.currentSong?.id ?? ""))
-        NotificationCenter.default.post(name: .resetYouTubePlayerHostingView, object: nil)
     }
 }
