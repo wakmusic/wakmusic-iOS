@@ -25,6 +25,7 @@ final class SearchOptionHeaderView:
     }
 
     fileprivate let dataSource: [FilterType] = [.all, .title, .artist, .credit]
+    private var disposeBag = DisposeBag()
     private lazy var searchFilterDiffableDataSource = UICollectionViewDiffableDataSource<Int, FilterType>(
         collectionView: collectionView
     ) { [searchFilterCellRegistration] collectionView, indexPath, itemIdentifier in
@@ -58,7 +59,7 @@ final class SearchOptionHeaderView:
         addSubviews()
         setLayout()
         initDataSource()
-
+        bindAction()
         dimView.isHidden = !isContainFilter
         collectionView.isHidden = !isContainFilter
     }
@@ -115,6 +116,14 @@ extension SearchOptionHeaderView {
         snapShot.appendItems(dataSource, toSection: 0)
 
         searchFilterDiffableDataSource.apply(snapShot)
+    }
+    
+    private func bindAction() {
+        collectionView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+                owner.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
