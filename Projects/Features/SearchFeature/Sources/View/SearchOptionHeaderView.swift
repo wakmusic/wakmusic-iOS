@@ -91,9 +91,10 @@ extension SearchOptionHeaderView {
         }
 
         sortButton.snp.makeConstraints {
-            $0.top.bottom.trailing.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
             $0.width.equalTo(70)
             $0.leading.equalTo(collectionView.snp.trailing).offset(4)
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 

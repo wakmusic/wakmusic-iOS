@@ -32,6 +32,7 @@ extension SearchFilterOptionCollectionViewLayout {
         let section = NSCollectionLayoutSection(group: group)
 
         section.interGroupSpacing = 4
+        section.contentInsets = .init(top: .zero, leading: 20, bottom: .zero, trailing: 30)
 
         section.orthogonalScrollingBehavior = .continuous
 
