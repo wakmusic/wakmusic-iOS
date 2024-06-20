@@ -117,7 +117,7 @@ extension SearchOptionHeaderView {
 
         searchFilterDiffableDataSource.apply(snapShot)
     }
-    
+
     private func bindAction() {
         collectionView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
