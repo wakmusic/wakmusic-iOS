@@ -7,7 +7,6 @@ import Then
 import UIKit
 import Utility
 
-#warning("로티 뷰 넣기")
 final class YoutubeThumbnailCell: UICollectionViewCell {
     private let lottieView = LottieAnimationView(name: "Weekly_WM", bundle: DesignSystemResources.bundle).then {
         $0.loopMode = .loop
@@ -42,7 +41,8 @@ extension YoutubeThumbnailCell {
         }
 
         lottieView.snp.makeConstraints {
-            $0.center.equalTo(thumbnailView.snp.center)
+            $0.centerX.equalTo(thumbnailView.snp.centerX)
+            $0.top.equalTo(thumbnailView).offset(40)
             $0.width.height.equalTo(124)
         }
     }
