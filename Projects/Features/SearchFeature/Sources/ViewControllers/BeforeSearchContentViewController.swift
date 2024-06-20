@@ -310,6 +310,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
         switch model {
         case let .youtube(model: model):
+            #warning("유튜브 이동")
             LogManager.printDebug("youtube \(model)")
         case let .recommend(model: model):
             LogManager.printDebug("recommend \(model)")
