@@ -15,18 +15,23 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     var bottomSheetView: BottomSheetView!
 
+    private let searchSortOptionComponent: SearchSortOptionComponent
+
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
-    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
-        $0.delegate = self
-    }
+    private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(false)
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         ListSearchResultSection,
         SearchPlaylistEntity
     > = createDataSource()
+
+    init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+        self.searchSortOptionComponent = searchSortOptionComponent
+        super.init(reactor: reactor)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +62,23 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
             .map { _ in ListSearchResultReactor.Action.askLoadMore }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        headerView.rx.tapSortButton
+            .withLatestFrom(sharedState.map(\.sortType))
+            .bind(with: self) { owner, sortType in
+                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
+                else {
+                    return
+                }
+
+                vc.delegate = owner
+
+                owner.showBottomSheet(
+                    content: vc,
+                    size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
+                )
+            }
+            .disposed(by: disposeBag)
     }
 
     override func bindState(reactor: ListSearchResultReactor) {
@@ -64,10 +86,9 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
-        sharedState.map { $0.sortType }
-            .bind(with: self) { owner, sortType in
-
-                owner.headerView.update(sortType: sortType)
+        sharedState.map(\.sortType)
+            .bind(with: self) { owner, type in
+                owner.headerView.updateSortState(type)
             }
             .disposed(by: disposeBag)
 
@@ -86,7 +107,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     snapshot.appendSections([.list])
 
                     snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+                    owner.dataSource.apply(snapshot, animatingDifferences: true)
 
                     let warningView = WMWarningView(
                         frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
@@ -113,7 +134,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalToSuperview().offset(56)
+            $0.top.equalToSuperview().offset(72) // 56 + 16
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
@@ -166,6 +187,12 @@ extension ListSearchResultViewController {
     public func scrollToTop() {}
 }
 
+extension ListSearchResultViewController: SearchSortOptionDelegate {
+    func updateSortType(_ type: SortType) {
+        reactor?.action.onNext(.changeSortType(type))
+    }
+}
+
 extension ListSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         #warning("플레이리스트 상세로 이동")
@@ -173,15 +200,5 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
         LogManager.printDebug(model)
-    }
-}
-
-extension ListSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tapFilter() {
-        LogManager.printDebug("filter")
-    }
-
-    func tapSort() {
-        LogManager.printDebug("sort")
     }
 }

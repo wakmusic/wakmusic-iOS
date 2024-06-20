@@ -8,15 +8,17 @@ import UIKit
 
 public protocol SongSearchResultDependency: Dependency {
     var fetchSearchSongsUseCase: any FetchSearchSongsUseCase { get }
+    var searchSortOptionComponent: SearchSortOptionComponent { get }
 }
 
 public final class SongSearchResultComponent: Component<SongSearchResultDependency>, SongSearchResultFactory {
     public func makeView(_ text: String) -> UIViewController {
         SongSearchResultViewController(
-            reactor: SongSearchResultReactor(
+            SongSearchResultReactor(
                 text: text,
                 fetchSearchSongsUseCase: dependency.fetchSearchSongsUseCase
-            )
+            ),
+            dependency.searchSortOptionComponent
         )
     }
 }

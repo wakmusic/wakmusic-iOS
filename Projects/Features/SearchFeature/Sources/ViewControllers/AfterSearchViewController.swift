@@ -62,7 +62,6 @@ extension AfterSearchViewController {
             .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { owner, text in
-                LogManager.printDebug("Text: \(text)")
                 owner.viewControllers = [
                     owner.songSearchResultFactory.makeView(text),
                     owner.listSearchResultFactory.makeView(text)

@@ -16,18 +16,23 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     var bottomSheetView: BottomSheetView!
 
+    private let searchSortOptionComponent: SearchSortOptionComponent
+
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
-    private lazy var headerView: SearchResultHeaderView = SearchResultHeaderView().then {
-        $0.delegate = self
-    }
+    private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         SongSearchResultSection,
         SongEntity
     > = createDataSource()
+
+    init(_ reactor: SongSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+        self.searchSortOptionComponent = searchSortOptionComponent
+        super.init(reactor: reactor)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +63,29 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .map { _ in SongSearchResultReactor.Action.askLoadMore }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        headerView.rx.tapSortButton
+            .withLatestFrom(sharedState.map(\.sortType))
+            .bind(with: self) { owner, sortType in
+                guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
+                else {
+                    return
+                }
+
+                vc.delegate = owner
+
+                owner.showBottomSheet(
+                    content: vc,
+                    size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
+                )
+            }
+            .disposed(by: disposeBag)
+
+        headerView.rx.selectedFilterItem
+            .bind(with: self) { owner, type in
+                reactor.action.onNext(.changeFilterType(type))
+            }
+            .disposed(by: disposeBag)
     }
 
     override func bindState(reactor: SongSearchResultReactor) {
@@ -65,12 +93,9 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         let sharedState = reactor.state.share()
 
-        sharedState.map { ($0.sortType, $0.filterType) }
-            .bind(with: self) { owner, info in
-
-                let (sortType, filterType) = (info.0, info.1)
-
-                owner.headerView.update(sortType: sortType, filterType: filterType)
+        sharedState.map(\.sortType)
+            .bind(with: self) { owner, type in
+                owner.headerView.updateSortState(type)
             }
             .disposed(by: disposeBag)
 
@@ -88,9 +113,9 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                     snapshot.appendSections([.song])
 
-                    snapshot.appendItems(dataSource, toSection: .song)
+                    snapshot.appendItems(dataSource)
 
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+                    owner.dataSource.apply(snapshot, animatingDifferences: true)
 
                     let warningView = WMWarningView(
                         frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
@@ -117,12 +142,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalToSuperview().offset(56)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalToSuperview().offset(72) // 56 + 16
+            $0.leading.trailing.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+            $0.top.equalTo(headerView.snp.bottom).offset(16)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
@@ -169,16 +194,9 @@ extension SongSearchResultViewController {
     public func scrollToTop() {}
 }
 
-extension SongSearchResultViewController: SearchResultHeaderViewDelegate {
-    func tapFilter() {
-        self.showBottomSheet(
-            content: SearchOptionViewController(selectedModel: .latest),
-            size: .fixed(240 + SAFEAREA_BOTTOM_HEIGHT())
-        )
-    }
-
-    func tapSort() {
-        LogManager.printDebug("sort")
+extension SongSearchResultViewController: SearchSortOptionDelegate {
+    func updateSortType(_ type: SortType) {
+        reactor?.action.onNext(.changeSortType(type))
     }
 }
 

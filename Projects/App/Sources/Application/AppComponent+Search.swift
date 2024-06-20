@@ -29,6 +29,10 @@ extension AppComponent {
         WakmusicRecommendComponent(parent: self)
     }
 
+    var searchSortOptionComponent: SearchSortOptionComponent {
+        SearchSortOptionComponent(parent: self)
+    }
+
     // 도메인 영역
 
     var remoteSearchDataSource: any RemoteSearchDataSource {

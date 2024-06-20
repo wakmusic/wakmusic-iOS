@@ -17,7 +17,7 @@ final class SongSearchResultReactor: Reactor {
         case updateDataSource(dataSource: [SongEntity], canLoad: Bool)
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
-        case updateScrollPage
+        case updateScrollPage(Int)
     }
 
     struct State {
@@ -78,7 +78,7 @@ final class SongSearchResultReactor: Reactor {
         case let .updateFilterType(type):
             newState.filterType = type
         case let .updateDataSource(dataSource, canLoad):
-            newState.dataSource += dataSource
+            newState.dataSource = dataSource
             newState.canLoad = canLoad
 
         case let .updateSelectedCount(count):
@@ -87,8 +87,8 @@ final class SongSearchResultReactor: Reactor {
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
 
-        case .updateScrollPage:
-            newState.scrollPage += 1
+        case let .updateScrollPage(page):
+            newState.scrollPage = page
         }
 
         return newState
@@ -97,28 +97,41 @@ final class SongSearchResultReactor: Reactor {
 
 extension SongSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
-        return .just(.updateSortType(type))
+        let state = self.currentState
+
+        return .concat([
+            .just(.updateSortType(type)),
+            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1, byOption: true)
+        ])
     }
 
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
-        return .just(.updateFilterType(type))
+        let state = self.currentState
+
+        return .concat([
+            .just(.updateFilterType(type)),
+            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
+        ])
     }
 
     private func updateDataSource(
         order: SortType,
         filter: FilterType,
         text: String,
-        scrollPage: Int
+        scrollPage: Int,
+        byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
+        let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
+
         return .concat([
             .just(Mutation.updateLoadingState(true)), // 로딩
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
                 .map { [limit] dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
+                    return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
                 },
-            .just(Mutation.updateScrollPage), // 스크롤 페이지 증가
+            .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }

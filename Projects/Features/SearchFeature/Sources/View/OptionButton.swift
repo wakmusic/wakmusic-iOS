@@ -1,9 +1,14 @@
 import DesignSystem
 import RxCocoa
 import RxSwift
+import SearchDomainInterface
 import SnapKit
 import Then
 import UIKit
+
+private protocol OptionButtonStateProtocol {
+    func updateSortrState(_ filterType: SortType)
+}
 
 private protocol OptionButtonActionProtocol {
     var didTap: Observable<Void> { get }
@@ -14,9 +19,8 @@ final class OptionButton: UIView {
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t6(weight: .medium),
-        alignment: .left,
-        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
-        kernValue: -0.5
+        alignment: .right,
+        lineHeight: UIFont.WMFontSystem.t6().lineHeight
     ).then {
         $0.numberOfLines = 1
     }
@@ -25,22 +29,22 @@ final class OptionButton: UIView {
         $0.image = DesignSystemAsset.Search.arrowDown.image
     }
 
+    private var sortType: SortType
+
     fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
 
-    public init() {
+    public init(_ sortType: SortType) {
+        self.sortType = sortType
         super.init(frame: .zero)
         addSubviews()
         setLayout()
+        configureUI()
         bindAction()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    public func setLeftTitle(_ title: String) {
-        leftLabel.text = title
     }
 }
 
@@ -64,9 +68,20 @@ extension OptionButton {
         }
     }
 
+    private func configureUI() {
+        leftLabel.text = sortType.title
+    }
+
     private func bindAction() {
         self.addGestureRecognizer(tapGestureRecognizer)
         self.isUserInteractionEnabled = true
+    }
+}
+
+extension OptionButton: OptionButtonStateProtocol {
+    func updateSortrState(_ type: SortType) {
+        self.sortType = type
+        leftLabel.text = sortType.title
     }
 }
 
