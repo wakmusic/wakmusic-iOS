@@ -19,7 +19,6 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
 
 extension BeforeSearchCollectionViewLayout {
     private static func configureLayoutSection(_ layoutKind: BeforeSearchSection) -> NSCollectionLayoutSection {
-
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -64,8 +63,10 @@ extension BeforeSearchCollectionViewLayout {
 
         case .popularList:
             #warning("fractional 고민하기")
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140),
-                                                   heightDimension: .absolute(190))
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(140),
+                heightDimension: .absolute(190)
+            )
 
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
