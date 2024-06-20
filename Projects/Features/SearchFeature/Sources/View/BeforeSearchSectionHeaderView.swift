@@ -16,11 +16,11 @@ final class BeforeSearchSectionHeaderView:
 
     var section: Int?
 
-    private let label: WMLabel = WMLabel(text: "",
-                                         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color ,
-                                         font: .t6(weight: .medium))
-    
-
+    private let label: WMLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+        font: .t6(weight: .medium)
+    )
 
     private let button: UIButton = UIButton().then {
         $0.setTitle("전체보기", for: .normal)
