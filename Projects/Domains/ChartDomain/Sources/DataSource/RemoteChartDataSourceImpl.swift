@@ -9,4 +9,10 @@ public final class RemoteChartDataSourceImpl: BaseRemoteDataSource<ChartAPI>, Re
             .map(SingleChartRankingResponseDTO.self)
             .map { $0.toDomain(type: type) }
     }
+
+    public func fetchCurrentVideoUseCase() -> Single<CurrentVideoEntity> {
+        request(.fetchCurrentVideo)
+            .map(CurrentVideoDTO.self)
+            .map { $0.toDomain() }
+    }
 }

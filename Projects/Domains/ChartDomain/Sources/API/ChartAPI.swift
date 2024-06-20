@@ -6,6 +6,7 @@ import Moya
 
 public enum ChartAPI {
     case fetchChartRanking(type: ChartDateType)
+    case fetchCurrentVideo
 }
 
 extension ChartAPI: WMAPI {
@@ -17,6 +18,9 @@ extension ChartAPI: WMAPI {
         switch self {
         case let .fetchChartRanking(type):
             return "/\(type.rawValue)"
+
+        case .fetchCurrentVideo:
+            return "/current-video"
         }
     }
 
@@ -26,7 +30,7 @@ extension ChartAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchChartRanking:
+        case .fetchChartRanking, .fetchCurrentVideo:
             return .requestPlain
         }
     }

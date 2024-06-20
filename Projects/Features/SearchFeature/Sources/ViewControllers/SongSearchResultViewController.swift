@@ -65,7 +65,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         headerView.rx.tapSortButton
-            .withLatestFrom(sharedState.map(\.sortType))
+            .withLatestFrom(sharedState.map(\.sortType)) { $1 }
             .bind(with: self) { owner, sortType in
                 guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
                 else {

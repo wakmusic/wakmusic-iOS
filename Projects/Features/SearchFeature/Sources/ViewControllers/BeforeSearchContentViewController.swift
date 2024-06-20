@@ -1,5 +1,6 @@
 import BaseFeature
 import BaseFeatureInterface
+import ChartDomainInterface
 import DesignSystem
 import LogManager
 import NeedleFoundation
@@ -20,6 +21,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
+
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
         $0.separatorStyle = .none
@@ -29,7 +31,9 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private lazy var dataSource: UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce> =
         createDataSource()
 
-    private lazy var collectionView: UICollectionView = createCollectionView()
+    private lazy var collectionView: UICollectionView = createCollectionView().then {
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
+    }
 
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
@@ -50,7 +54,6 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        initDataSource()
     }
 
     override public func addView() {
@@ -99,7 +102,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func bindState(reactor: BeforeSearchReactor) {
         super.bindState(reactor: reactor)
 
-        let sharedState = reactor.state.share(replay: 2)
+        let sharedState = reactor.state.share()
 
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
@@ -144,6 +147,23 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
 
                 return cell
             }.disposed(by: disposeBag)
+
+        sharedState.map(\.dataSource)
+            .distinctUntilChanged { $0.currentVideo == $1.currentVideo }
+            .bind(with: self) { owner, dataSource in
+
+                var snapShot = owner.dataSource.snapshot()
+                snapShot.appendSections([.youtube, .recommend, .popularList])
+
+                let tmp: [Model] = [Model(title: "임시플리1"), Model(title: "임시플리2"), Model(title: "임시플리3")]
+
+                snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
+                snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
+                snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
+
+                owner.dataSource.apply(snapShot, animatingDifferences: false)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -167,10 +187,6 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 300))
         warningView.text = "최근 검색 기록이 없습니다."
-
-        guard let state = reactor?.currentState else {
-            return nil
-        }
 
         let recentRecordHeaderView = RecentRecordHeaderView()
 
@@ -210,22 +226,19 @@ extension BeforeSearchContentViewController {
         // MARK: Cell
 
         let youtubeCellRegistration = UICollectionView
-            .CellRegistration<YoutubeThumbnailCell, Model> { cell, indexPath, item in
+            .CellRegistration<YoutubeThumbnailCell, CurrentVideoEntity> { cell, indexPath, itemIdentifier in
+
+                cell.update(model: itemIdentifier)
             }
 
-        let recommendCellRegistration = UICollectionView.CellRegistration<RecommendPlayListCell, Model>(cellNib: UINib(
+        let recommendCellRegistration = UICollectionView.CellRegistration<
+            RecommendPlayListCell,
+            RecommendPlayListEntity
+        >(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
         )) { cell, indexPath, itemIdentifier in
-            cell.update(
-                model: RecommendPlayListEntity(
-                    key: "best",
-                    title: "임시 플레이리스트",
-                    image: "",
-                    private: true,
-                    count: 0
-                )
-            )
+            cell.update(model: itemIdentifier)
         }
 
         let popularListCellRegistration = UICollectionView
@@ -242,9 +255,9 @@ extension BeforeSearchContentViewController {
                     .kind
             ) { [weak self] supplementaryView, string, indexPath in
 
-                guard let self else { return }
+                guard let self, let layoutKind = BeforeSearchSection(rawValue: indexPath.section) else { return }
                 supplementaryView.delegate = self
-                supplementaryView.update("임시 타이틀", indexPath.section)
+                supplementaryView.update(layoutKind.title, indexPath.section)
             }
 
         let dataSource = UICollectionViewDiffableDataSource<
@@ -264,12 +277,12 @@ extension BeforeSearchContentViewController {
                     for: indexPath,
                     item: model
                 )
-            case let .recommend(model2: model2):
+            case let .recommend(model: model):
                 return
                     collectionView.dequeueConfiguredReusableCell(
                         using: recommendCellRegistration,
                         for: indexPath,
-                        item: model2
+                        item: model
                     )
 
             case let .popularList(model: model):
@@ -287,31 +300,6 @@ extension BeforeSearchContentViewController {
 
         return dataSource
     }
-
-    private func initDataSource() {
-        // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
-        snapshot.appendSections([.youtube, .recommend, .popularList])
-        snapshot.appendItems([.youtube(model: Model(title: "Hello"))], toSection: .youtube)
-        snapshot.appendItems(
-            [
-                .recommend(model2: Model(title: "123")),
-                .recommend(model2: Model(title: "456")),
-                .recommend(model2: Model(title: "4564")),
-                .recommend(model2: Model(title: "4516"))
-            ],
-            toSection: .recommend
-        )
-        snapshot.appendItems(
-            [
-                .popularList(model: Model(title: "Hello1")),
-                .popularList(model: Model(title: "Hello2")),
-                .popularList(model: Model(title: "Hello3"))
-            ],
-            toSection: .popularList
-        )
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
 }
 
 // MARK: CollectionView Deleagte
@@ -323,9 +311,10 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
         switch model {
         case let .youtube(model: model):
+            #warning("유튜브 이동")
             LogManager.printDebug("youtube \(model)")
-        case let .recommend(model2: model2):
-            LogManager.printDebug("recommend \(model2)")
+        case let .recommend(model: model):
+            LogManager.printDebug("recommend \(model)")
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }

@@ -19,11 +19,6 @@ final class BeforeSearchCollectionViewLayout: UICollectionViewCompositionalLayou
 
 extension BeforeSearchCollectionViewLayout {
     private static func configureLayoutSection(_ layoutKind: BeforeSearchSection) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
-        )
-
         let headerLayout = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
 
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -32,10 +27,12 @@ extension BeforeSearchCollectionViewLayout {
             alignment: .top
         )
 
-        header.contentInsets = .init(top: .zero, leading: 8, bottom: .zero, trailing: 8)
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
 
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 8, bottom: 0, trailing: 8)
+        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection
@@ -66,13 +63,17 @@ extension BeforeSearchCollectionViewLayout {
 
         case .popularList:
             #warning("fractional 고민하기")
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(140), heightDimension: .absolute(190))
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(140),
+                heightDimension: .absolute(190)
+            )
 
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
             section = NSCollectionLayoutSection(group: group)
             section.boundarySupplementaryItems = [header]
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+            section.interGroupSpacing = 8
         }
 
         section.orthogonalScrollingBehavior = .continuous
