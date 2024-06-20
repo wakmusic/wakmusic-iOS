@@ -19,7 +19,7 @@ final class BeforeSearchSectionHeaderView:
     private let label: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t6(weight: .medium)
+        font: .t5(weight: .bold)
     )
 
     private let button: UIButton = UIButton().then {
