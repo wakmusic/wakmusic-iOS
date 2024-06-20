@@ -4,7 +4,6 @@ import Utility
 final class SearchFilterOptionCollectionViewLayout: UICollectionViewCompositionalLayout {
     init() {
         super.init { _, _ in
-
             return SearchFilterOptionCollectionViewLayout.configureLayout()
         }
     }

@@ -93,7 +93,7 @@ extension ListSearchResultReactor {
                 .execute(order: order, text: text, page: scrollPage, limit: limit)
                 .asObservable()
                 .map { [limit] dataSource -> Mutation in
-                    return Mutation.updateDataSource(dataSource: dataSource, canLoad: dataSource.count == limit)
+                    return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)),
             .just(Mutation.updateLoadingState(false))
