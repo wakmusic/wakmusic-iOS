@@ -54,9 +54,6 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        var snapShot = dataSource.snapshot()
-        snapShot.appendSections([.youtube, .recommend, .popularList])
-        dataSource.apply(snapShot)
     }
 
     override public func addView() {
@@ -156,6 +153,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
             .bind(with: self) { owner, dataSource in
 
                 var snapShot = owner.dataSource.snapshot()
+                snapShot.appendSections([.youtube, .recommend, .popularList])
 
                 let tmp: [Model] = [Model(title: "임시플리1"), Model(title: "임시플리2"), Model(title: "임시플리3")]
 
