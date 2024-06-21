@@ -75,7 +75,7 @@ extension MyPlaylistDetailReactor {
             .just(.updateDataSource(PlayListDetailEntity(
                 key: "0034",
                 title: "임시플레이리스트 입니다.",
-                songs: [ SongEntity(
+                songs: [SongEntity(
                     id: "8KTFf2X-ago",
                     title: "Another World",
                     artist: "이세계아이돌",
@@ -92,7 +92,3 @@ extension MyPlaylistDetailReactor {
         ])
     }
 }
-
-
-
- 

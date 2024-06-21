@@ -31,7 +31,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         width: APP_WIDTH(),
         height: 140
     ))
-    
+
     private lazy var tableView: UITableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
@@ -47,7 +47,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 4
     }
-    
+
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
     override func viewDidLoad() {
@@ -134,7 +134,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.tableView.isEditing = isEditing
                 owner.headerView.updateEditState(isEditing)
                 owner.tableView.reloadData()
-                
             }
             .disposed(by: disposeBag)
 
@@ -146,13 +145,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
-                
+
                 if playlistDetail.songs.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT()/2.5)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
                     owner.tableView.restore()
                 }
-                
+
                 snapShot.appendItems(playlistDetail.songs)
                 owner.dataSource.apply(snapShot)
             }
@@ -174,23 +173,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
+        let dataSource =
+            MyplaylistDetailDataSource(tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
 
-        let dataSource = MyplaylistDetailDataSource(tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
-        
-            guard let self, let cell = tableView.dequeueReusableCell(
-                withIdentifier: PlaylistTableViewCell.identifier,
-                for: indexPath
-            ) as? PlaylistTableViewCell else {
-                return UITableViewCell()
+                guard let self, let cell = tableView.dequeueReusableCell(
+                    withIdentifier: PlaylistTableViewCell.identifier,
+                    for: indexPath
+                ) as? PlaylistTableViewCell else {
+                    return UITableViewCell()
+                }
+
+                cell.delegate = self
+                cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
+                cell.selectionStyle = .none
+
+                return cell
             }
-        
-            
-            cell.delegate = self
-            cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
-            cell.selectionStyle = .none
-
-            return cell
-        }
 
         tableView.dataSource = dataSource
 
@@ -207,72 +205,61 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(60.0)
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let playbuttonGroupView = PlayButtonGroupView()
         playbuttonGroupView.delegate = self
-        
+
         guard let reactor = reactor else {
             return nil
         }
-        
+
         if reactor.currentState.dataSource.songs.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
         }
-
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let reactor = reactor else {
             return .zero
         }
-        
+
         if reactor.currentState.dataSource.songs.isEmpty {
             return .zero
         } else {
-            return CGFloat(52.0+22.0)
+            return CGFloat(52.0 + 22.0)
         }
     }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell
+        .EditingStyle {
         return .none
     }
-    
+
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-    
+
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         DEBUG_LOG("TAP Cell")
     }
-    
 }
 
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
-        
         DEBUG_LOG("playGroup Touched")
         #warning("재생 이벤트 넣기")
         switch event {
-                
         case .allPlay:
             break
         case .shufflePlay:
             break
         }
-        
     }
-    
 }
 
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
-    func superButtonTapped(index: Int) {
-        
-    }
-    
+    func superButtonTapped(index: Int) {}
 }
-
