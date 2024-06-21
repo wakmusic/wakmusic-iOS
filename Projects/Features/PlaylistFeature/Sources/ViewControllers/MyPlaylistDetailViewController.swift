@@ -27,7 +27,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
     }
     
-    private var tableView: UITableView = UITableView()
+    private var headerView: MyPlaylistHeaderView = MyPlaylistHeaderView(frame: .init(x: .zero, y: .zero, width: APP_WIDTH(), height: 140))
+    
+    private lazy var tableView: UITableView = UITableView().then {
+        $0.backgroundColor = .clear
+        $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
+        $0.tableHeaderView = headerView
+    }
+    
+    private lazy var completeButton: RectangleButton = RectangleButton().then {
+        $0.setBackgroundColor(.clear, for: .normal)
+        $0.setColor(isHighlight: true)
+        $0.setTitle("완료", for: .normal)
+        $0.titleLabel?.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 12)
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 4
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +54,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton])
+        wmNavigationbarView.setRightViews([lockButton, moreButton,completeButton])
     }
     
     override func setLayout() {
@@ -55,6 +70,12 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.top.equalTo(wmNavigationbarView.snp.bottom).offset(8)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        
+        completeButton.snp.makeConstraints {
+            $0.width.equalTo(45)
+            $0.height.equalTo(24)
+            $0.bottom.equalToSuperview().offset(-5)
+        }
 
     }
     
@@ -62,7 +83,21 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.configureUI()
         
     }
+    
+    override func bind(reactor: MyPlaylistDetailReactor) {
+        super.bind(reactor: reactor)
+    }
+    
+    override func bindAction(reactor: MyPlaylistDetailReactor) {
+        super.bindAction(reactor: reactor)
+    }
+    
+    override func bindState(reactor: MyPlaylistDetailReactor) {
+        super.bindState(reactor: reactor)
+    }
 
 
 
 }
+
+

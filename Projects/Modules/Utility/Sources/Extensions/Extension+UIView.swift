@@ -12,7 +12,7 @@ import SwiftEntryKit
 import UIKit
 
 public extension UIView {
-    enum VerticalLocation {
+    enum VerticalLocation { 
         case bottom
         case top
         case left
