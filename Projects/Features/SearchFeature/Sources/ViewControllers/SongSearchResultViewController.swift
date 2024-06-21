@@ -177,7 +177,10 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { (collectionView: UICollectionView, indexPath:IndexPath, item: SongEntity
+        >(collectionView: collectionView) { (
+            collectionView: UICollectionView,
+            indexPath: IndexPath,
+            item: SongEntity
         ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
