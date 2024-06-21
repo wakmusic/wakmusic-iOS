@@ -9,6 +9,7 @@
 import BaseFeature
 import ChartDomainInterface
 import Foundation
+import LogManager
 import RxRelay
 import RxSwift
 import SongsDomainInterface
@@ -30,19 +31,19 @@ public final class NewSongsContentViewModel: ViewModelType {
     }
 
     public struct Input {
-        var pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
-        var songTapped: PublishSubject<Int> = PublishSubject()
-        var allSongSelected: PublishSubject<Bool> = PublishSubject()
-        var groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
-        var refreshPulled: PublishSubject<Void> = PublishSubject()
+        let pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
+        let songTapped: PublishSubject<Int> = PublishSubject()
+        let allSongSelected: PublishSubject<Bool> = PublishSubject()
+        let groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
+        let refreshPulled: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
-        var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let dataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
+        let updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        var canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
+        let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
     }
 
     public func transform(from input: Input) -> Output {
@@ -57,7 +58,7 @@ public final class NewSongsContentViewModel: ViewModelType {
 
         let type: NewSongGroupType = self.type
         let fetchNewSongsUseCase = self.fetchNewSongsUseCase
-        let limit: Int = 100
+        let limit: Int = 30
 
         input.pageID
             .flatMap { pageID -> Single<[NewSongsEntity]> in
@@ -69,7 +70,7 @@ public final class NewSongsContentViewModel: ViewModelType {
             .do(onNext: { model in
                 let canLoadMore: Bool = model.count < limit ? false : true
                 output.canLoadMore.accept(canLoadMore)
-                // DEBUG_LOG("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
+                LogManager.printDebug("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
             }, onError: { _ in
                 output.canLoadMore.accept(false)
             })

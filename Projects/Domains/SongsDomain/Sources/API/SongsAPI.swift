@@ -24,8 +24,8 @@ extension SongsAPI: WMAPI {
             return "/\(id)/lyrics"
         case let .fetchCredits(id):
             return "/\(id)/credits"
-        case let .fetchNewSongs(type, _, _):
-            return "/new/\(type.apiKey)"
+        case .fetchNewSongs:
+            return "/latest"
         }
     }
 
@@ -38,11 +38,12 @@ extension SongsAPI: WMAPI {
         case .fetchSong, .fetchLyrics, .fetchCredits:
             return .requestPlain
 
-        case let .fetchNewSongs(_, page, limit):
+        case let .fetchNewSongs(type, page, limit):
             return .requestParameters(
                 parameters: [
+                    "group": type.apiKey,
                     "limit": limit,
-                    "start": (page == 1) ? 0 : (page - 1) * limit
+                    "page": page
                 ],
                 encoding: URLEncoding.queryString
             )

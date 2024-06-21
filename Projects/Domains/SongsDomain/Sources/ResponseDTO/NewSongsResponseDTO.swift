@@ -10,39 +10,36 @@ import Foundation
 import SongsDomainInterface
 
 public struct NewSongsResponseDTO: Decodable {
-    public let id, title, artist: String
-    public let remix, reaction: String
-    public let date: Int
-    public let total: NewSongsResponseDTO.Total?
-
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
-    }
+    public let songID, title: String
+    public let artists: [String]
+    public let date, views, likes: Int
+    public let karaokeNumber: SingleSongResponseDTO.KaraokeNumber
 
     enum CodingKeys: String, CodingKey {
-        case id = "songId"
-        case title, artist, remix, reaction, date, total
+        case title, artists, date, views, likes
+        case songID = "videoId"
+        case karaokeNumber
     }
 }
 
 public extension NewSongsResponseDTO {
-    struct Total: Codable {
-        public let views: Int
-        public let last: Int
+    struct KaraokeNumber: Decodable {
+        public let TJ, KY: Int?
     }
 }
 
 public extension NewSongsResponseDTO {
     func toDomain() -> NewSongsEntity {
         return NewSongsEntity(
-            id: id,
+            id: songID,
             title: title,
-            artist: artist,
-            remix: remix,
-            reaction: reaction,
-            views: total?.views ?? 0,
-            last: total?.last ?? 0,
-            date: date
+            artist: artists.joined(separator: ", "),
+            remix: "",
+            reaction: "",
+            views: views,
+            last: 0,
+            date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
+            karaokeNumber: .init(TJ: karaokeNumber.TJ, KY: karaokeNumber.KY)
         )
     }
 }
