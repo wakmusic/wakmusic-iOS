@@ -20,6 +20,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var isEditing: Bool
         var dataSource: PlayListDetailEntity
         var isLoading: Bool
+        var selectedCount: Int
     }
 
     var initialState: State
@@ -35,7 +36,8 @@ final class MyPlaylistDetailReactor: Reactor {
                 image: "",
                 private: true
             ),
-            isLoading: false
+            isLoading: false,
+            selectedCount: 0
         )
     }
 
