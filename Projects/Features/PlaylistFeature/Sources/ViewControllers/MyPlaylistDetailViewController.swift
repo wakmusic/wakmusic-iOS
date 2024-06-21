@@ -31,7 +31,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         width: APP_WIDTH(),
         height: 140
     ))
-
+    
     private lazy var tableView: UITableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
@@ -48,7 +48,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.layer.cornerRadius = 4
     }
     
-    private let playbuttonGroupView = PlayButtonGroupView()
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
     override func viewDidLoad() {
@@ -142,6 +141,17 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, playlistDetail in
                 var snapShot = owner.dataSource.snapshot()
 
+                let warningView = WMWarningView(
+                    frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()/2),
+                    text: "리스트에 곡이 없습니다."
+                )
+                
+                if playlistDetail.songs.isEmpty {
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT()/2.5)
+                } else {
+                    owner.tableView.restore()
+                }
+                
                 snapShot.appendItems(playlistDetail.songs)
                 owner.dataSource.apply(snapShot)
             }
@@ -197,6 +207,9 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
+        let playbuttonGroupView = PlayButtonGroupView()
+        playbuttonGroupView.delegate = self
+        
         guard let reactor = reactor else {
             return nil
         }
@@ -227,9 +240,10 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
         
+        DEBUG_LOG("playGroup Touched")
         #warning("재생 이벤트 넣기")
         switch event {
-            
+                
         case .allPlay:
             break
         case .shufflePlay:
