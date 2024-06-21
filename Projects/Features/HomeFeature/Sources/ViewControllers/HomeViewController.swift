@@ -156,10 +156,10 @@ extension HomeViewController {
                 id: $0.1[$0.0.row].id,
                 title: $0.1[$0.0.row].title,
                 artist: $0.1[$0.0.row].artist,
-                remix: $0.1[$0.0.row].remix,
-                reaction: $0.1[$0.0.row].reaction,
+                remix: "",
+                reaction: "",
                 views: $0.1[$0.0.row].views,
-                last: $0.1[$0.0.row].last,
+                last: 0,
                 date: "\($0.1[$0.0.row].date)"
             )
             }
