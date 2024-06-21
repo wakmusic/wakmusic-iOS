@@ -47,7 +47,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 4
     }
-
+    
+    private let playbuttonGroupView = PlayButtonGroupView()
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
     override func viewDidLoad() {
@@ -193,4 +194,48 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(60.0)
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        guard let reactor = reactor else {
+            return nil
+        }
+        
+        if reactor.currentState.dataSource.songs.isEmpty {
+            return nil
+        } else {
+            return playbuttonGroupView
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let reactor = reactor else {
+            return .zero
+        }
+        
+        if reactor.currentState.dataSource.songs.isEmpty {
+            return .zero
+        } else {
+            return CGFloat(52.0+22.0)
+        }
+    }
+    
+    
+}
+
+extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
+    func play(_ event: PlayEvent) {
+        
+        #warning("재생 이벤트 넣기")
+        switch event {
+            
+        case .allPlay:
+            break
+        case .shufflePlay:
+            break
+        }
+        
+    }
+    
 }
