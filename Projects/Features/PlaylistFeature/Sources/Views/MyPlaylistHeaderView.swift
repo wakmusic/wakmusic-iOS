@@ -4,9 +4,14 @@ import Then
 import Kingfisher
 import DesignSystem
 import RxCocoa
+import RxSwift
 
-protocol MyPlaylistHeaderProtocol {
-    var didTap
+public protocol MyPlaylistHeaderStateProtocol {
+    func updateEditState(_ isEditing: Bool)
+}
+
+protocol MyPlaylistHeaderActionProtocol {
+    var editNickNameButtonDidTap: Observable<Void> { get }
 }
 
 final class MyPlaylistHeaderView: UIView {
@@ -91,9 +96,21 @@ extension MyPlaylistHeaderView {
             $0.leading.equalTo(countLabel.snp.trailing).offset(4)
             $0.centerY.equalTo(countLabel.snp.centerY)
         }
-        
     }
 
     #warning("모델 및 편집상태 전달하기")
     
+}
+
+extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
+    func updateEditState(_ isEditing: Bool) {
+        editNickNameButton.isHidden = !isEditing
+    }
+}
+
+extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderView {
+    var editNickNameButtonDidTap: Observable<Void> {
+        base.editNickNameButton.rx.tap.asObservable()
+    }
+
 }

@@ -5,6 +5,7 @@ import ReactorKit
 import BaseFeature
 import DesignSystem
 import Utility
+import SongsDomainInterface
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor> {
     
@@ -33,6 +34,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.backgroundColor = .clear
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         $0.tableHeaderView = headerView
+        $0.separatorStyle = .none
     }
     
     private lazy var completeButton: RectangleButton = RectangleButton().then {
@@ -44,9 +46,12 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.layer.cornerRadius = 4
     }
     
+    lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        reactor?.action.onNext(.viewDidLoad)
        
     }
     
@@ -86,17 +91,114 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     
     override func bind(reactor: MyPlaylistDetailReactor) {
         super.bind(reactor: reactor)
+        tableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
     }
     
     override func bindAction(reactor: MyPlaylistDetailReactor) {
         super.bindAction(reactor: reactor)
+        
+        #warning("private 버튼 이벤트")
+        
+        moreButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                reactor.action.onNext(.changeEditingState)
+            }
+            .disposed(by: disposeBag)
+        
+        completeButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                reactor.action.onNext(.changeEditingState)
+            }
+            .disposed(by: disposeBag)
+        
+        headerView.rx.editNickNameButtonDidTap
+            .bind(with: self) { owner, _ in
+                DEBUG_LOG("탭 이름 변경 버튼")
+            }
+            .disposed(by: disposeBag)
+        
+        
     }
     
     override func bindState(reactor: MyPlaylistDetailReactor) {
         super.bindState(reactor: reactor)
+        
+        let sharedState = reactor.state.share()
+        
+        sharedState.map(\.isEditing)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isEditing in
+                owner.lockButton.isHidden = isEditing
+                owner.moreButton.isHidden = isEditing
+                owner.completeButton.isHidden = !isEditing
+                owner.tableView.isEditing = isEditing
+                owner.headerView.updateEditState(isEditing)
+                
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.dataSource)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, playlistDetail in
+                var snapShot = owner.dataSource.snapshot()
+                
+                snapShot.appendItems(playlistDetail.songs)
+                owner.dataSource.apply(snapShot)
+                
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.isLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoading in
+                
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+                
+            }
+            .disposed(by: disposeBag)
+        
     }
 
+}
 
+extension MyPlaylistDetailViewController {
+    func createDataSource() -> MyplaylistDetailDataSource {
+        let state = reactor?.currentState
+        
+        let dataSource =  MyplaylistDetailDataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
+            
+            guard let isEditing = state?.isEditing, let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.identifier, for: indexPath) as? PlaylistTableViewCell else {
+                return UITableViewCell()
+                
+            }
+            cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: isEditing)
+            cell.selectionStyle = .none
+            
+            return cell
+        }
+                
+        tableView.dataSource = dataSource
+        
+        var snapShot = dataSource.snapshot()
+        snapShot.appendSections([0])
+        
+        dataSource.apply(snapShot)
+        
+        return dataSource
+    }
+}
+
+extension MyPlaylistDetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(60.0)
+    }
 
 }
 
