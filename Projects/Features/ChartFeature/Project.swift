@@ -5,6 +5,9 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.ChartFeature.rawValue,
     targets: [
+        .interface(
+            module: .feature(.ChartFeature)
+        ),
         .implements(
             module: .feature(.ChartFeature),
             product: .staticFramework,
@@ -12,6 +15,7 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .BaseFeature),
+                    .feature(target: .ChartFeature, type: .interface),
                     .domain(target: .ChartDomain, type: .interface)
                 ]
             )
