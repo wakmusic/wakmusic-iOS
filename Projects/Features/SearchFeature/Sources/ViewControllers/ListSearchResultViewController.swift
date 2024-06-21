@@ -63,7 +63,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        headerView.rx.tapSortButton
+        headerView.rx.didTapSortButton
             .withLatestFrom(sharedState.map(\.sortType))
             .bind(with: self) { owner, sortType in
                 guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController

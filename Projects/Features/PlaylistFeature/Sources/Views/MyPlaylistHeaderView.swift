@@ -3,6 +3,11 @@ import SnapKit
 import Then
 import Kingfisher
 import DesignSystem
+import RxCocoa
+
+protocol MyPlaylistHeaderProtocol {
+    var didTap
+}
 
 final class MyPlaylistHeaderView: UIView {
 

@@ -12,7 +12,7 @@ private protocol SearchOptionHeaderStateProtocol {
 
 private protocol SearchOptionHeaderActionProtocol {
     var selectedFilterItem: Observable<FilterType> { get }
-    var tapSortButton: Observable<Void> { get }
+    var didTapSortButton: Observable<Void> { get }
 }
 
 final class SearchOptionHeaderView:
@@ -140,7 +140,7 @@ extension Reactive: SearchOptionHeaderActionProtocol where Base: SearchOptionHea
             .asObservable()
     }
 
-    var tapSortButton: Observable<Void> {
+    var didTapSortButton: Observable<Void> {
         base.sortButton.rx.didTap
     }
 }
