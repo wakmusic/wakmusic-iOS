@@ -269,9 +269,9 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     
 }
 
-extension MyPlaylistDetailViewController: PlayListCellDelegate {
-    func buttonTapped(type: BaseFeature.PlayListCellDelegateConstant) {
-        DEBUG_LOG("셀 재생버튼 탭")
+extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
+    func superButtonTapped(index: Int) {
+        
     }
     
 }
