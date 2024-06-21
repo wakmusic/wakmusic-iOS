@@ -70,7 +70,10 @@ public final class NewSongsContentViewModel: ViewModelType {
             .do(onNext: { model in
                 let canLoadMore: Bool = model.count < limit ? false : true
                 output.canLoadMore.accept(canLoadMore)
-                LogManager.printDebug("page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)")
+                LogManager
+                    .printDebug(
+                        "page: \(input.pageID.value) called, count: \(model.count), nextPage exist: \(canLoadMore)"
+                    )
             }, onError: { _ in
                 output.canLoadMore.accept(false)
             })
