@@ -110,7 +110,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     owner.dataSource.apply(snapshot, animatingDifferences: true)
 
                     let warningView = WMWarningView(
-                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
                         text: "검색결과가 없습니다."
                     )
 
