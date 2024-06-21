@@ -1,6 +1,5 @@
 import ArtistFeature
 import BaseFeature
-import ChartFeature
 import DesignSystem
 import HomeFeature
 import MyInfoFeature

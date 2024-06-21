@@ -13,6 +13,7 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .BaseFeature),
                     .feature(target: .HomeFeature),
+                    .feature(target: .ChartFeature),
                     .feature(target: .SearchFeature),
                     .feature(target: .ArtistFeature),
                     .feature(target: .StorageFeature),

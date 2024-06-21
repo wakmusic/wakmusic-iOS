@@ -9,12 +9,12 @@ import Then
 import UIKit
 import Utility
 
-public class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     private let disposeBag = DisposeBag()
     private var viewModel: ChartContentViewModel!
 
-    fileprivate lazy var input = ChartContentViewModel.Input()
-    fileprivate lazy var output = viewModel.transform(from: input)
+    private lazy var input = ChartContentViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
@@ -26,6 +26,8 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     let playState = PlayState.shared
 
     private var containSongsFactory: ContainSongsFactory!
+
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -50,9 +52,9 @@ public class ChartContentViewController: BaseViewController, ViewControllerFromS
     }
 }
 
-extension ChartContentViewController {
-    private func bind() {
-        tableView.register(ChartContentTableViewCell.self, forCellReuseIdentifier: "chartContentTableViewCell")
+private extension ChartContentViewController {
+    func bind() {
+        tableView.register(ChartContentTableViewCell.self, forCellReuseIdentifier: "\(ChartContentTableViewCell.self)")
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
         tableView.rx.itemSelected
@@ -66,7 +68,7 @@ extension ChartContentViewController {
             .disposed(by: disposeBag)
     }
 
-    private func outputBind() {
+    func outputBind() {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
@@ -93,7 +95,7 @@ extension ChartContentViewController {
                 guard let self else { return UITableViewCell() }
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "chartContentTableViewCell",
+                    withIdentifier: "\(ChartContentTableViewCell.self)",
                     for: indexPath
                 ) as? ChartContentTableViewCell else {
                     return UITableViewCell()
@@ -135,13 +137,11 @@ extension ChartContentViewController {
             .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+    func configureUI() {
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.activityIncidator.type = .circleStrokeSpin
         self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
         self.activityIncidator.startAnimating()
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
-        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
         self.tableView.refreshControl = refreshControl
     }
 }

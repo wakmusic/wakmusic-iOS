@@ -10,10 +10,9 @@ import Utility
 
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI
-
     private let rankingLabel = WMLabel(
         text: "0",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t5(weight: .medium),
         alignment: .center,
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
@@ -62,7 +61,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
 
     private let titleStringLabel = WMLabel(
         text: "제목",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t6(weight: .medium),
         alignment: .left,
         lineHeight: UIFont.WMFontSystem.t6().lineHeight,
@@ -71,7 +70,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
 
     private let groupStringLabel = WMLabel(
         text: "아티스트",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t7(weight: .light),
         alignment: .left,
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
@@ -80,7 +79,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
 
     private let hitsLabel = UILabel().then {
         $0.textAlignment = .right
-        $0.textColor = DesignSystemAsset.GrayColor.gray900.color
+        $0.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
     }
 
@@ -268,7 +267,7 @@ extension ChartContentTableViewCell {
 extension ChartContentTableViewCell {
     public func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
         self.model = model
-        self.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200.color : .clear
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : .clear
 
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
@@ -326,7 +325,7 @@ extension ChartContentTableViewCell {
             string: text,
             attributes: [
                 .font: font,
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )

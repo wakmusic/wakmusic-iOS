@@ -1,5 +1,6 @@
 import BaseFeature
 import ChartDomainInterface
+import ChartFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
@@ -53,6 +54,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
+    var chartFactory: ChartFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
     var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
@@ -66,8 +68,8 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         super.viewDidLoad()
         configureUI()
         configureBlurUI()
-        inputBind()
         outputBind()
+        inputBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -84,20 +86,28 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     public static func viewController(
         viewModel: HomeViewModel,
         playlistDetailFactory: PlaylistDetailFactory,
-        newSongsComponent: NewSongsComponent
+        newSongsComponent: NewSongsComponent,
+        chartFactory: ChartFactory
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
+        viewController.chartFactory = chartFactory
         return viewController
     }
 }
 
 extension HomeViewController {
     private func inputBind() {
+        input.fetchHomeUseCase.onNext(())
+
         chartMoreButton.rx.tap
-            .bind(to: input.chartMoreTapped)
+            .bind(with: self, onNext: { owner, _ in
+                LogManager.analytics(HomeAnalyticsLog.clickChartTop100MusicsTitleButton)
+                let viewController = owner.chartFactory.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            })
             .disposed(by: disposeBag)
 
         chartAllListenButton.rx.tap
@@ -179,19 +189,19 @@ extension HomeViewController {
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "HomeChartCell", for: indexPath) as? HomeChartCell else {
+                    .dequeueReusableCell(
+                        withIdentifier: "HomeChartCell",
+                        for: indexPath
+                    ) as? HomeChartCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model, index: indexPath.row)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         output.newSongDataSource
             .skip(1)
-            .map { model in
-                let max: Int = 10
-                return (model.count >= max) ? Array(model[0 ..< max]) : Array(model[0 ..< model.count])
-            }
             .do(onNext: { [weak self] model in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
