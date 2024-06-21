@@ -49,16 +49,16 @@ class NewSongsCell: UITableViewCell {
 extension NewSongsCell {
     func update(model: NewSongsEntity) {
         self.model = model
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.GrayColor.gray200
-            .color : DesignSystemAsset.GrayColor.gray100.color
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200
+            .color : DesignSystemAsset.BlueGrayColor.gray100.color
 
         titleStringLabel.text = model.title
-        titleStringLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         titleStringLabel.setTextWithAttributes(kernValue: -0.5)
 
         artistLabel.text = model.artist
-        artistLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        artistLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         artistLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         artistLabel.setTextWithAttributes(kernValue: -0.5)
 
