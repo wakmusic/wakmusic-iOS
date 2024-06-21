@@ -17,7 +17,7 @@ public extension AppComponent {
     }
 
     var playlistDetailFactory: any PlaylistDetailFactory {
-        PlayListDetailComponent(parent: self)
+        PlaylistDetailComponent(parent: self)
     }
 
     var myPlayListComponent: MyPlayListComponent {

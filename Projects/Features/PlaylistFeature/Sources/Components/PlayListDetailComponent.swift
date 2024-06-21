@@ -7,7 +7,7 @@ import PlayListDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
-public protocol PlayListDetailDependency: Dependency {
+public protocol PlaylistDetailDependency: Dependency {
     var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
 
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
@@ -20,20 +20,8 @@ public protocol PlayListDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistDetailFactory {
+public final class PlaylistDetailComponent: Component<PlaylistDetailDependency>, PlaylistDetailFactory {
     public func makeView(id: String, isCustom: Bool) -> UIViewController {
-        return PlayListDetailViewController.viewController(
-            reactor: PlaylistDetailReactor(
-                key: id,
-                type: isCustom ? .custom : .wmRecommend,
-                fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
-                updatePlaylistUseCase: dependency.updatePlaylistUseCase,
-                removeSongsUseCase: dependency.removeSongsUseCase,
-                logoutUseCase: dependency.logoutUseCase
-            ),
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory
-        )
+        return UIViewController()
     }
 }
