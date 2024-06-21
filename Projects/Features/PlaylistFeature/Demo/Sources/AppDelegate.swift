@@ -1,6 +1,6 @@
 import Inject
-import UIKit
 @testable import PlaylistFeature
+import UIKit
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,7 +13,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
 
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor()))
+            UINavigationController(
+                rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor())
+            )
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()

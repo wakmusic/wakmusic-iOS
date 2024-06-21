@@ -9,7 +9,7 @@ let project = Project.module(
             .feature(target: .BaseFeature, type: .interface)
         ]),
         .implements(
-            module: .feature(.PlaylistFeature),dependencies: [
+            module: .feature(.PlaylistFeature), dependencies: [
                 .feature(target: .BaseFeature),
                 .feature(target: .PlaylistFeature, type: .interface)
             ]
@@ -20,7 +20,7 @@ let project = Project.module(
         .tests(module: .feature(.PlaylistFeature), dependencies: [
             .feature(target: .PlaylistFeature)
         ]),
-        .demo(module: .feature(.PlaylistFeature),dependencies: [
+        .demo(module: .feature(.PlaylistFeature), dependencies: [
             .feature(target: .PlaylistFeature)
         ])
     ]
