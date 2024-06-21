@@ -11,7 +11,7 @@ let project = Project.module(
             spec: .init(
                 resources: ["Resources/**"],
                 dependencies: [
-                    .feature(target: .PlayerFeature),
+                    .feature(target: .BaseFeature),
                     .feature(target: .PlaylistFeature, type: .interface),
                     .feature(target: .MusicDetailFeature, type: .interface),
                     .domain(target: .ChartDomain, type: .interface),

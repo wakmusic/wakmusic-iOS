@@ -39,7 +39,6 @@ public extension ModulePaths {
         case ChartFeature
         case HomeFeature
         case MainTabFeature
-        case PlayerFeature
         case RootFeature
         case SearchFeature
         case SignInFeature

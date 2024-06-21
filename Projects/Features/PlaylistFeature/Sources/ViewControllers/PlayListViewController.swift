@@ -129,11 +129,6 @@ private extension PlaylistViewController {
             viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             closeButtonDidTapEvent: playlistView.closeButton.tapPublisher,
             editButtonDidTapEvent: playlistView.editButton.tapPublisher,
-            repeatButtonDidTapEvent: playlistView.repeatButton.tapPublisher,
-            prevButtonDidTapEvent: playlistView.prevButton.tapPublisher,
-            playButtonDidTapEvent: playlistView.playButton.tapPublisher,
-            nextButtonDidTapEvent: playlistView.nextButton.tapPublisher,
-            shuffleButtonDidTapEvent: playlistView.shuffleButton.tapPublisher,
             playlistTableviewCellDidTapEvent: playlistView.playlistTableView.rx.itemSelected.asObservable(),
             playlistTableviewCellDidTapInEditModeEvent: tappedCellIndex.asObservable(),
             selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
@@ -147,12 +142,6 @@ private extension PlaylistViewController {
         bindPlaylistTableView(output: output)
         bindSongCart(output: output)
         bindCloseButton(output: output)
-        bindThumbnail(output: output)
-        bindCurrentPlayTime(output: output)
-        bindRepeatMode(output: output)
-        bindShuffleMode(output: output)
-        bindPlayButtonImages(output: output)
-        bindwaveStreamAnimationView(output: output)
     }
 
     private func bindCountOfSongs(output: PlaylistViewModel.Output) {
@@ -163,35 +152,6 @@ private extension PlaylistViewController {
     }
 
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
-        playlistView.playlistTableView.rx
-            .sentMessage(#selector(playlistView.playlistTableView.reloadData))
-            .throttle(RxTimeInterval.seconds(1), latest: false, scheduler: MainScheduler.instance)
-            .take(1)
-            .withLatestFrom(output.dataSource)
-            .withUnretained(self)
-            .subscribe(onNext: { owner, dataSource in
-                let dataSource = dataSource.first?.items ?? []
-                guard !dataSource.isEmpty else {
-                    DEBUG_LOG("🐛:: 재생목록이 없습니다.")
-                    return
-                }
-
-                let i = output.currentSongIndex.value
-                guard dataSource.count > i else {
-                    DEBUG_LOG("🐛:: 포커스 하려는 인덱스가 데이터 범위에 없습니다.")
-                    return
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                    owner.playlistView.playlistTableView.scrollToRow(
-                        at: IndexPath(row: i, section: 0),
-                        at: .middle,
-                        animated: false
-                    )
-                }
-            })
-            .disposed(by: disposeBag)
-
         output.editState.sink { [weak self] isEditing in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
@@ -199,10 +159,6 @@ private extension PlaylistViewController {
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
             self.playlistView.playlistTableView.reloadData()
-        }.store(in: &subscription)
-
-        output.currentSongIndex.sink { [weak self] _ in
-            self?.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
 
         output.dataSource
@@ -255,93 +211,6 @@ private extension PlaylistViewController {
             self?.dismiss(animated: true)
         }.store(in: &subscription)
     }
-
-    private func bindThumbnail(output: PlaylistViewModel.Output) {
-        output.thumbnailImageURL
-            .sink { [weak self] thumbnailImageURL in
-                self?.playlistView.thumbnailImageView.kf.setImage(
-                    with: URL(string: thumbnailImageURL),
-                    placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-                    options: [.transition(.fade(0.2))]
-                )
-            }.store(in: &subscription)
-    }
-
-    private func bindCurrentPlayTime(output: PlaylistViewModel.Output) {
-        output.playTimeValue.combineLatest(output.totalTimeValue)
-            .compactMap { playTimeValue, totalTimeValue -> Float? in
-                guard totalTimeValue > 0 else { return nil }
-                let newRatio = playTimeValue / totalTimeValue
-                return newRatio
-            }
-            .sink { [weak self] newRatio in
-                guard let self else { return }
-                self.playlistView.currentPlayTimeView.snp.remakeConstraints {
-                    $0.top.left.bottom.equalToSuperview()
-                    $0.width.equalTo(self.playlistView.totalPlayTimeView.snp.width).multipliedBy(newRatio)
-                }
-            }
-            .store(in: &subscription)
-    }
-
-    private func bindRepeatMode(output: PlaylistViewModel.Output) {
-        output.repeatMode.sink { [weak self] repeatMode in
-            guard let self else { return }
-            switch repeatMode {
-            case .none:
-                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
-            case .repeatAll:
-                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOnAll.image, for: .normal)
-            case .repeatOnce:
-                self.playlistView.repeatButton.setImage(DesignSystemAsset.Player.repeatOn1.image, for: .normal)
-            }
-        }.store(in: &subscription)
-    }
-
-    private func bindShuffleMode(output: PlaylistViewModel.Output) {
-        output.shuffleMode.sink { [weak self] shuffleMode in
-            guard let self else { return }
-            switch shuffleMode {
-            case .off:
-                self.playlistView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
-            case .on:
-                self.playlistView.shuffleButton.setImage(DesignSystemAsset.Player.shuffleOn.image, for: .normal)
-            }
-        }.store(in: &subscription)
-    }
-
-    private func bindPlayButtonImages(output: PlaylistViewModel.Output) {
-        output.playerState.sink { [weak self] state in
-            guard let self else { return }
-            switch state {
-            case .playing:
-                self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPause.image, for: .normal)
-            default:
-                self.playlistView.playButton.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
-            }
-        }.store(in: &subscription)
-    }
-
-    private func bindwaveStreamAnimationView(output: PlaylistViewModel.Output) {
-        output.playerState
-            .compactMap { [weak self] state -> (PlaylistTableViewCell, Bool)? in
-                guard let self else { return nil }
-                guard let index = self.playState.playList.currentPlayIndex else { return nil }
-                guard let cell = self.playlistView.playlistTableView.cellForRow(at: IndexPath(
-                    row: index,
-                    section: 0
-                )) as? PlaylistTableViewCell else { return nil }
-                return (cell, state == .playing)
-            }
-            .sink { cell, isAnimating in
-                if isAnimating {
-                    cell.waveStreamAnimationView.play()
-                } else {
-                    cell.waveStreamAnimationView.pause()
-                }
-            }
-            .store(in: &subscription)
-    }
 }
 
 private extension PlaylistViewController {
@@ -373,14 +242,11 @@ extension PlaylistViewController {
                 let index = indexPath.row
                 let isEditing = output.editState.value
                 let isPlaying = model.isPlaying
-                let isAnimating = self.playState.state == .playing
 
                 cell.setContent(
                     song: model.item,
                     index: index,
-                    isEditing: isEditing,
-                    isPlaying: isPlaying,
-                    isAnimating: isAnimating
+                    isEditing: isEditing
                 )
                 return cell
 

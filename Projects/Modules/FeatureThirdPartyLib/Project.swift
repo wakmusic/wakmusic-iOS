@@ -4,7 +4,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.module(
     name: ModulePaths.Module.FeatureThirdPartyLib.rawValue,
-    packages: [.YouTubePlayerKit],
+    packages: [],
     targets: [
         .implements(module: .module(.FeatureThirdPartyLib), product: .framework, dependencies: [
             .SPM.Needle,
@@ -21,7 +21,6 @@ let project = Project.module(
             .SPM.RxKeyboard,
             .SPM.SwiftEntryKit,
             .SPM.CryptoSwift,
-            .SPM.YouTubePlayerKit,
             .SPM.NVActivityIndicatorView
         ])
     ]

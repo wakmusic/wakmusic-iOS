@@ -1,7 +1,6 @@
 import ArtistFeature
 import BaseFeature
 import DesignSystem
-import PlayerFeature
 import PlaylistFeatureInterface
 import RxSwift
 import SnapKit
@@ -29,7 +28,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
     var bottomTabBarComponent: BottomTabBarComponent!
     var mainTabBarComponent: MainTabBarComponent!
-    var playerComponent: PlayerComponent!
     var playlistFactory: PlaylistFactory!
     var playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol!
 
@@ -62,7 +60,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
     public static func viewController(
         bottomTabBarComponent: BottomTabBarComponent,
         mainTabBarComponent: MainTabBarComponent,
-        playerComponent: PlayerComponent,
         playlistFactory: PlaylistFactory,
         playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol
     ) -> MainContainerViewController {
@@ -70,7 +67,6 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
         viewController.bottomTabBarComponent = bottomTabBarComponent
         viewController.mainTabBarComponent = mainTabBarComponent
-        viewController.playerComponent = playerComponent
         viewController.playlistFactory = playlistFactory
         viewController.playlistPresenterGlobalState = playlistPresenterGlobalState
 
@@ -263,23 +259,6 @@ extension MainContainerViewController {
                     self.panelView.alpha = 1
                 }
             }).disposed(by: disposeBag)
-
-        NotificationCenter.default.rx
-            .notification(UIApplication.didBecomeActiveNotification)
-            .subscribe(onNext: { _ in
-                PlayState.shared.checkForPlayerState { state in
-                    switch state {
-                    case .idle:
-                        DEBUG_LOG("🚀:: Player State ➡️ [idle]")
-                    case .ready:
-                        DEBUG_LOG("🚀:: Player State ➡️ [ready]")
-                    case let .error(error):
-                        DEBUG_LOG("🚀:: Player State ➡️ [error] \(error.localizedDescription)")
-                        PlayState.shared.resetPlayer()
-                    }
-                }
-            })
-            .disposed(by: disposeBag)
     }
 }
 

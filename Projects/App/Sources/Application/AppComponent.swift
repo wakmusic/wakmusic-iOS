@@ -4,7 +4,6 @@ import KeychainModule
 import MainTabFeature
 import MyInfoFeature
 import NeedleFoundation
-import PlayerFeature
 import RootFeature
 import StorageFeature
 import UIKit
@@ -39,17 +38,6 @@ public extension AppComponent {
 
     var mainTabBarComponent: MainTabBarComponent {
         MainTabBarComponent(parent: self)
-    }
-}
-
-// MARK: - Player
-public extension AppComponent {
-    var playerComponent: PlayerComponent {
-        PlayerComponent(parent: self)
-    }
-
-    var playlistComponent: LegacyPlaylistComponent {
-        LegacyPlaylistComponent(parent: self)
     }
 }
 
