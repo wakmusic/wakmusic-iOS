@@ -133,6 +133,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.completeButton.isHidden = !isEditing
                 owner.tableView.isEditing = isEditing
                 owner.headerView.updateEditState(isEditing)
+                owner.tableView.reloadData()
+                
             }
             .disposed(by: disposeBag)
 
@@ -142,7 +144,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 var snapShot = owner.dataSource.snapshot()
 
                 let warningView = WMWarningView(
-                    frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()/2),
                     text: "리스트에 곡이 없습니다."
                 )
                 
@@ -173,17 +174,19 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
-        let state = reactor?.currentState
 
-        let dataSource = MyplaylistDetailDataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
-
-            guard let isEditing = state?.isEditing, let cell = tableView.dequeueReusableCell(
+        let dataSource = MyplaylistDetailDataSource(tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
+        
+            guard let self, let cell = tableView.dequeueReusableCell(
                 withIdentifier: PlaylistTableViewCell.identifier,
                 for: indexPath
             ) as? PlaylistTableViewCell else {
                 return UITableViewCell()
             }
-            cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: isEditing)
+        
+            
+            cell.delegate = self
+            cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
             cell.selectionStyle = .none
 
             return cell
@@ -219,7 +222,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
         } else {
             return playbuttonGroupView
         }
-        
+
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -234,6 +237,18 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        DEBUG_LOG("TAP Cell")
+    }
     
 }
 
@@ -253,3 +268,11 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     }
     
 }
+
+extension MyPlaylistDetailViewController: PlayListCellDelegate {
+    func buttonTapped(type: BaseFeature.PlayListCellDelegateConstant) {
+        DEBUG_LOG("셀 재생버튼 탭")
+    }
+    
+}
+
