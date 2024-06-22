@@ -6,8 +6,11 @@ import UIKit
 import Utility
 
 public final class ChartViewController: TabmanViewController, ViewControllerFromStoryBoard, EqualHandleTappedType {
-    private var chartContentComponent: ChartContentComponent?
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var naviTitleLabel: UILabel!
+    @IBOutlet weak var tabBarContentView: UIView!
 
+    private var chartContentComponent: ChartContentComponent?
     private lazy var viewControllers: [ChartContentViewController?] = {
         let viewControllers = [
             chartContentComponent?.makeView(type: .hourly),
@@ -19,7 +22,7 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         return viewControllers
     }()
 
-    private let tabBarContentView = UIView()
+    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -27,19 +30,32 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
     }
 
     public static func viewController(chartContentComponent: ChartContentComponent) -> ChartViewController {
-        let viewController = ChartViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
+        let viewController = ChartViewController.viewController(
+            storyBoardName: "Chart",
+            bundle: ChartFeatureResources.bundle
+        )
         viewController.chartContentComponent = chartContentComponent
         return viewController
     }
+
+    @IBAction func backButtonAction(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
 }
 
-extension ChartViewController {
-    private func configureUI() {
+private extension ChartViewController {
+    func configureUI() {
+        backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        naviTitleLabel.text = "왁뮤차트 TOP100"
+        naviTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+        naviTitleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+        naviTitleLabel.setTextWithAttributes(alignment: .center)
+
         self.dataSource = self
         let bar = TMBar.ButtonBar()
 
         // 배경색
-        bar.backgroundView.style = .flat(color: DesignSystemAsset.GrayColor.gray100.color)
+        bar.backgroundView.style = .flat(color: DesignSystemAsset.BlueGrayColor.gray100.color)
 
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -48,8 +64,8 @@ extension ChartViewController {
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.tintColor = DesignSystemAsset.BlueGrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.BlueGrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
@@ -59,16 +75,10 @@ extension ChartViewController {
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
 
-        view.addSubview(tabBarContentView)
-        tabBarContentView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(40)
-        }
-
         addBar(bar, dataSource: self, at: .custom(view: self.tabBarContentView, layout: nil))
         bar.layer.addBorder(
             [.bottom],
-            color: DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4),
+            color: DesignSystemAsset.BlueGrayColor.gray300.color.withAlphaComponent(0.4),
             height: 1
         )
     }

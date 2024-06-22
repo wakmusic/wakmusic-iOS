@@ -2,9 +2,10 @@ import BaseFeature
 import ChartDomain
 import ChartDomainInterface
 import ChartFeature
+import ChartFeatureInterface
 
 public extension AppComponent {
-    var chartComponent: ChartComponent {
+    var chartFactory: any ChartFactory {
         ChartComponent(parent: self)
     }
 

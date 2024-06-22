@@ -16,8 +16,10 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
+typealias HomeUseCase = Observable<([ChartRankingEntity], [NewSongsEntity], [RecommendPlayListEntity])>
+
 public final class HomeViewModel: ViewModelType {
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     var fetchChartRankingUseCase: FetchChartRankingUseCase
     var fetchNewSongsUseCase: FetchNewSongsUseCase
     var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
@@ -33,23 +35,20 @@ public final class HomeViewModel: ViewModelType {
     }
 
     public struct Input {
-        var chartMoreTapped: PublishSubject<Void> = PublishSubject()
-        var chartAllListenTapped: PublishSubject<Void> = PublishSubject()
-        var newSongsAllListenTapped: PublishSubject<Void> = PublishSubject()
-        var refreshPulled: PublishSubject<Void> = PublishSubject()
+        let fetchHomeUseCase: PublishSubject<Void> = PublishSubject()
+        let chartAllListenTapped: PublishSubject<Void> = PublishSubject()
+        let newSongsAllListenTapped: PublishSubject<Void> = PublishSubject()
+        let refreshPulled: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var chartDataSource: BehaviorRelay<[ChartRankingEntity]>
-        let newSongDataSource: BehaviorRelay<[NewSongsEntity]>
-        var playListDataSource: BehaviorRelay<[RecommendPlayListEntity]>
-    }
-
-    public func transform(from input: Input) -> Output {
         let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
         let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+    }
 
+    public func transform(from input: Input) -> Output {
+        let output = Output()
         let chart = self.fetchChartRankingUseCase
             .execute(type: .hourly)
             .catchAndReturn(.init(updatedAt: "팬치들 미안해요 ㅠㅠ 잠시만 기다려주세요.", songs: []))
@@ -57,7 +56,7 @@ public final class HomeViewModel: ViewModelType {
             .asObservable()
 
         let newSongs = self.fetchNewSongsUseCase
-            .execute(type: .all, page: 1, limit: 100)
+            .execute(type: .all, page: 1, limit: 10)
             .catchAndReturn([])
             .asObservable()
 
@@ -66,28 +65,22 @@ public final class HomeViewModel: ViewModelType {
             .catchAndReturn([])
             .asObservable()
 
-        let chartAndNewSong = Observable.zip(chart, newSongs)
-        let firstLoad = Observable.zip(chartAndNewSong, playList)
+        let homeSceneUseCase = Observable.zip(chart, newSongs, playList)
 
-        firstLoad
-            .take(1)
-            .subscribe(onNext: { arg, recommendPlayListEntity in
-                let (chartRankingEntity, newSongEntity) = arg
-                chartDataSource.accept(chartRankingEntity)
-                newSongDataSource.accept(newSongEntity)
-                playListDataSource.accept(recommendPlayListEntity)
+        input.fetchHomeUseCase
+            .flatMap { _ -> HomeUseCase in
+                return homeSceneUseCase
+            }
+            .subscribe(onNext: { arg in
+                let (chartRankingEntity, newSongEntity, recommendPlayListEntity) = arg
+                output.chartDataSource.accept(chartRankingEntity)
+                output.newSongDataSource.accept(newSongEntity)
+                output.playListDataSource.accept(recommendPlayListEntity)
             })
             .disposed(by: disposeBag)
 
-        input.chartMoreTapped
-            .map { _ in 1 }
-            .subscribe(onNext: { index in
-                LogManager.analytics(HomeAnalyticsLog.clickChartTop100MusicsTitleButton)
-                NotificationCenter.default.post(name: .movedTab, object: index)
-            }).disposed(by: disposeBag)
-
         input.chartAllListenTapped
-            .withLatestFrom(chartDataSource)
+            .withLatestFrom(output.chartDataSource)
             .subscribe(onNext: { songs in
                 let songEntities: [SongEntity] = songs.map {
                     return SongEntity(
@@ -107,17 +100,17 @@ public final class HomeViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.newSongsAllListenTapped
-            .withLatestFrom(newSongDataSource)
+            .withLatestFrom(output.newSongDataSource)
             .subscribe(onNext: { newSongs in
                 let songEntities: [SongEntity] = newSongs.map {
                     return SongEntity(
                         id: $0.id,
                         title: $0.title,
                         artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
+                        remix: "",
+                        reaction: "",
                         views: $0.views,
-                        last: $0.last,
+                        last: 0,
                         date: "\($0.date)"
                     )
                 }
@@ -126,24 +119,18 @@ public final class HomeViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.refreshPulled
-            .flatMap { _ -> Observable<(([ChartRankingEntity], [NewSongsEntity]), [RecommendPlayListEntity])> in
-                let chartAndNewSong = Observable.zip(chart, newSongs)
-                let result = Observable.zip(chartAndNewSong, playList)
-                return result
+            .flatMap { _ -> HomeUseCase in
+                return homeSceneUseCase
             }
             .debug("✅ Refresh Completed")
-            .subscribe(onNext: { arg, recommendPlayListEntity in
-                let (chartRankingEntity, newSongEntity) = arg
-                chartDataSource.accept(chartRankingEntity)
-                newSongDataSource.accept(newSongEntity)
-                playListDataSource.accept(recommendPlayListEntity)
+            .subscribe(onNext: { arg in
+                let (chartRankingEntity, newSongEntity, recommendPlayListEntity) = arg
+                output.chartDataSource.accept(chartRankingEntity)
+                output.newSongDataSource.accept(newSongEntity)
+                output.playListDataSource.accept(recommendPlayListEntity)
             })
             .disposed(by: disposeBag)
 
-        return Output(
-            chartDataSource: chartDataSource,
-            newSongDataSource: newSongDataSource,
-            playListDataSource: playListDataSource
-        )
+        return output
     }
 }

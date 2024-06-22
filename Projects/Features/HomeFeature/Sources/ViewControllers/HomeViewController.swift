@@ -1,5 +1,6 @@
 import BaseFeature
 import ChartDomainInterface
+import ChartFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
@@ -53,6 +54,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
+    var chartFactory: ChartFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
     var newSongsComponent: NewSongsComponent!
     var recommendViewHeightConstraint: NSLayoutConstraint?
@@ -66,8 +68,8 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         super.viewDidLoad()
         configureUI()
         configureBlurUI()
-        inputBind()
         outputBind()
+        inputBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -84,20 +86,28 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     public static func viewController(
         viewModel: HomeViewModel,
         playlistDetailFactory: PlaylistDetailFactory,
-        newSongsComponent: NewSongsComponent
+        newSongsComponent: NewSongsComponent,
+        chartFactory: ChartFactory
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
+        viewController.chartFactory = chartFactory
         return viewController
     }
 }
 
 extension HomeViewController {
     private func inputBind() {
+        input.fetchHomeUseCase.onNext(())
+
         chartMoreButton.rx.tap
-            .bind(to: input.chartMoreTapped)
+            .bind(with: self, onNext: { owner, _ in
+                LogManager.analytics(HomeAnalyticsLog.clickChartTop100MusicsTitleButton)
+                let viewController = owner.chartFactory.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            })
             .disposed(by: disposeBag)
 
         chartAllListenButton.rx.tap
@@ -146,10 +156,10 @@ extension HomeViewController {
                 id: $0.1[$0.0.row].id,
                 title: $0.1[$0.0.row].title,
                 artist: $0.1[$0.0.row].artist,
-                remix: $0.1[$0.0.row].remix,
-                reaction: $0.1[$0.0.row].reaction,
+                remix: "",
+                reaction: "",
                 views: $0.1[$0.0.row].views,
-                last: $0.1[$0.0.row].last,
+                last: 0,
                 date: "\($0.1[$0.0.row].date)"
             )
             }
@@ -179,19 +189,19 @@ extension HomeViewController {
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "HomeChartCell", for: indexPath) as? HomeChartCell else {
+                    .dequeueReusableCell(
+                        withIdentifier: "HomeChartCell",
+                        for: indexPath
+                    ) as? HomeChartCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model, index: indexPath.row)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         output.newSongDataSource
             .skip(1)
-            .map { model in
-                let max: Int = 10
-                return (model.count >= max) ? Array(model[0 ..< max]) : Array(model[0 ..< model.count])
-            }
             .do(onNext: { [weak self] model in
                 self?.collectionView.contentOffset = .zero
                 self?.refreshControl.endRefreshing()
@@ -264,18 +274,18 @@ extension HomeViewController {
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
 
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
-        chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
+        chartBorderView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray25.color.cgColor
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -285,7 +295,7 @@ extension HomeViewController {
             string: "전체듣기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         )
@@ -296,7 +306,7 @@ extension HomeViewController {
             string: "최신 음악",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -307,7 +317,7 @@ extension HomeViewController {
             string: "전체듣기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
                 .kern: -0.5
             ]
         )
@@ -315,7 +325,7 @@ extension HomeViewController {
 
         latestSongEmptyLabel.isHidden = true
         latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
-        latestSongEmptyLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        latestSongEmptyLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         latestSongEmptyLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         latestSongEmptyLabel.setTextWithAttributes(kernValue: -0.5)
         latestSongEmptyLabel.textAlignment = .center

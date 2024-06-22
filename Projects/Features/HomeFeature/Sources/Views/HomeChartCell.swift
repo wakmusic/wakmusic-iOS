@@ -42,7 +42,7 @@ extension HomeChartCell {
             string: "\(index + 1)",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -52,7 +52,7 @@ extension HomeChartCell {
             string: model.title,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -62,7 +62,7 @@ extension HomeChartCell {
             string: model.artist,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )

@@ -1,6 +1,5 @@
 import ArtistFeature
 import BaseFeature
-import ChartFeature
 import DesignSystem
 import HomeFeature
 import MyInfoFeature
@@ -23,7 +22,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private lazy var viewControllers: [UIViewController] = {
         return [
             homeComponent.makeView().wrapNavigationController,
-            chartComponent.makeView().wrapNavigationController,
             searchFactory.makeView().wrapNavigationController,
             artistComponent.makeView().wrapNavigationController,
             storageFactory.makeView().wrapNavigationController,
@@ -40,7 +38,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
 
     private var homeComponent: HomeComponent!
-    private var chartComponent: ChartComponent!
     private var searchFactory: SearchFactory!
     private var artistComponent: ArtistComponent!
     private var storageFactory: StorageFactory!
@@ -69,7 +66,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MainTabBarViewModel,
         homeComponent: HomeComponent,
-        chartComponent: ChartComponent,
         searchFactory: SearchFactory,
         artistComponent: ArtistComponent,
         storageFactory: StorageFactory,
@@ -81,7 +77,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.homeComponent = homeComponent
-        viewController.chartComponent = chartComponent
         viewController.searchFactory = searchFactory
         viewController.artistComponent = artistComponent
         viewController.storageFactory = storageFactory

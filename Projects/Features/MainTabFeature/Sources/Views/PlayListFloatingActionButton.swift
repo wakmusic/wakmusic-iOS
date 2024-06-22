@@ -15,6 +15,8 @@ final class PlayListFloatingActionButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.layer.cornerRadius = self.frame.height / 2.0
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.white.cgColor
         self.clipsToBounds = true
     }
 
@@ -24,6 +26,6 @@ final class PlayListFloatingActionButton: UIButton {
                 .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal),
             for: .normal
         )
-        self.backgroundColor = .white
+        self.backgroundColor = .white.withAlphaComponent(0.8)
     }
 }

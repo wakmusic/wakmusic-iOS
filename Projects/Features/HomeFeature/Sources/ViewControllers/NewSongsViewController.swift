@@ -49,11 +49,11 @@ public class NewSongsViewController: TabmanViewController, ViewControllerFromSto
 
 extension NewSongsViewController {
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         self.navigationTitleLabel.text = "최신 음악"
         self.navigationTitleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        self.navigationTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        self.navigationTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         self.navigationTitleLabel.setTextWithAttributes(kernValue: -0.5)
     }
 
@@ -71,8 +71,8 @@ extension NewSongsViewController {
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.tintColor = DesignSystemAsset.BlueGrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.BlueGrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
