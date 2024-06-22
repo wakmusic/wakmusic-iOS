@@ -8,7 +8,7 @@ import UIKit
 
 public protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
-    func updateData(_ title:String, _ songCount:Int,_ thumnail:String)
+    func updateData(_ title: String, _ songCount: Int, _ thumnail: String)
 }
 
 protocol MyPlaylistHeaderActionProtocol {
@@ -109,7 +109,7 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
         countLabel.text = "\(songCount)곡"
         #warning("이미지 업데이트")
     }
-    
+
     func updateEditState(_ isEditing: Bool) {
         editNickNameButton.isHidden = !isEditing
     }

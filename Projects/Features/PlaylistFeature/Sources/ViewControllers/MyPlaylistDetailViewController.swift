@@ -55,8 +55,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
-    
-    public override func viewDidAppear(_ animated: Bool) {
+
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
@@ -103,23 +103,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindAction(reactor: reactor)
 
         #warning("private 버튼 이벤트")
-        
+
         let sharedState = reactor.state.share()
-        
+
         dismissButton.rx
             .tap
             .withLatestFrom(sharedState.map(\.isEditing))
             .bind(with: self) { owner, isEditing in
-                
+
                 if isEditing {
                     #warning("경고 팝업 후 되돌릭")
-                    
+
                     reactor.action.onNext(.restore)
-                    
+
                 } else {
                     owner.navigationController?.popViewController(animated: true)
                 }
-                
             }
             .disposed(by: disposeBag)
 
@@ -167,11 +166,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
-                
+
                 let data = model.data
-                
+
                 owner.headerView.updateData(data.title, data.songs.count, data.image)
-                
+
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
@@ -181,11 +180,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 } else {
                     owner.tableView.restore()
                 }
-                
+
                 #warning("셀 선택 업데이트 관련 질문")
                 snapShot.appendSections([0])
                 snapShot.appendItems(data.songs)
-                
+
                 owner.dataSource.apply(snapShot, animatingDifferences: true)
             }
             .disposed(by: disposeBag)
