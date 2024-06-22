@@ -70,7 +70,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .itemDidTap(index):
             return updateItemSelected(index)
         case .restore:
-            return .empty()
+            return restoreDataSource()
         }
     }
 
@@ -101,7 +101,7 @@ final class MyPlaylistDetailReactor: Reactor {
     }
 }
 
-extension MyPlaylistDetailReactor {
+private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
@@ -162,6 +162,16 @@ extension MyPlaylistDetailReactor {
         
     }
     
+    func restoreDataSource() -> Observable<Mutation> {
+        let state = currentState
+        let backUpDataSource = state.backUpDataSource
+        
+        return .concat([
+            .just(Mutation.updateEditingState(false)),
+            .just(Mutation.updateDataSource(backUpDataSource))
+        ])
+        
+    }
 }
 
 func fetchData() -> [SongEntity] {

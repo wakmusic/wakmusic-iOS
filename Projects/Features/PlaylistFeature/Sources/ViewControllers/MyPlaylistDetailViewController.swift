@@ -55,6 +55,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
 
     override func addView() {
         super.addView()
@@ -98,6 +103,25 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindAction(reactor: reactor)
 
         #warning("private 버튼 이벤트")
+        
+        let sharedState = reactor.state.share()
+        
+        dismissButton.rx
+            .tap
+            .withLatestFrom(sharedState.map(\.isEditing))
+            .bind(with: self) { owner, isEditing in
+                
+                if isEditing {
+                    #warning("경고 팝업 후 되돌릭")
+                    
+                    reactor.action.onNext(.restore)
+                    
+                } else {
+                    owner.navigationController?.popViewController(animated: true)
+                }
+                
+            }
+            .disposed(by: disposeBag)
 
         moreButton.rx
             .tap
@@ -134,6 +158,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.completeButton.isHidden = !isEditing
                 owner.tableView.isEditing = isEditing
                 owner.headerView.updateEditState(isEditing)
+                owner.navigationController?.interactivePopGestureRecognizer?.delegate = isEditing ? owner : nil
                 owner.tableView.reloadData()
             }
             .disposed(by: disposeBag)
@@ -268,5 +293,11 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
     func superButtonTapped(index: Int) {
         tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
         reactor?.action.onNext(.itemDidTap(index))
+    }
+}
+
+extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
