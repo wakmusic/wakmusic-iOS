@@ -87,6 +87,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         let sharedState = reactor.state.share()
 
         sharedState.map(\.sortType)
+            .distinctUntilChanged()
             .bind(with: self) { owner, type in
                 owner.headerView.updateSortState(type)
             }
@@ -189,7 +190,9 @@ extension ListSearchResultViewController {
 
 extension ListSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
-        reactor?.action.onNext(.changeSortType(type))
+        if reactor?.currentState.sortType != type {
+            reactor?.action.onNext(.changeSortType(type))
+        }
     }
 }
 
