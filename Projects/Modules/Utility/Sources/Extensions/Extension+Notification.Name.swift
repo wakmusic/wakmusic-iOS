@@ -1,11 +1,3 @@
-//
-//  Extension+Notification.Name.swift
-//  Utility
-//
-//  Created by yongbeomkwak on 2023/02/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 
 public extension Notification.Name {
@@ -18,6 +10,5 @@ public extension Notification.Name {
     static let hideSongCart = Notification.Name("hideSongCart")
     static let movedTab = Notification.Name("movedTab")
     static let movedStorageFavoriteTab = Notification.Name("movedStorageFavoriteTab")
-    static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
     static let updateCurrentSongLikeState = Notification.Name("updateCurrentSongLikeState")
 }
