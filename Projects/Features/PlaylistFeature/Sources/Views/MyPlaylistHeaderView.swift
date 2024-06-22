@@ -8,6 +8,7 @@ import UIKit
 
 public protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
+    func updateData(_ title:String, _ songCount:Int,_ thumnail:String)
 }
 
 protocol MyPlaylistHeaderActionProtocol {
@@ -15,13 +16,13 @@ protocol MyPlaylistHeaderActionProtocol {
 }
 
 final class MyPlaylistHeaderView: UIView {
-    let thumbnailImageView: UIImageView = UIImageView().then {
+    private var thumbnailImageView: UIImageView = UIImageView().then {
         #warning("나중에 이미지 제거")
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.PlayListTheme.theme0.image
     }
 
-    let containerView: UIView = UIView().then {
+    private let containerView: UIView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray25.color.withAlphaComponent(0.4)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 8
@@ -29,7 +30,7 @@ final class MyPlaylistHeaderView: UIView {
         $0.clipsToBounds = true
     }
 
-    let titleLabel: WMLabel = WMLabel(
+    private var titleLabel: WMLabel = WMLabel(
         text: "테스트",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t3(weight: .bold)
@@ -103,6 +104,12 @@ extension MyPlaylistHeaderView {
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
+    func updateData(_ title: String, _ songCount: Int, _ thumnail: String) {
+        titleLabel.text = title
+        countLabel.text = "\(songCount)곡"
+        #warning("이미지 업데이트")
+    }
+    
     func updateEditState(_ isEditing: Bool) {
         editNickNameButton.isHidden = !isEditing
     }

@@ -102,14 +102,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         moreButton.rx
             .tap
             .bind(with: self) { owner, _ in
-                reactor.action.onNext(.changeEditingState)
+                #warning("추후 바텀시트로 팝업으로 교체")
+                reactor.action.onNext(.editButtonDidTap)
             }
             .disposed(by: disposeBag)
 
         completeButton.rx
             .tap
             .bind(with: self) { owner, _ in
-                reactor.action.onNext(.changeEditingState)
+                reactor.action.onNext(.completeButtonDidTap)
             }
             .disposed(by: disposeBag)
 
@@ -139,21 +140,28 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
-            .bind(with: self) { owner, playlistDetail in
-                var snapShot = owner.dataSource.snapshot()
-
+            .bind(with: self) { owner, model in
+                var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
+                
+                let data = model.data
+                
+                owner.headerView.updateData(data.title, data.songs.count, data.image)
+                
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
 
-                if playlistDetail.songs.isEmpty {
+                if data.songs.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
                     owner.tableView.restore()
                 }
-
-                snapShot.appendItems(playlistDetail.songs)
-                owner.dataSource.apply(snapShot)
+                
+                #warning("셀 선택 업데이트 관련 질문")
+                snapShot.appendSections([0])
+                snapShot.appendItems(data.songs)
+                
+                owner.dataSource.apply(snapShot, animatingDifferences: true)
             }
             .disposed(by: disposeBag)
 
@@ -184,6 +192,7 @@ extension MyPlaylistDetailViewController {
                 }
 
                 cell.delegate = self
+                DEBUG_LOG("isEditing: \(tableView.isEditing)")
                 cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
                 cell.selectionStyle = .none
 
@@ -191,11 +200,6 @@ extension MyPlaylistDetailViewController {
             }
 
         tableView.dataSource = dataSource
-
-        var snapShot = dataSource.snapshot()
-        snapShot.appendSections([0])
-
-        dataSource.apply(snapShot)
 
         return dataSource
     }
@@ -214,7 +218,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return nil
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.data.songs.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
@@ -226,10 +230,10 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return .zero
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.data.songs.isEmpty {
             return .zero
         } else {
-            return CGFloat(52.0 + 22.0)
+            return CGFloat(52.0 + 32.0)
         }
     }
 
@@ -243,7 +247,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DEBUG_LOG("TAP Cell")
+        DEBUG_LOG("HELLo")
     }
 }
 
@@ -261,5 +265,8 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 }
 
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
-    func superButtonTapped(index: Int) {}
+    func superButtonTapped(index: Int) {
+        tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
+        reactor?.action.onNext(.itemDidTap(index))
+    }
 }
