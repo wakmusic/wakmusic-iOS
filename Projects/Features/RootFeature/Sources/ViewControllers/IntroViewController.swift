@@ -156,19 +156,19 @@ private extension IntroViewController {
 
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
-                     owner.showBottomSheet(
-                         content: owner.textPopUpFactory.makeView(
-                             text: error.asWMError.errorDescription ?? "",
-                             cancelButtonIsHidden: true,
-                             confirmButtonText: "재시도",
-                             cancelButtonText: nil,
-                             completion: {
-                                 owner.input.fetchAppCheck.onNext(())
-                             },
-                             cancelCompletion: nil
-                         ),
-                         dismissOnOverlayTapAndPull: false
-                     )
+                    owner.showBottomSheet(
+                        content: owner.textPopUpFactory.makeView(
+                            text: error.asWMError.errorDescription ?? "",
+                            cancelButtonIsHidden: true,
+                            confirmButtonText: "재시도",
+                            cancelButtonText: nil,
+                            completion: {
+                                owner.input.fetchAppCheck.onNext(())
+                            },
+                            cancelCompletion: nil
+                        ),
+                        dismissOnOverlayTapAndPull: false
+                    )
                 }
             })
             .disposed(by: disposeBag)
