@@ -107,10 +107,10 @@ public final class HomeViewModel: ViewModelType {
                         id: $0.id,
                         title: $0.title,
                         artist: $0.artist,
-                        remix: $0.remix,
-                        reaction: $0.reaction,
+                        remix: "",
+                        reaction: "",
                         views: $0.views,
-                        last: $0.last,
+                        last: 0,
                         date: "\($0.date)"
                     )
                 }

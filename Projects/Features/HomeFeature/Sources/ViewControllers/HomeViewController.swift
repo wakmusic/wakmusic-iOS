@@ -156,10 +156,10 @@ extension HomeViewController {
                 id: $0.1[$0.0.row].id,
                 title: $0.1[$0.0.row].title,
                 artist: $0.1[$0.0.row].artist,
-                remix: $0.1[$0.0.row].remix,
-                reaction: $0.1[$0.0.row].reaction,
+                remix: "",
+                reaction: "",
                 views: $0.1[$0.0.row].views,
-                last: $0.1[$0.0.row].last,
+                last: 0,
                 date: "\($0.1[$0.0.row].date)"
             )
             }
@@ -274,18 +274,18 @@ extension HomeViewController {
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.startAnimating()
-        view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         topCircleImageView.image = DesignSystemAsset.Home.gradationBg.image
 
         chartBorderView.layer.cornerRadius = 12
         chartBorderView.layer.borderWidth = 1
-        chartBorderView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
+        chartBorderView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray25.color.cgColor
 
         let mainTitleLabelAttributedString = NSMutableAttributedString(
             string: "왁뮤차트 TOP100",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -295,7 +295,7 @@ extension HomeViewController {
             string: "전체듣기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         )
@@ -306,7 +306,7 @@ extension HomeViewController {
             string: "최신 음악",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -317,7 +317,7 @@ extension HomeViewController {
             string: "전체듣기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
                 .kern: -0.5
             ]
         )
@@ -325,7 +325,7 @@ extension HomeViewController {
 
         latestSongEmptyLabel.isHidden = true
         latestSongEmptyLabel.text = "현재 집계된 음악이 없습니다."
-        latestSongEmptyLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        latestSongEmptyLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         latestSongEmptyLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         latestSongEmptyLabel.setTextWithAttributes(kernValue: -0.5)
         latestSongEmptyLabel.textAlignment = .center
