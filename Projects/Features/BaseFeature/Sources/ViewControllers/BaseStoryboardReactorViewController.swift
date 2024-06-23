@@ -22,14 +22,11 @@ open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController, St
     }
 
     open func configureUI() {
-        // 내용 유지?
-        if #available(iOS 15.0, *) {
-            let tableViews = self.view.subviews
-                .compactMap { $0 as? UITableView }
-                .forEach {
-                    $0.sectionHeaderTopPadding = 0
-                }
-        }
+        self.view.subviews
+            .compactMap { $0 as? UITableView }
+            .forEach {
+                $0.sectionHeaderTopPadding = 0
+            }
     }
 
     open func configureNavigation() {

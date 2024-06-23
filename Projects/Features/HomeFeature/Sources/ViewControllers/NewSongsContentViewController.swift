@@ -154,16 +154,13 @@ extension NewSongsContentViewController {
     }
 
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        self.activityIncidator.type = .circleStrokeSpin
-        self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIncidator.startAnimating()
-        self.tableView.backgroundColor = .clear
-        self.tableView.refreshControl = refreshControl
-
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        activityIncidator.type = .circleStrokeSpin
+        activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIncidator.startAnimating()
+        tableView.backgroundColor = .clear
+        tableView.refreshControl = refreshControl
+        tableView.sectionHeaderTopPadding = 0
     }
 }
 

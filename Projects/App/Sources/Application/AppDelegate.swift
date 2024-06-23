@@ -110,23 +110,12 @@ private extension AppDelegate {
             super.motionEnded(motion, with: event)
             switch motion {
             case .motionShake:
-                let topViewController: UIViewController?
-                if #available(iOS 15.0, *) {
-                    topViewController = UIApplication.shared.connectedScenes
-                        .compactMap { $0 as? UIWindowScene }
-                        .filter { $0.activationState == .foregroundActive }
-                        .first?
-                        .keyWindow?
-                        .rootViewController
-                } else {
-                    topViewController = UIApplication.shared.connectedScenes
-                        .compactMap { $0 as? UIWindowScene }
-                        .filter { $0.activationState == .foregroundActive }
-                        .first?
-                        .windows
-                        .first(where: \.isKeyWindow)?
-                        .rootViewController
-                }
+                let topViewController = UIApplication.shared.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .filter { $0.activationState == .foregroundActive }
+                    .first?
+                    .keyWindow?
+                    .rootViewController
                 guard let topViewController else { break }
                 let logHistoryViewController = UINavigationController(rootViewController: LogHistoryViewController())
                 if let nav = topViewController as? UINavigationController,
