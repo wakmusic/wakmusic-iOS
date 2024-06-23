@@ -135,7 +135,8 @@ private extension MyPlaylistDetailReactor {
         return .concat([
             .just(.updateEditingState(false)),
             .just(.updateDataSource(MyPlaylistModel(currentDataSoruce))),
-            .just(.updateBackUpDataSource(MyPlaylistModel(currentDataSoruce)))
+            .just(.updateBackUpDataSource(MyPlaylistModel(currentDataSoruce))),
+            .just(.updateSelectedCount(0))
         ])
     }
 
@@ -163,7 +164,8 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(Mutation.updateEditingState(false)),
-            .just(Mutation.updateDataSource(backUpDataSource))
+            .just(Mutation.updateDataSource(backUpDataSource)),
+            .just(.updateSelectedCount(0))
         ])
     }
 }

@@ -184,6 +184,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 owner.headerView.updateData(data.title, data.songs.count, data.image)
 
+                DEBUG_LOG(model.data.songs.map{$0.isSelected})
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
@@ -198,7 +199,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 snapShot.appendSections([0])
                 snapShot.appendItems(data.songs)
 
-                owner.dataSource.apply(snapShot, animatingDifferences: true)
+                owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
 

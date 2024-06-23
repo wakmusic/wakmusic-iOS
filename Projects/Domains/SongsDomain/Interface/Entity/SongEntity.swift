@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SongEntity: Hashable, Equatable {
+public struct SongEntity: Hashable {
     public init(
         id: String,
         title: String,
@@ -36,13 +36,10 @@ public struct SongEntity: Hashable, Equatable {
         hasher.combine(id)
     }
 
-    public static func == (lhs: SongEntity, rhs: SongEntity) -> Bool {
-        lhs.id == rhs.id
-    }
 }
 
 public extension SongEntity {
-    struct KaraokeNumber {
+    struct KaraokeNumber: Hashable, Equatable {
         public init (TJ: Int?, KY: Int?) {
             self.TJ = TJ
             self.KY = KY
