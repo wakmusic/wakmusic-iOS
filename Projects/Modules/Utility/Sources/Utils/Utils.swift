@@ -25,22 +25,22 @@ public func PLAYER_HEIGHT() -> CGFloat {
 
 public func STATUS_BAR_HEGHIT() -> CGFloat {
     return UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .filter { $0.activationState == .foregroundActive }
-            .first?
-            .keyWindow?
-            .safeAreaInsets
-            .top ?? 0
+        .compactMap { $0 as? UIWindowScene }
+        .filter { $0.activationState == .foregroundActive }
+        .first?
+        .keyWindow?
+        .safeAreaInsets
+        .top ?? 0
 }
 
 public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
     return UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .filter { $0.activationState == .foregroundActive }
-            .first?
-            .keyWindow?
-            .safeAreaInsets
-            .bottom ?? 0
+        .compactMap { $0 as? UIWindowScene }
+        .filter { $0.activationState == .foregroundActive }
+        .first?
+        .keyWindow?
+        .safeAreaInsets
+        .bottom ?? 0
 }
 
 public func APP_VERSION() -> String {
