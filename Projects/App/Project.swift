@@ -43,7 +43,7 @@ let targets: [Target] = [
             .domain(target: .PlayListDomain),
             .domain(target: .UserDomain),
             .domain(target: .SearchDomain),
-            .domain(target: .LyricDomain)
+            .domain(target: .ImageDomain)
         ],
         settings: .settings(
             base: env.baseSetting,

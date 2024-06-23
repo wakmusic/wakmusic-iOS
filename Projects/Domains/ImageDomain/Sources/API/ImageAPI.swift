@@ -1,35 +1,35 @@
 import BaseDomain
 import ErrorModule
 import Foundation
-import LyricDomainInterface
+import ImageDomainInterface
 import Moya
 
-public enum LyricAPI {
-    case fetchDecoratingBackground
+public enum ImageAPI {
+    case fetchLyricDecoratingBackground
 }
 
-extension LyricAPI: WMAPI {
+extension ImageAPI: WMAPI {
     public var domain: WMDomain {
-        return .lyric
+        return .image
     }
 
     public var urlPath: String {
         switch self {
-        case .fetchDecoratingBackground:
-            return "/background"
+        case .fetchLyricDecoratingBackground:
+            return "/lyrics/backgrounds"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchDecoratingBackground:
+        case .fetchLyricDecoratingBackground:
             return .get
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchDecoratingBackground:
+        case .fetchLyricDecoratingBackground:
             return .requestPlain
         }
     }
