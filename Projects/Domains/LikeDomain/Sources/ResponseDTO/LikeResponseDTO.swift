@@ -12,7 +12,7 @@ import LikeDomainInterface
 public struct LikeResponseDTO: Decodable {
     public let status: Int
     public let likes: Int
-    
+
     private enum CodingKeys: String, CodingKey {
         case status
         case likes = "data"
