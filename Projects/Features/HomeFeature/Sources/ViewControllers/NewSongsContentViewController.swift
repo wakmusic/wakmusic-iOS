@@ -12,10 +12,10 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 
-    var viewModel: NewSongsContentViewModel!
+    private var viewModel: NewSongsContentViewModel!
     fileprivate lazy var input = NewSongsContentViewModel.Input()
     fileprivate lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
     public var songCartView: SongCartView!
@@ -50,8 +50,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     }
 }
 
-extension NewSongsContentViewController {
-    private func inputBind() {
+private extension NewSongsContentViewController {
+    func inputBind() {
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -84,7 +84,7 @@ extension NewSongsContentViewController {
             .disposed(by: disposeBag)
     }
 
-    private func outputBind() {
+    func outputBind() {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
@@ -138,28 +138,22 @@ extension NewSongsContentViewController {
                     )
                     self.songCartView?.delegate = self
                 }
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
 
         output.songEntityOfSelectedSongs
             .filter { !$0.isEmpty }
             .subscribe()
             .disposed(by: disposeBag)
-
-        output.updateTime
-            .filter { !$0.isEmpty }
-            .subscribe(onNext: { [weak self] _ in
-                self?.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        self.activityIncidator.type = .circleStrokeSpin
-        self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIncidator.startAnimating()
-        self.tableView.backgroundColor = .clear
-        self.tableView.refreshControl = refreshControl
+    func configureUI() {
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        activityIncidator.type = .circleStrokeSpin
+        activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIncidator.startAnimating()
+        tableView.backgroundColor = .clear
+        tableView.refreshControl = refreshControl
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
@@ -173,21 +167,13 @@ extension NewSongsContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80 + 22
+        return 80
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let base = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 88 + 22))
-
         let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        base.addSubview(view)
-
-        let time = ChartUpdateTimeView(frame: CGRect(x: 0, y: view.frame.height, width: APP_WIDTH(), height: 22))
-        time.setUpdateTime(updateTime: self.output.updateTime.value)
-        base.addSubview(time)
-
-        return base
+        return view
     }
 }
 
