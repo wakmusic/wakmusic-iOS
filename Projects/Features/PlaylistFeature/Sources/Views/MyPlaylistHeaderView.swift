@@ -13,13 +13,28 @@ public protocol MyPlaylistHeaderStateProtocol {
 
 protocol MyPlaylistHeaderActionProtocol {
     var editNickNameButtonDidTap: Observable<Void> { get }
+    var cameraButtonDidTap: Observable<Void> { get }
 }
 
 final class MyPlaylistHeaderView: UIView {
+    
+    fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
+    
     private var thumbnailImageView: UIImageView = UIImageView().then {
         #warning("나중에 이미지 제거")
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.PlayListTheme.theme0.image
+    }
+    
+    private let cameraContainerView: UIView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.8)
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+    }
+    
+    private let cameraImageView: UIImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Storage.camera.image
+        $0.contentMode = .scaleAspectFill
     }
 
     private let containerView: UIView = UIView().then {
@@ -56,6 +71,7 @@ final class MyPlaylistHeaderView: UIView {
 
         addView()
         setLayout()
+        bindAction()
     }
 
     @available(*, unavailable)
@@ -66,8 +82,10 @@ final class MyPlaylistHeaderView: UIView {
 
 extension MyPlaylistHeaderView {
     private func addView() {
-        self.addSubviews(thumbnailImageView, containerView)
+        self.addSubviews(thumbnailImageView, containerView, cameraContainerView)
+        cameraContainerView.addSubviews(cameraImageView)
         containerView.addSubviews(titleLabel, countLabel, editNickNameButton)
+        
     }
 
     private func setLayout() {
@@ -75,6 +93,16 @@ extension MyPlaylistHeaderView {
             $0.width.height.equalTo(140)
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview().inset(20)
+        }
+        
+        cameraContainerView.snp.makeConstraints {
+            $0.width.height.equalTo(140)
+            $0.verticalEdges.horizontalEdges.equalTo(thumbnailImageView)
+        }
+        
+        cameraImageView.snp.makeConstraints {
+            $0.width.height.equalTo(32)
+            $0.center.equalToSuperview()
         }
 
         containerView.snp.makeConstraints {
@@ -99,6 +127,11 @@ extension MyPlaylistHeaderView {
             $0.centerY.equalTo(countLabel.snp.centerY)
         }
     }
+    
+    private func bindAction() {
+        cameraContainerView.addGestureRecognizer(tapGestureRecognizer)
+        cameraImageView.isUserInteractionEnabled = true
+    }
 
     #warning("모델 및 편집상태 전달하기")
 }
@@ -112,6 +145,7 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
 
     func updateEditState(_ isEditing: Bool) {
         editNickNameButton.isHidden = !isEditing
+        cameraContainerView.isHidden = !isEditing
     }
 }
 
@@ -119,4 +153,9 @@ extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderV
     var editNickNameButtonDidTap: Observable<Void> {
         base.editNickNameButton.rx.tap.asObservable()
     }
+    
+    var cameraButtonDidTap: Observable<Void> {
+        base.tapGestureRecognizer.rx.event.map{_ in}.asObservable()
+    }
+    
 }

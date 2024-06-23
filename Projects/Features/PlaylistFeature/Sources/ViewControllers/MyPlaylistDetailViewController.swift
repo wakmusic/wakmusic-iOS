@@ -7,7 +7,13 @@ import Then
 import UIKit
 import Utility
 
-final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor> {
+final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor> , EditSheetViewType , SongCartViewType {
+    var songCartView: BaseFeature.SongCartView!
+    
+    var editSheetView: EditSheetView!
+    
+    var bottomSheetView: BottomSheetView!
+    
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
     private var lockButton: UIButton = UIButton().then {
@@ -138,8 +144,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .disposed(by: disposeBag)
 
         headerView.rx.editNickNameButtonDidTap
-            .bind(with: self) { owner, _ in
+            .bind(with: self) { ownerm, _   in
                 DEBUG_LOG("탭 이름 변경 버튼")
+            }
+            .disposed(by: disposeBag)
+        
+        headerView.rx.cameraButtonDidTap
+            .bind(with: self) { owner, _ in
+                DEBUG_LOG("카메라 버튼 탭")
             }
             .disposed(by: disposeBag)
     }
@@ -198,6 +210,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 } else {
                     owner.indicator.stopAnimating()
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.selectedCount)
+            .distinctUntilChanged()
+            .withLatestFrom(sharedState.map(\.dataSource.data.songs.count)) {($0,$1)}
+            .bind(with: self) { owner, info in
+                
+                let (count, limit) = (info.0, info.1)
+                
+                if count == .zero {
+                    owner.hideSongCart()
+                } else {
+                    owner.showSongCart(in: owner.view, type: .myList, selectedSongCount: count, totalSongCount: limit, useBottomSpace: false)
+                }
+                
             }
             .disposed(by: disposeBag)
     }
@@ -298,5 +326,18 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
 extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+extension MyPlaylistDetailViewController: SongCartViewDelegate {
+    func buttonTapped(type: BaseFeature.SongCartSelectType) {
+        #warning("송카트 구횬")
+    }
+    
+}
+
+extension MyPlaylistDetailViewController:EditSheetViewDelegate {
+    public func buttonTapped(type: EditSheetSelectType) {
+        #warning("EditSheet 구현")
     }
 }
