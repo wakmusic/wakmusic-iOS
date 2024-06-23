@@ -10,15 +10,15 @@ import Foundation
 import LikeDomainInterface
 
 public struct LikeResponseDTO: Decodable {
-    public let status: Int?
-    public let like: Int
+    public let status: Int
+    public let likes: Int
 }
 
 public extension LikeResponseDTO {
     func toDomain() -> LikeEntity {
         LikeEntity(
-            status: status ?? 200,
-            likes: like
+            status: status,
+            likes: likes
         )
     }
 }
