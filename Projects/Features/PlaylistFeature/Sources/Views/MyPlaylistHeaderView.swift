@@ -45,7 +45,7 @@ final class MyPlaylistHeaderView: UIView {
     }
 
     private var titleLabel: WMLabel = WMLabel(
-        text: "테스트",
+        text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t3(weight: .bold)
     ).then {
@@ -53,7 +53,7 @@ final class MyPlaylistHeaderView: UIView {
     }
 
     let countLabel: WMLabel = WMLabel(
-        text: "3곡",
+        text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.6),
         font: .t6_1(weight: .light)
     )
