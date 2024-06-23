@@ -154,10 +154,7 @@ private extension NewSongsContentViewController {
         activityIncidator.startAnimating()
         tableView.backgroundColor = .clear
         tableView.refreshControl = refreshControl
-
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
     }
 }
 

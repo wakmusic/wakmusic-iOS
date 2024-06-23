@@ -16,7 +16,7 @@ public let env = ProjectEnvironment(
     previousName: "Billboardoo",
     name: "WaktaverseMusic",
     organizationName: "yongbeomkwak",
-    deploymentTargets: .iOS("14.0"),
+    deploymentTargets: .iOS("15.0"),
     destinations: [.iPhone],
     baseSetting: SettingsDictionary()
         .marketingVersion("2.2.2")
