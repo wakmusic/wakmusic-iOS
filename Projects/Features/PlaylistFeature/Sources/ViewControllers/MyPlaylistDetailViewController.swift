@@ -234,7 +234,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-        
     }
 }
 
