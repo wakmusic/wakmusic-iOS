@@ -8,6 +8,7 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
+import LogManager
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
@@ -84,22 +85,28 @@ extension ArtistMusicContentViewController {
             .skip(1)
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
             .do(onNext: { [weak self] dataSource, songs in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
+                let height = self.tableView.frame.height / 3 * 2
+                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+                warningView.text = "아티스트 곡이 없습니다."
+                self.tableView.tableFooterView = dataSource.isEmpty ? warningView : nil
                 self.activityIndidator.stopAnimating()
-
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
             })
             .map { $0.0 }
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView
-                    .dequeueReusableCell(withIdentifier: "ArtistMusicCell", for: indexPath) as? ArtistMusicCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "ArtistMusicCell",
+                    for: indexPath
+                ) as? ArtistMusicCell else {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         output.indexOfSelectedSongs
             .skip(1)
@@ -166,13 +173,13 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80
+        return output.dataSource.value.isEmpty ? 0 : 80
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = ArtistPlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
         view.delegate = self
-        return view
+        return output.dataSource.value.isEmpty ? nil : view
     }
 }
 
