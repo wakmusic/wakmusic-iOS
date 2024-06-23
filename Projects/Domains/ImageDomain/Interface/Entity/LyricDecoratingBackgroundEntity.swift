@@ -1,14 +1,14 @@
 import Foundation
 
-public struct DecoratingBackgroundEntity {
+public struct LyricDecoratingBackgroundEntity {
     public init(
         name: String,
-        image: String
+        url: String
     ) {
         self.name = name
-        self.image = image
+        self.url = url
     }
 
-    public let name, image: String
+    public let name, url: String
     public var isSelected: Bool = false
 }

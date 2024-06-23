@@ -49,7 +49,7 @@ public enum WMDomain: String {
     case notice
     case app
     case search
-    case lyric
+    case image
 }
 
 extension WMDomain {
@@ -85,8 +85,8 @@ extension WMDomain {
             return WMDOMAIN_APP()
         case .search:
             return WMDOMAIN_SEARCH()
-        case .lyric:
-            return WMDOMAIN_LYRIC()
+        case .image:
+            return WMDOMAIN_IMAGE()
         }
     }
 }

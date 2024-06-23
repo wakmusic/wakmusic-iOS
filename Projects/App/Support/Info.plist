@@ -104,8 +104,8 @@
 		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
 		<key>WMDOMAIN_LIKE</key>
 		<string>$(WMDOMAIN_LIKE)</string>
-		<key>WMDOMAIN_LYRIC</key>
-		<string>$(WMDOMAIN_LYRIC)</string>
+		<key>WMDOMAIN_IMAGE</key>
+		<string>$(WMDOMAIN_IMAGE)</string>
 		<key>WMDOMAIN_NOTICE</key>
 		<string>$(WMDOMAIN_NOTICE)</string>
 		<key>WMDOMAIN_PLAYLIST</key>

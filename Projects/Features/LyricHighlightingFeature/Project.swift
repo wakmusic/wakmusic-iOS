@@ -14,7 +14,7 @@ let project = Project.module(
                 .feature(target: .BaseFeature),
                 .feature(target: .LyricHighlightingFeature, type: .interface),
                 .domain(target: .SongsDomain, type: .interface),
-                .domain(target: .LyricDomain, type: .interface)
+                .domain(target: .ImageDomain, type: .interface)
             ]
         ),
         .tests(

@@ -5,7 +5,6 @@ import KeychainModule
 import Moya
 
 public enum LikeAPI {
-    case fetchLikeNumOfSong(id: String)
     case addLikeSong(id: String)
     case cancelLikeSong(id: String)
 }
@@ -17,8 +16,6 @@ extension LikeAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case let .fetchLikeNumOfSong(id: id):
-            return "/\(id)"
         case let .addLikeSong(id: id):
             return "/\(id)"
         case let .cancelLikeSong(id: id):
@@ -28,8 +25,6 @@ extension LikeAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchLikeNumOfSong:
-            return .get
         case .addLikeSong:
             return .post
         case .cancelLikeSong:
@@ -43,8 +38,6 @@ extension LikeAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchLikeNumOfSong:
-            return .none
         case .addLikeSong, .cancelLikeSong:
             return .accessToken
         }
