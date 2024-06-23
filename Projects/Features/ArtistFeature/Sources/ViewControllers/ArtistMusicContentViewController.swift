@@ -51,8 +51,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     }
 }
 
-extension ArtistMusicContentViewController {
-    private func inputBind() {
+private extension ArtistMusicContentViewController {
+    func inputBind() {
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -80,7 +80,7 @@ extension ArtistMusicContentViewController {
             .disposed(by: disposeBag)
     }
 
-    private func outputBind() {
+    func outputBind() {
         output.dataSource
             .skip(1)
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
@@ -89,7 +89,8 @@ extension ArtistMusicContentViewController {
                 let height = self.tableView.frame.height / 3 * 2
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "아티스트 곡이 없습니다."
-                self.tableView.tableFooterView = dataSource.isEmpty ? warningView : nil
+                self.tableView.tableFooterView = dataSource.isEmpty ?
+                warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
                 self.activityIndidator.stopAnimating()
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
@@ -129,13 +130,11 @@ extension ArtistMusicContentViewController {
             }).disposed(by: disposeBag)
     }
 
-    private func configureUI() {
-        self.activityIndidator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIndidator.type = .circleStrokeSpin
-        self.activityIndidator.startAnimating()
-        self.tableView.backgroundColor = .clear
-        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
-        self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
+    func configureUI() {
+        activityIndidator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIndidator.type = .circleStrokeSpin
+        activityIndidator.startAnimating()
+        tableView.backgroundColor = .clear
     }
 }
 
