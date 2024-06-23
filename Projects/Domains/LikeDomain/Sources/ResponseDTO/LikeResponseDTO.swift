@@ -10,7 +10,7 @@ import Foundation
 import LikeDomainInterface
 
 public struct LikeResponseDTO: Decodable {
-    public let status: Int
+    public let status: String
     public let likes: Int
 
     private enum CodingKeys: String, CodingKey {
