@@ -94,7 +94,7 @@ public final class ArtistViewController:
 
 extension ArtistViewController {
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
@@ -108,8 +108,8 @@ extension ArtistViewController {
         layout.headerHeight = 0
         layout.footerHeight = 56.0
 
-        self.collectionView.setCollectionViewLayout(layout, animated: false)
-        self.collectionView.showsVerticalScrollIndicator = false
+        collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.showsVerticalScrollIndicator = false
     }
 }
 

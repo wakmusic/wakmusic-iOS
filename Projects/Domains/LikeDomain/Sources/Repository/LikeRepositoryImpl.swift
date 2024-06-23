@@ -19,10 +19,6 @@ public final class LikeRepositoryImpl: LikeRepository {
         self.remoteLikeDataSource = remoteLikeDataSource
     }
 
-    public func fetchLikeNumOfSong(id: String) -> Single<LikeEntity> {
-        remoteLikeDataSource.fetchLikeNumOfSong(id: id)
-    }
-
     public func addLikeSong(id: String) -> Single<LikeEntity> {
         remoteLikeDataSource.addLikeSong(id: id)
     }
