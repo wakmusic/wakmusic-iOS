@@ -10,11 +10,13 @@ import Foundation
 import UIKit
 
 public func APP_WIDTH() -> CGFloat {
-    return UIScreen.main.bounds.size.width
+    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+    return windowScene?.screen.bounds.size.width ?? .zero
 }
 
 public func APP_HEIGHT() -> CGFloat {
-    return UIScreen.main.bounds.size.height
+    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+    return windowScene?.screen.bounds.size.height ?? .zero
 }
 
 public func PLAYER_HEIGHT() -> CGFloat {
@@ -22,28 +24,23 @@ public func PLAYER_HEIGHT() -> CGFloat {
 }
 
 public func STATUS_BAR_HEGHIT() -> CGFloat {
-    return max(20, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0)
+    return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+            .first?
+            .keyWindow?
+            .safeAreaInsets
+            .top ?? 0
 }
 
 public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
-    return if #available(iOS 15.0, *) {
-        UIApplication.shared.connectedScenes
+    return UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .filter { $0.activationState == .foregroundActive }
             .first?
             .keyWindow?
             .safeAreaInsets
             .bottom ?? 0
-    } else {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .filter { $0.activationState == .foregroundActive }
-            .first?
-            .windows
-            .first(where: \.isKeyWindow)?
-            .safeAreaInsets
-            .bottom ?? 0
-    }
 }
 
 public func APP_VERSION() -> String {
