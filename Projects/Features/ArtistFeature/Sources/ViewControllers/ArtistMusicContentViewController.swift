@@ -2,13 +2,13 @@ import ArtistDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
-import LogManager
 
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
