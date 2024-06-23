@@ -90,7 +90,7 @@ private extension ArtistMusicContentViewController {
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
                 warningView.text = "아티스트 곡이 없습니다."
                 self.tableView.tableFooterView = dataSource.isEmpty ?
-                warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+                    warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
                 self.activityIndidator.stopAnimating()
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
