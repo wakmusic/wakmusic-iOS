@@ -184,7 +184,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 owner.headerView.updateData(data.title, data.songs.count, data.image)
 
-                DEBUG_LOG(model.data.songs.map{$0.isSelected})
+                DEBUG_LOG(model.data.songs.map { $0.isSelected })
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
