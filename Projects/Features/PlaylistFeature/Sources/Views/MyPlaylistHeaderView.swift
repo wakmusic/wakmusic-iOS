@@ -17,21 +17,20 @@ protocol MyPlaylistHeaderActionProtocol {
 }
 
 final class MyPlaylistHeaderView: UIView {
-    
     fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
-    
+
     private var thumbnailImageView: UIImageView = UIImageView().then {
         #warning("나중에 이미지 제거")
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.PlayListTheme.theme0.image
     }
-    
+
     private let cameraContainerView: UIView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.8)
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
-    
+
     private let cameraImageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.camera.image
         $0.contentMode = .scaleAspectFill
@@ -85,7 +84,6 @@ extension MyPlaylistHeaderView {
         self.addSubviews(thumbnailImageView, containerView, cameraContainerView)
         cameraContainerView.addSubviews(cameraImageView)
         containerView.addSubviews(titleLabel, countLabel, editNickNameButton)
-        
     }
 
     private func setLayout() {
@@ -94,12 +92,12 @@ extension MyPlaylistHeaderView {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview().inset(20)
         }
-        
+
         cameraContainerView.snp.makeConstraints {
             $0.width.height.equalTo(140)
             $0.verticalEdges.horizontalEdges.equalTo(thumbnailImageView)
         }
-        
+
         cameraImageView.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.center.equalToSuperview()
@@ -127,7 +125,7 @@ extension MyPlaylistHeaderView {
             $0.centerY.equalTo(countLabel.snp.centerY)
         }
     }
-    
+
     private func bindAction() {
         cameraContainerView.addGestureRecognizer(tapGestureRecognizer)
         cameraImageView.isUserInteractionEnabled = true
@@ -153,9 +151,8 @@ extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderV
     var editNickNameButtonDidTap: Observable<Void> {
         base.editNickNameButton.rx.tap.asObservable()
     }
-    
+
     var cameraButtonDidTap: Observable<Void> {
-        base.tapGestureRecognizer.rx.event.map{_ in}.asObservable()
+        base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
-    
 }
