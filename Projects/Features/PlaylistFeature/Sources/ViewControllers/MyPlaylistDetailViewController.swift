@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import ReactorKit
 import SnapKit
@@ -6,19 +7,17 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, EditSheetViewType,
     SongCartViewType {
-    
     var songCartView: BaseFeature.SongCartView!
 
     var editSheetView: EditSheetView!
 
     var bottomSheetView: BottomSheetView!
 
- //   private let multiPurposePopUpFactory: any MultiPurposePopUpFactory
-    
+    //   private let multiPurposePopUpFactory: any MultiPurposePopUpFactory
+
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
     private var lockButton: UIButton = UIButton()
@@ -59,13 +58,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     }
 
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
-    
+
     #warning("추후 의존성 추가")
 //    init(reactor: MyPlaylistDetailReactor, multiPurposePopUpFactory: any MultiPurposePopUpFactory) {
 //        self.multiPurposePopUpFactory = multiPurposePopUpFactory
 //        super.init(reactor: reactor)
 //    }
-//    
+//
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +119,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindAction(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
+
         lockButton.rx
             .tap
             .asDriver()
@@ -128,7 +127,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .drive(onNext: { [weak self] _ in
 
                 reactor.action.onNext(.privateButtonDidTap)
-                
+
             })
             .disposed(by: disposeBag)
 
