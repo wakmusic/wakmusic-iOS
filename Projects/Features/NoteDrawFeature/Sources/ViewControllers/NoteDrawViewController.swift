@@ -1,10 +1,9 @@
-import UIKit
 import DesignSystem
 import LogManager
+import UIKit
 import Utility
 
 class NoteDrawViewController: UIViewController {
-
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
