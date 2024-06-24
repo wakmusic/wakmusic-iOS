@@ -53,15 +53,17 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.isHidden = true
     }
 
-    let saveButtonContentView = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray900.color
+    let completeButton = UIButton().then {
+        $0.layer.borderColor = DesignSystemAsset.PrimaryColorV2.point.color.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+        $0.setTitle("완료", for: .normal)
+        $0.setTitleColor(DesignSystemAsset.PrimaryColorV2.point.color, for: .normal)
+        $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
+        $0.titleLabel?.setTextWithAttributes(alignment: .center)
+        $0.isHidden = true
     }
-
-    private let singleLineLabel = UILabel().then {
-        $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray700.color
-    }
-
-    let saveButton = UIButton()
 
     let indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin
@@ -130,13 +132,11 @@ private extension LyricHighlightingViewController {
             navigationBarView,
             collectionView,
             emptyLabel,
-            saveButtonContentView,
             indicator
         )
-        navigationBarView.addSubviews(backButton, navigationTitleStackView)
+        navigationBarView.addSubviews(backButton, navigationTitleStackView, completeButton)
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
-        saveButtonContentView.addSubviews(saveButton, singleLineLabel)
     }
 
     func setAutoLayout() {
@@ -152,9 +152,16 @@ private extension LyricHighlightingViewController {
             $0.width.equalTo(32)
         }
 
+        completeButton.snp.makeConstraints {
+            $0.width.equalTo(45)
+            $0.height.equalTo(24)
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-20)
+        }
+
         navigationTitleStackView.snp.makeConstraints {
-            $0.leading.equalTo(backButton.snp.trailing).offset(10)
-            $0.trailing.equalToSuperview().offset(-62)
+            $0.leading.equalTo(backButton.snp.trailing).offset(10+13)
+            $0.trailing.equalTo(completeButton.snp.leading).offset(-10)
             $0.centerY.equalToSuperview()
         }
 
@@ -168,33 +175,19 @@ private extension LyricHighlightingViewController {
 
         dimmedBackgroundView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(saveButtonContentView.snp.top)
+            $0.bottom.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
             $0.top.equalTo(navigationBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(saveButtonContentView.snp.top)
+            $0.bottom.equalToSuperview()
         }
 
         emptyLabel.snp.makeConstraints {
-            $0.top.bottom.equalTo(collectionView)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-        }
-
-        saveButtonContentView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
-
-        singleLineLabel.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1)
-        }
-
-        saveButton.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(collectionView)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(56)
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
         indicator.snp.makeConstraints {

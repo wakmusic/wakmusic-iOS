@@ -22,7 +22,7 @@ extension LyricHighlightingViewController {
             }
             .disposed(by: disposeBag)
 
-        saveButton.rx.tap
+        completeButton.rx.tap
             .bind(to: input.didTapSaveButton)
             .disposed(by: disposeBag)
     }
@@ -61,16 +61,8 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         output.isStorable
-            .bind(with: self) { owner, isStorable in
-                let color = isStorable ?
-                    DesignSystemAsset.PrimaryColorV2.point.color :
-                    DesignSystemAsset.NewGrayColor.gray900.color
-                owner.saveButtonContentView.backgroundColor = color
-                let image = isStorable ?
-                    DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image :
-                    DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image
-                owner.saveButton.setImage(image, for: .normal)
-            }
+            .map { !$0 }
+            .bind(to: completeButton.rx.isHidden)
             .disposed(by: disposeBag)
 
         output.goDecoratingScene
