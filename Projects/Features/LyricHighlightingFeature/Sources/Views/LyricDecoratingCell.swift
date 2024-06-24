@@ -29,7 +29,7 @@ final class LyricDecoratingCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViews()
-        setAutoLayout()
+        setLayout()
         layer.cornerRadius = 4
         clipsToBounds = true
     }
@@ -60,7 +60,7 @@ private extension LyricDecoratingCell {
         descriptionContentView.addSubview(descriptionLabel)
     }
 
-    func setAutoLayout() {
+    func setLayout() {
         decoImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

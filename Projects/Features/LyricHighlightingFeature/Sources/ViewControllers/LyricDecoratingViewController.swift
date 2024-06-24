@@ -146,7 +146,7 @@ public final class LyricDecoratingViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
-        setAutoLayout()
+        setLayout()
         configureUI()
         outputBind()
         inputBind()
@@ -183,7 +183,7 @@ private extension LyricDecoratingViewController {
         decorateBottomView.addSubviews(decorateBottomShadowImageView, descriptionLabel, collectionView, saveButton)
     }
 
-    func setAutoLayout() {
+    func setLayout() {
         navigationBarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()

@@ -99,7 +99,7 @@ public final class LyricHighlightingViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
-        setAutoLayout()
+        setLayout()
         configureUI()
         outputBind()
         inputBind()
@@ -139,7 +139,7 @@ private extension LyricHighlightingViewController {
         navigationTitleStackView.addArrangedSubview(artistLabel)
     }
 
-    func setAutoLayout() {
+    func setLayout() {
         navigationBarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
@@ -174,14 +174,12 @@ private extension LyricHighlightingViewController {
         }
 
         dimmedBackgroundView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
             $0.top.equalTo(navigationBarView.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
         }
 
         emptyLabel.snp.makeConstraints {
