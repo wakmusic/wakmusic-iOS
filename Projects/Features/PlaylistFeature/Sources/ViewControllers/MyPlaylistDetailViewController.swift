@@ -6,22 +6,24 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import BaseFeatureInterface
 
-#warning("move이벤트 reactor 데이터소스와 sync하기")
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, EditSheetViewType,
     SongCartViewType {
+    
     var songCartView: BaseFeature.SongCartView!
 
     var editSheetView: EditSheetView!
 
     var bottomSheetView: BottomSheetView!
 
+ //   private let multiPurposePopUpFactory: any MultiPurposePopUpFactory
+    
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
-    private var lockButton: UIButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Playlist.lock.image, for: .normal)
-        $0.setImage(DesignSystemAsset.Playlist.unLock.image, for: .selected)
-    }
+    private var lockButton: UIButton = UIButton()
+    private let lockImage = DesignSystemAsset.Playlist.lock.image
+    private let unLockImage = DesignSystemAsset.Playlist.unLock.image
 
     fileprivate let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
@@ -57,6 +59,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     }
 
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
+    
+    #warning("추후 의존성 추가")
+//    init(reactor: MyPlaylistDetailReactor, multiPurposePopUpFactory: any MultiPurposePopUpFactory) {
+//        self.multiPurposePopUpFactory = multiPurposePopUpFactory
+//        super.init(reactor: reactor)
+//    }
+//    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,9 +119,18 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     override func bindAction(reactor: MyPlaylistDetailReactor) {
         super.bindAction(reactor: reactor)
 
-        #warning("private 버튼 이벤트")
-
         let sharedState = reactor.state.share()
+        
+        lockButton.rx
+            .tap
+            .asDriver()
+            .throttle(.seconds(1))
+            .drive(onNext: { [weak self] _ in
+
+                reactor.action.onNext(.privateButtonDidTap)
+                
+            })
+            .disposed(by: disposeBag)
 
         dismissButton.rx
             .tap
@@ -142,7 +160,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .tap
             .bind(with: self) { owner, _ in
                 reactor.action.onNext(.completeButtonDidTap)
-                DEBUG_LOG(owner.dataSource.snapshot().itemIdentifiers.map(\.title))
             }
             .disposed(by: disposeBag)
 
@@ -183,7 +200,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
 
                 owner.headerView.updateData(model.title, model.songs.count, model.image)
-
+                owner.lockButton.setImage(model.private ? owner.lockImage : owner.unLockImage, for: .normal)
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )

@@ -1,5 +1,6 @@
 import Inject
 @testable import PlaylistFeature
+@testable import BaseFeature
 import UIKit
 
 @main
@@ -14,7 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
-                rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor())
+                rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor() )
             )
         )
         window?.rootViewController = viewController

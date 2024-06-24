@@ -30,6 +30,7 @@ final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongE
         guard sourceIndexPath != destinationIndexPath else { return }
         let destinationIdentifier = itemIdentifier(for: destinationIndexPath)
 
+        #warning("updateDataSource에서 apply해주는데 왜 여기서도 해줘야하지 ?? 질문하기")
         var snapshot = self.snapshot()
 
         // 같은 섹션으로 이동

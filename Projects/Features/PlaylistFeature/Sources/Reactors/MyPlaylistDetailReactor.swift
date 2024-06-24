@@ -10,6 +10,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case viewDidLoad
         case itemDidTap(Int)
         case editButtonDidTap
+        case privateButtonDidTap
         case completeButtonDidTap
         case restore
         case itemDidMoved(Int, Int)
@@ -64,6 +65,9 @@ final class MyPlaylistDetailReactor: Reactor {
         case .editButtonDidTap:
             return beginEditing()
 
+        case .privateButtonDidTap:
+            return updatePrivate()
+        
         case .completeButtonDidTap:
             return endEditing()
 
@@ -73,6 +77,7 @@ final class MyPlaylistDetailReactor: Reactor {
             return restoreDataSource()
         case let .itemDidMoved(from, to):
             return updateItemPosition(from: from, to: to)
+            
         }
     }
 
@@ -166,8 +171,6 @@ private extension MyPlaylistDetailReactor {
         let state = currentState
         var dataSource = state.dataSource
 
-        let isAfter = to > from
-
         let item = dataSource.songs[from]
 
         dataSource.songs.remove(at: from)
@@ -186,6 +189,16 @@ private extension MyPlaylistDetailReactor {
             .just(Mutation.updateDataSource(backUpDataSource)),
             .just(.updateSelectedCount(0))
         ])
+    }
+    
+    func updatePrivate() -> Observable<Mutation> {
+        let state = currentState
+        
+        var prev = state.dataSource
+        prev.private = !prev.private
+        
+        return .just(.updateDataSource(prev))
+        
     }
 }
 
