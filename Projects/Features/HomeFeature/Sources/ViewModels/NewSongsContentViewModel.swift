@@ -40,7 +40,6 @@ public final class NewSongsContentViewModel: ViewModelType {
 
     public struct Output {
         let dataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
-        let updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
@@ -84,13 +83,8 @@ public final class NewSongsContentViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.refreshPulled
-            .do(onNext: { _ in
-                input.pageID.accept(1)
-            })
-            .flatMap { _ -> Observable<String> in
-                return .just("-")
-            }
-            .bind(to: output.updateTime)
+            .map { _ in 1 }
+            .bind(to: input.pageID)
             .disposed(by: disposeBag)
 
         input.songTapped
