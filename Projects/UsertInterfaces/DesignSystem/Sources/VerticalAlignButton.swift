@@ -7,6 +7,7 @@ open class VerticalAlignButton: UIButton {
     public init(
         title: String? = nil,
         image: UIImage? = nil,
+        titleColor: UIColor = DesignSystemAsset.NewGrayColor.gray400.color,
         spacing: CGFloat = 0.0
     ) {
         self.spacing = spacing
@@ -17,7 +18,7 @@ open class VerticalAlignButton: UIButton {
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
             var attribute = $0
             attribute.font = UIFont.setFont(.t7(weight: .medium))
-            attribute.foregroundColor = DesignSystemAsset.NewGrayColor.gray400.color
+            attribute.foregroundColor = titleColor
             attribute.kern = -0.5
             return attribute
         }

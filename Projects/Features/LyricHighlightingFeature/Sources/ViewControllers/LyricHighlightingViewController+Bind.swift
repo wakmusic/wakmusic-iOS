@@ -18,11 +18,13 @@ extension LyricHighlightingViewController {
 
         backButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
+                owner.dismiss(animated: true)
+                #warning("TO-DO: 노래상세에 연결된 이후는 pop으로 변경해야함")
+                // owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
 
-        saveButton.rx.tap
+        completeButton.rx.tap
             .bind(to: input.didTapSaveButton)
             .disposed(by: disposeBag)
     }
@@ -61,16 +63,8 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         output.isStorable
-            .bind(with: self) { owner, isStorable in
-                let color = isStorable ?
-                    DesignSystemAsset.PrimaryColorV2.point.color :
-                    DesignSystemAsset.NewGrayColor.gray900.color
-                owner.saveButtonContentView.backgroundColor = color
-                let image = isStorable ?
-                    DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image :
-                    DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image
-                owner.saveButton.setImage(image, for: .normal)
-            }
+            .map { !$0 }
+            .bind(to: completeButton.rx.isHidden)
             .disposed(by: disposeBag)
 
         output.goDecoratingScene

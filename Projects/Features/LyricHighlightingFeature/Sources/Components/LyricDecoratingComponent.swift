@@ -1,3 +1,4 @@
+import BaseFeatureInterface
 import Foundation
 import ImageDomainInterface
 import LyricHighlightingFeatureInterface
@@ -5,6 +6,7 @@ import NeedleFoundation
 
 public protocol LyricDecoratingDependency: Dependency {
     var fetchLyricDecoratingBackgroundUseCase: any FetchLyricDecoratingBackgroundUseCase { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
@@ -13,6 +15,9 @@ public final class LyricDecoratingComponent: Component<LyricDecoratingDependency
             model: model,
             fetchLyricDecoratingBackgroundUseCase: dependency.fetchLyricDecoratingBackgroundUseCase
         )
-        return LyricDecoratingViewController(viewModel: viewModel)
+        return LyricDecoratingViewController(
+            viewModel: viewModel,
+            textPopUpFactory: dependency.textPopUpFactory
+        )
     }
 }
