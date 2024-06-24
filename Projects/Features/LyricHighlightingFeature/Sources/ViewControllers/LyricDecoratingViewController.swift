@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
@@ -145,14 +146,19 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
     private var viewModel: LyricDecoratingViewModel
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
+    let textPopUpFactory: TextPopUpFactory
     let disposeBag = DisposeBag()
 
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(viewModel: LyricDecoratingViewModel) {
+    init(
+        viewModel: LyricDecoratingViewModel,
+        textPopUpFactory: TextPopUpFactory
+    ) {
         self.viewModel = viewModel
+        self.textPopUpFactory = textPopUpFactory
         super.init(nibName: nil, bundle: nil)
     }
 

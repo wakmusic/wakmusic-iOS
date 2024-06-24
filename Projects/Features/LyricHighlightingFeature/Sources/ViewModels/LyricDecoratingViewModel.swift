@@ -37,31 +37,23 @@ final class LyricDecoratingViewModel: ViewModelType {
         let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateDecoratingImage: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let occurredError: PublishSubject<String> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
 
-        #warning("TO-DO: catchAndReturn은 []로 수정해야함")
         input.fetchBackgroundImage
             .flatMap { [fetchLyricDecoratingBackgroundUseCase] _ -> Observable<[LyricDecoratingBackgroundEntity]> in
                 return fetchLyricDecoratingBackgroundUseCase.execute()
                     .asObservable()
-                    .catchAndReturn(
-                        [
-                            .init(name: "Wm", url: ""),
-                            .init(name: "Wg", url: ""),
-                            .init(name: "Color1", url: ""),
-                            .init(name: "Color2", url: ""),
-                            .init(name: "Color3", url: ""),
-                            .init(name: "Color4", url: ""),
-                            .init(name: "Color5", url: ""),
-                            .init(name: "Color6", url: "")
-                        ]
-                    )
+                    .catchAndReturn([])
             }
             .do(onNext: { entities in
-                guard !entities.isEmpty else { return }
+                guard !entities.isEmpty else {
+                    output.occurredError.onNext("서버에서 문제가 발생하였습니다.\n잠시 후 다시 시도해주세요!")
+                    return
+                }
                 output.updateDecoratingImage.accept(entities[0].url)
             })
             .map { entities in

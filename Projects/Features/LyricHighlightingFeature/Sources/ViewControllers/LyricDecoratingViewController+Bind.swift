@@ -129,5 +129,23 @@ extension LyricDecoratingViewController {
             }
             .bind(to: highlightingLyricLabel.rx.attributedText)
             .disposed(by: disposeBag)
+
+        output.occurredError
+            .bind(with: self) { owner, message in
+                owner.showBottomSheet(
+                    content: owner.textPopUpFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.navigationController?.popViewController(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
+                )
+            }
+            .disposed(by: disposeBag)
     }
 }
