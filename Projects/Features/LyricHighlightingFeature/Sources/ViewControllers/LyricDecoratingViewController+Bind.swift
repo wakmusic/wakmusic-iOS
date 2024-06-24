@@ -32,6 +32,12 @@ extension LyricDecoratingViewController {
 
         saveButton.rx.tap
             .bind(with: self) { owner, _ in
+                owner.requestPhotoLibraryPermission()
+            }
+            .disposed(by: disposeBag)
+
+        shareButton.rx.tap
+            .bind(with: self) { owner, _ in
                 let activityViewController = UIActivityViewController(
                     activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
                     applicationActivities: nil

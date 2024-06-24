@@ -1,3 +1,4 @@
+import BaseFeature
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
@@ -7,8 +8,9 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import Photos
 
-public final class LyricDecoratingViewController: UIViewController {
+public final class LyricDecoratingViewController: UIViewController, RequestPermissionable {
     private let navigationBarView = UIView()
     let backButton = UIButton(type: .system).then {
         $0.tintColor = DesignSystemAsset.NewGrayColor.gray900.color
@@ -77,11 +79,11 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 14)
     }
 
-    private let decorateBottomView = UIView().then {
+    private let decoratePickContentView = UIView().then {
         $0.backgroundColor = .clear
     }
 
-    private let decorateBottomShadowImageView = UIImageView().then {
+    private let decoratePickShadowImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
     }
@@ -109,15 +111,27 @@ public final class LyricDecoratingViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
     }
 
-    let saveButton = UIButton(type: .system).then {
-        $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray25.color, for: .normal)
-        $0.setTitle("저장하기", for: .normal)
-        $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        $0.titleLabel?.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
+    private let decorateCompleteContentView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
+
+    private let decorateCompleteButtonStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 0
+        $0.distribution = .fillEqually
+    }
+
+    let saveButton = VerticalAlignButton(
+        title: "저장하기",
+        image: DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image,
+        titleColor: .white
+    )
+
+    let shareButton = VerticalAlignButton(
+        title: "공유하기",
+        image: DesignSystemAsset.PlayListEdit.playlistShare.image,
+        titleColor: .white
+    )
 
     let indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin
@@ -165,7 +179,13 @@ extension LyricDecoratingViewController: UICollectionViewDelegateFlowLayout {
 
 private extension LyricDecoratingViewController {
     func addSubViews() {
-        view.addSubviews(navigationBarView, decorateContentView, decorateBottomView, indicator)
+        view.addSubviews(
+            navigationBarView,
+            decorateContentView,
+            decoratePickContentView,
+            decorateCompleteContentView,
+            indicator
+        )
         navigationBarView.addSubviews(backButton, navigationTitleLabel)
 
         decorateContentView.addSubview(decorateShareContentView)
@@ -180,7 +200,10 @@ private extension LyricDecoratingViewController {
         decorateSecondStackView.addArrangedSubview(songTitleLabel)
         decorateSecondStackView.addArrangedSubview(artistLabel)
 
-        decorateBottomView.addSubviews(decorateBottomShadowImageView, descriptionLabel, collectionView, saveButton)
+        decoratePickContentView.addSubviews(decoratePickShadowImageView, descriptionLabel, collectionView)
+        decorateCompleteContentView.addSubviews(decorateCompleteButtonStackView)
+        decorateCompleteButtonStackView.addArrangedSubview(saveButton)
+        decorateCompleteButtonStackView.addArrangedSubview(shareButton)
     }
 
     func setLayout() {
@@ -189,79 +212,105 @@ private extension LyricDecoratingViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48)
         }
+
         backButton.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview().offset(20)
             $0.width.equalTo(32)
         }
+
         navigationTitleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
+
         decorateContentView.snp.makeConstraints {
             $0.top.equalTo(navigationBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(decorateBottomView.snp.top)
+            $0.bottom.equalTo(decoratePickContentView.snp.top)
         }
+
         decorateShareContentView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.center.equalToSuperview()
             $0.height.equalTo(decorateImageView.snp.width)
         }
+
         decorateImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+
         decorateLogoImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
-            $0.trailing.equalToSuperview().offset(-12)
+            $0.trailing.equalToSuperview().offset(-14)
             $0.size.equalTo(32)
         }
+
         decorateTextContentView.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
+
         decorateFirstStackView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
         }
+
         decorateQuotationLeftImageView.snp.makeConstraints {
             $0.height.equalTo(12)
         }
+
         decorateQuotationRightImageView.snp.makeConstraints {
             $0.height.equalTo(12)
         }
+
         decorateSecondStackView.snp.makeConstraints {
             $0.top.equalTo(decorateFirstStackView.snp.bottom).offset(16)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+
         songTitleLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
+
         artistLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
-        decorateBottomView.snp.makeConstraints {
+
+        decoratePickContentView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(150)
+        }
+
+        decoratePickShadowImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-12)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(206)
+            $0.bottom.equalTo(view.snp.bottom)
         }
-        decorateBottomShadowImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(22)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
+
         descriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(decorateBottomView.snp.top).offset(16)
+            $0.top.equalTo(decoratePickContentView.snp.top).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(22)
         }
+
         collectionView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(64)
         }
-        saveButton.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(20)
+
+        decorateCompleteContentView.snp.makeConstraints {
+            $0.top.equalTo(decoratePickContentView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+
+        decorateCompleteButtonStackView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(40 * APP_WIDTH() / 375)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(56)
         }
+
         indicator.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(30)
@@ -273,5 +322,24 @@ private extension LyricDecoratingViewController {
         view.backgroundColor = UIColor.white
         collectionView.register(LyricDecoratingCell.self, forCellWithReuseIdentifier: "\(LyricDecoratingCell.self)")
         indicator.startAnimating()
+    }
+}
+
+extension LyricDecoratingViewController {
+    public func showPhotoLibrary() {
+        let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
+        PHPhotoLibrary.shared().performChanges {
+            let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+        } completionHandler: { _, error in
+            var message: String = ""
+            if let error = error {
+                message = error.localizedDescription
+            } else {
+                message = "해당 이미지가 저장되었습니다."
+            }
+            DispatchQueue.main.async {
+                self.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            }
+        }
     }
 }

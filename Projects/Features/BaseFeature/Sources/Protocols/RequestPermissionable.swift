@@ -25,6 +25,11 @@ public protocol RequestPermissionable: AnyObject {
     func showPhotoLibrary()
 }
 
+public extension RequestPermissionable {
+    func showCamera() {}
+    func showPhotoLibrary() {}
+}
+
 public extension RequestPermissionable where Self: UIViewController {
     func requestCameraPermission() {
         let cameraMediaType = AVMediaType.video
@@ -76,9 +81,9 @@ public extension RequestPermissionable where Self: UIViewController {
         var message: String = ""
         switch type {
         case .camera:
-            message = "[선택권한] 버그 제보 시 카메라 촬영을 하려면 권한 승인이 필요합니다."
+            message = "[선택권한] 카메라 촬영을 하려면 권한 승인이 필요합니다."
         case .photoLibrary:
-            message = "[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다."
+            message = "[선택권한] 앨범 사진을 첨부하거나, 저장 하려면 권한 승인이 필요합니다."
         }
 
         DispatchQueue.main.async {
