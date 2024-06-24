@@ -2,13 +2,13 @@ import BaseFeature
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
+import Photos
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
-import Photos
 
 public final class LyricDecoratingViewController: UIViewController, RequestPermissionable {
     private let navigationBarView = UIView()
@@ -325,8 +325,8 @@ private extension LyricDecoratingViewController {
     }
 }
 
-extension LyricDecoratingViewController {
-    public func showPhotoLibrary() {
+public extension LyricDecoratingViewController {
+    func showPhotoLibrary() {
         let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
         PHPhotoLibrary.shared().performChanges {
             let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
