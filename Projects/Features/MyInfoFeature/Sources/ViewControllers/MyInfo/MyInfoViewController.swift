@@ -4,6 +4,7 @@ import DesignSystem
 import Foundation
 import LogManager
 import MyInfoFeatureInterface
+import NoteDrawFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
@@ -20,6 +21,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var questionFactory: QuestionFactory! // 문의하기
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
+    private var noteDrawFactory: NoteDrawFactory!
 
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -47,7 +49,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         noticeFactory: NoticeFactory,
         questionFactory: QuestionFactory,
         teamInfoFactory: TeamInfoFactory,
-        settingFactory: SettingFactory
+        settingFactory: SettingFactory,
+        noteDrawFactory: NoteDrawFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -57,6 +60,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         viewController.questionFactory = questionFactory
         viewController.teamInfoFactory = teamInfoFactory
         viewController.settingFactory = settingFactory
+        viewController.noteDrawFactory = noteDrawFactory
         return viewController
     }
 
@@ -102,7 +106,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    #warning("뽑기 화면 이동 기능 필요")
+                    let viewController = owner.noteDrawFactory.makeView().wrapNavigationController
+                    viewController.modalPresentationStyle = .fullScreen
+                    owner.present(viewController, animated: true)
                 case .like:
                     if reactor.currentState.isLoggedIn {
                         NotificationCenter.default.post(name: .movedTab, object: 4)

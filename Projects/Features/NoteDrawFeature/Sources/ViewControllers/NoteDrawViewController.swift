@@ -46,7 +46,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.clipsToBounds = true
     }
 
-    // Left Component
+    /// Left Component
     private let purpleHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleHeart.image
@@ -67,7 +67,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.NoteDraw.noteDrawPinkBall.image
     }
 
-    // Right Component
+    /// Right Component
     private let yellowHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawYellowHeart.image
@@ -77,7 +77,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleBall.image
     }
-    
+
     private let magentaBallImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawMagentaBall.image
@@ -92,7 +92,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawRedHeart.image
     }
-    
+
     private let deepGreenHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawDeepGreenHeart.image
@@ -113,7 +113,7 @@ public final class NoteDrawViewController: UIViewController {
         fatalError("\(Self.self) has not been implemented")
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
         setLayout()
@@ -121,7 +121,7 @@ public final class NoteDrawViewController: UIViewController {
         bind()
     }
 
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }
@@ -179,8 +179,8 @@ private extension NoteDrawViewController {
         drawMachineImageView.snp.makeConstraints {
             $0.top.equalTo(218.0.correctTop)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(180*APP_WIDTH()/375)
-            $0.height.equalTo(300*APP_HEIGHT()/812)
+            $0.width.equalTo(180 * APP_WIDTH() / 375)
+            $0.height.equalTo(300 * APP_HEIGHT() / 812)
         }
 
         descriptioniLabel.snp.makeConstraints {
@@ -246,28 +246,31 @@ private extension NoteDrawViewController {
             $0.trailing.equalToSuperview().offset(84.67.correctTrailing)
             $0.bottom.equalToSuperview().offset(158.22.correctBottom)
         }
-
     }
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
 
-        [purpleHeartImageView,
-         greenHeartImageView,
-         cloudImageView,
-         pickBallImageView].forEach {
+        [
+            purpleHeartImageView,
+            greenHeartImageView,
+            cloudImageView,
+            pickBallImageView
+        ].forEach {
             $0.startMoveRepeatAnimate(
                 duration: 5.0,
                 amount: 50
             )
         }
 
-        [yellowHeartImageView,
-         purpleBallImageView,
-         magentaBallImageView,
-         orangeBallImageView,
-         redHeartImageView,
-         deepGreenHeartImageView].forEach {
+        [
+            yellowHeartImageView,
+            purpleBallImageView,
+            magentaBallImageView,
+            orangeBallImageView,
+            redHeartImageView,
+            deepGreenHeartImageView
+        ].forEach {
             $0.startMoveRepeatAnimate(
                 duration: 5.0,
                 amount: 50

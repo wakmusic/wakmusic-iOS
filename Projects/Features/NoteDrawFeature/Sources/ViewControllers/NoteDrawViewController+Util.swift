@@ -4,14 +4,17 @@ import Utility
 
 extension Double {
     var correctLeading: CGFloat {
-        return self*APP_WIDTH()/375.0
+        return self * APP_WIDTH() / 375.0
     }
+
     var correctTrailing: CGFloat {
-        return -self*APP_WIDTH()/375.0
+        return -self * APP_WIDTH() / 375.0
     }
+
     var correctTop: CGFloat {
         return APP_HEIGHT() * (self / 812.0)
     }
+
     var correctBottom: CGFloat {
         return -APP_HEIGHT() * (self / 812.0)
     }
@@ -19,7 +22,7 @@ extension Double {
 
 extension UIView {
     func startMoveRepeatAnimate(duration: CGFloat, amount: CGFloat) {
-        let random = Array(0...1).randomElement() ?? 0
+        let random = Array(0 ... 1).randomElement() ?? 0
         UIView.animate(
             withDuration: duration,
             delay: 0,
