@@ -18,7 +18,9 @@ extension LyricHighlightingViewController {
 
         backButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
+                owner.dismiss(animated: true)
+                #warning("TO-DO: 노래상세에 연결된 이후는 pop으로 변경해야함")
+                // owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
 
