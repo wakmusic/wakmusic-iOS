@@ -33,28 +33,28 @@ final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongE
 
         reactor.action.onNext(.itemDidMoved(sourceIndexPath.row, destinationIndexPath.row))
 
-        // 같은 섹션으로 이동
-        if let destinationIdentifier = destinationIdentifier {
-            if let sourceIndex = snapshot.indexOfItem(sourceIdentifier),
-               let destinationIndex = snapshot.indexOfItem(destinationIdentifier) {
-                let isAfter = destinationIndex > sourceIndex &&
-                    snapshot.sectionIdentifier(containingItem: sourceIdentifier) ==
-                    snapshot.sectionIdentifier(containingItem: destinationIdentifier)
-                snapshot.deleteItems([sourceIdentifier])
-                if isAfter {
-                    snapshot.insertItems([sourceIdentifier], afterItem: destinationIdentifier)
-                } else {
-                    snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
-                }
-            }
-        } else {
-            // 다른 섹션으로 이동
-            let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
-            snapshot.deleteItems([sourceIdentifier])
-            snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
-        }
-
-        print(snapshot.itemIdentifiers.map(\.title))
-        apply(snapshot, animatingDifferences: false)
+//        // 같은 섹션으로 이동
+//        if let destinationIdentifier = destinationIdentifier {
+//            if let sourceIndex = snapshot.indexOfItem(sourceIdentifier),
+//               let destinationIndex = snapshot.indexOfItem(destinationIdentifier) {
+//                let isAfter = destinationIndex > sourceIndex &&
+//                    snapshot.sectionIdentifier(containingItem: sourceIdentifier) ==
+//                    snapshot.sectionIdentifier(containingItem: destinationIdentifier)
+//                snapshot.deleteItems([sourceIdentifier])
+//                if isAfter {
+//                    snapshot.insertItems([sourceIdentifier], afterItem: destinationIdentifier)
+//                } else {
+//                    snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
+//                }
+//            }
+//        } else {
+//            // 다른 섹션으로 이동
+//            let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
+//            snapshot.deleteItems([sourceIdentifier])
+//            snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
+//        }
+//
+//        print(snapshot.itemIdentifiers.map(\.title))
+//        apply(snapshot, animatingDifferences: false)
     }
 }

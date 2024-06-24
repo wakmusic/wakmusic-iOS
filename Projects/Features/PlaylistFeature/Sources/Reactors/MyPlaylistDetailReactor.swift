@@ -17,17 +17,17 @@ final class MyPlaylistDetailReactor: Reactor {
 
     enum Mutation {
         case updateEditingState(Bool)
-        case updateDataSource(MyPlaylistModel)
-        case updateBackUpDataSource(MyPlaylistModel)
+        case updateDataSource(PlayListDetailEntity)
+        case updateBackUpDataSource(PlayListDetailEntity)
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateSelectingStateByIndex(MyPlaylistModel)
+        case updateSelectingStateByIndex(PlayListDetailEntity)
     }
 
     struct State {
         var isEditing: Bool
-        var dataSource: MyPlaylistModel
-        var backUpDataSource: MyPlaylistModel
+        var dataSource: PlayListDetailEntity
+        var backUpDataSource: PlayListDetailEntity
         var isLoading: Bool
         var selectedCount: Int
     }
@@ -38,19 +38,19 @@ final class MyPlaylistDetailReactor: Reactor {
     init() {
         self.initialState = State(
             isEditing: false,
-            dataSource: MyPlaylistModel(PlayListDetailEntity(
+            dataSource: PlayListDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
                 private: true
-            )), backUpDataSource: MyPlaylistModel(PlayListDetailEntity(
+            ), backUpDataSource: PlayListDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
                 private: true
-            )),
+            ),
             isLoading: false,
             selectedCount: 0
         )
@@ -107,13 +107,13 @@ private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            .just(.updateDataSource(MyPlaylistModel(PlayListDetailEntity(
+            .just(.updateDataSource(PlayListDetailEntity(
                 key: "0034",
                 title: "임시플레이리스트 입니다.",
                 songs: fetchData(),
                 image: "",
                 private: true
-            )))),
+            ))),
             .just(.updateLoadingState(false))
         ])
     }
@@ -131,7 +131,7 @@ private extension MyPlaylistDetailReactor {
     func endEditing() -> Observable<Mutation> {
         #warning("저장 유즈 케이스")
         let state = currentState
-        var currentDataSoruce = state.dataSource.data
+        var currentDataSoruce = state.dataSource
 
         for i in 0 ..< currentDataSoruce.songs.count {
             currentDataSoruce.songs[i].isSelected = false
@@ -139,8 +139,8 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updateEditingState(false)),
-            .just(.updateDataSource(MyPlaylistModel(currentDataSoruce))),
-            .just(.updateBackUpDataSource(MyPlaylistModel(currentDataSoruce))),
+            .just(.updateDataSource(currentDataSoruce)),
+            .just(.updateBackUpDataSource(currentDataSoruce)),
             .just(.updateSelectedCount(0))
         ])
     }
@@ -148,7 +148,7 @@ private extension MyPlaylistDetailReactor {
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
-        var prev = state.dataSource.data
+        var prev = state.dataSource
 
         if prev.songs[index].isSelected {
             count -= 1
@@ -159,7 +159,7 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(Mutation.updateSelectedCount(count)),
-            .just(Mutation.updateSelectingStateByIndex(MyPlaylistModel(prev)))
+            .just(Mutation.updateSelectingStateByIndex((prev)))
         ])
     }
 

@@ -6,12 +6,12 @@ import SnapKit
 import Then
 import UIKit
 
-public protocol MyPlaylistHeaderStateProtocol {
+private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
     func updateData(_ title: String, _ songCount: Int, _ thumnail: String)
 }
 
-protocol MyPlaylistHeaderActionProtocol {
+private protocol MyPlaylistHeaderActionProtocol {
     var editNickNameButtonDidTap: Observable<Void> { get }
     var cameraButtonDidTap: Observable<Void> { get }
 }

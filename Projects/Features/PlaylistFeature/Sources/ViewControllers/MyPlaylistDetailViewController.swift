@@ -182,11 +182,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
 
-                let data = model.data
+                let data = model
 
                 owner.headerView.updateData(data.title, data.songs.count, data.image)
-
-                DEBUG_LOG(model.data.songs.map { $0.isSelected })
+                
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
@@ -219,7 +218,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
-            .withLatestFrom(sharedState.map(\.dataSource.data.songs.count)) { ($0, $1) }
+            .withLatestFrom(sharedState.map(\.dataSource.songs.count)) { ($0, $1) }
             .bind(with: self) { owner, info in
 
                 let (count, limit) = (info.0, info.1)
@@ -282,7 +281,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return nil
         }
 
-        if reactor.currentState.dataSource.data.songs.isEmpty {
+        if reactor.currentState.dataSource.songs.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
@@ -294,7 +293,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return .zero
         }
 
-        if reactor.currentState.dataSource.data.songs.isEmpty {
+        if reactor.currentState.dataSource.songs.isEmpty {
             return .zero
         } else {
             return CGFloat(52.0 + 32.0)
