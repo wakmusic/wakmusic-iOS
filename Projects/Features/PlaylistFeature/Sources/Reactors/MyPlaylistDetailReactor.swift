@@ -148,7 +148,7 @@ private extension MyPlaylistDetailReactor {
         let state = currentState
         var count = state.selectedCount
         var prev = state.dataSource
-        
+
         if prev.songs[index].isSelected {
             count -= 1
         } else {
@@ -158,25 +158,23 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(Mutation.updateSelectedCount(count)),
-            .just(Mutation.updateSelectingStateByIndex((prev)))
+            .just(Mutation.updateSelectingStateByIndex(prev))
         ])
     }
-    
+
     func updateItemPosition(from: Int, to: Int) -> Observable<Mutation> {
-        
         let state = currentState
         var dataSource = state.dataSource
-        
+
         let isAfter = to > from
-        
+
         let item = dataSource.songs[from]
-    
+
         dataSource.songs.remove(at: from)
-        
+
         dataSource.songs.insert(item, at: to)
-        
+
         return .just(Mutation.updateDataSource(dataSource))
-        
     }
 
     func restoreDataSource() -> Observable<Mutation> {
@@ -189,7 +187,6 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
-    
 }
 
 func fetchData() -> [SongEntity] {

@@ -181,9 +181,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
-            
+
                 owner.headerView.updateData(model.title, model.songs.count, model.image)
-                
+
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
