@@ -12,7 +12,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case editButtonDidTap
         case completeButtonDidTap
         case restore
-        case itemDidMoved(Int,Int)
+        case itemDidMoved(Int, Int)
     }
 
     enum Mutation {

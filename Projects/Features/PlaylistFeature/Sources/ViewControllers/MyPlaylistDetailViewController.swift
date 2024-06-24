@@ -105,7 +105,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-    
     }
 
     override func bindAction(reactor: MyPlaylistDetailReactor) {
@@ -243,10 +242,12 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
-        
         #warning("옵셔널 해결하기")
         let dataSource =
-        MyplaylistDetailDataSource(reactor: reactor!,tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
+            MyplaylistDetailDataSource(
+                reactor: reactor!,
+                tableView: tableView
+            ) { [weak self] tableView, indexPath, itemIdentifier in
 
                 guard let self, let cell = tableView.dequeueReusableCell(
                     withIdentifier: PlaylistTableViewCell.identifier,
@@ -312,11 +313,10 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DEBUG_LOG("HELLo")
     }
-    
+
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         DEBUG_LOG("\(sourceIndexPath) \(destinationIndexPath)")
     }
-    
 }
 
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {

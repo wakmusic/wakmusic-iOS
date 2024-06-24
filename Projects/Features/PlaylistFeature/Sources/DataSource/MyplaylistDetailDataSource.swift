@@ -2,14 +2,17 @@ import SongsDomainInterface
 import UIKit
 
 final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {
-    
     private let reactor: MyPlaylistDetailReactor
-    
-    init(reactor: MyPlaylistDetailReactor, tableView: UITableView, cellProvider: @escaping UITableViewDiffableDataSource<Int, SongEntity>.CellProvider) {
+
+    init(
+        reactor: MyPlaylistDetailReactor,
+        tableView: UITableView,
+        cellProvider: @escaping UITableViewDiffableDataSource<Int, SongEntity>.CellProvider
+    ) {
         self.reactor = reactor
         super.init(tableView: tableView, cellProvider: cellProvider)
     }
-    
+
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         true
     }
@@ -27,7 +30,7 @@ final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongE
         guard sourceIndexPath != destinationIndexPath else { return }
         let destinationIdentifier = itemIdentifier(for: destinationIndexPath)
         var snapshot = self.snapshot()
-        
+
         reactor.action.onNext(.itemDidMoved(sourceIndexPath.row, destinationIndexPath.row))
 
         // 같은 섹션으로 이동
@@ -50,7 +53,7 @@ final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongE
             snapshot.deleteItems([sourceIdentifier])
             snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
         }
-        
+
         print(snapshot.itemIdentifiers.map(\.title))
         apply(snapshot, animatingDifferences: false)
     }
