@@ -84,7 +84,7 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
     }
 
     private let decoratePickShadowImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleToFill
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
     }
 
@@ -285,7 +285,7 @@ private extension LyricDecoratingViewController {
         }
 
         decoratePickShadowImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(-12)
+            $0.top.equalToSuperview().offset(-24)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.snp.bottom)
         }
