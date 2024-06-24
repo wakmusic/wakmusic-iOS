@@ -181,16 +181,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
-
-                let data = model
-
-                owner.headerView.updateData(data.title, data.songs.count, data.image)
+            
+                owner.headerView.updateData(model.title, model.songs.count, model.image)
                 
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
 
-                if data.songs.isEmpty {
+                if model.songs.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
                     owner.tableView.restore()
@@ -198,7 +196,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 #warning("셀 선택 업데이트 관련 질문")
                 snapShot.appendSections([0])
-                snapShot.appendItems(data.songs)
+                snapShot.appendItems(model.songs)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }

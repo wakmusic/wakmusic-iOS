@@ -72,8 +72,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case .restore:
             return restoreDataSource()
         case let .itemDidMoved(from, to):
-            DEBUG_LOG("\(from) \(to)")
-            return .empty()
+            return updateItemPosition(from: from, to: to)
         }
     }
 
@@ -149,7 +148,7 @@ private extension MyPlaylistDetailReactor {
         let state = currentState
         var count = state.selectedCount
         var prev = state.dataSource
-
+        
         if prev.songs[index].isSelected {
             count -= 1
         } else {
@@ -162,6 +161,23 @@ private extension MyPlaylistDetailReactor {
             .just(Mutation.updateSelectingStateByIndex((prev)))
         ])
     }
+    
+    func updateItemPosition(from: Int, to: Int) -> Observable<Mutation> {
+        
+        let state = currentState
+        var dataSource = state.dataSource
+        
+        let isAfter = to > from
+        
+        let item = dataSource.songs[from]
+    
+        dataSource.songs.remove(at: from)
+        
+        dataSource.songs.insert(item, at: to)
+        
+        return .just(Mutation.updateDataSource(dataSource))
+        
+    }
 
     func restoreDataSource() -> Observable<Mutation> {
         let state = currentState
@@ -173,6 +189,7 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
+    
 }
 
 func fetchData() -> [SongEntity] {
@@ -217,55 +234,55 @@ func fetchData() -> [SongEntity] {
             last: 0,
             date: "2012.12.12"
         ),
-        SongEntity(
-            id: "H500rMdazVc1",
-            title: "왁차지껄",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 3,
-            last: 0,
-            date: "2012.12.12"
-        ),
-        SongEntity(
-            id: "H500rMdazVc2",
-            title: "왁차지껄",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 3,
-            last: 0,
-            date: "2012.12.12"
-        ),
-        SongEntity(
-            id: "H500rMdazVc3",
-            title: "왁차지껄",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 3,
-            last: 0,
-            date: "2012.12.12"
-        ),
-        SongEntity(
-            id: "H500rMdazVc4",
-            title: "왁차지껄",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 3,
-            last: 0,
-            date: "2012.12.12"
-        ),
-        SongEntity(
-            id: "H500rMdazVc5",
-            title: "왁차지껄",
-            artist: "이세계아이돌",
-            remix: "",
-            reaction: "",
-            views: 3,
-            last: 0,
-            date: "2012.12.12"
-        )
+//        SongEntity(
+//            id: "H500rMdazVc1",
+//            title: "왁차지껄",
+//            artist: "이세계아이돌",
+//            remix: "",
+//            reaction: "",
+//            views: 3,
+//            last: 0,
+//            date: "2012.12.12"
+//        ),
+//        SongEntity(
+//            id: "H500rMdazVc2",
+//            title: "왁차지껄",
+//            artist: "이세계아이돌",
+//            remix: "",
+//            reaction: "",
+//            views: 3,
+//            last: 0,
+//            date: "2012.12.12"
+//        ),
+//        SongEntity(
+//            id: "H500rMdazVc3",
+//            title: "왁차지껄",
+//            artist: "이세계아이돌",
+//            remix: "",
+//            reaction: "",
+//            views: 3,
+//            last: 0,
+//            date: "2012.12.12"
+//        ),
+//        SongEntity(
+//            id: "H500rMdazVc4",
+//            title: "왁차지껄",
+//            artist: "이세계아이돌",
+//            remix: "",
+//            reaction: "",
+//            views: 3,
+//            last: 0,
+//            date: "2012.12.12"
+//        ),
+//        SongEntity(
+//            id: "H500rMdazVc5",
+//            title: "왁차지껄",
+//            artist: "이세계아이돌",
+//            remix: "",
+//            reaction: "",
+//            views: 3,
+//            last: 0,
+//            date: "2012.12.12"
+//        )
     ]
 }
