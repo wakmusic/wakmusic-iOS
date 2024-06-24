@@ -125,13 +125,17 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
         title: "저장하기",
         image: DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image,
         titleColor: .white
-    )
+    ).then {
+        $0.isEnabled = false
+    }
 
     let shareButton = VerticalAlignButton(
         title: "공유하기",
         image: DesignSystemAsset.PlayListEdit.playlistShare.image,
         titleColor: .white
-    )
+    ).then {
+        $0.isEnabled = false
+    }
 
     let indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin
@@ -329,7 +333,7 @@ public extension LyricDecoratingViewController {
     func showPhotoLibrary() {
         let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
         PHPhotoLibrary.shared().performChanges {
-            let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            let _ = PHAssetChangeRequest.creationRequestForAsset(from: image)
         } completionHandler: { _, error in
             var message: String = ""
             if let error = error {

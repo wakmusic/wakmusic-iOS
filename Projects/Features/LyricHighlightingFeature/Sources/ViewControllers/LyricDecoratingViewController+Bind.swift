@@ -93,8 +93,10 @@ extension LyricDecoratingViewController {
 
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator] _ in
+            .do(onNext: { [indicator, saveButton, shareButton] source in
                 indicator.stopAnimating()
+                saveButton.isEnabled = !source.isEmpty
+                shareButton.isEnabled = saveButton.isEnabled
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
                 guard let cell = collectionView.dequeueReusableCell(
