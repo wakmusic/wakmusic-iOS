@@ -12,6 +12,7 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .BaseFeature),
+                    .feature(target: .LyricHighlightingFeature, type: .interface),
                     .domain(target: .ArtistDomain, type: .interface)
                 ]
             )
