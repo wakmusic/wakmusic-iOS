@@ -59,7 +59,7 @@ public final class ArtistViewController:
             .bind(with: self) { owner, entity in
                 if entity.id == "jingburger" {
                     let viewController = owner.lyricHighlightingFactory.makeView(
-                        model: .init(songID: "", title: "리와인드 (RE:WIND)", artist: "이세계아이돌")
+                        model: .init(songID: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌")
                     ).wrapNavigationController
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
