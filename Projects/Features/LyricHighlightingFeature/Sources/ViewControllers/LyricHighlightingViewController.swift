@@ -160,7 +160,7 @@ private extension LyricHighlightingViewController {
         }
 
         navigationTitleStackView.snp.makeConstraints {
-            $0.leading.equalTo(backButton.snp.trailing).offset(10+13)
+            $0.leading.equalTo(backButton.snp.trailing).offset(10 + 13)
             $0.trailing.equalTo(completeButton.snp.leading).offset(-10)
             $0.centerY.equalToSuperview()
         }
