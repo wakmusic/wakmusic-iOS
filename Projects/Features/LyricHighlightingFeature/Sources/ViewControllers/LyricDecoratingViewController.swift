@@ -333,7 +333,7 @@ public extension LyricDecoratingViewController {
     func showPhotoLibrary() {
         let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
         PHPhotoLibrary.shared().performChanges {
-            let _ = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
         } completionHandler: { _, error in
             var message: String = ""
             if let error = error {
