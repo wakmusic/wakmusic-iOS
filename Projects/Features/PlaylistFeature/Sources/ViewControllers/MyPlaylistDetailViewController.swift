@@ -180,6 +180,18 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         let sharedState = reactor.state.share()
 
+        reactor.pulse(\.$toastMessage)
+            .bind(with: self) { owner, message in
+                
+                guard let message = message else {
+                    return
+                }
+                
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                
+            }
+            .disposed(by: disposeBag)
+        
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in

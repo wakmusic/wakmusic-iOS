@@ -23,6 +23,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex(PlayListDetailEntity)
+        case showtoastMessage(String)
     }
 
     struct State {
@@ -31,6 +32,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var backUpDataSource: PlayListDetailEntity
         var isLoading: Bool
         var selectedCount: Int
+        @Pulse var toastMessage: String?
     }
 
     var initialState: State
@@ -100,6 +102,10 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
+            
+        case let .showtoastMessage(message):
+            newState.toastMessage = message
+        
         }
 
         return newState
@@ -195,8 +201,13 @@ private extension MyPlaylistDetailReactor {
 
         var prev = state.dataSource
         prev.private = !prev.private
+        
+        let message: String = prev.private ? "리스트를 비공개 처리했습니다." : "리스트를 공개 처리했습니다."
 
-        return .just(.updateDataSource(prev))
+        return .concat([
+            .just(.updateDataSource(prev)),
+            .just(.showtoastMessage(message))
+        ])
     }
 }
 
