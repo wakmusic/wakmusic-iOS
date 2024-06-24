@@ -3,6 +3,7 @@ import PlayListDomainInterface
 import ReactorKit
 import RxSwift
 import SongsDomainInterface
+import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
     enum Action {
@@ -11,6 +12,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case editButtonDidTap
         case completeButtonDidTap
         case restore
+        case itemDidMoved(Int,Int)
     }
 
     enum Mutation {
@@ -69,6 +71,9 @@ final class MyPlaylistDetailReactor: Reactor {
             return updateItemSelected(index)
         case .restore:
             return restoreDataSource()
+        case let .itemDidMoved(from, to):
+            DEBUG_LOG("\(from) \(to)")
+            return .empty()
         }
     }
 

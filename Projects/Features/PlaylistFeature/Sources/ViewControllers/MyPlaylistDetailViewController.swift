@@ -7,6 +7,7 @@ import Then
 import UIKit
 import Utility
 
+#warning("move이벤트 reactor 데이터소스와 sync하기")
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, EditSheetViewType,
     SongCartViewType {
     var songCartView: BaseFeature.SongCartView!
@@ -104,6 +105,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+    
     }
 
     override func bindAction(reactor: MyPlaylistDetailReactor) {
@@ -141,6 +143,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .tap
             .bind(with: self) { owner, _ in
                 reactor.action.onNext(.completeButtonDidTap)
+                DEBUG_LOG(owner.dataSource.snapshot().itemIdentifiers.map(\.title))
             }
             .disposed(by: disposeBag)
 
@@ -240,8 +243,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
+        
+        #warning("옵셔널 해결하기")
         let dataSource =
-            MyplaylistDetailDataSource(tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
+        MyplaylistDetailDataSource(reactor: reactor!,tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
 
                 guard let self, let cell = tableView.dequeueReusableCell(
                     withIdentifier: PlaylistTableViewCell.identifier,
@@ -251,7 +256,6 @@ extension MyPlaylistDetailViewController {
                 }
 
                 cell.delegate = self
-                DEBUG_LOG("isEditing: \(tableView.isEditing)")
                 cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
                 cell.selectionStyle = .none
 
@@ -301,13 +305,18 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
         return .none
     }
 
-    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
 
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DEBUG_LOG("HELLo")
     }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        DEBUG_LOG("\(sourceIndexPath) \(destinationIndexPath)")
+    }
+    
 }
 
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
