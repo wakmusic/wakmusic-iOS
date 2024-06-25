@@ -36,6 +36,12 @@ public final class NoteDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.NoteDraw.noteDrawMachine.image
     }
 
+    private let hitBallImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.image = DesignSystemAsset.NoteDraw.noteDrawHitBall.image
+        $0.alpha = 0
+    }
+
     private let drawButton = UIButton(type: .system).then {
         $0.setTitle("음표 열매 뽑기", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)
@@ -149,6 +155,14 @@ private extension NoteDrawViewController {
             }
             .disposed(by: disposeBag)
 
+        drawButton.rx.tap
+            .bind(with: self) { owner, _ in
+                UIView.animate(withDuration: 0.5) {
+                    owner.hitBallImageView.alpha = 1
+                }
+            }
+            .disposed(by: disposeBag)
+
         NotificationCenter.default.rx
             .notification(UIApplication.didEnterBackgroundNotification)
             .bind(with: self, onNext: { owner, _ in
@@ -185,15 +199,17 @@ private extension NoteDrawViewController {
             magentaBallImageView,
             orangeBallImageView,
             redHeartImageView,
-            rightBottomNoteImageView,
-            deepGreenHeartImageView
+            deepGreenHeartImageView,
+            rightBottomNoteImageView
         )
         view.addSubviews(
             navigationBarView,
             drawMachineImageView,
             descriptioniLabel,
+            hitBallImageView,
             drawButton
         )
+        navigationBarView.setLeftViews([dismissButton])
     }
 
     func setLayout() {
@@ -206,13 +222,17 @@ private extension NoteDrawViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
-        navigationBarView.setLeftViews([dismissButton])
 
         drawMachineImageView.snp.makeConstraints {
             $0.top.equalTo(218.0.correctTop)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(180 * APP_WIDTH() / 375)
             $0.height.equalTo(300 * APP_HEIGHT() / 812)
+        }
+
+        hitBallImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(141.0.correctLeading)
+            $0.bottom.equalToSuperview().offset(273.56.correctBottom)
         }
 
         descriptioniLabel.snp.makeConstraints {
