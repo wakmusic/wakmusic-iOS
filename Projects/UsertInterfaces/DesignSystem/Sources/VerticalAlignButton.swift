@@ -7,7 +7,8 @@ open class VerticalAlignButton: UIButton {
     public init(
         title: String? = nil,
         image: UIImage? = nil,
-        spacing: CGFloat = 0.0
+        spacing: CGFloat = 0.0,
+        textColor: UIColor = DesignSystemAsset.NewGrayColor.gray400.color
     ) {
         self.spacing = spacing
         super.init(frame: .zero)
@@ -17,7 +18,7 @@ open class VerticalAlignButton: UIButton {
             config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
                 var attribute = $0
                 attribute.font = UIFont.setFont(.t7(weight: .medium))
-                attribute.foregroundColor = DesignSystemAsset.NewGrayColor.gray400.color
+                attribute.foregroundColor = textColor
                 attribute.kern = -0.5
                 return attribute
             }
@@ -27,10 +28,10 @@ open class VerticalAlignButton: UIButton {
             self.configuration = config
         } else {
             self.setTitle(title, for: .normal)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .normal)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .selected)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .highlighted)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .disabled)
+            self.setTitleColor(textColor, for: .normal)
+            self.setTitleColor(textColor, for: .selected)
+            self.setTitleColor(textColor, for: .highlighted)
+            self.setTitleColor(textColor, for: .disabled)
             self.titleLabel?.font = .setFont(.t7(weight: .medium))
             self.titleLabel?.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             self.setImage(image, for: .normal)

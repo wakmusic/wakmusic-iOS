@@ -8,11 +8,11 @@ import Then
 import UIKit
 import Utility
 
-final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, EditSheetViewType,
-    SongCartViewType {
-    var songCartView: BaseFeature.SongCartView!
-
-    var editSheetView: EditSheetView!
+final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, PlaylistEditSheetViewType,
+                                            SongCartViewType {
+    var playlisteditSheetView: PlaylistEditSheetView!
+    
+    var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
@@ -150,8 +150,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         moreButton.rx
             .tap
             .bind(with: self) { owner, _ in
-                #warning("추후 바텀시트로 팝업으로 교체")
-                reactor.action.onNext(.editButtonDidTap)
+//                #warning("추후 바텀시트로 팝업으로 교체")
+//                reactor.action.onNext(.editButtonDidTap)
+                owner.showplaylistEditSheet(in: owner.view)
+                
             }
             .disposed(by: disposeBag)
 
@@ -187,7 +189,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     return
                 }
                 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light    )))
                 
             }
             .disposed(by: disposeBag)
@@ -376,8 +378,9 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
     }
 }
 
-extension MyPlaylistDetailViewController: EditSheetViewDelegate {
-    public func buttonTapped(type: EditSheetSelectType) {
-        #warning("EditSheet 구현")
+extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
+    func didTap(_ type: PlaylistEditType) {
+        DEBUG_LOG(type)
     }
+    
 }
