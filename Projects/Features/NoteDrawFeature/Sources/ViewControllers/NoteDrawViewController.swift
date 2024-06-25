@@ -157,19 +157,20 @@ private extension NoteDrawViewController {
             }
             .disposed(by: disposeBag)
 
-        NotificationCenter.default.rx
-            .notification(UIApplication.didEnterBackgroundNotification)
-            .bind(with: self, onNext: { owner, _ in
+        Observable.merge(
+            NotificationCenter.default.rx.notification(UIApplication.didEnterBackgroundNotification)
+                .map { _ in UIApplication.didEnterBackgroundNotification },
+            NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+                .map { _ in UIApplication.willEnterForegroundNotification }
+        )
+        .bind(with: self, onNext: { owner, notification in
+            if notification == UIApplication.didEnterBackgroundNotification {
                 owner.removeAnimation()
-            })
-            .disposed(by: disposeBag)
-
-        NotificationCenter.default.rx
-            .notification(UIApplication.willEnterForegroundNotification)
-            .bind(with: self, onNext: { owner, _ in
+            } else {
                 owner.startAnimation()
-            })
-            .disposed(by: disposeBag)
+            }
+        })
+        .disposed(by: disposeBag)
     }
 }
 
