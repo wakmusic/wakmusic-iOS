@@ -39,7 +39,8 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     }
 
     public struct Output {
-        let showErrorToast: PublishRelay<String>
+        let showErrorToast: PublishRelay<String> = .init()
+        let shouldDismiss: PublishRelay<Void> = .init()
     }
 
     public init(
@@ -54,7 +55,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
     }
 
     public func transform(from input: Input) -> Output {
-        let showErrorToast = PublishRelay<String>()
+        let output = Output()
         inputTransfrom(input: input)
 
         // MARK: (Naver, Google, Apple)Token WMToken으로 치환
@@ -63,35 +64,35 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
             .filter { !$0.1.isEmpty }
             .flatMap { [fetchTokenUseCase] provider, token in
                 fetchTokenUseCase.execute(providerType: provider, token: token)
-                    .catchAndReturn(AuthLoginEntity(token: ""))
+                    .catch { (error: Error) in
+                        return Single.error(error)
+                    }
                     .asObservable()
             }
             .flatMap { [fetchUserInfoUseCase] _ in
                 fetchUserInfoUseCase.execute()
-                    .catchAndReturn(
-                        UserInfoEntity(
-                            id: "",
-                            platform: "apple",
-                            name: "ifari",
-                            profile: "panchi",
-                            version: 1
-                        )
-                    )
+                    .catch { (error: Error) in
+                        return Single.error(error)
+                    }
                     .asObservable()
             }
-            .bind {
-                LogManager.setUserID(userID: $0.id)
+            .subscribe(onNext: { entity in
+                LogManager.setUserID(userID: entity.id)
                 PreferenceManager.shared.setUserInfo(
-                    ID: AES256.encrypt(string: $0.id),
-                    platform: $0.platform,
-                    profile: $0.profile,
-                    name: AES256.encrypt(string: $0.name),
-                    version: $0.version
+                    ID: AES256.encrypt(string: entity.id),
+                    platform: entity.platform,
+                    profile: entity.profile,
+                    name: AES256.encrypt(string: entity.name),
+                    version: entity.version
                 )
-            }
-            .disposed(by: disposeBag)
+                output.shouldDismiss.accept(())
+            }, onError: { error in
+                let error = error.asWMError
+                output.showErrorToast.accept(error.errorDescription ?? "알수 없는 오류가 발생하였습니다.")
+                output.shouldDismiss.accept(())
+            }).disposed(by: disposeBag)
 
-        return Output(showErrorToast: showErrorToast)
+        return output
     }
 
     // MARK: Input Binding
