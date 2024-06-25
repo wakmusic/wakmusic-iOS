@@ -57,7 +57,7 @@ final class MyInfoView: UIView {
 
     let likeNavigationButton = MyInfoNavigationButton(
         title: "좋아요",
-        image: DesignSystemAsset.MyInfo.heartMyInfo.image
+        image: DesignSystemAsset.MyInfo.fruit.image
     )
     let qnaNavigationButton = MyInfoNavigationButton(
         title: "자주 묻는 질문",
@@ -73,7 +73,7 @@ final class MyInfoView: UIView {
     )
     let teamNavigationButton = MyInfoNavigationButton(
         title: "팀 소개",
-        image: DesignSystemAsset.MyInfo.noti.image
+        image: DesignSystemAsset.MyInfo.team.image
     )
     let settingNavigationButton = MyInfoNavigationButton(
         title: "설정",
