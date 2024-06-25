@@ -151,8 +151,7 @@ private extension NoteDrawViewController {
 
         drawButton.rx.tap
             .bind(with: self) { owner, _ in
-                UIView.animate(withDuration: 0.5) {
-                }
+                UIView.animate(withDuration: 0.5) {}
             }
             .disposed(by: disposeBag)
 
