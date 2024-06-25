@@ -51,6 +51,11 @@ public final class NoteDrawViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleHeart.image
     }
+    
+    private let leftNoteImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.image = DesignSystemAsset.NoteDraw.noteDrawLeftNote.image
+    }
 
     private let greenHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -71,6 +76,11 @@ public final class NoteDrawViewController: UIViewController {
     private let yellowHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawYellowHeart.image
+    }
+    
+    private let rightTopNoteImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.image = DesignSystemAsset.NoteDraw.noteDrawRightTopNote.image
     }
 
     private let purpleBallImageView = UIImageView().then {
@@ -143,6 +153,7 @@ private extension NoteDrawViewController {
         // Left Component
         view.addSubviews(
             purpleHeartImageView,
+            leftNoteImageView,
             greenHeartImageView,
             pickBallImageView,
             cloudImageView
@@ -151,6 +162,7 @@ private extension NoteDrawViewController {
         view.addSubviews(
             yellowHeartImageView,
             purpleBallImageView,
+            rightTopNoteImageView,
             magentaBallImageView,
             orangeBallImageView,
             redHeartImageView,
@@ -201,6 +213,11 @@ private extension NoteDrawViewController {
             $0.top.equalToSuperview().offset(140.0.correctTop)
         }
 
+        leftNoteImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(29.0.correctLeading)
+            $0.top.equalToSuperview().offset(234.0.correctTop)
+        }
+
         greenHeartImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(25.0.correctLeading)
             $0.top.equalToSuperview().offset(362.0.correctTop)
@@ -213,13 +230,18 @@ private extension NoteDrawViewController {
 
         pickBallImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(6)
-            $0.bottom.equalTo(cloudImageView.snp.bottom).offset(-80)
+            $0.bottom.equalTo(cloudImageView.snp.bottom).offset(-80.44)
         }
 
         // Right Component
         yellowHeartImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(104.0.correctTop)
             $0.trailing.equalToSuperview().offset(108.0.correctTrailing)
+        }
+
+        rightTopNoteImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(127.0.correctTop)
+            $0.trailing.equalToSuperview().offset(24.61.correctTrailing)
         }
 
         purpleBallImageView.snp.makeConstraints {
@@ -253,27 +275,31 @@ private extension NoteDrawViewController {
 
         [
             purpleHeartImageView,
+            leftNoteImageView,
             greenHeartImageView,
             cloudImageView,
             pickBallImageView
         ].forEach {
-            $0.startMoveRepeatAnimate(
+            $0.startMoveAnimate(
                 duration: 5.0,
-                amount: 50
+                amount: 30,
+                direction: .random
             )
         }
 
         [
             yellowHeartImageView,
+            rightTopNoteImageView,
             purpleBallImageView,
             magentaBallImageView,
             orangeBallImageView,
             redHeartImageView,
             deepGreenHeartImageView
         ].forEach {
-            $0.startMoveRepeatAnimate(
+            $0.startMoveAnimate(
                 duration: 5.0,
-                amount: 50
+                amount: 30,
+                direction: .random
             )
         }
     }
