@@ -151,10 +151,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        myInfoView.rx.moreButtonDidTap
-            .map { MyInfoReactor.Action.moreButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        
 
         myInfoView.rx.drawButtonDidTap
             .map { MyInfoReactor.Action.drawButtonDidTap }

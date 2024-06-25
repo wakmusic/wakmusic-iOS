@@ -60,14 +60,15 @@ final class ProfileView: UIView {
     func highlightName() {
         guard let text = self.nameLabel.text else { return }
         let attrStr = NSMutableAttributedString(string: text)
-        let fullRange = NSRange(location: 0, length: attrStr.length)
-        let lastRange = (text as NSString).range(of: "님")
+        let strLength = attrStr.length
+        let nameRange = NSRange(location: 0, length: strLength - 1)
+        let lastRange = NSRange(location: strLength - 1, length: 1)
         let color = DesignSystemAsset.BlueGrayColor.blueGray900.color
         let lightColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
         let font = UIFont.setFont(.t3(weight: .medium))
         let lightFont = UIFont.setFont(.t4(weight: .light))
-        attrStr.addAttribute(.foregroundColor, value: color, range: fullRange)
-        attrStr.addAttribute(.font, value: font, range: fullRange)
+        attrStr.addAttribute(.foregroundColor, value: color, range: nameRange)
+        attrStr.addAttribute(.font, value: font, range: nameRange)
         attrStr.addAttribute(.foregroundColor, value: lightColor, range: lastRange)
         attrStr.addAttribute(.font, value: lightFont, range: lastRange)
         self.nameLabel.attributedText = attrStr
