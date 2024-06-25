@@ -148,6 +148,20 @@ private extension NoteDrawViewController {
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
+
+        NotificationCenter.default.rx
+            .notification(UIApplication.didEnterBackgroundNotification)
+            .bind(with: self, onNext: { owner, _ in
+                owner.removeAnimation()
+            })
+            .disposed(by: disposeBag)
+
+        NotificationCenter.default.rx
+            .notification(UIApplication.willEnterForegroundNotification)
+            .bind(with: self, onNext: { owner, _ in
+                owner.startAnimation()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -283,10 +297,10 @@ private extension NoteDrawViewController {
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        startAnimate()
+        startAnimation()
     }
 
-    func startAnimate() {
+    func startAnimation() {
         // Left Component
         purpleHeartImageView.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
         leftNoteImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
@@ -304,11 +318,29 @@ private extension NoteDrawViewController {
         orangeBallImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
         redHeartImageView.startMoveAnimate(duration: 4.0, amount: 15, direction: .up)
         [rightBottomNoteImageView, deepGreenHeartImageView].forEach {
-            $0.startMoveAnimate(
-                duration: 5.0,
-                amount: 20,
-                direction: .up
-            )
+            $0.startMoveAnimate(duration: 5.0, amount: 20, direction: .up)
+        }
+    }
+
+    func removeAnimation() {
+        let animateViews = [
+            purpleHeartImageView,
+            leftNoteImageView,
+            greenHeartImageView,
+            cloudImageView,
+            pickBallImageView,
+            yellowHeartImageView,
+            rightTopNoteImageView,
+            purpleBallImageView,
+            magentaBallImageView,
+            orangeBallImageView,
+            redHeartImageView,
+            rightBottomNoteImageView,
+            deepGreenHeartImageView
+        ]
+        animateViews.forEach {
+            $0.transform = .identity
+            $0.layer.removeAllAnimations()
         }
     }
 }
