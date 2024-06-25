@@ -9,9 +9,10 @@ import UIKit
 import Utility
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
-                                            PlaylistEditSheetViewType, PlaylistImageEditSheetViewType, SongCartViewType {
+    PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
+    SongCartViewType {
     var playlistImageEditSheetView: PlaylistImageEditSheetView!
-    
+
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -173,10 +174,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
                 DEBUG_LOG("카메라 버튼 탭")
-                
+
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
-                
             }
             .disposed(by: disposeBag)
     }
@@ -273,7 +273,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
         #warning("옵셔널 해결하기")
-    
+
         let dataSource =
             MyplaylistDetailDataSource(
                 reactor: reactor!,
@@ -384,26 +384,22 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
 extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
-        
         switch type {
-            
         case .edit:
             reactor?.action.onNext(.editButtonDidTap)
         case .share:
             #warning("공유 작업")
             break
         }
-        
+
         self.hideplaylistEditSheet()
     }
 }
 
 extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
     func didTap(_ type: PlaylistImageEditType) {
-        
         DEBUG_LOG(type) // 탭
         switch type {
-            
         case .gallery:
             #warning("갤러리")
             break
@@ -411,9 +407,7 @@ extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
             #warning("기본 팝업")
             break
         }
-        
+
         self.hideplaylistImageEditSheet()
     }
-    
-    
 }
