@@ -51,7 +51,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleHeart.image
     }
-    
+
     private let leftNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawLeftNote.image
@@ -77,7 +77,7 @@ public final class NoteDrawViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawYellowHeart.image
     }
-    
+
     private let rightTopNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawRightTopNote.image
