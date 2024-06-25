@@ -15,7 +15,7 @@ public struct FetchUserResponseDTO: Decodable, Equatable {
         case id, name, itemCount
         case profile = "profileUrl"
         case createdAt
-        //case platform
+        // case platform
     }
 }
 

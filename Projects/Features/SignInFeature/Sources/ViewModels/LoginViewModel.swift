@@ -91,7 +91,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                 output.showErrorToast.accept(error.errorDescription ?? "알수 없는 오류가 발생하였습니다.")
                 output.shouldDismiss.accept(())
             }).disposed(by: disposeBag)
-        
+
         return output
     }
 
