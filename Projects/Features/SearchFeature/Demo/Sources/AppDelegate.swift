@@ -1,5 +1,5 @@
 import Inject
-@testable import PlayListDomainTesting
+@testable import PlaylistDomainTesting
 @testable import PlaylistFeatureTesting
 @testable import SearchFeature
 import UIKit

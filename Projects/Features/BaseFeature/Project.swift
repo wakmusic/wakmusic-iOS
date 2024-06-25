@@ -16,7 +16,7 @@ let project = Project.module(
                     .feature(target: .BaseFeature, type: .interface),
                     .domain(target: .BaseDomain, type: .interface),
                     .domain(target: .AuthDomain, type: .interface),
-                    .domain(target: .PlayListDomain, type: .interface),
+                    .domain(target: .PlaylistDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
                     .domain(target: .NoticeDomain, type: .interface),
                     .module(target: .ErrorModule),

@@ -1,37 +1,29 @@
-//
-//  HomeViewModel.swift
-//  HomeFeature
-//
-//  Created by KTH on 2023/02/20.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import ChartDomainInterface
 import Foundation
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import Utility
 
-typealias HomeUseCase = Observable<([ChartRankingEntity], [NewSongsEntity], [RecommendPlayListEntity])>
+typealias HomeUseCase = Observable<([ChartRankingEntity], [NewSongsEntity], [RecommendPlaylistEntity])>
 
 public final class HomeViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     var fetchChartRankingUseCase: FetchChartRankingUseCase
     var fetchNewSongsUseCase: FetchNewSongsUseCase
-    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    var fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase
 
     public init(
         fetchChartRankingUseCase: any FetchChartRankingUseCase,
         fetchNewSongsUseCase: any FetchNewSongsUseCase,
-        fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+        fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase
     ) {
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
     }
 
     public struct Input {
@@ -44,7 +36,7 @@ public final class HomeViewModel: ViewModelType {
     public struct Output {
         let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
-        let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let playListDataSource: BehaviorRelay<[RecommendPlaylistEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
@@ -60,7 +52,7 @@ public final class HomeViewModel: ViewModelType {
             .catchAndReturn([])
             .asObservable()
 
-        let playList = self.fetchRecommendPlayListUseCase
+        let playList = self.fetchRecommendPlaylistUseCase
             .execute()
             .catchAndReturn([])
             .asObservable()

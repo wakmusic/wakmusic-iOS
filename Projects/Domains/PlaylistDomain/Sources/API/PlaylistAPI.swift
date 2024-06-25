@@ -4,7 +4,7 @@ import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
-import PlayListDomainInterface
+import PlaylistDomainInterface
 
 public struct AddSongRequest: Encodable {
     var songIds: [String]
@@ -23,9 +23,9 @@ public struct TitleAndPrivateRequset: Encodable {
     var `private`: Bool?
 }
 
-public enum PlayListAPI {
+public enum PlaylistAPI {
     case fetchRecommendPlayList // 추천 플리 불러오기
-    case fetchPlayListDetail(id: String, type: PlayListType) // 플리 상세 불러오기
+    case fetchPlayListDetail(id: String, type: PlaylistType) // 플리 상세 불러오기
     case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
     case createPlayList(title: String) // 플리 생성
     case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기
@@ -35,7 +35,7 @@ public enum PlayListAPI {
     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
 }
 
-extension PlayListAPI: WMAPI {
+extension PlaylistAPI: WMAPI {
     public var domain: WMDomain {
         .playlist
     }

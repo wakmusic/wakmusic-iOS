@@ -1,17 +1,9 @@
-//
-//  HomeComponent.swift
-//  HomeFeatureTests
-//
-//  Created by KTH on 2023/02/20.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import ChartDomainInterface
 import ChartFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit
@@ -19,7 +11,7 @@ import UIKit
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var chartFactory: any ChartFactory { get }
     var newSongsComponent: NewSongsComponent { get }
@@ -31,7 +23,7 @@ public final class HomeComponent: Component<HomeDependency> {
             viewModel: .init(
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
-                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+                fetchRecommendPlaylistUseCase: dependency.fetchRecommendPlaylistUseCase
             ),
             playlistDetailFactory: dependency.playlistDetailFactory,
             newSongsComponent: dependency.newSongsComponent,

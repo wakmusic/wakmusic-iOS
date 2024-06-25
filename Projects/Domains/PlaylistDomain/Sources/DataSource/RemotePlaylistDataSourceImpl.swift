@@ -1,21 +1,21 @@
 import BaseDomain
 import BaseDomainInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 import SongsDomain
 import SongsDomainInterface
 
-public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
-    public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {
+public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAPI>, RemotePlaylistDataSource {
+    public func fetchRecommendPlayList() -> Single<[RecommendPlaylistEntity]> {
         request(.fetchRecommendPlayList)
             .map([SingleRecommendPlayListResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
 
-    public func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
+    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
         request(.fetchPlayListDetail(id: id, type: type))
-            .map(SinglePlayListDetailResponseDTO.self)
+            .map(SinglePlaylistDetailResponseDTO.self)
             .map { $0.toDomain() }
     }
 
@@ -24,9 +24,9 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .asCompletable()
     }
 
-    public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
+    public func createPlayList(title: String) -> Single<PlaylistBaseEntity> {
         request(.createPlayList(title: title))
-            .map(PlayListBaseResponseDTO.self)
+            .map(PlaylistBaseResponseDTO.self)
             .map { $0.toDomain() }
     }
 

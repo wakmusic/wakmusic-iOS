@@ -3,12 +3,12 @@ import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }
@@ -22,7 +22,7 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
             playlistDetailFactory: dependency.playlistDetailFactory,
             reactor: BeforeSearchReactor(
                 fetchCurrentVideoUseCase: dependency.fetchCurrentVideoUseCase,
-                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+                fetchRecommendPlaylistUseCase: dependency.fetchRecommendPlaylistUseCase
             )
         )
     }

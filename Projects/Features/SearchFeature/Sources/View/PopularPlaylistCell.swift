@@ -1,7 +1,7 @@
 import DesignSystem
 import UIKit
 
-final class PopularPlayListCell: UICollectionViewCell {
+final class PopularPlaylistCell: UICollectionViewCell {
     private let imageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.PlayListTheme.theme10.image
         $0.contentMode = .scaleAspectFill
@@ -41,7 +41,7 @@ final class PopularPlayListCell: UICollectionViewCell {
     }
 }
 
-extension PopularPlayListCell {
+extension PopularPlaylistCell {
     public func update(_ model: Model) {
         self.titleLabel.text = model.title
         self.nickNameLabel.text = "Hamp"

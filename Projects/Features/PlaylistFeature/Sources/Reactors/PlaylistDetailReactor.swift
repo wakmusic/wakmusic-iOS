@@ -4,7 +4,7 @@ import BaseFeature
 import ErrorModule
 import Foundation
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxCocoa
 import RxRelay
@@ -41,26 +41,26 @@ internal final class PlaylistDetailReactor: Reactor {
     }
 
     internal var initialState: State
-    internal let type: PlayListType
+    internal let type: PlaylistType
     internal let key: String
 
     private var disposeBag = DisposeBag()
-    private let fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase
+    private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let updatePlaylistUseCase: any UpdatePlaylistUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let logoutUseCase: any LogoutUseCase
 
     public init(
         key: String,
-        type: PlayListType,
-        fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase,
+        type: PlaylistType,
+        fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
         updatePlaylistUseCase: any UpdatePlaylistUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
-        self.fetchPlayListDetailUseCase = fetchPlayListDetailUseCase
+        self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
         self.updatePlaylistUseCase = updatePlaylistUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.logoutUseCase = logoutUseCase
@@ -140,9 +140,9 @@ internal final class PlaylistDetailReactor: Reactor {
 private extension PlaylistDetailReactor {
     /// 서버에서 데이터 불러오기
     func fetchData() -> Observable<Mutation> {
-        return fetchPlayListDetailUseCase.execute(id: key, type: type)
+        return fetchPlaylistDetailUseCase.execute(id: key, type: type)
             .catchAndReturn(
-                PlayListDetailEntity(
+                PlaylistDetailEntity(
                     key: key,
                     title: "",
                     songs: [],

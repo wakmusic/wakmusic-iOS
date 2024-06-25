@@ -58,7 +58,7 @@ public extension ModulePaths {
         case FaqDomain
         case LikeDomain
         case NoticeDomain
-        case PlayListDomain
+        case PlaylistDomain
         case SongsDomain
         case UserDomain
     }

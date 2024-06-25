@@ -3,12 +3,12 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
 public protocol PlayListDetailDependency: Dependency {
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
 
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
@@ -26,7 +26,7 @@ public final class PlayListDetailComponent: Component<PlayListDetailDependency>,
             reactor: PlaylistDetailReactor(
                 key: id,
                 type: isCustom ? .custom : .wmRecommend,
-                fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
+                fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 logoutUseCase: dependency.logoutUseCase

@@ -1,12 +1,12 @@
 import Foundation
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 
 final class WakmusicRecommendReactor: Reactor {
     private var disposeBag: DisposeBag = DisposeBag()
-    private var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+    private var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase
 
     var initialState: State
 
@@ -15,12 +15,12 @@ final class WakmusicRecommendReactor: Reactor {
     }
 
     enum Mutation {
-        case updateDataSource([RecommendPlayListEntity])
+        case updateDataSource([RecommendPlaylistEntity])
         case updateLodingState(Bool)
     }
 
     struct State {
-        var dataSource: [RecommendPlayListEntity]
+        var dataSource: [RecommendPlaylistEntity]
         var isLoading: Bool
     }
 
@@ -44,9 +44,9 @@ final class WakmusicRecommendReactor: Reactor {
         return newState
     }
 
-    init(fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase) {
+    init(fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase) {
         LogManager.printDebug("✅ \(Self.self)")
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
         self.initialState = State(
             dataSource: [],
             isLoading: true
@@ -62,7 +62,7 @@ extension WakmusicRecommendReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLodingState(true)),
-            fetchRecommendPlayListUseCase
+            fetchRecommendPlaylistUseCase
                 .execute()
                 .asObservable()
                 .map { Mutation.updateDataSource($0) },

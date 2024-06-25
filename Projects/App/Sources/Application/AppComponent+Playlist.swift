@@ -1,7 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
-import PlayListDomain
-import PlayListDomainInterface
+import PlaylistDomain
+import PlaylistDomainInterface
 import PlaylistFeature
 import PlaylistFeatureInterface
 import StorageFeature
@@ -28,63 +28,63 @@ public extension AppComponent {
         PlaylistComponent(parent: self)
     }
 
-    var remotePlayListDataSource: any RemotePlayListDataSource {
+    var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
-            RemotePlayListDataSourceImpl(keychain: keychain)
+            RemotePlaylistDataSourceImpl(keychain: keychain)
         }
     }
 
-    var playListRepository: any PlayListRepository {
+    var playlistRepository: any PlaylistRepository {
         shared {
-            PlayListRepositoryImpl(remotePlayListDataSource: remotePlayListDataSource)
+            PlayListRepositoryImpl(remotePlayListDataSource: remotePlaylistDataSource)
         }
     }
 
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase {
         shared {
-            FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
+            FetchRecommendPlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase {
         shared {
-            FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+            FetchPlaylistDetailUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
-    var createPlayListUseCase: any CreatePlayListUseCase {
+    var createPlaylistUseCase: any CreatePlaylistUseCase {
         shared {
-            CreatePlayListUseCaseImpl(playListRepository: playListRepository)
+            CreatePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
     var updatePlaylistUseCase: any UpdatePlaylistUseCase {
         shared {
-            UpdatePlaylistUseCaseImpl(playListRepository: playListRepository)
+            UpdatePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase {
         shared {
-            UpdateTitleAndPrivateUseCaseImpl(playListRepository: playListRepository)
+            UpdateTitleAndPrivateUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
-    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+    var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase {
         shared {
-            AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
+            AddSongIntoPlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
     var removeSongsUseCase: any RemoveSongsUseCase {
         shared {
-            RemoveSongsUseCaseImpl(playListRepository: playListRepository)
+            RemoveSongsUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase {
         shared {
-            UploadPlaylistImageUseCaseImpl(playListRepository: playListRepository)
+            UploadPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }
