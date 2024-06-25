@@ -14,15 +14,15 @@ public class PlaylistImageEditSheetView: UIView {
     private let galleryButton: VerticalAlignButton = VerticalAlignButton(
         title: "앨범에서 고르기",
         image: DesignSystemAsset.Playlist.album.image,
-        spacing: .zero,
-        textColor: .white
+        titleColor: .white,
+        spacing: .zero
     )
 
     private let defaultButton: VerticalAlignButton = VerticalAlignButton(
         title: "임시",
         image: DesignSystemAsset.Playlist.album.image,
-        spacing: .zero,
-        textColor: .white
+        titleColor: .white,
+        spacing: .zero
     )
 
     private lazy var stackView: UIStackView = UIStackView(arrangedSubviews: [galleryButton, defaultButton]).then {
