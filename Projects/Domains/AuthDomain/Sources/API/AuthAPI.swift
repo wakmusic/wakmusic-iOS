@@ -9,9 +9,8 @@ public enum AuthAPI {
     case reGenerateAccessToken
 }
 
-#warning("오타 서버에서 고치면 대응 예정")
 private struct FetchTokenRequestParameters: Encodable {
-    var privoder: String
+    var provider: String
     var token: String
 }
 
@@ -51,7 +50,7 @@ extension AuthAPI: WMAPI {
         case let .fetchToken(providerType: providerType, token: id):
             return .requestJSONEncodable(
                 FetchTokenRequestParameters(
-                    privoder: providerType.rawValue,
+                    provider: providerType.rawValue,
                     token: id
                 )
             )
