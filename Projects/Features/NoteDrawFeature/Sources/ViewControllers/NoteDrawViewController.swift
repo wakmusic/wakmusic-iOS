@@ -151,7 +151,9 @@ private extension NoteDrawViewController {
 
         drawButton.rx.tap
             .bind(with: self) { owner, _ in
-                UIView.animate(withDuration: 0.5) {}
+                UIView.animate(withDuration: 0.3) {
+                    owner.hiddenComponent()
+                }
             }
             .disposed(by: disposeBag)
 
@@ -347,6 +349,29 @@ private extension NoteDrawViewController {
         animateViews.forEach {
             $0.transform = .identity
             $0.layer.removeAllAnimations()
+        }
+    }
+
+    func hiddenComponent() {
+        let animateViews = [
+            descriptioniLabel,
+            drawMachineImageView,
+            purpleHeartImageView,
+            leftNoteImageView,
+            greenHeartImageView,
+            cloudImageView,
+            pickBallImageView,
+            yellowHeartImageView,
+            rightTopNoteImageView,
+            purpleBallImageView,
+            magentaBallImageView,
+            orangeBallImageView,
+            redHeartImageView,
+            rightBottomNoteImageView,
+            deepGreenHeartImageView
+        ]
+        animateViews.forEach {
+            $0.alpha = 0
         }
     }
 }
