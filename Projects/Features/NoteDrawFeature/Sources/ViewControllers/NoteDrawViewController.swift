@@ -103,6 +103,11 @@ public final class NoteDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.NoteDraw.noteDrawRedHeart.image
     }
 
+    private let rightBottomNoteImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.image = DesignSystemAsset.NoteDraw.noteDrawRightBottomNote.image
+    }
+
     private let deepGreenHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.NoteDraw.noteDrawDeepGreenHeart.image
@@ -166,6 +171,7 @@ private extension NoteDrawViewController {
             magentaBallImageView,
             orangeBallImageView,
             redHeartImageView,
+            rightBottomNoteImageView,
             deepGreenHeartImageView
         )
         view.addSubviews(
@@ -240,8 +246,8 @@ private extension NoteDrawViewController {
         }
 
         rightTopNoteImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(127.0.correctTop)
-            $0.trailing.equalToSuperview().offset(24.61.correctTrailing)
+            $0.top.equalToSuperview().offset(132.0.correctTop)
+            $0.trailing.equalToSuperview().offset(38.61.correctTrailing)
         }
 
         purpleBallImageView.snp.makeConstraints {
@@ -264,6 +270,11 @@ private extension NoteDrawViewController {
             $0.bottom.equalToSuperview().offset(326.38.correctBottom)
         }
 
+        rightBottomNoteImageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(82.24.correctTrailing)
+            $0.bottom.equalToSuperview().offset(160.66.correctBottom)
+        }
+
         deepGreenHeartImageView.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(84.67.correctTrailing)
             $0.bottom.equalToSuperview().offset(158.22.correctBottom)
@@ -272,34 +283,31 @@ private extension NoteDrawViewController {
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        startAnimate()
+    }
 
-        [
-            purpleHeartImageView,
-            leftNoteImageView,
-            greenHeartImageView,
-            cloudImageView,
-            pickBallImageView
-        ].forEach {
-            $0.startMoveAnimate(
-                duration: 5.0,
-                amount: 30,
-                direction: .random
-            )
+    func startAnimate() {
+        // Left Component
+        purpleHeartImageView.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
+        leftNoteImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
+        greenHeartImageView.startMoveAnimate(duration: 4.0, amount: 20, direction: .down)
+        [cloudImageView, pickBallImageView].forEach {
+            $0.startMoveAnimate(duration: 3.0, amount: 30, direction: .down)
         }
 
-        [
-            yellowHeartImageView,
-            rightTopNoteImageView,
-            purpleBallImageView,
-            magentaBallImageView,
-            orangeBallImageView,
-            redHeartImageView,
-            deepGreenHeartImageView
-        ].forEach {
+        // Right Component
+        yellowHeartImageView.startMoveAnimate(duration: 3.0, amount: 20, direction: .down)
+        [rightTopNoteImageView, purpleBallImageView].forEach {
+            $0.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
+        }
+        magentaBallImageView.startMoveAnimate(duration: 5.0, amount: 20, direction: .down)
+        orangeBallImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
+        redHeartImageView.startMoveAnimate(duration: 4.0, amount: 15, direction: .up)
+        [rightBottomNoteImageView, deepGreenHeartImageView].forEach {
             $0.startMoveAnimate(
                 duration: 5.0,
-                amount: 30,
-                direction: .random
+                amount: 20,
+                direction: .up
             )
         }
     }
