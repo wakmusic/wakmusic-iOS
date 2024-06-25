@@ -9,7 +9,7 @@ public protocol PlaylistEditSheetDelegate: AnyObject {
 }
 
 public class PlaylistEditSheetView: UIView {
-    weak var delegate: PlaylistEditSheetDelegate?
+    public weak var delegate: PlaylistEditSheetDelegate?
 
     private let editButton: VerticalAlignButton = VerticalAlignButton(
         title: "편집",
