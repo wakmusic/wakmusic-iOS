@@ -9,8 +9,9 @@ import UIKit
 import Utility
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
-    PlaylistEditSheetViewType,
-    SongCartViewType {
+                                            PlaylistEditSheetViewType, PlaylistImageEditSheetViewType, SongCartViewType {
+    var playlistImageEditSheetView: PlaylistImageEditSheetView!
+    
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -125,8 +126,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .tap
             .asDriver()
             .throttle(.seconds(1))
-            .drive(onNext: { [weak self] _ in
-
+            .drive(onNext: {
                 reactor.action.onNext(.privateButtonDidTap)
 
             })
@@ -151,9 +151,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         moreButton.rx
             .tap
             .bind(with: self) { owner, _ in
-//                #warning("추후 바텀시트로 팝업으로 교체")
-//                reactor.action.onNext(.editButtonDidTap)
                 owner.showplaylistEditSheet(in: owner.view)
+                owner.playlisteditSheetView?.delegate = owner
             }
             .disposed(by: disposeBag)
 
@@ -166,6 +165,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         headerView.rx.editNickNameButtonDidTap
             .bind(with: self) { ownerm, _ in
+                #warning("이름 변경 팝업")
                 DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
@@ -173,6 +173,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
                 DEBUG_LOG("카메라 버튼 탭")
+                
+                owner.showplaylistImageEditSheet(in: owner.view)
+                owner.playlistImageEditSheetView.delegate = owner
+                
             }
             .disposed(by: disposeBag)
     }
@@ -269,6 +273,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyplaylistDetailDataSource {
         #warning("옵셔널 해결하기")
+    
         let dataSource =
             MyplaylistDetailDataSource(
                 reactor: reactor!,
@@ -379,6 +384,36 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
 extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
-        DEBUG_LOG(type)
+        
+        switch type {
+            
+        case .edit:
+            reactor?.action.onNext(.editButtonDidTap)
+        case .share:
+            #warning("공유 작업")
+            break
+        }
+        
+        self.hideplaylistEditSheet()
     }
+}
+
+extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
+    func didTap(_ type: PlaylistImageEditType) {
+        
+        DEBUG_LOG(type) // 탭
+        switch type {
+            
+        case .gallery:
+            #warning("갤러리")
+            break
+        case .default:
+            #warning("기본 팝업")
+            break
+        }
+        
+        self.hideplaylistImageEditSheet()
+    }
+    
+    
 }

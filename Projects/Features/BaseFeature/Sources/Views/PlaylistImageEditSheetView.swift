@@ -4,28 +4,28 @@ import Then
 import UIKit
 import Utility
 
-public protocol PlaylistEditSheetDelegate: AnyObject {
-    func didTap(_ type: PlaylistEditType)
+public protocol PlaylistImageEditSheetDelegate: AnyObject {
+    func didTap(_ type: PlaylistImageEditType)
 }
 
-public class PlaylistEditSheetView: UIView {
-    public weak var delegate: PlaylistEditSheetDelegate?
+public class PlaylistImageEditSheetView: UIView {
+    public weak var delegate: PlaylistImageEditSheetDelegate?
 
-    private let editButton: VerticalAlignButton = VerticalAlignButton(
-        title: "편집",
-        image: DesignSystemAsset.PlayListEdit.playlistEdit.image,
+    private let galleryButton: VerticalAlignButton = VerticalAlignButton(
+        title: "앨범에서 고르기",
+        image: DesignSystemAsset.Playlist.album.image,
         spacing: .zero,
         textColor: .white
     )
 
-    private let shareButton: VerticalAlignButton = VerticalAlignButton(
-        title: "공유하기",
-        image: DesignSystemAsset.PlayListEdit.playlistShare.image,
+    private let defaultButton: VerticalAlignButton = VerticalAlignButton(
+        title: "임시",
+        image: DesignSystemAsset.Playlist.album.image,
         spacing: .zero,
         textColor: .white
     )
 
-    private lazy var stackView: UIStackView = UIStackView(arrangedSubviews: [editButton, shareButton]).then {
+    private lazy var stackView: UIStackView = UIStackView(arrangedSubviews: [galleryButton, defaultButton]).then {
         $0.spacing = 0
         $0.distribution = .fillEqually
         $0.alignment = .fill
@@ -46,7 +46,7 @@ public class PlaylistEditSheetView: UIView {
     }
 }
 
-extension PlaylistEditSheetView {
+extension PlaylistImageEditSheetView {
     private func addViews() {
         self.addSubviews(stackView)
     }
@@ -59,14 +59,14 @@ extension PlaylistEditSheetView {
     }
 
     private func addAction() {
-        editButton.addAction { [weak self] in
+        galleryButton.addAction { [weak self] in
             guard let self else { return }
-            self.delegate?.didTap(.edit)
+            self.delegate?.didTap(.gallery)
         }
 
-        shareButton.addAction { [weak self] in
+        defaultButton.addAction { [weak self] in
             guard let self else { return }
-            self.delegate?.didTap(.share)
+            self.delegate?.didTap(.default)
         }
     }
 }
