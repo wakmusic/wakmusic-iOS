@@ -394,6 +394,7 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
 
         self.hideplaylistEditSheet()
     }
+    
 }
 
 extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
