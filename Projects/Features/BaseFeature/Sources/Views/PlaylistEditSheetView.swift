@@ -1,16 +1,14 @@
-import UIKit
-import Then
-import SnapKit
 import DesignSystem
+import SnapKit
+import Then
+import UIKit
 import Utility
 
-public protocol PlaylistEditSheetDelegate : AnyObject {
-    func didTap(_ type:PlaylistEditType)
+public protocol PlaylistEditSheetDelegate: AnyObject {
+    func didTap(_ type: PlaylistEditType)
 }
 
-
 public class PlaylistEditSheetView: UIView {
-    
     weak var delegate: PlaylistEditSheetDelegate?
 
     private let editButton: VerticalAlignButton = VerticalAlignButton(
@@ -33,9 +31,7 @@ public class PlaylistEditSheetView: UIView {
         $0.alignment = .fill
         $0.backgroundColor = .clear
     }
-    
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         addViews()
@@ -43,36 +39,34 @@ public class PlaylistEditSheetView: UIView {
         addAction()
         self.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 extension PlaylistEditSheetView {
-    private func addViews(){
+    private func addViews() {
         self.addSubviews(stackView)
     }
-    
+
     private func setLayout() {
         stackView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(40)
         }
     }
-    
+
     private func addAction() {
-        
-        editButton.addAction { [weak self]  in
+        editButton.addAction { [weak self] in
             guard let self else { return }
             self.delegate?.didTap(.edit)
         }
-        
-        shareButton.addAction { [weak self]  in
+
+        shareButton.addAction { [weak self] in
             guard let self else { return }
             self.delegate?.didTap(.share)
         }
-        
     }
 }
