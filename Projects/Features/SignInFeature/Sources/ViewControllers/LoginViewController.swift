@@ -63,6 +63,12 @@ extension LoginViewController {
                 guard let self = self else { return }
                 self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             }).disposed(by: disposeBag)
+        
+        output
+            .shouldDismiss
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }.disposed(by: disposeBag)
     }
 
     private func configureLogin() {
