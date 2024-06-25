@@ -7,14 +7,17 @@ import UIKit
 import Utility
 
 private protocol ProfileStateProtocol {
+    func updateProfileImage(image: UIImage)
     func updateNickName(nickname: String)
     func updatePlatform(platform: String)
 }
 
-private protocol ProfileActionProtocol {}
+private protocol ProfileActionProtocol {
+    var profileImageDidTap: Observable<Void> { get }
+}
 
 final class ProfileView: UIView {
-    private let imageView: UIImageView = UIImageView().then {
+    fileprivate let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.MyInfo.iconColor.image
     }
@@ -100,6 +103,10 @@ extension ProfileView {
 }
 
 extension ProfileView: ProfileStateProtocol {
+    func updateProfileImage(image: UIImage) {
+        imageView.image = image
+    }
+    
     func updateNickName(nickname: String) {
         nameLabel.text = nickname + "님"
         highlightName()
@@ -121,4 +128,11 @@ extension ProfileView: ProfileStateProtocol {
     }
 }
 
-extension Reactive: ProfileActionProtocol where Base: ProfileView {}
+extension Reactive: ProfileActionProtocol where Base: ProfileView {
+    var profileImageDidTap: Observable<Void> {
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        base.imageView.addGestureRecognizer(tapGestureRecognizer)
+        base.imageView.isUserInteractionEnabled = true
+        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+    }
+}

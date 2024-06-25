@@ -14,7 +14,8 @@ private protocol MyInfoStateProtocol {
 
 private protocol MyInfoActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
-    var moreButtonDidTap: Observable<Void> { get }
+    var profileImageDidTap: Observable<Void> { get }
+    var drawButtonDidTap: Observable<Void> { get }
     var likeNavigationButtonDidTap: Observable<Void> { get }
     var qnaNavigationButtonDidTap: Observable<Void> { get }
     var notiNavigationButtonDidTap: Observable<Void> { get }
@@ -28,15 +29,12 @@ final class MyInfoView: UIView {
     let contentView = UIView()
 
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
+    
     let profileView = ProfileView().then {
         $0.isHidden = true
     }
 
     let drawButtonView = DrawButtonView()
-
-    let moreButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
-    }
 
     let vStackView = UIStackView().then {
         $0.axis = .vertical
@@ -98,7 +96,6 @@ private extension MyInfoView {
         self.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(
-            moreButton,
             loginWarningView,
             profileView,
             drawButtonView,
@@ -129,12 +126,6 @@ private extension MyInfoView {
         contentView.snp.makeConstraints {
             $0.width.equalToSuperview()
             $0.edges.equalTo(scrollView.contentLayoutGuide)
-        }
-
-        moreButton.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.top.equalToSuperview().offset(8)
-            $0.trailing.equalToSuperview().offset(-20)
         }
 
         loginWarningView.snp.makeConstraints {
@@ -187,7 +178,7 @@ extension MyInfoView: MyInfoStateProtocol {
 
 extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
-    var moreButtonDidTap: Observable<Void> { base.moreButton.rx.tap.asObservable() }
+    var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
     var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }
     var likeNavigationButtonDidTap: Observable<Void> { base.likeNavigationButton.rx.tap.asObservable() }
     var qnaNavigationButtonDidTap: Observable<Void> { base.qnaNavigationButton.rx.tap.asObservable() }
