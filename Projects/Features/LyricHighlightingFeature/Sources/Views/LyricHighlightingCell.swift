@@ -13,7 +13,7 @@ final class LyricHighlightingCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViews()
-        setAutoLayout()
+        setLayout()
     }
 
     @available(*, unavailable)
@@ -57,7 +57,7 @@ private extension LyricHighlightingCell {
         contentView.addSubview(lyricLabel)
     }
 
-    func setAutoLayout() {
+    func setLayout() {
         lyricLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview().offset(25)

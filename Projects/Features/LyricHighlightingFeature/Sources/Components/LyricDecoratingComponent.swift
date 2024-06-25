@@ -1,18 +1,23 @@
+import BaseFeatureInterface
 import Foundation
-import LyricDomainInterface
+import ImageDomainInterface
 import LyricHighlightingFeatureInterface
 import NeedleFoundation
 
 public protocol LyricDecoratingDependency: Dependency {
-    var fetchDecoratingBackgroundUseCase: any FetchDecoratingBackgroundUseCase { get }
+    var fetchLyricDecoratingBackgroundUseCase: any FetchLyricDecoratingBackgroundUseCase { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
     public func makeView(model: LyricHighlightingRequiredModel) -> LyricDecoratingViewController {
         let viewModel = LyricDecoratingViewModel(
             model: model,
-            fetchDecoratingBackgroundUseCase: dependency.fetchDecoratingBackgroundUseCase
+            fetchLyricDecoratingBackgroundUseCase: dependency.fetchLyricDecoratingBackgroundUseCase
         )
-        return LyricDecoratingViewController(viewModel: viewModel)
+        return LyricDecoratingViewController(
+            viewModel: viewModel,
+            textPopUpFactory: dependency.textPopUpFactory
+        )
     }
 }

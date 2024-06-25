@@ -32,6 +32,12 @@ extension LyricDecoratingViewController {
 
         saveButton.rx.tap
             .bind(with: self) { owner, _ in
+                owner.requestPhotoLibraryPermission()
+            }
+            .disposed(by: disposeBag)
+
+        shareButton.rx.tap
+            .bind(with: self) { owner, _ in
                 let activityViewController = UIActivityViewController(
                     activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
                     applicationActivities: nil
@@ -87,8 +93,10 @@ extension LyricDecoratingViewController {
 
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator] _ in
+            .do(onNext: { [indicator, saveButton, shareButton] source in
                 indicator.stopAnimating()
+                saveButton.isEnabled = !source.isEmpty
+                shareButton.isEnabled = saveButton.isEnabled
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
                 guard let cell = collectionView.dequeueReusableCell(
@@ -120,6 +128,24 @@ extension LyricDecoratingViewController {
                 return attributedString
             }
             .bind(to: highlightingLyricLabel.rx.attributedText)
+            .disposed(by: disposeBag)
+
+        output.occurredError
+            .bind(with: self) { owner, message in
+                owner.showBottomSheet(
+                    content: owner.textPopUpFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.navigationController?.popViewController(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
+                )
+            }
             .disposed(by: disposeBag)
     }
 }

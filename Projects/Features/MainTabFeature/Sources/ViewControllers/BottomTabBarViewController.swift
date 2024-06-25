@@ -1,4 +1,5 @@
 import DesignSystem
+import LogManager
 import RxSwift
 import UIKit
 import Utility
@@ -16,13 +17,12 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
 
     private lazy var tabs: [TabItemView] = {
         var items = [TabItemView]()
-        for _ in 0 ..< 6 {
+        for _ in 0 ..< 5 {
             items.append(TabItemView.newInstance)
         }
         return items
     }()
 
-    #warning("차트를 홈에 적용 시 삭제 요망")
     private lazy var tabItems: [TabItem] = {
         return [
             TabItem(
@@ -30,12 +30,6 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
                 offImage: DesignSystemAsset.TabBar.homeOff.image,
                 onImage: DesignSystemAsset.TabBar.homeOn.image,
                 animateImage: "Home_Tab"
-            ),
-            TabItem(
-                title: "차트",
-                offImage: DesignSystemAsset.TabBar.chartOff.image,
-                onImage: DesignSystemAsset.TabBar.chartOn.image,
-                animateImage: "Chart_Tab"
             ),
             TabItem(
                 title: "검색",
@@ -78,10 +72,10 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
     }
 }
 
-extension BottomTabBarViewController {
-    private func configureUI() {
+private extension BottomTabBarViewController {
+    func configureUI() {
         let startPage: Int = Utility.PreferenceManager.startPage ?? 0
-        DEBUG_LOG("startPage: \(startPage)")
+        LogManager.printDebug("startPage: \(startPage)")
 
         for (index, model) in self.tabItems.enumerated() {
             let tabView = self.tabs[index]
@@ -92,18 +86,19 @@ extension BottomTabBarViewController {
         }
     }
 
-    private func bindNotification() {
+    func bindNotification() {
         NotificationCenter.default.rx
             .notification(.movedTab)
             .subscribe(onNext: { [weak self] notification in
                 guard
-                    let `self` = self,
+                    let self = self,
                     let index = notification.object as? Int,
                     self.tabs.count > index
                 else { return }
 
                 self.handleTap(view: self.tabs[index])
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
 }
 

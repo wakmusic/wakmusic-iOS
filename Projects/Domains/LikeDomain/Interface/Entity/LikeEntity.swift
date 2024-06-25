@@ -10,7 +10,7 @@ import Foundation
 
 public struct LikeEntity {
     public init(
-        status: Int,
+        status: String,
         likes: Int,
         description: String = ""
     ) {
@@ -19,7 +19,7 @@ public struct LikeEntity {
         self.description = description
     }
 
-    public let status: Int
+    public let status: String
     public let likes: Int
     public var description: String = ""
 }

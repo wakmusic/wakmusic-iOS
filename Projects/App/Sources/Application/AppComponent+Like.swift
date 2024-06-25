@@ -1,11 +1,3 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import LikeDomain
 import LikeDomainInterface
@@ -25,12 +17,6 @@ public extension AppComponent {
     var likeRepository: any LikeRepository {
         shared {
             LikeRepositoryImpl(remoteLikeDataSource: remoteLikeDataSource)
-        }
-    }
-
-    var fetchLikeNumOfSongUseCase: any FetchLikeNumOfSongUseCase {
-        shared {
-            FetchLikeNumOfSongUseCaseImpl(likeRepository: likeRepository)
         }
     }
 

@@ -1,5 +1,5 @@
 import DesignSystem
-import LyricDomainInterface
+import ImageDomainInterface
 import SnapKit
 import Then
 import UIKit
@@ -29,7 +29,7 @@ final class LyricDecoratingCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViews()
-        setAutoLayout()
+        setLayout()
         layer.cornerRadius = 4
         clipsToBounds = true
     }
@@ -45,8 +45,8 @@ final class LyricDecoratingCell: UICollectionViewCell {
 }
 
 extension LyricDecoratingCell {
-    func update(model: DecoratingBackgroundEntity) {
-        decoImageView.kf.setImage(with: URL(string: model.image))
+    func update(model: LyricDecoratingBackgroundEntity) {
+        decoImageView.kf.setImage(with: URL(string: model.url))
         descriptionLabel.text = model.name
         descriptionLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
         checkBoxContentView.isHidden = !model.isSelected
@@ -60,7 +60,7 @@ private extension LyricDecoratingCell {
         descriptionContentView.addSubview(descriptionLabel)
     }
 
-    func setAutoLayout() {
+    func setLayout() {
         decoImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

@@ -1,5 +1,7 @@
 import BaseFeature
 import DesignSystem
+import LogManager
+import LyricHighlightingFeatureInterface
 import NeedleFoundation
 import NVActivityIndicatorView
 import ReactorKit
@@ -19,6 +21,7 @@ public final class ArtistViewController:
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     var artistDetailComponent: ArtistDetailComponent!
+    var lyricHighlightingFactory: LyricHighlightingFactory!
     public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
@@ -53,9 +56,17 @@ public final class ArtistViewController:
             })
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
-            .bind(with: self) { owner, artist in
-                let viewController = owner.artistDetailComponent.makeView(model: artist)
-                owner.navigationController?.pushViewController(viewController, animated: true)
+            .bind(with: self) { owner, entity in
+                if entity.id == "jingburger" {
+                    let viewController = owner.lyricHighlightingFactory.makeView(
+                        model: .init(songID: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌")
+                    ).wrapNavigationController
+                    viewController.modalPresentationStyle = .fullScreen
+                    owner.present(viewController, animated: true)
+                } else {
+                    let viewController = owner.artistDetailComponent.makeView(model: entity)
+                    owner.navigationController?.pushViewController(viewController, animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -83,18 +94,20 @@ public final class ArtistViewController:
 
     public static func viewController(
         reactor: ArtistReactor,
-        artistDetailComponent: ArtistDetailComponent
+        artistDetailComponent: ArtistDetailComponent,
+        lyricHighlightingFactory: LyricHighlightingFactory
     ) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.reactor = reactor
         viewController.artistDetailComponent = artistDetailComponent
+        viewController.lyricHighlightingFactory = lyricHighlightingFactory
         return viewController
     }
 }
 
 extension ArtistViewController {
     private func configureUI() {
-        self.view.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.startAnimating()
@@ -108,8 +121,8 @@ extension ArtistViewController {
         layout.headerHeight = 0
         layout.footerHeight = 56.0
 
-        self.collectionView.setCollectionViewLayout(layout, animated: false)
-        self.collectionView.showsVerticalScrollIndicator = false
+        collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.showsVerticalScrollIndicator = false
     }
 }
 

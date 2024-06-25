@@ -8,6 +8,7 @@
 
 import BaseFeature
 import ChartDomainInterface
+import ChartFeatureInterface
 import Foundation
 import NeedleFoundation
 import PlayListDomainInterface
@@ -20,6 +21,7 @@ public protocol HomeDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
+    var chartFactory: any ChartFactory { get }
     var newSongsComponent: NewSongsComponent { get }
 }
 
@@ -32,7 +34,8 @@ public final class HomeComponent: Component<HomeDependency> {
                 fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
             ),
             playlistDetailFactory: dependency.playlistDetailFactory,
-            newSongsComponent: dependency.newSongsComponent
+            newSongsComponent: dependency.newSongsComponent,
+            chartFactory: dependency.chartFactory
         )
     }
 }

@@ -82,6 +82,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         headerView.rx.selectedFilterItem
+            .distinctUntilChanged()
             .bind(with: self) { owner, type in
                 reactor.action.onNext(.changeFilterType(type))
             }
@@ -94,6 +95,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         let sharedState = reactor.state.share()
 
         sharedState.map(\.sortType)
+            .distinctUntilChanged()
             .bind(with: self) { owner, type in
                 owner.headerView.updateSortState(type)
             }
@@ -193,7 +195,9 @@ extension SongSearchResultViewController {
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
-        reactor?.action.onNext(.changeSortType(type))
+        if reactor?.currentState.sortType != type {
+            reactor?.action.onNext(.changeSortType(type))
+        }
     }
 }
 

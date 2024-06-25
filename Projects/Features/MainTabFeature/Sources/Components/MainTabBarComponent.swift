@@ -1,6 +1,5 @@
 import ArtistFeature
 import BaseFeature
-import ChartFeature
 import Foundation
 import HomeFeature
 import MyInfoFeature
@@ -15,7 +14,6 @@ import StorageFeatureInterface
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticeUseCase: any FetchNoticeUseCase { get }
     var homeComponent: HomeComponent { get }
-    var chartComponent: ChartComponent { get }
     var searchFactory: any SearchFactory { get }
     var artistComponent: ArtistComponent { get }
     var storageFactory: any StorageFactory { get }
@@ -32,7 +30,6 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
                 fetchNoticeUseCase: self.dependency.fetchNoticeUseCase
             ),
             homeComponent: self.dependency.homeComponent,
-            chartComponent: self.dependency.chartComponent,
             searchFactory: self.dependency.searchFactory,
             artistComponent: self.dependency.artistComponent,
             storageFactory: self.dependency.storageFactory,

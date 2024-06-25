@@ -3,19 +3,19 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.module(
-    name: ModulePaths.Domain.LyricDomain.rawValue,
+    name: ModulePaths.Domain.ImageDomain.rawValue,
     targets: [
         .interface(
-            module: .domain(.LyricDomain),
+            module: .domain(.ImageDomain),
             dependencies: [
                 .domain(target: .BaseDomain, type: .interface)
             ]
         ),
         .implements(
-            module: .domain(.LyricDomain),
+            module: .domain(.ImageDomain),
             dependencies: [
                 .domain(target: .BaseDomain),
-                .domain(target: .LyricDomain, type: .interface)
+                .domain(target: .ImageDomain, type: .interface)
             ]
         )
     ]
