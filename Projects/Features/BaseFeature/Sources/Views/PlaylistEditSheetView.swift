@@ -13,11 +13,21 @@ public class PlaylistEditSheetView: UIView {
     
     weak var delegate: PlaylistEditSheetDelegate?
 
-    private let editButton: VerticalAlignButton = VerticalAlignButton(title: "편집", image: DesignSystemAsset.PlayListEdit.playlistEdit.image, titleColor: .white ,spacing: .zero)
-    
-    private let shareButton: VerticalAlignButton = VerticalAlignButton(title: "공유하기", image: DesignSystemAsset.PlayListEdit.playlistShare.image, titleColor: .white ,spacing: .zero)
-    
-    private lazy var stackView: UIStackView = UIStackView(arrangedSubviews: [editButton,shareButton]).then {
+    private let editButton: VerticalAlignButton = VerticalAlignButton(
+        title: "편집",
+        image: DesignSystemAsset.PlayListEdit.playlistEdit.image,
+        titleColor: .white,
+        spacing: .zero
+    )
+
+    private let shareButton: VerticalAlignButton = VerticalAlignButton(
+        title: "공유하기",
+        image: DesignSystemAsset.PlayListEdit.playlistShare.image,
+        titleColor: .white,
+        spacing: .zero
+    )
+
+    private lazy var stackView: UIStackView = UIStackView(arrangedSubviews: [editButton, shareButton]).then {
         $0.spacing = 0
         $0.distribution = .fillEqually
         $0.alignment = .fill
