@@ -8,10 +8,11 @@ import Then
 import UIKit
 import Utility
 
-final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>, PlaylistEditSheetViewType,
-                                            SongCartViewType {
+final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
+    PlaylistEditSheetViewType,
+    SongCartViewType {
     var playlisteditSheetView: PlaylistEditSheetView!
-    
+
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -153,7 +154,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 //                #warning("추후 바텀시트로 팝업으로 교체")
 //                reactor.action.onNext(.editButtonDidTap)
                 owner.showplaylistEditSheet(in: owner.view)
-                
             }
             .disposed(by: disposeBag)
 
@@ -184,16 +184,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
-                
+
                 guard let message = message else {
                     return
                 }
-                
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light    )))
-                
+
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in
@@ -382,5 +381,4 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
         DEBUG_LOG(type)
     }
-    
 }

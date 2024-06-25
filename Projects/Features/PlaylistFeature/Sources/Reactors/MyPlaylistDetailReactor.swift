@@ -102,10 +102,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
-            
+
         case let .showtoastMessage(message):
             newState.toastMessage = message
-        
         }
 
         return newState
@@ -201,7 +200,7 @@ private extension MyPlaylistDetailReactor {
 
         var prev = state.dataSource
         prev.private = !prev.private
-        
+
         let message: String = prev.private ? "리스트를 비공개 처리했습니다." : "리스트를 공개 처리했습니다."
 
         return .concat([
