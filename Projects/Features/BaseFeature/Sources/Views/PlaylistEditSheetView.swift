@@ -30,7 +30,7 @@ public class PlaylistEditSheetView: UIView {
         super.init(frame: .zero)
         addViews()
         setLayout()
-        addViews()
+        addAction()
         self.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
     
