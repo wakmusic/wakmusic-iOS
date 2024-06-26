@@ -4,15 +4,15 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct UpdateTitleAndPrivateUseCaseImpl: UpdateTitleAndPrivateUseCase {
-    private let playListRepository: any PlaylistRepository
+    private let playlistRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlaylistRepository
+        playlistRepository: PlaylistRepository
     ) {
-        self.playListRepository = playListRepository
+        self.playlistRepository = playlistRepository
     }
 
     public func execute(key: String, title: String?, isPrivate: Bool?) -> Completable {
-        playListRepository.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
+        playlistRepository.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
     }
 }

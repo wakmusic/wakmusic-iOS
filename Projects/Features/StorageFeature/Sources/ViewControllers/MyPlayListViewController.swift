@@ -31,7 +31,6 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     let playState = PlayState.shared
 
-    let header = MyPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +57,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
         self.tableView.refreshControl = self.refreshControl
 
-        header.delegate = self
-        self.tableView.tableHeaderView = header
+        #warning("tableview 헤더로 리스트 만들기 버튼")
 
         self.tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
 
@@ -162,7 +160,6 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
             .withUnretained(self)
             .bind { owner, flag in
 
-                owner.tableView.tableHeaderView = flag ? nil : owner.header
                 owner.tableView.isEditing = flag
                 owner.tableView.reloadData()
             }
@@ -320,40 +317,6 @@ extension MyPlayListViewController: UITableViewDelegate {
     }
 }
 
-extension MyPlayListViewController: MyPlayListHeaderViewDelegate {
-    public func action(_ type: PurposeType) {
-        guard let userInfo = Utility.PreferenceManager.userInfo else {
-            guard let vc = self.textPopUpFactory.makeView(
-                text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
-                cancelButtonIsHidden: false,
-                confirmButtonText: nil,
-                cancelButtonText: nil,
-                completion: { [weak self] in
-
-                    guard let self else { return }
-
-                    let loginVC = self.signInFactory.makeView()
-                    self.present(loginVC, animated: true)
-                },
-                cancelCompletion: {}
-            ) as? TextPopupViewController else {
-                return
-            }
-
-            self.showBottomSheet(content: vc)
-
-            return
-        }
-
-        switch type {
-        // TODO: UseCase 연결 후
-        case .creation:
-            break
-        default:
-            break
-        }
-    }
-}
 
 extension MyPlayListViewController {
     func scrollToTop() {

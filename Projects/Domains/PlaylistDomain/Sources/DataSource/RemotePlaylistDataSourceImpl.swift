@@ -6,7 +6,7 @@ import RxSwift
 import SongsDomain
 import SongsDomainInterface
 
-public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAPI>, RemotePlayListDataSource {
+public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAPI>, RemotePlaylistDataSource {
     public func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]> {
         request(.fetchRecommendPlaylist)
             .map([SingleRecommendPlayListResponseDTO].self)

@@ -11,15 +11,15 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct FetchRecommendPlaylistUseCaseImpl: FetchRecommendPlaylistUseCase {
-    private let playListRepository: any PlaylistRepository
+    private let playlistRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlaylistRepository
+        playlistRepository: PlaylistRepository
     ) {
-        self.playListRepository = playListRepository
+        self.playlistRepository = playlistRepository
     }
 
     public func execute() -> Single<[RecommendPlaylistEntity]> {
-        playListRepository.fetchRecommendPlaylist()
+        playlistRepository.fetchRecommendPlaylist()
     }
 }

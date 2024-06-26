@@ -4,15 +4,15 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct UploadPlaylistImageUseCaseImpl: UploadPlaylistImageUseCase {
-    private let playListRepository: any PlaylistRepository
+    private let playlistRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlaylistRepository
+        playlistRepository: PlaylistRepository
     ) {
-        self.playListRepository = playListRepository
+        self.playlistRepository = playlistRepository
     }
 
     public func execute(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
-        playListRepository.uploadImage(key: key, model: model)
+        playlistRepository.uploadImage(key: key, model: model)
     }
 }
