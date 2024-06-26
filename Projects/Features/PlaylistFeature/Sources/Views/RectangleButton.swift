@@ -1,11 +1,3 @@
-//
-//  RectangleButton.swift
-//  PlayerFeature
-//
-//  Created by YoungK on 2023/02/28.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import UIKit
 
@@ -16,8 +8,8 @@ internal class RectangleButton: UIButton {
             self.setColor(title: pointColor, border: pointColor)
         } else {
             self.setColor(
-                title: DesignSystemAsset.GrayColor.gray400.color,
-                border: DesignSystemAsset.GrayColor.gray300.color
+                title: DesignSystemAsset.BlueGrayColor.gray400.color,
+                border: DesignSystemAsset.BlueGrayColor.gray300.color
             )
         }
     }

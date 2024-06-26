@@ -26,7 +26,7 @@ public struct PlayListDetailEntity: Equatable {
     }
 
     public let key, title: String
-    public let songs: [SongEntity]
+    public var songs: [SongEntity]
     public let image: String
-    public let `private`: Bool
+    public var `private`: Bool
 }

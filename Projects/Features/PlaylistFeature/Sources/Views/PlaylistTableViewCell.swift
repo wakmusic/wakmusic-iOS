@@ -1,11 +1,3 @@
-//
-//  PlaylistTableViewCell.swift
-//  PlayerFeature
-//
-//  Created by YoungK on 2023/02/28.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import Kingfisher
 import Lottie
@@ -36,7 +28,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
 
     lazy var titleLabel = WMLabel(
         text: "곡 제목",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t6(weight: .medium),
         alignment: .left,
         lineHeight: UIFont.WMFontSystem.t6().lineHeight,
@@ -47,7 +39,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
 
     lazy var artistLabel = WMLabel(
         text: "아티스트명",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t7(weight: .light),
         alignment: .left,
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
@@ -151,7 +143,7 @@ extension PlaylistTableViewCell {
         self.titleLabel.text = song.title
         self.artistLabel.text = song.artist
         self.model = (index, song)
-        self.backgroundColor = song.isSelected ? DesignSystemAsset.GrayColor.gray200.color : UIColor.clear
+        self.backgroundColor = song.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
 
         self.updateButtonHidden(isEditing: isEditing, isPlaying: isPlaying)
         self.updateConstraintPlayImageView(isEditing: isEditing)
