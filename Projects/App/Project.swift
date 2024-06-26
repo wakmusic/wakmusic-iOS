@@ -40,7 +40,7 @@ let targets: [Target] = [
             .domain(target: .LikeDomain),
             .domain(target: .NoticeDomain),
             .domain(target: .SongsDomain),
-            .domain(target: .PlayListDomain),
+            .domain(target: .PlaylistDomain),
             .domain(target: .UserDomain),
             .domain(target: .SearchDomain),
             .domain(target: .ImageDomain)

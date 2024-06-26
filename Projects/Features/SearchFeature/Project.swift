@@ -24,12 +24,12 @@ let project = Project.module(
         ),
         .tests(module: .feature(.SearchFeature), dependencies: [
             .feature(target: .SearchFeature),
-            .domain(target: .PlayListDomain, type: .testing)
+            .domain(target: .PlaylistDomain, type: .testing)
         ]),
 
         .demo(module: .feature(.SearchFeature), dependencies: [
             .feature(target: .SearchFeature),
-            .domain(target: .PlayListDomain, type: .testing),
+            .domain(target: .PlaylistDomain, type: .testing),
             .feature(target: .PlaylistFeature, type: .testing)
         ])
     ]
