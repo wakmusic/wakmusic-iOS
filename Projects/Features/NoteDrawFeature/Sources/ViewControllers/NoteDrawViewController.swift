@@ -28,7 +28,7 @@ public final class NoteDrawViewController: UIViewController {
         alignment: .center,
         lineHeight: 28
     ).then {
-        $0.numberOfLines = 2
+        $0.numberOfLines = 0
     }
 
     private let drawMachineImageView = UIImageView().then {
@@ -150,6 +150,7 @@ private extension NoteDrawViewController {
             .disposed(by: disposeBag)
 
         drawButton.rx.tap
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 UIView.animate(withDuration: 0.3) {
                     owner.hiddenComponent()
@@ -186,6 +187,7 @@ private extension NoteDrawViewController {
             pickBallImageView,
             cloudImageView
         )
+
         // Right Component
         view.addSubviews(
             yellowHeartImageView,
@@ -197,6 +199,7 @@ private extension NoteDrawViewController {
             deepGreenHeartImageView,
             rightBottomNoteImageView
         )
+
         view.addSubviews(
             navigationBarView,
             drawMachineImageView,
@@ -308,7 +311,9 @@ private extension NoteDrawViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         startAnimation()
     }
+}
 
+private extension NoteDrawViewController {
     func startAnimation() {
         // Left Component
         purpleHeartImageView.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
@@ -354,7 +359,7 @@ private extension NoteDrawViewController {
     }
 
     func hiddenComponent() {
-        let animateViews = [
+        let hiddenViews = [
             descriptioniLabel,
             drawMachineImageView,
             purpleHeartImageView,
@@ -371,7 +376,7 @@ private extension NoteDrawViewController {
             rightBottomNoteImageView,
             deepGreenHeartImageView
         ]
-        animateViews.forEach {
+        hiddenViews.forEach {
             $0.alpha = 0
         }
     }
