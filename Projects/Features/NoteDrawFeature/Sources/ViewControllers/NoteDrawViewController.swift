@@ -113,13 +113,17 @@ public final class NoteDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.NoteDraw.noteDrawDeepGreenHeart.image
     }
 
+    private var viewModel: NoteDrawViewModel
+    lazy var input = NoteDrawViewModel.Input()
+    lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
 
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init() {
+    public init(viewModel: NoteDrawViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
