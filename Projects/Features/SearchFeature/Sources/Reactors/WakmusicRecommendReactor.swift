@@ -1,6 +1,6 @@
 import Foundation
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 

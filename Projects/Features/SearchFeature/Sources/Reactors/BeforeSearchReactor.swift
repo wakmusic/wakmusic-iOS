@@ -1,6 +1,6 @@
 import ChartDomainInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import Utility

@@ -1,7 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
-import PlayListDomain
-import PlayListDomainInterface
+import PlaylistDomain
+import PlaylistDomainInterface
 import PlaylistFeature
 import PlaylistFeatureInterface
 import StorageFeature

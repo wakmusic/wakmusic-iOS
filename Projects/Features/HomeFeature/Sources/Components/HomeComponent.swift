@@ -11,7 +11,7 @@ import ChartDomainInterface
 import ChartFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit

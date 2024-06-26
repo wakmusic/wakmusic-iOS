@@ -1,5 +1,5 @@
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 
 public struct AddSongResponseDTO: Decodable {
     public let addedSongCount: Int

@@ -1,5 +1,5 @@
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 
 public struct SingleRecommendPlayListResponseDTO: Decodable {
     public let key, title, imageUrl: String

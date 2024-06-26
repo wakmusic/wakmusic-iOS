@@ -1,6 +1,6 @@
 import XCTest
 
-final class PlayListDomainTests: XCTestCase {
+final class PlaylistDomainTests: XCTestCase {
     override func setUpWithError() throws {}
 
     override func tearDownWithError() throws {}

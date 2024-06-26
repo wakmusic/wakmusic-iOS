@@ -1,7 +1,7 @@
 import BaseFeature
 import DesignSystem
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 import Utility

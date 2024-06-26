@@ -8,7 +8,7 @@
 
 import DesignSystem
 import Kingfisher
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import UIKit
 import Utility
 

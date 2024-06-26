@@ -7,7 +7,7 @@
 //
 
 import DesignSystem
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import UIKit
 import Utility
 

@@ -2,7 +2,7 @@ import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeatureInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface

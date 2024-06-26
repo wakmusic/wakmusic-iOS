@@ -1,5 +1,5 @@
 import BaseDomainInterface
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 import SongsDomainInterface
 

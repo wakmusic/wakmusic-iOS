@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 
 public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {

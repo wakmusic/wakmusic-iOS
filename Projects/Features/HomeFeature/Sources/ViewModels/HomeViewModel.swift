@@ -10,7 +10,7 @@ import BaseFeature
 import ChartDomainInterface
 import Foundation
 import LogManager
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxCocoa
 import RxSwift
 import SongsDomainInterface

@@ -4,7 +4,7 @@ import ChartFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift

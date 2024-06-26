@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import SongsDomain
 import SongsDomainInterface
 import Utility

@@ -3,7 +3,7 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 

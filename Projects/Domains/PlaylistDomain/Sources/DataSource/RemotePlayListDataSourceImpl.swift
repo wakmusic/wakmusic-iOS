@@ -1,7 +1,7 @@
 import BaseDomain
 import BaseDomainInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 import SongsDomain
 import SongsDomainInterface

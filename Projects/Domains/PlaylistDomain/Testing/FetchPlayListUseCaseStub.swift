@@ -1,4 +1,4 @@
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 
 final class FetchPlayListUseCaseStub: FetchRecommendPlayListUseCase {

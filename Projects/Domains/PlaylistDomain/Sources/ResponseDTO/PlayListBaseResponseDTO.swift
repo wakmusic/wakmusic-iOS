@@ -1,5 +1,5 @@
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 
 public struct PlayListBaseResponseDTO: Decodable {
     public let key, imageUrl: String

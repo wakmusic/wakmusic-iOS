@@ -1,5 +1,5 @@
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 
 public protocol FetchSearchPlaylistsUseCase {

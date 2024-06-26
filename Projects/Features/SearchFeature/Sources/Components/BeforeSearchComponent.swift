@@ -3,7 +3,7 @@ import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {

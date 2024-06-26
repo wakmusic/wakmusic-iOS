@@ -4,7 +4,7 @@ import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
-import PlayListDomainInterface
+import PlaylistDomainInterface
 
 public struct AddSongRequest: Encodable {
     var songIds: [String]

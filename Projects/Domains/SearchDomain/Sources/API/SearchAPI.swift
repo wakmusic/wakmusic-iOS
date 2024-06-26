@@ -4,7 +4,7 @@ import ErrorModule
 import Foundation
 import KeychainModule
 import Moya
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import SearchDomainInterface
 import SongsDomainInterface
 
