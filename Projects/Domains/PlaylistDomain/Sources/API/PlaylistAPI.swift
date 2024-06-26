@@ -6,24 +6,7 @@ import KeychainModule
 import Moya
 import PlaylistDomainInterface
 
-public struct AddSongRequest: Encodable {
-    var songIds: [String]
-}
-
-public struct CreatePlayListRequset: Encodable {
-    var title: String
-}
-
-public struct SongsKeyBody: Encodable {
-    var songIds: [String]
-}
-
-public struct TitleAndPrivateRequset: Encodable {
-    var title: String?
-    var `private`: Bool?
-}
-
-public enum PlayListAPI {
+public enum PlaylistAPI {
     case fetchRecommendPlaylist // 추천 플리 불러오기
     case fetchPlaylistDetail(id: String, type: PlaylistType) // 플리 상세 불러오기
     case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
@@ -35,7 +18,7 @@ public enum PlayListAPI {
     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
 }
 
-extension PlayListAPI: WMAPI {
+extension PlaylistAPI: WMAPI {
     public var domain: WMDomain {
         .playlist
     }
@@ -90,16 +73,16 @@ extension PlayListAPI: WMAPI {
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
-            return .requestJSONEncodable(TitleAndPrivateRequset(title: title, private: isPrivate))
+            return .requestJSONEncodable(TitleAndPrivateRequsetDTO(title: title, private: isPrivate))
 
         case let .createPlaylist(title: title):
-            return .requestJSONEncodable(CreatePlayListRequset(title: title))
+            return .requestJSONEncodable(CreatePlaylistRequsetDTO(title: title))
 
         case let .addSongIntoPlaylist(_, songs: songs):
-            return .requestJSONEncodable(AddSongRequest(songIds: songs))
+            return .requestJSONEncodable(AddSongRequestDTO(songIds: songs))
 
         case let .updatePlaylist(_, songs: songs):
-            return .requestJSONEncodable(SongsKeyBody(songIds: songs))
+            return .requestJSONEncodable(SongsKeyRequestDTO(songIds: songs))
 
         case let .removeSongs(_, songs: songs):
             return .requestParameters(
