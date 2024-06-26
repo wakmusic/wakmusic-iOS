@@ -15,6 +15,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
+    private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -47,6 +48,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor: MyInfoReactor,
         profilePopUpComponent: ProfilePopComponent,
         textPopUpFactory: TextPopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
@@ -57,6 +59,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopUpComponent = profilePopUpComponent
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
         viewController.noticeFactory = noticeFactory
@@ -222,9 +225,10 @@ extension MyInfoViewController: EditSheetViewDelegate {
             break
         case .profile:
             let vc = profilePopUpComponent.makeView()
-            self.present(vc, animated: true)
+            self.showEntryKitModal(content: vc, height: 352)
         case .nickname:
-            break
+            guard let vc = multiPurposePopUpFactory.makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController else { return }            
+            self.showEntryKitModal(content: vc, height: 296)
         }
     }
 }

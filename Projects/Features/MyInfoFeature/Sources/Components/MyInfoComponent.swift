@@ -7,6 +7,7 @@ import UIKit
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var faqFactory: any FaqFactory { get }
     var noticeFactory: any NoticeFactory { get }
     var questionFactory: any QuestionFactory { get }
@@ -21,6 +22,7 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             reactor: MyInfoReactor(),
             profilePopUpComponent: dependency.profilePopComponent,
             textPopUpFactory: dependency.textPopUpFactory,
+            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             signInFactory: dependency.signInFactory,
             faqFactory: dependency.faqFactory,
             noticeFactory: dependency.noticeFactory,
