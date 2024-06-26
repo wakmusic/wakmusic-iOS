@@ -166,7 +166,7 @@ private extension MyInfoView {
         hStackViewBottom.snp.makeConstraints {
             $0.height.equalTo(100)
         }
-        
+
         newNotiIndicator.snp.makeConstraints {
             $0.width.height.equalTo(5)
             $0.centerX.equalTo(notiNavigationButton.snp.centerX).offset(27)
