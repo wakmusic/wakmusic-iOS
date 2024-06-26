@@ -108,10 +108,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                         }
                         .asObservable()
                         .subscribe(onNext: { result in
-                            if result.status != 200 { // Created == 201
-                                output.result.onNext(result)
-                                return
-                            }
                             Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?
                                 .update(displayName: AES256.encrypt(string: text))
                             output.result.onNext(BaseEntity(status: 200, description: ""))
