@@ -19,7 +19,7 @@ public struct FetchPlayListDetailUseCaseImpl: FetchPlayListDetailUseCase {
         self.playListRepository = playListRepository
     }
 
-    public func execute(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
+    public func execute(id: String, type: PlaylistType) -> Single<PlayListDetailEntity> {
         playListRepository.fetchPlayListDetail(id: id, type: type)
     }
 }

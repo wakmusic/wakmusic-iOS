@@ -25,7 +25,7 @@ public struct TitleAndPrivateRequset: Encodable {
 
 public enum PlayListAPI {
     case fetchRecommendPlayList // 추천 플리 불러오기
-    case fetchPlayListDetail(id: String, type: PlayListType) // 플리 상세 불러오기
+    case fetchPlayListDetail(id: String, type: PlaylistType) // 플리 상세 불러오기
     case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
     case createPlayList(title: String) // 플리 생성
     case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기

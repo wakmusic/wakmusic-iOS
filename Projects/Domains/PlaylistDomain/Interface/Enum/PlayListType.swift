@@ -1,6 +1,6 @@
 import Foundation
 
-public enum PlayListType {
+public enum PlaylistType {
     case custom
     case wmRecommend
 }

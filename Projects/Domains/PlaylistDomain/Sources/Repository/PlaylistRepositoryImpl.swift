@@ -16,7 +16,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.fetchRecommendPlayList()
     }
 
-    public func fetchPlayListDetail(id: String, type: PlayListType) -> Single<PlayListDetailEntity> {
+    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlayListDetailEntity> {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
 
