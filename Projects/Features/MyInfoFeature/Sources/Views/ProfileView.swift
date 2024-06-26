@@ -111,7 +111,7 @@ extension ProfileView: ProfileStateProtocol {
             placeholder: DesignSystemAsset.MyInfo.iconColor.image,
             options: [
                 .transition(.fade(0.5)),
-                .processor(DownsamplingImageProcessor(size: CGSize(width: 100, height: 100)))
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))
             ]
         )
     }
