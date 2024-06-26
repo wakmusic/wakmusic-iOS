@@ -1,4 +1,6 @@
 import Foundation
+import FruitDrawFeature
+import FruitDrawFeatureInterface
 import MyInfoFeature
 import MyInfoFeatureInterface
 
@@ -41,5 +43,9 @@ extension AppComponent {
 
     var profilePopComponent: ProfilePopComponent {
         ProfilePopComponent(parent: self)
+    }
+
+    var fruitDrawFactory: any FruitDrawFactory {
+        FruitDrawComponent(parent: self)
     }
 }

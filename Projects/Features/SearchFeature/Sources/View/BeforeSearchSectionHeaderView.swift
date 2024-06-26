@@ -25,7 +25,7 @@ final class BeforeSearchSectionHeaderView:
     private let button: UIButton = UIButton().then {
         $0.setTitle("전체보기", for: .normal)
 
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray900.color, for: .normal)
+        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6), for: .normal)
 
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
     }

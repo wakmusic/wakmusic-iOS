@@ -3,12 +3,12 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
-public protocol PlayListDetailDependency: Dependency {
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
+public protocol PlaylistDetailDependency: Dependency {
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
 
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
@@ -20,20 +20,8 @@ public protocol PlayListDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class PlayListDetailComponent: Component<PlayListDetailDependency>, PlaylistDetailFactory {
+public final class PlaylistDetailComponent: Component<PlaylistDetailDependency>, PlaylistDetailFactory {
     public func makeView(id: String, isCustom: Bool) -> UIViewController {
-        return PlayListDetailViewController.viewController(
-            reactor: PlaylistDetailReactor(
-                key: id,
-                type: isCustom ? .custom : .wmRecommend,
-                fetchPlayListDetailUseCase: dependency.fetchPlayListDetailUseCase,
-                updatePlaylistUseCase: dependency.updatePlaylistUseCase,
-                removeSongsUseCase: dependency.removeSongsUseCase,
-                logoutUseCase: dependency.logoutUseCase
-            ),
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory
-        )
+        return UIViewController()
     }
 }

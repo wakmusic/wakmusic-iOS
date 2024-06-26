@@ -14,8 +14,8 @@ public enum WMImageAPI {
     case fetchArtistWithSquare(id: String, version: Int)
     case fetchProfile(name: String, version: Int)
     case fetchPlayList(id: String, version: Int)
-    case fetchRecommendPlayListWithRound(id: String, version: Int)
-    case fetchRecommendPlayListWithSquare(id: String, version: Int)
+    case fetchRecommendPlaylistWithRound(id: String, version: Int)
+    case fetchRecommendPlaylistWithSquare(id: String, version: Int)
     case fetchYoutubeThumbnail(id: String)
     case fetchYoutubeThumbnailHD(id: String)
     case fetchNotice(id: String)
@@ -47,10 +47,10 @@ public extension WMImageAPI {
         case let .fetchPlayList(id, version):
             return WMDOMAIN_IMAGE_PLAYLIST() + "/\(id).png?v=\(version)"
 
-        case let .fetchRecommendPlayListWithSquare(id, version):
+        case let .fetchRecommendPlaylistWithSquare(id, version):
             return WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE() + "/\(id).png?v=\(version)"
 
-        case let .fetchRecommendPlayListWithRound(id, version):
+        case let .fetchRecommendPlaylistWithRound(id, version):
             return WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND() + "/\(id).png?v=\(version)"
 
         case let .fetchYoutubeThumbnail(id):

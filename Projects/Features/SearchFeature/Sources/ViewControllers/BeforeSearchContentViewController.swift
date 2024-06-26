@@ -5,7 +5,7 @@ import DesignSystem
 import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import ReactorKit
 import RxCocoa
@@ -233,7 +233,7 @@ extension BeforeSearchContentViewController {
 
         let recommendCellRegistration = UICollectionView.CellRegistration<
             RecommendPlayListCell,
-            RecommendPlayListEntity
+            RecommendPlaylistEntity
         >(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle

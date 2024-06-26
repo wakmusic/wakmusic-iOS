@@ -16,11 +16,8 @@ public final class WMWarningView: UIView {
         kernValue: -0.5
     )
 
-    public init(
-        frame: CGRect,
-        text: String
-    ) {
-        super.init(frame: frame)
+    public init(text: String) {
+        super.init(frame: .zero)
 
         addSubviews()
 

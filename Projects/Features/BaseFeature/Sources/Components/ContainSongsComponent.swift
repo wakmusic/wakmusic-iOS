@@ -2,14 +2,14 @@ import AuthDomainInterface
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import UIKit
 import UserDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
-    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase { get }
+    var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 
@@ -20,7 +20,7 @@ public final class ContainSongsComponent: Component<ContainSongsDependency>, Con
             viewModel: .init(
                 songs: songs,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
-                addSongIntoPlayListUseCase: dependency.addSongIntoPlayListUseCase,
+                addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
                 logoutUseCase: dependency.logoutUseCase
             )
         )

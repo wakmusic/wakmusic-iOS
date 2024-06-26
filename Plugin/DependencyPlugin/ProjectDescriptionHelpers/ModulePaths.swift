@@ -30,6 +30,7 @@ extension ModulePaths: MicroTargetPathConvertable {
 
 public extension ModulePaths {
     enum Feature: String, MicroTargetPathConvertable {
+        case FruitDrawFeature
         case LyricHighlightingFeature
         case MyInfoFeature
         case MusicDetailFeature
@@ -58,7 +59,7 @@ public extension ModulePaths {
         case FaqDomain
         case LikeDomain
         case NoticeDomain
-        case PlayListDomain
+        case PlaylistDomain
         case SongsDomain
         case UserDomain
     }

@@ -64,7 +64,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        headerView.rx.tapSortButton
+        headerView.rx.didTapSortButton
             .withLatestFrom(sharedState.map(\.sortType)) { $1 }
             .bind(with: self) { owner, sortType in
                 guard let vc = owner.searchSortOptionComponent.makeView(sortType) as? SearchSortOptionViewController
@@ -119,10 +119,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                     owner.dataSource.apply(snapshot, animatingDifferences: true)
 
-                    let warningView = WMWarningView(
-                        frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()),
-                        text: "검색결과가 없습니다."
-                    )
+                    let warningView = WMWarningView(text: "검색결과가 없습니다.")
 
                     if dataSource.isEmpty {
                         owner.collectionView.setBackgroundView(warningView, 100)
