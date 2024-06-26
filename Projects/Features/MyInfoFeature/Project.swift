@@ -18,6 +18,7 @@ let project = Project.module(
                     .feature(target: .BaseFeature),
                     .feature(target: .MyInfoFeature, type: .interface),
                     .feature(target: .SignInFeature, type: .interface),
+                    .feature(target: .FruitDrawFeature, type: .interface),
                     .domain(target: .FaqDomain, type: .interface),
                     .domain(target: .NoticeDomain, type: .interface),
                     .domain(target: .AuthDomain, type: .interface),

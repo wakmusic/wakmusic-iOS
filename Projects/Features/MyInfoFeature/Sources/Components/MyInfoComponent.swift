@@ -1,4 +1,5 @@
 import BaseFeatureInterface
+import FruitDrawFeatureInterface
 import MyInfoFeatureInterface
 import NeedleFoundation
 import SignInFeatureInterface
@@ -12,6 +13,7 @@ public protocol MyInfoDependency: Dependency {
     var questionFactory: any QuestionFactory { get }
     var teamInfoFactory: any TeamInfoFactory { get }
     var settingFactory: any SettingFactory { get }
+    var fruitDrawFactory: any FruitDrawFactory { get }
 }
 
 public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
@@ -24,7 +26,8 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             noticeFactory: dependency.noticeFactory,
             questionFactory: dependency.questionFactory,
             teamInfoFactory: dependency.teamInfoFactory,
-            settingFactory: dependency.settingFactory
+            settingFactory: dependency.settingFactory,
+            fruitDrawFactory: dependency.fruitDrawFactory
         )
     }
 }
