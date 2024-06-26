@@ -355,23 +355,23 @@ private extension NoteDrawViewController {
 
     func startComponentAnimation() {
         // Left Component
-        purpleHeartImageView.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
-        leftNoteImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
-        greenHeartImageView.startMoveAnimate(duration: 4.0, amount: 20, direction: .down)
+        purpleHeartImageView.moveAnimate(duration: 5.0, amount: 30, direction: .up)
+        leftNoteImageView.moveAnimate(duration: 3.0, amount: 30, direction: .up)
+        greenHeartImageView.moveAnimate(duration: 4.0, amount: 20, direction: .down)
         [cloudImageView, pickBallImageView].forEach {
-            $0.startMoveAnimate(duration: 3.0, amount: 30, direction: .down)
+            $0.moveAnimate(duration: 3.0, amount: 30, direction: .down)
         }
 
         // Right Component
-        yellowHeartImageView.startMoveAnimate(duration: 3.0, amount: 20, direction: .down)
+        yellowHeartImageView.moveAnimate(duration: 3.0, amount: 20, direction: .down)
         [rightTopNoteImageView, purpleBallImageView].forEach {
-            $0.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
+            $0.moveAnimate(duration: 5.0, amount: 30, direction: .up)
         }
-        magentaBallImageView.startMoveAnimate(duration: 5.0, amount: 20, direction: .down)
-        orangeBallImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
-        redHeartImageView.startMoveAnimate(duration: 4.0, amount: 15, direction: .up)
+        magentaBallImageView.moveAnimate(duration: 5.0, amount: 20, direction: .down)
+        orangeBallImageView.moveAnimate(duration: 3.0, amount: 30, direction: .up)
+        redHeartImageView.moveAnimate(duration: 4.0, amount: 15, direction: .up)
         [rightBottomNoteImageView, deepGreenHeartImageView].forEach {
-            $0.startMoveAnimate(duration: 5.0, amount: 20, direction: .up)
+            $0.moveAnimate(duration: 5.0, amount: 20, direction: .up)
         }
     }
 

@@ -21,7 +21,7 @@ extension Double {
 }
 
 extension UIView {
-    func startMoveAnimate(
+    func moveAnimate(
         duration: CGFloat,
         amount: CGFloat,
         direction: StartDirection
