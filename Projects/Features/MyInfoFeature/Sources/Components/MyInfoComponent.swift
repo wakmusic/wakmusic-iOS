@@ -1,7 +1,7 @@
 import BaseFeatureInterface
+import FruitDrawFeatureInterface
 import MyInfoFeatureInterface
 import NeedleFoundation
-import FruitDrawFeatureInterface
 import SignInFeatureInterface
 import UIKit
 

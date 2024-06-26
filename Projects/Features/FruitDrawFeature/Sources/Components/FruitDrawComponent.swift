@@ -1,6 +1,6 @@
 import Foundation
-import NeedleFoundation
 import FruitDrawFeatureInterface
+import NeedleFoundation
 import UIKit
 
 public protocol FruitDrawDependency: Dependency {}

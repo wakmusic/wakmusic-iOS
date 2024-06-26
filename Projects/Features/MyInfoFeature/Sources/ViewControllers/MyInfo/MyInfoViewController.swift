@@ -2,9 +2,9 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Foundation
+import FruitDrawFeatureInterface
 import LogManager
 import MyInfoFeatureInterface
-import FruitDrawFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
