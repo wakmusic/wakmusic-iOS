@@ -16,7 +16,8 @@ import Utility
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-final class PlaylistStorageViewController: BaseStoryboardReactorViewController<PlaylistStorageReactor>, SongCartViewType {
+final class PlaylistStorageViewController: BaseStoryboardReactorViewController<PlaylistStorageReactor>,
+    SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -42,7 +43,10 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
     ) -> PlaylistStorageViewController {
-        let viewController = PlaylistStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = PlaylistStorageViewController.viewController(
+            storyBoardName: "Storage",
+            bundle: Bundle.module
+        )
         viewController.reactor = reactor
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
