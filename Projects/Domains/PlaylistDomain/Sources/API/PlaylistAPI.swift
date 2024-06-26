@@ -50,14 +50,13 @@ extension PlaylistAPI: WMAPI {
 
         case let .uploadImage(key: key, _):
             return "/\(key)/image"
-            
+
         case let .subscribePlaylist(key):
             return "/\(key)/subscribe"
-            
+
         case let .unSubscribePlaylist(key):
             return "/\(key)/unsubscribe"
         }
-        
     }
 
     public var method: Moya.Method {
@@ -65,7 +64,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist,. subscribePlaylist, .unSubscribePlaylist:
+        case .createPlaylist, .addSongIntoPlaylist, .subscribePlaylist, .unSubscribePlaylist:
             return .post
 
         case .removeSongs:
@@ -78,7 +77,8 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .unSubscribePlaylist:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist,
+             .unSubscribePlaylist:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -140,7 +140,7 @@ extension PlaylistAPI: WMAPI {
             return .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-                .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .unSubscribePlaylist:
+             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .unSubscribePlaylist:
             return .accessToken
         }
     }

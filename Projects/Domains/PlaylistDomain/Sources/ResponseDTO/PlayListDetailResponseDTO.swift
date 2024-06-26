@@ -4,8 +4,6 @@ import SongsDomain
 import SongsDomainInterface
 import Utility
 
-
-
 public struct SinglePlayListDetailResponseDTO: Decodable {
     public let key: String?
     public let title: String
@@ -13,11 +11,10 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let imageUrl: String
     public let `private`: Bool
     public let user: SinglePlayListDetailResponseDTO.UserResponseDTO
-        
 }
 
-extension SinglePlayListDetailResponseDTO {
-    public struct UserResponseDTO: Decodable {
+public extension SinglePlayListDetailResponseDTO {
+    struct UserResponseDTO: Decodable {
         public let handle: String
         public let name: String
     }
@@ -28,7 +25,7 @@ public extension SinglePlayListDetailResponseDTO {
         PlaylistDetailEntity(
             key: key ?? "",
             title: title,
-            songs: (songs ?? []).map {$0.toDomain()},
+            songs: (songs ?? []).map { $0.toDomain() },
             image: imageUrl,
             private: `private`,
             userId: user.handle,

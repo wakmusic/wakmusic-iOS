@@ -87,13 +87,13 @@ public extension AppComponent {
             UploadPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase {
         shared {
             UnSubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
