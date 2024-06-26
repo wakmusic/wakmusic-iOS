@@ -153,7 +153,8 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
                     owner.hideSongCart()
                 } else {
                     owner.showSongCart(
-                        in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController?.view ?? UIView(),
+                        in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
+                            .rootViewController?.view ?? UIView(),
                         type: .likeSong,
                         selectedSongCount: count,
                         totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
