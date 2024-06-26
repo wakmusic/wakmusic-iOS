@@ -16,7 +16,8 @@ public final class MyInfoComponentStub: MyInfoFactory {
             noticeFactory: NoticeComponentStub(),
             questionFactory: QuestionComponentStub(),
             teamInfoFactory: TeamInfoComponentStub(),
-            settingFactory: SettingComponentStub()
+            settingFactory: SettingComponentStub(),
+            fruitDrawFactory: FruitDrawComponentStub()
         )
     }
 }
