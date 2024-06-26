@@ -20,7 +20,7 @@ let project = Project.module(
                     .feature(target: .MyInfoFeature),
                     .feature(target: .PlaylistFeature, type: .interface),
                     .feature(target: .LyricHighlightingFeature),
-                    .feature(target: .NoteDrawFeature),
+                    .feature(target: .FruitDrawFeature),
                     .domain(target: .NoticeDomain, type: .interface)
                 ]
             )

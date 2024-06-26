@@ -8,10 +8,10 @@ import Then
 import UIKit
 import Utility
 
-public final class NoteDrawViewController: UIViewController {
+public final class FruitDrawViewController: UIViewController {
     private let backgroundImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawBg.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawBg.image
     }
 
     private let navigationBarView = WMNavigationBarView()
@@ -36,7 +36,7 @@ public final class NoteDrawViewController: UIViewController {
 
     private let drawMachineImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawMachine.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawMachine.image
     }
 
     private let drawButton = UIButton(type: .system).then {
@@ -61,72 +61,72 @@ public final class NoteDrawViewController: UIViewController {
     /// Left Component
     private let purpleHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleHeart.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawPurpleHeart.image
     }
 
     private let leftNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawLeftNote.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawLeftNote.image
     }
 
     private let greenHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawGreenHeart.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawGreenHeart.image
     }
 
     private let cloudImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawCloud.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawCloud.image
     }
 
     private let pickBallImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawPinkBall.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawPinkBall.image
     }
 
     /// Right Component
     private let yellowHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawYellowHeart.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawYellowHeart.image
     }
 
     private let rightTopNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawRightTopNote.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawRightTopNote.image
     }
 
     private let purpleBallImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawPurpleBall.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawPurpleBall.image
     }
 
     private let magentaBallImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawMagentaBall.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawMagentaBall.image
     }
 
     private let orangeBallImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawOrangeBall.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawOrangeBall.image
     }
 
     private let redHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawRedHeart.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawRedHeart.image
     }
 
     private let rightBottomNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawRightBottomNote.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawRightBottomNote.image
     }
 
     private let deepGreenHeartImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.NoteDraw.noteDrawDeepGreenHeart.image
+        $0.image = DesignSystemAsset.FruitDraw.fruitDrawDeepGreenHeart.image
     }
 
-    private var viewModel: NoteDrawViewModel
-    lazy var input = NoteDrawViewModel.Input()
+    private var viewModel: FruitDrawViewModel
+    lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
 
@@ -134,7 +134,7 @@ public final class NoteDrawViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init(viewModel: NoteDrawViewModel) {
+    public init(viewModel: FruitDrawViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -157,7 +157,7 @@ public final class NoteDrawViewController: UIViewController {
     }
 }
 
-private extension NoteDrawViewController {
+private extension FruitDrawViewController {
     func bind() {
         dismissButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -195,7 +195,7 @@ private extension NoteDrawViewController {
     }
 }
 
-private extension NoteDrawViewController {
+private extension FruitDrawViewController {
     func addSubViews() {
         view.addSubviews(
             backgroundImageView,
@@ -340,7 +340,7 @@ private extension NoteDrawViewController {
     }
 }
 
-private extension NoteDrawViewController {
+private extension FruitDrawViewController {
     func startLottieAnimation() {
         view.addSubview(lottieAnimationView)
         lottieAnimationView.snp.makeConstraints {

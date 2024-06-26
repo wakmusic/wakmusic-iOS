@@ -4,7 +4,7 @@ import DesignSystem
 import Foundation
 import LogManager
 import MyInfoFeatureInterface
-import NoteDrawFeatureInterface
+import FruitDrawFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
@@ -21,7 +21,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var questionFactory: QuestionFactory! // 문의하기
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
-    private var noteDrawFactory: NoteDrawFactory!
+    private var fruitDrawFactory: FruitDrawFactory!
 
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -50,7 +50,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         questionFactory: QuestionFactory,
         teamInfoFactory: TeamInfoFactory,
         settingFactory: SettingFactory,
-        noteDrawFactory: NoteDrawFactory
+        fruitDrawFactory: FruitDrawFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -60,7 +60,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         viewController.questionFactory = questionFactory
         viewController.teamInfoFactory = teamInfoFactory
         viewController.settingFactory = settingFactory
-        viewController.noteDrawFactory = noteDrawFactory
+        viewController.fruitDrawFactory = fruitDrawFactory
         return viewController
     }
 
@@ -106,7 +106,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    let viewController = owner.noteDrawFactory.makeView().wrapNavigationController
+                    let viewController = owner.fruitDrawFactory.makeView().wrapNavigationController
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
                 case .like:

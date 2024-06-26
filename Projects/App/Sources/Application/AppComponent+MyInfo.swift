@@ -1,8 +1,8 @@
 import Foundation
+import FruitDrawFeature
+import FruitDrawFeatureInterface
 import MyInfoFeature
 import MyInfoFeatureInterface
-import NoteDrawFeature
-import NoteDrawFeatureInterface
 
 extension AppComponent {
     var myInfoFactory: any MyInfoFactory {
@@ -41,7 +41,7 @@ extension AppComponent {
         ServiceInfoComponent(parent: self)
     }
 
-    var noteDrawFactory: any NoteDrawFactory {
-        NoteDrawComponent(parent: self)
+    var fruitDrawFactory: any FruitDrawFactory {
+        FruitDrawComponent(parent: self)
     }
 }

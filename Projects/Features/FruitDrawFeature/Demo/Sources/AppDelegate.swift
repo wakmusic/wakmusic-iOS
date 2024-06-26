@@ -1,4 +1,4 @@
-@testable import NoteDrawFeature
+@testable import FruitDrawFeature
 import UIKit
 
 @main
@@ -10,7 +10,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = NoteDrawViewController(viewModel: .init())
+        window?.rootViewController = FruitDrawViewController(viewModel: .init())
         window?.makeKeyAndVisible()
 
         return true

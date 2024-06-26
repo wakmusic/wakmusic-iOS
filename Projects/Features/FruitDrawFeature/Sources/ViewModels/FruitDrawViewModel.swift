@@ -5,7 +5,7 @@ import RxRelay
 import RxSwift
 import Utility
 
-public final class NoteDrawViewModel: ViewModelType {
+public final class FruitDrawViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -15,7 +15,7 @@ public final class NoteDrawViewModel: ViewModelType {
     public init() {}
 
     public struct Input {
-        let didTapNoteDraw: PublishSubject<Void> = PublishSubject()
+        let didTapFruitDraw: PublishSubject<Void> = PublishSubject()
         let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
@@ -28,9 +28,9 @@ public final class NoteDrawViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
 
-        input.didTapNoteDraw
+        input.didTapFruitDraw
             .flatMap { _ in
-                // TO-DO: NoteDrawUseCase
+                // TO-DO: FruitDrawUseCase
                 return Observable.just("")
             }
             .bind(to: output.dataSource)

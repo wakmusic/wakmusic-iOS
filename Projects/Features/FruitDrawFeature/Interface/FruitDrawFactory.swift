@@ -1,5 +1,5 @@
 import UIKit
 
-public protocol NoteDrawFactory {
+public protocol FruitDrawFactory {
     func makeView() -> UIViewController
 }
