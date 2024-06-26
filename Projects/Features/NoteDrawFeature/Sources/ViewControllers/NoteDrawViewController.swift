@@ -53,10 +53,10 @@ public final class NoteDrawViewController: UIViewController {
         LottieAnimationView(
             name: "Splash_Logo_Main",
             bundle: DesignSystemResources.bundle
-    ).then {
-        $0.loopMode = .playOnce
-        $0.contentMode = .scaleAspectFit
-    }
+        ).then {
+            $0.loopMode = .playOnce
+            $0.contentMode = .scaleAspectFit
+        }
 
     /// Left Component
     private let purpleHeartImageView = UIImageView().then {
