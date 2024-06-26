@@ -10,16 +10,16 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct AddSongIntoPlayListUseCaseImpl: AddSongIntoPlayListUseCase {
-    private let playListRepository: any PlayListRepository
+public struct AddSongIntoPlaylistUseCaseImpl: AddSongIntoPlaylistUseCase {
+    private let playListRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlayListRepository
+        playListRepository: PlaylistRepository
     ) {
         self.playListRepository = playListRepository
     }
 
     public func execute(key: String, songs: [String]) -> Single<AddSongEntity> {
-        playListRepository.addSongIntoPlayList(key: key, songs: songs)
+        playListRepository.addSongIntoPlaylist(key: key, songs: songs)
     }
 }

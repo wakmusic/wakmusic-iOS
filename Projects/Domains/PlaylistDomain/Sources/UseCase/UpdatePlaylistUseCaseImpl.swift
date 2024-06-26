@@ -4,15 +4,15 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct UpdatePlaylistUseCaseImpl: UpdatePlaylistUseCase {
-    private let playListRepository: any PlayListRepository
+    private let playListRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlayListRepository
+        playListRepository: PlaylistRepository
     ) {
         self.playListRepository = playListRepository
     }
 
     public func execute(key: String, songs: [String]) -> Completable {
-        return playListRepository.updatePlayList(key: key, songs: songs)
+        return playListRepository.updatePlaylist(key: key, songs: songs)
     }
 }

@@ -3,7 +3,7 @@ import PlaylistDomainInterface
 import RxSwift
 import SongsDomainInterface
 
-public final class PlayListRepositoryImpl: PlayListRepository {
+public final class PlaylistRepositoryImpl: PlaylistRepository {
     private let remotePlayListDataSource: any RemotePlayListDataSource
 
     public init(
@@ -12,32 +12,32 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         self.remotePlayListDataSource = remotePlayListDataSource
     }
 
-    public func fetchRecommendPlayList() -> Single<[RecommendPlaylistEntity]> {
-        remotePlayListDataSource.fetchRecommendPlayList()
+    public func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]> {
+        remotePlayListDataSource.fetchRecommendPlaylist()
     }
 
-    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
-        remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
+    public func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
+        remotePlayListDataSource.fetchPlaylistDetail(id: id, type: type)
     }
 
     public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
         remotePlayListDataSource.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
     }
 
-    public func createPlayList(title: String) -> Single<PlaylistBaseEntity> {
-        remotePlayListDataSource.createPlayList(title: title)
+    public func createPlaylist(title: String) -> Single<PlaylistBaseEntity> {
+        remotePlayListDataSource.createPlaylist(title: title)
     }
 
     public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
         remotePlayListDataSource.fetchPlaylistSongs(id: id)
     }
 
-    public func updatePlayList(key: String, songs: [String]) -> Completable {
+    public func updatePlaylist(key: String, songs: [String]) -> Completable {
         return remotePlayListDataSource.updatePlaylist(key: key, songs: songs)
     }
 
-    public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
-        remotePlayListDataSource.addSongIntoPlayList(key: key, songs: songs)
+    public func addSongIntoPlaylist(key: String, songs: [String]) -> Single<AddSongEntity> {
+        remotePlayListDataSource.addSongIntoPlaylist(key: key, songs: songs)
     }
 
     public func removeSongs(key: String, songs: [String]) -> Completable {

@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol AddSongIntoPlayListUseCase {
+public protocol AddSongIntoPlaylistUseCase {
     func execute(key: String, songs: [String]) -> Single<AddSongEntity>
 }

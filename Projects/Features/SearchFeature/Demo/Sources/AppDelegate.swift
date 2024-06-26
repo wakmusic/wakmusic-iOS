@@ -19,7 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let wakMucomponent =
 //            WakmusicRecommendViewController(
 //                playlistDetailFactory: PlaylistDetailFactoryStub(),
-//                reactor: WakmusicRecommendReactor(fetchRecommendPlayListUseCase: fetchPlayListUseCase)
+//                reactor: WakmusicRecommendReactor(fetchRecommendPlaylistUseCase: fetchPlayListUseCase)
 //            )
 
 //        let component = SongSearchResultViewController(reactor: SongSearchResultReactor("1234"))

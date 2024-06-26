@@ -11,15 +11,15 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {
-    private let playListRepository: any PlayListRepository
+    private let playListRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlayListRepository
+        playListRepository: PlaylistRepository
     ) {
         self.playListRepository = playListRepository
     }
 
     public func execute(title: String) -> Single<PlaylistBaseEntity> {
-        playListRepository.createPlayList(title: title)
+        playListRepository.createPlaylist(title: title)
     }
 }

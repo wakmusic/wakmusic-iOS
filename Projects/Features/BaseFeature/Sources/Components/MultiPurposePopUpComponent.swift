@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 
 public protocol MultiPurposePopUpDependency: Dependency {
-    var createPlayListUseCase: any CreatePlayListUseCase { get }
+    var createPlaylistUseCase: any CreatePlayListUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
@@ -23,7 +23,7 @@ public final class MultiPurposePopUpComponent: Component<MultiPurposePopUpDepend
             viewModel: .init(
                 type: type,
                 key: key,
-                createPlayListUseCase: dependency.createPlayListUseCase,
+                createPlaylistUseCase: dependency.createPlaylistUseCase,
                 setUserNameUseCase: dependency.setUserNameUseCase,
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 logoutUseCase: dependency.logoutUseCase

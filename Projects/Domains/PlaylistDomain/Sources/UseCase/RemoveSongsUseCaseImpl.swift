@@ -12,10 +12,10 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct RemoveSongsUseCaseImpl: RemoveSongsUseCase {
-    private let playListRepository: any PlayListRepository
+    private let playListRepository: any PlaylistRepository
 
     public init(
-        playListRepository: PlayListRepository
+        playListRepository: PlaylistRepository
     ) {
         self.playListRepository = playListRepository
     }

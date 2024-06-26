@@ -7,14 +7,14 @@ import SongsDomain
 import SongsDomainInterface
 
 public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAPI>, RemotePlayListDataSource {
-    public func fetchRecommendPlayList() -> Single<[RecommendPlaylistEntity]> {
-        request(.fetchRecommendPlayList)
+    public func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]> {
+        request(.fetchRecommendPlaylist)
             .map([SingleRecommendPlayListResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
 
-    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
-        request(.fetchPlayListDetail(id: id, type: type))
+    public func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
+        request(.fetchPlaylistDetail(id: id, type: type))
             .map(SinglePlayListDetailResponseDTO.self)
             .map { $0.toDomain() }
     }
@@ -24,8 +24,8 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .asCompletable()
     }
 
-    public func createPlayList(title: String) -> Single<PlaylistBaseEntity> {
-        request(.createPlayList(title: title))
+    public func createPlaylist(title: String) -> Single<PlaylistBaseEntity> {
+        request(.createPlaylist(title: title))
             .map(PlayListBaseResponseDTO.self)
             .map { $0.toDomain() }
     }
@@ -41,8 +41,8 @@ public final class RemotePlayListDataSourceImpl: BaseRemoteDataSource<PlayListAP
             .asCompletable()
     }
 
-    public func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity> {
-        request(.addSongIntoPlayList(key: key, songs: songs))
+    public func addSongIntoPlaylist(key: String, songs: [String]) -> Single<AddSongEntity> {
+        request(.addSongIntoPlaylist(key: key, songs: songs))
             .map(AddSongResponseDTO.self)
             .map { $0.toDomain() }
     }

@@ -10,8 +10,8 @@ public protocol MyPlayListHeaderViewDelegate: AnyObject {
 }
 
 class MyPlayListHeaderView: UIView {
-    @IBOutlet weak var createPlayListImageView: UIImageView!
-    @IBOutlet weak var createPlayListButton: UIButton!
+    @IBOutlet weak var createPlaylistImageView: UIImageView!
+    @IBOutlet weak var createPlaylistButton: UIButton!
     @IBOutlet weak var createSuperView: UIView!
 
     @IBOutlet weak var loadSuperView: UIView!
@@ -20,7 +20,7 @@ class MyPlayListHeaderView: UIView {
 
     weak var delegate: MyPlayListHeaderViewDelegate?
 
-    @IBAction func createPlayListAction(_ sender: UIButton) {
+    @IBAction func createPlaylistAction(_ sender: UIButton) {
         delegate?.action(.creation)
     }
 
@@ -47,7 +47,7 @@ class MyPlayListHeaderView: UIView {
             self.addSubview(view)
         }
 
-        self.createPlayListImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
+        self.createPlaylistImageView.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
         self.loadPlayListImageView.image = DesignSystemAsset.Storage.share.image
 
         let createAttr = NSMutableAttributedString(
@@ -72,7 +72,7 @@ class MyPlayListHeaderView: UIView {
             view?.layer.borderWidth = 1
         }
 
-        self.createPlayListButton.setAttributedTitle(createAttr, for: .normal)
+        self.createPlaylistButton.setAttributedTitle(createAttr, for: .normal)
         self.loadPlayListButton.setAttributedTitle(loadAttr, for: .normal)
     }
 }

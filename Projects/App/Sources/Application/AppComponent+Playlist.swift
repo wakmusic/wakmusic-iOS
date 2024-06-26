@@ -34,25 +34,25 @@ public extension AppComponent {
         }
     }
 
-    var playListRepository: any PlayListRepository {
+    var playListRepository: any PlaylistRepository {
         shared {
-            PlayListRepositoryImpl(remotePlayListDataSource: remotePlayListDataSource)
+            PlaylistRepositoryImpl(remotePlayListDataSource: remotePlayListDataSource)
         }
     }
 
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase {
         shared {
             FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
         }
     }
 
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
+    var fetchPlaylistDetailUseCase: any FetchPlayListDetailUseCase {
         shared {
             FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
         }
     }
 
-    var createPlayListUseCase: any CreatePlayListUseCase {
+    var createPlaylistUseCase: any CreatePlayListUseCase {
         shared {
             CreatePlayListUseCaseImpl(playListRepository: playListRepository)
         }
@@ -70,9 +70,9 @@ public extension AppComponent {
         }
     }
 
-    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+    var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase {
         shared {
-            AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
+            AddSongIntoPlaylistUseCaseImpl(playListRepository: playListRepository)
         }
     }
 

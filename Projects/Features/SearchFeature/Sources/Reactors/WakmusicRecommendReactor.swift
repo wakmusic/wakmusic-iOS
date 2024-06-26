@@ -6,7 +6,7 @@ import RxSwift
 
 final class WakmusicRecommendReactor: Reactor {
     private var disposeBag: DisposeBag = DisposeBag()
-    private var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+    private var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase
 
     var initialState: State
 
@@ -44,9 +44,9 @@ final class WakmusicRecommendReactor: Reactor {
         return newState
     }
 
-    init(fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase) {
+    init(fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase) {
         LogManager.printDebug("✅ \(Self.self)")
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
         self.initialState = State(
             dataSource: [],
             isLoading: true
@@ -62,7 +62,7 @@ extension WakmusicRecommendReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLodingState(true)),
-            fetchRecommendPlayListUseCase
+            fetchRecommendPlaylistUseCase
                 .execute()
                 .asObservable()
                 .map { Mutation.updateDataSource($0) },

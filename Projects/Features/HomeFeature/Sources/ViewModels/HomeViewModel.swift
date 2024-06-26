@@ -22,16 +22,16 @@ public final class HomeViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     var fetchChartRankingUseCase: FetchChartRankingUseCase
     var fetchNewSongsUseCase: FetchNewSongsUseCase
-    var fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    var fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase
 
     public init(
         fetchChartRankingUseCase: any FetchChartRankingUseCase,
         fetchNewSongsUseCase: any FetchNewSongsUseCase,
-        fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase
+        fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase
     ) {
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
     }
 
     public struct Input {
@@ -60,7 +60,7 @@ public final class HomeViewModel: ViewModelType {
             .catchAndReturn([])
             .asObservable()
 
-        let playList = self.fetchRecommendPlayListUseCase
+        let playList = self.fetchRecommendPlaylistUseCase
             .execute()
             .catchAndReturn([])
             .asObservable()

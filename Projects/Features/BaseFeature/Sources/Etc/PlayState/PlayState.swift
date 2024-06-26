@@ -41,11 +41,11 @@ public final class PlayState {
         )
         .sink { [weak self] playListItems in
             guard let self else { return }
-            self.updatePlayListChangesToLocalDB(playList: playListItems)
+            self.updatePlaylistChangesToLocalDB(playList: playListItems)
         }.store(in: &subscription)
     }
 
-    public func updatePlayListChangesToLocalDB(playList: [PlayListItem]) {
+    public func updatePlaylistChangesToLocalDB(playList: [PlayListItem]) {
         let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
         RealmManager.shared.deleteRealmDB(model: allPlayedLists)
 

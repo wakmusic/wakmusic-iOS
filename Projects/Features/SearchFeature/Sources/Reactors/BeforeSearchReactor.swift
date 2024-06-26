@@ -13,7 +13,7 @@ public struct WrapperDataSourceModel {
 public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
-    private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    private let fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase
     private let fetchCurrentVideoUseCase: FetchCurrentVideoUseCase
 
     public var initialState: State
@@ -40,11 +40,11 @@ public final class BeforeSearchReactor: Reactor {
 
     init(
         fetchCurrentVideoUseCase: FetchCurrentVideoUseCase,
-        fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
+        fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase,
         service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
         self.fetchCurrentVideoUseCase = fetchCurrentVideoUseCase
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
         self.service = service
         self.initialState = State(
             showRecommend: true,
@@ -96,7 +96,7 @@ extension BeforeSearchReactor {
                 fetchCurrentVideoUseCase
                     .execute()
                     .asObservable(),
-                fetchRecommendPlayListUseCase
+                fetchRecommendPlaylistUseCase
                     .execute()
                     .asObservable()
             ).map { Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) },

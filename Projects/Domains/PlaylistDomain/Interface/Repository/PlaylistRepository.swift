@@ -3,7 +3,7 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public protocol RemotePlayListDataSource {
+public protocol PlaylistRepository {
     func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]>
     func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity>
     func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
