@@ -20,7 +20,7 @@ public enum UserAPI {
 }
 
 private struct RequsetProfileModel: Encodable {
-    var type: String
+    var imageName: String
 }
 
 private struct RequsetUserNameModel: Encodable {
@@ -59,11 +59,11 @@ extension UserAPI: WMAPI {
         case .deleteFavoriteList:
             return "/likes"
         case .setProfile:
-            return ""
+            return "/profile/image"
         case .setUserName:
-            return ""
+            return "/profile/name"
         case .withdrawUserInfo:
-            return ""
+            return "/user/delete"
         }
     }
 
@@ -123,7 +123,7 @@ extension UserAPI: WMAPI {
                 encoding: URLEncoding.queryString
             )
         case let .setProfile(image):
-            return .requestJSONEncodable(RequsetProfileModel(type: image))
+            return .requestJSONEncodable(RequsetProfileModel(imageName: image))
         case let .setUserName(name):
             return .requestJSONEncodable(RequsetUserNameModel(name: name))
         case .withdrawUserInfo:

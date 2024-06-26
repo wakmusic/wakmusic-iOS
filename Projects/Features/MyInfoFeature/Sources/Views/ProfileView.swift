@@ -5,9 +5,10 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import Kingfisher
 
 private protocol ProfileStateProtocol {
-    func updateProfileImage(image: UIImage)
+    func updateProfileImage(image: String)
     func updateNickName(nickname: String)
     func updatePlatform(platform: String)
 }
@@ -104,8 +105,15 @@ extension ProfileView {
 }
 
 extension ProfileView: ProfileStateProtocol {
-    func updateProfileImage(image: UIImage) {
-        imageView.image = image
+    func updateProfileImage(image: String) {
+        imageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchProfile(name: image, version: 0).toString),
+            placeholder: DesignSystemAsset.MyInfo.iconColor.image,
+            options: [
+                .transition(.fade(0.5)),
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 100, height: 100)))
+            ]
+        )
     }
     
     func updateNickName(nickname: String) {

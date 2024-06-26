@@ -11,8 +11,9 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
+    private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
@@ -20,7 +21,10 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var questionFactory: QuestionFactory! // 문의하기
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
-
+    
+    var editSheetView: EditSheetView!
+    var bottomSheetView: BottomSheetView!
+    
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -41,6 +45,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
 
     public static func viewController(
         reactor: MyInfoReactor,
+        profilePopUpComponent: ProfilePopComponent,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
@@ -50,6 +55,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         settingFactory: SettingFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
+        viewController.profilePopUpComponent = profilePopUpComponent
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
@@ -68,6 +74,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             }
             .disposed(by: disposeBag)
 
+        reactor.state.map(\.profileImage)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, image in
+                owner.myInfoView.profileView.updateProfileImage(image: image)
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.nickname)
             .distinctUntilChanged()
             .bind(with: self) { owner, nickname in
@@ -90,11 +103,12 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$moreButtonDidTap)
+        reactor.pulse(\.$profileImageDidTap)
             .compactMap { $0 }
-            .bind { _ in
-                #warning("[프로필 변경, 닉네임 수정] 팝업 띄워야 함")
-            }
+            .bind(with: self, onNext: { owner, _ in
+                owner.showEditSheet(in: owner.view, type: .profile)
+                owner.editSheetView.delegate = owner
+            })
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$navigateType)
@@ -151,7 +165,10 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        
+        myInfoView.rx.profileImageDidTap
+            .map { MyInfoReactor.Action.profileImageDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
         myInfoView.rx.drawButtonDidTap
             .map { MyInfoReactor.Action.drawButtonDidTap }
@@ -193,5 +210,21 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
 extension MyInfoViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+extension MyInfoViewController: EditSheetViewDelegate {
+    func buttonTapped(type: EditSheetSelectType) {
+        switch type {
+        case .edit:
+            break
+        case .share:
+            break
+        case .profile:
+            let vc = profilePopUpComponent.makeView()
+            self.present(vc, animated: true)
+        case .nickname:
+            break
+        }
     }
 }

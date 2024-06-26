@@ -8,7 +8,7 @@ import Utility
 final class MyInfoReactor: Reactor {
     enum Action {
         case loginButtonDidTap
-        case moreButtonDidTap
+        case profileImageDidTap
         case drawButtonDidTap
         case likeNavigationDidTap
         case faqNavigationDidTap
@@ -21,9 +21,10 @@ final class MyInfoReactor: Reactor {
 
     enum Mutation {
         case loginButtonDidTap
-        case moreButtonDidTap
+        case profileImageDidTap
         case navigate(NavigateType?)
         case updateIsLoggedIn(Bool)
+        case updateProfileImage(String)
         case updateNickname(String)
         case updatePlatform(String)
     }
@@ -40,10 +41,11 @@ final class MyInfoReactor: Reactor {
 
     struct State {
         var isLoggedIn: Bool
+        var profileImage: String
         var nickname: String
         var platform: String
         @Pulse var loginButtonDidTap: Bool?
-        @Pulse var moreButtonDidTap: Bool?
+        @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
     }
 
@@ -53,6 +55,7 @@ final class MyInfoReactor: Reactor {
     init() {
         self.initialState = .init(
             isLoggedIn: false,
+            profileImage: "",
             nickname: "",
             platform: ""
         )
@@ -63,8 +66,8 @@ final class MyInfoReactor: Reactor {
         switch action {
         case .loginButtonDidTap:
             return loginButtonDidTap()
-        case .moreButtonDidTap:
-            return moreButtonDidTap()
+        case .profileImageDidTap:
+            return profileImageDidTap()
         case .drawButtonDidTap:
             return drawButtonDidTap()
         case .likeNavigationDidTap:
@@ -82,6 +85,7 @@ final class MyInfoReactor: Reactor {
         case let .changeUserInfo(userInfo):
             return .concat(
                 updateIsLoggedIn(userInfo),
+                updateProfileImage(userInfo),
                 updateNickname(userInfo),
                 updatePlatform(userInfo)
             )
@@ -93,16 +97,19 @@ final class MyInfoReactor: Reactor {
         switch mutation {
         case .loginButtonDidTap:
             newState.loginButtonDidTap = true
-
-        case .moreButtonDidTap:
-            newState.moreButtonDidTap = true
-
+            
+        case .profileImageDidTap:
+            newState.profileImageDidTap = true
+            
         case let .navigate(navigate):
             newState.navigateType = navigate
 
         case let .updateIsLoggedIn(isLoggedIn):
             newState.isLoggedIn = isLoggedIn
-
+            
+        case let .updateProfileImage(image):
+            newState.profileImage = image
+            
         case let .updateNickname(nickname):
             newState.nickname = nickname
 
@@ -126,14 +133,19 @@ private extension MyInfoReactor {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
 
+    func updateProfileImage(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        guard let profile = userInfo?.profile else { return .empty() }
+        return .just(.updateProfileImage(profile))
+    }
+    
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        let nickname = userInfo?.name ?? ""
+        guard let nickname = userInfo?.name  else { return .empty() }
         let decrypt = AES256.decrypt(encoded: nickname)
         return .just(.updateNickname(decrypt))
     }
 
     func updatePlatform(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        let platform = userInfo?.platform ?? ""
+        guard let platform = userInfo?.platform else { return .empty() }
         return .just(.updatePlatform(platform))
     }
 
@@ -141,8 +153,8 @@ private extension MyInfoReactor {
         return .just(.loginButtonDidTap)
     }
 
-    func moreButtonDidTap() -> Observable<Mutation> {
-        return .just(.moreButtonDidTap)
+    func profileImageDidTap() -> Observable<Mutation> {
+        return .just(.profileImageDidTap)
     }
 
     func drawButtonDidTap() -> Observable<Mutation> {
