@@ -21,14 +21,8 @@ public protocol PlaylistStorageDependency: Dependency {
 
 public final class PlaylistStorageComponent: Component<PlaylistStorageDependency> {
     public func makeView() -> UIViewController {
-        return MyPlayListViewController.viewController(
-            //            viewModel: .init(
-//                fetchPlayListUseCase: dependency.fetchPlayListUseCase,
-//                editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
-//                deletePlayListUseCase: dependency.deletePlayListUseCase,
-//                logoutUseCase: dependency.logoutUseCase
-//            ),
-            reactor: MyPlaylistReactor(),
+        return PlaylistStorageViewController.viewController(
+            reactor: PlaylistStorageReactor(),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             playlistDetailFactory: dependency.playlistDetailFactory,
             textPopUpFactory: dependency.textPopUpFactory,

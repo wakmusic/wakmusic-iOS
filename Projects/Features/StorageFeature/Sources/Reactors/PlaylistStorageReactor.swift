@@ -5,7 +5,7 @@ import RxCocoa
 import RxSwift
 import UserDomainInterface
 
-final class MyPlaylistReactor: Reactor {
+final class PlaylistStorageReactor: Reactor {
     enum Action {
         case viewDidLoad
         case refresh
@@ -99,7 +99,7 @@ final class MyPlaylistReactor: Reactor {
     }
 }
 
-extension MyPlaylistReactor {
+extension PlaylistStorageReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .just(
             .updateDataSource(

@@ -8,7 +8,7 @@ import UIKit
 
 public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
-    var myPlayListComponent: PlaylistStorageComponent { get }
+    var playlistStorageComponent: PlaylistStorageComponent { get }
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
     var favoriteComponent: FavoriteComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
@@ -18,7 +18,7 @@ public final class StorageComponent: Component<StorageDependency>, StorageFactor
     public func makeView() -> UIViewController {
         return StorageViewController.viewController(
             reactor: StorageReactor(),
-            myPlayListComponent: dependency.myPlayListComponent,
+            playlistStorageComponent: dependency.playlistStorageComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             favoriteComponent: dependency.favoriteComponent,
             textPopUpFactory: dependency.textPopUpFactory,

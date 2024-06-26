@@ -16,7 +16,7 @@ import Utility
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlaylistReactor>, SongCartViewType {
+final class PlaylistStorageViewController: BaseStoryboardReactorViewController<PlaylistStorageReactor>, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -36,13 +36,13 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
     }
 
     static func viewController(
-        reactor: MyPlaylistReactor,
+        reactor: PlaylistStorageReactor,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
-    ) -> MyPlayListViewController {
-        let viewController = MyPlayListViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+    ) -> PlaylistStorageViewController {
+        let viewController = PlaylistStorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
         viewController.reactor = reactor
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
@@ -67,14 +67,14 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
         reactor?.action.onNext(.viewDidLoad)
     }
 
-    override func bind(reactor: MyPlaylistReactor) {
+    override func bind(reactor: PlaylistStorageReactor) {
         super.bind(reactor: reactor)
 
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: MyPlaylistReactor) {
+    override func bindAction(reactor: PlaylistStorageReactor) {
         super.bindAction(reactor: reactor)
 
         let currentState = reactor.state
@@ -111,7 +111,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
             .disposed(by: disposeBag)
     }
 
-    override func bindState(reactor: MyPlaylistReactor) {
+    override func bindState(reactor: PlaylistStorageReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 3)
@@ -243,7 +243,7 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
     }
 }
 
-extension MyPlayListViewController: SongCartViewDelegate {
+extension PlaylistStorageViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         switch type {
         case let .allSelect(flag):
@@ -280,7 +280,7 @@ extension MyPlayListViewController: SongCartViewDelegate {
     }
 }
 
-extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
+extension PlaylistStorageViewController: MyPlayListTableViewCellDelegate {
     public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
@@ -301,7 +301,7 @@ extension MyPlayListViewController: MyPlayListTableViewCellDelegate {
     }
 }
 
-extension MyPlayListViewController: UITableViewDelegate {
+extension PlaylistStorageViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
@@ -316,7 +316,7 @@ extension MyPlayListViewController: UITableViewDelegate {
     }
 }
 
-extension MyPlayListViewController {
+extension PlaylistStorageViewController {
     func scrollToTop() {
         tableView.setContentOffset(.zero, animated: true)
     }
