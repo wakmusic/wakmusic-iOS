@@ -2,7 +2,7 @@ import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeatureInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
@@ -13,7 +13,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var key: String
     let disposeBag: DisposeBag = DisposeBag()
 
-    let createPlayListUseCase: CreatePlayListUseCase!
+    let createPlaylistUseCase: CreatePlaylistUseCase!
     let setUserNameUseCase: SetUserNameUseCase!
     // TODO: 플레이리스트 이름 변경 Usecase
     private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
@@ -34,14 +34,14 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     public init(
         type: PurposeType,
         key: String,
-        createPlayListUseCase: CreatePlayListUseCase,
+        createPlaylistUseCase: CreatePlaylistUseCase,
         setUserNameUseCase: SetUserNameUseCase,
         updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.key = key
         self.type = type
-        self.createPlayListUseCase = createPlayListUseCase
+        self.createPlaylistUseCase = createPlaylistUseCase
         self.setUserNameUseCase = setUserNameUseCase
         self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
         self.logoutUseCase = logoutUseCase
@@ -66,7 +66,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
                 }
                 switch self.type {
                 case .creation:
-                    self.createPlayListUseCase.execute(title: text)
+                    self.createPlaylistUseCase.execute(title: text)
                         .catch { (error: Error) in
                             let wmError = error.asWMError
                             if wmError == .tokenExpired {

@@ -2,14 +2,14 @@ import AuthDomainInterface
 import BaseDomainInterface
 import ErrorModule
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
 
 public final class ContainSongsViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
-    var addSongIntoPlayListUseCase: AddSongIntoPlayListUseCase!
+    var addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
@@ -33,11 +33,11 @@ public final class ContainSongsViewModel: ViewModelType {
     init(
         songs: [String],
         fetchPlayListUseCase: FetchPlayListUseCase!,
-        addSongIntoPlayListUseCase: AddSongIntoPlayListUseCase!,
+        addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!,
         logoutUseCase: LogoutUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase
-        self.addSongIntoPlayListUseCase = addSongIntoPlayListUseCase
+        self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
         self.logoutUseCase = logoutUseCase
         self.songs = songs
     }
@@ -73,7 +73,7 @@ public final class ContainSongsViewModel: ViewModelType {
                 guard let self = self else {
                     return Observable.empty()
                 }
-                return self.addSongIntoPlayListUseCase
+                return self.addSongIntoPlaylistUseCase
                     .execute(key: key, songs: self.songs)
                     .catch { (error: Error) in
                         let wmError = error.asWMError

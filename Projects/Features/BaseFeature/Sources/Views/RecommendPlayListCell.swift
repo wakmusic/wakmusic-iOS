@@ -8,7 +8,7 @@
 
 import DesignSystem
 import Kingfisher
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import UIKit
 import Utility
 
@@ -31,7 +31,7 @@ public class RecommendPlayListCell: UICollectionViewCell {
 }
 
 public extension RecommendPlayListCell {
-    func update(model: RecommendPlayListEntity) {
+    func update(model: RecommendPlaylistEntity) {
         let attributedString = NSMutableAttributedString(
             string: model.title,
             attributes: [

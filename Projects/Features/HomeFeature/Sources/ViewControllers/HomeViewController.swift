@@ -4,7 +4,7 @@ import ChartFeatureInterface
 import DesignSystem
 import LogManager
 import NVActivityIndicatorView
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
@@ -385,7 +385,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 }
 
 extension HomeViewController: RecommendPlayListViewDelegate {
-    public func itemSelected(model: RecommendPlayListEntity) {
+    public func itemSelected(model: RecommendPlaylistEntity) {
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
         let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
         self.navigationController?.pushViewController(playListDetailVc, animated: true)

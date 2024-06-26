@@ -1,19 +1,19 @@
 import ChartDomainInterface
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import Utility
 
 public struct WrapperDataSourceModel {
     let currentVideo: CurrentVideoEntity
-    let recommendPlayList: [RecommendPlayListEntity]
+    let recommendPlayList: [RecommendPlaylistEntity]
 }
 
 public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
-    private let fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase
+    private let fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase
     private let fetchCurrentVideoUseCase: FetchCurrentVideoUseCase
 
     public var initialState: State
@@ -40,11 +40,11 @@ public final class BeforeSearchReactor: Reactor {
 
     init(
         fetchCurrentVideoUseCase: FetchCurrentVideoUseCase,
-        fetchRecommendPlayListUseCase: FetchRecommendPlayListUseCase,
+        fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase,
         service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
         self.fetchCurrentVideoUseCase = fetchCurrentVideoUseCase
-        self.fetchRecommendPlayListUseCase = fetchRecommendPlayListUseCase
+        self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
         self.service = service
         self.initialState = State(
             showRecommend: true,
@@ -96,7 +96,7 @@ extension BeforeSearchReactor {
                 fetchCurrentVideoUseCase
                     .execute()
                     .asObservable(),
-                fetchRecommendPlayListUseCase
+                fetchRecommendPlaylistUseCase
                     .execute()
                     .asObservable()
             ).map { Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) },

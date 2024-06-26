@@ -2,7 +2,7 @@ import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import NVActivityIndicatorView
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import RxSwift
 import UIKit
 import Utility

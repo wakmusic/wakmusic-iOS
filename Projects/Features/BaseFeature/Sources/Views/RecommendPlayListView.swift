@@ -7,12 +7,12 @@
 //
 
 import DesignSystem
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import UIKit
 import Utility
 
 public protocol RecommendPlayListViewDelegate: AnyObject {
-    func itemSelected(model: RecommendPlayListEntity)
+    func itemSelected(model: RecommendPlaylistEntity)
 }
 
 public class RecommendPlayListView: UIView {
@@ -31,7 +31,7 @@ public class RecommendPlayListView: UIView {
         self.setupView()
     }
 
-    public var dataSource: [RecommendPlayListEntity] = [] {
+    public var dataSource: [RecommendPlaylistEntity] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -65,7 +65,7 @@ public extension RecommendPlayListView {
         titleStringLabel.attributedText = attributedString
     }
 
-    static func getViewHeight(model: [RecommendPlayListEntity]) -> CGFloat {
+    static func getViewHeight(model: [RecommendPlaylistEntity]) -> CGFloat {
         guard !model.isEmpty else {
             return 0
         }

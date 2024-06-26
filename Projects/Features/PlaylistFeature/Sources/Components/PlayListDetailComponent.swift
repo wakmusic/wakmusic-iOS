@@ -3,12 +3,12 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import UIKit
 
 public protocol PlaylistDetailDependency: Dependency {
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase { get }
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
 
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }

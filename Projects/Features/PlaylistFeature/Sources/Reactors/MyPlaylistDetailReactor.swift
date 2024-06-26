@@ -1,5 +1,5 @@
 import Foundation
-import PlayListDomainInterface
+import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import SongsDomainInterface
@@ -18,18 +18,18 @@ final class MyPlaylistDetailReactor: Reactor {
 
     enum Mutation {
         case updateEditingState(Bool)
-        case updateDataSource(PlayListDetailEntity)
-        case updateBackUpDataSource(PlayListDetailEntity)
+        case updateDataSource(PlaylistDetailEntity)
+        case updateBackUpDataSource(PlaylistDetailEntity)
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateSelectingStateByIndex(PlayListDetailEntity)
+        case updateSelectingStateByIndex(PlaylistDetailEntity)
         case showtoastMessage(String)
     }
 
     struct State {
         var isEditing: Bool
-        var dataSource: PlayListDetailEntity
-        var backUpDataSource: PlayListDetailEntity
+        var dataSource: PlaylistDetailEntity
+        var backUpDataSource: PlaylistDetailEntity
         var isLoading: Bool
         var selectedCount: Int
         @Pulse var toastMessage: String?
@@ -41,13 +41,13 @@ final class MyPlaylistDetailReactor: Reactor {
     init() {
         self.initialState = State(
             isEditing: false,
-            dataSource: PlayListDetailEntity(
+            dataSource: PlaylistDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
                 private: true
-            ), backUpDataSource: PlayListDetailEntity(
+            ), backUpDataSource: PlaylistDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
@@ -115,7 +115,7 @@ private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            .just(.updateDataSource(PlayListDetailEntity(
+            .just(.updateDataSource(PlaylistDetailEntity(
                 key: "0034",
                 title: "임시플레이리스트 입니다.",
                 songs: fetchData(),
