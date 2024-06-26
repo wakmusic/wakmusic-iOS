@@ -1,4 +1,5 @@
 import UIKit
+@testable import NoteDrawFeature
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -9,9 +10,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .yellow
-        window?.rootViewController = viewController
+        window?.rootViewController = NoteDrawViewController(viewModel: .init())
         window?.makeKeyAndVisible()
 
         return true
