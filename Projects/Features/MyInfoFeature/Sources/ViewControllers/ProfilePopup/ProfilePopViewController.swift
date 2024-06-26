@@ -1,11 +1,3 @@
-//
-//  ProfilePopViewController.swift
-//  DesignSystem
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import NVActivityIndicatorView
 import RxCocoa

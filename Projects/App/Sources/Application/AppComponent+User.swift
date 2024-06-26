@@ -16,10 +16,6 @@ import UserDomainInterface
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
-    var profilePopComponent: ProfilePopComponent {
-        ProfilePopComponent(parent: self)
-    }
-
     var favoriteComponent: FavoriteComponent {
         FavoriteComponent(parent: self)
     }
