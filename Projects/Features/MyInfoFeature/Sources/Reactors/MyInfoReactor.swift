@@ -97,19 +97,19 @@ final class MyInfoReactor: Reactor {
         switch mutation {
         case .loginButtonDidTap:
             newState.loginButtonDidTap = true
-            
+
         case .profileImageDidTap:
             newState.profileImageDidTap = true
-            
+
         case let .navigate(navigate):
             newState.navigateType = navigate
 
         case let .updateIsLoggedIn(isLoggedIn):
             newState.isLoggedIn = isLoggedIn
-            
+
         case let .updateProfileImage(image):
             newState.profileImage = image
-            
+
         case let .updateNickname(nickname):
             newState.nickname = nickname
 
@@ -137,9 +137,9 @@ private extension MyInfoReactor {
         guard let profile = userInfo?.profile else { return .empty() }
         return .just(.updateProfileImage(profile))
     }
-    
+
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        guard let nickname = userInfo?.name  else { return .empty() }
+        guard let nickname = userInfo?.name else { return .empty() }
         let decrypt = AES256.decrypt(encoded: nickname)
         return .just(.updateNickname(decrypt))
     }

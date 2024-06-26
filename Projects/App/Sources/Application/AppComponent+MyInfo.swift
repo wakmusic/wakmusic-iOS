@@ -38,7 +38,7 @@ extension AppComponent {
     var serviceInfoFactory: any ServiceInfoFactory {
         ServiceInfoComponent(parent: self)
     }
-    
+
     var profilePopComponent: ProfilePopComponent {
         ProfilePopComponent(parent: self)
     }

@@ -29,7 +29,7 @@ final class MyInfoView: UIView {
     let contentView = UIView()
 
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
-    
+
     let profileView = ProfileView().then {
         $0.isHidden = true
     }

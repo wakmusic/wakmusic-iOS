@@ -22,10 +22,10 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     private var questionFactory: QuestionFactory! // 문의하기
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
-    
+
     var editSheetView: EditSheetView!
     var bottomSheetView: BottomSheetView!
-    
+
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -83,7 +83,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.profileView.updateProfileImage(image: image)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.nickname)
             .distinctUntilChanged()
             .bind(with: self) { owner, nickname in
@@ -227,7 +227,9 @@ extension MyInfoViewController: EditSheetViewDelegate {
             let vc = profilePopUpComponent.makeView()
             self.showEntryKitModal(content: vc, height: 352)
         case .nickname:
-            guard let vc = multiPurposePopUpFactory.makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController else { return }            
+            guard let vc = multiPurposePopUpFactory
+                .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
+            else { return }
             self.showEntryKitModal(content: vc, height: 296)
         }
     }

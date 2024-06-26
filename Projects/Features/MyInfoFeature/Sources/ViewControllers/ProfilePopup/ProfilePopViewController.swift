@@ -1,10 +1,10 @@
 import DesignSystem
+import ImageDomainInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxRelay
 import RxSwift
 import UIKit
-import ImageDomainInterface
 import Utility
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {
@@ -31,7 +31,10 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     }
 
     public static func viewController(viewModel: ProfilePopViewModel) -> ProfilePopViewController {
-        let viewController = ProfilePopViewController.viewController(storyBoardName: "ProfilePopUp", bundle: Bundle.module)
+        let viewController = ProfilePopViewController.viewController(
+            storyBoardName: "ProfilePopUp",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         return viewController
     }

@@ -1,11 +1,11 @@
 import DesignSystem
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
-import Kingfisher
 
 private protocol ProfileStateProtocol {
     func updateProfileImage(image: String)
@@ -115,7 +115,7 @@ extension ProfileView: ProfileStateProtocol {
             ]
         )
     }
-    
+
     func updateNickName(nickname: String) {
         nameLabel.text = nickname + "님"
         highlightName()

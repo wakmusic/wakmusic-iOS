@@ -1,6 +1,6 @@
 import Foundation
-import RxSwift
 import ImageDomainInterface
+import RxSwift
 
 public struct FetchProfileListUseCaseImpl: FetchProfileListUseCase {
     private let imageRepository: any ImageRepository

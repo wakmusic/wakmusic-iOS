@@ -1,6 +1,6 @@
 import DesignSystem
-import UIKit
 import ImageDomainInterface
+import UIKit
 import Utility
 
 public enum FanType: String {

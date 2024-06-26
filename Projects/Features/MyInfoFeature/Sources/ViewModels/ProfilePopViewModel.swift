@@ -2,11 +2,11 @@ import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
+import ImageDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
-import ImageDomainInterface
 
 public final class ProfilePopViewModel {
     let input = Input()

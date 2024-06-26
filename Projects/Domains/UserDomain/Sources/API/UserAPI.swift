@@ -90,7 +90,6 @@ extension UserAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        
         case .fetchUserInfo:
             return .requestPlain
         case .fetchPlayList:
