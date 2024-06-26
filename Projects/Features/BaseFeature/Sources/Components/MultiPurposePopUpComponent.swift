@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 
 public protocol MultiPurposePopUpDependency: Dependency {
-    var createPlaylistUseCase: any CreatePlayListUseCase { get }
+    var createPlaylistUseCase: any CreatePlaylistUseCase { get }
     var setUserNameUseCase: any SetUserNameUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }

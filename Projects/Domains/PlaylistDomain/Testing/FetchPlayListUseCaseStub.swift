@@ -1,7 +1,7 @@
 import PlaylistDomainInterface
 import RxSwift
 
-final class FetchPlayListUseCaseStub: FetchRecommendPlayListUseCase {
+final class FetchPlayListUseCaseStub: FetchRecommendPlaylistUseCase {
     var fetchData = [
         RecommendPlaylistEntity(
             key: "best",

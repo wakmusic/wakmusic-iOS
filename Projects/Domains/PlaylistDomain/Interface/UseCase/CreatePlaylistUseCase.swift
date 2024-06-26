@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol CreatePlayListUseCase {
+public protocol CreatePlaylistUseCase {
     func execute(title: String) -> Single<PlaylistBaseEntity>
 }

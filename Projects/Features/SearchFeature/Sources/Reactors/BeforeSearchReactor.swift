@@ -13,7 +13,7 @@ public struct WrapperDataSourceModel {
 public final class BeforeSearchReactor: Reactor {
     private let disposeBag: DisposeBag = DisposeBag()
 
-    private let fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase
+    private let fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase
     private let fetchCurrentVideoUseCase: FetchCurrentVideoUseCase
 
     public var initialState: State
@@ -40,7 +40,7 @@ public final class BeforeSearchReactor: Reactor {
 
     init(
         fetchCurrentVideoUseCase: FetchCurrentVideoUseCase,
-        fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase,
+        fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase,
         service: some SearchCommonService = DefaultSearchCommonService.shared
     ) {
         self.fetchCurrentVideoUseCase = fetchCurrentVideoUseCase

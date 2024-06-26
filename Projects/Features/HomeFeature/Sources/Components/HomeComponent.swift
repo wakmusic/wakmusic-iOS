@@ -19,7 +19,7 @@ import UIKit
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
-    var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var chartFactory: any ChartFactory { get }
     var newSongsComponent: NewSongsComponent { get }

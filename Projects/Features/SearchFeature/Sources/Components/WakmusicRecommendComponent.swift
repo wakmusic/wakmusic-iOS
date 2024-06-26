@@ -5,7 +5,7 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol WakmusicRecommendDependency: Dependency {
-    var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
 }
 

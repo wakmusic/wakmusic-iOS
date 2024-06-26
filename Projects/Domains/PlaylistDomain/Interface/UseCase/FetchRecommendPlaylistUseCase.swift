@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchRecommendPlayListUseCase {
+public protocol FetchRecommendPlaylistUseCase {
     func execute() -> Single<[RecommendPlaylistEntity]>
 }

@@ -22,12 +22,12 @@ public final class HomeViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
     var fetchChartRankingUseCase: FetchChartRankingUseCase
     var fetchNewSongsUseCase: FetchNewSongsUseCase
-    var fetchRecommendPlaylistUseCase: FetchRecommendPlayListUseCase
+    var fetchRecommendPlaylistUseCase: FetchRecommendPlaylistUseCase
 
     public init(
         fetchChartRankingUseCase: any FetchChartRankingUseCase,
         fetchNewSongsUseCase: any FetchNewSongsUseCase,
-        fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase
+        fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase
     ) {
         self.fetchChartRankingUseCase = fetchChartRankingUseCase
         self.fetchNewSongsUseCase = fetchNewSongsUseCase

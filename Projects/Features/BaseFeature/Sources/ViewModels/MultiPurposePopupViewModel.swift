@@ -13,7 +13,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var key: String
     let disposeBag: DisposeBag = DisposeBag()
 
-    let createPlaylistUseCase: CreatePlayListUseCase!
+    let createPlaylistUseCase: CreatePlaylistUseCase!
     let setUserNameUseCase: SetUserNameUseCase!
     // TODO: 플레이리스트 이름 변경 Usecase
     private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
@@ -34,7 +34,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     public init(
         type: PurposeType,
         key: String,
-        createPlaylistUseCase: CreatePlayListUseCase,
+        createPlaylistUseCase: CreatePlaylistUseCase,
         setUserNameUseCase: SetUserNameUseCase,
         updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         logoutUseCase: any LogoutUseCase

@@ -10,7 +10,7 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct FetchPlayListDetailUseCaseImpl: FetchPlayListDetailUseCase {
+public struct FetchPlaylistDetailUseCaseImpl: FetchPlaylistDetailUseCase {
     private let playListRepository: any PlaylistRepository
 
     public init(

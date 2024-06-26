@@ -8,7 +8,7 @@ import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
-    var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }

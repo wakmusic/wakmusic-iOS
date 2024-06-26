@@ -40,21 +40,21 @@ public extension AppComponent {
         }
     }
 
-    var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase {
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase {
         shared {
-            FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
+            FetchRecommendPlaylistUseCaseImpl(playListRepository: playListRepository)
         }
     }
 
-    var fetchPlaylistDetailUseCase: any FetchPlayListDetailUseCase {
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase {
         shared {
-            FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+            FetchPlaylistDetailUseCaseImpl(playListRepository: playListRepository)
         }
     }
 
-    var createPlaylistUseCase: any CreatePlayListUseCase {
+    var createPlaylistUseCase: any CreatePlaylistUseCase {
         shared {
-            CreatePlayListUseCaseImpl(playListRepository: playListRepository)
+            CreatePlaylistUseCaseImpl(playListRepository: playListRepository)
         }
     }
 

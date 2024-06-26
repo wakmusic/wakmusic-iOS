@@ -6,7 +6,7 @@ import RxSwift
 
 final class WakmusicRecommendReactor: Reactor {
     private var disposeBag: DisposeBag = DisposeBag()
-    private var fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase
+    private var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase
 
     var initialState: State
 
@@ -44,7 +44,7 @@ final class WakmusicRecommendReactor: Reactor {
         return newState
     }
 
-    init(fetchRecommendPlaylistUseCase: any FetchRecommendPlayListUseCase) {
+    init(fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase) {
         LogManager.printDebug("✅ \(Self.self)")
         self.fetchRecommendPlaylistUseCase = fetchRecommendPlaylistUseCase
         self.initialState = State(
