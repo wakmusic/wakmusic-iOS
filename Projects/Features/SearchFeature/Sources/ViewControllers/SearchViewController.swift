@@ -187,9 +187,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
                     return
                 }
                 // 키보드는 바텀 SafeArea부터 계산되므로 빼야함
-                let window: UIWindow? = UIApplication.shared.windows.first
-                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-                let tmp = keyboardVisibleHeight - safeAreaInsetsBottom - 56 // 탭바 높이 추가
+                let tmp = keyboardVisibleHeight - SAFEAREA_BOTTOM_HEIGHT() - 56 // 탭바 높이 추가
                 self.contentViewBottomConstraint.constant = tmp > 0 ? tmp : 0
             })
             .disposed(by: disposeBag)

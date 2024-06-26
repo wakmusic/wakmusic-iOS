@@ -155,7 +155,7 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
 // MARK: - AppleLoginDelegate
 extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return UIApplication.shared.windows.last!
+        return (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.last ?? .init()
     }
 
     public func authorizationController(
