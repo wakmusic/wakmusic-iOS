@@ -5,7 +5,6 @@ import KeychainModule
 import Moya
 
 public enum UserAPI {
-    case fetchProfileList
     case fetchUserInfo
     case fetchPlayList
     case editPlayListOrder(ids: [String])
@@ -13,7 +12,6 @@ public enum UserAPI {
     case fetchFavoriteSongs
     case editFavoriteSongsOrder(ids: [String])
     case deleteFavoriteList(ids: [String])
-    #warning("엔드포인트 구현되면 추가 필요")
     case setProfile(image: String)
     case setUserName(name: String)
     case withdrawUserInfo
@@ -42,8 +40,6 @@ extension UserAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case .fetchProfileList:
-            return "/profile/list"
         case .fetchUserInfo:
             return "/profile"
         case .fetchPlayList:
@@ -69,8 +65,6 @@ extension UserAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchProfileList:
-            return .get
         case .fetchUserInfo:
             return .get
         case .fetchPlayList:
@@ -96,8 +90,7 @@ extension UserAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchProfileList:
-            return .requestPlain
+        
         case .fetchUserInfo:
             return .requestPlain
         case .fetchPlayList:
@@ -133,8 +126,6 @@ extension UserAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchProfileList:
-            return .none
         default:
             return .accessToken
         }

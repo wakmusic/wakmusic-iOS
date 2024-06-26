@@ -32,12 +32,6 @@ public extension AppComponent {
         }
     }
 
-    var fetchProfileListUseCase: any FetchProfileListUseCase {
-        shared {
-            FetchProfileListUseCaseImpl(userRepository: userRepository)
-        }
-    }
-
     var setProfileUseCase: any SetProfileUseCase {
         shared {
             SetProfileUseCaseImpl(userRepository: userRepository)

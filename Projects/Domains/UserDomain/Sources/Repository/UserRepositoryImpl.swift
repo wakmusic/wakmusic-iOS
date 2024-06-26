@@ -24,10 +24,6 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.fetchUserInfo()
     }
 
-    public func fetchProfileList() -> Single<[ProfileListEntity]> {
-        remoteUserDataSource.fetchProfileList()
-    }
-
     public func setProfile(image: String) -> Single<BaseEntity> {
         remoteUserDataSource.setProfile(image: image)
     }

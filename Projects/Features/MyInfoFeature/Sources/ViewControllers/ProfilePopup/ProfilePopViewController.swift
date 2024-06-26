@@ -4,7 +4,7 @@ import RxCocoa
 import RxRelay
 import RxSwift
 import UIKit
-import UserDomainInterface
+import ImageDomainInterface
 import Utility
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {

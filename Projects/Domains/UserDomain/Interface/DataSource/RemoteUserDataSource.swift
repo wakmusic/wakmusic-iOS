@@ -3,7 +3,6 @@ import Foundation
 import RxSwift
 
 public protocol RemoteUserDataSource {
-    func fetchProfileList() -> Single<[ProfileListEntity]>
     func setProfile(image: String) -> Single<BaseEntity>
     func setUserName(name: String) -> Single<BaseEntity>
     func fetchPlayList() -> Single<[PlayListEntity]>
