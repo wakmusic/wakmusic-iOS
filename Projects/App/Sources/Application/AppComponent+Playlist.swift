@@ -30,7 +30,7 @@ public extension AppComponent {
 
     var remotePlayListDataSource: any RemotePlayListDataSource {
         shared {
-            RemotePlayListDataSourceImpl(keychain: keychain)
+            RemotePlaylistDataSourceImpl(keychain: keychain)
         }
     }
 
