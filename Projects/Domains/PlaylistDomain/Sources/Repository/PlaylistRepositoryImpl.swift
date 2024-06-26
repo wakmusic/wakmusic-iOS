@@ -51,4 +51,8 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func subscribePlaylist(key: String) -> Completable {
         remotePlaylistDataSource.subscribePlaylist(key: key)
     }
+    
+    public func unSubscribePlaylist(key: String) -> Completable {
+        remotePlaylistDataSource.unSubscribePlaylist(key: key)
+    }
 }

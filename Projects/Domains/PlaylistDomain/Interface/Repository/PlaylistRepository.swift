@@ -14,4 +14,5 @@ public protocol PlaylistRepository {
     func removeSongs(key: String, songs: [String]) -> Completable
     func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity>
     func subscribePlaylist(key: String) -> Completable
+    func unSubscribePlaylist(key: String) -> Completable
 }

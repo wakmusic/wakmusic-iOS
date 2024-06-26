@@ -16,6 +16,7 @@ public enum PlaylistAPI {
     case removeSongs(key: String, songs: [String]) // 곡 삭제
     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
     case subscribePlaylist(key: String) // 플레이리스트 구독하기
+    case unSubscribePlaylist(key: String) // 플레이리스트 구독취소하기
     case fetchRecommendPlaylist // 추천 플리 불러오기
 }
 
@@ -52,7 +53,11 @@ extension PlaylistAPI: WMAPI {
             
         case let .subscribePlaylist(key):
             return "/\(key)/subscribe"
+            
+        case let .unSubscribePlaylist(key):
+            return "/\(key)/unsubscribe"
         }
+        
     }
 
     public var method: Moya.Method {
@@ -60,7 +65,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist,. subscribePlaylist:
+        case .createPlaylist, .addSongIntoPlaylist,. subscribePlaylist, .unSubscribePlaylist:
             return .post
 
         case .removeSongs:
@@ -73,7 +78,7 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .unSubscribePlaylist:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -135,7 +140,7 @@ extension PlaylistAPI: WMAPI {
             return .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-                .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist:
+                .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .unSubscribePlaylist:
             return .accessToken
         }
     }

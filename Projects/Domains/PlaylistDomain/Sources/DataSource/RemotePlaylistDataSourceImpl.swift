@@ -62,4 +62,9 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
         request(.subscribePlaylist(key: key))
             .asCompletable()
     }
+    
+    public func unSubscribePlaylist(key: String) -> Completable {
+        request(.subscribePlaylist(key: key))
+            .asCompletable()
+    }
 }
