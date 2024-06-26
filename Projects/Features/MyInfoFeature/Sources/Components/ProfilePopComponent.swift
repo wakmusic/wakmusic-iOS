@@ -2,6 +2,7 @@ import AuthDomainInterface
 import Foundation
 import NeedleFoundation
 import UserDomainInterface
+import ImageDomainInterface
 
 public protocol ProfilePopDependency: Dependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase { get }
