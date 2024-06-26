@@ -17,22 +17,6 @@ public enum UserAPI {
     case withdrawUserInfo
 }
 
-private struct RequsetProfileModel: Encodable {
-    var imageName: String
-}
-
-private struct RequsetUserNameModel: Encodable {
-    var name: String
-}
-
-private struct RequsetEditFavoriteSongs: Encodable {
-    var songIds: [String]
-}
-
-private struct RequsetEditPlayList: Encodable {
-    var playlistKeys: [String]
-}
-
 extension UserAPI: WMAPI {
     public var domain: WMDomain {
         .user
@@ -95,7 +79,7 @@ extension UserAPI: WMAPI {
         case .fetchPlayList:
             return .requestPlain
         case let .editPlayListOrder(ids):
-            return .requestJSONEncodable(RequsetEditPlayList(playlistKeys: ids))
+            return .requestJSONEncodable(EditPlayListOrderRequestDTO(playlistKeys: ids))
         case let .deletePlayList(ids):
             return .requestParameters(
                 parameters: [
@@ -106,7 +90,7 @@ extension UserAPI: WMAPI {
         case .fetchFavoriteSongs:
             return .requestPlain
         case let .editFavoriteSongsOrder(ids):
-            return .requestJSONEncodable(RequsetEditFavoriteSongs(songIds: ids))
+            return .requestJSONEncodable(EditFavoriteSongsOrderRequestDTO(songIds: ids))
         case let .deleteFavoriteList(ids):
             return .requestParameters(
                 parameters: [
@@ -115,9 +99,9 @@ extension UserAPI: WMAPI {
                 encoding: URLEncoding.queryString
             )
         case let .setProfile(image):
-            return .requestJSONEncodable(RequsetProfileModel(imageName: image))
+            return .requestJSONEncodable(SetProfileRequestDTO(imageName: image))
         case let .setUserName(name):
-            return .requestJSONEncodable(RequsetUserNameModel(name: name))
+            return .requestJSONEncodable(SetUserNameRequestDTO(name: name))
         case .withdrawUserInfo:
             return .requestPlain
         }
