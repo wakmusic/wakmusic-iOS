@@ -6,7 +6,7 @@ import PlaylistDomainInterface
 
 enum BeforeVcDataSoruce: Hashable {
     case youtube(model: CurrentVideoEntity)
-    case recommend(model: RecommendPlayListEntity)
+    case recommend(model: RecommendPlaylistEntity)
     case popularList(model: Model)
 
     var title: String {

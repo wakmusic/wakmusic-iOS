@@ -21,7 +21,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         $0.backgroundColor = .clear
     }
 
-    private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlayListEntity> =
+    private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlaylistEntity> =
         createDataSource()
 
     private let playlistDetailFactory: any PlaylistDetailFactory
@@ -115,10 +115,10 @@ extension WakmusicRecommendViewController {
         return UICollectionView(frame: .zero, collectionViewLayout: RecommendCollectionViewLayout())
     }
 
-    private func createDataSource() -> UICollectionViewDiffableDataSource<RecommendSection, RecommendPlayListEntity> {
+    private func createDataSource() -> UICollectionViewDiffableDataSource<RecommendSection, RecommendPlaylistEntity> {
         let recommendCellRegistration = UICollectionView.CellRegistration<
             RecommendPlayListCell,
-            RecommendPlayListEntity
+            RecommendPlaylistEntity
         >(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
@@ -129,10 +129,10 @@ extension WakmusicRecommendViewController {
         }
         let dataSource = UICollectionViewDiffableDataSource<
             RecommendSection,
-            RecommendPlayListEntity
+            RecommendPlaylistEntity
         >(collectionView: collectionView) {
             (
-                collectionView: UICollectionView, indexPath: IndexPath, item: RecommendPlayListEntity
+                collectionView: UICollectionView, indexPath: IndexPath, item: RecommendPlaylistEntity
             ) -> UICollectionViewCell? in
 
             return
@@ -148,7 +148,7 @@ extension WakmusicRecommendViewController {
 
     private func initDataSource() {
         // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<RecommendSection, RecommendPlayListEntity>()
+        var snapshot = NSDiffableDataSourceSnapshot<RecommendSection, RecommendPlaylistEntity>()
 
         snapshot.appendSections([.main])
 

@@ -12,11 +12,11 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         self.remotePlayListDataSource = remotePlayListDataSource
     }
 
-    public func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]> {
+    public func fetchRecommendPlayList() -> Single<[RecommendPlaylistEntity]> {
         remotePlayListDataSource.fetchRecommendPlayList()
     }
 
-    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlayListDetailEntity> {
+    public func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
         remotePlayListDataSource.fetchPlayListDetail(id: id, type: type)
     }
 
@@ -24,7 +24,7 @@ public final class PlayListRepositoryImpl: PlayListRepository {
         remotePlayListDataSource.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate)
     }
 
-    public func createPlayList(title: String) -> Single<PlayListBaseEntity> {
+    public func createPlayList(title: String) -> Single<PlaylistBaseEntity> {
         remotePlayListDataSource.createPlayList(title: title)
     }
 

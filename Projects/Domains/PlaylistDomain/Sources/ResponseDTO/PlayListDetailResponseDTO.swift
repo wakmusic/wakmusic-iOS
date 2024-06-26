@@ -21,8 +21,8 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
 }
 
 public extension SinglePlayListDetailResponseDTO {
-    func toDomain() -> PlayListDetailEntity {
-        PlayListDetailEntity(
+    func toDomain() -> PlaylistDetailEntity {
+        PlaylistDetailEntity(
             key: key ?? "",
             title: title,
             songs: (songs ?? []).map { dto in

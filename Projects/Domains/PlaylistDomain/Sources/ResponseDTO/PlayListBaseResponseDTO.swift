@@ -6,7 +6,7 @@ public struct PlayListBaseResponseDTO: Decodable {
 }
 
 public extension PlayListBaseResponseDTO {
-    func toDomain() -> PlayListBaseEntity {
-        PlayListBaseEntity(key: key, image: imageUrl)
+    func toDomain() -> PlaylistBaseEntity {
+        PlaylistBaseEntity(key: key, image: imageUrl)
     }
 }

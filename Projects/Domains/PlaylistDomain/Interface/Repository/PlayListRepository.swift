@@ -4,10 +4,10 @@ import RxSwift
 import SongsDomainInterface
 
 public protocol PlayListRepository {
-    func fetchRecommendPlayList() -> Single<[RecommendPlayListEntity]>
-    func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlayListDetailEntity>
+    func fetchRecommendPlayList() -> Single<[RecommendPlaylistEntity]>
+    func fetchPlayListDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity>
     func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
-    func createPlayList(title: String) -> Single<PlayListBaseEntity>
+    func createPlayList(title: String) -> Single<PlaylistBaseEntity>
     func fetchPlaylistSongs(id: String) -> Single<[SongEntity]>
     func updatePlayList(key: String, songs: [String]) -> Completable
     func addSongIntoPlayList(key: String, songs: [String]) -> Single<AddSongEntity>

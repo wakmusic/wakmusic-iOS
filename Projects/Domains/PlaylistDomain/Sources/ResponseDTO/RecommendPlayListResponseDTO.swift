@@ -8,8 +8,8 @@ public struct SingleRecommendPlayListResponseDTO: Decodable {
 }
 
 public extension SingleRecommendPlayListResponseDTO {
-    func toDomain() -> RecommendPlayListEntity {
-        RecommendPlayListEntity(
+    func toDomain() -> RecommendPlaylistEntity {
+        RecommendPlaylistEntity(
             key: key,
             title: title,
             image: imageUrl,

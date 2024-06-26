@@ -1,6 +1,6 @@
 import Foundation
 
-public struct RecommendPlayListEntity: Hashable, Equatable {
+public struct RecommendPlaylistEntity: Hashable, Equatable {
     public init(
         key: String,
         title: String,

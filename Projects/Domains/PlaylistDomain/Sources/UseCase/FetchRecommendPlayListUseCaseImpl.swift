@@ -19,7 +19,7 @@ public struct FetchRecommendPlayListUseCaseImpl: FetchRecommendPlayListUseCase {
         self.playListRepository = playListRepository
     }
 
-    public func execute() -> Single<[RecommendPlayListEntity]> {
+    public func execute() -> Single<[RecommendPlaylistEntity]> {
         playListRepository.fetchRecommendPlayList()
     }
 }

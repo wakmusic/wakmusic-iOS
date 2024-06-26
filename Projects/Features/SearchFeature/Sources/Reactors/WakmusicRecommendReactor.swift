@@ -15,12 +15,12 @@ final class WakmusicRecommendReactor: Reactor {
     }
 
     enum Mutation {
-        case updateDataSource([RecommendPlayListEntity])
+        case updateDataSource([RecommendPlaylistEntity])
         case updateLodingState(Bool)
     }
 
     struct State {
-        var dataSource: [RecommendPlayListEntity]
+        var dataSource: [RecommendPlaylistEntity]
         var isLoading: Bool
     }
 

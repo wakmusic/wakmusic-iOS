@@ -3,126 +3,126 @@ import RxSwift
 
 final class FetchPlayListUseCaseStub: FetchRecommendPlayListUseCase {
     var fetchData = [
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "best",
             title: "베스트",
             image: "https://cdn.wakmusic.xyz/playlist/best_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "carol",
             title: "캐롤",
             image: "https://cdn.wakmusic.xyz/playlist/carol_1.png",
             private: false,
             count: 0
         ),
-        RecommendPlayListEntity(
+        RecommendPlaylistEntity(
             key: "competition",
             title: "경쟁",
             image: "https://cdn.wakmusic.xyz/playlist/competition_1.png",
@@ -131,7 +131,7 @@ final class FetchPlayListUseCaseStub: FetchRecommendPlayListUseCase {
         )
     ]
 
-    func execute() -> Single<[RecommendPlayListEntity]> {
+    func execute() -> Single<[RecommendPlaylistEntity]> {
         return Single.create { [fetchData] single in
 
             single(.success(fetchData))

@@ -1,15 +1,7 @@
-//
-//  RecommendPlayListEntity.swift
-//  DomainModuleTests
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import SongsDomainInterface
 
-public struct PlayListDetailEntity: Equatable {
+public struct PlaylistDetailEntity: Equatable {
     public init(
         key: String,
         title: String,

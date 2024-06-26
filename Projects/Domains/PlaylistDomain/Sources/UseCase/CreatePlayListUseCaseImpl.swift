@@ -19,7 +19,7 @@ public struct CreatePlayListUseCaseImpl: CreatePlayListUseCase {
         self.playListRepository = playListRepository
     }
 
-    public func execute(title: String) -> Single<PlayListBaseEntity> {
+    public func execute(title: String) -> Single<PlaylistBaseEntity> {
         playListRepository.createPlayList(title: title)
     }
 }

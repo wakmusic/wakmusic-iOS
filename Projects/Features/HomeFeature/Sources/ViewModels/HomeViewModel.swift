@@ -16,7 +16,7 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-typealias HomeUseCase = Observable<([ChartRankingEntity], [NewSongsEntity], [RecommendPlayListEntity])>
+typealias HomeUseCase = Observable<([ChartRankingEntity], [NewSongsEntity], [RecommendPlaylistEntity])>
 
 public final class HomeViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
@@ -44,7 +44,7 @@ public final class HomeViewModel: ViewModelType {
     public struct Output {
         let chartDataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
         let newSongDataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
-        let playListDataSource: BehaviorRelay<[RecommendPlayListEntity]> = BehaviorRelay(value: [])
+        let playListDataSource: BehaviorRelay<[RecommendPlaylistEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {

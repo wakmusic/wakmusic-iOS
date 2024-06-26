@@ -7,7 +7,7 @@ import Utility
 
 public struct WrapperDataSourceModel {
     let currentVideo: CurrentVideoEntity
-    let recommendPlayList: [RecommendPlayListEntity]
+    let recommendPlayList: [RecommendPlaylistEntity]
 }
 
 public final class BeforeSearchReactor: Reactor {

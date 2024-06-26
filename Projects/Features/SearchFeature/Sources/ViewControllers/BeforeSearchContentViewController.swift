@@ -233,7 +233,7 @@ extension BeforeSearchContentViewController {
 
         let recommendCellRegistration = UICollectionView.CellRegistration<
             RecommendPlayListCell,
-            RecommendPlayListEntity
+            RecommendPlaylistEntity
         >(cellNib: UINib(
             nibName: "RecommendPlayListCell",
             bundle: BaseFeatureResources.bundle
