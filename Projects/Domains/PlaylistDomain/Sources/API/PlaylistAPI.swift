@@ -7,7 +7,6 @@ import Moya
 import PlaylistDomainInterface
 
 public enum PlaylistAPI {
-    case fetchRecommendPlaylist // 추천 플리 불러오기
     case fetchPlaylistDetail(id: String, type: PlaylistType) // 플리 상세 불러오기
     case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
     case createPlaylist(title: String) // 플리 생성
@@ -16,6 +15,8 @@ public enum PlaylistAPI {
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
+    case subscribePlaylist(key: String) // 플레이리스트 구독하기
+    case fetchRecommendPlaylist // 추천 플리 불러오기
 }
 
 extension PlaylistAPI: WMAPI {
@@ -48,6 +49,9 @@ extension PlaylistAPI: WMAPI {
 
         case let .uploadImage(key: key, _):
             return "/\(key)/image"
+            
+        case let .subscribePlaylist(key):
+            return "/\(key)/subscribe"
         }
     }
 
@@ -56,7 +60,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist:
+        case .createPlaylist, .addSongIntoPlaylist,. subscribePlaylist:
             return .post
 
         case .removeSongs:
@@ -69,7 +73,7 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -131,7 +135,7 @@ extension PlaylistAPI: WMAPI {
             return .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-             .removeSongs, .updateTitleAndPrivate, .uploadImage:
+                .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist:
             return .accessToken
         }
     }
