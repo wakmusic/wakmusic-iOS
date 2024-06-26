@@ -77,6 +77,10 @@ final class MyInfoView: UIView {
         title: "설정",
         image: DesignSystemAsset.MyInfo.gear.image
     )
+    let newNotiIndicator = UIView().then {
+        $0.backgroundColor = .red
+        $0.layer.cornerRadius = 2.5
+    }
 
     init() {
         super.init(frame: .zero)
@@ -99,7 +103,8 @@ private extension MyInfoView {
             loginWarningView,
             profileView,
             drawButtonView,
-            vStackView
+            vStackView,
+            newNotiIndicator
         )
         vStackView.addArrangedSubviews(
             hStackViewTop,
@@ -160,6 +165,12 @@ private extension MyInfoView {
 
         hStackViewBottom.snp.makeConstraints {
             $0.height.equalTo(100)
+        }
+        
+        newNotiIndicator.snp.makeConstraints {
+            $0.width.height.equalTo(5)
+            $0.centerX.equalTo(notiNavigationButton.snp.centerX).offset(27)
+            $0.centerY.equalTo(notiNavigationButton.snp.centerY).offset(12)
         }
     }
 }
