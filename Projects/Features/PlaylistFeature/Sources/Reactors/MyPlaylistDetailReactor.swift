@@ -46,13 +46,17 @@ final class MyPlaylistDetailReactor: Reactor {
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ), backUpDataSource: PlaylistDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ),
             isLoading: false,
             selectedCount: 0
@@ -120,7 +124,9 @@ private extension MyPlaylistDetailReactor {
                 title: "임시플레이리스트 입니다.",
                 songs: fetchData(),
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ))),
             .just(.updateLoadingState(false))
         ])

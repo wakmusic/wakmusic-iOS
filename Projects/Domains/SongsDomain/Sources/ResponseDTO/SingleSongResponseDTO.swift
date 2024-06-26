@@ -13,7 +13,8 @@ import Utility
 public struct SingleSongResponseDTO: Decodable {
     public let songID, title: String
     public let artists: [String]
-    public let date, views, likes: Int
+    public let views, likes: Int
+    public let date: Double
     public let karaokeNumber: SingleSongResponseDTO.KaraokeNumber
 
     enum CodingKeys: String, CodingKey {
@@ -39,7 +40,7 @@ public extension SingleSongResponseDTO {
             reaction: "",
             views: views,
             last: 0,
-            date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
+            date: (date / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             karaokeNumber: .init(TJ: karaokeNumber.TJ, KY: karaokeNumber.KY)
         )
     }
