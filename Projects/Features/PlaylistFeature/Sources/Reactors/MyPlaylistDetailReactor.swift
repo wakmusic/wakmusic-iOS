@@ -6,9 +6,8 @@ import SongsDomainInterface
 import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
-    
     let key: String
-    
+
     enum Action {
         case viewDidLoad
         case itemDidTap(Int)

@@ -1,10 +1,10 @@
+import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
 import NeedleFoundation
-import UIKit
-import PlaylistFeatureInterface
 import PlaylistDomainInterface
-import AuthDomainInterface
+import PlaylistFeatureInterface
+import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
     #warning("추후 주입")
@@ -14,7 +14,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
-    
+
     var logoutUseCase: any LogoutUseCase { get }
 
     var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
@@ -27,6 +27,4 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
     public func makeView(key: String) -> UIViewController {
         return MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor(key: key))
     }
-    
-
 }
