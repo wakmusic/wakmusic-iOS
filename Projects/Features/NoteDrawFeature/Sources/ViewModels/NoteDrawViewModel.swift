@@ -5,7 +5,6 @@ import RxRelay
 import RxSwift
 import Utility
 
-#warning("Required NoteDraw UseCase")
 public final class NoteDrawViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
 
@@ -23,6 +22,7 @@ public final class NoteDrawViewModel: ViewModelType {
     public struct Output {
         let dataSource: PublishRelay<String> = PublishRelay()
         let showToast: PublishSubject<String> = PublishSubject()
+        let showRewardNote: PublishRelay<String> = PublishRelay()
     }
 
     public func transform(from input: Input) -> Output {
@@ -30,6 +30,7 @@ public final class NoteDrawViewModel: ViewModelType {
 
         input.didTapNoteDraw
             .flatMap { _ in
+                // TO-DO: NoteDrawUseCase
                 return Observable.just("")
             }
             .bind(to: output.dataSource)

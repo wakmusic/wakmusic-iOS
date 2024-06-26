@@ -1,5 +1,6 @@
 import DesignSystem
 import LogManager
+import Lottie
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -20,6 +21,8 @@ public final class NoteDrawViewController: UIViewController {
             .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
+
+    private let componentContentView = UIView()
 
     private let descriptioniLabel = WMLabel(
         text: "두근.. 두근...\n열매를 뽑아주세요!",
@@ -44,6 +47,15 @@ public final class NoteDrawViewController: UIViewController {
         $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
+    }
+
+    private lazy var lottieAnimationView =
+        LottieAnimationView(
+            name: "Splash_Logo_Main",
+            bundle: DesignSystemResources.bundle
+    ).then {
+        $0.loopMode = .playOnce
+        $0.contentMode = .scaleAspectFit
     }
 
     /// Left Component
@@ -156,8 +168,12 @@ private extension NoteDrawViewController {
         drawButton.rx.tap
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .bind(with: self) { owner, _ in
-                UIView.animate(withDuration: 0.3) {
-                    owner.hiddenComponent()
+                owner.startLottieAnimation()
+                UIView.animate(
+                    withDuration: 0.3,
+                    delay: 0.5
+                ) {
+                    owner.showHideComponent(isHide: true)
                 }
             }
             .disposed(by: disposeBag)
@@ -170,9 +186,9 @@ private extension NoteDrawViewController {
         )
         .bind(with: self, onNext: { owner, notification in
             if notification == UIApplication.didEnterBackgroundNotification {
-                owner.removeAnimation()
+                owner.removeComponentAnimation()
             } else {
-                owner.startAnimation()
+                owner.startComponentAnimation()
             }
         })
         .disposed(by: disposeBag)
@@ -181,10 +197,14 @@ private extension NoteDrawViewController {
 
 private extension NoteDrawViewController {
     func addSubViews() {
-        view.addSubview(backgroundImageView)
+        view.addSubviews(
+            backgroundImageView,
+            drawMachineImageView,
+            componentContentView
+        )
 
         // Left Component
-        view.addSubviews(
+        componentContentView.addSubviews(
             purpleHeartImageView,
             leftNoteImageView,
             greenHeartImageView,
@@ -193,7 +213,7 @@ private extension NoteDrawViewController {
         )
 
         // Right Component
-        view.addSubviews(
+        componentContentView.addSubviews(
             yellowHeartImageView,
             purpleBallImageView,
             rightTopNoteImageView,
@@ -206,7 +226,6 @@ private extension NoteDrawViewController {
 
         view.addSubviews(
             navigationBarView,
-            drawMachineImageView,
             descriptioniLabel,
             drawButton
         )
@@ -215,6 +234,10 @@ private extension NoteDrawViewController {
 
     func setLayout() {
         backgroundImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
+        componentContentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
@@ -313,12 +336,24 @@ private extension NoteDrawViewController {
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        startAnimation()
+        startComponentAnimation()
     }
 }
 
 private extension NoteDrawViewController {
-    func startAnimation() {
+    func startLottieAnimation() {
+        view.addSubview(lottieAnimationView)
+        lottieAnimationView.snp.makeConstraints {
+            $0.width.equalTo(275)
+            $0.height.equalTo(200)
+            $0.center.equalToSuperview()
+        }
+        lottieAnimationView.play { _ in
+            self.input.endedLottieAnimation.onNext(())
+        }
+    }
+
+    func startComponentAnimation() {
         // Left Component
         purpleHeartImageView.startMoveAnimate(duration: 5.0, amount: 30, direction: .up)
         leftNoteImageView.startMoveAnimate(duration: 3.0, amount: 30, direction: .up)
@@ -340,48 +375,19 @@ private extension NoteDrawViewController {
         }
     }
 
-    func removeAnimation() {
-        let animateViews = [
-            purpleHeartImageView,
-            leftNoteImageView,
-            greenHeartImageView,
-            cloudImageView,
-            pickBallImageView,
-            yellowHeartImageView,
-            rightTopNoteImageView,
-            purpleBallImageView,
-            magentaBallImageView,
-            orangeBallImageView,
-            redHeartImageView,
-            rightBottomNoteImageView,
-            deepGreenHeartImageView
-        ]
-        animateViews.forEach {
+    func removeComponentAnimation() {
+        componentContentView.subviews.forEach {
             $0.transform = .identity
             $0.layer.removeAllAnimations()
         }
     }
 
-    func hiddenComponent() {
-        let hiddenViews = [
-            descriptioniLabel,
-            drawMachineImageView,
-            purpleHeartImageView,
-            leftNoteImageView,
-            greenHeartImageView,
-            cloudImageView,
-            pickBallImageView,
-            yellowHeartImageView,
-            rightTopNoteImageView,
-            purpleBallImageView,
-            magentaBallImageView,
-            orangeBallImageView,
-            redHeartImageView,
-            rightBottomNoteImageView,
-            deepGreenHeartImageView
-        ]
-        hiddenViews.forEach {
-            $0.alpha = 0
+    func showHideComponent(isHide: Bool) {
+        componentContentView.subviews.forEach {
+            $0.alpha = isHide ? 0 : 1
         }
+        descriptioniLabel.alpha = isHide ? 0 : 1
+        drawMachineImageView.alpha = descriptioniLabel.alpha
+        drawButton.alpha = descriptioniLabel.alpha
     }
 }
