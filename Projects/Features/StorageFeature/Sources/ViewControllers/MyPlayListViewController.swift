@@ -31,7 +31,6 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
 
     let playState = PlayState.shared
 
-
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -316,7 +315,6 @@ extension MyPlayListViewController: UITableViewDelegate {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
 }
-
 
 extension MyPlayListViewController {
     func scrollToTop() {
