@@ -47,7 +47,7 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
     @IBOutlet weak var favoriteFakeView: UIView!
 
     public var bottomSheetView: BottomSheetView!
-    private var myPlayListComponent: MyPlayListComponent!
+    private var myPlayListComponent: PlaylistStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     private var favoriteComponent: FavoriteComponent!
     private var textPopUpFactory: TextPopUpFactory!
@@ -80,7 +80,7 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
 
     public static func viewController(
         reactor: StorageReactor,
-        myPlayListComponent: MyPlayListComponent,
+        myPlayListComponent: PlaylistStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
         favoriteComponent: FavoriteComponent,
         textPopUpFactory: TextPopUpFactory,

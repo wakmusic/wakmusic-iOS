@@ -20,8 +20,8 @@ public extension AppComponent {
         PlaylistDetailComponent(parent: self)
     }
 
-    var myPlayListComponent: MyPlayListComponent {
-        MyPlayListComponent(parent: self)
+    var myPlayListComponent: PlaylistStorageComponent {
+        PlaylistStorageComponent(parent: self)
     }
 
     var playlistFactory: any PlaylistFactory {
