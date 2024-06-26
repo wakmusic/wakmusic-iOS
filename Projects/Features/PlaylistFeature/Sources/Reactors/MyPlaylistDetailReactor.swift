@@ -6,6 +6,9 @@ import SongsDomainInterface
 import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
+    
+    let key: String
+    
     enum Action {
         case viewDidLoad
         case itemDidTap(Int)
@@ -38,7 +41,8 @@ final class MyPlaylistDetailReactor: Reactor {
     var initialState: State
     #warning("추후 usecase 연결")
 
-    init() {
+    init(key: String) {
+        self.key = key
         self.initialState = State(
             isEditing: false,
             dataSource: PlaylistDetailEntity(
