@@ -56,7 +56,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYJ-6Y-yl7">
-                                                <rect key="frame" x="333" y="0.0" width="40" height="48"/>
+                                                <rect key="frame" x="20" y="0.0" width="40" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="WL3-S3-ZEW"/>
                                                 </constraints>
@@ -67,10 +67,10 @@
                                         <constraints>
                                             <constraint firstItem="U6e-Nh-ABD" firstAttribute="centerY" secondItem="fiS-0z-9id" secondAttribute="centerY" id="4J1-yd-YMP"/>
                                             <constraint firstAttribute="height" constant="48" id="4do-dn-5V3"/>
+                                            <constraint firstItem="iYJ-6Y-yl7" firstAttribute="leading" secondItem="fiS-0z-9id" secondAttribute="leading" constant="20" id="7G5-7o-ZLq"/>
                                             <constraint firstAttribute="bottom" secondItem="iYJ-6Y-yl7" secondAttribute="bottom" id="FwW-OO-kfr"/>
                                             <constraint firstItem="iYJ-6Y-yl7" firstAttribute="top" secondItem="fiS-0z-9id" secondAttribute="top" id="Lts-4s-l9r"/>
                                             <constraint firstItem="U6e-Nh-ABD" firstAttribute="centerX" secondItem="fiS-0z-9id" secondAttribute="centerX" id="M5C-co-oKj"/>
-                                            <constraint firstAttribute="trailing" secondItem="iYJ-6Y-yl7" secondAttribute="trailing" constant="20" id="lQ3-3n-50O"/>
                                         </constraints>
                                     </view>
                                 </subviews>

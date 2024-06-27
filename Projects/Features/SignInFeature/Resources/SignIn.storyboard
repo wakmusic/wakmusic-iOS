@@ -173,20 +173,23 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cUj-HD-yw7">
-                                                <rect key="frame" x="0.0" y="473.99999999999994" width="393" height="84.333333333333314"/>
+                                                <rect key="frame" x="0.0" y="474" width="393" height="82"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85y-ci-J7X">
-                                                        <rect key="frame" x="20" y="0.0" width="172.66666666666666" height="46.333333333333336"/>
+                                                        <rect key="frame" x="20" y="0.0" width="172.66666666666666" height="44"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="44" id="sO5-1C-Dg5"/>
+                                                        </constraints>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKV-nS-HgI">
-                                                        <rect key="frame" x="200.66666666666663" y="0.0" width="172.33333333333337" height="46.333333333333336"/>
+                                                        <rect key="frame" x="200.66666666666663" y="0.0" width="172.33333333333337" height="44"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-2H-QeH">
-                                                        <rect key="frame" x="20" y="66.333333333333371" width="353" height="18"/>
+                                                        <rect key="frame" x="20" y="64" width="353" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="18" id="8Sb-vh-E9i"/>
                                                         </constraints>
@@ -210,10 +213,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJM-dB-a5k">
-                                                <rect key="frame" x="0.0" y="558.33333333333337" width="393" height="285.66666666666663"/>
+                                                <rect key="frame" x="0.0" y="556" width="393" height="288"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright 2024. WAKTAVERS MUSIC. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cz7-l6-Ock">
-                                                        <rect key="frame" x="20" y="257.66666666666663" width="353" height="18"/>
+                                                        <rect key="frame" x="20" y="260" width="353" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="uZw-Ip-qBr"/>
                                                         </constraints>
@@ -246,7 +249,6 @@
                         <constraints>
                             <constraint firstItem="7ZR-UJ-iSp" firstAttribute="bottom" secondItem="mjm-06-Do6" secondAttribute="bottom" id="FZA-8K-D9B"/>
                             <constraint firstItem="mjm-06-Do6" firstAttribute="top" secondItem="7ZR-UJ-iSp" secondAttribute="top" id="HOc-4r-BR6"/>
-                            <constraint firstItem="85y-ci-J7X" firstAttribute="height" secondItem="9y4-6d-KV6" secondAttribute="height" multiplier="44:812" id="eDu-g0-8tC"/>
                             <constraint firstItem="7ZR-UJ-iSp" firstAttribute="trailing" secondItem="mjm-06-Do6" secondAttribute="trailing" id="erm-2i-qOJ"/>
                             <constraint firstItem="mjm-06-Do6" firstAttribute="leading" secondItem="7ZR-UJ-iSp" secondAttribute="leading" id="gdM-Pf-GNr"/>
                             <constraint firstItem="aJM-dB-a5k" firstAttribute="bottom" secondItem="7ZR-UJ-iSp" secondAttribute="bottom" id="puo-Sk-9eT"/>

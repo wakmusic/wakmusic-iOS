@@ -1,8 +1,7 @@
-import AuthenticationServices
 import BaseFeature
 import DesignSystem
-import NaverThirdPartyLogin
-import RxRelay
+import LogManager
+import RxCocoa
 import RxSwift
 import SafariServices
 import UIKit
@@ -33,20 +32,20 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var copyrightLabel: UILabel!
 
+    private var viewModel: LoginViewModel!
+    private lazy var input = viewModel.input
+    private lazy var output = viewModel.output
     private let disposeBag = DisposeBag()
-    var viewModel: LoginViewModel!
 
-    private lazy var input = LoginViewModel.Input(
-        pressNaverLoginButton: PublishRelay(),
-        pressAppleLoginButton: PublishRelay()
-    )
-    private lazy var output = viewModel.transform(from: input)
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindRx()
-        configureLogin()
+        inputBind()
+        outputBind()
     }
 
     public static func viewController(viewModel: LoginViewModel) -> LoginViewController {
@@ -56,82 +55,80 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     }
 }
 
-extension LoginViewController {
-    private func bindRx() {
-        output
-            .showErrorToast
-            .subscribe(onNext: { [weak self] (msg: String) in
-                guard let self = self else { return }
-                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            }).disposed(by: disposeBag)
+private extension LoginViewController {
+    func outputBind() {
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+            }
+            .disposed(by: disposeBag)
 
-        output
-            .shouldDismiss
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
-            }.disposed(by: disposeBag)
+        output.dismissLoginScene
+            .withLatestFrom(input.arrivedTokenFromThirdParty)
+            .bind(with: self) { owner, source in
+                let (provider, _) = source
+                if provider == .google {
+                    owner.dismiss(animated: true, completion: {
+                        owner.dismiss(animated: true)
+                    })
+                } else {
+                    owner.dismiss(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func configureLogin() {
+    func inputBind() {
         closeButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
 
-        appleLoginButton.rx.tap
-            .bind(to: input.pressAppleLoginButton)
-            .disposed(by: disposeBag)
-
         naverLoginButton.rx.tap
-            .bind(to: input.pressNaverLoginButton)
+            .bind(to: input.didTapNaverLoginButton)
             .disposed(by: disposeBag)
 
-        googleLoginButton.rx.tap.bind {
-            GoogleLoginManager.shared.googleLoginRequest()
-        }.disposed(by: disposeBag)
+        googleLoginButton.rx.tap
+            .bind {
+                GoogleLoginManager.shared.googleLoginRequest()
+            }
+            .disposed(by: disposeBag)
 
-        viewModel.getGoogleTokenToSafariDismiss
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
-                guard let safari = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
-                    .windows
-                    .first?
-                    .rootViewController?
-                    .presentedViewController as? SFSafariViewController else {
-                    return
-                }
-                safari.dismiss(animated: true, completion: nil)
-            }).disposed(by: disposeBag)
+        appleLoginButton.rx.tap
+            .bind(to: input.didTapAppleLoginButton)
+            .disposed(by: disposeBag)
 
         serviceButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .service)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         privacyButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .privacy)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
-extension LoginViewController {
-    public func configureUI() {
+private extension LoginViewController {
+    func configureUI() {
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
-        scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        configureOAuthLogin()
-        configureService()
+        configureLoginButtonUI()
+        configureServiceUI()
     }
 
-    private func configureOAuthLogin() {
+    func configureLoginButtonUI() {
         let loginAttributedString: [NSMutableAttributedString] = [
             NSMutableAttributedString.init(string: "네이버로 로그인하기"),
             NSMutableAttributedString.init(string: "구글로 로그인하기"),
@@ -165,7 +162,7 @@ extension LoginViewController {
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
     }
 
-    private func configureService() {
+    func configureServiceUI() {
         let appAttributedString = NSMutableAttributedString
             .init(string: "왁타버스 뮤직")
 
@@ -229,11 +226,5 @@ extension LoginViewController {
         copyrightLabel.setTextWithAttributes(kernValue: -0.5)
         copyrightLabel.textAlignment = .center
         copyrightLabel.numberOfLines = 0
-    }
-}
-
-public extension LoginViewController {
-    func scrollToTop() {
-        scrollView.setContentOffset(.zero, animated: true)
     }
 }
