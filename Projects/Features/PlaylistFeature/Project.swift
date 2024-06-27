@@ -11,7 +11,9 @@ let project = Project.module(
         .implements(
             module: .feature(.PlaylistFeature), dependencies: [
                 .feature(target: .BaseFeature),
-                .feature(target: .PlaylistFeature, type: .interface)
+                .feature(target: .PlaylistFeature, type: .interface),
+                .domain(target: .AuthDomain, type: .interface),
+                .domain(target: .PlaylistDomain, type: .interface)
             ]
         ),
         .testing(module: .feature(.PlaylistFeature), dependencies: [

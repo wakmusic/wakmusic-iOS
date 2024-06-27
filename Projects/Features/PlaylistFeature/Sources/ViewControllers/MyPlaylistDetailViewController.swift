@@ -19,7 +19,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     var bottomSheetView: BottomSheetView!
 
-    //   private let multiPurposePopUpFactory: any MultiPurposePopUpFactory
+    private let multiPurposePopupFactory: any MultiPurposePopupFactory
+    
+    private let containSongsFactory: any ContainSongsFactory
+
+    private let textPopUpFactory: any TextPopUpFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -63,11 +67,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
     #warning("추후 의존성 추가")
-//    init(reactor: MyPlaylistDetailReactor, multiPurposePopUpFactory: any MultiPurposePopUpFactory) {
-//        self.multiPurposePopUpFactory = multiPurposePopUpFactory
-//        super.init(reactor: reactor)
-//    }
-//
+    init(reactor: MyPlaylistDetailReactor, multiPurposePopupFactory: any MultiPurposePopupFactory, containSongsFactory: any ContainSongsFactory, textPopUpFactory: any TextPopUpFactory ) {
+        self.multiPurposePopupFactory = multiPurposePopupFactory
+        self.containSongsFactory = containSongsFactory
+        self.textPopUpFactory = textPopUpFactory
+        
+        super.init(reactor: reactor)
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()

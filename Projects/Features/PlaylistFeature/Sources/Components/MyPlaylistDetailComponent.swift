@@ -25,6 +25,20 @@ public protocol MyPlaylistDetailDependency: Dependency {
 
 public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependency>, MyPlaylistFactory {
     public func makeView(key: String) -> UIViewController {
-        return MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor(key: key))
+        return MyPlaylistDetailViewController(
+            reactor: MyPlaylistDetailReactor(
+                key: key,
+                fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
+                updatePlaylistUseCase: dependency.updatePlaylistUseCase,
+                updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase, 
+                addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
+                removeSongsUseCase: dependency.removeSongsUseCase,
+                uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
+                logoutUseCase: dependency.logoutUseCase
+            ),
+            multiPurposePopupFactory: dependency.multiPurposePopUpFactory,
+            containSongsFactory: dependency.containSongsFactory,
+            textPopUpFactory: dependency.textPopUpFactory
+        )
     }
 }

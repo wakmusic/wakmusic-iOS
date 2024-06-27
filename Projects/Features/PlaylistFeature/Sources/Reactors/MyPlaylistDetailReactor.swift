@@ -4,6 +4,7 @@ import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Utility
+import AuthDomainInterface
 
 final class MyPlaylistDetailReactor: Reactor {
     let key: String
@@ -38,14 +39,40 @@ final class MyPlaylistDetailReactor: Reactor {
     }
 
     var initialState: State
+    private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
+    private let updatePlaylistUseCase: any UpdatePlaylistUseCase
+    private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
+    private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
+    private let removeSongsUseCase: any RemoveSongsUseCase
+    private let uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase
+
+    private let logoutUseCase: any LogoutUseCase
     #warning("추후 usecase 연결")
 
-    init(key: String) {
+    init(
+        key: String,
+        fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
+        updatePlaylistUseCase: any UpdatePlaylistUseCase,
+        updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
+        addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
+        removeSongsUseCase: any RemoveSongsUseCase,
+        uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase,
+        logoutUseCase: any LogoutUseCase
+         
+    ) {
         self.key = key
+        self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
+        self.updatePlaylistUseCase = updatePlaylistUseCase
+        self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
+        self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
+        self.removeSongsUseCase = removeSongsUseCase
+        self.uploadPlaylistImageUseCase = uploadPlaylistImageUseCase
+        self.logoutUseCase = logoutUseCase
+        
         self.initialState = State(
             isEditing: false,
             dataSource: PlaylistDetailEntity(
-                key: "000",
+                key: key,
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
@@ -53,7 +80,7 @@ final class MyPlaylistDetailReactor: Reactor {
                 userId: "kkk123",
                 userName: "hamp"
             ), backUpDataSource: PlaylistDetailEntity(
-                key: "000",
+                key: key,
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
