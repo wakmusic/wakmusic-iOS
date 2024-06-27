@@ -126,13 +126,13 @@ extension MultiPurposePopupViewController {
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = .white
     }
-    
+
     private func bindInput() {
         limitCount = viewModel.type == .nickname ? 8 : 12
         limitLabel.text = "/\(limitCount)"
 
         input.textString
-            .bind(with: self) {  owner, str in
+            .bind(with: self) { owner, str in
                 let errorColor = DesignSystemAsset.PrimaryColor.increase.color
                 let passColor = DesignSystemAsset.PrimaryColor.decrease.color
 
@@ -178,28 +178,24 @@ extension MultiPurposePopupViewController {
     }
 
     private func bindAction() {
-        
         textField.rx.text.orEmpty
             .skip(1) // 바인드 할 때 발생하는 첫 이벤트를 무시
             .bind(to: input.textString)
             .disposed(by: disposeBag)
-        
-        
+
         saveButton.rx
             .tap
             .withLatestFrom(input.textString)
             .bind(with: self) { owner, text in
-                
-                #warning("디스미스 안됨 큰일났ㄸ")
-                SwiftEntryKit.dismiss() {
-                    guard let completion = owner.completion else {
 
+                #warning("디스미스 안됨 큰일났ㄸ")
+                SwiftEntryKit.dismiss {
+                    guard let completion = owner.completion else {
                         return
                     }
                     completion(text)
                 }
             }
             .disposed(by: disposeBag)
-
     }
 }
