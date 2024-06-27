@@ -106,6 +106,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
                 let vc = owner.signInFactory.makeView()
+                vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -138,6 +139,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                             cancelButtonText: nil,
                             completion: {
                                 let loginVC = owner.signInFactory.makeView()
+                                loginVC.modalPresentationStyle = .fullScreen
                                 owner.present(loginVC, animated: true)
                             },
                             cancelCompletion: {}

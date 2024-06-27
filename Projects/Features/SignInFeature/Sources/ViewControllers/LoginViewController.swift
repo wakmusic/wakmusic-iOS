@@ -9,8 +9,8 @@ import UIKit
 import Utility
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var fakeView: UIView!
 
     @IBOutlet weak var appLogoImageView: UIImageView!
     @IBOutlet weak var appNameLabel: UILabel!
@@ -31,7 +31,8 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var serviceButton: UIButton!
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
-
+    @IBOutlet weak var copyrightLabel: UILabel!
+    
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
 
@@ -72,6 +73,12 @@ extension LoginViewController {
     }
 
     private func configureLogin() {
+        closeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+
         appleLoginButton.rx.tap
             .bind(to: input.pressAppleLoginButton)
             .disposed(by: disposeBag)
@@ -117,6 +124,7 @@ extension LoginViewController {
 
 extension LoginViewController {
     public func configureUI() {
+        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
         scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         configureOAuthLogin()
@@ -134,7 +142,7 @@ extension LoginViewController {
             attr.addAttributes(
                 [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                     .kern: -0.5
                 ],
                 range: NSRange(location: 0, length: attr.string.count)
@@ -145,7 +153,7 @@ extension LoginViewController {
         for sv in superViewArr {
             sv.backgroundColor = .white.withAlphaComponent(0.4)
             sv.layer.cornerRadius = 12
-            sv.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            sv.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
             sv.layer.borderWidth = 1
         }
 
@@ -164,7 +172,7 @@ extension LoginViewController {
         appAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ],
             range: NSRange(location: 0, length: appAttributedString.string.count)
@@ -177,7 +185,7 @@ extension LoginViewController {
         descriptionAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray600.color,
                 .kern: -0.5
             ],
             range: NSRange(location: 0, length: descriptionAttributedString.string.count)
@@ -193,7 +201,7 @@ extension LoginViewController {
             attr.addAttributes(
                 [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray600.color,
                     .kern: -0.5
                 ],
                 range: NSRange(location: 0, length: attr.string.count)
@@ -204,16 +212,23 @@ extension LoginViewController {
 
         for btn in servicePrivacyButtons {
             btn.layer.cornerRadius = 8
-            btn.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+            btn.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
             btn.layer.borderWidth = 1
             btn.clipsToBounds = true
         }
 
         versionLabel.text = "버전 정보 " + APP_VERSION()
-        versionLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
+        versionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.setTextWithAttributes(kernValue: -0.5)
         versionLabel.textAlignment = .center
+
+        copyrightLabel.text = "Copyright 2024. WAKTAVERS MUSIC. All rights reserved."
+        copyrightLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
+        copyrightLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        copyrightLabel.setTextWithAttributes(kernValue: -0.5)
+        copyrightLabel.textAlignment = .center
+        copyrightLabel.numberOfLines = 0
     }
 }
 
