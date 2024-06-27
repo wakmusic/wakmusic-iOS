@@ -8,11 +8,11 @@
 
 import Alamofire
 import Foundation
+import LogManager
 import RxRelay
 import RxSwift
 import SafariServices
 import UIKit
-import LogManager
 
 // MARK: - Delegate protocol
 public protocol GoogleOAuthLoginDelegate: AnyObject {
