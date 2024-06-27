@@ -19,7 +19,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     }
 
     public struct Output {
-        let isFoucused: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     }
 
     public init(
@@ -35,8 +34,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     }
 
     public func transform(from input: Input) -> Output {
-        let logoutRelay = PublishRelay<Error>()
-
         var output = Output()
 
 

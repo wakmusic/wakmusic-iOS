@@ -45,6 +45,8 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bindInput()
+        bindAction()
     }
 
     public static func viewController(
@@ -68,15 +70,15 @@ extension MultiPurposePopupViewController {
 
         titleLabel.text = viewModel.type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
 
         subTitleLabel.text = viewModel.type.subTitle
         subTitleLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 16)
-        subTitleLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
+        subTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
 
         let headerFontSize: CGFloat = 20
         let focusedplaceHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.GrayColor.gray400.color,
+            NSAttributedString.Key.foregroundColor: DesignSystemAsset.BlueGrayColor.gray400.color,
             NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
         ] // 포커싱 플레이스홀더 폰트 및 color 설정
 
@@ -88,13 +90,13 @@ extension MultiPurposePopupViewController {
         ) // 플레이스 홀더 설정
         self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
 
-        self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
+        self.dividerView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray200.color
 
         self.cancelButton.layer.cornerRadius = 12
         self.cancelButton.titleLabel?.text = "취소"
         self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         self.cancelButton.layer.cornerRadius = 4
-        self.cancelButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        self.cancelButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
         self.cancelButton.layer.borderWidth = 1
         self.cancelButton.backgroundColor = .white
         self.cancelButton.isHidden = true
@@ -103,13 +105,10 @@ extension MultiPurposePopupViewController {
         self.confirmLabel.isHidden = true
 
         self.limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.limitLabel.textColor = DesignSystemAsset.GrayColor.gray500.color
+        self.limitLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
 
         self.countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-        bindRx()
-
-        bindRxEvent()
 
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
@@ -117,78 +116,91 @@ extension MultiPurposePopupViewController {
             string: viewModel.type.btnText,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color
             ]
         ), for: .normal)
 
         saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
-        saveButton.setBackgroundColor(DesignSystemAsset.GrayColor.gray300.color, for: .disabled)
+        saveButton.setBackgroundColor(DesignSystemAsset.BlueGrayColor.gray300.color, for: .disabled)
 
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = .white
     }
-
-    private func bindRx() {
+    
+    private func bindInput() {
         limitCount = viewModel.type == .nickname ? 8 : 12
         limitLabel.text = "/\(limitCount)"
 
         input.textString
-            .subscribe { [weak self] (str: String) in
-                guard let self = self else {
-                    return
-                }
-
+            .bind(with: self) {  owner, str in
                 let errorColor = DesignSystemAsset.PrimaryColor.increase.color
                 let passColor = DesignSystemAsset.PrimaryColor.decrease.color
 
-                self.countLabel.text = "\(str.count)자"
+                owner.countLabel.text = "\(str.count)자"
 
                 if str.isEmpty {
-                    self.cancelButton.isHidden = true
-                    self.confirmLabel.isHidden = true
-                    self.saveButton.isEnabled = false
-                    self.dividerView.backgroundColor = DesignSystemAsset.GrayColor.gray200.color
-                    self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+                    owner.cancelButton.isHidden = true
+                    owner.confirmLabel.isHidden = true
+                    owner.saveButton.isEnabled = false
+                    owner.dividerView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray200.color
+                    owner.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
                     return
 
                 } else {
-                    self.cancelButton.isHidden = false
-                    self.confirmLabel.isHidden = false
-                    self.countLabel.isHidden = false
+                    owner.cancelButton.isHidden = false
+                    owner.confirmLabel.isHidden = false
+                    owner.countLabel.isHidden = false
                 }
 
                 if str.isWhiteSpace {
-                    self.dividerView.backgroundColor = errorColor
-                    self.confirmLabel.text = "제목이 비어있습니다."
-                    self.confirmLabel.textColor = errorColor
-                    self.countLabel.textColor = errorColor
-                    self.saveButton.isEnabled = false
+                    owner.dividerView.backgroundColor = errorColor
+                    owner.confirmLabel.text = "제목이 비어있습니다."
+                    owner.confirmLabel.textColor = errorColor
+                    owner.countLabel.textColor = errorColor
+                    owner.saveButton.isEnabled = false
 
-                } else if str.count > self.limitCount {
-                    self.dividerView.backgroundColor = errorColor
-                    self.confirmLabel.text = "글자 수를 초과하였습니다."
-                    self.confirmLabel.textColor = errorColor
-                    self.countLabel.textColor = errorColor
-                    self.saveButton.isEnabled = false
+                } else if str.count > owner.limitCount {
+                    owner.dividerView.backgroundColor = errorColor
+                    owner.confirmLabel.text = "글자 수를 초과하였습니다."
+                    owner.confirmLabel.textColor = errorColor
+                    owner.countLabel.textColor = errorColor
+                    owner.saveButton.isEnabled = false
 
                 } else {
-                    self.dividerView.backgroundColor = passColor
-                    self.confirmLabel.text = self.viewModel.type == .nickname ? "사용할 수 있는 닉네임입니다." : "사용할 수 있는 제목입니다."
-                    self.confirmLabel.textColor = passColor
-                    self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-                    self.saveButton.isEnabled = true
+                    owner.dividerView.backgroundColor = passColor
+                    owner.confirmLabel.text = owner.viewModel.type == .nickname ? "사용할 수 있는 닉네임입니다." : "사용할 수 있는 제목입니다."
+                    owner.confirmLabel.textColor = passColor
+                    owner.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+                    owner.saveButton.isEnabled = true
                 }
 
             }.disposed(by: disposeBag)
-
-
     }
 
-    private func bindRxEvent() {
+    private func bindAction() {
+        
         textField.rx.text.orEmpty
             .skip(1) // 바인드 할 때 발생하는 첫 이벤트를 무시
             .bind(to: input.textString)
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
+        
+        
+        saveButton.rx
+            .tap
+            .withLatestFrom(input.textString)
+            .asDriver(onErrorJustReturn: "")
+            .bind(with: self) { owner, text in
+                
+                #warning("디스미스 안됨 큰일났ㄸ")
+                SwiftEntryKit.dismiss() {
+                    guard let completion = owner.completion else {
+
+                        return
+                    }
+                    completion(text)
+                }
+            }
+            .disposed(by: disposeBag)
 
     }
 }
