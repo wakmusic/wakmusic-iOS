@@ -15,15 +15,14 @@ import NoticeDomainInterface
 public enum NoticeAPI {
     case fetchNotice(type: NoticeType)
     case fetchNoticeCategories
+    case fetchNoticePopup
+    case fetchNoticeAll
+    case fetchNoticeIDList
 }
 
 extension NoticeAPI: WMAPI {
     public var domain: WMDomain {
-        switch self {
-        case .fetchNotice,
-             .fetchNoticeCategories:
-            return .notice
-        }
+        return .notice
     }
 
     public var urlPath: String {
@@ -32,6 +31,12 @@ extension NoticeAPI: WMAPI {
             return "/\(type.rawValue)"
         case .fetchNoticeCategories:
             return "/categories"
+        case .fetchNoticePopup:
+            return "/popup"
+        case .fetchNoticeAll:
+            return "/all"
+        case .fetchNoticeIDList:
+            return "/ids"
         }
     }
 
@@ -39,6 +44,12 @@ extension NoticeAPI: WMAPI {
         switch self {
         case .fetchNotice,
              .fetchNoticeCategories:
+            return .get
+        case .fetchNoticePopup:
+            return .get
+        case .fetchNoticeAll:
+            return .get
+        case .fetchNoticeIDList:
             return .get
         }
     }
@@ -55,6 +66,12 @@ extension NoticeAPI: WMAPI {
                 encoding: URLEncoding.queryString
             )
         case .fetchNoticeCategories:
+            return .requestPlain
+        case .fetchNoticePopup:
+            return .requestPlain
+        case .fetchNoticeAll:
+            return .requestPlain
+        case .fetchNoticeIDList:
             return .requestPlain
         }
     }
