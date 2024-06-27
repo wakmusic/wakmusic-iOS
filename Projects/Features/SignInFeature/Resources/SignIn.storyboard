@@ -17,32 +17,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jmW-xj-qY4">
+                                <rect key="frame" x="0.0" y="59" width="393" height="48"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AHt-FH-2iX">
+                                        <rect key="frame" x="20" y="8" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="aNp-Ag-AiF"/>
+                                            <constraint firstAttribute="height" constant="32" id="i9s-u8-Upp"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="AHt-FH-2iX" firstAttribute="centerY" secondItem="jmW-xj-qY4" secondAttribute="centerY" id="0Wr-h8-8nN"/>
+                                    <constraint firstAttribute="height" constant="48" id="305-Id-Efe"/>
+                                    <constraint firstItem="AHt-FH-2iX" firstAttribute="leading" secondItem="jmW-xj-qY4" secondAttribute="leading" constant="20" id="fFg-ip-ODH"/>
+                                </constraints>
+                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mjm-06-Do6">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="107" width="393" height="711"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xTh-PE-mul">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="844"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="711"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jmW-xj-qY4">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="48"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AHt-FH-2iX">
-                                                        <rect key="frame" x="20" y="8" width="32" height="32"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="32" id="aNp-Ag-AiF"/>
-                                                            <constraint firstAttribute="height" constant="32" id="i9s-u8-Upp"/>
-                                                        </constraints>
-                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="AHt-FH-2iX" firstAttribute="centerY" secondItem="jmW-xj-qY4" secondAttribute="centerY" id="0Wr-h8-8nN"/>
-                                                    <constraint firstAttribute="height" constant="48" id="305-Id-Efe"/>
-                                                    <constraint firstItem="AHt-FH-2iX" firstAttribute="leading" secondItem="jmW-xj-qY4" secondAttribute="leading" constant="20" id="fFg-ip-ODH"/>
-                                                </constraints>
-                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ysv-TD-zvH">
-                                                <rect key="frame" x="0.0" y="48" width="393" height="426"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="426"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="applogo" translatesAutoresizingMaskIntoConstraints="NO" id="D8m-cy-a9g">
                                                         <rect key="frame" x="150.66666666666666" y="4" width="92" height="92"/>
@@ -173,7 +173,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cUj-HD-yw7">
-                                                <rect key="frame" x="0.0" y="474" width="393" height="82"/>
+                                                <rect key="frame" x="0.0" y="426" width="393" height="82"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85y-ci-J7X">
                                                         <rect key="frame" x="20" y="0.0" width="172.66666666666666" height="44"/>
@@ -213,10 +213,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJM-dB-a5k">
-                                                <rect key="frame" x="0.0" y="556" width="393" height="288"/>
+                                                <rect key="frame" x="0.0" y="508" width="393" height="203"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright 2024. WAKTAVERS MUSIC. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cz7-l6-Ock">
-                                                        <rect key="frame" x="20" y="260" width="353" height="18"/>
+                                                        <rect key="frame" x="20" y="175" width="353" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="uZw-Ip-qBr"/>
                                                         </constraints>
@@ -247,8 +247,11 @@
                         <viewLayoutGuide key="safeArea" id="7ZR-UJ-iSp"/>
                         <color key="backgroundColor" name="gray100"/>
                         <constraints>
+                            <constraint firstItem="jmW-xj-qY4" firstAttribute="trailing" secondItem="7ZR-UJ-iSp" secondAttribute="trailing" id="6fu-It-Ryk"/>
+                            <constraint firstItem="mjm-06-Do6" firstAttribute="top" secondItem="jmW-xj-qY4" secondAttribute="bottom" id="7E8-ci-fnk"/>
                             <constraint firstItem="7ZR-UJ-iSp" firstAttribute="bottom" secondItem="mjm-06-Do6" secondAttribute="bottom" id="FZA-8K-D9B"/>
-                            <constraint firstItem="mjm-06-Do6" firstAttribute="top" secondItem="7ZR-UJ-iSp" secondAttribute="top" id="HOc-4r-BR6"/>
+                            <constraint firstItem="jmW-xj-qY4" firstAttribute="top" secondItem="7ZR-UJ-iSp" secondAttribute="top" id="FjQ-Kf-YuG"/>
+                            <constraint firstItem="jmW-xj-qY4" firstAttribute="leading" secondItem="7ZR-UJ-iSp" secondAttribute="leading" id="Icw-nC-5Mt"/>
                             <constraint firstItem="7ZR-UJ-iSp" firstAttribute="trailing" secondItem="mjm-06-Do6" secondAttribute="trailing" id="erm-2i-qOJ"/>
                             <constraint firstItem="mjm-06-Do6" firstAttribute="leading" secondItem="7ZR-UJ-iSp" secondAttribute="leading" id="gdM-Pf-GNr"/>
                             <constraint firstItem="aJM-dB-a5k" firstAttribute="bottom" secondItem="7ZR-UJ-iSp" secondAttribute="bottom" id="puo-Sk-9eT"/>
