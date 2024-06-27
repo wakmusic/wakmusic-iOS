@@ -32,7 +32,7 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var copyrightLabel: UILabel!
-    
+
     private let disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
 
