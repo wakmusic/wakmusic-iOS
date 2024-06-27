@@ -53,7 +53,6 @@ extension PlaylistAPI: WMAPI {
 
         case let .subscribePlaylist(key), let .unSubscribePlaylist(key: key):
             return "/\(key)/subscription"
-
         }
     }
 
