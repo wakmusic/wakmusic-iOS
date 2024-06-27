@@ -8,7 +8,7 @@ import UIKit
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var faqFactory: any FaqFactory { get }
     var noticeFactory: any NoticeFactory { get }
     var questionFactory: any QuestionFactory { get }

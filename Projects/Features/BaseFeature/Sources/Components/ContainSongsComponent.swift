@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }

@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 
 
-public final class MultiPurposePopUpComponent: Component<EmptyDependency>, MultiPurposePopUpFactory {
+public final class MultiPurposePopupComponent: Component<EmptyDependency>, MultiPurposePopupFactory {
     public func makeView(
         type: PurposeType,
         key: String,

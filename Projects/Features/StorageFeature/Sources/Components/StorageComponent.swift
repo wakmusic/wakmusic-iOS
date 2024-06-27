@@ -9,7 +9,7 @@ import UIKit
 public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var playlistStorageComponent: PlaylistStorageComponent { get }
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var favoriteComponent: FavoriteComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }

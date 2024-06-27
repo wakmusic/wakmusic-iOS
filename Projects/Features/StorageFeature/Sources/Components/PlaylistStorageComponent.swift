@@ -9,7 +9,7 @@ import UIKit
 import UserDomainInterface
 
 public protocol PlaylistStorageDependency: Dependency {
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }

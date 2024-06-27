@@ -14,7 +14,7 @@ public protocol PlaylistDetailDependency: Dependency {
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 
-    var multiPurposePopUpFactory: any MultiPurposePopUpFactory { get }
+    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }

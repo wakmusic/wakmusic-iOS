@@ -19,7 +19,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var songCountLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
 
-    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    var multiPurposePopUpFactory: MultiPurposePopupFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -36,7 +36,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     }
 
     public static func viewController(
-        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(

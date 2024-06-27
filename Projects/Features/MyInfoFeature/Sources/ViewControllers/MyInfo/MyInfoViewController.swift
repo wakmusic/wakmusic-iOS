@@ -16,7 +16,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
-    private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -50,7 +50,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor: MyInfoReactor,
         profilePopUpComponent: ProfilePopComponent,
         textPopUpFactory: TextPopUpFactory,
-        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
