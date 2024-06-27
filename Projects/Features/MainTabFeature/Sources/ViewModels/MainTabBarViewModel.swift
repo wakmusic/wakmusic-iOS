@@ -5,13 +5,13 @@ import RxSwift
 import Utility
 
 public final class MainTabBarViewModel {
-    private let fetchNoticeAllUseCase: FetchNoticeAllUseCase
+    private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticeAllUseCase: any FetchNoticeAllUseCase
+        fetchNoticePopupUseCase: any FetchNoticePopupUseCase
     ) {
-        self.fetchNoticeAllUseCase = fetchNoticeAllUseCase
+        self.fetchNoticePopupUseCase = fetchNoticePopupUseCase
     }
 
     public struct Input {
@@ -28,8 +28,8 @@ public final class MainTabBarViewModel {
         DEBUG_LOG("ignoredPopupIDs: \(ignoredPopupIDs)")
 
         input.fetchNoticePopup
-            .flatMap { [fetchNoticeAllUseCase] _ -> Single<[FetchNoticeEntity]> in
-                return fetchNoticeAllUseCase.execute()
+            .flatMap { [fetchNoticePopupUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticePopupUseCase.execute()
                     .catchAndReturn([])
             }
             .map { entities in
