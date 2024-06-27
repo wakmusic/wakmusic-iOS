@@ -122,8 +122,6 @@ private extension LoginViewController {
 
 private extension LoginViewController {
     func configureUI() {
-        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
-        appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
         configureLoginButtonUI()
         configureServiceUI()
     }
@@ -163,6 +161,9 @@ private extension LoginViewController {
     }
 
     func configureServiceUI() {
+        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
+
         let appAttributedString = NSMutableAttributedString
             .init(string: "왁타버스 뮤직")
 
