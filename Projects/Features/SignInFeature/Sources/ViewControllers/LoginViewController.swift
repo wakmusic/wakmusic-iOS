@@ -67,9 +67,7 @@ private extension LoginViewController {
             .disposed(by: disposeBag)
 
         output.dismissLoginScene
-            .withLatestFrom(input.arrivedTokenFromThirdParty)
-            .bind(with: self) { owner, source in
-                let (provider, _) = source
+            .bind(with: self) { owner, provider in
                 if provider == .google {
                     owner.dismiss(animated: true, completion: {
                         owner.dismiss(animated: true)

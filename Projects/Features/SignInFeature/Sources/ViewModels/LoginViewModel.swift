@@ -28,7 +28,7 @@ public final class LoginViewModel: NSObject { // 네이버 델리게이트를 �
 
     public struct Output {
         let showToast: PublishRelay<String> = .init()
-        let dismissLoginScene: PublishRelay<Void> = .init()
+        let dismissLoginScene: PublishRelay<ProviderType> = .init()
     }
 
     public init(
@@ -82,7 +82,7 @@ private extension LoginViewModel {
                     }
                     .asObservable()
             }
-            .subscribe(onNext: { [output] entity in
+            .subscribe(onNext: { [input, output] entity in
                 LogManager.setUserID(userID: entity.id)
                 PreferenceManager.shared.setUserInfo(
                     ID: AES256.encrypt(string: entity.id),
@@ -91,12 +91,12 @@ private extension LoginViewModel {
                     name: AES256.encrypt(string: entity.name),
                     version: entity.version
                 )
-                output.dismissLoginScene.accept(())
+                output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
 
-            }, onError: { [output] error in
+            }, onError: { [input, output] error in
                 let error = error.asWMError
                 output.showToast.accept(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
-                output.dismissLoginScene.accept(())
+                output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
             })
             .disposed(by: disposeBag)
     }
