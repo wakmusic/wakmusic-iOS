@@ -54,9 +54,9 @@ public final class OpenSourceLicenseViewModel {
                 link: "https://github.com/RxSwiftCommunity/RxKeyboard.git"
             ),
             OpenSourceLicense(
-                title: "PanModal",
-                description: "The MIT License\nCopyright © 2018 Tiny Speck, Inc.",
-                link: "https://github.com/slackhq/PanModal.git"
+                title: "FittedSheets",
+                description: "The MIT License\nCopyright (c) 2018 Gordon Tucker",
+                link: "https://github.com/gordontucker/FittedSheets.git"
             ),
             OpenSourceLicense(
                 title: "Then",
@@ -122,11 +122,6 @@ public final class OpenSourceLicenseViewModel {
                 title: "RealmSwift",
                 description: "realm/realm-swift is licensed under the Apache License 2.0",
                 link: "https://github.com/realm/realm-swift"
-            ),
-            OpenSourceLicense(
-                title: "YouTubePlayerKit",
-                description: "The MIT License\nCopyright (c) 2023 Sven Tiigi",
-                link: "https://github.com/SvenTiigi/YouTubePlayerKit.git"
             )
         ].sorted { $0.title < $1.title }
 
