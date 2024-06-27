@@ -47,13 +47,13 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
     @IBOutlet weak var favoriteFakeView: UIView!
 
     public var bottomSheetView: BottomSheetView!
-    private var myPlayListComponent: MyPlayListComponent!
+    private var playlistStorageComponent: PlaylistStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     private var favoriteComponent: FavoriteComponent!
     private var textPopUpFactory: TextPopUpFactory!
 
     private lazy var viewControllers: [UIViewController] = [
-        myPlayListComponent.makeView(),
+        playlistStorageComponent.makeView(),
         favoriteComponent.makeView()
     ]
 
@@ -80,7 +80,7 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
 
     public static func viewController(
         reactor: StorageReactor,
-        myPlayListComponent: MyPlayListComponent,
+        playlistStorageComponent: PlaylistStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopUpFactory,
         favoriteComponent: FavoriteComponent,
         textPopUpFactory: TextPopUpFactory,
@@ -91,10 +91,10 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
 
         viewController.reactor = reactor
 
-        viewController.myPlayListComponent = myPlayListComponent
+        viewController.playlistStorageComponent = playlistStorageComponent
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.favoriteComponent = favoriteComponent
-        viewController.viewControllers = [myPlayListComponent.makeView(), favoriteComponent.makeView()]
+        viewController.viewControllers = [playlistStorageComponent.makeView(), favoriteComponent.makeView()]
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
         return viewController
@@ -275,7 +275,7 @@ extension StorageViewController {
     func scrollToTop() {
         let current: Int = self.currentIndex ?? 0
         guard self.viewControllers.count > current else { return }
-        if let myPlayList = self.viewControllers[current] as? MyPlayListViewController {
+        if let myPlayList = self.viewControllers[current] as? PlaylistStorageViewController {
             myPlayList.scrollToTop()
         } else if let favorite = self.viewControllers[current] as? FavoriteViewController {
             favorite.scrollToTop()

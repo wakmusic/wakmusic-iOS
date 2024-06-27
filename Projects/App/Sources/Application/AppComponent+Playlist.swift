@@ -20,8 +20,8 @@ public extension AppComponent {
         PlaylistDetailComponent(parent: self)
     }
 
-    var myPlayListComponent: MyPlayListComponent {
-        MyPlayListComponent(parent: self)
+    var playlistStorageComponent: PlaylistStorageComponent {
+        PlaylistStorageComponent(parent: self)
     }
 
     var playlistFactory: any PlaylistFactory {
@@ -85,6 +85,18 @@ public extension AppComponent {
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase {
         shared {
             UploadPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
+        shared {
+            SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase {
+        shared {
+            UnSubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

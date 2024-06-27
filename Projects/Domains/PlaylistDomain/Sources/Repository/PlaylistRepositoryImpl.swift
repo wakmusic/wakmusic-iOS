@@ -47,4 +47,12 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
         remotePlaylistDataSource.uploadImage(key: key, model: model)
     }
+
+    public func subscribePlaylist(key: String) -> Completable {
+        remotePlaylistDataSource.subscribePlaylist(key: key)
+    }
+
+    public func unSubscribePlaylist(key: String) -> Completable {
+        remotePlaylistDataSource.unSubscribePlaylist(key: key)
+    }
 }

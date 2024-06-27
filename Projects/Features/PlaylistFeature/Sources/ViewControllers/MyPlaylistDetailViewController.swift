@@ -91,7 +91,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.setLayout()
 
         wmNavigationbarView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }

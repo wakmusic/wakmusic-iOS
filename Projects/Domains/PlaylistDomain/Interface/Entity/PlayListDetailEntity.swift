@@ -7,7 +7,9 @@ public struct PlaylistDetailEntity: Equatable {
         title: String,
         songs: [SongEntity],
         image: String,
-        `private`: Bool
+        `private`: Bool,
+        userId: String,
+        userName: String
 
     ) {
         self.key = key
@@ -15,10 +17,12 @@ public struct PlaylistDetailEntity: Equatable {
         self.songs = songs
         self.image = image
         self.private = `private`
+        self.userId = userId
+        self.userName = userName
     }
 
     public let key, title: String
     public var songs: [SongEntity]
-    public let image: String
+    public let image, userId, userName: String
     public var `private`: Bool
 }

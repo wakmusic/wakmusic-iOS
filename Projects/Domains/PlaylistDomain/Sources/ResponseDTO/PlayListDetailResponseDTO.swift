@@ -1,11 +1,3 @@
-//
-//  RecommendPlayListResponseDTO.swift
-//  DataMappingModuleTests
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import PlaylistDomainInterface
 import SongsDomain
@@ -18,6 +10,14 @@ public struct SinglePlayListDetailResponseDTO: Decodable {
     public let songs: [SingleSongResponseDTO]?
     public let imageUrl: String
     public let `private`: Bool
+    public let user: SinglePlayListDetailResponseDTO.UserResponseDTO
+}
+
+public extension SinglePlayListDetailResponseDTO {
+    struct UserResponseDTO: Decodable {
+        public let handle: String
+        public let name: String
+    }
 }
 
 public extension SinglePlayListDetailResponseDTO {
@@ -25,20 +25,11 @@ public extension SinglePlayListDetailResponseDTO {
         PlaylistDetailEntity(
             key: key ?? "",
             title: title,
-            songs: (songs ?? []).map { dto in
-                return SongEntity(
-                    id: dto.songID,
-                    title: dto.title,
-                    artist: dto.artists.joined(separator: ", "),
-                    remix: "",
-                    reaction: "",
-                    views: dto.views,
-                    last: 0,
-                    date: dto.date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
-                )
-            },
+            songs: (songs ?? []).map { $0.toDomain() },
             image: imageUrl,
-            private: `private`
+            private: `private`,
+            userId: user.handle,
+            userName: user.name
         )
     }
 }

@@ -6,6 +6,8 @@ import SongsDomainInterface
 import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
+    let key: String
+
     enum Action {
         case viewDidLoad
         case itemDidTap(Int)
@@ -38,7 +40,8 @@ final class MyPlaylistDetailReactor: Reactor {
     var initialState: State
     #warning("추후 usecase 연결")
 
-    init() {
+    init(key: String) {
+        self.key = key
         self.initialState = State(
             isEditing: false,
             dataSource: PlaylistDetailEntity(
@@ -46,13 +49,17 @@ final class MyPlaylistDetailReactor: Reactor {
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ), backUpDataSource: PlaylistDetailEntity(
                 key: "000",
                 title: "임시플레이리스트 입니다.",
                 songs: [],
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ),
             isLoading: false,
             selectedCount: 0
@@ -120,7 +127,9 @@ private extension MyPlaylistDetailReactor {
                 title: "임시플레이리스트 입니다.",
                 songs: fetchData(),
                 image: "",
-                private: true
+                private: true,
+                userId: "kkk123",
+                userName: "hamp"
             ))),
             .just(.updateLoadingState(false))
         ])

@@ -15,7 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
-                rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor())
+                rootViewController: MyPlaylistDetailViewController(reactor: MyPlaylistDetailReactor(key: "TTT"))
             )
         )
         window?.rootViewController = viewController

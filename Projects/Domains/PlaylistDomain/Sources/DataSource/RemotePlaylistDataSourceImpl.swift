@@ -57,4 +57,14 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map(BaseImageResponseDTO.self)
             .map { $0.toDomain() }
     }
+
+    public func subscribePlaylist(key: String) -> Completable {
+        request(.subscribePlaylist(key: key))
+            .asCompletable()
+    }
+
+    public func unSubscribePlaylist(key: String) -> Completable {
+        request(.subscribePlaylist(key: key))
+            .asCompletable()
+    }
 }

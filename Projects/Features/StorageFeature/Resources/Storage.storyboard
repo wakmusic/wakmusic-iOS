@@ -95,10 +95,10 @@
             </objects>
             <point key="canvasLocation" x="937" y="5"/>
         </scene>
-        <!--My Play List View Controller-->
+        <!--Playlist Storage View Controller-->
         <scene sceneID="Xx3-OI-gKt">
             <objects>
-                <viewController storyboardIdentifier="MyPlayListViewController" id="sGd-6b-4i6" customClass="MyPlayListViewController" customModule="StorageFeature" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlaylistStorageViewController" id="sGd-6b-4i6" customClass="PlaylistStorageViewController" customModule="StorageFeature" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HZM-LB-aUt">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
