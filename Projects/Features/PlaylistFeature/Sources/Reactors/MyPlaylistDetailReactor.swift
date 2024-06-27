@@ -86,7 +86,6 @@ final class MyPlaylistDetailReactor: Reactor {
         )
     }
 
-  
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
@@ -118,7 +117,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .updateHeader(header):
             newState.header = header
-            
+
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
 
@@ -142,11 +141,17 @@ final class MyPlaylistDetailReactor: Reactor {
 }
 
 private extension MyPlaylistDetailReactor {
-    
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            .just(.updateHeader(MyPlaylistHeaderModel(key: "333", title: "임시플리타이틀", image: "333", userName: "hamp", private: false, songCount: 5))),
+            .just(.updateHeader(MyPlaylistHeaderModel(
+                key: "333",
+                title: "임시플리타이틀",
+                image: "333",
+                userName: "hamp",
+                private: false,
+                songCount: 5
+            ))),
             .just(.updateDataSource(fetchData())),
             .just(.updateLoadingState(false))
         ])
@@ -226,7 +231,7 @@ private extension MyPlaylistDetailReactor {
 
         var prev = state.header
         prev.updatePrivate()
-        
+
         let message: String = prev.private ? "리스트를 비공개 처리했습니다." : "리스트를 공개 처리했습니다."
 
         return .concat([

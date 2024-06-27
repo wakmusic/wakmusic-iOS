@@ -90,7 +90,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-    
+
     #warning("바텀 시트 내리기")
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -98,7 +98,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         hideSongCart()
         hideplaylistImageEditSheet()
     }
-    
+
     override func addView() {
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView)
@@ -228,7 +228,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.tableView.reloadData()
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.header)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
@@ -241,7 +241,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
-
 
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
