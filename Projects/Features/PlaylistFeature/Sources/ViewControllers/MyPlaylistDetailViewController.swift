@@ -220,19 +220,26 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.tableView.reloadData()
             }
             .disposed(by: disposeBag)
+        
+        sharedState.map(\.header)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, model in
+                owner.headerView.updateData(model)
+                owner.lockButton.setImage(model.private ? owner.lockImage : owner.unLockImage, for: .normal)
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
 
-                owner.headerView.updateData(model.title, model.songs.count, model.image)
-                owner.lockButton.setImage(model.private ? owner.lockImage : owner.unLockImage, for: .normal)
+
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
 
-                if model.songs.isEmpty {
+                if model.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
                     owner.tableView.restore()
@@ -240,7 +247,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 #warning("셀 선택 업데이트 관련 질문")
                 snapShot.appendSections([0])
-                snapShot.appendItems(model.songs)
+                snapShot.appendItems(model)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
@@ -260,10 +267,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
-            .withLatestFrom(sharedState.map(\.dataSource.songs.count)) { ($0, $1) }
+            .withLatestFrom(sharedState.map(\.header)) { ($0, $1) }
             .bind(with: self) { owner, info in
 
-                let (count, limit) = (info.0, info.1)
+                let (count, limit) = (info.0, info.1.songCount)
 
                 if count == .zero {
                     owner.hideSongCart()
@@ -324,7 +331,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return nil
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
@@ -336,7 +343,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return .zero
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.isEmpty {
             return .zero
         } else {
             return CGFloat(52.0 + 32.0)

@@ -8,7 +8,7 @@ import UIKit
 
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
-    func updateData(_ title: String, _ songCount: Int, _ thumnail: String)
+    func updateData(_ model: MyPlaylistHeaderModel)
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -135,9 +135,9 @@ extension MyPlaylistHeaderView {
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
-    func updateData(_ title: String, _ songCount: Int, _ thumnail: String) {
-        titleLabel.text = title
-        countLabel.text = "\(songCount)곡"
+    func updateData(_ model: MyPlaylistHeaderModel) {
+        titleLabel.text = model.title
+        countLabel.text = "\(model.songCount)곡"
         #warning("이미지 업데이트")
     }
 
