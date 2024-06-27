@@ -8,6 +8,7 @@
 
 import Alamofire
 import Foundation
+import LogManager
 import RxRelay
 import RxSwift
 import SafariServices
@@ -52,14 +53,13 @@ public class GoogleLoginManager {
         components?.queryItems = [scope, responseType, codeChallenge, redirectURI, clientID, codeChallengeMethod]
 
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
-            DEBUG_LOG(url)
-            // UIApplication.shared.open(url) // 이건 앱 외부로 나가서 사파리 앱이 실행되는거고,
-            let safari = SFSafariViewController(url: url) // 이건 앱 안에서 사파리 컨트롤러를 띄울 수 있음
-            (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+            LogManager.printDebug(url)
+            let safari = SFSafariViewController(url: url)
+            let root = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
                 .windows
                 .first?
-                .rootViewController?
-                .present(safari, animated: true)
+                .rootViewController
+            (root as? UINavigationController)?.presentedViewController?.present(safari, animated: true)
         }
     }
 

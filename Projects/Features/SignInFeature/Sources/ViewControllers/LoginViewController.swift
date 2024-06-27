@@ -1,16 +1,15 @@
-import AuthenticationServices
 import BaseFeature
 import DesignSystem
-import NaverThirdPartyLogin
-import RxRelay
+import LogManager
+import RxCocoa
 import RxSwift
 import SafariServices
 import UIKit
 import Utility
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var fakeView: UIView!
 
     @IBOutlet weak var appLogoImageView: UIImageView!
     @IBOutlet weak var appNameLabel: UILabel!
@@ -31,21 +30,22 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var serviceButton: UIButton!
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
+    @IBOutlet weak var copyrightLabel: UILabel!
 
+    private var viewModel: LoginViewModel!
+    private lazy var input = viewModel.input
+    private lazy var output = viewModel.output
     private let disposeBag = DisposeBag()
-    var viewModel: LoginViewModel!
 
-    private lazy var input = LoginViewModel.Input(
-        pressNaverLoginButton: PublishRelay(),
-        pressAppleLoginButton: PublishRelay()
-    )
-    private lazy var output = viewModel.transform(from: input)
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindRx()
-        configureLogin()
+        inputBind()
+        outputBind()
     }
 
     public static func viewController(viewModel: LoginViewModel) -> LoginViewController {
@@ -55,75 +55,76 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     }
 }
 
-extension LoginViewController {
-    private func bindRx() {
-        output
-            .showErrorToast
-            .subscribe(onNext: { [weak self] (msg: String) in
-                guard let self = self else { return }
-                self.showToast(text: msg, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            }).disposed(by: disposeBag)
+private extension LoginViewController {
+    func outputBind() {
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
+            }
+            .disposed(by: disposeBag)
 
-        output
-            .shouldDismiss
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
-            }.disposed(by: disposeBag)
+        output.dismissLoginScene
+            .bind(with: self) { owner, provider in
+                if provider == .google {
+                    owner.dismiss(animated: true, completion: {
+                        owner.dismiss(animated: true)
+                    })
+                } else {
+                    owner.dismiss(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
-    private func configureLogin() {
-        appleLoginButton.rx.tap
-            .bind(to: input.pressAppleLoginButton)
+    func inputBind() {
+        closeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
             .disposed(by: disposeBag)
 
         naverLoginButton.rx.tap
-            .bind(to: input.pressNaverLoginButton)
+            .bind(to: input.didTapNaverLoginButton)
             .disposed(by: disposeBag)
 
-        googleLoginButton.rx.tap.bind {
-            GoogleLoginManager.shared.googleLoginRequest()
-        }.disposed(by: disposeBag)
+        googleLoginButton.rx.tap
+            .bind {
+                GoogleLoginManager.shared.googleLoginRequest()
+            }
+            .disposed(by: disposeBag)
 
-        viewModel.getGoogleTokenToSafariDismiss
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { _ in
-                guard let safari = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
-                    .windows
-                    .first?
-                    .rootViewController?
-                    .presentedViewController as? SFSafariViewController else {
-                    return
-                }
-                safari.dismiss(animated: true, completion: nil)
-            }).disposed(by: disposeBag)
+        appleLoginButton.rx.tap
+            .bind(to: input.didTapAppleLoginButton)
+            .disposed(by: disposeBag)
 
         serviceButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .service)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         privacyButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .privacy)
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true)
-            }).disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
-extension LoginViewController {
-    public func configureUI() {
-        appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
-        scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        configureOAuthLogin()
-        configureService()
+private extension LoginViewController {
+    func configureUI() {
+        configureLoginButtonUI()
+        configureServiceUI()
     }
 
-    private func configureOAuthLogin() {
+    func configureLoginButtonUI() {
         let loginAttributedString: [NSMutableAttributedString] = [
             NSMutableAttributedString.init(string: "네이버로 로그인하기"),
             NSMutableAttributedString.init(string: "구글로 로그인하기"),
@@ -134,7 +135,7 @@ extension LoginViewController {
             attr.addAttributes(
                 [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                     .kern: -0.5
                 ],
                 range: NSRange(location: 0, length: attr.string.count)
@@ -145,7 +146,7 @@ extension LoginViewController {
         for sv in superViewArr {
             sv.backgroundColor = .white.withAlphaComponent(0.4)
             sv.layer.cornerRadius = 12
-            sv.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+            sv.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
             sv.layer.borderWidth = 1
         }
 
@@ -157,14 +158,18 @@ extension LoginViewController {
         appleLoginButton.setAttributedTitle(loginAttributedString[2], for: .normal)
     }
 
-    private func configureService() {
+    func configureServiceUI() {
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
+        appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
+
         let appAttributedString = NSMutableAttributedString
             .init(string: "왁타버스 뮤직")
 
         appAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 20),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ],
             range: NSRange(location: 0, length: appAttributedString.string.count)
@@ -177,7 +182,7 @@ extension LoginViewController {
         descriptionAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray600.color,
                 .kern: -0.5
             ],
             range: NSRange(location: 0, length: descriptionAttributedString.string.count)
@@ -193,7 +198,7 @@ extension LoginViewController {
             attr.addAttributes(
                 [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.gray600.color,
                     .kern: -0.5
                 ],
                 range: NSRange(location: 0, length: attr.string.count)
@@ -204,21 +209,22 @@ extension LoginViewController {
 
         for btn in servicePrivacyButtons {
             btn.layer.cornerRadius = 8
-            btn.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+            btn.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
             btn.layer.borderWidth = 1
             btn.clipsToBounds = true
         }
 
         versionLabel.text = "버전 정보 " + APP_VERSION()
-        versionLabel.textColor = DesignSystemAsset.GrayColor.gray400.color
+        versionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
         versionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         versionLabel.setTextWithAttributes(kernValue: -0.5)
         versionLabel.textAlignment = .center
-    }
-}
 
-public extension LoginViewController {
-    func scrollToTop() {
-        scrollView.setContentOffset(.zero, animated: true)
+        copyrightLabel.text = "Copyright 2024. WAKTAVERS MUSIC. All rights reserved."
+        copyrightLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
+        copyrightLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        copyrightLabel.setTextWithAttributes(kernValue: -0.5)
+        copyrightLabel.textAlignment = .center
+        copyrightLabel.numberOfLines = 0
     }
 }

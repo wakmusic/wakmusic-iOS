@@ -175,6 +175,7 @@ extension StorageViewController {
                     cancelButtonText: nil,
                     completion: {
                         let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
                         owner.present(loginVC, animated: true)
                     },
                     cancelCompletion: {}

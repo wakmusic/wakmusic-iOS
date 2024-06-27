@@ -1,46 +1,34 @@
-//
-//  SearchViewModel.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/01/05.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import AuthenticationServices
 import BaseFeature
 import CryptoSwift
-import KeychainModule
 import LogManager
 import NaverThirdPartyLogin
-import RxCocoa
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
 
-public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리게이트를 받기위한 NSObject 상속
+public final class LoginViewModel: NSObject { // 네이버 델리게이트를 받기위한 NSObject 상속
+    private let fetchTokenUseCase: FetchTokenUseCase
+    private let fetchUserInfoUseCase: FetchUserInfoUseCase
+    let input: Input = Input()
+    let output: Output = Output()
     private let disposeBag = DisposeBag()
 
-    private var fetchTokenUseCase: FetchTokenUseCase
-    private var fetchUserInfoUseCase: FetchUserInfoUseCase
-
-    let googleLoginManager = GoogleLoginManager.shared
-    let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-    let oauthToken: PublishRelay<(ProviderType, String)> = PublishRelay()
-    let fetchedWMToken: PublishRelay<String> = PublishRelay()
-    let isErrorString: PublishRelay<String> = PublishRelay() // 에러를 아웃풋에 반환해 주기 위한 작업
-    let keychain = KeychainImpl()
-    let getGoogleTokenToSafariDismiss: PublishSubject<Void> = PublishSubject()
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
+    }
 
     public struct Input {
-        let pressNaverLoginButton: PublishRelay<Void>
-        let pressAppleLoginButton: PublishRelay<Void>
+        let didTapNaverLoginButton: PublishRelay<Void> = .init()
+        let didTapAppleLoginButton: PublishRelay<Void> = .init()
+        let arrivedTokenFromThirdParty: BehaviorRelay<(ProviderType, String)> = .init(value: (.apple, ""))
     }
 
     public struct Output {
-        let showErrorToast: PublishRelay<String> = .init()
-        let shouldDismiss: PublishRelay<Void> = .init()
+        let showToast: PublishRelay<String> = .init()
+        let dismissLoginScene: PublishRelay<ProviderType> = .init()
     }
 
     public init(
@@ -50,17 +38,35 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
         self.fetchTokenUseCase = fetchTokenUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         super.init()
-        self.googleLoginManager.googleOAuthLoginDelegate = self
-        self.naverLoginInstance?.delegate = self
+        GoogleLoginManager.shared.googleOAuthLoginDelegate = self
+        NaverThirdPartyLoginConnection.getSharedInstance()?.delegate = self
+        bind()
     }
+}
 
-    public func transform(from input: Input) -> Output {
-        let output = Output()
-        inputTransfrom(input: input)
+private extension LoginViewModel {
+    func bind() {
+        input.didTapNaverLoginButton
+            .bind(with: self, onNext: { owner, _ in
+                NaverThirdPartyLoginConnection.getSharedInstance()?.delegate = owner
+                NaverThirdPartyLoginConnection.getSharedInstance()?.requestThirdPartyLogin()
+            })
+            .disposed(by: disposeBag)
 
-        // MARK: (Naver, Google, Apple)Token WMToken으로 치환
-        oauthToken
-            .debug("🚚 oauthToken")
+        input.didTapAppleLoginButton
+            .bind(with: self, onNext: { owner, _ in
+                let appleIdProvider = ASAuthorizationAppleIDProvider()
+                let request = appleIdProvider.createRequest()
+                request.requestedScopes = [.fullName, .email]
+                let auth = ASAuthorizationController(authorizationRequests: [request])
+                auth.delegate = owner
+                auth.presentationContextProvider = owner
+                auth.performRequests()
+            })
+            .disposed(by: disposeBag)
+
+        input.arrivedTokenFromThirdParty
+            .debug("🚚:: arrivedTokenFromThirdParty")
             .filter { !$0.1.isEmpty }
             .flatMap { [fetchTokenUseCase] provider, token in
                 fetchTokenUseCase.execute(providerType: provider, token: token)
@@ -76,7 +82,7 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     }
                     .asObservable()
             }
-            .subscribe(onNext: { entity in
+            .subscribe(onNext: { [input, output] entity in
                 LogManager.setUserID(userID: entity.id)
                 PreferenceManager.shared.setUserInfo(
                     ID: AES256.encrypt(string: entity.id),
@@ -85,77 +91,51 @@ public final class LoginViewModel: NSObject, ViewModelType { // 네이버 델리
                     name: AES256.encrypt(string: entity.name),
                     version: entity.version
                 )
-                output.shouldDismiss.accept(())
-            }, onError: { error in
+                output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
+
+            }, onError: { [input, output] error in
                 let error = error.asWMError
-                output.showErrorToast.accept(error.errorDescription ?? "알수 없는 오류가 발생하였습니다.")
-                output.shouldDismiss.accept(())
-            }).disposed(by: disposeBag)
-
-        return output
-    }
-
-    // MARK: Input Binding
-    func inputTransfrom(input: Input) {
-        input.pressNaverLoginButton
-            .bind {
-                self.naverLoginInstance?.delegate = self
-                self.naverLoginInstance?.requestThirdPartyLogin() // requestDeleteToken() <- 로그아읏
-            }.disposed(by: disposeBag)
-
-        input.pressAppleLoginButton.subscribe(onNext: { [weak self] _ in
-            guard let self = self else { return }
-            let appleIdProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIdProvider.createRequest()
-            request.requestedScopes = [.fullName, .email]
-            let auth = ASAuthorizationController(authorizationRequests: [request])
-            auth.delegate = self
-            auth.presentationContextProvider = self
-            auth.performRequests()
-        }).disposed(by: disposeBag)
+                output.showToast.accept(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
-// MARK: - GoogleOAuthLoginDelegate를 이용하여 code 받기
 extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
-            oauthToken.accept((.google, id))
-            getGoogleTokenToSafariDismiss.onNext(())
+            input.arrivedTokenFromThirdParty.accept((.google, id))
         }
     }
 }
 
-// MARK: - NaverThirdPartyLoginConnectionDelegate
 extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-        if !accessToken { return }
-        guard let accessToken = naverLoginInstance?.accessToken else { return }
-        oauthToken.accept((.naver, accessToken))
+        let shared = NaverThirdPartyLoginConnection.getSharedInstance()
+        guard let accessToken = shared?.accessToken else { return }
+        input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
     }
 
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        guard let accessToken = naverLoginInstance?.isValidAccessTokenExpireTimeNow() else { return }
-        if !accessToken { return }
-        guard let accessToken = naverLoginInstance?.accessToken else { return }
-        oauthToken.accept((.naver, accessToken))
+        let shared = NaverThirdPartyLoginConnection.getSharedInstance()
+        guard let accessToken = shared?.accessToken else { return }
+        input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
     }
 
     public func oauth20ConnectionDidFinishDeleteToken() {
-        DEBUG_LOG("네이버 로그아웃")
+        LogManager.printDebug("oauth20ConnectionDidFinishDeleteToken")
     }
 
     public func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
-        isErrorString.accept(error.localizedDescription)
+        output.showToast.accept(error.localizedDescription)
     }
 }
 
-// MARK: - AppleLoginDelegate
 extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.last ?? .init()
+        return (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first ?? .init()
     }
 
     public func authorizationController(
@@ -165,11 +145,11 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
            let rawData = credential.identityToken {
             let token = String(decoding: rawData, as: UTF8.self)
-            oauthToken.accept((.apple, token))
+            input.arrivedTokenFromThirdParty.accept((.apple, token))
         }
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        isErrorString.accept(error.localizedDescription)
+        output.showToast.accept(error.localizedDescription)
     }
 }
