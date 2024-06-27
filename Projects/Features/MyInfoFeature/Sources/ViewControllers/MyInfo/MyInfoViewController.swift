@@ -240,3 +240,12 @@ extension MyInfoViewController: EditSheetViewDelegate {
         }
     }
 }
+
+extension MyInfoViewController: EqualHandleTappedType {
+    func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+}
