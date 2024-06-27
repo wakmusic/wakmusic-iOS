@@ -1,6 +1,6 @@
 import Foundation
-import RxSwift
 import NoticeDomainInterface
+import RxSwift
 
 public struct FetchNoticeIDListUseCaseImpl: FetchNoticeIDListUseCase {
     private let noticeRepository: any NoticeRepository
@@ -10,7 +10,7 @@ public struct FetchNoticeIDListUseCaseImpl: FetchNoticeIDListUseCase {
     ) {
         self.noticeRepository = noticeRepository
     }
-    
+
     public func execute() -> Single<FetchNoticeIDListEntity> {
         return noticeRepository.fetchNoticeIDList()
     }

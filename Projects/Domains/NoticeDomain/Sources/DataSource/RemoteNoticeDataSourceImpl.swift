@@ -23,19 +23,19 @@ public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, 
             .map(FetchNoticeCategoriesResponseDTO.self)
             .map { $0.toDomain() }
     }
-    
+
     public func fetchNoticePopup() -> Single<[FetchNoticeEntity]> {
         request(.fetchNoticePopup)
             .map([FetchNoticeResponseDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
-    
+
     public func fetchNoticeAll() -> Single<[FetchNoticeEntity]> {
         request(.fetchNoticeAll)
             .map([FetchNoticeResponseDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
-    
+
     public func fetchNoticeIDList() -> Single<FetchNoticeIDListEntity> {
         request(.fetchNoticeIDList)
             .map(FetchNoticeIDListDTO.self)
