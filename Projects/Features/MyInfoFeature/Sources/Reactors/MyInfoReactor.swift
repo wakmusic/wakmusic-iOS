@@ -94,7 +94,6 @@ final class MyInfoReactor: Reactor {
                 updatePlatform(userInfo)
             )
         case let .changeReadNoticeIDs(readIDs):
-            
         }
     }
 
@@ -134,7 +133,7 @@ private extension MyInfoReactor {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func observeReadNoticeIdChanges() {
 //        PreferenceManager.$readNoticeIDs
 //            .compactMap { $0 }
@@ -143,11 +142,9 @@ private extension MyInfoReactor {
 //            }
 //            .disposed(by: disposeBag)
     }
-    
-    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
-        
-    }
-    
+
+    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {}
+
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
