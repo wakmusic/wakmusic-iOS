@@ -6,7 +6,6 @@ import PlaylistDomainInterface
 import UIKit
 import UserDomainInterface
 
-
 public final class MultiPurposePopupComponent: Component<EmptyDependency>, MultiPurposePopupFactory {
     public func makeView(
         type: PurposeType,
@@ -16,7 +15,8 @@ public final class MultiPurposePopupComponent: Component<EmptyDependency>, Multi
         return MultiPurposePopupViewController.viewController(
             viewModel: .init(
                 type: type,
-                key: key),
+                key: key
+            ),
             completion: completion
         )
     }

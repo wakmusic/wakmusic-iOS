@@ -12,14 +12,11 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     var type: PurposeType
     var key: String
 
-
-
     public struct Input {
         let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
-    public struct Output {
-    }
+    public struct Output {}
 
     public init(
         type: PurposeType,
@@ -35,7 +32,6 @@ public final class MultiPurposePopupViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         var output = Output()
-
 
         return output
     }
