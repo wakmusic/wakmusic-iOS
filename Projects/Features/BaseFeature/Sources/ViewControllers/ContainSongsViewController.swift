@@ -64,11 +64,7 @@ extension ContainSongsViewController {
                 guard let self = self else {
                     return
                 }
-                let window: UIWindow? = UIApplication.shared.windows.first
-                let safeAreaInsetsTop: CGFloat = window?.safeAreaInsets.top ?? 0
-                let safeAreaInsetsBottom: CGFloat = window?.safeAreaInsets.bottom ?? 0
-
-                let space = APP_HEIGHT() - 48 - 16 - 24 - 12 - 52 - 12 - safeAreaInsetsTop - safeAreaInsetsBottom
+                let space = APP_HEIGHT() - 48 - 16 - 24 - 12 - 52 - 12 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
                 let height = space / 3 * 2
 
                 let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))

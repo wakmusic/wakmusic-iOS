@@ -87,7 +87,10 @@ extension LoginViewController {
         viewModel.getGoogleTokenToSafariDismiss
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { _ in
-                guard let safari = UIApplication.shared.windows.first?.rootViewController?
+                guard let safari = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+                    .windows
+                    .first?
+                    .rootViewController?
                     .presentedViewController as? SFSafariViewController else {
                     return
                 }

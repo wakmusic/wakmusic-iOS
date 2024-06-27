@@ -172,7 +172,8 @@ final class MyPlayListViewController: BaseStoryboardReactorViewController<MyPlay
                     owner.hideSongCart()
                 } else {
                     owner.showSongCart(
-                        in: UIApplication.shared.windows.first?.rootViewController?.view ?? UIView(),
+                        in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
+                            .rootViewController?.view ?? UIView(),
                         type: .myList,
                         selectedSongCount: count,
                         totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,

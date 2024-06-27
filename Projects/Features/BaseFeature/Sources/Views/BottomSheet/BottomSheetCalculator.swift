@@ -3,10 +3,11 @@
 //
 
 import UIKit
+import Utility
 
 extension CGFloat {
     static var safeAreaBottomInset: CGFloat {
-        return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        return SAFEAREA_BOTTOM_HEIGHT()
     }
 }
 
