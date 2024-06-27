@@ -16,7 +16,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
-    private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -50,7 +50,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor: MyInfoReactor,
         profilePopUpComponent: ProfilePopComponent,
         textPopUpFactory: TextPopUpFactory,
-        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
@@ -233,12 +233,12 @@ extension MyInfoViewController: EditSheetViewDelegate {
             break
         case .profile:
             let vc = profilePopUpComponent.makeView()
-            self.showEntryKitModal(content: vc, height: 352)
+            showBottomSheet(content: vc, size: .fixed(352 + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
             guard let vc = multiPurposePopUpFactory
                 .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
             else { return }
-            self.showEntryKitModal(content: vc, height: 296)
+            showBottomSheet(content: vc, size: .fixed(296))
         }
     }
 }

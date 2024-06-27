@@ -19,7 +19,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var songCountLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
 
-    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    var multiPurposePopUpFactory: MultiPurposePopupFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -36,7 +36,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     }
 
     public static func viewController(
-        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
@@ -173,17 +173,18 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         ) as? MultiPurposePopupViewController else {
             return
         }
-        self.showEntryKitModal(content: multiPurposePopVc, height: 296)
+        showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
     }
 }
 
-extension ContainSongsViewController: MultiPurposePopupViewDelegate {
-    public func didTokenExpired() {
-        self.dismiss(animated: true) { [weak self] in
-
-            guard let self else { return }
-
-            self.delegate?.tokenExpired()
-        }
-    }
-}
+#warning("토근 만료 처리")
+// extension ContainSongsViewController: MultiPurposePopupViewDelegate {
+//    public func didTokenExpired() {
+//        self.dismiss(animated: true) { [weak self] in
+//
+//            guard let self else { return }
+//
+//            self.delegate?.tokenExpired()
+//        }
+//    }
+// }

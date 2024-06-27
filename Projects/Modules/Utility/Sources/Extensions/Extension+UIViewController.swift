@@ -54,43 +54,6 @@ public extension UIViewController {
         )
     }
 
-    func showEntryKitModal(content: UIViewController, height: CGFloat) {
-        var attributes: EKAttributes
-        attributes = .bottomFloat
-        attributes.displayDuration = .infinity
-        attributes.screenBackground = .color(color: EKColor(rgb: 0x000000).with(alpha: 0.4))
-        attributes.entryBackground = .color(color: EKColor(rgb: 0xFFFFFF))
-        attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .absorbTouches
-        attributes.positionConstraints.verticalOffset = 0
-        attributes.positionConstraints.safeArea = .empty(fillSafeArea: true)
-        attributes.roundCorners = .top(radius: 24)
-        attributes.positionConstraints.keyboardRelation = .bind(offset: .none)
-        attributes.entranceAnimation = .init(
-            translate: .init(
-                duration: 0.4,
-                spring: .init(damping: 0.8, initialVelocity: 0)
-            )
-        )
-        attributes.exitAnimation = .init(
-            translate: .init(
-                duration: 0.4,
-                spring: .init(damping: 0.8, initialVelocity: 0)
-            )
-        )
-        attributes.positionConstraints.size = .init(
-            width: .offset(value: 0),
-            height: .constant(value: height)
-        )
-        attributes.positionConstraints.maxSize = .init(
-            width: .offset(value: 0),
-            height: .constant(value: height)
-        )
-
-        HapticManager.shared.impact(style: .light)
-        SwiftEntryKit.display(entry: content, using: attributes)
-    }
-
     func showToast(text: String, font: UIFont, verticalOffset: CGFloat? = nil) {
         var attributes = EKAttributes.bottomFloat
         attributes.displayDuration = 2

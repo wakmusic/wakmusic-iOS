@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol MultiPurposePopUpFactory {
+public protocol MultiPurposePopupFactory {
     func makeView(
         type: PurposeType,
         key: String,

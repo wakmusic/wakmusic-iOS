@@ -22,7 +22,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     private var refreshControl = UIRefreshControl()
-    var multiPurposePopUpFactory: MultiPurposePopUpFactory!
+    var multiPurposePopUpFactory: MultiPurposePopupFactory!
     var textPopUpFactory: TextPopUpFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
     var signInFactory: SignInFactory!
@@ -38,7 +38,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
 
     static func viewController(
         reactor: PlaylistStorageReactor,
-        multiPurposePopUpFactory: MultiPurposePopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
