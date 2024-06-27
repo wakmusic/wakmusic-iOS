@@ -176,14 +176,14 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         self.showEntryKitModal(content: multiPurposePopVc, height: 296)
     }
 }
-
-extension ContainSongsViewController: MultiPurposePopupViewDelegate {
-    public func didTokenExpired() {
-        self.dismiss(animated: true) { [weak self] in
-
-            guard let self else { return }
-
-            self.delegate?.tokenExpired()
-        }
-    }
-}
+#warning("토근 만료 처리")
+//extension ContainSongsViewController: MultiPurposePopupViewDelegate {
+//    public func didTokenExpired() {
+//        self.dismiss(animated: true) { [weak self] in
+//
+//            guard let self else { return }
+//
+//            self.delegate?.tokenExpired()
+//        }
+//    }
+//}

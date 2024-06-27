@@ -8,10 +8,6 @@ import SwiftEntryKit
 import UIKit
 import Utility
 
-public protocol MultiPurposePopupViewDelegate: AnyObject {
-    func didTokenExpired()
-}
-
 public final class MultiPurposePopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -41,8 +37,7 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     lazy var output = viewModel.transform(from: input)
 
     var limitCount: Int = 12
-    var creationCompletion: ((String) -> Void)?
-    public var delegate: MultiPurposePopupViewDelegate?
+    var completion: ((String) -> Void)?
     public var disposeBag = DisposeBag()
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
@@ -61,7 +56,7 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
             bundle: Bundle.module
         )
         viewController.viewModel = viewModel
-        viewController.creationCompletion = completion
+        viewController.completion = completion
         return viewController
     }
 }
@@ -186,12 +181,7 @@ extension MultiPurposePopupViewController {
 
             }.disposed(by: disposeBag)
 
-        output.newPlayListKey
-            .subscribe(onNext: { [weak self] (str: String) in
-                guard let self = self else { return }
-                self.creationCompletion?(str)
-            })
-            .disposed(by: disposeBag)
+
     }
 
     private func bindRxEvent() {
@@ -200,62 +190,5 @@ extension MultiPurposePopupViewController {
             .bind(to: input.textString)
             .disposed(by: self.disposeBag)
 
-        output.result.subscribe(onNext: { [weak self] res in
-            guard let self = self else {
-                return
-            }
-
-            self.indicator.stopAnimating()
-            self.saveButton.setAttributedTitle(
-                NSMutableAttributedString(
-                    string: "완료",
-                    attributes: [
-                        .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
-                    ]
-                ), for: .normal
-            )
-            self.view.endEditing(true)
-
-            // 토스트도 EntryKit을 사용하기 때문에 토스트만 띄워도 떠있던 팝업이 자동으로 내려감.
-            if res.status == 200 {
-                var description: String = ""
-                switch self.viewModel.type {
-                case .creation:
-                    description = "리스트가 생성되었습니다."
-                case .updatePlaylistTile:
-                    description = "리스트가 수정되었습니다."
-                    return
-                case .nickname:
-                    description = "닉네임이 수정되었습니다."
-                }
-                self.showToast(
-                    text: description,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
-            } else {
-                self.showToast(text: res.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
-            }
-        })
-        .disposed(by: disposeBag)
-
-        output.onLogout.bind(with: self) { owner, error in
-            let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-            owner.showToast(text: error.localizedDescription, font: toastFont)
-            NotificationCenter.default.post(name: .movedTab, object: 4)
-
-            if owner.viewModel.type == .updatePlaylistTile || owner.viewModel.type == .creation {
-                owner.delegate?.didTokenExpired()
-            }
-        }
-        .disposed(by: disposeBag)
-
-        saveButton.rx.tap.subscribe(onNext: { [weak self] in
-            guard let self = self else {
-                return
-            }
-            self.input.pressConfirm.onNext(())
-        })
-        .disposed(by: disposeBag)
     }
 }

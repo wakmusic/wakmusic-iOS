@@ -11,40 +11,23 @@ import Utility
 public final class MultiPurposePopupViewModel: ViewModelType {
     var type: PurposeType
     var key: String
-    let disposeBag: DisposeBag = DisposeBag()
 
-    let createPlaylistUseCase: CreatePlaylistUseCase!
-    let setUserNameUseCase: SetUserNameUseCase!
-    // TODO: 플레이리스트 이름 변경 Usecase
-    private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
-    private let logoutUseCase: any LogoutUseCase
+
 
     public struct Input {
         let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let pressConfirm: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         let isFoucused: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        let result: PublishSubject<BaseEntity> = PublishSubject()
-        let newPlayListKey: PublishSubject<String> = PublishSubject()
-        let onLogout: PublishRelay<Error>
     }
 
     public init(
         type: PurposeType,
-        key: String,
-        createPlaylistUseCase: CreatePlaylistUseCase,
-        setUserNameUseCase: SetUserNameUseCase,
-        updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
-        logoutUseCase: any LogoutUseCase
+        key: String
     ) {
         self.key = key
         self.type = type
-        self.createPlaylistUseCase = createPlaylistUseCase
-        self.setUserNameUseCase = setUserNameUseCase
-        self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
-        self.logoutUseCase = logoutUseCase
     }
 
     deinit {
@@ -54,92 +37,8 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let logoutRelay = PublishRelay<Error>()
 
-        var output = Output(
-            onLogout: logoutRelay
-        )
+        var output = Output()
 
-        input.pressConfirm
-            .withLatestFrom(input.textString)
-            .subscribe(onNext: { [weak self, logoutUseCase] (text: String) in
-                guard let self = self else {
-                    return
-                }
-                switch self.type {
-                case .creation:
-                    self.createPlaylistUseCase.execute(title: text)
-                        .catch { (error: Error) in
-                            let wmError = error.asWMError
-                            if wmError == .tokenExpired {
-                                logoutRelay.accept(error)
-                                return logoutUseCase.execute()
-                                    .andThen(.never())
-                            } else {
-                                output.result.onNext(BaseEntity(
-                                    status: 400,
-                                    description: wmError.asWMError.errorDescription ?? ""
-                                ))
-                                return .never()
-                            }
-                        }
-                        .asObservable()
-                        .subscribe(onNext: { _ in
-                            output.result.onNext(BaseEntity(status: 200, description: ""))
-                            NotificationCenter.default.post(name: .playListRefresh, object: nil)
-                        })
-                        .disposed(by: self.disposeBag)
-
-                case .nickname:
-                    self.setUserNameUseCase.execute(name: text)
-                        .catch { error in
-                            let wmError = error.asWMError
-                            if wmError == .tokenExpired {
-                                logoutRelay.accept(error)
-                                return logoutUseCase.execute()
-                                    .andThen(.never())
-                            } else {
-                                return Single<BaseEntity>.create { single in
-                                    single(.success(BaseEntity(
-                                        status: 0,
-                                        description: error.asWMError.errorDescription ?? ""
-                                    )))
-                                    return Disposables.create {}
-                                }
-                            }
-                        }
-                        .asObservable()
-                        .subscribe(onNext: { result in
-                            Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?
-                                .update(displayName: AES256.encrypt(string: text))
-                            output.result.onNext(BaseEntity(status: 200, description: ""))
-                        }).disposed(by: self.disposeBag)
-
-                case .updatePlaylistTile:
-                    break
-                    self.updateTitleAndPrivateUseCase
-                        .execute(key: key, title: text, isPrivate: nil)
-                        .catch { (error: Error) in
-                            let wmError = error.asWMError
-
-                            switch wmError {
-                            case .tokenExpired:
-                                logoutRelay.accept(error)
-                                return logoutUseCase.execute()
-                                    .andThen(.never())
-                            default:
-                                output.result.onNext(BaseEntity(
-                                    status: 400,
-                                    description: wmError.errorDescription ?? "잘못된 요청입니다."
-                                ))
-                            }
-                            return .never()
-                        }
-                        .subscribe(onCompleted: {
-                            NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                            NotificationCenter.default.post(name: .playListNameRefresh, object: text)
-                        })
-                        .disposed(by: disposeBag)
-                }
-            }).disposed(by: disposeBag)
 
         return output
     }
