@@ -1,10 +1,10 @@
 import ArtistDomainInterface
 import DesignSystem
+import LogManager
 import Pageboy
 import Tabman
 import UIKit
 import Utility
-import LogManager
 
 public class ArtistMusicViewController: TabmanViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tabBarContentView: UIView!

@@ -9,11 +9,11 @@
 import ArtistDomainInterface
 import BaseFeature
 import Foundation
+import LogManager
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import Utility
-import LogManager
 
 public final class ArtistMusicContentViewModel: ViewModelType {
     var fetchArtistSongListUseCase: FetchArtistSongListUseCase
