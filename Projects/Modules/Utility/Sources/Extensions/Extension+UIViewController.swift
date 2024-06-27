@@ -61,7 +61,7 @@ public extension UIViewController {
         attributes.screenBackground = .color(color: EKColor(rgb: 0x000000).with(alpha: 0.4))
         attributes.entryBackground = .color(color: EKColor(rgb: 0xFFFFFF))
         attributes.screenInteraction = .dismiss
-        attributes.entryInteraction = .absorbTouches
+        attributes.entryInteraction = .dismiss
         attributes.positionConstraints.verticalOffset = 0
         attributes.positionConstraints.safeArea = .empty(fillSafeArea: true)
         attributes.roundCorners = .top(radius: 24)
