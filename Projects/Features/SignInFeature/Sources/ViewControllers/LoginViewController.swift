@@ -161,6 +161,7 @@ private extension LoginViewController {
     }
 
     func configureServiceUI() {
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
         appLogoImageView.image = DesignSystemAsset.Logo.applogo.image
 

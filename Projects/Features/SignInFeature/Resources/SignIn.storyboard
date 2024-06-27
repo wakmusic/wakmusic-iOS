@@ -245,7 +245,7 @@
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7ZR-UJ-iSp"/>
-                        <color key="backgroundColor" name="gray100"/>
+                        <color key="backgroundColor" name="blueGray100"/>
                         <constraints>
                             <constraint firstItem="jmW-xj-qY4" firstAttribute="trailing" secondItem="7ZR-UJ-iSp" secondAttribute="trailing" id="6fu-It-Ryk"/>
                             <constraint firstItem="mjm-06-Do6" firstAttribute="top" secondItem="jmW-xj-qY4" secondAttribute="bottom" id="7E8-ci-fnk"/>
@@ -286,7 +286,7 @@
     <resources>
         <image name="applogo" width="92" height="92"/>
         <image name="naver" width="24" height="24"/>
-        <namedColor name="gray100">
+        <namedColor name="blueGray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
