@@ -173,7 +173,7 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         ) as? MultiPurposePopupViewController else {
             return
         }
-        self.showEntryKitModal(content: multiPurposePopVc, height: 296)
+        showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
     }
 }
 

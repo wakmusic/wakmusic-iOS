@@ -4,7 +4,6 @@ import NVActivityIndicatorView
 import RxCocoa
 import RxKeyboard
 import RxSwift
-import SwiftEntryKit
 import UIKit
 import Utility
 
@@ -65,8 +64,7 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
 
 extension MultiPurposePopupViewController {
     private func configureUI() {
-        self.view.layer.cornerRadius = 24
-        self.view.clipsToBounds = true
+        textField.becomeFirstResponder()
 
         titleLabel.text = viewModel.type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
@@ -187,9 +185,7 @@ extension MultiPurposePopupViewController {
             .tap
             .withLatestFrom(input.textString)
             .bind(with: self) { owner, text in
-
-                #warning("디스미스 안됨 큰일났ㄸ")
-                SwiftEntryKit.dismiss {
+                owner.dismiss(animated: true) {
                     guard let completion = owner.completion else {
                         return
                     }

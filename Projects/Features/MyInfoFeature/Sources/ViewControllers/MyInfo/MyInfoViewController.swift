@@ -233,12 +233,12 @@ extension MyInfoViewController: EditSheetViewDelegate {
             break
         case .profile:
             let vc = profilePopUpComponent.makeView()
-            self.showEntryKitModal(content: vc, height: 352)
+            showBottomSheet(content: vc, size: .fixed(352))
         case .nickname:
             guard let vc = multiPurposePopUpFactory
                 .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
             else { return }
-            self.showEntryKitModal(content: vc, height: 296)
+            showBottomSheet(content: vc, size: .fixed(296))
         }
     }
 }
