@@ -90,7 +90,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-
+    
+    #warning("바텀 시트 내리기")
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hideplaylistEditSheet()
+        hideSongCart()
+        hideplaylistImageEditSheet()
+    }
+    
     override func addView() {
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView)

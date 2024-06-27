@@ -146,6 +146,7 @@ private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
+            .just(.updateHeader(MyPlaylistHeaderModel(key: "333", title: "임시플리타이틀", image: "333", userName: "hamp", private: false, songCount: 5))),
             .just(.updateDataSource(fetchData())),
             .just(.updateLoadingState(false))
         ])
