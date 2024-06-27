@@ -1,11 +1,3 @@
-//
-//  ArtistDetailViewController.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/01/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import DesignSystem
 import RxCocoa

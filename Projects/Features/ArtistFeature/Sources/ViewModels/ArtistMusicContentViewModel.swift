@@ -13,6 +13,7 @@ import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import Utility
+import LogManager
 
 public final class ArtistMusicContentViewModel: ViewModelType {
     var fetchArtistSongListUseCase: FetchArtistSongListUseCase
@@ -76,7 +77,9 @@ public final class ArtistMusicContentViewModel: ViewModelType {
 
         input.songTapped
             .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
+                let songID: String = output.dataSource.value[index].songID
                 if selectedSongs.contains(index) {
+                    LogManager.analytics(ArtistAnalyticsLog.deselectMusicItem(id: songID, location: "artist"))
                     guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
                     else { return selectedSongs }
                     var newSelectedSongs = selectedSongs
@@ -84,6 +87,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
                     return newSelectedSongs
 
                 } else {
+                    LogManager.analytics(ArtistAnalyticsLog.selectMusicItem(id: songID, location: "artist"))
                     return selectedSongs + [index]
                 }
             })
