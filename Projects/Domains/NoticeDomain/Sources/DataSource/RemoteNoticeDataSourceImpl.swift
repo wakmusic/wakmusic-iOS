@@ -12,12 +12,6 @@ import NoticeDomainInterface
 import RxSwift
 
 public final class RemoteNoticeDataSourceImpl: BaseRemoteDataSource<NoticeAPI>, RemoteNoticeDataSource {
-    public func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]> {
-        request(.fetchNotice(type: type))
-            .map([FetchNoticeResponseDTO].self)
-            .map { $0.map { $0.toDomain() }}
-    }
-
     public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         request(.fetchNoticeCategories)
             .map(FetchNoticeCategoriesResponseDTO.self)

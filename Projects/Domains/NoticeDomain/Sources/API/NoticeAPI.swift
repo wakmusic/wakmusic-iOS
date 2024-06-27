@@ -13,7 +13,6 @@ import Moya
 import NoticeDomainInterface
 
 public enum NoticeAPI {
-    case fetchNotice(type: NoticeType)
     case fetchNoticeCategories
     case fetchNoticePopup
     case fetchNoticeAll
@@ -27,8 +26,6 @@ extension NoticeAPI: WMAPI {
 
     public var urlPath: String {
         switch self {
-        case let .fetchNotice(type):
-            return "/\(type.rawValue)"
         case .fetchNoticeCategories:
             return "/categories"
         case .fetchNoticePopup:
@@ -42,8 +39,7 @@ extension NoticeAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchNotice,
-             .fetchNoticeCategories:
+        case .fetchNoticeCategories:
             return .get
         case .fetchNoticePopup:
             return .get
@@ -56,15 +52,6 @@ extension NoticeAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchNotice:
-            return .requestParameters(
-                parameters: [
-                    "os": "ios",
-                    "version": Bundle.main
-                        .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-                ],
-                encoding: URLEncoding.queryString
-            )
         case .fetchNoticeCategories:
             return .requestPlain
         case .fetchNoticePopup:

@@ -17,6 +17,7 @@ final class MyInfoReactor: Reactor {
         case teamNavigationDidTap
         case settingNavigationDidTap
         case changeUserInfo(UserInfo?)
+        case changeReadNoticeIDs([Int])
     }
 
     enum Mutation {
@@ -27,6 +28,7 @@ final class MyInfoReactor: Reactor {
         case updateProfileImage(String)
         case updateNickname(String)
         case updatePlatform(String)
+        case updateIsAllNoticesRead(Bool)
     }
 
     enum NavigateType {
@@ -44,6 +46,7 @@ final class MyInfoReactor: Reactor {
         var profileImage: String
         var nickname: String
         var platform: String
+        var isAllNoticesRead: Bool
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
@@ -57,7 +60,8 @@ final class MyInfoReactor: Reactor {
             isLoggedIn: false,
             profileImage: "",
             nickname: "",
-            platform: ""
+            platform: "",
+            isAllNoticesRead: false
         )
         observeUserInfoChanges()
     }
@@ -89,6 +93,8 @@ final class MyInfoReactor: Reactor {
                 updateNickname(userInfo),
                 updatePlatform(userInfo)
             )
+        case let .changeReadNoticeIDs(readIDs):
+            
         }
     }
 
@@ -128,7 +134,20 @@ private extension MyInfoReactor {
             }
             .disposed(by: disposeBag)
     }
-
+    
+    func observeReadNoticeIdChanges() {
+//        PreferenceManager.$readNoticeIDs
+//            .compactMap { $0 }
+//            .bind(with: self) { owner, readIDs in
+//                owner.action.onNext(.changeReadNoticeIDs(readIDs))
+//            }
+//            .disposed(by: disposeBag)
+    }
+    
+    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
+        
+    }
+    
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }

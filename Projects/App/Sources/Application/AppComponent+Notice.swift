@@ -39,9 +39,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchNoticeUseCase: any FetchNoticeUseCase {
+    var fetchNoticeAllUseCase: any FetchNoticeAllUseCase {
         shared {
-            FetchNoticeUseCaseImpl(noticeRepository: noticeRepository)
+            FetchNoticeAllUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
 

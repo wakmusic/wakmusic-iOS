@@ -11,10 +11,6 @@ public final class NoticeRepositoryImpl: NoticeRepository {
         self.remoteNoticeDataSource = remoteNoticeDataSource
     }
 
-    public func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]> {
-        remoteNoticeDataSource.fetchNotice(type: type)
-    }
-
     public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         remoteNoticeDataSource.fetchNoticeCategories()
     }

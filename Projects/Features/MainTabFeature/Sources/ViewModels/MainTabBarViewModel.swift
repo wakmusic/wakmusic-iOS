@@ -1,11 +1,3 @@
-//
-//  MainTabBarViewModel.swift
-//  MainTabFeature
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import NoticeDomainInterface
 import RxRelay
@@ -13,13 +5,13 @@ import RxSwift
 import Utility
 
 public final class MainTabBarViewModel {
-    private let fetchNoticeUseCase: FetchNoticeUseCase
+    private let fetchNoticeAllUseCase: FetchNoticeAllUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticeUseCase: any FetchNoticeUseCase
+        fetchNoticeAllUseCase: any FetchNoticeAllUseCase
     ) {
-        self.fetchNoticeUseCase = fetchNoticeUseCase
+        self.fetchNoticeAllUseCase = fetchNoticeAllUseCase
     }
 
     public struct Input {
@@ -36,8 +28,8 @@ public final class MainTabBarViewModel {
         DEBUG_LOG("igoredNoticeIds: \(igoredNoticeIds)")
 
         input.fetchNoticePopup
-            .flatMap { [fetchNoticeUseCase] _ -> Single<[FetchNoticeEntity]> in
-                return fetchNoticeUseCase.execute(type: .popup)
+            .flatMap { [fetchNoticeAllUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticeAllUseCase.execute()
                     .catchAndReturn([])
             }
             .map { entities in

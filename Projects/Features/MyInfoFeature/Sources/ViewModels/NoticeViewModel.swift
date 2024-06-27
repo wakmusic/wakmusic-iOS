@@ -7,13 +7,13 @@ import RxSwift
 import Utility
 
 public final class NoticeViewModel {
-    private let fetchNoticeUseCase: FetchNoticeUseCase
+    private let fetchNoticeAllUseCase: FetchNoticeAllUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticeUseCase: any FetchNoticeUseCase
+        fetchNoticeAllUseCase: any FetchNoticeAllUseCase
     ) {
-        self.fetchNoticeUseCase = fetchNoticeUseCase
+        self.fetchNoticeAllUseCase = fetchNoticeAllUseCase
     }
 
     public struct Input {
@@ -30,8 +30,8 @@ public final class NoticeViewModel {
         let output = Output()
 
         input.fetchNotice
-            .flatMap { [fetchNoticeUseCase] _ -> Single<[FetchNoticeEntity]> in
-                return fetchNoticeUseCase.execute(type: .all)
+            .flatMap { [fetchNoticeAllUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticeAllUseCase.execute()
                     .catchAndReturn([])
             }
             .bind(to: output.dataSource)
@@ -39,7 +39,13 @@ public final class NoticeViewModel {
 
         input.didTapList
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { $0.1[$0.0.row] }
+            .map { selectedIndexPath, entities in
+                entities[selectedIndexPath.row]
+            }
+            .do { entity in
+                //let savedIds: [Int] = Utility.PreferenceManager.readNoticeIDs ?? []
+                //PreferenceManager.readNoticeIDs = savedIds.isEmpty ? [entity.id] : savedIds + [entity.id]
+            }
             .bind(to: output.goNoticeDetailScene)
             .disposed(by: disposeBag)
 
