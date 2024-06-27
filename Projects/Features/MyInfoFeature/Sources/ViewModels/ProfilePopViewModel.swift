@@ -1,15 +1,8 @@
-//
-//  ProfilePopViewModel.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/02/18.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
+import ImageDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface

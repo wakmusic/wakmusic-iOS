@@ -1,18 +1,10 @@
-//
-//  ProfilePopViewController.swift
-//  DesignSystem
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
+import ImageDomainInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxRelay
 import RxSwift
 import UIKit
-import UserDomainInterface
 import Utility
 
 public final class ProfilePopViewController: UIViewController, ViewControllerFromStoryBoard {
@@ -39,7 +31,10 @@ public final class ProfilePopViewController: UIViewController, ViewControllerFro
     }
 
     public static func viewController(viewModel: ProfilePopViewModel) -> ProfilePopViewController {
-        let viewController = ProfilePopViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
+        let viewController = ProfilePopViewController.viewController(
+            storyBoardName: "ProfilePopUp",
+            bundle: Bundle.module
+        )
         viewController.viewModel = viewModel
         return viewController
     }

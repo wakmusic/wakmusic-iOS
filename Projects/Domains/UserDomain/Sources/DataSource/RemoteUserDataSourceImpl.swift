@@ -11,12 +11,6 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func fetchProfileList() -> Single<[ProfileListEntity]> {
-        return request(.fetchProfileList)
-            .map([FetchProfileListResponseDTO].self)
-            .map { $0.map { $0.toDomain() } }
-    }
-
     public func setProfile(image: String) -> Single<BaseEntity> {
         return request(.setProfile(image: image))
             .map(BaseResponseDTO.self)

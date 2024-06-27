@@ -22,4 +22,10 @@ public extension AppComponent {
             FetchLyricDecoratingBackgroundUseCaseImpl(imageRepository: imageRepository)
         }
     }
+
+    var fetchProfileListUseCase: any FetchProfileListUseCase {
+        shared {
+            FetchProfileListUseCaseImpl(imageRepository: imageRepository)
+        }
+    }
 }

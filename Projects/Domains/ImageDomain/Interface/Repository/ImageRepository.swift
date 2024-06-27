@@ -3,4 +3,5 @@ import RxSwift
 
 public protocol ImageRepository {
     func fetchLyricDecoratingBackground() -> Single<[LyricDecoratingBackgroundEntity]>
+    func fetchProfileList() -> Single<[ProfileListEntity]>
 }

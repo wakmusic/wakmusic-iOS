@@ -41,6 +41,10 @@ extension AppComponent {
         ServiceInfoComponent(parent: self)
     }
 
+    var profilePopComponent: ProfilePopComponent {
+        ProfilePopComponent(parent: self)
+    }
+
     var fruitDrawFactory: any FruitDrawFactory {
         FruitDrawComponent(parent: self)
     }

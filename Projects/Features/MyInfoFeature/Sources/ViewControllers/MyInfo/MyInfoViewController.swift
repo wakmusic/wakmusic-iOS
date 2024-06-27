@@ -12,9 +12,11 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
+    private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
+    private var multiPurposePopUpFactory: MultiPurposePopUpFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -22,6 +24,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
     private var fruitDrawFactory: FruitDrawFactory!
+
+    var editSheetView: EditSheetView!
+    var bottomSheetView: BottomSheetView!
 
     override func configureNavigation() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -43,7 +48,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
 
     public static func viewController(
         reactor: MyInfoReactor,
+        profilePopUpComponent: ProfilePopComponent,
         textPopUpFactory: TextPopUpFactory,
+        multiPurposePopUpFactory: MultiPurposePopUpFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
@@ -53,7 +60,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
         fruitDrawFactory: FruitDrawFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
+        viewController.profilePopUpComponent = profilePopUpComponent
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
         viewController.noticeFactory = noticeFactory
@@ -69,6 +78,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoggedIn in
                 owner.myInfoView.updateIsHiddenLoginWarningView(isLoggedIn: isLoggedIn)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map(\.profileImage)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, image in
+                owner.myInfoView.profileView.updateProfileImage(image: image)
             }
             .disposed(by: disposeBag)
 
@@ -94,11 +110,12 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$moreButtonDidTap)
+        reactor.pulse(\.$profileImageDidTap)
             .compactMap { $0 }
-            .bind { _ in
-                #warning("[프로필 변경, 닉네임 수정] 팝업 띄워야 함")
-            }
+            .bind(with: self, onNext: { owner, _ in
+                owner.showEditSheet(in: owner.view, type: .profile)
+                owner.editSheetView.delegate = owner
+            })
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$navigateType)
@@ -157,8 +174,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        myInfoView.rx.moreButtonDidTap
-            .map { MyInfoReactor.Action.moreButtonDidTap }
+        myInfoView.rx.profileImageDidTap
+            .map { MyInfoReactor.Action.profileImageDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -202,5 +219,33 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor> {
 extension MyInfoViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+extension MyInfoViewController: EditSheetViewDelegate {
+    func buttonTapped(type: EditSheetSelectType) {
+        switch type {
+        case .edit:
+            break
+        case .share:
+            break
+        case .profile:
+            let vc = profilePopUpComponent.makeView()
+            self.showEntryKitModal(content: vc, height: 352)
+        case .nickname:
+            guard let vc = multiPurposePopUpFactory
+                .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
+            else { return }
+            self.showEntryKitModal(content: vc, height: 296)
+        }
+    }
+}
+
+extension MyInfoViewController: EqualHandleTappedType {
+    func equalHandleTapped() {
+        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+        if viewControllersCount > 1 {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
 }

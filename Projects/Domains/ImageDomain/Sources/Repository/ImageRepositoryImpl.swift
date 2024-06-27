@@ -14,4 +14,8 @@ public final class ImageRepositoryImpl: ImageRepository {
     public func fetchLyricDecoratingBackground() -> Single<[LyricDecoratingBackgroundEntity]> {
         remoteImageDataSource.fetchLyricDecoratingBackground()
     }
+
+    public func fetchProfileList() -> Single<[ProfileListEntity]> {
+        remoteImageDataSource.fetchProfileList()
+    }
 }

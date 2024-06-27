@@ -1,4 +1,5 @@
 import DesignSystem
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -7,14 +8,17 @@ import UIKit
 import Utility
 
 private protocol ProfileStateProtocol {
+    func updateProfileImage(image: String)
     func updateNickName(nickname: String)
     func updatePlatform(platform: String)
 }
 
-private protocol ProfileActionProtocol {}
+private protocol ProfileActionProtocol {
+    var profileImageDidTap: Observable<Void> { get }
+}
 
 final class ProfileView: UIView {
-    private let imageView: UIImageView = UIImageView().then {
+    fileprivate let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.MyInfo.iconColor.image
     }
@@ -57,14 +61,15 @@ final class ProfileView: UIView {
     func highlightName() {
         guard let text = self.nameLabel.text else { return }
         let attrStr = NSMutableAttributedString(string: text)
-        let fullRange = NSRange(location: 0, length: attrStr.length)
-        let lastRange = (text as NSString).range(of: "님")
+        let strLength = attrStr.length
+        let nameRange = NSRange(location: 0, length: strLength - 1)
+        let lastRange = NSRange(location: strLength - 1, length: 1)
         let color = DesignSystemAsset.BlueGrayColor.blueGray900.color
         let lightColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
         let font = UIFont.setFont(.t3(weight: .medium))
         let lightFont = UIFont.setFont(.t4(weight: .light))
-        attrStr.addAttribute(.foregroundColor, value: color, range: fullRange)
-        attrStr.addAttribute(.font, value: font, range: fullRange)
+        attrStr.addAttribute(.foregroundColor, value: color, range: nameRange)
+        attrStr.addAttribute(.font, value: font, range: nameRange)
         attrStr.addAttribute(.foregroundColor, value: lightColor, range: lastRange)
         attrStr.addAttribute(.font, value: lightFont, range: lastRange)
         self.nameLabel.attributedText = attrStr
@@ -100,6 +105,17 @@ extension ProfileView {
 }
 
 extension ProfileView: ProfileStateProtocol {
+    func updateProfileImage(image: String) {
+        imageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchProfile(name: image, version: 0).toString),
+            placeholder: DesignSystemAsset.MyInfo.iconColor.image,
+            options: [
+                .transition(.fade(0.5)),
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))
+            ]
+        )
+    }
+
     func updateNickName(nickname: String) {
         nameLabel.text = nickname + "님"
         highlightName()
@@ -121,4 +137,11 @@ extension ProfileView: ProfileStateProtocol {
     }
 }
 
-extension Reactive: ProfileActionProtocol where Base: ProfileView {}
+extension Reactive: ProfileActionProtocol where Base: ProfileView {
+    var profileImageDidTap: Observable<Void> {
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        base.imageView.addGestureRecognizer(tapGestureRecognizer)
+        base.imageView.isUserInteractionEnabled = true
+        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+    }
+}

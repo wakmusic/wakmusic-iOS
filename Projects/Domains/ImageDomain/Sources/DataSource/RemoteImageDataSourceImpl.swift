@@ -9,4 +9,10 @@ public final class RemoteImageDataSourceImpl: BaseRemoteDataSource<ImageAPI>, Re
             .map([LyricDecoratingBackgroundResponseDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
+
+    public func fetchProfileList() -> Single<[ProfileListEntity]> {
+        return request(.fetchProfileList)
+            .map([FetchProfileListResponseDTO].self)
+            .map { $0.map { $0.toDomain() } }
+    }
 }

@@ -1,14 +1,6 @@
-//
-//  ProfileCollectionViewCell.swift
-//  DesignSystem
-//
-//  Created by yongbeomkwak on 2023/01/26.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
+import ImageDomainInterface
 import UIKit
-import UserDomainInterface
 import Utility
 
 public enum FanType: String {
