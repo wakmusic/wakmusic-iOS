@@ -1,10 +1,10 @@
+import AuthDomainInterface
 import Foundation
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Utility
-import AuthDomainInterface
 
 final class MyPlaylistDetailReactor: Reactor {
     let key: String
@@ -58,7 +58,7 @@ final class MyPlaylistDetailReactor: Reactor {
         removeSongsUseCase: any RemoveSongsUseCase,
         uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase,
         logoutUseCase: any LogoutUseCase
-         
+
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
@@ -68,7 +68,7 @@ final class MyPlaylistDetailReactor: Reactor {
         self.removeSongsUseCase = removeSongsUseCase
         self.uploadPlaylistImageUseCase = uploadPlaylistImageUseCase
         self.logoutUseCase = logoutUseCase
-        
+
         self.initialState = State(
             isEditing: false,
             dataSource: PlaylistDetailEntity(

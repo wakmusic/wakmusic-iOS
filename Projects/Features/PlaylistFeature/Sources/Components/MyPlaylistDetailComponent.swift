@@ -30,7 +30,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 key: key,
                 fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
-                updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase, 
+                updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
