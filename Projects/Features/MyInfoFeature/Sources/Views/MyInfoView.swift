@@ -13,6 +13,7 @@ private protocol MyInfoStateProtocol {
 }
 
 private protocol MyInfoActionProtocol {
+    var scrollViewDidTap: Observable<Void> { get }
     var loginButtonDidTap: Observable<Void> { get }
     var profileImageDidTap: Observable<Void> { get }
     var drawButtonDidTap: Observable<Void> { get }
@@ -188,6 +189,12 @@ extension MyInfoView: MyInfoStateProtocol {
 }
 
 extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
+    var scrollViewDidTap: Observable<Void> {
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        base.scrollView.addGestureRecognizer(tapGestureRecognizer)
+        base.scrollView.isUserInteractionEnabled = true
+        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+    }
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
     var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }
