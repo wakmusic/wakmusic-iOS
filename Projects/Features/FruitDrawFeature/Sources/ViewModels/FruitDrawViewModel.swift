@@ -1,11 +1,11 @@
 import BaseFeature
 import Foundation
+import Kingfisher
 import LogManager
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
-import Kingfisher
 
 public final class FruitDrawViewModel: ViewModelType {
     private let fetchFruitDrawStatusUseCase: FetchFruitDrawStatusUseCase
@@ -72,7 +72,7 @@ public final class FruitDrawViewModel: ViewModelType {
                 guard let self = self else { return .never() }
                 return self.downloadNoteImage(entity: entity)
             }
-            .map { (entity, data) -> FruitEntity in
+            .map { entity, data -> FruitEntity in
                 var newEntity = entity
                 newEntity.imageData = data
                 return newEntity
@@ -83,7 +83,7 @@ public final class FruitDrawViewModel: ViewModelType {
         let combineObservable = Observable.combineLatest(
             input.endedLottieAnimation,
             output.fruitSource.skip(1)
-        ) { (_, fruit) -> FruitEntity in
+        ) { _, fruit -> FruitEntity in
             return fruit
         }
 
