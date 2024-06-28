@@ -82,7 +82,7 @@ extension MultiPurposePopupViewController {
 
 //        textField.becomeFirstResponder()
         self.textField.attributedPlaceholder = NSAttributedString(
-            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTile ?
+            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTitle ?
                 "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요.",
             attributes: focusedplaceHolderAttributes
         ) // 플레이스 홀더 설정

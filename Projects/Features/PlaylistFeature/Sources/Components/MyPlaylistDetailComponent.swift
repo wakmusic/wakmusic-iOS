@@ -11,7 +11,6 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
-    var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
 
@@ -31,7 +30,6 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
-                addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
                 logoutUseCase: dependency.logoutUseCase

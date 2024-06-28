@@ -18,6 +18,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
+        case changeTitle(String)
     }
 
     enum Mutation {
@@ -45,7 +46,6 @@ final class MyPlaylistDetailReactor: Reactor {
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let updatePlaylistUseCase: any UpdatePlaylistUseCase
     private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
-    private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase
 
@@ -56,7 +56,6 @@ final class MyPlaylistDetailReactor: Reactor {
         fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
         updatePlaylistUseCase: any UpdatePlaylistUseCase,
         updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
-        addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
         uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase,
         logoutUseCase: any LogoutUseCase
@@ -66,7 +65,6 @@ final class MyPlaylistDetailReactor: Reactor {
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
         self.updatePlaylistUseCase = updatePlaylistUseCase
         self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
-        self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.uploadPlaylistImageUseCase = uploadPlaylistImageUseCase
         self.logoutUseCase = logoutUseCase
@@ -106,6 +104,9 @@ final class MyPlaylistDetailReactor: Reactor {
             return restoreDataSource()
         case let .itemDidMoved(from, to):
             return updateItemPosition(from: from, to: to)
+        
+        case let .changeTitle(text):
+            return updateTitle(text: text)
         }
     }
 
@@ -205,6 +206,20 @@ private extension MyPlaylistDetailReactor {
             .just(.showtoastMessage(message)),
             updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
                 .andThen(.empty())
+        ])
+    }
+    
+    func updateTitle(text: String) -> Observable<Mutation> {
+        
+        let state = currentState
+        
+        var prev = state.header
+        prev.updateTitle(text)
+        
+        return .concat([
+            updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
+                .andThen(.empty()),
+            .just(.updateHeader(prev))
         ])
     }
 }

@@ -8,6 +8,8 @@ import Then
 import UIKit
 import Utility
 
+#warning("송카트, 공유하기, 이미지 업로드")
+
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
     SongCartViewType {
@@ -188,14 +190,23 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         completeButton.rx
             .tap
-            .bind(with: self) { owner, _ in
-                reactor.action.onNext(.completeButtonDidTap)
-            }
+            .map{ Reactor.Action.completeButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         headerView.rx.editNickNameButtonDidTap
-            .bind(with: self) { ownerm, _ in
-                #warning("이름 변경 팝업")
+            .bind(with: self) { owner, _ in
+                
+                guard let reactor = owner.reactor else {
+                    return
+                }
+                
+                let vc = owner.multiPurposePopupFactory.makeView(type: .updatePlaylistTitle, key: reactor.key) { text in
+                    reactor.action.onNext(.changeTitle(text))
+                }
+                
+                owner.showBottomSheet(content: vc, size: .fixed(296))
+                
                 DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
@@ -203,6 +214,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
                 DEBUG_LOG("카메라 버튼 탭")
+                owner.hideplaylistEditSheet()
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
@@ -288,13 +300,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, info in
 
                 let (count, limit) = (info.0, info.1.songCount)
-
+                
                 if count == .zero {
                     owner.hideSongCart()
                 } else {
                     owner.showSongCart(
                         in: owner.view,
-                        type: .myList,
+                        type: .myPlaylist,
                         selectedSongCount: count,
                         totalSongCount: limit,
                         useBottomSpace: false
@@ -412,8 +424,17 @@ extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
 }
 
 extension MyPlaylistDetailViewController: SongCartViewDelegate {
-    func buttonTapped(type: BaseFeature.SongCartSelectType) {
-        #warning("송카트 구횬")
+    func buttonTapped(type: SongCartSelectType) {
+        
+        guard let reactor = reactor else {
+            return
+        }
+        
+        let currentState = reactor.currentState
+        
+        
+        
+        
     }
 }
 
