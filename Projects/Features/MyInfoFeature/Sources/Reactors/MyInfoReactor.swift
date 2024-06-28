@@ -4,6 +4,7 @@ import LogManager
 import ReactorKit
 import UserDomainInterface
 import Utility
+import NoticeDomainInterface
 
 final class MyInfoReactor: Reactor {
     enum Action {
@@ -51,11 +52,15 @@ final class MyInfoReactor: Reactor {
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
     }
-
+    
     var initialState: State
+    private let fetchNoticeIDListUseCase : any FetchNoticeIDListUseCase
     private var disposeBag = DisposeBag()
 
-    init() {
+    init(
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+    ) {
+        self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
@@ -64,6 +69,7 @@ final class MyInfoReactor: Reactor {
             isAllNoticesRead: false
         )
         observeUserInfoChanges()
+        observeReadNoticeIdChanges()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -94,6 +100,7 @@ final class MyInfoReactor: Reactor {
                 updatePlatform(userInfo)
             )
         case let .changeReadNoticeIDs(readIDs):
+            return updateIsAllNoticesRead(readIDs)
         }
     }
 
@@ -120,6 +127,9 @@ final class MyInfoReactor: Reactor {
 
         case let .updatePlatform(platform):
             newState.platform = platform
+            
+        case let .updateIsAllNoticesRead(isAllNoticesRead):
+            newState.isAllNoticesRead = isAllNoticesRead
         }
         return newState
     }
@@ -135,15 +145,25 @@ private extension MyInfoReactor {
     }
 
     func observeReadNoticeIdChanges() {
-//        PreferenceManager.$readNoticeIDs
-//            .compactMap { $0 }
-//            .bind(with: self) { owner, readIDs in
-//                owner.action.onNext(.changeReadNoticeIDs(readIDs))
-//            }
-//            .disposed(by: disposeBag)
+        PreferenceManager.$ignoredPopupIDs
+            .map { $0 ?? [] }
+            .bind(with: self) { owner, readIDs in
+                owner.action.onNext(.changeReadNoticeIDs(readIDs))
+            }
+            .disposed(by: disposeBag)
     }
 
-    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {}
+    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
+        return fetchNoticeIDListUseCase.execute()
+            .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
+            .asObservable()
+            .map {
+                let readIDsSet = Set(readIDs)
+                let allNoticeIDsSet = Set($0.data)
+                return allNoticeIDsSet.isSubset(of: readIDsSet)
+            }
+            .map { Mutation.updateIsAllNoticesRead($0) }
+    }
 
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))

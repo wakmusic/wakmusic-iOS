@@ -74,6 +74,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.state.map(\.isAllNoticesRead)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isAllNoticesRead in
+                owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.isLoggedIn)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoggedIn in
