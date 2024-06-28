@@ -15,4 +15,5 @@ public struct FruitEntity {
 
     public let quantity: Int
     public let fruitID, name, imageURL: String
+    public var imageData: Data?
 }

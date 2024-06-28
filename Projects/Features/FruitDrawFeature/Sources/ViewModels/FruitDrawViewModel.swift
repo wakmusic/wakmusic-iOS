@@ -5,6 +5,7 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import Kingfisher
 
 public final class FruitDrawViewModel: ViewModelType {
     private let fetchFruitDrawStatusUseCase: FetchFruitDrawStatusUseCase
@@ -37,8 +38,8 @@ public final class FruitDrawViewModel: ViewModelType {
             name: "",
             imageURL: ""
         ))
+        let showRewardNote: PublishSubject<FruitEntity> = PublishSubject()
         let showToast: PublishSubject<String> = PublishSubject()
-        let showRewardNote: PublishRelay<String> = PublishRelay()
     }
 
     public func transform(from input: Input) -> Output {
@@ -67,13 +68,53 @@ public final class FruitDrawViewModel: ViewModelType {
                     .catchAndReturn(.init(quantity: 0, fruitID: "", name: "", imageURL: ""))
             }
             .filter { $0.quantity > 0 }
+            .flatMap { [weak self] entity -> Observable<(FruitEntity, Data?)> in
+                guard let self = self else { return .never() }
+                return self.downloadNoteImage(entity: entity)
+            }
+            .map { (entity, data) -> FruitEntity in
+                var newEntity = entity
+                newEntity.imageData = data
+                return newEntity
+            }
             .bind(to: output.fruitSource)
             .disposed(by: disposeBag)
-//
-//        Observable.zip(input.endedLottieAnimation, output.dataSource)
-//            .subscribe()
-//            .disposed(by: disposeBag)
+
+        let combineObservable = Observable.combineLatest(
+            input.endedLottieAnimation,
+            output.fruitSource.skip(1)
+        ) { (_, fruit) -> FruitEntity in
+            return fruit
+        }
+
+        combineObservable
+            .debug()
+            .bind(to: output.showRewardNote)
+            .disposed(by: disposeBag)
 
         return output
+    }
+}
+
+private extension FruitDrawViewModel {
+    func downloadNoteImage(entity: FruitEntity) -> Observable<(FruitEntity, Data?)> {
+        guard let URL = URL(string: entity.imageURL) else { return .never() }
+        return Observable.create { observer in
+            KingfisherManager.shared.retrieveImage(
+                with: URL
+            ) { result in
+                switch result {
+                case let .success(value):
+                    observer.onNext((entity, value.data()))
+                    observer.onCompleted()
+
+                case let .failure(error):
+                    LogManager.printDebug(error.localizedDescription)
+                    observer.onNext((entity, Data()))
+                    observer.onCompleted()
+                }
+            }
+            return Disposables.create()
+        }
     }
 }

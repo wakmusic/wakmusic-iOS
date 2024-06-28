@@ -160,6 +160,17 @@ public final class FruitDrawViewController: UIViewController {
 
 private extension FruitDrawViewController {
     func outputBind() {
+        output.showRewardNote
+            .bind(with: self) { owner, entity in
+                owner.drawButton.setTitle("확인", for: .normal)
+                owner.drawButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+                UIView.animate(withDuration: 0.3) {
+                    owner.lottieAnimationView.alpha = 0
+                    owner.drawButton.alpha = 1
+                }
+            }
+            .disposed(by: disposeBag)
+
         output.canDraw
             .skip(1)
             .bind(with: self) { owner, canDraw in
@@ -170,10 +181,12 @@ private extension FruitDrawViewController {
             }
             .disposed(by: disposeBag)
 
-        output.fruitSource
-            .filter { $0.quantity > 0 }
-            .bind(with: self) { owner, fruit in
-                LogManager.printDebug(fruit)
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                )
             }
             .disposed(by: disposeBag)
     }
@@ -190,8 +203,9 @@ private extension FruitDrawViewController {
         drawButton.rx.tap
             .withLatestFrom(output.canDraw)
             .filter { $0 }
-            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
             .bind(with: self) { owner, _ in
+                owner.input.didTapFruitDraw.onNext(())
                 owner.startLottieAnimation()
                 UIView.animate(
                     withDuration: 0.3,
