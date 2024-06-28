@@ -142,17 +142,31 @@ final class MyPlaylistDetailReactor: Reactor {
 
 private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
+
         return .concat([
             .just(.updateLoadingState(true)),
-            .just(.updateHeader(MyPlaylistHeaderModel(
-                key: "333",
-                title: "임시플리타이틀",
-                image: "333",
-                userName: "hamp",
-                private: false,
-                songCount: 5
-            ))),
-            .just(.updateDataSource(fetchData())),
+            fetchPlaylistDetailUseCase.execute(id: key, type: .my)
+                .asObservable()
+                .flatMap({ data -> Observable<Mutation> in
+                    return .concat([
+                        Observable.just( Mutation.updateHeader(MyPlaylistHeaderModel(
+                            key: data.key,
+                            title: data.title,
+                            image: data.image,
+                            userName: data.userName,
+                            private: data.private,
+                            songCount: data.songs.count)
+                        )),
+                        Observable.just(  Mutation.updateDataSource(data.songs))
+                    ])
+                    
+                })
+                .catch({ error in
+                    let wmErorr = error.asWMError
+                    return Observable.just( 
+                        Mutation.showtoastMessage(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
+                }),
             .just(.updateLoadingState(false))
         ])
     }

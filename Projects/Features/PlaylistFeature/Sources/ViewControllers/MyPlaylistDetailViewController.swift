@@ -230,6 +230,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .disposed(by: disposeBag)
 
         sharedState.map(\.header)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 owner.headerView.updateData(model)
@@ -238,6 +239,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
