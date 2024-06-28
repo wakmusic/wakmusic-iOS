@@ -62,7 +62,8 @@ extension ArtistMusicCell {
 
     func update(model: ArtistSongListEntity) {
         self.model = model
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor
+            .clear
 
         titleStringLabel.attributedText = getAttributedString(
             text: model.title,

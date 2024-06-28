@@ -78,7 +78,8 @@ extension ArtistPlayButtonGroupView {
         // 랜덤재생
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderWidth = 1
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7).cgColor
+        shufflePlayButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7)
+            .cgColor
         shufflePlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         shufflePlayButton.setImage(
             DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal),
