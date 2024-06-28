@@ -3,7 +3,7 @@ import UserDomainInterface
 
 public struct FruitDrawStatusResponseDTO: Decodable {
     public let canDraw: Bool
-    public let lastDraw: FruitDrawStatusResponseDTO.LastDraw
+    public let lastDraw: FruitDrawStatusResponseDTO.LastDraw?
 }
 
 public extension FruitDrawStatusResponseDTO {
@@ -30,11 +30,11 @@ public extension FruitDrawStatusResponseDTO {
         return FruitDrawStatusEntity(
             canDraw: canDraw,
             lastDraw: FruitDrawStatusEntity.LastDraw(
-                drawAt: lastDraw.drawAt,
+                drawAt: lastDraw?.drawAt ?? 0,
                 fruit: FruitDrawStatusEntity.LastDraw.Fruit(
-                    fruitID: lastDraw.fruit.fruitID,
-                    name: lastDraw.fruit.name,
-                    imageURL: lastDraw.fruit.imageURL
+                    fruitID: lastDraw?.fruit.fruitID ?? "",
+                    name: lastDraw?.fruit.name ?? "",
+                    imageURL: lastDraw?.fruit.imageURL ?? ""
                 )
             )
         )

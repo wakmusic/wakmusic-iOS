@@ -40,11 +40,11 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let drawButton = UIButton(type: .system).then {
-        $0.setTitle("음표 열매 뽑기", for: .normal)
+        $0.setTitle("...", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
-        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray300.color
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
@@ -125,7 +125,7 @@ public final class FruitDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.FruitDraw.fruitDrawDeepGreenHeart.image
     }
 
-    private var viewModel: FruitDrawViewModel
+    private let viewModel: FruitDrawViewModel
     lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
@@ -149,7 +149,8 @@ public final class FruitDrawViewController: UIViewController {
         addSubViews()
         setLayout()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     override public var preferredStatusBarStyle: UIStatusBarStyle {
@@ -158,7 +159,28 @@ public final class FruitDrawViewController: UIViewController {
 }
 
 private extension FruitDrawViewController {
-    func bind() {
+    func outputBind() {
+        output.canDraw
+            .skip(1)
+            .bind(with: self) { owner, canDraw in
+                owner.drawButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
+                owner.drawButton.backgroundColor = canDraw ?
+                DesignSystemAsset.PrimaryColorV2.point.color :
+                DesignSystemAsset.BlueGrayColor.gray300.color
+            }
+            .disposed(by: disposeBag)
+
+        output.fruitSource
+            .filter { $0.quantity > 0 }
+            .bind(with: self) { owner, fruit in
+                LogManager.printDebug(fruit)
+            }
+            .disposed(by: disposeBag)
+    }
+
+    func inputBind() {
+        input.fetchFruitDrawStatus.onNext(())
+
         dismissButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.dismiss(animated: true)
@@ -166,6 +188,8 @@ private extension FruitDrawViewController {
             .disposed(by: disposeBag)
 
         drawButton.rx.tap
+            .withLatestFrom(output.canDraw)
+            .filter { $0 }
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 owner.startLottieAnimation()

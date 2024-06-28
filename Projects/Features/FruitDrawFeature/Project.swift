@@ -10,7 +10,8 @@ let project = Project.module(
             module: .feature(.FruitDrawFeature),
             dependencies: [
                 .feature(target: .FruitDrawFeature, type: .interface),
-                .feature(target: .BaseFeature)
+                .feature(target: .BaseFeature),
+                .domain(target: .UserDomain, type: .interface)
             ]
         ),
         .demo(
