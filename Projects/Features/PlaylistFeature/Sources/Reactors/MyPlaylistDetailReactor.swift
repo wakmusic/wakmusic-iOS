@@ -97,7 +97,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case .privateButtonDidTap:
             return updatePrivate()
 
-        case .forceSave , .completeButtonDidTap:
+        case .forceSave, .completeButtonDidTap:
             return endEditing()
 
         case let .itemDidTap(index):
@@ -172,7 +172,6 @@ private extension MyPlaylistDetailReactor {
         ])
     }
 
-
     func endEditing() -> Observable<Mutation> {
         #warning("저장 유즈 케이스")
         let state = currentState
@@ -187,14 +186,11 @@ private extension MyPlaylistDetailReactor {
             .just(.updateDataSource(currentDataSoruce)),
             .just(.updateBackUpDataSource(currentDataSoruce)),
             .just(.updateSelectedCount(0)),
-            updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map{ $0.id })
+            updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map { $0.id })
                 .andThen(.empty())
-            
-        
+
         ])
     }
-
-
 
     func updatePrivate() -> Observable<Mutation> {
         let state = currentState
@@ -213,9 +209,8 @@ private extension MyPlaylistDetailReactor {
     }
 }
 
-// usecase를 사용하지 않는
+/// usecase를 사용하지 않는
 private extension MyPlaylistDetailReactor {
-    
     func beginEditing() -> Observable<Mutation> {
         let state = currentState
         let currentDataSoruce = state.dataSource
@@ -225,7 +220,7 @@ private extension MyPlaylistDetailReactor {
             .just(.updateBackUpDataSource(currentDataSoruce))
         ])
     }
-    
+
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
@@ -243,7 +238,7 @@ private extension MyPlaylistDetailReactor {
             .just(Mutation.updateSelectingStateByIndex(prev))
         ])
     }
-    
+
     func updateItemPosition(from: Int, to: Int) -> Observable<Mutation> {
         let state = currentState
         var dataSource = state.dataSource
@@ -268,4 +263,3 @@ private extension MyPlaylistDetailReactor {
         ])
     }
 }
-

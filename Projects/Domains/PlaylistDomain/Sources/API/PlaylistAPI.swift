@@ -138,9 +138,9 @@ extension PlaylistAPI: WMAPI {
         switch self {
         case .fetchRecommendPlaylist, .fetchPlaylistSongs:
             return .none
-            
+
         case let .fetchPlaylistDetail(_, type):
-            
+
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,

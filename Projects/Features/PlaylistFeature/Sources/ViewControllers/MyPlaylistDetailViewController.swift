@@ -156,17 +156,18 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .withLatestFrom(sharedState.map(\.isEditing))
             .bind(with: self) { owner, isEditing in
 
-                let vc = owner.textPopUpFactory.makeView(text: "변경된 내용을 저장할까요",
-                                                   cancelButtonIsHidden: false,
-                                                   confirmButtonText: "확인", cancelButtonText: "취소") {
-                    
+                let vc = owner.textPopUpFactory.makeView(
+                    text: "변경된 내용을 저장할까요",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: "확인",
+                    cancelButtonText: "취소"
+                ) {
                     reactor.action.onNext(.forceSave)
                     owner.navigationController?.popViewController(animated: true)
-                    
+
                 } cancelCompletion: {
                     reactor.action.onNext(.restore)
                     owner.navigationController?.popViewController(animated: true)
-                    
                 }
 
                 if isEditing {
