@@ -2,6 +2,7 @@ import BaseFeatureInterface
 import FruitDrawFeatureInterface
 import MyInfoFeatureInterface
 import NeedleFoundation
+import NoticeDomainInterface
 import SignInFeatureInterface
 import UIKit
 
@@ -16,12 +17,15 @@ public protocol MyInfoDependency: Dependency {
     var settingFactory: any SettingFactory { get }
     var profilePopComponent: ProfilePopComponent { get }
     var fruitDrawFactory: any FruitDrawFactory { get }
+    var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
 }
 
 public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
     public func makeView() -> UIViewController {
         return MyInfoViewController.viewController(
-            reactor: MyInfoReactor(),
+            reactor: MyInfoReactor(
+                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase
+            ),
             profilePopUpComponent: dependency.profilePopComponent,
             textPopUpFactory: dependency.textPopUpFactory,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,

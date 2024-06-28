@@ -53,13 +53,13 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     }
 
     @IBAction func ignoreButtonAction(_ sender: Any) {
-        let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
+        let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredPopupIDs ?? []
         let currentNoticeIds: [Int] = output.originDataSource.value.map { $0.id }
 
         if savedIgoredNoticeIds.isEmpty {
-            Utility.PreferenceManager.ignoredNoticeIDs = currentNoticeIds
+            Utility.PreferenceManager.ignoredPopupIDs = currentNoticeIds
         } else {
-            Utility.PreferenceManager.ignoredNoticeIDs = savedIgoredNoticeIds + currentNoticeIds
+            Utility.PreferenceManager.ignoredPopupIDs = savedIgoredNoticeIds + currentNoticeIds
         }
         dismiss(animated: true)
     }

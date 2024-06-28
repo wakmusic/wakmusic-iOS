@@ -1,6 +1,7 @@
 import BaseFeature
 import Foundation
 import LogManager
+import NoticeDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
@@ -16,7 +17,8 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
-        case changeUserInfo(UserInfo?)
+        case changedUserInfo(UserInfo?)
+        case changedReadNoticeIDs([Int])
     }
 
     enum Mutation {
@@ -27,6 +29,7 @@ final class MyInfoReactor: Reactor {
         case updateProfileImage(String)
         case updateNickname(String)
         case updatePlatform(String)
+        case updateIsAllNoticesRead(Bool)
     }
 
     enum NavigateType {
@@ -44,22 +47,29 @@ final class MyInfoReactor: Reactor {
         var profileImage: String
         var nickname: String
         var platform: String
+        var isAllNoticesRead: Bool
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
     }
 
     var initialState: State
+    private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     private var disposeBag = DisposeBag()
 
-    init() {
+    init(
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+    ) {
+        self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
             nickname: "",
-            platform: ""
+            platform: "",
+            isAllNoticesRead: false
         )
         observeUserInfoChanges()
+        observeReadNoticeIdChanges()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -82,13 +92,15 @@ final class MyInfoReactor: Reactor {
             return teamNavigationDidTap()
         case .settingNavigationDidTap:
             return settingNavigationDidTap()
-        case let .changeUserInfo(userInfo):
+        case let .changedUserInfo(userInfo):
             return .concat(
                 updateIsLoggedIn(userInfo),
                 updateProfileImage(userInfo),
                 updateNickname(userInfo),
                 updatePlatform(userInfo)
             )
+        case let .changedReadNoticeIDs(readIDs):
+            return updateIsAllNoticesRead(readIDs)
         }
     }
 
@@ -115,6 +127,9 @@ final class MyInfoReactor: Reactor {
 
         case let .updatePlatform(platform):
             newState.platform = platform
+
+        case let .updateIsAllNoticesRead(isAllNoticesRead):
+            newState.isAllNoticesRead = isAllNoticesRead
         }
         return newState
     }
@@ -124,9 +139,30 @@ private extension MyInfoReactor {
     func observeUserInfoChanges() {
         PreferenceManager.$userInfo
             .bind(with: self) { owner, userInfo in
-                owner.action.onNext(.changeUserInfo(userInfo))
+                owner.action.onNext(.changedUserInfo(userInfo))
             }
             .disposed(by: disposeBag)
+    }
+
+    func observeReadNoticeIdChanges() {
+        PreferenceManager.$readNoticeIDs
+            .map { $0 ?? [] }
+            .bind(with: self) { owner, readIDs in
+                owner.action.onNext(.changedReadNoticeIDs(readIDs))
+            }
+            .disposed(by: disposeBag)
+    }
+
+    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
+        return fetchNoticeIDListUseCase.execute()
+            .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
+            .asObservable()
+            .map {
+                let readIDsSet = Set(readIDs)
+                let allNoticeIDsSet = Set($0.data)
+                return allNoticeIDsSet.isSubset(of: readIDsSet)
+            }
+            .map { Mutation.updateIsAllNoticesRead($0) }
     }
 
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
