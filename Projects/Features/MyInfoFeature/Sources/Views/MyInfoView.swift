@@ -195,6 +195,7 @@ extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
         base.scrollView.isUserInteractionEnabled = true
         return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
+
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
     var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }

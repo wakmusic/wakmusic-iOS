@@ -223,7 +223,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         myInfoView.rx.scrollViewDidTap
             .bind(with: self) { owner, _ in
                 owner.hideEditSheet()
