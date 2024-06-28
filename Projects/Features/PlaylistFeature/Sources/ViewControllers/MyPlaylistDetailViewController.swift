@@ -53,6 +53,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         $0.tableHeaderView = headerView
         $0.separatorStyle = .none
+        $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
     private lazy var completeButton: RectangleButton = RectangleButton().then {
@@ -66,7 +67,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
-    #warning("추후 의존성 추가")
     init(
         reactor: MyPlaylistDetailReactor,
         multiPurposePopupFactory: any MultiPurposePopupFactory,
@@ -91,7 +91,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
-    #warning("바텀 시트 내리기")
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hideplaylistEditSheet()
@@ -157,10 +156,24 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .withLatestFrom(sharedState.map(\.isEditing))
             .bind(with: self) { owner, isEditing in
 
-                if isEditing {
-                    #warning("경고 팝업 후 되돌릭")
-
+                let vc = owner.textPopUpFactory.makeView(text: "변경된 내용을 저장할까요",
+                                                   cancelButtonIsHidden: false,
+                                                   confirmButtonText: "확인", cancelButtonText: "취소") {
+                    
+                    reactor.action.onNext(.forceSave)
+                    owner.navigationController?.popViewController(animated: true)
+                    
+                } cancelCompletion: {
                     reactor.action.onNext(.restore)
+                    owner.navigationController?.popViewController(animated: true)
+                    
+                }
+
+                if isEditing {
+        
+
+                    owner.showBottomSheet(content: vc)
+                    
 
                 } else {
                     owner.navigationController?.popViewController(animated: true)
@@ -253,8 +266,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 } else {
                     owner.tableView.restore()
                 }
-
-                #warning("셀 선택 업데이트 관련 질문")
                 snapShot.appendSections([0])
                 snapShot.appendItems(model)
 
