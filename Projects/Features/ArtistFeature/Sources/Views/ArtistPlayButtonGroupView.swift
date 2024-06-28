@@ -55,7 +55,7 @@ extension ArtistPlayButtonGroupView {
         // 전체재생
         allPlayButton.layer.cornerRadius = 8
         allPlayButton.layer.borderWidth = 1
-        allPlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
+        allPlayButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         allPlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         allPlayButton.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         allPlayButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
@@ -65,7 +65,7 @@ extension ArtistPlayButtonGroupView {
         allButtonAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ],
             range: NSRange(
@@ -78,7 +78,8 @@ extension ArtistPlayButtonGroupView {
         // 랜덤재생
         shufflePlayButton.layer.cornerRadius = 8
         shufflePlayButton.layer.borderWidth = 1
-        shufflePlayButton.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.withAlphaComponent(0.7).cgColor
+        shufflePlayButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7)
+            .cgColor
         shufflePlayButton.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         shufflePlayButton.setImage(
             DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal),
@@ -91,7 +92,7 @@ extension ArtistPlayButtonGroupView {
         shuffleButtonAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ],
             range: NSRange(
