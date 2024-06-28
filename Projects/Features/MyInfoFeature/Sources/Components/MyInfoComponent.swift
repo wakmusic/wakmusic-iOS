@@ -2,8 +2,8 @@ import BaseFeatureInterface
 import FruitDrawFeatureInterface
 import MyInfoFeatureInterface
 import NeedleFoundation
-import SignInFeatureInterface
 import NoticeDomainInterface
+import SignInFeatureInterface
 import UIKit
 
 public protocol MyInfoDependency: Dependency {

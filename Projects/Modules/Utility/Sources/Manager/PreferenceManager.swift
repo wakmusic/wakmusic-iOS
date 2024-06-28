@@ -37,7 +37,7 @@ public final class PreferenceManager {
 
     @UserDefaultWrapper(key: Constants.ignoredPopupIDs.rawValue, defaultValue: nil)
     public static var ignoredPopupIDs: [Int]?
-    
+
     @UserDefaultWrapper(key: Constants.readNoticeIDs.rawValue, defaultValue: nil)
     public static var readNoticeIDs: [Int]?
 }

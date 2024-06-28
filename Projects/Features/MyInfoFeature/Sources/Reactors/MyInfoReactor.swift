@@ -1,10 +1,10 @@
 import BaseFeature
 import Foundation
 import LogManager
+import NoticeDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
-import NoticeDomainInterface
 
 final class MyInfoReactor: Reactor {
     enum Action {
@@ -52,9 +52,9 @@ final class MyInfoReactor: Reactor {
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
     }
-    
+
     var initialState: State
-    private let fetchNoticeIDListUseCase : any FetchNoticeIDListUseCase
+    private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     private var disposeBag = DisposeBag()
 
     init(
@@ -127,7 +127,7 @@ final class MyInfoReactor: Reactor {
 
         case let .updatePlatform(platform):
             newState.platform = platform
-            
+
         case let .updateIsAllNoticesRead(isAllNoticesRead):
             newState.isAllNoticesRead = isAllNoticesRead
         }

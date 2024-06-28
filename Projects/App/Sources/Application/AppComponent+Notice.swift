@@ -36,7 +36,7 @@ public extension AppComponent {
             FetchNoticeAllUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
-    
+
     var fetchNoticePopupUseCase: any FetchNoticePopupUseCase {
         shared {
             FetchNoticePopupUseCaseImpl(noticeRepository: noticeRepository)
@@ -48,11 +48,10 @@ public extension AppComponent {
             FetchNoticeCategoriesUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
-    
+
     var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase {
         shared {
             FetchNoticeIDListUseCaseImpl(noticeRepository: noticeRepository)
         }
-        
     }
 }

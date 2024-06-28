@@ -80,7 +80,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isLoggedIn)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoggedIn in
