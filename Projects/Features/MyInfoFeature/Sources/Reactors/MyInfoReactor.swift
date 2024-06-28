@@ -17,8 +17,8 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
-        case changeUserInfo(UserInfo?)
-        case changeReadNoticeIDs([Int])
+        case changedUserInfo(UserInfo?)
+        case changedReadNoticeIDs([Int])
     }
 
     enum Mutation {
@@ -92,14 +92,14 @@ final class MyInfoReactor: Reactor {
             return teamNavigationDidTap()
         case .settingNavigationDidTap:
             return settingNavigationDidTap()
-        case let .changeUserInfo(userInfo):
+        case let .changedUserInfo(userInfo):
             return .concat(
                 updateIsLoggedIn(userInfo),
                 updateProfileImage(userInfo),
                 updateNickname(userInfo),
                 updatePlatform(userInfo)
             )
-        case let .changeReadNoticeIDs(readIDs):
+        case let .changedReadNoticeIDs(readIDs):
             return updateIsAllNoticesRead(readIDs)
         }
     }
@@ -139,7 +139,7 @@ private extension MyInfoReactor {
     func observeUserInfoChanges() {
         PreferenceManager.$userInfo
             .bind(with: self) { owner, userInfo in
-                owner.action.onNext(.changeUserInfo(userInfo))
+                owner.action.onNext(.changedUserInfo(userInfo))
             }
             .disposed(by: disposeBag)
     }
@@ -148,7 +148,7 @@ private extension MyInfoReactor {
         PreferenceManager.$ignoredPopupIDs
             .map { $0 ?? [] }
             .bind(with: self) { owner, readIDs in
-                owner.action.onNext(.changeReadNoticeIDs(readIDs))
+                owner.action.onNext(.changedReadNoticeIDs(readIDs))
             }
             .disposed(by: disposeBag)
     }
