@@ -333,7 +333,10 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-                self.navigationController?.pushViewController(myPlaylistFactory.makeView(key: "-iZB-NSFdy-"), animated: true)
+                self.navigationController?.pushViewController(
+                    myPlaylistFactory.makeView(key: "-iZB-NSFdy-"),
+                    animated: true
+                )
 //                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
 
             case .popularList:

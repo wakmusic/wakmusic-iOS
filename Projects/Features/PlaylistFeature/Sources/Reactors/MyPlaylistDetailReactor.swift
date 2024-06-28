@@ -142,31 +142,31 @@ final class MyPlaylistDetailReactor: Reactor {
 
 private extension MyPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
-
         return .concat([
             .just(.updateLoadingState(true)),
             fetchPlaylistDetailUseCase.execute(id: key, type: .my)
                 .asObservable()
-                .flatMap({ data -> Observable<Mutation> in
+                .flatMap { data -> Observable<Mutation> in
                     return .concat([
-                        Observable.just( Mutation.updateHeader(MyPlaylistHeaderModel(
-                            key: data.key,
-                            title: data.title,
-                            image: data.image,
-                            userName: data.userName,
-                            private: data.private,
-                            songCount: data.songs.count)
+                        Observable.just(Mutation.updateHeader(
+                            MyPlaylistHeaderModel(
+                                key: data.key,
+                                title: data.title,
+                                image: data.image,
+                                userName: data.userName,
+                                private: data.private,
+                                songCount: data.songs.count
+                            )
                         )),
-                        Observable.just(  Mutation.updateDataSource(data.songs))
+                        Observable.just(Mutation.updateDataSource(data.songs))
                     ])
-                    
-                })
-                .catch({ error in
+                }
+                .catch { error in
                     let wmErorr = error.asWMError
-                    return Observable.just( 
+                    return Observable.just(
                         Mutation.showtoastMessage(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
-                }),
+                },
             .just(.updateLoadingState(false))
         ])
     }
