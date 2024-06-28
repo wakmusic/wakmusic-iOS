@@ -42,10 +42,6 @@ public final class NoticeViewModel {
             .map { selectedIndexPath, entities in
                 entities[selectedIndexPath.row]
             }
-            .do { entity in
-                let savedIds: [Int] = Utility.PreferenceManager.readNoticeIDs ?? []
-                PreferenceManager.readNoticeIDs = savedIds.isEmpty ? [entity.id] : savedIds + [entity.id]
-            }
             .bind(to: output.goNoticeDetailScene)
             .disposed(by: disposeBag)
 
