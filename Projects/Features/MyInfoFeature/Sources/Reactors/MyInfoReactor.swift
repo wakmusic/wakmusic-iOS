@@ -145,7 +145,7 @@ private extension MyInfoReactor {
     }
 
     func observeReadNoticeIdChanges() {
-        PreferenceManager.$ignoredPopupIDs
+        PreferenceManager.$readNoticeIDs
             .map { $0 ?? [] }
             .bind(with: self) { owner, readIDs in
                 owner.action.onNext(.changedReadNoticeIDs(readIDs))

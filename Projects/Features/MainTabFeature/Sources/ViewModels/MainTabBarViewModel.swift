@@ -6,16 +6,20 @@ import Utility
 
 public final class MainTabBarViewModel {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
+    private let fetchNoticeIDListUseCase: FetchNoticeIDListUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticePopupUseCase: any FetchNoticePopupUseCase
+        fetchNoticePopupUseCase: any FetchNoticePopupUseCase,
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     ) {
         self.fetchNoticePopupUseCase = fetchNoticePopupUseCase
+        self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
     }
 
     public struct Input {
         let fetchNoticePopup: PublishSubject<Void> = PublishSubject()
+        let fetchNoticeIDList: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -42,6 +46,21 @@ public final class MainTabBarViewModel {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
+        input.fetchNoticeIDList
+            .filter { 
+                let readNoticeIDs = PreferenceManager.readNoticeIDs ?? []
+                return readNoticeIDs.isEmpty
+            }
+            .flatMap { [fetchNoticeIDListUseCase] _ -> Single<FetchNoticeIDListEntity> in
+                return fetchNoticeIDListUseCase.execute()
+                    .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
+            }
+            .map { $0.data }
+            .bind { allNoticeIDs in
+                PreferenceManager.readNoticeIDs = allNoticeIDs
+            }
+            .disposed(by: disposeBag)
+        
         return output
     }
 }
