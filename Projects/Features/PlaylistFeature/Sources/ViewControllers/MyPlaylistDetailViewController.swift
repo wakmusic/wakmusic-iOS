@@ -170,11 +170,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
 
                 if isEditing {
-        
-
                     owner.showBottomSheet(content: vc)
-                    
-
                 } else {
                     owner.navigationController?.popViewController(animated: true)
                 }

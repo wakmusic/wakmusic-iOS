@@ -136,8 +136,12 @@ extension PlaylistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
+        case .fetchRecommendPlaylist, .fetchPlaylistSongs:
             return .none
+            
+        case let .fetchPlaylistDetail(_, type):
+            
+            return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
              .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .unSubscribePlaylist:

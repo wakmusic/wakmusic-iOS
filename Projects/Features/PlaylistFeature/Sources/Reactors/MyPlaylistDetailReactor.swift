@@ -189,6 +189,7 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0)),
             updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map{ $0.id })
                 .andThen(.empty())
+            
         
         ])
     }
@@ -205,7 +206,9 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updateHeader(prev)),
-            .just(.showtoastMessage(message))
+            .just(.showtoastMessage(message)),
+            updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
+                .andThen(.empty())
         ])
     }
 }
