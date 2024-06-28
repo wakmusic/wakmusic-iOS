@@ -32,6 +32,7 @@ public final class ArtistViewController:
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
+        LogManager.analytics(ArtistAnalyticsLog.viewPage(pageName: "artist"))
     }
 
     override public func viewDidDisappear(_ animated: Bool) {

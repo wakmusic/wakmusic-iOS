@@ -1,5 +1,6 @@
 import ArtistDomainInterface
 import DesignSystem
+import LogManager
 import RxCocoa
 import RxSwift
 import UIKit
@@ -47,6 +48,11 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         configureUI()
         configureHeader()
         configureContent()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(ArtistAnalyticsLog.viewPage(pageName: "artist_detail"))
     }
 
     override public func viewDidLayoutSubviews() {

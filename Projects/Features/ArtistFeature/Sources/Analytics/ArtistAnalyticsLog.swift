@@ -1,6 +1,7 @@
 import LogManager
 
 enum ArtistAnalyticsLog: AnalyticsLogType {
+    case viewPage(pageName: String)
     case clickArtistItem(artist: String)
     case clickArtistDescription(page: String, artist: String)
     case clickArtistPlayButton(type: String, artist: String)
