@@ -165,8 +165,8 @@ private extension FruitDrawViewController {
             .bind(with: self) { owner, canDraw in
                 owner.drawButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
                 owner.drawButton.backgroundColor = canDraw ?
-                DesignSystemAsset.PrimaryColorV2.point.color :
-                DesignSystemAsset.BlueGrayColor.gray300.color
+                    DesignSystemAsset.PrimaryColorV2.point.color :
+                    DesignSystemAsset.BlueGrayColor.gray300.color
             }
             .disposed(by: disposeBag)
 

@@ -3,8 +3,8 @@ import Foundation
 import LogManager
 import RxRelay
 import RxSwift
-import Utility
 import UserDomainInterface
+import Utility
 
 public final class FruitDrawViewModel: ViewModelType {
     private let fetchFruitDrawStatusUseCase: FetchFruitDrawStatusUseCase
@@ -31,7 +31,12 @@ public final class FruitDrawViewModel: ViewModelType {
 
     public struct Output {
         let canDraw: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-        let fruitSource: BehaviorRelay<FruitEntity> = BehaviorRelay(value: .init(quantity: 0, fruitID: "", name: "", imageURL: ""))
+        let fruitSource: BehaviorRelay<FruitEntity> = BehaviorRelay(value: .init(
+            quantity: 0,
+            fruitID: "",
+            name: "",
+            imageURL: ""
+        ))
         let showToast: PublishSubject<String> = PublishSubject()
         let showRewardNote: PublishRelay<String> = PublishRelay()
     }
