@@ -64,4 +64,22 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
+
+    public func fetchFruitList() -> Single<[FruitEntity]> {
+        return request(.fetchFruitList)
+            .map([FruitListResponseDTO].self)
+            .map { $0.map { $0.toDomain() } }
+    }
+
+    public func fetchFruitDrawStatus() -> Single<FruitDrawStatusEntity> {
+        return request(.fetchFruitDrawStatus)
+            .map(FruitDrawStatusResponseDTO.self)
+            .map { $0.toDomain() }
+    }
+
+    public func drawFruit() -> Single<FruitEntity> {
+        return request(.drawFruit)
+            .map(FruitListResponseDTO.self)
+            .map { $0.toDomain() }
+    }
 }
