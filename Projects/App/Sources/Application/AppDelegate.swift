@@ -40,7 +40,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() // 시크릿 아이디
         naverInstance?.appName = NAVER_APP_NAME() // 앱이름
 
-
         // Realm register
         RealmManager.shared.register()
 
