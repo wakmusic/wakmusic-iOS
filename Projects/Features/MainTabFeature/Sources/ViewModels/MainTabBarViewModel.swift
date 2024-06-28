@@ -47,7 +47,7 @@ public final class MainTabBarViewModel {
             .disposed(by: disposeBag)
 
         input.fetchNoticeIDList
-            .filter { 
+            .filter {
                 let readNoticeIDs = PreferenceManager.readNoticeIDs ?? []
                 return readNoticeIDs.isEmpty
             }
@@ -60,7 +60,7 @@ public final class MainTabBarViewModel {
                 PreferenceManager.readNoticeIDs = allNoticeIDs
             }
             .disposed(by: disposeBag)
-        
+
         return output
     }
 }
