@@ -44,6 +44,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        hideEditSheet()
     }
 
     public static func viewController(
@@ -222,6 +223,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        myInfoView.rx.scrollViewDidTap
+            .bind(with: self) { owner, _ in
+                owner.hideEditSheet()
+            }.disposed(by: disposeBag)
     }
 }
 
