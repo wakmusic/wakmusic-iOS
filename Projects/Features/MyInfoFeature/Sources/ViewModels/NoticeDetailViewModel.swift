@@ -67,7 +67,7 @@ private extension NoticeDetailViewModel {
         newReadNoticeIDs.append(ID)
         PreferenceManager.readNoticeIDs = newReadNoticeIDs
     }
-    
+
     func downloadImageSize(url: URL) -> Observable<CGSize> {
         return Observable.create { observer in
             KingfisherManager.shared.retrieveImage(
