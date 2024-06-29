@@ -260,6 +260,7 @@ private extension FruitDrawViewController {
             .bind(with: self) { owner, source in
                 let (_, fruit) = source
                 let drawCompleted: Bool = fruit.quantity > 0
+
                 if drawCompleted {
                     owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
                     owner.dismiss(animated: true)
@@ -450,7 +451,7 @@ private extension FruitDrawViewController {
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        startComponentAnimation()
+        perform(#selector(startComponentAnimation), with: nil, afterDelay: 0.3)
     }
 }
 
@@ -467,7 +468,7 @@ private extension FruitDrawViewController {
         }
     }
 
-    func startComponentAnimation() {
+    @objc func startComponentAnimation() {
         // Left Component
         purpleHeartImageView.moveAnimate(duration: 5.0, amount: 30, direction: .up)
         leftNoteImageView.moveAnimate(duration: 3.0, amount: 30, direction: .up)
