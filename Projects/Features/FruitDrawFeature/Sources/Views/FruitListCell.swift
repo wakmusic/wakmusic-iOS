@@ -1,6 +1,7 @@
 import DesignSystem
 import UIKit
 import UserDomainInterface
+import Utility
 
 public protocol FruitListCellDelegate: AnyObject {
     func itemSelected(item: FruitEntity)
@@ -46,7 +47,7 @@ public final class FruitListCell: UICollectionViewCell {
 }
 
 extension FruitListCell {
-    func update(model: [FruitEntity]) {
+    func update(model: [FruitEntity], index: Int) {
         self.items = model
         let notes = [firstNoteImageView, secondNoteImageView, thirdNoteImageView]
         notes.forEach { $0.alpha = 0 }
@@ -54,7 +55,7 @@ extension FruitListCell {
         for i in 0 ..< model.count {
             notes[i].alpha = 1
             if model[i].quantity == -1 {
-                notes[i].image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
+                notes[i].image = floorToImage(index: index)
             } else {
                 notes[i].kf.setImage(
                     with: URL(string: model[i].imageURL),
@@ -62,6 +63,23 @@ extension FruitListCell {
                     options: [.transition(.fade(0.2))]
                 )
             }
+        }
+    }
+
+    func floorToImage(index: Int) -> UIImage {
+        switch index {
+        case 0:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote1st.image
+        case 1:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote2nd.image
+        case 2:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote3rd.image
+        case 3:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote4th.image
+        case 4:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote5th.image
+        default:
+            return DesignSystemAsset.FruitDraw.unidentifiedNote.image
         }
     }
 }
@@ -78,11 +96,14 @@ private extension FruitListCell {
         supportImageView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview()
+            $0.width.equalTo(APP_WIDTH()-40)
+            $0.height.equalTo(26)
         }
 
         noteStackView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.verticalEdges.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-12)
         }
     }
 

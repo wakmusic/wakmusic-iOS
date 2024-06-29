@@ -69,7 +69,7 @@ private extension FruitInfoPopupViewController {
 
     func setLayout() {
         popupContentView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.width.equalTo(335)
             $0.center.equalToSuperview()
         }
 

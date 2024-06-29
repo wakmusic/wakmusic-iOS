@@ -102,7 +102,7 @@ private extension FruitStorageViewController {
                 ) as? FruitListCell else {
                     return UICollectionViewCell()
                 }
-                cell.update(model: model)
+                cell.update(model: model, index: index)
                 cell.delegate = self
                 return cell
             }
