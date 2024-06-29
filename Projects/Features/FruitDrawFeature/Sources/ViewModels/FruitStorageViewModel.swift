@@ -24,11 +24,9 @@ public final class FruitStorageViewModel: ViewModelType {
         self.logoutUseCase = logoutUseCase
     }
 
-    public struct Input {
-    }
+    public struct Input {}
 
-    public struct Output {
-    }
+    public struct Output {}
 
     public func transform(from input: Input) -> Output {
         let output = Output()

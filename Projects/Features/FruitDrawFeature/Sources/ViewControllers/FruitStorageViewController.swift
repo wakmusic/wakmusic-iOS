@@ -63,8 +63,7 @@ public final class FruitStorageViewController: UIViewController {
 }
 
 private extension FruitStorageViewController {
-    func outputBind() {
-    }
+    func outputBind() {}
 
     func inputBind() {
         backButton.rx.tap
