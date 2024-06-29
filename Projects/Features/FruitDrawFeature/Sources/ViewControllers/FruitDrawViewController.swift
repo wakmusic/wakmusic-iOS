@@ -245,9 +245,8 @@ private extension FruitDrawViewController {
             .bind(with: self) { owner, fruit in
                 let drawCompleted: Bool = fruit.quantity > 0
                 if drawCompleted {
-                    owner.dismiss(animated: true) {
-                        owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
-                    }
+                    owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    owner.dismiss(animated: true)
                 } else {
                     owner.dismiss(animated: true)
                 }
@@ -263,9 +262,8 @@ private extension FruitDrawViewController {
                 let (_, fruit) = source
                 let drawCompleted: Bool = fruit.quantity > 0
                 if drawCompleted {
-                    owner.dismiss(animated: true) {
-                        owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
-                    }
+                    owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    owner.dismiss(animated: true)
                 } else {
                     owner.input.didTapFruitDraw.onNext(())
                     owner.startLottieAnimation()
