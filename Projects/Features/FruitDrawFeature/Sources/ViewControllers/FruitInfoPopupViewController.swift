@@ -23,7 +23,7 @@ public final class FruitInfoPopupViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
     }
 
-    private let confirmButton = UIButton().then {
+    private let confirmButton = UIButton(type: .system).then {
         $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
         $0.setTitle("확인", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)

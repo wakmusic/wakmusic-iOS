@@ -19,17 +19,14 @@ public final class FruitListCell: UICollectionViewCell {
 
     private let firstNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
     }
 
     private let secondNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
     }
 
     private let thirdNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
     }
 
     private var items: [FruitEntity] = []
@@ -59,7 +56,11 @@ extension FruitListCell {
             if model[i].quantity == -1 {
                 notes[i].image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
             } else {
-                notes[i].kf.setImage(with: URL(string: model[i].imageURL))
+                notes[i].kf.setImage(
+                    with: URL(string: model[i].imageURL),
+                    placeholder: DesignSystemAsset.FruitDraw.unidentifiedNote.image,
+                    options: [.transition(.fade(0.2))]
+                )
             }
         }
     }

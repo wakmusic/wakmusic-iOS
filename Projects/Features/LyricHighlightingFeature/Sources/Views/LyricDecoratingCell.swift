@@ -46,10 +46,14 @@ final class LyricDecoratingCell: UICollectionViewCell {
 
 extension LyricDecoratingCell {
     func update(model: LyricDecoratingBackgroundEntity) {
-        decoImageView.kf.setImage(with: URL(string: model.url))
         descriptionLabel.text = model.name
         descriptionLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-        checkBoxContentView.isHidden = !model.isSelected
+        checkBoxContentView.isHidden = !model.isSelected        
+        decoImageView.kf.setImage(
+            with: URL(string: model.url),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
 }
 
