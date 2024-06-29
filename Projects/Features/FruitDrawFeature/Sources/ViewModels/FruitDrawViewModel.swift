@@ -55,7 +55,8 @@ public final class FruitDrawViewModel: ViewModelType {
                     .asObservable()
                     .catch { error in
                         let wmError = error.asWMError
-                        output.occurredError.onNext(wmError.errorDescription ?? error.localizedDescription)
+                        let message = wmError.errorDescription ?? error.localizedDescription
+                        output.occurredError.onNext(message)
 
                         if wmError == .tokenExpired {
                             return logoutUseCase.execute()
@@ -80,7 +81,8 @@ public final class FruitDrawViewModel: ViewModelType {
                 return drawFruitUseCase.execute()
                     .catch { error in
                         let wmError = error.asWMError
-                        output.occurredError.onNext(wmError.errorDescription ?? error.localizedDescription)
+                        let message = wmError.errorDescription ?? error.localizedDescription
+                        output.occurredError.onNext(message)
 
                         if wmError == .tokenExpired {
                             return logoutUseCase.execute()
