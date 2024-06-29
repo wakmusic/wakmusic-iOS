@@ -131,8 +131,7 @@ public extension SongCartView {
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
-            
-            
+
         case .likeSong:
             allSelectView.isHidden = false
             songAddButton.isHidden = false

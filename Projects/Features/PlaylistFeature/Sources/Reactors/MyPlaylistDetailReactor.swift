@@ -106,13 +106,13 @@ final class MyPlaylistDetailReactor: Reactor {
             return restoreDataSource()
         case let .itemDidMoved(from, to):
             return updateItemPosition(from: from, to: to)
-        
+
         case let .changeTitle(text):
             return updateTitle(text: text)
-            
+
         case .selectAll:
-                return selectAll()
-            
+            return selectAll()
+
         case .deselectAll:
             return deselectAll()
         }
@@ -216,14 +216,13 @@ private extension MyPlaylistDetailReactor {
                 .andThen(.empty())
         ])
     }
-    
+
     func updateTitle(text: String) -> Observable<Mutation> {
-        
         let state = currentState
-        
+
         var prev = state.header
         prev.updateTitle(text)
-        
+
         return .concat([
             updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
                 .andThen(.empty()),
@@ -285,34 +284,32 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
-    
+
     func selectAll() -> Observable<Mutation> {
         let state = currentState
         var dataSource = state.dataSource
-        
-        for i in 0..<dataSource.count {
+
+        for i in 0 ..< dataSource.count {
             dataSource[i].isSelected = true
         }
-        
+
         return .concat([
             .just(.updateDataSource(dataSource)),
             .just(.updateSelectedCount(dataSource.count))
         ])
-        
     }
-    
+
     func deselectAll() -> Observable<Mutation> {
         let state = currentState
         var dataSource = state.dataSource
-        
-        for i in 0..<dataSource.count {
+
+        for i in 0 ..< dataSource.count {
             dataSource[i].isSelected = false
         }
-        
-        return  .concat([
+
+        return .concat([
             .just(.updateDataSource(dataSource)),
             .just(.updateSelectedCount(0))
         ])
-        
     }
 }

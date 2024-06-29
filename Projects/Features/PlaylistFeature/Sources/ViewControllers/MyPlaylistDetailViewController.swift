@@ -191,23 +191,23 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         completeButton.rx
             .tap
-            .map{ Reactor.Action.completeButtonDidTap }
+            .map { Reactor.Action.completeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         headerView.rx.editNickNameButtonDidTap
             .bind(with: self) { owner, _ in
-                
+
                 guard let reactor = owner.reactor else {
                     return
                 }
-                
+
                 let vc = owner.multiPurposePopupFactory.makeView(type: .updatePlaylistTitle, key: reactor.key) { text in
                     reactor.action.onNext(.changeTitle(text))
                 }
-                
+
                 owner.showBottomSheet(content: vc, size: .fixed(296))
-                
+
                 DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
@@ -301,7 +301,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, info in
 
                 let (count, limit) = (info.0, info.1.songCount)
-                
+
                 if count == .zero {
                     owner.hideSongCart()
                 } else {
@@ -427,27 +427,25 @@ extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
 
 extension MyPlaylistDetailViewController: SongCartViewDelegate {
     func buttonTapped(type: SongCartSelectType) {
-        
         guard let reactor = reactor else {
             return
         }
-        
+
         let currentState = reactor.currentState
-        
+
         switch type {
-        
-        case .allSelect(flag: let flag):
+        case let .allSelect(flag: flag):
             if flag {
                 reactor.action.onNext(.selectAll)
             } else {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map{$0.id})
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
             vc.modalPresentationStyle = .fullScreen
-            
+
             self.present(vc, animated: true)
-            
+
             break
         case .addPlayList:
             #warning("재생목록 관련 구현체 구현 시 추가")
@@ -457,9 +455,6 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
         case .remove:
             break
         }
-        
-        
-        
     }
 }
 
