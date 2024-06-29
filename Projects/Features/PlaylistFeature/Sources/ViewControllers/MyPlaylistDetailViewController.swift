@@ -453,22 +453,20 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
         case .play:
             break
         case .remove:
-            
-            
+
             let vc: UIViewController = textPopUpFactory.makeView(
                 text: "\(currentState.selectedCount)곡을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false, confirmButtonText: "확인",
                 cancelButtonText: "취소",
                 completion: { [weak self] in
-                    
+
                     guard let self else { return }
-                    
+
                     self.reactor?.action.onNext(.removeSongs)
-            }, cancelCompletion: nil)
-            
+                }, cancelCompletion: nil
+            )
 
             self.showBottomSheet(content: vc)
-            
         }
     }
 }

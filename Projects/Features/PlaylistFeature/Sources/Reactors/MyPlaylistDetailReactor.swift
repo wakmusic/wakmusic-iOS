@@ -116,7 +116,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .deselectAll:
             return deselectAll()
-            
+
         case .removeSongs:
             return removeSongs()
         }
@@ -316,17 +316,16 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
-    
+
     func removeSongs() -> Observable<Mutation> {
-        
         let state = currentState
         let dataSource = state.dataSource
-        
+
         let remainSongs = dataSource.filter { !$0.isSelected }
         let removeSongs = dataSource.filter { $0.isSelected }.map { $0.id }
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
-        
+
         return .concat([
             .just(.updateDataSource(remainSongs)),
             .just(.updateBackUpDataSource(remainSongs)),
@@ -336,8 +335,7 @@ private extension MyPlaylistDetailReactor {
             .just(.showtoastMessage("\(remainSongs.count)개의 곡을 삭제했습니다.")),
             removeSongsUseCase.execute(key: key, songs: removeSongs)
                 .andThen(.never())
-        
+
         ])
-        
     }
 }
