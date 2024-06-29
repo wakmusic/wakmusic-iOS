@@ -132,7 +132,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    let viewController = owner.fruitDrawFactory.makeView().wrapNavigationController
+                    let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
                 case .like:
@@ -262,5 +262,12 @@ extension MyInfoViewController: EqualHandleTappedType {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         }
+    }
+}
+
+extension MyInfoViewController: FruitDrawViewControllerDelegate {
+    func completedFruitDraw(itemCount: Int) {
+        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
+        LogManager.printDebug("itemCount: \(itemCount)")
     }
 }

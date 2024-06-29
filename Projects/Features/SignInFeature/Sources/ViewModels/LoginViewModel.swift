@@ -29,6 +29,7 @@ public final class LoginViewModel: NSObject { // 네이버 델리게이트를 �
     public struct Output {
         let showToast: PublishRelay<String> = .init()
         let dismissLoginScene: PublishRelay<ProviderType> = .init()
+        let showLoading: PublishRelay<Bool> = .init()
     }
 
     public init(
@@ -68,6 +69,9 @@ private extension LoginViewModel {
         input.arrivedTokenFromThirdParty
             .debug("🚚:: arrivedTokenFromThirdParty")
             .filter { !$0.1.isEmpty }
+            .do(onNext: { [output] _ in
+                output.showLoading.accept(true)
+            })
             .flatMap { [fetchTokenUseCase] provider, token in
                 fetchTokenUseCase.execute(providerType: provider, token: token)
                     .catch { (error: Error) in
@@ -92,11 +96,13 @@ private extension LoginViewModel {
                     version: entity.version
                 )
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
+                output.showLoading.accept(false)
 
             }, onError: { [input, output] error in
                 let error = error.asWMError
                 output.showToast.accept(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
+                output.showLoading.accept(false)
             })
             .disposed(by: disposeBag)
     }

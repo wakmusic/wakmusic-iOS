@@ -1,11 +1,3 @@
-//
-//  ArtistRepositoryImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import ErrorModule
 import RxSwift
@@ -58,5 +50,17 @@ public final class UserRepositoryImpl: UserRepository {
 
     public func withdrawUserInfo() -> Single<BaseEntity> {
         remoteUserDataSource.withdrawUserInfo()
+    }
+
+    public func fetchFruitList() -> Single<[FruitEntity]> {
+        remoteUserDataSource.fetchFruitList()
+    }
+
+    public func fetchFruitDrawStatus() -> Single<FruitDrawStatusEntity> {
+        remoteUserDataSource.fetchFruitDrawStatus()
+    }
+
+    public func drawFruit() -> Single<FruitEntity> {
+        remoteUserDataSource.drawFruit()
     }
 }

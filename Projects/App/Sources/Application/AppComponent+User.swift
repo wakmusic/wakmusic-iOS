@@ -91,4 +91,22 @@ public extension AppComponent {
             WithdrawUserInfoUseCaseImpl(userRepository: userRepository)
         }
     }
+
+    var fetchFruitListUseCase: any FetchFruitListUseCase {
+        shared {
+            FetchFruitListUseCaseImpl(userRepository: userRepository)
+        }
+    }
+
+    var fetchFruitDrawStatusUseCase: any FetchFruitDrawStatusUseCase {
+        shared {
+            FetchFruitDrawStatusUseCaseImpl(userRepository: userRepository)
+        }
+    }
+
+    var drawFruitUseCase: any DrawFruitUseCase {
+        shared {
+            DrawFruitUseCaseImpl(userRepository: userRepository)
+        }
+    }
 }
