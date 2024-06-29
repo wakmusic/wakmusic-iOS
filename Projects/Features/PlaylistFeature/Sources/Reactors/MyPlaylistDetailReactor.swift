@@ -19,6 +19,8 @@ final class MyPlaylistDetailReactor: Reactor {
         case itemDidMoved(Int, Int)
         case forceSave
         case changeTitle(String)
+        case selectAll
+        case deselectAll
     }
 
     enum Mutation {
@@ -107,6 +109,12 @@ final class MyPlaylistDetailReactor: Reactor {
         
         case let .changeTitle(text):
             return updateTitle(text: text)
+            
+        case .selectAll:
+                return selectAll()
+            
+        case .deselectAll:
+            return deselectAll()
         }
     }
 
@@ -276,5 +284,35 @@ private extension MyPlaylistDetailReactor {
             .just(Mutation.updateDataSource(backUpDataSource)),
             .just(.updateSelectedCount(0))
         ])
+    }
+    
+    func selectAll() -> Observable<Mutation> {
+        let state = currentState
+        var dataSource = state.dataSource
+        
+        for i in 0..<dataSource.count {
+            dataSource[i].isSelected = true
+        }
+        
+        return .concat([
+            .just(.updateDataSource(dataSource)),
+            .just(.updateSelectedCount(dataSource.count))
+        ])
+        
+    }
+    
+    func deselectAll() -> Observable<Mutation> {
+        let state = currentState
+        var dataSource = state.dataSource
+        
+        for i in 0..<dataSource.count {
+            dataSource[i].isSelected = false
+        }
+        
+        return  .concat([
+            .just(.updateDataSource(dataSource)),
+            .just(.updateSelectedCount(0))
+        ])
+        
     }
 }

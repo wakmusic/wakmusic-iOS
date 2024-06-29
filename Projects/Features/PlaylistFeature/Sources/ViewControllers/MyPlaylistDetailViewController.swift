@@ -311,6 +311,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                         totalSongCount: limit,
                         useBottomSpace: false
                     )
+                    owner.songCartView.delegate = owner
                 }
             }
             .disposed(by: disposeBag)
@@ -432,6 +433,23 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
         
         let currentState = reactor.currentState
         
+        switch type {
+        
+        case .allSelect(flag: let flag):
+            if flag {
+                reactor.action.onNext(.selectAll)
+            } else {
+                reactor.action.onNext(.deselectAll)
+            }
+        case .addSong:
+            break
+        case .addPlayList:
+            break
+        case .play:
+            break
+        case .remove:
+            break
+        }
         
         
         
