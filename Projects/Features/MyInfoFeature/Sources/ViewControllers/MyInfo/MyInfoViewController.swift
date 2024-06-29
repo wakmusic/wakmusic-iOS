@@ -12,7 +12,8 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType, FruitDrawViewControllerDelegate {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType,
+    FruitDrawViewControllerDelegate {
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
