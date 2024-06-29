@@ -1,6 +1,6 @@
 import AuthDomainInterface
-import Foundation
 import BaseFeatureInterface
+import Foundation
 import FruitDrawFeatureInterface
 import NeedleFoundation
 import UIKit
