@@ -1,9 +1,9 @@
 import DesignSystem
-import UIKit
-import Utility
-import UserDomainInterface
 import SnapKit
 import Then
+import UIKit
+import UserDomainInterface
+import Utility
 
 public final class FruitInfoPopupViewController: UIViewController {
     private let popupContentView = UIView().then {
