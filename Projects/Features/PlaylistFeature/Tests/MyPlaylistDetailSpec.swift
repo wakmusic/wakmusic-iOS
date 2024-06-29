@@ -5,7 +5,5 @@ import ReactorKit
 import XCTest
 
 final class MyPlaylistDetailSpec: QuickSpec {
-    override class func spec() {
-
-    }
+    override class func spec() {}
 }
