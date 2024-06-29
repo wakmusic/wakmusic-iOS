@@ -1,4 +1,3 @@
-import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Lottie
@@ -9,7 +8,7 @@ import Then
 import UIKit
 import Utility
 
-open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
+open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var logoContentView: UIView!
     private let parableLogoImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Logo.splashParable.image
@@ -85,7 +84,7 @@ private extension IntroViewController {
                 case let .success(entity):
                     owner.lottiePlay(specialLogo: entity.specialLogo)
 
-                    var textPopupVc: TextPopupViewController
+                    var textPopupVc: UIViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
                     let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
 
@@ -120,7 +119,7 @@ private extension IntroViewController {
                                 exit(0)
                             },
                             cancelCompletion: nil
-                        ) as? TextPopupViewController ?? .init()
+                        )
 
                     case .update:
                         textPopupVc = owner.textPopUpFactory.makeView(
@@ -134,7 +133,7 @@ private extension IntroViewController {
                             cancelCompletion: {
                                 owner.input.fetchUserInfoCheck.onNext(())
                             }
-                        ) as? TextPopupViewController ?? .init()
+                        )
 
                     case .forceUpdate:
                         textPopupVc = owner.textPopUpFactory.makeView(
@@ -146,7 +145,7 @@ private extension IntroViewController {
                                 owner.goAppStore()
                             },
                             cancelCompletion: nil
-                        ) as? TextPopupViewController ?? .init()
+                        )
                     }
 
                     owner.showBottomSheet(
