@@ -9,6 +9,10 @@ import Then
 import UIKit
 import Utility
 
+public protocol FruitDrawViewControllerDelegate: AnyObject {
+    func completedFruitDraw(itemCount: Int)
+}
+
 public final class FruitDrawViewController: UIViewController {
     private let backgroundImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -148,6 +152,7 @@ public final class FruitDrawViewController: UIViewController {
     lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
+    public weak var delegate: FruitDrawViewControllerDelegate?
 
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
@@ -236,8 +241,16 @@ private extension FruitDrawViewController {
         input.fetchFruitDrawStatus.onNext(())
 
         dismissButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
+            .withLatestFrom(output.fruitSource)
+            .bind(with: self) { owner, fruit in
+                let drawCompleted: Bool = fruit.quantity > 0
+                if drawCompleted {
+                    owner.dismiss(animated: true) {
+                        owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    }
+                } else {
+                    owner.dismiss(animated: true)
+                }
             }
             .disposed(by: disposeBag)
 
@@ -250,8 +263,9 @@ private extension FruitDrawViewController {
                 let (_, fruit) = source
                 let drawCompleted: Bool = fruit.quantity > 0
                 if drawCompleted {
-                    owner.dismiss(animated: true)
-
+                    owner.dismiss(animated: true) {
+                        owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    }
                 } else {
                     owner.input.didTapFruitDraw.onNext(())
                     owner.startLottieAnimation()
