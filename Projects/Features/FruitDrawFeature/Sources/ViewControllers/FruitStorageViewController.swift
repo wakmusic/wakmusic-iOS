@@ -8,8 +8,8 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import UserDomainInterface
 import Utility
-import  UserDomainInterface
 
 public final class FruitStorageViewController: UIViewController {
     private let gradientLayer = CAGradientLayer()

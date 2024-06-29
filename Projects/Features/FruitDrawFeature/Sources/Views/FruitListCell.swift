@@ -54,7 +54,7 @@ extension FruitListCell {
         let notes = [firstNoteImageView, secondNoteImageView, thirdNoteImageView]
         notes.forEach { $0.alpha = 0 }
 
-        for i in 0..<model.count {
+        for i in 0 ..< model.count {
             notes[i].alpha = 1
             if model[i].quantity == -1 {
                 notes[i].image = DesignSystemAsset.FruitDraw.unidentifiedNote.image
