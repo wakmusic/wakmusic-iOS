@@ -33,7 +33,7 @@ final class SettingView: UIView {
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
         kernValue: -0.5
     )
-    
+
     let settingItemTableView = UITableView().then {
         $0.register(SettingItemTableViewCell.self, forCellReuseIdentifier: SettingItemTableViewCell.reuseIdentifier)
         $0.isScrollEnabled = false
@@ -69,6 +69,7 @@ private extension SettingView {
             withDrawLabel
         )
     }
+
     func setLayout() {
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
@@ -80,7 +81,7 @@ private extension SettingView {
         titleLabel.snp.makeConstraints {
             $0.center.equalTo(wmNavigationbarView.snp.center)
         }
-        
+
         settingItemTableView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
@@ -106,7 +107,7 @@ extension SettingView: SettingStateProtocol {
         self.dotImageView.isHidden = isHidden
         self.withDrawLabel.isHidden = isHidden
     }
-    
+
     func updateIsHiddenLogoutButton(isHidden: Bool) {
         guard let dataSource = settingItemTableView.dataSource as? SettingItemDataSource else { return }
         settingItemTableView.reloadData()

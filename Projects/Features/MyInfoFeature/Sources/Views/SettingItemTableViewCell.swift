@@ -1,8 +1,8 @@
-import UIKit
-import SnapKit
-import Then
 import DesignSystem
 import MyInfoFeatureInterface
+import SnapKit
+import Then
+import UIKit
 import Utility
 
 class SettingItemTableViewCell: UITableViewCell {
@@ -36,6 +36,7 @@ class SettingItemTableViewCell: UITableViewCell {
         setLayout()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,7 +61,7 @@ private extension SettingItemTableViewCell {
             self.titleLabel.text = identifier.rawValue
         }
     }
-    
+
     func configureRightItem(type: SettingItemType) {
         switch type {
         case .navigate(_):
@@ -71,7 +72,7 @@ private extension SettingItemTableViewCell {
             rightLabel.isHidden = false
         }
     }
-    
+
     func configureIdentifier(type: SettingItemType) {
         switch type {
         case let .navigate(identifier):
@@ -88,20 +89,20 @@ private extension SettingItemTableViewCell {
         contentView.addSubview(rightImageView)
         contentView.addSubview(rightLabel)
     }
-    
+
     func setLayout() {
         titleLabel.snp.makeConstraints {
             $0.left.equalToSuperview().inset(20)
             $0.right.equalTo(rightLabel.snp.left).offset(-20)
             $0.centerY.equalToSuperview()
         }
-        
+
         rightImageView.snp.makeConstraints {
             $0.width.height.equalTo(24)
             $0.right.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
         }
-        
+
         rightLabel.snp.makeConstraints {
             $0.width.equalTo(30)
             $0.right.equalToSuperview().inset(20)

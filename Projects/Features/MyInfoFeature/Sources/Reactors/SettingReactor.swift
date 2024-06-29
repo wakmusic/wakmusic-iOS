@@ -70,7 +70,7 @@ final class SettingReactor: Reactor {
     ) {
         self.initialState = .init(
             userInfo: Utility.PreferenceManager.userInfo,
-            isHiddenLogoutButton: true, 
+            isHiddenLogoutButton: true,
             isHiddenWithDrawButton: true
         )
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
@@ -109,7 +109,7 @@ final class SettingReactor: Reactor {
                 updateIsHiddenLogoutButton(userInfo),
                 updateIsHiddenWithDrawButton(userInfo)
             )
-            
+
         case let .updateIsHiddenLogoutButton(isHidden):
             return .just(.updateIsHiddenLogoutButton(isHidden))
         case let .updateIsHiddenWithDrawButton(isHidden):
@@ -149,23 +149,21 @@ private extension SettingReactor {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func updateIsHiddenLogoutButton(_ userInfo: UserInfo?) -> Observable<Mutation> {
         let isHidden = userInfo == nil
         return .just(.updateIsHiddenLogoutButton(isHidden))
-        
     }
-    
+
     func updateIsHiddenWithDrawButton(_ userInfo: UserInfo?) -> Observable<Mutation> {
         let isHidden = userInfo == nil
         return .just(.updateIsHiddenWithDrawButton(isHidden))
-        
     }
-    
+
     func dismissButtonDidTap() -> Observable<Mutation> {
         return .just(.navigate(.dismiss))
     }
-    
+
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
         logoutUseCase.execute()
             .subscribe(with: self, onCompleted: { owner in
@@ -186,7 +184,7 @@ private extension SettingReactor {
             : .withDrawButtonDidTap
         return .just(mutation)
     }
-    
+
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
         // TODO: 회원탈퇴 처리
         return withDrawUserInfoUseCase.execute()

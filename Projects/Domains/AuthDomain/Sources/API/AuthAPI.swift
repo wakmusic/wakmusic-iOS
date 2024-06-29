@@ -61,7 +61,7 @@ extension AuthAPI: WMAPI {
             )
         case .reGenerateAccessToken:
             return .requestPlain
-            
+
         case .logout:
             return .requestPlain
         }
@@ -73,7 +73,7 @@ extension AuthAPI: WMAPI {
             return .none
         case .reGenerateAccessToken:
             return .refreshToken
-            
+
         case .logout:
             return .refreshToken
         }

@@ -1,5 +1,5 @@
-import UIKit
 import MyInfoFeatureInterface
+import UIKit
 
 class SettingItemDataSource: NSObject, UITableViewDataSource {
     private let nonLoginSettingItems: [SettingItemType] = [
@@ -10,7 +10,7 @@ class SettingItemDataSource: NSObject, UITableViewDataSource {
         .navigate(.removeCache),
         .description(.versionInfo)
     ]
-    
+
     private let loginSettingItems: [SettingItemType] = [
         .navigate(.appPush),
         .navigate(.serviceTerms),
@@ -20,20 +20,23 @@ class SettingItemDataSource: NSObject, UITableViewDataSource {
         .navigate(.logout),
         .description(.versionInfo)
     ]
-    
+
     private(set) var currentSettingItems: [SettingItemType]
-    
+
     override init() {
         currentSettingItems = nonLoginSettingItems
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return currentSettingItems.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = currentSettingItems[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: SettingItemTableViewCell.reuseIdentifier, for: indexPath) as! SettingItemTableViewCell
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: SettingItemTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as! SettingItemTableViewCell
         cell.configure(type: item)
         return cell
     }

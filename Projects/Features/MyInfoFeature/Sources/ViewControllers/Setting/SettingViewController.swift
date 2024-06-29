@@ -22,7 +22,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
 
-
     override func loadView() {
         view = settingView
     }
@@ -31,7 +30,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         super.viewDidLoad()
         setSettingItemTableView()
     }
-    
+
     public static func viewController(
         reactor: SettingReactor,
         textPopUpFactory: TextPopUpFactory,
@@ -58,7 +57,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.settingView.updateIsHiddenWithDrawButton(isHidden: isHidden)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isHiddenLogoutButton)
             .distinctUntilChanged()
             .bind(with: self) { owner, isHidden in
@@ -66,7 +65,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.settingView.updateIsHiddenLogoutButton(isHidden: isHidden)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
@@ -191,10 +190,11 @@ extension SettingViewController: UITableViewDelegate {
             $0.height.equalTo(settingItemDataSource.currentSettingItems.count * 60)
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let identifier = cell.identifier else { return }
@@ -220,8 +220,8 @@ extension SettingViewController: UITableViewDelegate {
                     guard let self else { return }
                     self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
                 },
-                cancelCompletion: {
-                })
+                cancelCompletion: {}
+            )
             showBottomSheet(content: vc, size: .fixed(234))
         case .versionInfo:
             reactor?.action.onNext(.versionInfoButtonDidTap)
