@@ -10,6 +10,8 @@ public final class FruitInfoPopupViewController: UIViewController {
         $0.backgroundColor = colorFromRGB(0xF2F4F7).withAlphaComponent(0.8)
     }
 
+    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+
     private let descriptionLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -58,6 +60,7 @@ private extension FruitInfoPopupViewController {
     func addSubViews() {
         view.addSubview(popupContentView)
         popupContentView.addSubviews(
+            blurView,
             descriptionLabel,
             noteImageView,
             confirmButton
@@ -68,6 +71,12 @@ private extension FruitInfoPopupViewController {
         popupContentView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.center.equalToSuperview()
+        }
+
+        blurView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.bottom.equalTo(confirmButton.snp.top)
         }
 
         confirmButton.snp.makeConstraints {
