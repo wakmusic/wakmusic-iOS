@@ -20,11 +20,18 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
 
     let settingView = SettingView()
+    let settingItemDataSource = SettingItemDataSource()
+
 
     override func loadView() {
         view = settingView
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setSettingItemTableView()
+    }
+    
     public static func viewController(
         reactor: SettingReactor,
         textPopUpFactory: TextPopUpFactory,
@@ -45,6 +52,21 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.state.map(\.isHiddenWithDrawButton)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isHidden in
+                owner.settingView.updateIsHiddenWithDrawButton(isHidden: isHidden)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state.map(\.isHiddenLogoutButton)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isHidden in
+                owner.settingItemDataSource.updateCurrentSettingItems(isHidden: isHidden)
+                owner.settingView.updateIsHiddenLogoutButton(isHidden: isHidden)
+            }
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
@@ -158,40 +180,51 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .map { SettingReactor.Action.dismissButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+}
 
-        settingView.rx.withDrawButtonDidTap
-            .map { SettingReactor.Action.withDrawButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.appPushSettingNavigationButtonDidTap
-            .map { SettingReactor.Action.appPushSettingNavigationDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.termsNavigationButtonDidTap
-            .map { SettingReactor.Action.serviceTermsNavigationDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.privacyNavigationButtonDidTap
-            .map { SettingReactor.Action.privacyNavigationDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.openSourceNavigationButtonDidTap
-            .map { SettingReactor.Action.openSourceNavigationDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.removeCacheButtonDidTap
-            .map { SettingReactor.Action.removeCacheButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        settingView.rx.versionInfoButtonDidTap
-            .map { SettingReactor.Action.versionInfoButtonDidTap }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+extension SettingViewController: UITableViewDelegate {
+    func setSettingItemTableView() {
+        settingView.settingItemTableView.dataSource = settingItemDataSource
+        settingView.settingItemTableView.delegate = self
+        settingView.settingItemTableView.snp.updateConstraints {
+            $0.height.equalTo(settingItemDataSource.currentSettingItems.count * 60)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
+        guard let identifier = cell.identifier else { return }
+        switch identifier {
+        case .appPush:
+            reactor?.action.onNext(.appPushSettingNavigationDidTap)
+        case .serviceTerms:
+            reactor?.action.onNext(.serviceTermsNavigationDidTap)
+        case .privacy:
+            reactor?.action.onNext(.privacyNavigationDidTap)
+        case .openSource:
+            reactor?.action.onNext(.openSourceNavigationDidTap)
+        case .removeCache:
+            reactor?.action.onNext(.removeCacheButtonDidTap)
+        case .logout:
+            let text = "로그아웃 하시겠습니까?"
+            let vc = textPopUpFactory.makeView(
+                text: text,
+                cancelButtonIsHidden: false,
+                confirmButtonText: "확인",
+                cancelButtonText: "취소",
+                completion: { [weak self] in
+                    guard let self else { return }
+                    self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
+                },
+                cancelCompletion: {
+                })
+            showBottomSheet(content: vc, size: .fixed(234))
+        case .versionInfo:
+            reactor?.action.onNext(.versionInfoButtonDidTap)
+        }
     }
 }

@@ -8,6 +8,7 @@
 
 import AuthDomainInterface
 import RxSwift
+import BaseDomainInterface
 
 public final class AuthRepositoryImpl: AuthRepository {
     private let localAuthDataSource: any LocalAuthDataSource
@@ -30,11 +31,13 @@ public final class AuthRepositoryImpl: AuthRepository {
     }
 
     public func logout() -> Completable {
-        Completable.create { [localAuthDataSource] observer in
+        let localLogoutCompletable = Completable.create { [localAuthDataSource] observer in
             localAuthDataSource.logout()
             observer(.completed)
             return Disposables.create()
         }
+        return remoteAuthDataSource.logout()
+            .andThen(localLogoutCompletable)
     }
 
     public func checkIsExistAccessToken() -> Single<Bool> {
