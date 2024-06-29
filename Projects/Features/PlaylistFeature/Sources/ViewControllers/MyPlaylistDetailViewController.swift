@@ -94,10 +94,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewDidDisappear(animated)
         hideplaylistEditSheet()
         hideSongCart()
         hideplaylistImageEditSheet()
+        reactor?.action.onNext(.deselectAll)
     }
 
     override func addView() {
@@ -442,8 +443,14 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map{$0.id})
+            vc.modalPresentationStyle = .fullScreen
+            
+            self.present(vc, animated: true)
+            
             break
         case .addPlayList:
+            #warning("재생목록 관련 구현체 구현 시 추가")
             break
         case .play:
             break
