@@ -11,7 +11,8 @@ let project = Project.module(
             dependencies: [
                 .feature(target: .FruitDrawFeature, type: .interface),
                 .feature(target: .BaseFeature),
-                .domain(target: .UserDomain, type: .interface)
+                .domain(target: .UserDomain, type: .interface),
+                .domain(target: .AuthDomain, type: .interface)
             ]
         ),
         .demo(

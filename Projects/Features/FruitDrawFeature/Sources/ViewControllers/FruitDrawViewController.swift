@@ -1,3 +1,4 @@
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import Lottie
@@ -47,6 +48,7 @@ public final class FruitDrawViewController: UIViewController {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray300.color
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
+        $0.isEnabled = false
     }
 
     private lazy var lottieAnimationView =
@@ -57,6 +59,21 @@ public final class FruitDrawViewController: UIViewController {
             $0.loopMode = .playOnce
             $0.contentMode = .scaleAspectFit
         }
+
+    private let rewardDescriptioniLabel = WMLabel(
+        text: "",
+        textColor: .white,
+        font: .t2(weight: .bold),
+        alignment: .center
+    ).then {
+        $0.numberOfLines = 0
+        $0.alpha = 0
+    }
+
+    private let rewardFruitImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.alpha = 0
+    }
 
     /// Left Component
     private let purpleHeartImageView = UIImageView().then {
@@ -126,6 +143,8 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let viewModel: FruitDrawViewModel
+    private let textPopUpFactory: TextPopUpFactory
+
     lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
@@ -134,8 +153,12 @@ public final class FruitDrawViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init(viewModel: FruitDrawViewModel) {
+    public init(
+        viewModel: FruitDrawViewModel,
+        textPopUpFactory: TextPopUpFactory
+    ) {
         self.viewModel = viewModel
+        self.textPopUpFactory = textPopUpFactory
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -160,20 +183,10 @@ public final class FruitDrawViewController: UIViewController {
 
 private extension FruitDrawViewController {
     func outputBind() {
-        output.showRewardNote
-            .bind(with: self) { owner, entity in
-                owner.drawButton.setTitle("확인", for: .normal)
-                owner.drawButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
-                UIView.animate(withDuration: 0.3) {
-                    owner.lottieAnimationView.alpha = 0
-                    owner.drawButton.alpha = 1
-                }
-            }
-            .disposed(by: disposeBag)
-
         output.canDraw
             .skip(1)
             .bind(with: self) { owner, canDraw in
+                owner.drawButton.isEnabled = canDraw
                 owner.drawButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
                 owner.drawButton.backgroundColor = canDraw ?
                     DesignSystemAsset.PrimaryColorV2.point.color :
@@ -181,11 +194,39 @@ private extension FruitDrawViewController {
             }
             .disposed(by: disposeBag)
 
-        output.showToast
+        output.showRewardNote
+            .bind(with: self) { owner, entity in
+                owner.drawButton.setTitle("확인", for: .normal)
+                owner.drawButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+                owner.rewardDescriptioniLabel.text = "\(entity.name)를 획득했어요!"
+
+                if let data = entity.imageData {
+                    owner.rewardFruitImageView.image = UIImage(data: data)
+                }
+
+                UIView.animate(withDuration: 0.3) {
+                    owner.lottieAnimationView.alpha = 0
+                    owner.drawButton.alpha = 1
+                    owner.rewardDescriptioniLabel.alpha = 1
+                    owner.rewardFruitImageView.alpha = 1
+                }
+            }
+            .disposed(by: disposeBag)
+
+        output.occurredError
             .bind(with: self) { owner, message in
-                owner.showToast(
-                    text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
+                owner.showBottomSheet(
+                    content: owner.textPopUpFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.dismiss(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
                 )
             }
             .disposed(by: disposeBag)
@@ -202,16 +243,24 @@ private extension FruitDrawViewController {
 
         drawButton.rx.tap
             .withLatestFrom(output.canDraw)
-            .filter { $0 }
+            .withLatestFrom(output.fruitSource) { ($0, $1) }
+            .filter { $0.0 }
             .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
-            .bind(with: self) { owner, _ in
-                owner.input.didTapFruitDraw.onNext(())
-                owner.startLottieAnimation()
-                UIView.animate(
-                    withDuration: 0.3,
-                    delay: 0.5
-                ) {
-                    owner.showHideComponent(isHide: true)
+            .bind(with: self) { owner, source in
+                let (_, fruit) = source
+                let drawCompleted: Bool = fruit.quantity > 0
+                if drawCompleted {
+                    owner.dismiss(animated: true)
+
+                } else {
+                    owner.input.didTapFruitDraw.onNext(())
+                    owner.startLottieAnimation()
+                    UIView.animate(
+                        withDuration: 0.3,
+                        delay: 0.5
+                    ) {
+                        owner.showHideComponent(isHide: true)
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -265,6 +314,8 @@ private extension FruitDrawViewController {
         view.addSubviews(
             navigationBarView,
             descriptioniLabel,
+            rewardFruitImageView,
+            rewardDescriptioniLabel,
             drawButton
         )
         navigationBarView.setLeftViews([dismissButton])
@@ -302,6 +353,20 @@ private extension FruitDrawViewController {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             $0.height.equalTo(56)
+        }
+
+        rewardFruitImageView.snp.makeConstraints {
+            $0.top.equalTo(276.0.correctTop)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(275)
+            $0.height.equalTo(200)
+        }
+
+        rewardDescriptioniLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(32)
+            $0.bottom.equalTo(rewardFruitImageView.snp.top).offset(60.0.correctBottom)
         }
 
         // Left Component

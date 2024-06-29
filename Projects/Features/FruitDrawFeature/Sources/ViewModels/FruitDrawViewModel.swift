@@ -1,3 +1,4 @@
+import AuthDomainInterface
 import BaseFeature
 import Foundation
 import Kingfisher
@@ -10,6 +11,7 @@ import Utility
 public final class FruitDrawViewModel: ViewModelType {
     private let fetchFruitDrawStatusUseCase: FetchFruitDrawStatusUseCase
     private let drawFruitUseCase: DrawFruitUseCase
+    private let logoutUseCase: LogoutUseCase
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -18,10 +20,12 @@ public final class FruitDrawViewModel: ViewModelType {
 
     public init(
         fetchFruitDrawStatusUseCase: any FetchFruitDrawStatusUseCase,
-        drawFruitUseCase: any DrawFruitUseCase
+        drawFruitUseCase: any DrawFruitUseCase,
+        logoutUseCase: any LogoutUseCase
     ) {
         self.fetchFruitDrawStatusUseCase = fetchFruitDrawStatusUseCase
         self.drawFruitUseCase = drawFruitUseCase
+        self.logoutUseCase = logoutUseCase
     }
 
     public struct Input {
@@ -39,35 +43,53 @@ public final class FruitDrawViewModel: ViewModelType {
             imageURL: ""
         ))
         let showRewardNote: PublishSubject<FruitEntity> = PublishSubject()
-        let showToast: PublishSubject<String> = PublishSubject()
+        let occurredError: PublishSubject<String> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
 
         input.fetchFruitDrawStatus
-            .flatMap { [fetchFruitDrawStatusUseCase] _ in
+            .flatMap { [fetchFruitDrawStatusUseCase, logoutUseCase] _ in
                 return fetchFruitDrawStatusUseCase.execute()
-                    .catchAndReturn(
-                        .init(
-                            canDraw: false,
-                            lastDraw: .init(
-                                drawAt: 0,
-                                fruit: .init(fruitID: "", name: "", imageURL: "")
-                            )
-                        )
-                    )
+                    .asObservable()
+                    .catch { error in
+                        let wmError = error.asWMError
+                        output.occurredError.onNext(wmError.errorDescription ?? error.localizedDescription)
+
+                        if wmError == .tokenExpired {
+                            return logoutUseCase.execute()
+                                .andThen(.never())
+                        } else {
+                            return .never()
+                        }
+                    }
             }
+            .do(onNext: { entity in
+                let lastAt = (entity.lastDraw.drawAt / 1000.0)
+                    .unixTimeToDate
+                    .dateToString(format: "yyyy.MM.dd HH:mm:ss")
+                LogManager.printDebug("Draw lastAt: \(lastAt)")
+            })
             .map { $0.canDraw }
             .bind(to: output.canDraw)
             .disposed(by: disposeBag)
 
         input.didTapFruitDraw
-            .flatMap { [drawFruitUseCase] _ in
+            .flatMap { [drawFruitUseCase, logoutUseCase] _ in
                 return drawFruitUseCase.execute()
-                    .catchAndReturn(.init(quantity: 0, fruitID: "", name: "", imageURL: ""))
+                    .catch { error in
+                        let wmError = error.asWMError
+                        output.occurredError.onNext(wmError.errorDescription ?? error.localizedDescription)
+
+                        if wmError == .tokenExpired {
+                            return logoutUseCase.execute()
+                                .andThen(.never())
+                        } else {
+                            return .never()
+                        }
+                    }
             }
-            .filter { $0.quantity > 0 }
             .flatMap { [weak self] entity -> Observable<(FruitEntity, Data?)> in
                 guard let self = self else { return .never() }
                 return self.downloadNoteImage(entity: entity)
@@ -80,15 +102,15 @@ public final class FruitDrawViewModel: ViewModelType {
             .bind(to: output.fruitSource)
             .disposed(by: disposeBag)
 
-        let combineObservable = Observable.combineLatest(
+        let zipObservable = Observable.zip(
             input.endedLottieAnimation,
             output.fruitSource.skip(1)
-        ) { _, fruit -> FruitEntity in
-            return fruit
+        ) { _, entity -> FruitEntity in
+            return entity
         }
 
-        combineObservable
-            .debug()
+        zipObservable
+            .debug("FruitDrawZip")
             .bind(to: output.showRewardNote)
             .disposed(by: disposeBag)
 
