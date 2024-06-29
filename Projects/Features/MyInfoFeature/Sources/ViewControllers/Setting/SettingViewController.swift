@@ -197,8 +197,8 @@ extension SettingViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
-        guard let identifier = cell.identifier else { return }
-        switch identifier {
+        guard let category = cell.category else { return }
+        switch category {
         case .appPush:
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
         case .serviceTerms:

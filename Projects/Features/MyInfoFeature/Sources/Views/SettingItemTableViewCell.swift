@@ -7,7 +7,7 @@ import Utility
 
 class SettingItemTableViewCell: UITableViewCell {
     static let reuseIdentifier = "SettingItemTableViewCell"
-    var identifier: SettingItemIdentifier?
+    var category: SettingItemCategory?
 
     private let titleLabel = UILabel().then {
         $0.font = .setFont(.t5(weight: .medium))
@@ -55,10 +55,10 @@ class SettingItemTableViewCell: UITableViewCell {
 private extension SettingItemTableViewCell {
     func configureTitle(type: SettingItemType) {
         switch type {
-        case let .navigate(identifier):
-            self.titleLabel.text = identifier.rawValue
-        case let .description(identifier):
-            self.titleLabel.text = identifier.rawValue
+        case let .navigate(category):
+            self.titleLabel.text = category.rawValue
+        case let .description(category):
+            self.titleLabel.text = category.rawValue
         }
     }
 
@@ -75,10 +75,10 @@ private extension SettingItemTableViewCell {
 
     func configureIdentifier(type: SettingItemType) {
         switch type {
-        case let .navigate(identifier):
-            self.identifier = identifier
-        case let .description(identifier):
-            self.identifier = identifier
+        case let .navigate(category):
+            self.category = category
+        case let .description(category):
+            self.category = category
         }
     }
 }

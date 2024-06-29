@@ -1,6 +1,6 @@
 import Foundation
 
 public enum SettingItemType {
-    case navigate(_ identifier: SettingItemIdentifier)
-    case description(_ identifier: SettingItemIdentifier)
+    case navigate(_ category: SettingItemCategory)
+    case description(_ category: SettingItemCategory)
 }

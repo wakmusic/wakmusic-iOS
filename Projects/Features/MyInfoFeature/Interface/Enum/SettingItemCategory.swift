@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SettingItemIdentifier: String {
+public enum SettingItemCategory: String {
     case appPush = "앱 알림 받기"
     case serviceTerms = "서비스 이용약관"
     case privacy = "개인정보 처리 방침"
