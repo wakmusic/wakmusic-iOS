@@ -96,7 +96,7 @@ private extension FruitListCell {
         supportImageView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview()
-            $0.width.equalTo(APP_WIDTH()-40)
+            $0.width.equalTo(APP_WIDTH() - 40)
             $0.height.equalTo(26)
         }
 
