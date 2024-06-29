@@ -1,11 +1,3 @@
-//
-//  RequestPermissionable.swift
-//  BaseFeature
-//
-//  Created by KTH on 2023/04/09.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import AVFoundation
 import Foundation
 import Photos
@@ -13,46 +5,46 @@ import UIKit
 import Utility
 
 public enum RequestPermissionType {
-    case camera
+  //  case camera
     case photoLibrary
 }
 
 public protocol RequestPermissionable: AnyObject {
-    func requestCameraPermission()
+  //  func requestCameraPermission()
     func requestPhotoLibraryPermission()
     func showErrorMessage(type: RequestPermissionType)
-    func showCamera()
+//    func showCamera()
     func showPhotoLibrary()
 }
 
 public extension RequestPermissionable {
-    func showCamera() {}
+  //  func showCamera() {}
     func showPhotoLibrary() {}
 }
 
 public extension RequestPermissionable where Self: UIViewController {
-    func requestCameraPermission() {
-        let cameraMediaType = AVMediaType.video
-        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-
-        switch cameraAuthorizationStatus {
-        case .denied, .restricted:
-            self.showErrorMessage(type: .camera)
-        case .authorized:
-            self.showCamera()
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: cameraMediaType) { granted in
-                if granted {
-                    DispatchQueue.main.async {
-                        self.showCamera()
-                    }
-                } else {
-                    self.showErrorMessage(type: .camera)
-                }
-            }
-        default: return
-        }
-    }
+//    func requestCameraPermission() {
+//        let cameraMediaType = AVMediaType.video
+//        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+//
+//        switch cameraAuthorizationStatus {
+//        case .denied, .restricted:
+//            self.showErrorMessage(type: .camera)
+//        case .authorized:
+//            self.showCamera()
+//        case .notDetermined:
+//            AVCaptureDevice.requestAccess(for: cameraMediaType) { granted in
+//                if granted {
+//                    DispatchQueue.main.async {
+//                        self.showCamera()
+//                    }
+//                } else {
+//                    self.showErrorMessage(type: .camera)
+//                }
+//            }
+//        default: return
+//        }
+//    }
 
     func requestPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -80,8 +72,7 @@ public extension RequestPermissionable where Self: UIViewController {
     func showErrorMessage(type: RequestPermissionType) {
         var message: String = ""
         switch type {
-        case .camera:
-            message = "[선택권한] 카메라 촬영을 하려면 권한 승인이 필요합니다."
+
         case .photoLibrary:
             message = "[선택권한] 앨범 사진을 첨부하거나, 저장 하려면 권한 승인이 필요합니다."
         }
