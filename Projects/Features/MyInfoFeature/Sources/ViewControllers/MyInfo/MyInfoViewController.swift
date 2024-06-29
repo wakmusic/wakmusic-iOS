@@ -138,7 +138,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                     let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
-                case .like:
+                case .fruit:
                     if reactor.currentState.isLoggedIn {
                         let viewController = owner.fruitStorageFactory.makeView()
                         owner.navigationController?.pushViewController(viewController, animated: true)
@@ -197,8 +197,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        myInfoView.rx.likeNavigationButtonDidTap
-            .map { MyInfoReactor.Action.likeNavigationDidTap }
+        myInfoView.rx.fruitNavigationButtonDidTap
+            .map { MyInfoReactor.Action.fruitNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

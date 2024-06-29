@@ -11,7 +11,7 @@ final class MyInfoReactor: Reactor {
         case loginButtonDidTap
         case profileImageDidTap
         case drawButtonDidTap
-        case likeNavigationDidTap
+        case fruitNavigationDidTap
         case faqNavigationDidTap
         case notiNavigationDidTap
         case mailNavigationDidTap
@@ -34,7 +34,7 @@ final class MyInfoReactor: Reactor {
 
     enum NavigateType {
         case draw
-        case like
+        case fruit
         case faq
         case noti
         case mail
@@ -80,8 +80,8 @@ final class MyInfoReactor: Reactor {
             return profileImageDidTap()
         case .drawButtonDidTap:
             return drawButtonDidTap()
-        case .likeNavigationDidTap:
-            return likeNavigationDidTap()
+        case .fruitNavigationDidTap:
+            return fruitNavigationDidTap()
         case .faqNavigationDidTap:
             return faqNavigationDidTap()
         case .notiNavigationDidTap:
@@ -197,8 +197,8 @@ private extension MyInfoReactor {
         return .just(.navigate(.draw))
     }
 
-    func likeNavigationDidTap() -> Observable<Mutation> {
-        return .just(.navigate(.like))
+    func fruitNavigationDidTap() -> Observable<Mutation> {
+        return .just(.navigate(.fruit))
     }
 
     func faqNavigationDidTap() -> Observable<Mutation> {
