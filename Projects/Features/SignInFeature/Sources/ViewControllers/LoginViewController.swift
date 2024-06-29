@@ -1,14 +1,14 @@
 import BaseFeature
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SafariServices
-import UIKit
-import Utility
 import SnapKit
 import Then
-import NVActivityIndicatorView
+import UIKit
+import Utility
 
 public class LoginViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -43,6 +43,7 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
         }
         $0.isHidden = true
     }
+
     private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = .white
         $0.type = .circleStrokeSpin
