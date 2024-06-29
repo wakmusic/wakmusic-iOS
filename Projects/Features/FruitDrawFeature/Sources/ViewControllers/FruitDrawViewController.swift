@@ -1,4 +1,5 @@
 import BaseFeatureInterface
+import FruitDrawFeatureInterface
 import DesignSystem
 import LogManager
 import Lottie
@@ -8,10 +9,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-
-public protocol FruitDrawViewControllerDelegate: AnyObject {
-    func completedFruitDraw(itemCount: Int)
-}
 
 public final class FruitDrawViewController: UIViewController {
     private let backgroundImageView = UIImageView().then {
@@ -148,11 +145,11 @@ public final class FruitDrawViewController: UIViewController {
 
     private let viewModel: FruitDrawViewModel
     private let textPopUpFactory: TextPopUpFactory
+    private weak var delegate: FruitDrawViewControllerDelegate?
 
     lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
-    public weak var delegate: FruitDrawViewControllerDelegate?
 
     deinit {
         LogManager.printDebug("❌:: \(Self.self) deinit")
@@ -160,10 +157,12 @@ public final class FruitDrawViewController: UIViewController {
 
     public init(
         viewModel: FruitDrawViewModel,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        delegate: FruitDrawViewControllerDelegate
     ) {
         self.viewModel = viewModel
         self.textPopUpFactory = textPopUpFactory
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
 

@@ -12,7 +12,7 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType, FruitDrawViewControllerDelegate {
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
@@ -131,7 +131,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    let viewController = owner.fruitDrawFactory.makeView().wrapNavigationController
+                    let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
                 case .like:
@@ -256,5 +256,11 @@ extension MyInfoViewController: EqualHandleTappedType {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         }
+    }
+}
+
+extension MyInfoViewController {
+    func completedFruitDraw(itemCount: Int) {
+        LogManager.printDebug("itemCount: \(itemCount)")
     }
 }

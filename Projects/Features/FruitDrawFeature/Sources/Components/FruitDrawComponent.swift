@@ -14,14 +14,15 @@ public protocol FruitDrawDependency: Dependency {
 }
 
 public final class FruitDrawComponent: Component<FruitDrawDependency>, FruitDrawFactory {
-    public func makeView() -> UIViewController {
+    public func makeView(delegate: any FruitDrawViewControllerDelegate) -> UIViewController {
         return FruitDrawViewController(
             viewModel: .init(
                 fetchFruitDrawStatusUseCase: dependency.fetchFruitDrawStatusUseCase,
                 drawFruitUseCase: dependency.drawFruitUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            textPopUpFactory: dependency.textPopUpFactory
+            textPopUpFactory: dependency.textPopUpFactory,
+            delegate: delegate
         )
     }
 }
