@@ -102,17 +102,15 @@ public final class FruitDrawViewModel: ViewModelType {
             .bind(to: output.fruitSource)
             .disposed(by: disposeBag)
 
-        let zipObservable = Observable.zip(
+        Observable.zip(
             input.endedLottieAnimation,
             output.fruitSource.skip(1)
         ) { _, entity -> FruitEntity in
             return entity
         }
-
-        zipObservable
-            .debug("FruitDrawZip")
-            .bind(to: output.showRewardNote)
-            .disposed(by: disposeBag)
+        .debug("FruitDrawZip")
+        .bind(to: output.showRewardNote)
+        .disposed(by: disposeBag)
 
         return output
     }
