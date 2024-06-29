@@ -9,6 +9,7 @@ import UIKit
 import Utility
 
 #warning("송카트, 공유하기, 이미지 업로드")
+#warning("다양한 바텀시트 겹침 현상")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
