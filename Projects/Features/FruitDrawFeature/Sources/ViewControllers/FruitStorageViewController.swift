@@ -181,6 +181,9 @@ extension FruitStorageViewController: UICollectionViewDelegateFlowLayout {
 
 extension FruitStorageViewController: FruitListCellDelegate {
     public func itemSelected(item: FruitEntity) {
-        LogManager.printDebug(item)
+        let viewController = FruitInfoPopupViewController(item: item)
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        present(viewController, animated: true)
     }
 }
