@@ -41,7 +41,7 @@ public final class FruitDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.FruitDraw.fruitDrawMachine.image
     }
 
-    private let drawButton = UIButton(type: .system).then {
+    private let drawOrConfirmButton = UIButton(type: .system).then {
         $0.setTitle("...", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
@@ -190,9 +190,9 @@ private extension FruitDrawViewController {
         output.canDraw
             .skip(1)
             .bind(with: self) { owner, canDraw in
-                owner.drawButton.isEnabled = canDraw
-                owner.drawButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
-                owner.drawButton.backgroundColor = canDraw ?
+                owner.drawOrConfirmButton.isEnabled = canDraw
+                owner.drawOrConfirmButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
+                owner.drawOrConfirmButton.backgroundColor = canDraw ?
                     DesignSystemAsset.PrimaryColorV2.point.color :
                     DesignSystemAsset.BlueGrayColor.gray300.color
             }
@@ -200,8 +200,8 @@ private extension FruitDrawViewController {
 
         output.showRewardNote
             .bind(with: self) { owner, entity in
-                owner.drawButton.setTitle("확인", for: .normal)
-                owner.drawButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+                owner.drawOrConfirmButton.setTitle("확인", for: .normal)
+                owner.drawOrConfirmButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
                 owner.rewardDescriptioniLabel.text = "\(entity.name)를 획득했어요!"
 
                 if let data = entity.imageData {
@@ -210,7 +210,7 @@ private extension FruitDrawViewController {
 
                 UIView.animate(withDuration: 0.3) {
                     owner.lottieAnimationView.alpha = 0
-                    owner.drawButton.alpha = 1
+                    owner.drawOrConfirmButton.alpha = 1
                     owner.rewardDescriptioniLabel.alpha = 1
                     owner.rewardFruitImageView.alpha = 1
                 }
@@ -252,7 +252,7 @@ private extension FruitDrawViewController {
             }
             .disposed(by: disposeBag)
 
-        drawButton.rx.tap
+        drawOrConfirmButton.rx.tap
             .withLatestFrom(output.canDraw)
             .withLatestFrom(output.fruitSource) { ($0, $1) }
             .filter { $0.0 }
@@ -328,7 +328,7 @@ private extension FruitDrawViewController {
             descriptioniLabel,
             rewardFruitImageView,
             rewardDescriptioniLabel,
-            drawButton
+            drawOrConfirmButton
         )
         navigationBarView.setLeftViews([dismissButton])
     }
@@ -361,7 +361,7 @@ private extension FruitDrawViewController {
             $0.height.equalTo(56)
         }
 
-        drawButton.snp.makeConstraints {
+        drawOrConfirmButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             $0.height.equalTo(56)
@@ -503,6 +503,6 @@ private extension FruitDrawViewController {
         }
         descriptioniLabel.alpha = isHide ? 0 : 1
         drawMachineImageView.alpha = descriptioniLabel.alpha
-        drawButton.alpha = descriptioniLabel.alpha
+        drawOrConfirmButton.alpha = descriptioniLabel.alpha
     }
 }
