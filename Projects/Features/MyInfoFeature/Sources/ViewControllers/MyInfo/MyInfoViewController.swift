@@ -12,8 +12,7 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType,
-    FruitDrawViewControllerDelegate {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
     private var profilePopUpComponent: ProfilePopComponent!
     private var textPopUpFactory: TextPopUpFactory!
@@ -260,7 +259,7 @@ extension MyInfoViewController: EqualHandleTappedType {
     }
 }
 
-extension MyInfoViewController {
+extension MyInfoViewController: FruitDrawViewControllerDelegate {
     func completedFruitDraw(itemCount: Int) {
         LogManager.printDebug("itemCount: \(itemCount)")
     }
