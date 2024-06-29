@@ -24,6 +24,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
     private var fruitDrawFactory: FruitDrawFactory!
+    private var fruitStorageFactory: FruitStorageFactory!
 
     var editSheetView: EditSheetView!
     var bottomSheetView: BottomSheetView!
@@ -58,7 +59,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         questionFactory: QuestionFactory,
         teamInfoFactory: TeamInfoFactory,
         settingFactory: SettingFactory,
-        fruitDrawFactory: FruitDrawFactory
+        fruitDrawFactory: FruitDrawFactory,
+        fruitStorageFactory: FruitStorageFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopUpComponent = profilePopUpComponent
@@ -71,6 +73,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         viewController.teamInfoFactory = teamInfoFactory
         viewController.settingFactory = settingFactory
         viewController.fruitDrawFactory = fruitDrawFactory
+        viewController.fruitStorageFactory = fruitStorageFactory
         return viewController
     }
 
@@ -137,8 +140,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                     owner.present(viewController, animated: true)
                 case .like:
                     if reactor.currentState.isLoggedIn {
-                        NotificationCenter.default.post(name: .movedTab, object: 4)
-                        NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
+                        let viewController = owner.fruitStorageFactory.makeView()
+                        owner.navigationController?.pushViewController(viewController, animated: true)
                     } else {
                         guard let vc = owner.textPopUpFactory.makeView(
                             text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",

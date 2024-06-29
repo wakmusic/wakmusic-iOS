@@ -17,6 +17,7 @@ public protocol MyInfoDependency: Dependency {
     var settingFactory: any SettingFactory { get }
     var profilePopComponent: ProfilePopComponent { get }
     var fruitDrawFactory: any FruitDrawFactory { get }
+    var fruitStorageFactory: any FruitStorageFactory { get }
     var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
 }
 
@@ -35,7 +36,8 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             questionFactory: dependency.questionFactory,
             teamInfoFactory: dependency.teamInfoFactory,
             settingFactory: dependency.settingFactory,
-            fruitDrawFactory: dependency.fruitDrawFactory
+            fruitDrawFactory: dependency.fruitDrawFactory,
+            fruitStorageFactory: dependency.fruitStorageFactory
         )
     }
 }
