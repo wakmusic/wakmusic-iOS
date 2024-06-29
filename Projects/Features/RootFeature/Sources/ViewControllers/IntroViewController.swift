@@ -209,6 +209,7 @@ private extension IntroViewController {
 
 private extension IntroViewController {
     func configureUI() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(parableLogoImageView)
         parableLogoImageView.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-50)
