@@ -21,6 +21,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case changeTitle(String)
         case selectAll
         case deselectAll
+        case removeSongs
     }
 
     enum Mutation {
@@ -115,6 +116,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .deselectAll:
             return deselectAll()
+            
+        case .removeSongs:
+            return removeSongs()
         }
     }
 
@@ -224,9 +228,9 @@ private extension MyPlaylistDetailReactor {
         prev.updateTitle(text)
 
         return .concat([
+            .just(.updateHeader(prev)),
             updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
-                .andThen(.empty()),
-            .just(.updateHeader(prev))
+                .andThen(.empty())
         ])
     }
 }
@@ -311,5 +315,29 @@ private extension MyPlaylistDetailReactor {
             .just(.updateDataSource(dataSource)),
             .just(.updateSelectedCount(0))
         ])
+    }
+    
+    func removeSongs() -> Observable<Mutation> {
+        
+        let state = currentState
+        let dataSource = state.dataSource
+        
+        let remainSongs = dataSource.filter { !$0.isSelected }
+        let removeSongs = dataSource.filter { $0.isSelected }.map { $0.id }
+        var prevHeader = currentState.header
+        prevHeader.updateSongCount(remainSongs.count)
+        
+        return .concat([
+            .just(.updateDataSource(remainSongs)),
+            .just(.updateBackUpDataSource(remainSongs)),
+            .just(.updateEditingState(false)),
+            .just(.updateSelectedCount(0)),
+            .just(.updateHeader(prevHeader)),
+            .just(.showtoastMessage("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+            removeSongsUseCase.execute(key: key, songs: removeSongs)
+                .andThen(.never())
+        
+        ])
+        
     }
 }
