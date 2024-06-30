@@ -154,7 +154,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showtoastMessage(message):
             newState.toastMessage = message
-            
+
         case let .updateThumbnail(data):
             newState.replaceThumnbnailData = data
         }
@@ -347,8 +347,8 @@ private extension MyPlaylistDetailReactor {
 
         ])
     }
-    
-    func updateThumbnail(_ data:Data?) -> Observable<Mutation> {
+
+    func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
         return .just(.updateThumbnail(data))
     }
 }

@@ -142,14 +142,10 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
         editNickNameButton.isHidden = !isEditing
         cameraContainerView.isHidden = !isEditing
     }
-    
-    func updateThumbnail(_ data: Data) {
-        
-        thumbnailImageView.image = UIImage(data: data)
-        
-    }
-    
 
+    func updateThumbnail(_ data: Data) {
+        thumbnailImageView.image = UIImage(data: data)
+    }
 }
 
 extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderView {
