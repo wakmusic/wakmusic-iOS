@@ -13,11 +13,12 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case viewDidLoad
         case selectAll
         case deselectAll
+        case subscriptionButtonDidTap
 
     }
 
     enum Mutation {
-        case updateHeader(MyPlaylistHeaderModel)
+        case updateHeader(PlaylistDetailHeaderModel)
         case updateDataSource([SongEntity])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
@@ -26,7 +27,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
     }
 
     struct State {
-        var header: MyPlaylistHeaderModel
+        var header: PlaylistDetailHeaderModel
         var dataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
@@ -50,7 +51,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
-            header: MyPlaylistHeaderModel(
+            header: PlaylistDetailHeaderModel(
                 key: key, title: "",
                 image: "",
                 userName: "",
@@ -67,7 +68,10 @@ final class UnknownPlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return updateDataSource()
-
+            
+        case .subscriptionButtonDidTap:
+            return .empty()
+    
         case .selectAll:
             return selectAll()
 
@@ -110,12 +114,12 @@ private extension UnknownPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchPlaylistDetailUseCase.execute(id: key, type: .my)
+            fetchPlaylistDetailUseCase.execute(id: key, type: .unknown)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
                         Observable.just(Mutation.updateHeader(
-                            MyPlaylistHeaderModel(
+                            PlaylistDetailHeaderModel(
                                 key: data.key,
                                 title: data.title,
                                 image: data.image,

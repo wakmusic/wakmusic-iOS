@@ -8,7 +8,7 @@ import UIKit
 
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
-    func updateData(_ model: MyPlaylistHeaderModel)
+    func updateData(_ model: PlaylistDetailHeaderModel)
     func updateThumbnail(_ data: Data)
 }
 
@@ -132,7 +132,7 @@ extension MyPlaylistHeaderView {
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
-    func updateData(_ model: MyPlaylistHeaderModel) {
+    func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         countLabel.text = "\(model.songCount)곡"
         thumbnailImageView.kf.setImage(with: URL(string: model.image))
@@ -157,3 +157,5 @@ extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderV
         base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
 }
+
+

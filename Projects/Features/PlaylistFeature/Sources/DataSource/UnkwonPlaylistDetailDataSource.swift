@@ -1,7 +1,7 @@
 import SongsDomainInterface
 import UIKit
 
-final class UnkwonPlaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {
+final class UnknownPlaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {
 
     override init(
         tableView: UITableView,

@@ -32,7 +32,7 @@ extension PlaylistAPI: WMAPI {
 
         case let .fetchPlaylistDetail(id: id, type: type):
             switch type {
-            case .custom, .my:
+            case .unknown, .my:
                 return "/\(id)"
             case .wmRecommend:
                 return "/recommend/\(id)"

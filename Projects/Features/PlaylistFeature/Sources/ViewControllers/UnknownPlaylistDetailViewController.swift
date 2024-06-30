@@ -20,6 +20,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
+    
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -33,7 +34,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
 
 
-    private var headerView: MyPlaylistHeaderView = MyPlaylistHeaderView(frame: .init(
+    private var headerView: UnknownPlaylistHeaderView = UnknownPlaylistHeaderView(frame: .init(
         x: .zero,
         y: .zero,
         width: APP_WIDTH(),
@@ -48,16 +49,16 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
-    private lazy var completeButton: RectangleButton = RectangleButton().then {
+    private lazy var subscriptionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
         $0.setTitle("완료", for: .normal)
-        $0.titleLabel?.font = .init(font: DesignSystemFontFamily.Pretendard.bold, size: 12)
+        $0.titleLabel?.font = .setFont(.t7(weight: .bold))
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 4
     }
 
-    lazy var dataSource: UnkwonPlaylistDetailDataSource = createDataSource()
+    lazy var dataSource: UnknownPlaylistDetailDataSource = createDataSource()
 
     init(
         reactor: UnknownPlaylistDetailReactor,
@@ -91,7 +92,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([completeButton])
+        wmNavigationbarView.setRightViews([subscriptionButton])
     }
 
     override func setLayout() {
@@ -108,7 +109,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        completeButton.snp.makeConstraints {
+        subscriptionButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
             $0.bottom.equalToSuperview().offset(-5)
@@ -139,14 +140,11 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .disposed(by: disposeBag)
 
 
-        completeButton.rx
+        subscriptionButton.rx
             .tap
-            .map { Reactor.Action.completeButtonDidTap }
+            .map { Reactor.Action.subscriptionButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
-
-
 
     }
 
@@ -172,7 +170,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 
-                
+                owner.headerView.updateData(model)
             }
             .disposed(by: disposeBag)
 
@@ -185,7 +183,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
-
+                
                 if model.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
@@ -236,10 +234,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 }
 
 extension UnknownPlaylistDetailViewController {
-    func createDataSource() -> UnkwonPlaylistDetailDataSource {
+    func createDataSource() -> UnknownPlaylistDetailDataSource {
 
         let dataSource =
-        UnkwonPlaylistDetailDataSource(
+        UnknownPlaylistDetailDataSource(
                 tableView: tableView
             ) { [weak self] tableView, indexPath, itemIdentifier in
 

@@ -27,7 +27,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
     enum Mutation {
         case updateEditingState(Bool)
-        case updateHeader(MyPlaylistHeaderModel)
+        case updateHeader(PlaylistDetailHeaderModel)
         case updateDataSource([SongEntity])
         case updateBackUpDataSource([SongEntity])
         case updateLoadingState(Bool)
@@ -39,7 +39,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
     struct State {
         var isEditing: Bool
-        var header: MyPlaylistHeaderModel
+        var header: PlaylistDetailHeaderModel
         var dataSource: [SongEntity]
         var backUpDataSource: [SongEntity]
         var isLoading: Bool
@@ -77,7 +77,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         self.initialState = State(
             isEditing: false,
-            header: MyPlaylistHeaderModel(
+            header: PlaylistDetailHeaderModel(
                 key: key, title: "",
                 image: "",
                 userName: "",
@@ -172,7 +172,7 @@ private extension MyPlaylistDetailReactor {
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
                         Observable.just(Mutation.updateHeader(
-                            MyPlaylistHeaderModel(
+                            PlaylistDetailHeaderModel(
                                 key: data.key,
                                 title: data.title,
                                 image: data.image,

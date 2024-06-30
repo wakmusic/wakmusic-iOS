@@ -1,7 +1,7 @@
 import Foundation
 
 public enum PlaylistType {
-    case custom
+    case unknown
     case wmRecommend
     case my
 }
