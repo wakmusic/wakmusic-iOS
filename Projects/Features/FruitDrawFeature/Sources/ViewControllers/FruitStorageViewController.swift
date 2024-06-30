@@ -79,7 +79,12 @@ public final class FruitStorageViewController: UIViewController {
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.gradientLayer.frame = view.bounds
+        self.gradientLayer.frame = CGRect(
+            x: view.bounds.origin.x,
+            y: view.bounds.origin.y,
+            width: view.bounds.width,
+            height: view.bounds.height + PLAYER_HEIGHT() + SAFEAREA_BOTTOM_HEIGHT()
+        )
     }
 }
 
