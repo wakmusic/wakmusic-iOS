@@ -6,11 +6,12 @@ import UserDomainInterface
 import Utility
 
 public final class FruitInfoPopupViewController: UIViewController {
-    private let popupContentView = UIView().then {
-        $0.backgroundColor = colorFromRGB(0xF2F4F7).withAlphaComponent(0.8)
-    }
+    private let popupContentView = UIView()
 
-    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+    private let backgroundImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.FruitDraw.noteInfoPopupBg.image
+        $0.contentMode = .scaleAspectFill
+    }
 
     private let descriptionLabel = WMLabel(
         text: "",
@@ -61,7 +62,7 @@ private extension FruitInfoPopupViewController {
     func addSubViews() {
         view.addSubview(popupContentView)
         popupContentView.addSubviews(
-            blurView,
+            backgroundImageView,
             descriptionLabel,
             noteImageView,
             confirmButton
@@ -76,10 +77,8 @@ private extension FruitInfoPopupViewController {
             $0.center.equalToSuperview()
         }
 
-        blurView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.top.equalToSuperview()
-            $0.bottom.equalTo(confirmButton.snp.top)
+        backgroundImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
 
         confirmButton.snp.makeConstraints {
