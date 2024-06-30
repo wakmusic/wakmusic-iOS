@@ -465,7 +465,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             }
         case .addSong:
             let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter{$0.isSelected}.map { $0.id })
-            // vc.modalPresentationStyle = .
+            vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
 
@@ -533,7 +533,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         configuration.selectionLimit = 1 // 갯수 제한
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        // picker.modalPresentationStyle =
+        picker.modalPresentationStyle = .overFullScreen
         self.present(picker, animated: true)
     }
 }
