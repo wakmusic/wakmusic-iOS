@@ -43,7 +43,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
     private lazy var tableView: UITableView = UITableView().then {
         $0.backgroundColor = .clear
-        $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
+        $0.register(PlaylistDateTableViewCell.self, forCellReuseIdentifier: PlaylistDateTableViewCell.identifier)
         $0.tableHeaderView = headerView
         $0.separatorStyle = .none
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
@@ -220,7 +220,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 } else {
                     owner.showSongCart(
                         in: owner.view,
-                        type: .myPlaylist,
+                        type: .WMPlaylist,
                         selectedSongCount: count,
                         totalSongCount: limit,
                         useBottomSpace: false
@@ -242,13 +242,13 @@ extension UnknownPlaylistDetailViewController {
             ) { [weak self] tableView, indexPath, itemIdentifier in
 
                 guard let self, let cell = tableView.dequeueReusableCell(
-                    withIdentifier: PlaylistTableViewCell.identifier,
+                    withIdentifier: PlaylistDateTableViewCell.identifier,
                     for: indexPath
-                ) as? PlaylistTableViewCell else {
+                ) as? PlaylistDateTableViewCell else {
                     return UITableViewCell()
                 }
 
-                cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
+                cell.update(itemIdentifier)
                 cell.selectionStyle = .none
 
                 return cell
@@ -300,7 +300,7 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DEBUG_LOG("HELLo")
+        reactor?.action.onNext(.itemDidTap(indexPath.row))
     }
 }
 
@@ -342,16 +342,20 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
+            reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
             #warning("재생목록 관련 구현체 구현 시 추가")
+            reactor.action.onNext(.deselectAll)
             break
         case .play:
             #warning("재생 구현")
+            reactor.action.onNext(.deselectAll)
             break
         case .remove:
             break
         }
+        
     }
 }
 

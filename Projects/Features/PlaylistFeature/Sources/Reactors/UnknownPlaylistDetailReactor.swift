@@ -13,6 +13,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case viewDidLoad
         case selectAll
         case deselectAll
+        case itemDidTap(Int)
         case subscriptionButtonDidTap
 
     }
@@ -78,6 +79,8 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case .deselectAll:
             return deselectAll()
 
+        case let .itemDidTap(index):
+            return updateItemSelected(index)
         }
     }
 
