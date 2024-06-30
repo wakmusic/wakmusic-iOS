@@ -1,7 +1,7 @@
 import SongsDomainInterface
 import UIKit
 
-final class MyplaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {
+final class MyPlaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {
     private let reactor: MyPlaylistDetailReactor
 
     init(

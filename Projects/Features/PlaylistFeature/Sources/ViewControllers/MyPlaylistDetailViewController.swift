@@ -72,7 +72,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.layer.cornerRadius = 4
     }
 
-    lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
+    lazy var dataSource: MyPlaylistDetailDataSource = createDataSource()
 
     init(
         reactor: MyPlaylistDetailReactor,
@@ -335,11 +335,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 }
 
 extension MyPlaylistDetailViewController {
-    func createDataSource() -> MyplaylistDetailDataSource {
+    func createDataSource() -> MyPlaylistDetailDataSource {
         #warning("옵셔널 해결하기")
 
         let dataSource =
-            MyplaylistDetailDataSource(
+            MyPlaylistDetailDataSource(
                 reactor: reactor!,
                 tableView: tableView
             ) { [weak self] tableView, indexPath, itemIdentifier in
