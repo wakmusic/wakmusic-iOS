@@ -5,10 +5,13 @@ import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Utility
+import PlaylistDomain
 
 final class UnknownPlaylistDetailReactor: Reactor {
     let key: String
 
+
+    
     enum Action {
         case viewDidLoad
         case selectAll
@@ -38,17 +41,23 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
-
+    private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
+    private let unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase
+    #warning(" 구독 확인 상태 APi 연결 후 추후 연결")
     private let logoutUseCase: any LogoutUseCase
 
     init(
         key: String,
         fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
+        subscribePlaylistUseCase: any SubscribePlaylistUseCase,
+        unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase,
         logoutUseCase: any LogoutUseCase
 
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
+        self.subscribePlaylistUseCase = subscribePlaylistUseCase
+        self.unSubscribePlaylistUseCase = unSubscribePlaylistUseCase
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(

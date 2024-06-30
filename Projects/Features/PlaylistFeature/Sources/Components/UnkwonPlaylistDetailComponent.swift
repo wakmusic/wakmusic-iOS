@@ -11,6 +11,10 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
 
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
 
+    var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
+    
+    var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase { get }
+
     var logoutUseCase: any LogoutUseCase { get }
 
     var containSongsFactory: any ContainSongsFactory { get }
@@ -25,6 +29,8 @@ public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDeta
             reactor: UnknownPlaylistDetailReactor(
                 key: key,
                 fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
+                subscribePlaylistUseCase: dependency.subscribePlaylistUseCase,
+                unSubscribePlaylistUseCase: dependency.unSubscribePlaylistUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
