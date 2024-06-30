@@ -47,7 +47,11 @@ public final class FruitListCell: UICollectionViewCell {
 }
 
 extension FruitListCell {
-    func update(model: [FruitEntity], index: Int) {
+    func update(
+        model: [FruitEntity],
+        floor: Int,
+        totalCount: Int
+    ) {
         self.items = model
         let notes = [firstNoteImageView, secondNoteImageView, thirdNoteImageView]
         notes.forEach { $0.alpha = 0 }
@@ -55,19 +59,43 @@ extension FruitListCell {
         for i in 0 ..< model.count {
             notes[i].alpha = 1
             if model[i].quantity == -1 {
-                notes[i].image = floorToImage(index: index)
+                notes[i].image = totalCount > 15 ?
+                    DesignSystemAsset.FruitDraw.unidentifiedNote.image :
+                    floorToImage(with: floor)
             } else {
                 notes[i].kf.setImage(
                     with: URL(string: model[i].imageURL),
-                    placeholder: DesignSystemAsset.FruitDraw.unidentifiedNote.image,
+                    placeholder: nil,
                     options: [.transition(.fade(0.2))]
                 )
             }
         }
     }
+}
 
-    func floorToImage(index: Int) -> UIImage {
-        switch index {
+private extension FruitListCell {
+    func addTapGestureRecognizers() {
+        [firstNoteImageView, secondNoteImageView, thirdNoteImageView].forEach {
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:)))
+            $0.addGestureRecognizer(gesture)
+            $0.isUserInteractionEnabled = true
+        }
+    }
+
+    @objc private func imageViewTapped(_ sender: UITapGestureRecognizer) {
+        if let tappedImageView = sender.view {
+            if tappedImageView == firstNoteImageView, items[0].quantity != -1 {
+                delegate?.itemSelected(item: items[0])
+            } else if tappedImageView == secondNoteImageView, items[1].quantity != -1 {
+                delegate?.itemSelected(item: items[1])
+            } else if tappedImageView == thirdNoteImageView, items[2].quantity != -1 {
+                delegate?.itemSelected(item: items[2])
+            }
+        }
+    }
+
+    func floorToImage(with floor: Int) -> UIImage {
+        switch floor {
         case 0:
             return DesignSystemAsset.FruitDraw.unidentifiedNote1st.image
         case 1:
@@ -104,26 +132,6 @@ private extension FruitListCell {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.top.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-12)
-        }
-    }
-
-    func addTapGestureRecognizers() {
-        [firstNoteImageView, secondNoteImageView, thirdNoteImageView].forEach {
-            let gesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:)))
-            $0.addGestureRecognizer(gesture)
-            $0.isUserInteractionEnabled = true
-        }
-    }
-
-    @objc private func imageViewTapped(_ sender: UITapGestureRecognizer) {
-        if let tappedImageView = sender.view {
-            if tappedImageView == firstNoteImageView, items[0].quantity != -1 {
-                delegate?.itemSelected(item: items[0])
-            } else if tappedImageView == secondNoteImageView, items[1].quantity != -1 {
-                delegate?.itemSelected(item: items[1])
-            } else if tappedImageView == thirdNoteImageView, items[2].quantity != -1 {
-                delegate?.itemSelected(item: items[2])
-            }
         }
     }
 }
