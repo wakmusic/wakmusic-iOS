@@ -105,10 +105,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .forceSave, .completeButtonDidTap:
             return endEditingWithSave()
-            
+
         case .forceEndEditing:
             return endEditing()
-            
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
@@ -130,8 +129,6 @@ final class MyPlaylistDetailReactor: Reactor {
             return removeSongs()
         case let .changeThumnail(data):
             return updateThumbnail(data)
-   
-            
         }
     }
 
@@ -202,7 +199,6 @@ private extension MyPlaylistDetailReactor {
     }
 
     func endEditingWithSave() -> Observable<Mutation> {
-   
         let state = currentState
         var currentDataSoruce = state.dataSource
 
@@ -220,7 +216,7 @@ private extension MyPlaylistDetailReactor {
 
         ])
     }
-    
+
     func endEditing() -> Observable<Mutation> {
         let state = currentState
         var currentDataSoruce = state.dataSource
@@ -375,6 +371,4 @@ private extension MyPlaylistDetailReactor {
     func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
         return .just(.updateThumbnail(data))
     }
-    
-    
 }

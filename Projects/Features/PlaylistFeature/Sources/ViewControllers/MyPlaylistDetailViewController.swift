@@ -491,7 +491,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             self.showBottomSheet(content: vc)
         }
-        
+
         reactor.action.onNext(.forceEndEditing)
     }
 }
