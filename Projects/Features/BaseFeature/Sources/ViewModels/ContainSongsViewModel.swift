@@ -21,7 +21,7 @@ public final class ContainSongsViewModel: ViewModelType {
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[PlaylistEntity]> = BehaviorRelay(value: [])
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
         let onLogout: PublishRelay<Error>
 
@@ -48,7 +48,7 @@ public final class ContainSongsViewModel: ViewModelType {
         let output = Output(onLogout: logoutRelay)
 
         input.playListLoad
-            .flatMap { [weak self] () -> Observable<[PlayListEntity]> in
+            .flatMap { [weak self] () -> Observable<[PlaylistEntity]> in
                 guard let self = self else {
                     return Observable.empty()
                 }
@@ -61,10 +61,14 @@ public final class ContainSongsViewModel: ViewModelType {
                             return logoutUseCase.execute()
                                 .andThen(.never())
                         } else {
-                            return Observable.never()
+                            return Observable.error(wmError)
                         }
                     }
             }
+            .do(onError: { error  in
+                let wmError: WMError = error.asWMError
+                output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
+            })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 

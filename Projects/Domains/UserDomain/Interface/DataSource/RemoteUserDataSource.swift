@@ -5,7 +5,7 @@ import RxSwift
 public protocol RemoteUserDataSource {
     func setProfile(image: String) -> Single<BaseEntity>
     func setUserName(name: String) -> Single<BaseEntity>
-    func fetchPlayList() -> Single<[PlayListEntity]>
+    func fetchPlayList() -> Single<[PlaylistEntity]>
     func fetchFavoriteSong() -> Single<[FavoriteSongEntity]>
     func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity>
     func editPlayListOrder(ids: [String]) -> Single<BaseEntity>

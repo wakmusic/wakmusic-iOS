@@ -1,25 +1,24 @@
 import Foundation
 import SongsDomainInterface
 
-public struct PlayListEntity: Equatable {
+public struct PlaylistEntity {
     public init(
         key: String,
         title: String,
         image: String,
-        songlist: [SongEntity],
-        image_version: Int,
+        songCount: Int,
+        userId: String,
         isSelected: Bool = false
     ) {
         self.key = key
         self.title = title
         self.image = image
-        self.songlist = songlist
-        self.image_version = image_version
         self.isSelected = isSelected
+        self.songCount = songCount
+        self.userId = userId
     }
 
-    public let image_version: Int
-    public let key, title, image: String
-    public let songlist: [SongEntity]
+    public let key, title, image, userId: String
+    public let songCount: Int
     public var isSelected: Bool
 }

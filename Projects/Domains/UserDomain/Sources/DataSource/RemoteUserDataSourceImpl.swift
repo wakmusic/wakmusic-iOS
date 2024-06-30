@@ -23,9 +23,9 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func fetchPlayList() -> Single<[PlayListEntity]> {
+    public func fetchPlayList() -> Single<[PlaylistEntity]> {
         return request(.fetchPlayList)
-            .map([PlayListResponseDTO].self)
+            .map([PlaylistResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
 

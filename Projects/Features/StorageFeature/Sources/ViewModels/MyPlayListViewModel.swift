@@ -17,6 +17,7 @@ import SongsDomainInterface
 import UserDomainInterface
 import Utility
 
+#warning("갈아 엎기")
 public final class MyPlayListViewModel: ViewModelType {
     var fetchPlayListUseCase: FetchPlayListUseCase!
     var editPlayListOrderUseCase: EditPlayListOrderUseCase!
@@ -73,7 +74,7 @@ public final class MyPlayListViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.playListLoad
-            .flatMap { [weak self] () -> Observable<[PlayListEntity]> in
+            .flatMap { [weak self] () -> Observable<[PlaylistEntity]> in
                 guard let self = self else {
                     return Observable.empty()
                 }
@@ -196,11 +197,11 @@ public final class MyPlayListViewModel: ViewModelType {
         input.addPlayList
             .withLatestFrom(output.indexPathOfSelectedPlayLists)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { indexPathes, dataSource -> [SongEntity] in
-                let songs = indexPathes.map {
-                    return dataSource[$0.section].items[$0.row].songlist
+            .map { indexPath, dataSource -> [SongEntity] in
+                let songs = indexPath.map { _ in
+                    return []  // dataSource[$0.section].items[$0.row].se
                 }.flatMap { $0 }
-                return songs
+                return []
             }
             .bind(to: output.willAddPlayList)
             .disposed(by: disposeBag)
