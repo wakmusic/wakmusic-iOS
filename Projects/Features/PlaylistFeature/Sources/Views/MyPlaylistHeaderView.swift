@@ -157,5 +157,3 @@ extension Reactive: MyPlaylistHeaderActionProtocol where Base: MyPlaylistHeaderV
         base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
 }
-
-

@@ -32,7 +32,6 @@ public extension SingleSongResponseDTO {
 
 public extension SingleSongResponseDTO {
     func toDomain() -> SongEntity {
-        
         return SongEntity(
             id: songID,
             title: title,

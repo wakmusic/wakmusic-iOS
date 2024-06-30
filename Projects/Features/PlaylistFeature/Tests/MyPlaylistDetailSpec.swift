@@ -6,8 +6,6 @@ import XCTest
 
 final class MyPlaylistDetailSpec: QuickSpec {
     override class func spec() {
-      
-
         describe("MyPlaylistDetailReactorTest") {
 //            context("viewDidLoad") {
 //                reactor.action.onNext(.viewDidLoad)

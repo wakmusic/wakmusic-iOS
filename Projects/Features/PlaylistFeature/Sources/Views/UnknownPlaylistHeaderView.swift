@@ -11,13 +11,11 @@ private protocol UnknownPlaylistHeaderStateProtocol {
 }
 
 final class UnknownPlaylistHeaderView: UIView {
-   
     private var thumbnailImageView: UIImageView = UIImageView().then {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
-
 
     private let containerView: UIView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray25.color.withAlphaComponent(0.4)
@@ -56,8 +54,8 @@ final class UnknownPlaylistHeaderView: UIView {
 
 extension UnknownPlaylistHeaderView {
     private func addView() {
-        self.addSubviews(thumbnailImageView, containerView )
-        containerView.addSubviews(titleLabel, subtitleLabel )
+        self.addSubviews(thumbnailImageView, containerView)
+        containerView.addSubviews(titleLabel, subtitleLabel)
     }
 
     private func setLayout() {
@@ -66,8 +64,6 @@ extension UnknownPlaylistHeaderView {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview().inset(20)
         }
-
-
 
         containerView.snp.makeConstraints {
             $0.leading.equalTo(thumbnailImageView.snp.trailing).offset(8)
@@ -83,9 +79,7 @@ extension UnknownPlaylistHeaderView {
         subtitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.leading.equalTo(titleLabel.snp.leading)
-    
         }
-
     }
 }
 
@@ -93,23 +87,16 @@ extension UnknownPlaylistHeaderView: UnknownPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         thumbnailImageView.kf.setImage(with: URL(string: model.image))
-        
-    
-       let attributedString = NSMutableAttributedString(string: "\(model.songCount)곡")
-        
 
-        
+        let attributedString = NSMutableAttributedString(string: "\(model.songCount)곡")
+
         let padding = NSTextAttachment()
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = DesignSystemAsset.Playlist.grayDot.image
         imageAttachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
         attributedString.append(NSAttributedString(attachment: imageAttachment))
         attributedString.append(NSAttributedString(string: model.userName))
-        
+
         subtitleLabel.attributedText = attributedString
-        
-        
     }
-
 }
-

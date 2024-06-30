@@ -9,10 +9,8 @@ import Then
 import UIKit
 import Utility
 
-
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
     SongCartViewType {
-   
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -20,19 +18,14 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
-    
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
-
-
 
     fileprivate let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
             .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
-
-
 
     private var headerView: UnknownPlaylistHeaderView = UnknownPlaylistHeaderView(frame: .init(
         x: .zero,
@@ -131,21 +124,18 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         let sharedState = reactor.state.share()
 
-  
         dismissButton.rx
             .tap
-            .bind(with: self) { owner, _  in
+            .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
-
 
         subscriptionButton.rx
             .tap
             .map { Reactor.Action.subscriptionButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
     }
 
     override func bindState(reactor: UnknownPlaylistDetailReactor) {
@@ -164,12 +154,11 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             }
             .disposed(by: disposeBag)
 
-
         sharedState.map(\.header)
             .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
-                
+
                 owner.headerView.updateData(model)
             }
             .disposed(by: disposeBag)
@@ -183,7 +172,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
-                
+
                 if model.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
@@ -212,12 +201,11 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
                 owner.subscriptionButton.setColor(isHighlight: !flag)
-                
+
                 owner.subscriptionButton.setTitle(flag ? "구독 중" : "구독", for: .normal)
-                
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
             .withLatestFrom(sharedState.map(\.header)) { ($0, $1) }
@@ -239,15 +227,13 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 }
             }
             .disposed(by: disposeBag)
-
     }
 }
 
 extension UnknownPlaylistDetailViewController {
     func createDataSource() -> UnknownPlaylistDetailDataSource {
-
         let dataSource =
-        UnknownPlaylistDetailDataSource(
+            UnknownPlaylistDetailDataSource(
                 tableView: tableView
             ) { [weak self] tableView, indexPath, itemIdentifier in
 
@@ -308,7 +294,6 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
         }
     }
 
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
     }
@@ -327,10 +312,6 @@ extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         }
     }
 }
-
-
-
-
 
 /// 송카트 델리게이트
 extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
@@ -365,7 +346,5 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
         case .remove:
             break
         }
-        
     }
 }
-

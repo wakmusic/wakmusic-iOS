@@ -15,7 +15,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case deselectAll
         case itemDidTap(Int)
         case subscriptionButtonDidTap
-
     }
 
     enum Mutation {
@@ -39,7 +38,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
-
 
     private let logoutUseCase: any LogoutUseCase
 
@@ -72,10 +70,10 @@ final class UnknownPlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return updateDataSource()
-            
+
         case .subscriptionButtonDidTap:
             return updateSubscribeState()
-    
+
         case .selectAll:
             return selectAll()
 
@@ -91,29 +89,25 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var newState = state
 
         switch mutation {
-
         case let .updateHeader(header):
             newState.header = header
 
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
 
-
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
         case let .updateSelectedCount(count):
             newState.selectedCount = count
-
 
         case let .showtoastMessage(message):
             newState.toastMessage = message
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
-        
+
         case let .updateSubscribeState(flag):
             newState.isSubscribing = flag
-            
         }
 
         return newState
@@ -150,12 +144,10 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateLoadingState(false))
         ])
     }
-
 }
 
 /// usecase를 사용하지 않는
 private extension UnknownPlaylistDetailReactor {
-
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
@@ -201,20 +193,15 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
-    
+
     func updateSubscribeState() -> Observable<Mutation> {
         let currentState = currentState
-        
+
         let prev = currentState.isSubscribing
-     
+
         if prev {
-            
-        } else {
-            
-        }
-        
+        } else {}
+
         return .just(.updateSubscribeState(!prev))
     }
-
-   
 }

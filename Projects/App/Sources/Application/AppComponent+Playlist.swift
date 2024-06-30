@@ -31,7 +31,7 @@ public extension AppComponent {
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory {
         MyPlaylistDetailComponent(parent: self)
     }
-    
+
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory {
         UnknownPlaylistDetailComponent(parent: self)
     }

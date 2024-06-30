@@ -7,7 +7,6 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol UnknownPlaylistDetailDependency: Dependency {
-   
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
 
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
@@ -19,7 +18,8 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDetailDependency>, UnknownPlaylistDetailFactory {
+public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDetailDependency>,
+    UnknownPlaylistDetailFactory {
     public func makeView(key: String) -> UIViewController {
         return UnknownPlaylistDetailViewController(
             reactor: UnknownPlaylistDetailReactor(

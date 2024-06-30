@@ -7,8 +7,6 @@ import Then
 import UIKit
 import Utility
 
-
-
 final class PlaylistDateTableViewCell: UITableViewCell {
     static let identifier = "PlaylistTableViewCell"
 
@@ -45,7 +43,7 @@ final class PlaylistDateTableViewCell: UITableViewCell {
     ).then {
         $0.lineBreakMode = .byTruncatingTail
     }
-    
+
     private lazy var dateLabel = WMLabel(
         text: "날짜",
         textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
@@ -57,28 +55,21 @@ final class PlaylistDateTableViewCell: UITableViewCell {
         $0.lineBreakMode = .byTruncatingTail
     }
 
-
-
-
-
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addViews()
         setLayout()
-    
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("")
     }
-    
+
     private func addViews() {
-        self.contentView.addSubviews(self.thumbnailImageView,self.titleArtistStackView,self.dateLabel)
+        self.contentView.addSubviews(self.thumbnailImageView, self.titleArtistStackView, self.dateLabel)
     }
 
-    
     private func setLayout() {
         let height = 40
         let width = height * 16 / 9
@@ -95,18 +86,16 @@ final class PlaylistDateTableViewCell: UITableViewCell {
             $0.right.equalTo(dateLabel.snp.left).offset(-16)
             $0.bottom.equalTo(thumbnailImageView.snp.bottom)
         }
-        
+
         dateLabel.snp.makeConstraints {
             $0.width.equalTo(70)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
     }
-    
 }
 
 extension PlaylistDateTableViewCell {
-    
     func update(_ model: SongEntity) {
         self.thumbnailImageView.kf.setImage(
             with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
@@ -119,7 +108,4 @@ extension PlaylistDateTableViewCell {
         self.dateLabel.text = model.date
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
     }
-    
-
-
 }
