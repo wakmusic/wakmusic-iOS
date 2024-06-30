@@ -68,7 +68,7 @@ public final class ContainSongsViewModel: ViewModelType {
                         }
                     }
             }
-            .do(onError: { error  in
+            .do(onError: { error in
                 let wmError: WMError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
             })

@@ -21,10 +21,7 @@ public struct PlaylistResponseDTO: Decodable {
         public let handle: String
         public let name: String
     }
-
-
 }
-
 
 public extension PlaylistResponseDTO {
     func toDomain() -> PlaylistEntity {

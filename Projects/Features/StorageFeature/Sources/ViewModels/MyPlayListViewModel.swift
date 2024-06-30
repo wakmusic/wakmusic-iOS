@@ -199,7 +199,7 @@ public final class MyPlayListViewModel: ViewModelType {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { indexPath, dataSource -> [SongEntity] in
                 let songs = indexPath.map { _ in
-                    return []  // dataSource[$0.section].items[$0.row].se
+                    return [] // dataSource[$0.section].items[$0.row].se
                 }.flatMap { $0 }
                 return []
             }
