@@ -31,7 +31,7 @@ public final class FruitListCell: UICollectionViewCell {
     }
 
     private var items: [FruitEntity] = []
-    public weak var delegate: FruitListCellDelegate?
+    weak var delegate: FruitListCellDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
