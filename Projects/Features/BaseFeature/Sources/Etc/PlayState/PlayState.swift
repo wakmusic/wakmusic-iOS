@@ -12,16 +12,15 @@ import Foundation
 import SongsDomainInterface
 import Utility
 
+/// 완전히 도메인 로직으로 전환 고려
 public final class PlayState {
     public static let shared = PlayState()
     @Published public var playList: PlayList
     private var subscription = Set<AnyCancellable>()
 
-    public init(
-        playList: PlayList = PlayList()
-    ) {
+    public init() {
         DEBUG_LOG("🚀:: \(Self.self) initialized")
-        self.playList = playList
+        self.playList = PlayList()
         self.playList.list = fetchPlayListFromLocalDB()
         subscribePlayListChanges()
     }
@@ -42,46 +41,31 @@ public final class PlayState {
         .sink { [weak self] playListItems in
             guard let self else { return }
             self.updatePlaylistChangesToLocalDB(playList: playListItems)
-        }.store(in: &subscription)
+        }
+        .store(in: &subscription)
     }
 
     public func updatePlaylistChangesToLocalDB(playList: [PlayListItem]) {
-        let allPlayedLists = RealmManager.shared.realm.objects(PlayedLists.self)
+        let allPlayedLists = RealmManager.shared.fetchRealmDB(PlaylistLocalEntity.self)
         RealmManager.shared.deleteRealmDB(model: allPlayedLists)
 
         let playedList = playList.map {
-            PlayedLists(
-                id: $0.item.id,
-                title: $0.item.title,
-                artist: $0.item.artist,
-                remix: $0.item.remix,
-                reaction: $0.item.reaction,
-                views: $0.item.views,
-                last: $0.item.last,
-                date: $0.item.date,
-                lastPlayed: $0.isPlaying
+            PlaylistLocalEntity(
+                id: $0.id,
+                title: $0.title,
+                artist: $0.artist,
+                date: $0.date
             )
         }
         RealmManager.shared.addRealmDB(model: playedList)
     }
 
     public func fetchPlayListFromLocalDB() -> [PlayListItem] {
-        let playedList = RealmManager.shared.realm.objects(PlayedLists.self)
-            .toArray(type: PlayedLists.self)
-            .map { PlayListItem(
-                item:
-                SongEntity(
-                    id: $0.id,
-                    title: $0.title,
-                    artist: $0.artist,
-                    remix: $0.remix,
-                    reaction: $0.reaction,
-                    views: $0.views,
-                    last: $0.last,
-                    date: $0.date
-                ),
-                isPlaying: $0.lastPlayed
-            ) }
+        let playedList = RealmManager.shared.fetchRealmDB(PlaylistLocalEntity.self)
+            .toArray(type: PlaylistLocalEntity.self)
+            .map {
+                PlayListItem(id: $0.id, title: $0.title, artist: $0.artist, date: $0.date)
+            }
         return playedList
     }
 }

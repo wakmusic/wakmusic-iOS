@@ -9,18 +9,31 @@
 import Combine
 import Foundation
 import SongsDomainInterface
+import Utility
 
 public struct PlayListItem: Equatable {
-    public var item: SongEntity
-    public var isPlaying: Bool
+    public let id: String
+    public let title: String
+    public let artist: String
+    public let date: Date
 
-    public init(item: SongEntity, isPlaying: Bool = false) {
-        self.item = item
-        self.isPlaying = isPlaying
+    public init(
+        id: String,
+        title: String,
+        artist: String,
+        date: Date
+    ) {
+        self.id = id
+        self.title = title
+        self.artist = artist
+        self.date = date
     }
 
-    public static func == (lhs: PlayListItem, rhs: PlayListItem) -> Bool {
-        return lhs.item == rhs.item && lhs.item.isSelected == rhs.item.isSelected && lhs.isPlaying == rhs.isPlaying
+    public init(item: SongEntity) {
+        self.id = item.id
+        self.title = item.title
+        self.artist = item.artist
+        self.date = item.date.toDateCustomFormat(format: "yyyy.MM.dd")
     }
 }
 
@@ -36,7 +49,6 @@ public class PlayList {
     public var listRemoved = PassthroughSubject<[PlayListItem], Never>()
     public var listReordered = PassthroughSubject<[PlayListItem], Never>()
     public var currentPlayIndexChanged = PassthroughSubject<[PlayListItem], Never>()
-    public var currentPlaySongChanged = PassthroughSubject<SongEntity, Never>()
 
     public init(list: [PlayListItem] = []) {
         self.list = list
@@ -89,6 +101,6 @@ public class PlayList {
 
     /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
     public func uniqueIndex(of item: PlayListItem) -> Int? {
-        return list.firstIndex(where: { $0.item == item.item })
+        return list.firstIndex(of: item)
     }
 }

@@ -14,7 +14,7 @@ import RxRelay
 import RxSwift
 import Utility
 
-internal typealias PlayListSectionModel = SectionModel<Int, PlayListItem>
+internal typealias PlayListSectionModel = SectionModel<Int, PlaylistItemModel>
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
@@ -33,7 +33,7 @@ final class PlaylistViewModel: ViewModelType {
         var willClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<Bool, Never>(false)
         let dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value: [])
-        let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
+        let selectedSongIds: BehaviorRelay<Set<String>> = BehaviorRelay(value: [])
         let countOfSongs = CurrentValueSubject<Int, Never>(0)
     }
 
@@ -57,7 +57,7 @@ final class PlaylistViewModel: ViewModelType {
         bindInput(input: input, output: output)
         bindTableView(output: output)
 
-        output.indexOfSelectedSongs
+        output.selectedSongIds
             .map { $0.count }
             .subscribe(onNext: { [weak self] count in
                 self?.countOfSelectedSongs = count
@@ -90,42 +90,46 @@ final class PlaylistViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.playlistTableviewCellDidTapInEditModeEvent
-            .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { tappedIndex, selectedSongs -> [Int] in
-                if let indexToRemove = selectedSongs.firstIndex(of: tappedIndex) {
-                    var newSelectedSongs = selectedSongs
-                    newSelectedSongs.remove(at: indexToRemove)
-                    return newSelectedSongs
-                } else {
-                    return selectedSongs + [tappedIndex]
-                }
+            .withLatestFrom(output.dataSource, resultSelector: { tappedIndex, dataSource in
+                return dataSource.first?.items[tappedIndex]
             })
-            .map { $0.sorted { $0 < $1 } }
-            .bind(to: output.indexOfSelectedSongs)
+            .compactMap { $0 }
+            .withLatestFrom(output.selectedSongIds) { selectedPlaylistItem, selectedSongIds in
+                var mutableSelectedSongIds = selectedSongIds
+                mutableSelectedSongIds.insert(selectedPlaylistItem.id)
+                return mutableSelectedSongIds
+            }
+            .bind(to: output.selectedSongIds)
             .disposed(by: disposeBag)
 
         input.selectAllSongsButtonDidTapEvent
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { flag, dataSource -> [Int] in
-                return flag ? Array(0 ..< dataSource.first!.items.count) : []
+            .compactMap { flag, dataSource -> [String]? in
+                return flag ? dataSource.first?.items.map(\.id) : []
             }
-            .bind(to: output.indexOfSelectedSongs)
+            .map { Set($0) }
+            .bind(to: output.selectedSongIds)
             .disposed(by: disposeBag)
 
         input.addPlaylistButtonDidTapEvent
             .subscribe { _ in
-                output.indexOfSelectedSongs.accept([])
+                output.selectedSongIds.accept([])
                 output.editState.send(false)
             }.disposed(by: disposeBag)
 
         input.removeSongsButtonDidTapEvent
-            .withLatestFrom(output.indexOfSelectedSongs)
-            .subscribe(onNext: { [weak self] selectedIndexs in
-                if selectedIndexs.count == self?.playState.playList.count {
+            .withLatestFrom(output.selectedSongIds)
+            .subscribe(onNext: { [weak self] selectedIds in
+                if selectedIds.count == self?.playState.playList.count {
                     self?.playState.playList.removeAll()
                     output.willClosePlaylist.send()
                 } else {
-                    self?.playState.playList.remove(indexs: selectedIndexs)
-                    output.indexOfSelectedSongs.accept([])
+                    let removingIndex = self?.playState.playList.list
+                        .filter { selectedIds.contains($0.id) }
+                        .enumerated()
+                        .map(\.offset)
+                    self?.playState.playList.remove(indexs: removingIndex ?? [])
+                    output.selectedSongIds.accept([])
                 }
             }).disposed(by: disposeBag)
 
@@ -133,45 +137,6 @@ final class PlaylistViewModel: ViewModelType {
             .map { (sourceIndex: $0.row, destIndex: $1.row) }
             .subscribe { (sourceIndex: Int, destIndex: Int) in
                 self.playState.playList.reorderPlaylist(from: sourceIndex, to: destIndex)
-            }.disposed(by: disposeBag)
-
-        input.itemMovedEvent
-            .map { (sourceIndex: $0.row, destIndex: $1.row) }
-            .subscribe { (sourceIndex: Int, destIndex: Int) in
-                /* indexOfSelectedSongs 갱신부 */
-                var selectedIndexs = output.indexOfSelectedSongs.value // 현재 선택된 인덱스 모음
-                let sourceIsSelected: Bool = selectedIndexs.contains(where: { $0 == sourceIndex }) // 선택된 것을 움직 였는지 ?
-
-                // 선택된 인덱스 배열 안에 source(시작점)이 있다는 뜻은 선택된 것을 옮긴다는 뜻
-                // 그러므로 일단 지워준다.
-                if sourceIsSelected {
-                    let pos = selectedIndexs.firstIndex(where: { $0 == sourceIndex })!
-                    selectedIndexs.remove(at: pos)
-                }
-
-                selectedIndexs = selectedIndexs.map { i -> Int in
-                    // 옮기기 시작한 위치와 도착한 위치가 i를 기준으로 앞일 때 아무 영향 없음
-                    if sourceIndex < i && i > destIndex { return i }
-
-                    // 옮기기 시작한 위치는 i 앞, 도착한 위치가 i 또는 i 뒤일 경우 i는 앞으로 한 칸 가야함
-                    if sourceIndex < i && i <= destIndex { return i - 1 }
-
-                    // 옮기기 시작한 위치는 i 뒤, 도착한 위치가 i 또는 i 앞일 경우 i는 뒤로 한칸 가야함
-                    // 단 옮겨질 위치가 배열의 끝일 경우는 그대로 있음
-                    if i < sourceIndex && destIndex <= i { return i + 1 }
-
-                    // 옮기기 시작한 위치는 i 뒤, 도착한 위치가 i 뒤 일 경우 아무 영향 없음
-                    if sourceIndex > i && i < destIndex { return i }
-
-                    return i
-                }
-
-                // 선택된 것을 건드렸으므로 dest 인덱스로 갱신하여 넣어준다
-                if sourceIsSelected { selectedIndexs.append(destIndex) }
-
-                selectedIndexs.sort()
-
-                output.indexOfSelectedSongs.accept(selectedIndexs)
             }.disposed(by: disposeBag)
     }
 
@@ -187,17 +152,20 @@ final class PlaylistViewModel: ViewModelType {
         }.store(in: &subscription)
 
         // cell 선택 시, cell의 isSelected 속성을 변경시키고 dataSource에 전달
-        output.indexOfSelectedSongs
+        output.selectedSongIds
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] selectedIndexs, dataSource in
+            .subscribe(onNext: { [weak self] selectedIds, dataSource in
                 guard let self else { return }
                 let copiedList = self.playState.playList.list
-                let newList = copiedList.enumerated().map { index, item -> PlayListItem in
-                    var newItem = item
-                    newItem.item.isSelected = selectedIndexs.contains(index)
-                    return newItem
+                let newList = copiedList.map { item -> PlaylistItemModel in
+                    return PlaylistItemModel(
+                        id: item.id,
+                        title: item.title,
+                        artist: item.artist,
+                        date: item.date,
+                        isSelected: selectedIds.contains(item.id)
+                    )
                 }
-                self.playState.playList.list = newList
             }).disposed(by: disposeBag)
 
         // 편집 종료 시, 셀 선택 초기화
@@ -206,7 +174,7 @@ final class PlaylistViewModel: ViewModelType {
             .filter { $0 == false }
             .sink { [weak self] _ in
                 guard let self else { return }
-                output.indexOfSelectedSongs.accept([])
+                output.selectedSongIds.accept([])
                 // Comment: 편집모드가 완료 된 시점에서 list를 가져와서 listReordered.send > DB 업데이트
                 let list = self.playState.playList.list
                 self.playState.playList.listReordered.send(list)
@@ -215,10 +183,20 @@ final class PlaylistViewModel: ViewModelType {
 
     private func pullForOriginalPlaylist(output: Output) {
         let originalPlaylist = playState.playList.list
+        let playlistModelFromOriginal = originalPlaylist.map { item in
+            PlaylistItemModel(
+                id: item.id,
+                title: item.title,
+                artist: item.artist,
+                date: item.date,
+                isSelected: output.selectedSongIds.value.contains(item.id)
+            )
+        }
+
         let localPlaylist = output.dataSource.value.first?.items ?? []
 
-        if originalPlaylist != localPlaylist {
-            output.dataSource.accept([PlayListSectionModel(model: 0, items: originalPlaylist)])
+        if playlistModelFromOriginal != localPlaylist {
+            output.dataSource.accept([PlayListSectionModel(model: 0, items: playlistModelFromOriginal)])
         }
     }
 }
