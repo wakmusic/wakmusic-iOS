@@ -12,18 +12,12 @@ import Utility
 
 final class StorageViewController: TabmanViewController, ViewControllerFromStoryBoard, EqualHandleTappedType,
     StoryboardView {
-    private enum Color {
-        static let gray = DesignSystemAsset.GrayColor.gray400.color
-
-        static let point = DesignSystemAsset.PrimaryColor.point.color
-    }
-
     private enum ButtonAttributed {
         static let edit = NSMutableAttributedString(
             string: "편집",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                .foregroundColor: Color.gray
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray400.color
             ]
         )
 
@@ -31,7 +25,7 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
             string: "완료",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                .foregroundColor: Color.point
+                .foregroundColor: DesignSystemAsset.PrimaryColor.point.color
             ]
         )
     }
@@ -195,14 +189,14 @@ extension StorageViewController {
         editButton.layer.borderWidth = 1
         editButton.backgroundColor = .clear
 
-        editButton.layer.borderColor = DesignSystemAsset.GrayColor.gray300.color.cgColor
+        editButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray300.color.cgColor
 
         editButton.setAttributedTitle(ButtonAttributed.edit, for: .normal)
 
         saveButton.layer.cornerRadius = 4
         saveButton.layer.borderWidth = 1
         saveButton.backgroundColor = .clear
-        saveButton.layer.borderColor = Color.point.cgColor
+        saveButton.layer.borderColor = DesignSystemAsset.PrimaryColor.point.color.cgColor
         saveButton.setAttributedTitle(ButtonAttributed.save, for: .normal)
         saveButton.isHidden = true
 
@@ -223,8 +217,8 @@ extension StorageViewController {
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.tintColor = DesignSystemAsset.BlueGrayColor.blueGray400.color
+            button.selectedTintColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
@@ -236,7 +230,7 @@ extension StorageViewController {
         addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         bar.layer.addBorder(
             [.bottom],
-            color: DesignSystemAsset.GrayColor.gray300.color.withAlphaComponent(0.4),
+            color: DesignSystemAsset.BlueGrayColor.blueGray300.color.withAlphaComponent(0.4),
             height: 1
         )
     }
