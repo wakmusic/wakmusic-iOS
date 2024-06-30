@@ -23,6 +23,7 @@ public final class FruitInfoPopupViewController: UIViewController {
 
     private let noteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
 
     private let confirmButton = UIButton(type: .system).then {
@@ -68,8 +69,10 @@ private extension FruitInfoPopupViewController {
     }
 
     func setLayout() {
+        let is320 = APP_WIDTH() < 375
+
         popupContentView.snp.makeConstraints {
-            $0.width.equalTo(335)
+            $0.width.equalTo(is320 ? APP_WIDTH() - 40 : 335)
             $0.center.equalToSuperview()
         }
 
@@ -91,12 +94,15 @@ private extension FruitInfoPopupViewController {
             $0.height.equalTo(32)
         }
 
+        let is320Width: CGFloat = (275 * APP_WIDTH()) / 375
+        let is320Height: CGFloat = (is320Width * 200) / 275
+
         noteImageView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(confirmButton.snp.top).offset(-80)
-            $0.width.equalTo(275)
-            $0.height.equalTo(200)
+            $0.width.equalTo(is320 ? is320Width : 275)
+            $0.height.equalTo(is320 ? is320Height : 200)
         }
     }
 
