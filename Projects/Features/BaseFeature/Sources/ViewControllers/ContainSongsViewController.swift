@@ -99,10 +99,18 @@ extension ContainSongsViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
                 guard let self = self else { return }
-                self.showToast(text: result.description, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                self.showToast(text: result.description, font: .setFont(.t6(weight: .light)))
 
-                NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                self.dismiss(animated: true)
+                if result.status == 201 {
+                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                } else if result.status == 200   {
+                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    self.dismiss(animated: true)
+                } else {
+                    self.dismiss(animated: true)
+                }
+                
+               
             })
             .disposed(by: disposeBag)
 
@@ -169,7 +177,10 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
             type: .creation,
             key: "",
-            completion: nil
+            completion: { [weak self] text in
+                guard let self else { return }
+                self.input.createPlaylist.onNext(text)
+            }
         ) as? MultiPurposePopupViewController else {
             return
         }
