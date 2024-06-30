@@ -30,6 +30,7 @@ public final class FruitStorageViewModel: ViewModelType {
 
     public struct Output {
         let fruitSource: BehaviorRelay<[[FruitEntity]]> = BehaviorRelay(value: [])
+        let fruitTotalCount: BehaviorRelay<Int> = BehaviorRelay(value: 0)
     }
 
     public func transform(from input: Input) -> Output {
@@ -41,6 +42,9 @@ public final class FruitStorageViewModel: ViewModelType {
                     .asObservable()
                     .catchAndReturn([])
             }
+            .do(onNext: { entities in
+                output.fruitTotalCount.accept(entities.count)
+            })
             .map { [weak self] source in
                 guard let self = self else { return [] }
                 return self.chunkArray(source: source, chunkSize: 3)
