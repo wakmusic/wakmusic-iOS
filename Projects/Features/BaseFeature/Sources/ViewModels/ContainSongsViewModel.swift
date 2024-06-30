@@ -19,7 +19,7 @@ public final class ContainSongsViewModel: ViewModelType {
         let newPlayListTap: PublishSubject<Void> = PublishSubject()
         let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let containSongWithKey: PublishSubject<String> = PublishSubject()
-        let createPlaylist: PublishSubject<String> =  PublishSubject()
+        let createPlaylist: PublishSubject<String> = PublishSubject()
     }
 
     public struct Output {
@@ -119,11 +119,11 @@ public final class ContainSongsViewModel: ViewModelType {
             }
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)
-        
+
         input.createPlaylist
-            .withUnretained(self){($0, $1)}
-            .flatMap { (owner, text) -> Observable<PlaylistBaseEntity> in
-                
+            .withUnretained(self) { ($0, $1) }
+            .flatMap { owner, text -> Observable<PlaylistBaseEntity> in
+
                 owner.createPlaylistUseCase.execute(title: text)
                     .asObservable()
                     .catch { (error: Error) in
@@ -141,10 +141,9 @@ public final class ContainSongsViewModel: ViewModelType {
                 let wmError: WMError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
             })
-            .map{ _ in BaseEntity(status: 201,description: "플레이리스트를 성곡적으로 생성했습니다.")}
+            .map { _ in BaseEntity(status: 201, description: "플레이리스트를 성곡적으로 생성했습니다.") }
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)
-        
 
         return output
     }

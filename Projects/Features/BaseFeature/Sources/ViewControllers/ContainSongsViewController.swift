@@ -103,14 +103,13 @@ extension ContainSongsViewController {
 
                 if result.status == 201 {
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
-                } else if result.status == 200   {
+                } else if result.status == 200 {
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
                 } else {
                     self.dismiss(animated: true)
                 }
-                
-               
+
             })
             .disposed(by: disposeBag)
 
