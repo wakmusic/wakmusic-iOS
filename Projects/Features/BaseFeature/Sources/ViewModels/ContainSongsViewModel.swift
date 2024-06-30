@@ -8,8 +8,9 @@ import RxSwift
 import UserDomainInterface
 
 public final class ContainSongsViewModel: ViewModelType {
-    var fetchPlayListUseCase: FetchPlayListUseCase!
-    var addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!
+    private let fetchPlayListUseCase: any FetchPlayListUseCase
+    private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
+    private let createPlaylistUseCase: any CreatePlaylistUseCase
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
@@ -25,17 +26,19 @@ public final class ContainSongsViewModel: ViewModelType {
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
         let onLogout: PublishRelay<Error>
 
-        init(onLogout: PublishRelay<Error> = PublishRelay()) {
+        init(onLogout: PublishRelay<Error>) {
             self.onLogout = onLogout
         }
     }
 
     init(
         songs: [String],
-        fetchPlayListUseCase: FetchPlayListUseCase!,
-        addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!,
+        createPlaylistUseCase: any CreatePlaylistUseCase,
+        fetchPlayListUseCase: any FetchPlayListUseCase,
+        addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
         logoutUseCase: LogoutUseCase
     ) {
+        self.createPlaylistUseCase = createPlaylistUseCase
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
         self.logoutUseCase = logoutUseCase
