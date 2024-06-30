@@ -19,9 +19,8 @@ public struct Model: Hashable {
 
 public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
-    private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
-    private let myPlaylistFactory: any MyPlaylistFactory
+    private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
@@ -39,14 +38,12 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
         textPopUpFactory: TextPopUpFactory,
-        playlistDetailFactory: PlaylistDetailFactory,
-        myPlaylistFactory: any MyPlaylistFactory,
+        myPlaylistDetailFactory: any MyPlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
-        self.playlistDetailFactory = playlistDetailFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
-        self.myPlaylistFactory = myPlaylistFactory
+        self.myPlaylistDetailFactory = myPlaylistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -334,7 +331,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
                 break
             case .recommend:
                 self.navigationController?.pushViewController(
-                    myPlaylistFactory.makeView(key: "-iZB-NSFdy-"),
+                    myPlaylistDetailFactory.makeView(key: "-iZB-NSFdy-"),
                     animated: true
                 )
 //                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)

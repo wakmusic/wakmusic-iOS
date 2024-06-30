@@ -7,12 +7,11 @@ import PlaylistDomainInterface
 import PlaylistFeatureInterface
 
 public protocol BeforeSearchDependency: Dependency {
-    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }
-    var myPlaylistFactory: any MyPlaylistFactory { get }
+    var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
@@ -20,8 +19,7 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
         return BeforeSearchContentViewController(
             wakmusicRecommendComponent: dependency.wakmusicRecommendComponent,
             textPopUpFactory: dependency.textPopUpFactory,
-            playlistDetailFactory: dependency.playlistDetailFactory,
-            myPlaylistFactory: dependency.myPlaylistFactory,
+            myPlaylistDetailFactory: dependency.myPlaylistDetailFactory,
             reactor: BeforeSearchReactor(
                 fetchCurrentVideoUseCase: dependency.fetchCurrentVideoUseCase,
                 fetchRecommendPlaylistUseCase: dependency.fetchRecommendPlaylistUseCase

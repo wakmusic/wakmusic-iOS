@@ -22,7 +22,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependency>, MyPlaylistFactory {
+public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependency>, MyPlaylistDetailFactory {
     public func makeView(key: String) -> UIViewController {
         return MyPlaylistDetailViewController(
             reactor: MyPlaylistDetailReactor(
