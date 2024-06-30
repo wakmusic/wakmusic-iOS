@@ -33,7 +33,7 @@ extension NoticeListCell {
         dayLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "yy.MM.dd")
         timeLabel.text = (model.createdAt / 1000.0).unixTimeToDate.dateToString(format: "HH:mm")
     }
-    
+
     func updateVisibleIndicator(visible: Bool) {
         if visible {
             let attributedString = NSMutableAttributedString(string: titleStringLabel.text ?? "")
@@ -42,7 +42,7 @@ extension NoticeListCell {
             imageAttachment.image = DesignSystemAsset.MyInfo.redDot.image
             imageAttachment.bounds = CGRect(x: 0, y: 10, width: 5, height: 5)
             padding.bounds = CGRect(x: 0, y: 0, width: 2, height: 0)
-            
+
             attributedString.append(NSAttributedString(attachment: padding))
             attributedString.append(NSAttributedString(attachment: imageAttachment))
             titleStringLabel.attributedText = attributedString
@@ -52,6 +52,5 @@ extension NoticeListCell {
             titleStringLabel.attributedText = nil
             titleStringLabel.text = text
         }
-        
     }
 }

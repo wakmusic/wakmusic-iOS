@@ -64,7 +64,7 @@ public final class NoticeViewModel {
             .debug()
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         input.didTapList
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { selectedIndexPath, entities in
