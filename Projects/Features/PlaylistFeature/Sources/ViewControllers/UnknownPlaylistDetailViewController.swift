@@ -52,7 +52,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private lazy var subscriptionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
-        $0.setTitle("완료", for: .normal)
+        $0.setTitle("구독", for: .normal)
         $0.titleLabel?.font = .setFont(.t7(weight: .bold))
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 4
@@ -208,6 +208,16 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             }
             .disposed(by: disposeBag)
 
+        sharedState.map(\.isSubscribing)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, flag in
+                owner.subscriptionButton.setColor(isHighlight: !flag)
+                
+                owner.subscriptionButton.setTitle(flag ? "구독 중" : "구독", for: .normal)
+                
+            }
+            .disposed(by: disposeBag)
+        
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
             .withLatestFrom(sharedState.map(\.header)) { ($0, $1) }

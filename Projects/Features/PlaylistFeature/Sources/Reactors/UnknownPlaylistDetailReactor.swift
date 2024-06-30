@@ -24,6 +24,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
+        case updateSubscribeState(Bool)
         case showtoastMessage(String)
     }
 
@@ -32,6 +33,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var dataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
+        var isSubscribing: Bool
         @Pulse var toastMessage: String?
     }
 
@@ -61,7 +63,8 @@ final class UnknownPlaylistDetailReactor: Reactor {
             ),
             dataSource: [],
             isLoading: false,
-            selectedCount: 0
+            selectedCount: 0,
+            isSubscribing: false
         )
     }
 
@@ -71,7 +74,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             return updateDataSource()
             
         case .subscriptionButtonDidTap:
-            return .empty()
+            return updateSubscribeState()
     
         case .selectAll:
             return selectAll()
@@ -107,6 +110,10 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
+        
+        case let .updateSubscribeState(flag):
+            newState.isSubscribing = flag
+            
         }
 
         return newState
@@ -193,6 +200,20 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateDataSource(dataSource)),
             .just(.updateSelectedCount(0))
         ])
+    }
+    
+    func updateSubscribeState() -> Observable<Mutation> {
+        let currentState = currentState
+        
+        let prev = currentState.isSubscribing
+     
+        if prev {
+            
+        } else {
+            
+        }
+        
+        return .just(.updateSubscribeState(!prev))
     }
 
    
