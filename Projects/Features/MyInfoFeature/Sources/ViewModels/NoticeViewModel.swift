@@ -44,24 +44,17 @@ public final class NoticeViewModel {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-
+        
         input.didTapList
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .do { selectedIndexPath, notices in
-                var savedIDs = PreferenceManager.readNoticeIDs ?? []
+            .map { selectedIndexPath, notices in
                 let selecterdID = notices[selectedIndexPath.row].id
-                savedIDs.append(selecterdID)
-                PreferenceManager.readNoticeIDs = savedIDs
-            }
-            .map { _, notices in
-                let readIDs = Set(PreferenceManager.readNoticeIDs ?? [])
                 return notices.map { notice in
-                    var notice = notice
-                    notice.isRead = readIDs.contains(notice.id)
-                    return notice
+                    var updatedNotice = notice
+                    updatedNotice.isRead = (notice.id == selecterdID) ? true : notice.isRead
+                    return updatedNotice
                 }
             }
-            .debug()
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 

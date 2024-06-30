@@ -59,7 +59,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1f-sa-uDl">
-                                                    <rect key="frame" x="20" y="12" width="313" height="24"/>
+                                                    <rect key="frame" x="20" y="12" width="353" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="pee-Ny-RLf"/>
                                                     </constraints>
@@ -105,7 +105,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="m1f-sa-uDl" secondAttribute="trailing" constant="60" id="3tm-Gh-bqA"/>
+                                                <constraint firstAttribute="trailing" secondItem="m1f-sa-uDl" secondAttribute="trailing" constant="20" id="3tm-Gh-bqA"/>
                                                 <constraint firstAttribute="bottom" secondItem="4h0-84-mJi" secondAttribute="bottom" id="Ah2-oK-8zy"/>
                                                 <constraint firstItem="N4D-sc-Poj" firstAttribute="leading" secondItem="m1f-sa-uDl" secondAttribute="leading" id="Gaw-YH-Un4"/>
                                                 <constraint firstItem="4h0-84-mJi" firstAttribute="leading" secondItem="SN6-Hr-l7a" secondAttribute="leading" id="Pud-v9-7a7"/>
