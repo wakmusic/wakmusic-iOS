@@ -22,6 +22,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case removeSongs
+        case changeThumnail(Data?)
     }
 
     enum Mutation {
@@ -32,6 +33,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
+        case updateThumbnail(Data?)
         case showtoastMessage(String)
     }
 
@@ -42,6 +44,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var backUpDataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
+        var replaceThumnbnailData: Data?
         @Pulse var toastMessage: String?
     }
 
@@ -84,7 +87,8 @@ final class MyPlaylistDetailReactor: Reactor {
             dataSource: [],
             backUpDataSource: [],
             isLoading: false,
-            selectedCount: 0
+            selectedCount: 0,
+            replaceThumnbnailData: nil
         )
     }
 
@@ -119,6 +123,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
+        case let .changeThumnail(data):
+            return updateThumbnail(data)
         }
     }
 
@@ -148,6 +154,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showtoastMessage(message):
             newState.toastMessage = message
+            
+        case let .updateThumbnail(data):
+            newState.replaceThumnbnailData = data
         }
 
         return newState
@@ -200,7 +209,7 @@ private extension MyPlaylistDetailReactor {
             .just(.updateBackUpDataSource(currentDataSoruce)),
             .just(.updateSelectedCount(0)),
             updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map { $0.id })
-                .andThen(.empty())
+                .andThen(.empty()),
 
         ])
     }
@@ -337,5 +346,9 @@ private extension MyPlaylistDetailReactor {
                 .andThen(.never())
 
         ])
+    }
+    
+    func updateThumbnail(_ data:Data?) -> Observable<Mutation> {
+        return .just(.updateThumbnail(data))
     }
 }
