@@ -75,7 +75,8 @@ public final class ContainSongsViewModel: ViewModelType {
             })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-
+        #warning("내 플리 목록만 가져오도록 필터링 dataSource.userId == 현재 로그인한 ID")
+        
         input.containSongWithKey
             .flatMap { [weak self] (key: String) -> Observable<AddSongEntity> in
                 guard let self = self else {
