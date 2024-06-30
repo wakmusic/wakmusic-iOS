@@ -46,7 +46,7 @@ public final class ProfilePopViewModel {
 
                 var newModel = model
                 newModel.indices
-                    .forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].type) }
+                    .forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].name) }
                 return newModel
             }
             .bind(to: output.dataSource)
