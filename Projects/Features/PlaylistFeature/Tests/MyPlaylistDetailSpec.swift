@@ -6,7 +6,7 @@ import XCTest
 
 final class MyPlaylistDetailSpec: QuickSpec {
     override class func spec() {
-        var reactor: MyPlaylistDetailReactor = MyPlaylistDetailReactor(key: "TT")
+       
 
         describe("MyPlaylistDetailReactorTest") {
 //            context("viewDidLoad") {
