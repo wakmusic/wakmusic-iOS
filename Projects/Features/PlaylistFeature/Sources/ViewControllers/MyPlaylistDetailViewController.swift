@@ -464,7 +464,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter{$0.isSelected}.map { $0.id })
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
