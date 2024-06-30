@@ -17,7 +17,7 @@ private protocol MyInfoActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
     var profileImageDidTap: Observable<Void> { get }
     var drawButtonDidTap: Observable<Void> { get }
-    var likeNavigationButtonDidTap: Observable<Void> { get }
+    var fruitNavigationButtonDidTap: Observable<Void> { get }
     var qnaNavigationButtonDidTap: Observable<Void> { get }
     var notiNavigationButtonDidTap: Observable<Void> { get }
     var mailNavigationButtonDidTap: Observable<Void> { get }
@@ -54,8 +54,8 @@ final class MyInfoView: UIView {
         $0.distribution = .fillEqually
     }
 
-    let likeNavigationButton = MyInfoNavigationButton(
-        title: "좋아요",
+    let fruitNavigationButton = MyInfoNavigationButton(
+        title: "열매함",
         image: DesignSystemAsset.MyInfo.fruit.image
     )
     let qnaNavigationButton = MyInfoNavigationButton(
@@ -112,7 +112,7 @@ private extension MyInfoView {
             hStackViewBottom
         )
         hStackViewTop.addArrangedSubviews(
-            likeNavigationButton,
+            fruitNavigationButton,
             qnaNavigationButton,
             notiNavigationButton
         )
@@ -199,7 +199,7 @@ extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
     var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }
-    var likeNavigationButtonDidTap: Observable<Void> { base.likeNavigationButton.rx.tap.asObservable() }
+    var fruitNavigationButtonDidTap: Observable<Void> { base.fruitNavigationButton.rx.tap.asObservable() }
     var qnaNavigationButtonDidTap: Observable<Void> { base.qnaNavigationButton.rx.tap.asObservable() }
     var notiNavigationButtonDidTap: Observable<Void> { base.notiNavigationButton.rx.tap.asObservable() }
     var mailNavigationButtonDidTap: Observable<Void> { base.mailNavigationButton.rx.tap.asObservable() }

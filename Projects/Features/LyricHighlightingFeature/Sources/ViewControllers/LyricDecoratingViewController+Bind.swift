@@ -1,6 +1,5 @@
 import DesignSystem
 import Foundation
-import Kingfisher
 import RxCocoa
 import RxSwift
 import UIKit
@@ -74,13 +73,14 @@ extension LyricDecoratingViewController {
             .map { URL(string: $0) }
             .compactMap { $0 }
             .bind(with: self) { owner, url in
-                KingfisherManager.shared.retrieveImage(
-                    with: url
+                owner.decorateImageView.kf.setImage(
+                    with: url,
+                    placeholder: nil,
+                    options: [.transition(.fade(0.2))]
                 ) { result in
                     switch result {
-                    case let .success(value):
-                        owner.decorateImageView.image = value.image
-
+                    case .success:
+                        break
                     case let .failure(error):
                         owner.showToast(
                             text: error.localizedDescription,
