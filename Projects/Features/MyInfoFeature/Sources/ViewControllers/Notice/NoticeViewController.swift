@@ -78,6 +78,7 @@ private extension NoticeViewController {
                     return UITableViewCell()
                 }
                 cell.update(model: model)
+                cell.updateVisibleIndicator(visible: !model.isRead)
                 return cell
             }
             .disposed(by: disposeBag)
