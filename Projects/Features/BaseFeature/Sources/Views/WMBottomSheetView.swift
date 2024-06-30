@@ -1,14 +1,15 @@
 import DesignSystem
-import SnapKit
-import UIKit
-import Then
 import LogManager
+import SnapKit
+import Then
+import UIKit
 
 public final class WMBottomSheetView: UIView {
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
     }
+
     private var items: [UIButton] = []
 
     deinit {
