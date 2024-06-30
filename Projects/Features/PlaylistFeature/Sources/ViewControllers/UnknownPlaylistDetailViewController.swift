@@ -341,10 +341,8 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
         case .addSong:
             let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
-
             self.present(vc, animated: true)
 
-            break
         case .addPlayList:
             #warning("재생목록 관련 구현체 구현 시 추가")
             break

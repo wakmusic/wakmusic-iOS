@@ -107,9 +107,7 @@ extension UnknownPlaylistHeaderView: UnknownPlaylistHeaderStateProtocol {
         attributedString.append(NSAttributedString(string: model.userName))
         
         subtitleLabel.attributedText = attributedString
-
         
-        subtitleLabel.text = "\(model.songCount)곡"
         
     }
 
