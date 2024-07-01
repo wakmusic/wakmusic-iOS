@@ -90,7 +90,6 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 private extension ArtistDetailViewController {
     func bind() {
         output.isSubscription
-            .skip(1)
             .bind(to: subscriptionButton.rx.isSelected)
             .disposed(by: disposeBag)
 
