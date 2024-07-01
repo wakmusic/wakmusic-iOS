@@ -4,8 +4,8 @@ import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
 import StorageFeatureInterface
-import UserDomainInterface
 import UIKit
+import UserDomainInterface
 
 public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
@@ -16,7 +16,6 @@ public protocol StorageDependency: Dependency {
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
-    
 }
 
 public final class StorageComponent: Component<StorageDependency>, StorageFactory {

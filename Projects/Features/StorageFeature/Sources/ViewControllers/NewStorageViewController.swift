@@ -12,30 +12,31 @@ import Utility
 final class NewStorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor
     var disposeBag = DisposeBag()
-    
+
     private var bottomSheetView: BottomSheetView!
     private var playlistStorageComponent: PlaylistStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var favoriteComponent: FavoriteComponent!
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-    
+
     private var viewControllers: [UIViewController]!
     let storageView = StorageView()
-    
+
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
-    
+
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func loadView() {
         view = storageView
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -59,7 +60,7 @@ final class NewStorageViewController: TabmanViewController, View {
         viewController.signInFactory = signInFactory
         return viewController
     }
-    
+
     /// 탭맨 페이지 변경 감지 함수
     override public func pageboyViewController(
         _ pageboyViewController: PageboyViewController,
@@ -69,7 +70,6 @@ final class NewStorageViewController: TabmanViewController, View {
     ) {
         self.reactor?.action.onNext(.switchTab(index))
     }
-    
 }
 
 extension NewStorageViewController {
@@ -110,13 +110,13 @@ private extension NewStorageViewController {
         // 탭바 설정
         self.dataSource = self
         let bar = TMBar.ButtonBar()
-        
+
         // 배경색
         bar.backgroundView.style = .flat(color: .clear)
 
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        
+
         bar.layout.contentMode = .intrinsic
         bar.layout.transitionStyle = .progressive
         bar.layout.interButtonSpacing = 24

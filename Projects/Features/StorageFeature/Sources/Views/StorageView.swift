@@ -94,13 +94,13 @@ final class StorageView: UIView {
             $0.horizontalEdges.equalToSuperview().priority(999)
             $0.height.equalTo(36)
         }
-        
+
         lineView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.top.equalTo(tabBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
         }
-        
+
         createListButton.snp.makeConstraints {
             $0.top.equalTo(tabBarView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20).priority(999)
@@ -120,7 +120,7 @@ final class StorageView: UIView {
             $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
-        
+
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
@@ -131,9 +131,9 @@ final class StorageView: UIView {
 
     func configureUI() {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
-        
+
         lineView.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
-        
+
         createListButton.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, for: .normal)
         createListButton.layer.cornerRadius = 8
         createListButton.layer.borderWidth = 1
