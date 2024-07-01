@@ -36,14 +36,14 @@ private enum ButtonAttributed {
 }
 
 final class StorageView: UIView {
-    private let tabBar = UITabBar().then {
-        $0.items = [.init(title: "내 리스트", image: nil, tag: 0), .init(title: "좋아요", image: nil, tag: 1)]
-    }
+    public let tabBarView = UIView()
 
-    private let myPlaylistTableView = UITableView().then {
-        let nib = UINib(nibName: "MyPlaylistTableViewCell", bundle: nil)
-        $0.register(nib, forCellReuseIdentifier: "MyPlaylistTableViewCell")
-    }
+    private let lineView = UIView()
+
+//    private let myPlaylistTableView = UITableView().then {
+//        let nib = UINib(nibName: "MyPlaylistTableViewCell", bundle: nil)
+//        $0.register(nib, forCellReuseIdentifier: "MyPlaylistTableViewCell")
+//    }
 
     fileprivate let createListButton = UIButton().then {
         $0.setTitle("리스트 만들기", for: .normal)
@@ -79,54 +79,48 @@ final class StorageView: UIView {
 
     func addView() {
         self.addSubviews(
-            tabBar,
+            tabBarView,
+            lineView,
             createListButton,
-            myPlaylistTableView,
             editButton,
             saveButton,
-            drawFruitButton,
             loginWarningView
         )
     }
 
     func setLayout() {
-        tabBar.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(56)
+        tabBarView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).offset(16)
+            $0.horizontalEdges.equalToSuperview().priority(999)
+            $0.height.equalTo(36)
         }
+        
+        lineView.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.top.equalTo(tabBarView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+        }
+        
         createListButton.snp.makeConstraints {
-            $0.top.equalTo(tabBar.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.top.equalTo(tabBarView.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(20).priority(999)
             $0.height.equalTo(52)
-        }
-
-        myPlaylistTableView.snp.makeConstraints {
-            $0.top.equalTo(createListButton.snp.bottom)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(drawFruitButton)
         }
 
         editButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
-            $0.centerY.equalTo(tabBar)
+            $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
 
         saveButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
-            $0.centerY.equalTo(tabBar)
+            $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
-
-        drawFruitButton.snp.makeConstraints {
-            $0.width.equalToSuperview()
-            $0.height.equalTo(56)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
+        
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
@@ -137,7 +131,9 @@ final class StorageView: UIView {
 
     func configureUI() {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
-
+        
+        lineView.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
+        
         createListButton.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, for: .normal)
         createListButton.layer.cornerRadius = 8
         createListButton.layer.borderWidth = 1
@@ -156,8 +152,6 @@ final class StorageView: UIView {
         saveButton.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         saveButton.layer.borderColor = DesignSystemAsset.PrimaryColor.point.color.cgColor
         saveButton.setAttributedTitle(ButtonAttributed.save, for: .normal)
-
-        myPlaylistTableView.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
 
         drawFruitButton.setAttributedTitle(
             NSAttributedString(
