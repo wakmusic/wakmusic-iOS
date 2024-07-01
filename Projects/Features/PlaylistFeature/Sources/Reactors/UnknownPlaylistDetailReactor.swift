@@ -211,6 +211,9 @@ private extension UnknownPlaylistDetailReactor {
         if prev {
         } else {}
 
-        return .just(.updateSubscribeState(!prev))
+        return .concat([
+            .just(.updateSubscribeState(!prev)),
+            .just(.showtoastMessage(!prev ? "리스트 구독이 추가되었습니다." : "리스트 구독을 취소 했습니다." ))
+        ])
     }
 }

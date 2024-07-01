@@ -133,8 +133,12 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         subscriptionButton.rx
             .tap
-            .map { Reactor.Action.subscriptionButtonDidTap }
-            .bind(to: reactor.action)
+            .asDriver()
+            .throttle(.seconds(1))
+            .drive(onNext: {
+                reactor.action.onNext(.subscriptionButtonDidTap)
+
+            })
             .disposed(by: disposeBag)
     }
 
@@ -142,6 +146,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
 
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
@@ -199,8 +204,13 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         sharedState.map(\.isSubscribing)
             .distinctUntilChanged()
+            .asObservable()
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, flag in
                 owner.subscriptionButton.setColor(isHighlight: !flag)
+                owner.subscriptionButton.snp.updateConstraints {
+                    $0.width.equalTo(!flag ? 45.0 : 57.0)
+                }
 
                 owner.subscriptionButton.setTitle(flag ? "구독 중" : "구독", for: .normal)
             }
