@@ -11,6 +11,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
     let key: String
 
 
+    var disposeBag = DisposeBag()
     
     enum Action {
         case viewDidLoad
@@ -18,6 +19,8 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case deselectAll
         case itemDidTap(Int)
         case subscriptionButtonDidTap
+        case askToast(String)
+        case changeSubscriptionButtonState(Bool)
     }
 
     enum Mutation {
@@ -27,7 +30,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
         case updateSubscribeState(Bool)
-        case showtoastMessage(String)
+        case showToast(String)
     }
 
     struct State {
@@ -92,6 +95,12 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
+            
+        case let .askToast(message):
+            return .just(.showToast(message))
+        
+        case let .changeSubscriptionButtonState(flag):
+            return .just(.updateSubscribeState(flag))
         }
     }
 
@@ -110,7 +119,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case let .updateSelectedCount(count):
             newState.selectedCount = count
 
-        case let .showtoastMessage(message):
+        case let .showToast(message):
             newState.toastMessage = message
 
         case let .updateSelectingStateByIndex(dataSource):
@@ -148,7 +157,7 @@ private extension UnknownPlaylistDetailReactor {
                 .catch { error in
                     let wmErorr = error.asWMError
                     return Observable.just(
-                        Mutation.showtoastMessage(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
             .just(.updateLoadingState(false))
@@ -209,12 +218,37 @@ private extension UnknownPlaylistDetailReactor {
 
         let prev = currentState.isSubscribing
 
-        if prev {
-        } else {}
 
-        return .concat([
-            .just(.updateSubscribeState(!prev)),
-            .just(.showtoastMessage(!prev ? "리스트 구독이 추가되었습니다." : "리스트 구독을 취소 했습니다." ))
-        ])
+        if prev { // 구독 -> 구독 취소
+            
+             unSubscribePlaylistUseCase.execute(key: key)
+                .subscribe(with: self) { owner in
+                    owner.action.onNext(.changeSubscriptionButtonState(false))
+                    owner.action.onNext(.askToast("리스트 구독을 취소 했습니다."))
+                } onError: { owner, error in
+                    let wmError = error.asWMError
+                    
+                    owner.action.onNext(.askToast(wmError.errorDescription!))
+                }
+                .disposed(by: disposeBag)
+
+            
+        } else { // 취소 -> 구독
+            
+             subscribePlaylistUseCase.execute(key: key)
+                .subscribe(with: self) { owner in
+                    owner.action.onNext(.changeSubscriptionButtonState(true))
+                    owner.action.onNext(.askToast( "리스트 구독이 추가되었습니다."))
+                } onError: { owner, error in
+                    let wmError = error.asWMError
+                    
+                    owner.action.onNext(.askToast(wmError.errorDescription!))
+                }
+                .disposed(by: disposeBag)
+            
+           
+        }
+        
+        return .empty()
     }
 }
