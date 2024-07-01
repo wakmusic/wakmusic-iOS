@@ -12,6 +12,8 @@ import NeedleFoundation
 
 public protocol ArtistDetailDependency: Dependency {
     var artistMusicComponent: ArtistMusicComponent { get }
+    var fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase { get }
+    var subscriptionArtistUseCase: any SubscriptionArtistUseCase { get }
 }
 
 public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
