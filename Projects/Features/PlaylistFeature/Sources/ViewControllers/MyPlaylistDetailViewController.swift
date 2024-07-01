@@ -464,8 +464,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
-            // vc.modalPresentationStyle = .
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+            vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
 
@@ -491,6 +491,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             self.showBottomSheet(content: vc)
         }
+
+        reactor.action.onNext(.forceEndEditing)
     }
 }
 
@@ -533,7 +535,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         configuration.selectionLimit = 1 // 갯수 제한
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        // picker.modalPresentationStyle =
+        picker.modalPresentationStyle = .overFullScreen
         self.present(picker, animated: true)
     }
 }
