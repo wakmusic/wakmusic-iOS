@@ -79,8 +79,8 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     }
 }
 
-extension ArtistDetailViewController {
-    private func bind() {
+private extension ArtistDetailViewController {
+    func bind() {
         output.isSubscription
             .skip(1)
             .bind(to: subscriptionButton.rx.isSelected)
@@ -104,7 +104,7 @@ extension ArtistDetailViewController {
             .disposed(by: disposeBag)
     }
 
-    private func configureUI() {
+    func configureUI() {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOff.image, for: .normal)
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOn.image, for: .selected)
@@ -123,7 +123,7 @@ extension ArtistDetailViewController {
         gradationView.layer.addSublayer(gradientLayer)
     }
 
-    private func configureHeader() {
+    func configureHeader() {
         self.addChild(headerViewController)
         self.headerContentView.addSubview(headerViewController.view)
         headerViewController.didMove(toParent: self)
@@ -136,7 +136,7 @@ extension ArtistDetailViewController {
         headerViewController.update(model: model)
     }
 
-    private func configureContent() {
+    func configureContent() {
         self.add(asChildViewController: contentViewController)
     }
 }
