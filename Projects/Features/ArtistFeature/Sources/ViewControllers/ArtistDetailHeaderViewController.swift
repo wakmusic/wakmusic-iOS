@@ -146,7 +146,7 @@ private extension ArtistDetailHeaderViewController {
         mergeObservable
             .bind(with: self) { owner, _ in
                 LogManager.analytics(
-                    ArtistAnalyticsLog.clickArtistDescriptionButton(page: "artist", artist: owner.model?.id ?? "")
+                    ArtistAnalyticsLog.clickArtistDescriptionButton(artist: owner.model?.id ?? "")
                 )
                 owner.flipArtistIntro()
             }
