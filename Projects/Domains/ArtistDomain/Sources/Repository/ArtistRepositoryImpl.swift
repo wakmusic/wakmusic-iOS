@@ -21,4 +21,8 @@ public final class ArtistRepositoryImpl: ArtistRepository {
     public func fetchArtistSubscriptionStatus(id: String) -> Single<ArtistSubscriptionStatusEntity> {
         remoteArtistDataSource.fetchArtistSubscriptionStatus(id: id)
     }
+
+    public func subscriptionArtist(id: String, on: Bool) -> Completable {
+        remoteArtistDataSource.subscriptionArtist(id: id, on: on)
+    }
 }
