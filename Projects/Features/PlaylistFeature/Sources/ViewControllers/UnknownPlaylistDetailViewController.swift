@@ -163,7 +163,16 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
-
+                if model.private {
+                    owner.wmNavigationbarView.isHidden = true
+                    owner.tableView.isHidden = true
+                    let vc = owner.textPopUpFactory.makeView(text: "비공개된 리스트 입니다.", cancelButtonIsHidden: true, confirmButtonText: "확인", cancelButtonText: nil, completion: {
+                        owner.navigationController?.popViewController(animated: true)
+                    }, cancelCompletion: nil)
+                    
+                    owner.showBottomSheet(content: vc)
+                }
+                
                 owner.headerView.updateData(model)
             }
             .disposed(by: disposeBag)

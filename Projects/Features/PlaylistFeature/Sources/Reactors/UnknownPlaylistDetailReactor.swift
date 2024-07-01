@@ -37,6 +37,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var isSubscribing: Bool
         @Pulse var toastMessage: String?
+
     }
 
     var initialState: State
@@ -65,7 +66,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
                 key: key, title: "",
                 image: "",
                 userName: "",
-                private: true,
+                private: false,
                 songCount: 0
             ),
             dataSource: [],
