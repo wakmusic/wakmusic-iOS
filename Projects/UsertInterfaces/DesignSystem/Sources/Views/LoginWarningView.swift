@@ -1,7 +1,7 @@
+import RxSwift
 import SnapKit
 import Then
 import UIKit
-import RxSwift
 
 public final class LoginWarningView: UIView {
     @available(*, deprecated, message: "loginButtonDidTapSubject로 액션을 보내고 클로저는 제거 예정")
@@ -29,9 +29,9 @@ public final class LoginWarningView: UIView {
         $0.layer.borderWidth = 1
         $0.clipsToBounds = true
     }
-    
+
     public let loginButtonDidTapSubject = PublishSubject<Void>()
-    
+
     public init(
         frame: CGRect = CGRect(
             x: .zero,
@@ -84,7 +84,7 @@ extension LoginWarningView {
             $0.centerX.equalToSuperview()
         }
     }
-    
+
     private func configureUI(text: String) {
         label.text = text
         label.numberOfLines = 0
@@ -94,7 +94,7 @@ extension LoginWarningView {
             alignment: .center
         )
     }
-    
+
     private func configureAction() {
         button.addAction(UIAction(handler: { [weak self] _ in
             guard let self else { return }

@@ -1,7 +1,7 @@
 import Foundation
 import ReactorKit
-import Utility
 import UserDomainInterface
+import Utility
 
 final class StorageReactor: Reactor {
     enum Action {
@@ -33,7 +33,7 @@ final class StorageReactor: Reactor {
     private let fetchPlayListUseCase: any FetchPlayListUseCase
     private let editPlayListOrderUseCase: any EditPlayListOrderUseCase
     private let deletePlayListUseCase: any DeletePlayListUseCase
-    
+
     init(
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
         fetchPlayListUseCase: any FetchPlayListUseCase,
@@ -122,7 +122,7 @@ private extension StorageReactor {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func observeUserInfoChanges() {
         PreferenceManager.$userInfo
             .bind(with: self) { owner, userInfo in
