@@ -45,20 +45,23 @@ final class UnknownPlaylistDetailReactor: Reactor {
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
+    private let checkSubscriptionUseCase: any CheckSubscriptionUseCase
 
-    #warning(" 구독 확인 상태 APi 연결 후 추후 연결")
+    
     private let logoutUseCase: any LogoutUseCase
 
     init(
         key: String,
         fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
         subscribePlaylistUseCase: any SubscribePlaylistUseCase,
+        checkSubscriptionUseCase: any CheckSubscriptionUseCase,
         logoutUseCase: any LogoutUseCase
 
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
         self.subscribePlaylistUseCase = subscribePlaylistUseCase
+        self.checkSubscriptionUseCase = checkSubscriptionUseCase
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
@@ -72,7 +75,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             dataSource: [],
             isLoading: false,
             selectedCount: 0,
-            isSubscribing: true
+            isSubscribing: false
         )
     }
 
@@ -150,6 +153,18 @@ private extension UnknownPlaylistDetailReactor {
                         )),
                         Observable.just(Mutation.updateDataSource(data.songs))
                     ])
+                }
+                .catch { error in
+                    let wmErorr = error.asWMError
+                    return Observable.just(
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
+                },
+            
+            checkSubscriptionUseCase.execute(key: key)
+                .asObservable()
+                .flatMap { flag -> Observable<Mutation> in
+                    return .just(.updateSubscribeState(flag))
                 }
                 .catch { error in
                     let wmErorr = error.asWMError

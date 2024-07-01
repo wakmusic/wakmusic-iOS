@@ -12,6 +12,8 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
 
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
+    
+    var checkSubscriptionUseCase: any CheckSubscriptionUseCase { get }
 
     var logoutUseCase: any LogoutUseCase { get }
 
@@ -28,6 +30,7 @@ public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDeta
                 key: key,
                 fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase,
                 subscribePlaylistUseCase: dependency.subscribePlaylistUseCase,
+                checkSubscriptionUseCase: dependency.checkSubscriptionUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
