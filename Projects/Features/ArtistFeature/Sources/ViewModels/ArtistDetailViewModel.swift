@@ -38,11 +38,6 @@ public final class ArtistDetailViewModel: ViewModelType {
         let id = model.id
 
         input.fetchArtistSubscriptionStatus
-            .do(onNext: { _ in
-                LogManager.analytics(
-                    ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)
-                )
-            })
             .filter { PreferenceManager.userInfo != nil }
             .flatMap { [fetchArtistSubscriptionStatusUseCase] _ -> Observable<ArtistSubscriptionStatusEntity> in
                 fetchArtistSubscriptionStatusUseCase.execute(id: id)
@@ -54,6 +49,11 @@ public final class ArtistDetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.subscriptionArtist
+            .do(onNext: { _ in
+                LogManager.analytics(
+                    ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)
+                )
+            })
             .filter { _ in
                 if PreferenceManager.userInfo == nil {
                     output.showLogin.onNext(())
