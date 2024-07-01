@@ -212,11 +212,10 @@ private extension UnknownPlaylistDetailReactor {
                     .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
                 ])
             )
-            .catch({ error in
+            .catch { error in
                 let wmError = error.asWMError
                 return .just(.showToast(wmError.errorDescription!))
-            })
-     
+            }
     }
 
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
