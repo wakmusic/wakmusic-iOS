@@ -24,7 +24,7 @@ public final class ArtistDetailViewModel: ViewModelType {
 
     public struct Input {
         let fetchArtistSubscriptionStatus: PublishSubject<Void> = PublishSubject()
-        let subscriptionArtist: PublishSubject<Void> = PublishSubject()
+        let didTapSubscription: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -48,7 +48,7 @@ public final class ArtistDetailViewModel: ViewModelType {
             .bind(to: output.isSubscription)
             .disposed(by: disposeBag)
 
-        input.subscriptionArtist
+        input.didTapSubscription
             .do(onNext: { _ in
                 LogManager.analytics(
                     ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)

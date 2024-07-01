@@ -125,7 +125,7 @@ private extension ArtistDetailViewController {
 
         subscriptionButton.rx.tap
             .throttle(.milliseconds(1000), latest: false, scheduler: MainScheduler.instance)
-            .bind(to: input.subscriptionArtist)
+            .bind(to: input.didTapSubscription)
             .disposed(by: disposeBag)
     }
 
