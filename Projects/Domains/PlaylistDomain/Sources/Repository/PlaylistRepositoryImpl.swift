@@ -48,11 +48,9 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.uploadImage(key: key, model: model)
     }
 
-    public func subscribePlaylist(key: String) -> Completable {
-        remotePlaylistDataSource.subscribePlaylist(key: key)
+    public func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable {
+        remotePlaylistDataSource.subscribePlaylist(key: key, isSubscribing: isSubscribing)
     }
 
-    public func unSubscribePlaylist(key: String) -> Completable {
-        remotePlaylistDataSource.unSubscribePlaylist(key: key)
-    }
+
 }

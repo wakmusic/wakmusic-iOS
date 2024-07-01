@@ -12,7 +12,7 @@ public struct SubscribePlaylistUseCaseImpl: SubscribePlaylistUseCase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(key: String) -> Completable {
-        playlistRepository.subscribePlaylist(key: key)
+    public func execute(key: String, isSubscribing: Bool) -> Completable {
+        playlistRepository.subscribePlaylist(key: key, isSubscribing: isSubscribing)
     }
 }

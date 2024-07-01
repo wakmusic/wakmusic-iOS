@@ -15,8 +15,7 @@ public enum PlaylistAPI {
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
     case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
-    case subscribePlaylist(key: String) // 플레이리스트 구독하기
-    case unSubscribePlaylist(key: String) // 플레이리스트 구독취소하기
+    case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case fetchRecommendPlaylist // 추천 플리 불러오기
 }
 
@@ -51,7 +50,7 @@ extension PlaylistAPI: WMAPI {
         case let .uploadImage(key: key, _):
             return "/\(key)/image"
 
-        case let .subscribePlaylist(key), let .unSubscribePlaylist(key):
+        case let .subscribePlaylist(key, _):
             return "/\(key)/subscription"
         }
     }
@@ -61,10 +60,13 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist, .subscribePlaylist:
+        case .createPlaylist, .addSongIntoPlaylist:
             return .post
+            
+        case let .subscribePlaylist(_, isSubscribing):
+            return isSubscribing ? .delete : .post
 
-        case .removeSongs, .unSubscribePlaylist:
+        case .removeSongs:
             return .delete
 
         case .updatePlaylist, .updateTitleAndPrivate, .uploadImage:
@@ -74,8 +76,7 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist,
-             .unSubscribePlaylist:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -141,7 +142,7 @@ extension PlaylistAPI: WMAPI {
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .unSubscribePlaylist:
+             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist:
             return .accessToken
         }
     }

@@ -44,7 +44,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
-    private let unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase
+
     #warning(" 구독 확인 상태 APi 연결 후 추후 연결")
     private let logoutUseCase: any LogoutUseCase
 
@@ -52,14 +52,12 @@ final class UnknownPlaylistDetailReactor: Reactor {
         key: String,
         fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
         subscribePlaylistUseCase: any SubscribePlaylistUseCase,
-        unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase,
         logoutUseCase: any LogoutUseCase
 
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
         self.subscribePlaylistUseCase = subscribePlaylistUseCase
-        self.unSubscribePlaylistUseCase = unSubscribePlaylistUseCase
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
@@ -216,32 +214,17 @@ private extension UnknownPlaylistDetailReactor {
 
         let prev = currentState.isSubscribing
 
-        if prev { // 구독 -> 구독 취소
-            unSubscribePlaylistUseCase.execute(key: key)
-                .subscribe(with: self) { owner in
-                    owner.action.onNext(.changeSubscriptionButtonState(false))
-                    owner.action.onNext(.askToast("리스트 구독을 취소 했습니다."))
-                } onError: { owner, error in
-                    let wmError = error.asWMError
+        subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
+            .subscribe(with: self) { owner in
+                owner.action.onNext(.changeSubscriptionButtonState(!prev))
+                owner.action.onNext(.askToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
+            } onError: { owner, error in
+                let wmError = error.asWMError
 
-                    owner.action.onNext(.askToast(wmError.errorDescription!))
-                }
-                .disposed(by: disposeBag)
-
-        } else { // 취소 -> 구독
-            subscribePlaylistUseCase.execute(key: key)
-                .subscribe(with: self) { owner in
-                    owner.action.onNext(.changeSubscriptionButtonState(true))
-                    owner.action.onNext(.askToast("리스트 구독이 추가되었습니다."))
-
-                } onError: { owner, error in
-                    let wmError = error.asWMError
-
-                    owner.action.onNext(.askToast(wmError.errorDescription!))
-                }
-                .disposed(by: disposeBag)
-        }
-
+                owner.action.onNext(.askToast(wmError.errorDescription!))
+            }
+            .disposed(by: disposeBag)
+        
         return .empty()
     }
 

@@ -102,9 +102,4 @@ public extension AppComponent {
         }
     }
 
-    var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase {
-        shared {
-            UnSubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
-        }
-    }
 }
