@@ -19,7 +19,11 @@ public protocol ArtistDetailDependency: Dependency {
 public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
     public func makeView(model: ArtistListEntity) -> ArtistDetailViewController {
         return ArtistDetailViewController.viewController(
-            model: model,
+            viewModel: .init(
+                model: model,
+                fetchArtistSubscriptionStatusUseCase: dependency.fetchArtistSubscriptionStatusUseCase,
+                subscriptionArtistUseCase: dependency.subscriptionArtistUseCase
+            ),
             artistMusicComponent: dependency.artistMusicComponent
         )
     }

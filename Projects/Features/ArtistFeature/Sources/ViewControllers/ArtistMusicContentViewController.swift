@@ -23,7 +23,9 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
 
-    deinit { DEBUG_LOG("\(Self.self) Deinit") }
+    deinit {         
+        LogManager.printDebug("\(Self.self) Deinit")
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
