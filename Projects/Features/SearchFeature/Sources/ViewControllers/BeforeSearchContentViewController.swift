@@ -22,6 +22,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private let textPopUpFactory: TextPopUpFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
+    private let wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
@@ -41,12 +42,14 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         textPopUpFactory: TextPopUpFactory,
         myPlaylistDetailFactory: any MyPlaylistDetailFactory,
         unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
+        wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
         self.myPlaylistDetailFactory = myPlaylistDetailFactory
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
+        self.wakmusicPlaylistDetailFactory = wakmusicPlaylistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -318,6 +321,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             LogManager.printDebug("youtube \(model)")
         case let .recommend(model: model):
             LogManager.printDebug("recommend \(model)")
+            self.navigationController?.pushViewController(wakmusicPlaylistDetailFactory.makeView(key: model.key), animated: true)
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }
@@ -333,12 +337,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-                self.navigationController?.pushViewController(
-                    unknownPlaylistDetailFactory.makeView(key: "N7PAooz2-_i"),
-                    animated: true
-                )
-//                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
-
+                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
             case .popularList:
                 break
             }

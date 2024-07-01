@@ -109,7 +109,7 @@ private extension WakmusicPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchPlaylistDetailUseCase.execute(id: key, type: .unknown)
+            fetchPlaylistDetailUseCase.execute(id: key, type: .wmRecommend)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
