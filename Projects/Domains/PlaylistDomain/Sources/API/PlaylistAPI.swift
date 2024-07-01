@@ -51,11 +51,8 @@ extension PlaylistAPI: WMAPI {
         case let .uploadImage(key: key, _):
             return "/\(key)/image"
 
-        case let .subscribePlaylist(key):
-            return "/\(key)/subscribe"
-
-        case let .unSubscribePlaylist(key):
-            return "/\(key)/unsubscribe"
+        case let .subscribePlaylist(key), let .unSubscribePlaylist(key):
+            return "/\(key)/subscription"
         }
     }
 
@@ -64,10 +61,10 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist, .subscribePlaylist, .unSubscribePlaylist:
+        case .createPlaylist, .addSongIntoPlaylist, .subscribePlaylist:
             return .post
 
-        case .removeSongs:
+        case .removeSongs, .unSubscribePlaylist:
             return .delete
 
         case .updatePlaylist, .updateTitleAndPrivate, .uploadImage:

@@ -73,7 +73,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             dataSource: [],
             isLoading: false,
             selectedCount: 0,
-            isSubscribing: false
+            isSubscribing: true
         )
     }
 
@@ -83,7 +83,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             return updateDataSource()
 
         case .subscriptionButtonDidTap:
-            return updateSubscribeState()
+            return askUpdateSubscribeUsecase()
 
         case .selectAll:
             return selectAll()
@@ -98,7 +98,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             return .just(.showToast(message))
 
         case let .changeSubscriptionButtonState(flag):
-            return .just(.updateSubscribeState(flag))
+            return updateSubscribeState(flag)
         }
     }
 
@@ -211,7 +211,7 @@ private extension UnknownPlaylistDetailReactor {
         ])
     }
 
-    func updateSubscribeState() -> Observable<Mutation> {
+    func askUpdateSubscribeUsecase() -> Observable<Mutation> {
         let currentState = currentState
 
         let prev = currentState.isSubscribing
@@ -233,6 +233,7 @@ private extension UnknownPlaylistDetailReactor {
                 .subscribe(with: self) { owner in
                     owner.action.onNext(.changeSubscriptionButtonState(true))
                     owner.action.onNext(.askToast("리스트 구독이 추가되었습니다."))
+            
                 } onError: { owner, error in
                     let wmError = error.asWMError
 
@@ -242,5 +243,11 @@ private extension UnknownPlaylistDetailReactor {
         }
 
         return .empty()
+    }
+    
+    func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
+        
+        return .just(.updateSubscribeState(flag))
+        
     }
 }
