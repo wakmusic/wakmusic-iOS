@@ -14,7 +14,8 @@ public protocol WakmusicPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
-public final class WakmusicPlaylistDetailComponent: Component<WakmusicPlaylistDetailDependency>, WakmusicPlaylistDetailFactory {
+public final class WakmusicPlaylistDetailComponent: Component<WakmusicPlaylistDetailDependency>,
+    WakmusicPlaylistDetailFactory {
     public func makeView(key: String) -> UIViewController {
         return WakmusicPlaylistDetailViewController(
             reactor: WakmusicPlaylistDetailReactor(

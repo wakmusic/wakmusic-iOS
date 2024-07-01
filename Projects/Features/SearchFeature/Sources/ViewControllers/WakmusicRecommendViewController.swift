@@ -8,13 +8,11 @@ import Utility
 
 #warning("실제 데이터 및 이벤트 연결")
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
-    
     private let wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory
-    
+
     private let wmNavigationbarView = WMNavigationBarView().then {
         $0.setTitle("왁뮤팀이 추천하는 리스트")
     }
-    
 
     private let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
@@ -28,7 +26,6 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlaylistEntity> =
         createDataSource()
 
-  
     init(wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory, reactor: WakmusicRecommendReactor) {
         self.wakmusicPlaylistDetailFactory = wakmusicPlaylistDetailFactory
         super.init(reactor: reactor)

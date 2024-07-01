@@ -75,7 +75,6 @@ final class WakmusicPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
-
         }
     }
 
@@ -184,5 +183,4 @@ private extension WakmusicPlaylistDetailReactor {
             .just(.updateSelectedCount(0))
         ])
     }
-
 }

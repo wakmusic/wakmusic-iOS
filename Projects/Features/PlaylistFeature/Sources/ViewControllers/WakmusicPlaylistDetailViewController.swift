@@ -42,7 +42,6 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
-
     lazy var dataSource: UnknownPlaylistDetailDataSource = createDataSource()
 
     init(
@@ -92,7 +91,6 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
             $0.top.equalTo(wmNavigationbarView.snp.bottom).offset(8)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-
     }
 
     override func configureUI() {
@@ -116,7 +114,6 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
-
     }
 
     override func bindState(reactor: WakmusicPlaylistDetailReactor) {
@@ -176,7 +173,6 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                 }
             }
             .disposed(by: disposeBag)
-
 
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()

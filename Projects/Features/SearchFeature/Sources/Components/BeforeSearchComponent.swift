@@ -22,7 +22,7 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
             wakmusicRecommendComponent: dependency.wakmusicRecommendComponent,
             textPopUpFactory: dependency.textPopUpFactory,
             myPlaylistDetailFactory: dependency.myPlaylistDetailFactory,
-            unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, 
+            unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory,
             wakmusicPlaylistDetailFactory: dependency.wakmusicPlaylistDetailFactory,
             reactor: BeforeSearchReactor(
                 fetchCurrentVideoUseCase: dependency.fetchCurrentVideoUseCase,

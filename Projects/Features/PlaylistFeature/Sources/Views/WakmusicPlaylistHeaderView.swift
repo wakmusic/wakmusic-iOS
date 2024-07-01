@@ -87,7 +87,7 @@ extension WakmusicPlaylistHeaderView: WakmusicPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         thumbnailImageView.kf.setImage(with: URL(string: model.image))
-    
+
         subtitleLabel.text = "\(model.songCount)곡"
     }
 }

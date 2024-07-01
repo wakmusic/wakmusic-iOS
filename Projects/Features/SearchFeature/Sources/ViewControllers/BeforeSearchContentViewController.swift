@@ -321,7 +321,10 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             LogManager.printDebug("youtube \(model)")
         case let .recommend(model: model):
             LogManager.printDebug("recommend \(model)")
-            self.navigationController?.pushViewController(wakmusicPlaylistDetailFactory.makeView(key: model.key), animated: true)
+            self.navigationController?.pushViewController(
+                wakmusicPlaylistDetailFactory.makeView(key: model.key),
+                animated: true
+            )
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }
