@@ -1,8 +1,10 @@
 import SnapKit
 import Then
 import UIKit
+import RxSwift
 
 public final class LoginWarningView: UIView {
+    @available(*, deprecated, message: "loginButtonDidTapSubject로 액션을 보내고 클로저는 제거 예정")
     private let completion: () -> Void
 
     private let imageView: UIImageView = UIImageView().then {
@@ -23,11 +25,13 @@ public final class LoginWarningView: UIView {
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray600.color, for: .normal)
         $0.layer.cornerRadius = 8
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray400.color.cgColor
+        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray400.color.cgColor.copy(alpha: 0.4)
         $0.layer.borderWidth = 1
         $0.clipsToBounds = true
     }
-
+    
+    public let loginButtonDidTapSubject = PublishSubject<Void>()
+    
     public init(
         frame: CGRect = CGRect(
             x: .zero,
@@ -42,15 +46,9 @@ public final class LoginWarningView: UIView {
         super.init(frame: frame)
 
         addSubviews()
-
-        label.text = text
-
         setLayout()
-
-        button.addAction(UIAction(handler: { [weak self] _ in
-            guard let self else { return }
-            self.completion()
-        }), for: .primaryActionTriggered)
+        configureUI(text: text)
+        configureAction()
     }
 
     @available(*, unavailable)
@@ -74,7 +72,7 @@ extension LoginWarningView {
         }
 
         label.snp.makeConstraints {
-            $0.top.equalTo(imageView.snp.bottom).offset(-8)
+            $0.top.equalTo(imageView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.centerX.equalTo(imageView.snp.centerX)
         }
@@ -85,5 +83,23 @@ extension LoginWarningView {
             $0.top.equalTo(label.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    private func configureUI(text: String) {
+        label.text = text
+        label.numberOfLines = 0
+        label.setTextWithAttributes(
+            kernValue: -0.5,
+            lineSpacing: 6,
+            alignment: .center
+        )
+    }
+    
+    private func configureAction() {
+        button.addAction(UIAction(handler: { [weak self] _ in
+            guard let self else { return }
+            self.completion()
+            self.loginButtonDidTapSubject.onNext(())
+        }), for: .primaryActionTriggered)
     }
 }
