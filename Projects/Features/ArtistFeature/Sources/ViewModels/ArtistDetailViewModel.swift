@@ -1,10 +1,10 @@
 import ArtistDomainInterface
 import BaseFeature
 import Foundation
+import LogManager
 import RxRelay
 import RxSwift
 import Utility
-import LogManager
 
 public final class ArtistDetailViewModel: ViewModelType {
     let model: ArtistListEntity
