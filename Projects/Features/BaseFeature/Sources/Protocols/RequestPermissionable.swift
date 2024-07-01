@@ -19,7 +19,6 @@ public extension RequestPermissionable {
 }
 
 public extension RequestPermissionable where Self: UIViewController {
-
     func requestPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
