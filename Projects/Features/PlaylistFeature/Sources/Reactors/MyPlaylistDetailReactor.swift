@@ -18,6 +18,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
+        case forceEndEditing
         case changeTitle(String)
         case selectAll
         case deselectAll
@@ -103,6 +104,9 @@ final class MyPlaylistDetailReactor: Reactor {
             return updatePrivate()
 
         case .forceSave, .completeButtonDidTap:
+            return endEditingWithSave()
+
+        case .forceEndEditing:
             return endEditing()
 
         case let .itemDidTap(index):
@@ -194,8 +198,7 @@ private extension MyPlaylistDetailReactor {
         ])
     }
 
-    func endEditing() -> Observable<Mutation> {
-        #warning("저장 유즈 케이스")
+    func endEditingWithSave() -> Observable<Mutation> {
         let state = currentState
         var currentDataSoruce = state.dataSource
 
@@ -209,7 +212,24 @@ private extension MyPlaylistDetailReactor {
             .just(.updateBackUpDataSource(currentDataSoruce)),
             .just(.updateSelectedCount(0)),
             updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map { $0.id })
-                .andThen(.empty()),
+                .andThen(.empty())
+
+        ])
+    }
+
+    func endEditing() -> Observable<Mutation> {
+        let state = currentState
+        var currentDataSoruce = state.dataSource
+
+        for i in 0 ..< currentDataSoruce.count {
+            currentDataSoruce[i].isSelected = false
+        }
+
+        return .concat([
+            .just(.updateEditingState(false)),
+            .just(.updateDataSource(currentDataSoruce)),
+            .just(.updateBackUpDataSource(currentDataSoruce)),
+            .just(.updateSelectedCount(0)),
 
         ])
     }
