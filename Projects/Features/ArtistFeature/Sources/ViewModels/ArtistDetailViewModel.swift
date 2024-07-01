@@ -4,6 +4,7 @@ import Foundation
 import RxRelay
 import RxSwift
 import Utility
+import LogManager
 
 public final class ArtistDetailViewModel: ViewModelType {
     let model: ArtistListEntity
@@ -37,6 +38,11 @@ public final class ArtistDetailViewModel: ViewModelType {
         let id = model.id
 
         input.fetchArtistSubscriptionStatus
+            .do(onNext: { _ in
+                LogManager.analytics(
+                    ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)
+                )
+            })
             .filter { PreferenceManager.userInfo != nil }
             .flatMap { [fetchArtistSubscriptionStatusUseCase] _ -> Observable<ArtistSubscriptionStatusEntity> in
                 fetchArtistSubscriptionStatusUseCase.execute(id: id)
