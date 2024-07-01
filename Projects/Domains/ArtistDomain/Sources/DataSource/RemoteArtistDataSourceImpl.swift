@@ -21,7 +21,7 @@ public final class RemoteArtistDataSourceImpl: BaseRemoteDataSource<ArtistAPI>, 
             .map(ArtistSubscriptionStatusResponseDTO.self)
             .map { $0.toDomain() }
     }
-    
+
     public func subscriptionArtist(id: String, on: Bool) -> Completable {
         request(.subscriptionArtist(id: id, on: on))
             .asCompletable()
