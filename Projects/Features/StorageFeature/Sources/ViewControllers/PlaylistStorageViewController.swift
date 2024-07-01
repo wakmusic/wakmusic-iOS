@@ -224,7 +224,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "MyPlayListTableViewCell",
                     for: IndexPath(row: indexPath.row, section: 0)
-                ) as? MyPlayListTableViewCell
+                ) as? MyPlaylistTableViewCell
                 else { return UITableViewCell() }
 
                 cell.update(
@@ -285,8 +285,8 @@ extension PlaylistStorageViewController: SongCartViewDelegate {
     }
 }
 
-extension PlaylistStorageViewController: MyPlayListTableViewCellDelegate {
-    public func buttonTapped(type: MyPlayListTableViewCellDelegateConstant) {
+extension PlaylistStorageViewController: MyPlaylistTableViewCellDelegate {
+    public func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
             self.reactor?.action.onNext(.playlistDidTap(indexPath.row))

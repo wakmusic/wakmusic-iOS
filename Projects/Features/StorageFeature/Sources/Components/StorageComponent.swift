@@ -16,13 +16,14 @@ public protocol StorageDependency: Dependency {
 
 public final class StorageComponent: Component<StorageDependency>, StorageFactory {
     public func makeView() -> UIViewController {
-        return StorageViewController.viewController(
-            reactor: StorageReactor(),
-            playlistStorageComponent: dependency.playlistStorageComponent,
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            favoriteComponent: dependency.favoriteComponent,
-            textPopUpFactory: dependency.textPopUpFactory,
-            signInFactory: dependency.signInFactory
-        )
+//        return StorageViewController.viewController(
+//            reactor: StorageReactor(),
+//            playlistStorageComponent: dependency.playlistStorageComponent,
+//            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+//            favoriteComponent: dependency.favoriteComponent,
+//            textPopUpFactory: dependency.textPopUpFactory,
+//            signInFactory: dependency.signInFactory
+//        )
+        return NewStorageViewController()
     }
 }

@@ -1,16 +1,20 @@
 import Foundation
 import ReactorKit
 import Utility
+import UserDomainInterface
 
 final class StorageReactor: Reactor {
     enum Action {
+        case viewDidLoad
         case switchTab(Int)
         case tabDidEditButton
         case saveButtonTap
         case showLoginAlert
+        case changedUserInfo(UserInfo?)
     }
 
     enum Mutation {
+        case updateIsLoggedIn(Bool)
         case switchTabIndex(Int)
         case switchEditingState(Bool)
         case showLoginAlert
@@ -19,25 +23,39 @@ final class StorageReactor: Reactor {
     struct State {
         var isEditing: Bool
         var tabIndex: Int
-        @Pulse var showLoginAlert: Void
+        var isLoggedIn: Bool
+        @Pulse var showLoginAlert: Void?
     }
 
     let initialState: State
     private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
-
-    init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
+    private let fetchPlayListUseCase: any FetchPlayListUseCase
+    private let editPlayListOrderUseCase: any EditPlayListOrderUseCase
+    private let deletePlayListUseCase: any DeletePlayListUseCase
+    
+    init(
+        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        fetchPlayListUseCase: any FetchPlayListUseCase,
+        editPlayListOrderUseCase: any EditPlayListOrderUseCase,
+        deletePlayListUseCase: any DeletePlayListUseCase
+    ) {
         initialState = State(
             isEditing: false,
             tabIndex: 0,
-            showLoginAlert: ()
+            isLoggedIn: false
         )
         self.storageCommonService = storageCommonService
+        self.fetchPlayListUseCase = fetchPlayListUseCase
+        self.editPlayListOrderUseCase = editPlayListOrderUseCase
+        self.deletePlayListUseCase = deletePlayListUseCase
         observeMovedFavoriteTab()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewDidLoad:
+            return .empty()
         case let .switchTab(index):
             return switchTabIndex(index)
         case .tabDidEditButton:
@@ -48,6 +66,8 @@ final class StorageReactor: Reactor {
         case .saveButtonTap:
             storageCommonService.isEditingState.onNext(false)
             return switchEditingState(false)
+        case let .changedUserInfo(userInfo):
+            return .empty()
         }
     }
 
@@ -55,6 +75,8 @@ final class StorageReactor: Reactor {
         var newState = state
 
         switch mutation {
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
         case let .switchTabIndex(index):
             newState.tabIndex = index
         case let .switchEditingState(flag):
@@ -74,13 +96,9 @@ final class StorageReactor: Reactor {
     }
 }
 
-extension StorageReactor {
-    func observeMovedFavoriteTab() {
-        NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
-            .bind(with: self) { owner, _ in
-                owner.action.onNext(.switchTab(1))
-            }
-            .disposed(by: disposeBag)
+private extension StorageReactor {
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
     }
 
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
@@ -93,5 +111,23 @@ extension StorageReactor {
 
     func showLoginAlert() -> Observable<Mutation> {
         return .just(.showLoginAlert)
+    }
+}
+
+private extension StorageReactor {
+    func observeMovedFavoriteTab() {
+        NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
+            .bind(with: self) { owner, _ in
+                owner.action.onNext(.switchTab(1))
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func observeUserInfoChanges() {
+        PreferenceManager.$userInfo
+            .bind(with: self) { owner, userInfo in
+                owner.action.onNext(.changedUserInfo(userInfo))
+            }
+            .disposed(by: disposeBag)
     }
 }

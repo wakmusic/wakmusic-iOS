@@ -4,16 +4,16 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-public protocol MyPlayListTableViewCellDelegate: AnyObject {
-    func buttonTapped(type: MyPlayListTableViewCellDelegateConstant)
+public protocol MyPlaylistTableViewCellDelegate: AnyObject {
+    func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant)
 }
 
-public enum MyPlayListTableViewCellDelegateConstant {
+public enum MyPlaylistTableViewCellDelegateConstant {
     case listTapped(indexPath: IndexPath)
     case playTapped(indexPath: IndexPath)
 }
 
-class MyPlayListTableViewCell: UITableViewCell {
+class MyPlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var playListImageView: UIImageView!
     @IBOutlet weak var playListNameLabel: UILabel!
     @IBOutlet weak var playListCountLabel: UILabel!
@@ -29,7 +29,7 @@ class MyPlayListTableViewCell: UITableViewCell {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
 
-    weak var delegate: MyPlayListTableViewCellDelegate?
+    weak var delegate: MyPlaylistTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
     override func awakeFromNib() {
@@ -41,7 +41,7 @@ class MyPlayListTableViewCell: UITableViewCell {
     }
 }
 
-extension MyPlayListTableViewCell {
+extension MyPlaylistTableViewCell {
     func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath) {
         self.passToModel = (indexPath, model.key)
 
