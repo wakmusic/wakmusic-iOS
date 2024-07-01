@@ -62,7 +62,7 @@ extension PlaylistAPI: WMAPI {
 
         case .createPlaylist, .addSongIntoPlaylist:
             return .post
-            
+
         case let .subscribePlaylist(_, isSubscribing):
             return isSubscribing ? .delete : .post
 

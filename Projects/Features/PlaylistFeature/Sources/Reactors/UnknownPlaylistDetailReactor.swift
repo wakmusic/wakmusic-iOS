@@ -224,7 +224,7 @@ private extension UnknownPlaylistDetailReactor {
                 owner.action.onNext(.askToast(wmError.errorDescription!))
             }
             .disposed(by: disposeBag)
-        
+
         return .empty()
     }
 

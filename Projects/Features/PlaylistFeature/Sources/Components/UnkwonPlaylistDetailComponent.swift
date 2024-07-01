@@ -13,7 +13,6 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
 
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
 
-
     var logoutUseCase: any LogoutUseCase { get }
 
     var containSongsFactory: any ContainSongsFactory { get }

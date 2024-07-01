@@ -101,5 +101,4 @@ public extension AppComponent {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-
 }
