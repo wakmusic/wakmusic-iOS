@@ -12,7 +12,6 @@ public enum WMImageAPI {
     case fetchNewsThumbnail(time: String)
     case fetchArtistWithRound(id: String, version: Int)
     case fetchArtistWithSquare(id: String, version: Int)
-    case fetchProfile(name: String, version: Int)
     case fetchPlayList(id: String, version: Int)
     case fetchRecommendPlaylistWithRound(id: String, version: Int)
     case fetchRecommendPlaylistWithSquare(id: String, version: Int)
@@ -40,9 +39,6 @@ public extension WMImageAPI {
 
         case let .fetchArtistWithSquare(id, version):
             return WMDOMAIN_IMAGE_ARTIST_SQUARE() + "/\(id).png?v=\(version)"
-
-        case let .fetchProfile(name, version):
-            return WMDOMAIN_IMAGE_PROFILE() + "/\(name).png?v=\(version)"
 
         case let .fetchPlayList(id, version):
             return WMDOMAIN_IMAGE_PLAYLIST() + "/\(id).png?v=\(version)"

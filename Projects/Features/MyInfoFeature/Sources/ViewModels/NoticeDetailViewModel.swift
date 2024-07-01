@@ -17,6 +17,7 @@ public final class NoticeDetailViewModel {
 
     public init(model: FetchNoticeEntity) {
         self.model = model
+        readNotice(ID: self.model.id)
     }
 
     public struct Input {
@@ -61,6 +62,12 @@ public final class NoticeDetailViewModel {
 }
 
 private extension NoticeDetailViewModel {
+    func readNotice(ID: Int) {
+        var newReadNoticeIDs = PreferenceManager.readNoticeIDs ?? []
+        newReadNoticeIDs.append(ID)
+        PreferenceManager.readNoticeIDs = newReadNoticeIDs
+    }
+
     func downloadImageSize(url: URL) -> Observable<CGSize> {
         return Observable.create { observer in
             KingfisherManager.shared.retrieveImage(

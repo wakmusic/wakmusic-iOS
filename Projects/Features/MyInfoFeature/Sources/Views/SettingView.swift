@@ -8,17 +8,13 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-private protocol SettingStateProtocol {}
+private protocol SettingStateProtocol {
+    func updateIsHiddenWithDrawButton(isHidden: Bool)
+    func updateIsHiddenLogoutButton(isHidden: Bool)
+}
 
 private protocol SettingActionProtocol {
     var dismissButtonDidTap: Observable<Void> { get }
-    var withDrawButtonDidTap: Observable<Void> { get }
-    var appPushSettingNavigationButtonDidTap: Observable<Void> { get }
-    var termsNavigationButtonDidTap: Observable<Void> { get }
-    var privacyNavigationButtonDidTap: Observable<Void> { get }
-    var openSourceNavigationButtonDidTap: Observable<Void> { get }
-    var removeCacheButtonDidTap: Observable<Void> { get }
-    var versionInfoButtonDidTap: Observable<Void> { get }
 }
 
 final class SettingView: UIView {
@@ -38,40 +34,10 @@ final class SettingView: UIView {
         kernValue: -0.5
     )
 
-    private let versionLabel = UILabel().then {
-        $0.text = "0.0.0"
-        $0.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
-        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
-        $0.setTextWithAttributes(kernValue: -0.5)
-    }
-
-    private let vStackView = UIStackView().then {
-        $0.axis = .vertical
-    }
-
-    fileprivate let notiNavgationButton = SettingItemButton().then {
-        $0.setLeftTitle("앱 알림 받기")
-    }
-
-    fileprivate let termNavgationButton = SettingItemButton().then {
-        $0.setLeftTitle("서비스 이용약관")
-    }
-
-    fileprivate let privacyNavgationButton = SettingItemButton().then {
-        $0.setLeftTitle("개인정보 처리 방침")
-    }
-
-    fileprivate let openSourceNavgationButton = SettingItemButton().then {
-        $0.setLeftTitle("오픈소스 라이선스")
-    }
-
-    fileprivate let removeCacheButton = SettingItemButton().then {
-        $0.setLeftTitle("캐시 데이터 지우기")
-    }
-
-    fileprivate let versionInfoButton = SettingItemButton().then {
-        $0.setLeftTitle("버전 정보")
-        $0.setRightImage(nil)
+    let settingItemTableView = UITableView().then {
+        $0.register(SettingItemTableViewCell.self, forCellReuseIdentifier: SettingItemTableViewCell.reuseIdentifier)
+        $0.isScrollEnabled = false
+        $0.separatorStyle = .none
     }
 
     private let dotImageView = UIImageView().then {
@@ -98,18 +64,9 @@ private extension SettingView {
         self.addSubviews(
             wmNavigationbarView,
             titleLabel,
-            vStackView,
-            versionLabel,
+            settingItemTableView,
             dotImageView,
             withDrawLabel
-        )
-        vStackView.addArrangedSubviews(
-            notiNavgationButton,
-            termNavgationButton,
-            privacyNavgationButton,
-            openSourceNavgationButton,
-            removeCacheButton,
-            versionInfoButton
         )
     }
 
@@ -125,39 +82,41 @@ private extension SettingView {
             $0.center.equalTo(wmNavigationbarView.snp.center)
         }
 
-        vStackView.snp.makeConstraints {
+        settingItemTableView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
-        }
-
-        versionLabel.snp.makeConstraints {
-            $0.centerY.equalTo(versionInfoButton.snp.centerY)
-            $0.right.equalTo(versionInfoButton.snp.right).inset(24)
+            $0.height.equalTo(360)
         }
 
         dotImageView.snp.makeConstraints {
-            $0.top.equalTo(vStackView.snp.bottom).offset(12)
+            $0.top.equalTo(settingItemTableView.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(20)
             $0.width.height.equalTo(16)
         }
 
         withDrawLabel.snp.makeConstraints {
-            $0.top.equalTo(vStackView.snp.bottom).offset(12)
+            $0.top.equalTo(settingItemTableView.snp.bottom).offset(12)
             $0.left.equalTo(dotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
     }
 }
 
-extension SettingView: SettingStateProtocol {}
+extension SettingView: SettingStateProtocol {
+    func updateIsHiddenWithDrawButton(isHidden: Bool) {
+        self.dotImageView.isHidden = isHidden
+        self.withDrawLabel.isHidden = isHidden
+    }
+
+    func updateIsHiddenLogoutButton(isHidden: Bool) {
+        guard let dataSource = settingItemTableView.dataSource as? SettingItemDataSource else { return }
+        settingItemTableView.reloadData()
+        settingItemTableView.snp.updateConstraints {
+            $0.height.equalTo(dataSource.currentSettingItems.count * 60)
+        }
+    }
+}
 
 extension Reactive: SettingActionProtocol where Base: SettingView {
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
-    var withDrawButtonDidTap: Observable<Void> { base.withDrawLabel.rx.didTap }
-    var appPushSettingNavigationButtonDidTap: Observable<Void> { base.notiNavgationButton.rx.didTap }
-    var termsNavigationButtonDidTap: Observable<Void> { base.termNavgationButton.rx.didTap }
-    var privacyNavigationButtonDidTap: Observable<Void> { base.privacyNavgationButton.rx.didTap }
-    var openSourceNavigationButtonDidTap: Observable<Void> { base.openSourceNavgationButton.rx.didTap }
-    var removeCacheButtonDidTap: Observable<Void> { base.removeCacheButton.rx.didTap }
-    var versionInfoButtonDidTap: RxSwift.Observable<Void> { base.versionInfoButton.rx.didTap }
 }

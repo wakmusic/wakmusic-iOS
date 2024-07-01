@@ -50,7 +50,7 @@ extension ProfilePopViewController {
                 string: "완료",
                 attributes: [
                     .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                    .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color
                 ]
             ), for: .normal
         )
@@ -98,7 +98,7 @@ extension ProfilePopViewController {
         saveButton.rx.tap
             .withLatestFrom(viewModel.output.dataSource)
             .map { model in
-                let id: String = model.filter { $0.isSelected }.first?.type ?? "unknown"
+                let id: String = model.filter { $0.isSelected }.first?.name ?? "unknown"
                 return id
             }
             .filter { [weak self] id in
@@ -120,7 +120,7 @@ extension ProfilePopViewController {
                         string: "",
                         attributes: [
                             .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                            .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
+                            .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color
                         ]
                     ), for: .normal
                 )
@@ -139,7 +139,7 @@ extension ProfilePopViewController {
                         string: "완료",
                         attributes: [
                             .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                            .foregroundColor: DesignSystemAsset.GrayColor.gray25.color
+                            .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color
                         ]
                     ), for: .normal
                 )

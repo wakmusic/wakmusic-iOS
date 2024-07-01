@@ -10,10 +10,6 @@ import RootFeature
 import UIKit
 import Utility
 
-// import Amplify
-// import AWSCognitoAuthPlugin
-// import AWSS3StoragePlugin
-
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
@@ -43,16 +39,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerKey = NAVER_CONSUMER_KEY() // 클라이언트 아이디
         naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() // 시크릿 아이디
         naverInstance?.appName = NAVER_APP_NAME() // 앱이름
-
-        // Amplify
-//        do {
-//            try Amplify.add(plugin: AWSCognitoAuthPlugin())
-//            try Amplify.add(plugin: AWSS3StoragePlugin())
-//            try Amplify.configure()
-//            DEBUG_LOG("Amplify configured with Auth and Storage plugins")
-//        } catch {
-//            DEBUG_LOG("Failed to initialize Amplify with \(error)")
-//        }
 
         // Realm register
         RealmManager.shared.register()

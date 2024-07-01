@@ -91,6 +91,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 private extension MainTabBarViewController {
     func inputBind() {
         input.fetchNoticePopup.onNext(())
+        input.fetchNoticeIDList.onNext(())
     }
 
     func outputBind() {

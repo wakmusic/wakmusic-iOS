@@ -1,11 +1,3 @@
-//
-//  AppComponent+Notice.swift
-//  WaktaverseMusic
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import MainTabFeature
 import MyInfoFeature
@@ -39,15 +31,27 @@ public extension AppComponent {
         }
     }
 
-    var fetchNoticeUseCase: any FetchNoticeUseCase {
+    var fetchNoticeAllUseCase: any FetchNoticeAllUseCase {
         shared {
-            FetchNoticeUseCaseImpl(noticeRepository: noticeRepository)
+            FetchNoticeAllUseCaseImpl(noticeRepository: noticeRepository)
+        }
+    }
+
+    var fetchNoticePopupUseCase: any FetchNoticePopupUseCase {
+        shared {
+            FetchNoticePopupUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
 
     var fetchNoticeCategoriesUseCase: any FetchNoticeCategoriesUseCase {
         shared {
             FetchNoticeCategoriesUseCaseImpl(noticeRepository: noticeRepository)
+        }
+    }
+
+    var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase {
+        shared {
+            FetchNoticeIDListUseCaseImpl(noticeRepository: noticeRepository)
         }
     }
 }
