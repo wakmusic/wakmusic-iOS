@@ -51,7 +51,7 @@ extension PlaylistAPI: WMAPI {
         case let .uploadImage(key: key, _):
             return "/\(key)/image"
 
-        case let .subscribePlaylist(key, _), let.checkSubscription(key):
+        case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
         }
     }
@@ -143,7 +143,7 @@ extension PlaylistAPI: WMAPI {
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-                .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .checkSubscription:
+             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .checkSubscription:
             return .accessToken
         }
     }

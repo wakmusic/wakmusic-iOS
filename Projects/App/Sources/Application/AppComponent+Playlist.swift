@@ -105,7 +105,7 @@ public extension AppComponent {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
         shared {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)

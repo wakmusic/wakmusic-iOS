@@ -47,7 +47,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
     private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
     private let checkSubscriptionUseCase: any CheckSubscriptionUseCase
 
-    
     private let logoutUseCase: any LogoutUseCase
 
     init(
@@ -160,7 +159,7 @@ private extension UnknownPlaylistDetailReactor {
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
-            
+
             checkSubscriptionUseCase.execute(key: key)
                 .asObservable()
                 .flatMap { flag -> Observable<Mutation> in

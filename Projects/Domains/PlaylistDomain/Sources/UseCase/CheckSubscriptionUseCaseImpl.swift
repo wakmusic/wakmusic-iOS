@@ -4,8 +4,6 @@ import PlaylistDomainInterface
 import RxSwift
 
 public struct CheckSubscriptionUseCaseImpl: CheckSubscriptionUseCase {
-
-    
     private let playlistRepository: any PlaylistRepository
 
     public init(

@@ -12,7 +12,7 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
 
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
-    
+
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase { get }
 
     var logoutUseCase: any LogoutUseCase { get }

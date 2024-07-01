@@ -51,7 +51,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable {
         remotePlaylistDataSource.subscribePlaylist(key: key, isSubscribing: isSubscribing)
     }
-    
+
     public func checkSubscriptionUseCase(key: String) -> Single<Bool> {
         remotePlaylistDataSource.checkSubscriptionUseCase(key: key)
     }
