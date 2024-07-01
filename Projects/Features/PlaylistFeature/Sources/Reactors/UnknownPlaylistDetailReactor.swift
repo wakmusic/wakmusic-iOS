@@ -233,7 +233,7 @@ private extension UnknownPlaylistDetailReactor {
                 .subscribe(with: self) { owner in
                     owner.action.onNext(.changeSubscriptionButtonState(true))
                     owner.action.onNext(.askToast("리스트 구독이 추가되었습니다."))
-            
+
                 } onError: { owner, error in
                     let wmError = error.asWMError
 
@@ -244,10 +244,8 @@ private extension UnknownPlaylistDetailReactor {
 
         return .empty()
     }
-    
+
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
-        
         return .just(.updateSubscribeState(flag))
-        
     }
 }
