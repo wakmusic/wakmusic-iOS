@@ -1,5 +1,5 @@
-import BaseFeatureInterface
 import ArtistDomainInterface
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface

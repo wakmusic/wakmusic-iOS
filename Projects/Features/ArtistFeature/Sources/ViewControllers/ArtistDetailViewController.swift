@@ -1,12 +1,12 @@
 import ArtistDomainInterface
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import RxCocoa
 import RxSwift
+import SignInFeatureInterface
 import UIKit
 import Utility
-import BaseFeatureInterface
-import SignInFeatureInterface
 
 public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet weak var gradationView: UIView!
