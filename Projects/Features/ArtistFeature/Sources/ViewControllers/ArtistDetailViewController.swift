@@ -38,6 +38,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         let height = (180 * width) / 140.0
         return -(margin + height)
     }
+
     private let minHeaderHeight: CGFloat = 0
     private var previousScrollOffset: [CGFloat] = [0, 0, 0]
 
