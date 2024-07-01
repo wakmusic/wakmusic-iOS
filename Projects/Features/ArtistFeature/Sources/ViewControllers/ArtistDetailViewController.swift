@@ -5,6 +5,8 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import BaseFeatureInterface
+import SignInFeatureInterface
 
 public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet weak var gradationView: UIView!
@@ -26,6 +28,8 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 
     private let gradientLayer = CAGradientLayer()
     private var artistMusicComponent: ArtistMusicComponent!
+    private var textPopupFactory: TextPopUpFactory!
+    private var signInFactory: SignInFactory!
 
     private var viewModel: ArtistDetailViewModel!
     private lazy var input = ArtistDetailViewModel.Input()
@@ -66,11 +70,15 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 
     public static func viewController(
         viewModel: ArtistDetailViewModel,
-        artistMusicComponent: ArtistMusicComponent
+        artistMusicComponent: ArtistMusicComponent,
+        textPopupFactory: TextPopUpFactory,
+        signInFactory: SignInFactory
     ) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.artistMusicComponent = artistMusicComponent
+        viewController.textPopupFactory = textPopupFactory
+        viewController.signInFactory = signInFactory
         return viewController
     }
 
@@ -84,6 +92,24 @@ private extension ArtistDetailViewController {
         output.isSubscription
             .skip(1)
             .bind(to: subscriptionButton.rx.isSelected)
+            .disposed(by: disposeBag)
+
+        output.showLogin
+            .bind(with: self) { owner, _ in
+                let viewController = owner.textPopupFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                )
+                owner.showBottomSheet(content: viewController)
+            }
             .disposed(by: disposeBag)
 
         output.showToast

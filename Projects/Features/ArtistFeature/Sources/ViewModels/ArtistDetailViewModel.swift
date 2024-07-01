@@ -3,6 +3,7 @@ import BaseFeature
 import Foundation
 import RxRelay
 import RxSwift
+import Utility
 
 public final class ArtistDetailViewModel: ViewModelType {
     let model: ArtistListEntity
@@ -28,6 +29,7 @@ public final class ArtistDetailViewModel: ViewModelType {
     public struct Output {
         let isSubscription: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let showToast: PublishSubject<String> = PublishSubject()
+        let showLogin: PublishSubject<Void> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
@@ -35,6 +37,7 @@ public final class ArtistDetailViewModel: ViewModelType {
         let id = model.id
 
         input.fetchArtistSubscriptionStatus
+            .filter { PreferenceManager.userInfo != nil }
             .flatMap { [fetchArtistSubscriptionStatusUseCase] _ -> Observable<ArtistSubscriptionStatusEntity> in
                 fetchArtistSubscriptionStatusUseCase.execute(id: id)
                     .asObservable()
@@ -45,6 +48,13 @@ public final class ArtistDetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.subscriptionArtist
+            .filter { _ in
+                if PreferenceManager.userInfo == nil {
+                    output.showLogin.onNext(())
+                    return false
+                }
+                return true
+            }
             .withLatestFrom(output.isSubscription)
             .flatMap { [subscriptionArtistUseCase] status -> Completable in
                 subscriptionArtistUseCase.execute(id: id, on: !status)
