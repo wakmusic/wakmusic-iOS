@@ -45,6 +45,18 @@ public extension AppComponent {
         }
     }
 
+    var fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase {
+        shared {
+            FetchSubscriptionStatusUseCaseImpl(artistRepository: artistRepository)
+        }
+    }
+
+    var subscriptionArtistUseCase: any SubscriptionArtistUseCase {
+        shared {
+            SubscriptionArtistUseCaseImpl(artistRepository: artistRepository)
+        }
+    }
+
     // MARK: Artist Detail > Artist Music
     var artistMusicComponent: ArtistMusicComponent {
         ArtistMusicComponent(parent: self)

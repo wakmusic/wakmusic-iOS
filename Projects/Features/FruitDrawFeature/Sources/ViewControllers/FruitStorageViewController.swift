@@ -172,6 +172,7 @@ private extension FruitStorageViewController {
         view.backgroundColor = .white
         collectionView.register(FruitListCell.self, forCellWithReuseIdentifier: "\(FruitListCell.self)")
         collectionView.contentInset = .init(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
+        collectionView.showsVerticalScrollIndicator = false
         activityIndicator.startAnimating()
     }
 }

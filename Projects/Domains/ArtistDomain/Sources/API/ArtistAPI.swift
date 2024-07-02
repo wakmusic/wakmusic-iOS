@@ -1,11 +1,3 @@
-//
-//  ArtistAPI.swift
-//  APIKit
-//
-//  Created by KTH on 2023/02/01.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import BaseDomain
 import ErrorModule
@@ -15,15 +7,13 @@ import Moya
 public enum ArtistAPI {
     case fetchArtistList
     case fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int)
+    case fetchSubscriptionStatus(id: String)
+    case subscriptionArtist(id: String, on: Bool)
 }
 
 extension ArtistAPI: WMAPI {
     public var domain: WMDomain {
-        switch self {
-        case .fetchArtistList,
-             .fetchArtistSongList:
-            return .artist
-        }
+        return .artist
     }
 
     public var urlPath: String {
@@ -32,20 +22,29 @@ extension ArtistAPI: WMAPI {
             return "/list"
         case let .fetchArtistSongList(id, _, _):
             return "/\(id)/songs"
+        case let .fetchSubscriptionStatus(id):
+            return "/\(id)/subscription"
+        case let .subscriptionArtist(id, _):
+            return "/\(id)/subscription"
         }
     }
 
     public var method: Moya.Method {
         switch self {
         case .fetchArtistList,
-             .fetchArtistSongList:
+             .fetchArtistSongList,
+             .fetchSubscriptionStatus:
             return .get
+        case let .subscriptionArtist(_, on):
+            return on ? .post : .delete
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchArtistList:
+        case .fetchArtistList,
+             .fetchSubscriptionStatus,
+             .subscriptionArtist:
             return .requestPlain
         case let .fetchArtistSongList(_, sort, page):
             return .requestParameters(
@@ -59,7 +58,12 @@ extension ArtistAPI: WMAPI {
     }
 
     public var jwtTokenType: JwtTokenType {
-        return .none
+        switch self {
+        case .fetchArtistList, .fetchArtistSongList:
+            return .none
+        case .fetchSubscriptionStatus, .subscriptionArtist:
+            return .accessToken
+        }
     }
 
     public var errorMap: [Int: WMError] {
