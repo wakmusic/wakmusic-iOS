@@ -56,11 +56,11 @@ private extension WMBottomSheetView {
 }
 
 public extension UIViewController {
-     func showInlineBottomSheet(
-         content: UIView,
-         size: CGFloat = 56,
-         useSafeArea: Bool = false
-     ) {
+    func showInlineBottomSheet(
+        content: UIView,
+        size: CGFloat = 56,
+        useSafeArea: Bool = false
+    ) {
         let bottomSheetView = BottomSheetView(
             contentView: content,
             contentHeights: [size],
