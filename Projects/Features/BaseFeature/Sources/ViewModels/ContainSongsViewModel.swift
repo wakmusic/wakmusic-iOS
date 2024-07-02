@@ -82,10 +82,10 @@ public final class ContainSongsViewModel: ViewModelType {
                 let wmError: WMError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
             })
-            .withLatestFrom(PreferenceManager.$userInfo){ ($0, $1) }
-            .map({ playlist, userInfo in
-                return playlist.filter{$0.userId == userInfo?.ID}
-            })
+            .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
+            .map { playlist, userInfo in
+                return playlist.filter { $0.userId == userInfo?.ID }
+            }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
