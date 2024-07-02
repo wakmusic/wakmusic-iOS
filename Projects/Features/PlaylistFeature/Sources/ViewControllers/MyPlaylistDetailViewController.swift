@@ -2,13 +2,13 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import PhotosUI
+import PlaylistFeatureInterface
 import ReactorKit
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import PlaylistFeatureInterface
 
 #warning("송카트, 공유하기, 이미지 업로드")
 #warning("다양한 바텀시트 겹침 현상")
@@ -16,7 +16,6 @@ import PlaylistFeatureInterface
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
-
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -28,7 +27,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
-    
+
     private let thumbnailPopupFactory: any ThumbnailPopupFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -216,12 +215,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
-                
-                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
-                
-                owner.showBottomSheet(content: vc,size: .fixed(296))
-                
 
+                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
+
+                owner.showBottomSheet(content: vc, size: .fixed(296))
             }
             .disposed(by: disposeBag)
     }
@@ -511,7 +508,6 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     }
 }
 
-
 extension MyPlaylistDetailViewController: RequestPermissionable {
     public func showPhotoLibrary() {
         var configuration = PHPickerConfiguration()
@@ -580,14 +576,9 @@ extension MyPlaylistDetailViewController: UIImagePickerControllerDelegate, UINav
 
 extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
-        
         if index == 0 {
-            
         } else {
             requestPhotoLibraryPermission()
         }
-        
-        
     }
-    
 }

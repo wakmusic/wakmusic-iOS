@@ -13,14 +13,13 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
-    
 
     var logoutUseCase: any LogoutUseCase { get }
 
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
-    
+
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 

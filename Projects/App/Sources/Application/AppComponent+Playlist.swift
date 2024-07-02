@@ -39,7 +39,7 @@ public extension AppComponent {
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory {
         WakmusicPlaylistDetailComponent(parent: self)
     }
-    
+
     var thumbnailPopupFactory: any ThumbnailPopupFactory {
         ThumbnailPopupComponent(parent: self)
     }
@@ -115,5 +115,4 @@ public extension AppComponent {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
 }

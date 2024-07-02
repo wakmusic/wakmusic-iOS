@@ -1,11 +1,10 @@
-import UIKit
 import BaseFeature
+import DesignSystem
 import SnapKit
 import Then
-import DesignSystem
+import UIKit
 
 final class CheckThumbnailViewController: UIViewController {
-
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
     fileprivate let dismissButton = UIButton().then {
@@ -14,16 +13,9 @@ final class CheckThumbnailViewController: UIViewController {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-    }
-    
-    func addViews() {
-        
     }
 
-
+    func addViews() {}
 }

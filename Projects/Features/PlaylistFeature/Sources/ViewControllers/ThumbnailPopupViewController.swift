@@ -1,12 +1,11 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import PlaylistFeatureInterface
 import SnapKit
 import Then
 import UIKit
 import Utility
-import PlaylistFeatureInterface
-
 
 final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPopupReactor> {
     weak var delegate: ThumbnailPopupDelegate?
@@ -25,11 +24,11 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, ThumbnailOptionModel> = createDataSoruce()
 
-    init(reactor: ThumbnailPopupReactor,delegate: ThumbnailPopupDelegate) {
+    init(reactor: ThumbnailPopupReactor, delegate: ThumbnailPopupDelegate) {
         self.delegate = delegate
         super.init(reactor: reactor)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -104,14 +103,13 @@ extension ThumbnailPopupViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let identifier = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-    
+
         delegate?.didTap(indexPath.row, identifier.cost)
         self.dismiss(animated: true)
     }
-    
 }
