@@ -18,10 +18,12 @@ final class MyPlaylistDetailReactor: Reactor {
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
+        case forceEndEditing
         case changeTitle(String)
         case selectAll
         case deselectAll
         case removeSongs
+        case changeThumnail(Data?)
     }
 
     enum Mutation {
@@ -32,6 +34,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
+        case updateThumbnail(Data?)
         case showtoastMessage(String)
     }
 
@@ -42,6 +45,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var backUpDataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
+        var replaceThumnbnailData: Data?
         @Pulse var toastMessage: String?
     }
 
@@ -84,7 +88,8 @@ final class MyPlaylistDetailReactor: Reactor {
             dataSource: [],
             backUpDataSource: [],
             isLoading: false,
-            selectedCount: 0
+            selectedCount: 0,
+            replaceThumnbnailData: nil
         )
     }
 
@@ -99,6 +104,9 @@ final class MyPlaylistDetailReactor: Reactor {
             return updatePrivate()
 
         case .forceSave, .completeButtonDidTap:
+            return endEditingWithSave()
+
+        case .forceEndEditing:
             return endEditing()
 
         case let .itemDidTap(index):
@@ -119,6 +127,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
+        case let .changeThumnail(data):
+            return updateThumbnail(data)
         }
     }
 
@@ -148,6 +158,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showtoastMessage(message):
             newState.toastMessage = message
+
+        case let .updateThumbnail(data):
+            newState.replaceThumnbnailData = data
         }
 
         return newState
@@ -185,8 +198,7 @@ private extension MyPlaylistDetailReactor {
         ])
     }
 
-    func endEditing() -> Observable<Mutation> {
-        #warning("저장 유즈 케이스")
+    func endEditingWithSave() -> Observable<Mutation> {
         let state = currentState
         var currentDataSoruce = state.dataSource
 
@@ -201,6 +213,23 @@ private extension MyPlaylistDetailReactor {
             .just(.updateSelectedCount(0)),
             updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map { $0.id })
                 .andThen(.empty())
+
+        ])
+    }
+
+    func endEditing() -> Observable<Mutation> {
+        let state = currentState
+        var currentDataSoruce = state.dataSource
+
+        for i in 0 ..< currentDataSoruce.count {
+            currentDataSoruce[i].isSelected = false
+        }
+
+        return .concat([
+            .just(.updateEditingState(false)),
+            .just(.updateDataSource(currentDataSoruce)),
+            .just(.updateBackUpDataSource(currentDataSoruce)),
+            .just(.updateSelectedCount(0)),
 
         ])
     }
@@ -337,5 +366,9 @@ private extension MyPlaylistDetailReactor {
                 .andThen(.never())
 
         ])
+    }
+
+    func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
+        return .just(.updateThumbnail(data))
     }
 }

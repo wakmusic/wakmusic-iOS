@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import PhotosUI
 import ReactorKit
 import SnapKit
 import SongsDomainInterface
@@ -10,10 +11,13 @@ import Utility
 
 #warning("송카트, 공유하기, 이미지 업로드")
 #warning("다양한 바텀시트 겹침 현상")
+#warning("다운 샘플링")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
     SongCartViewType {
+    var playlistImageBottomSheetView: BaseFeature.BottomSheetView!
+
     var playlistImageEditSheetView: PlaylistImageEditSheetView!
 
     var playlisteditSheetView: PlaylistEditSheetView!
@@ -96,10 +100,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        hideplaylistEditSheet()
-        hideSongCart()
-        hideplaylistImageEditSheet()
-        reactor?.action.onNext(.deselectAll)
+
+        hideAll()
     }
 
     override func addView() {
@@ -161,7 +163,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, isEditing in
 
                 let vc = owner.textPopUpFactory.makeView(
-                    text: "변경된 내용을 저장할까요",
+                    text: "변경된 내용을 저장할까요?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "확인",
                     cancelButtonText: "취소"
@@ -208,15 +210,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
 
                 owner.showBottomSheet(content: vc, size: .fixed(296))
-
-                DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
-                DEBUG_LOG("카메라 버튼 탭")
-                owner.hideplaylistEditSheet()
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
@@ -250,6 +248,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.headerView.updateEditState(isEditing)
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = isEditing ? owner : nil
                 owner.tableView.reloadData()
+
+                if !isEditing {
+                    owner.hideAll()
+                }
             }
             .disposed(by: disposeBag)
 
@@ -317,6 +319,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
+
+        sharedState.map(\.replaceThumnbnailData)
+            .compactMap { $0 }
+            .distinctUntilChanged()
+            .bind(with: self) { owner, data in
+
+                owner.headerView.updateThumbnail(data)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -348,8 +359,16 @@ extension MyPlaylistDetailViewController {
 
         return dataSource
     }
+
+    func hideAll() {
+        hideplaylistEditSheet()
+        hideSongCart()
+        hideplaylistImageEditSheet()
+        reactor?.action.onNext(.deselectAll)
+    }
 }
 
+/// 테이블 뷰 델리게이트
 extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(60.0)
@@ -394,12 +413,9 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DEBUG_LOG("HELLo")
     }
-
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        DEBUG_LOG("\(sourceIndexPath) \(destinationIndexPath)")
-    }
 }
 
+/// 전체재생 , 랜덤 재생 델리게이트
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
         DEBUG_LOG("playGroup Touched")
@@ -413,6 +429,7 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     }
 }
 
+/// 편집모드 시 셀 선택 이벤트
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
     func superButtonTapped(index: Int) {
         tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
@@ -420,12 +437,14 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
     }
 }
 
+/// swipe pop 델리게이트 , 편집모드 시 막기
 extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
 }
 
+/// 송카트 델리게이트
 extension MyPlaylistDetailViewController: SongCartViewDelegate {
     func buttonTapped(type: SongCartSelectType) {
         guard let reactor = reactor else {
@@ -442,8 +461,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
-            vc.modalPresentationStyle = .fullScreen
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+            vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
 
@@ -469,9 +488,12 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             self.showBottomSheet(content: vc)
         }
+
+        reactor.action.onNext(.forceEndEditing)
     }
 }
 
+/// 편집 / 공유 바텀시트 델리게이트
 extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
         switch type {
@@ -486,18 +508,84 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     }
 }
 
+/// 갤러리 / 기본 이미지 바텀시트 델리게이트
 extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
     func didTap(_ type: PlaylistImageEditType) {
-        DEBUG_LOG(type) // 탭
         switch type {
         case .gallery:
-            #warning("갤러리")
-            break
+            requestPhotoLibraryPermission()
+
         case .default:
             #warning("기본 팝업")
             break
         }
 
         self.hideplaylistImageEditSheet()
+    }
+}
+
+extension MyPlaylistDetailViewController: RequestPermissionable {
+    public func showPhotoLibrary() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .any(of: [.images])
+
+        configuration.selectionLimit = 1 // 갯수 제한
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        picker.modalPresentationStyle = .overFullScreen
+        self.present(picker, animated: true)
+    }
+}
+
+/// 갤러리 신버전
+extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        results.forEach {
+            let provider = $0.itemProvider
+
+            if provider.canLoadObject(ofClass: UIImage.self) {
+                provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                    guard let self = self else { return }
+                    if let error = error {
+                        DEBUG_LOG("error: \(error)")
+
+                    } else {
+                        DispatchQueue.main.async {
+                            guard let image = image as? UIImage,
+                                  let imageToData = image.pngData() else { return }
+
+                            DEBUG_LOG("Image: \(imageToData)")
+                            let sizeMB: Double = Double(imageToData.count).megabytes
+                            self.reactor?.action.onNext(.changeThumnail(imageToData))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// 갤러리 구버전
+extension MyPlaylistDetailViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    public func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
+            return
+        }
+
+        let imageToData: Data = image.pngData() ?? Data()
+        let sizeMB: Double = Double(imageToData.count).megabytes
+
+        self.reactor?.action.onNext(.changeThumnail(imageToData))
+
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }

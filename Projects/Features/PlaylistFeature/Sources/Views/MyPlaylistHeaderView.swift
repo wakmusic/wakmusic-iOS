@@ -9,6 +9,7 @@ import UIKit
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
     func updateData(_ model: MyPlaylistHeaderModel)
+    func updateThumbnail(_ data: Data)
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -140,6 +141,10 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool) {
         editNickNameButton.isHidden = !isEditing
         cameraContainerView.isHidden = !isEditing
+    }
+
+    func updateThumbnail(_ data: Data) {
+        thumbnailImageView.image = UIImage(data: data)
     }
 }
 
