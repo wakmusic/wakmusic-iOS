@@ -1,5 +1,5 @@
 import RxSwift
 
 public protocol SubscribePlaylistUseCase {
-    func execute(key: String) -> Completable
+    func execute(key: String, isSubscribing: Bool) -> Completable
 }

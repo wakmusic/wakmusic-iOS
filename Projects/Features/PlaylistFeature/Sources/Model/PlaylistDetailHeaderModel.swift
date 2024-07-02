@@ -1,6 +1,6 @@
 import Foundation
 
-struct MyPlaylistHeaderModel: Hashable {
+struct PlaylistDetailHeaderModel: Hashable {
     var key: String
     var title: String
     var image: String

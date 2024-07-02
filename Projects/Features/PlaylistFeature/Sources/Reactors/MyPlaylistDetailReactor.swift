@@ -28,19 +28,19 @@ final class MyPlaylistDetailReactor: Reactor {
 
     enum Mutation {
         case updateEditingState(Bool)
-        case updateHeader(MyPlaylistHeaderModel)
+        case updateHeader(PlaylistDetailHeaderModel)
         case updateDataSource([SongEntity])
         case updateBackUpDataSource([SongEntity])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
         case updateThumbnail(Data?)
-        case showtoastMessage(String)
+        case showToast(String)
     }
 
     struct State {
         var isEditing: Bool
-        var header: MyPlaylistHeaderModel
+        var header: PlaylistDetailHeaderModel
         var dataSource: [SongEntity]
         var backUpDataSource: [SongEntity]
         var isLoading: Bool
@@ -78,7 +78,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         self.initialState = State(
             isEditing: false,
-            header: MyPlaylistHeaderModel(
+            header: PlaylistDetailHeaderModel(
                 key: key, title: "",
                 image: "",
                 userName: "",
@@ -156,7 +156,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
 
-        case let .showtoastMessage(message):
+        case let .showToast(message):
             newState.toastMessage = message
 
         case let .updateThumbnail(data):
@@ -176,7 +176,7 @@ private extension MyPlaylistDetailReactor {
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
                         Observable.just(Mutation.updateHeader(
-                            MyPlaylistHeaderModel(
+                            PlaylistDetailHeaderModel(
                                 key: data.key,
                                 title: data.title,
                                 image: data.image,
@@ -191,7 +191,7 @@ private extension MyPlaylistDetailReactor {
                 .catch { error in
                     let wmErorr = error.asWMError
                     return Observable.just(
-                        Mutation.showtoastMessage(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
             .just(.updateLoadingState(false))
@@ -244,7 +244,7 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updateHeader(prev)),
-            .just(.showtoastMessage(message)),
+            .just(.showToast(message)),
             updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
                 .andThen(.empty())
         ])
@@ -361,7 +361,7 @@ private extension MyPlaylistDetailReactor {
             .just(.updateEditingState(false)),
             .just(.updateSelectedCount(0)),
             .just(.updateHeader(prevHeader)),
-            .just(.showtoastMessage("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+            .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
             removeSongsUseCase.execute(key: key, songs: removeSongs)
                 .andThen(.never())
 

@@ -28,8 +28,12 @@ public extension AppComponent {
         PlaylistComponent(parent: self)
     }
 
-    var myPlaylistFactory: any MyPlaylistFactory {
+    var myPlaylistDetailFactory: any MyPlaylistDetailFactory {
         MyPlaylistDetailComponent(parent: self)
+    }
+
+    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory {
+        UnknownPlaylistDetailComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
@@ -95,12 +99,6 @@ public extension AppComponent {
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
-        }
-    }
-
-    var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase {
-        shared {
-            UnSubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }
