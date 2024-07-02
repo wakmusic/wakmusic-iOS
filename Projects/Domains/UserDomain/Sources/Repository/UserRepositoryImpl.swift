@@ -24,7 +24,7 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.setUserName(name: name)
     }
 
-    public func fetchPlayList() -> Single<[PlayListEntity]> {
+    public func fetchPlayList() -> Single<[PlaylistEntity]> {
         remoteUserDataSource.fetchPlayList()
     }
 

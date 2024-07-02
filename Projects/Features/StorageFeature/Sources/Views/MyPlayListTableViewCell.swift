@@ -42,11 +42,11 @@ class MyPlayListTableViewCell: UITableViewCell {
 }
 
 extension MyPlayListTableViewCell {
-    func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath) {
+    func update(model: PlaylistEntity, isEditing: Bool, indexPath: IndexPath) {
         self.passToModel = (indexPath, model.key)
 
         self.playListImageView.kf.setImage(
-            with: WMImageAPI.fetchPlayList(id: String(model.image), version: model.image_version).toURL,
+            with: URL(string: model.image),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
@@ -57,7 +57,7 @@ extension MyPlayListTableViewCell {
         )
 
         self.playListCountLabel.attributedText = getAttributedString(
-            text: "\(model.songlist.count)곡",
+            text: "\(model.songCount)곡",
             font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
         )
 

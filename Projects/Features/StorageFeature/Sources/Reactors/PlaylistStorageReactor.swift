@@ -19,9 +19,9 @@ final class PlaylistStorageReactor: Reactor {
     enum Mutation {
         case updateDataSource([MyPlayListSectionModel])
         case switchEditingState(Bool)
-        case updateOrder([PlayListEntity])
-        case changeSelectedState(data: [PlayListEntity], selectedCount: Int)
-        case changeAllState(data: [PlayListEntity], selectedCount: Int)
+        case updateOrder([PlaylistEntity])
+        case changeSelectedState(data: [PlaylistEntity], selectedCount: Int)
+        case changeAllState(data: [PlaylistEntity], selectedCount: Int)
     }
 
     struct State {
@@ -106,10 +106,6 @@ extension PlaylistStorageReactor {
                 [MyPlayListSectionModel(
                     model: 0,
                     items: [
-                        .init(key: "123", title: "플리1", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리2", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리3", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리4", image: "", songlist: [], image_version: 0)
                     ]
                 )]
             )

@@ -14,7 +14,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
+typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
 final class PlaylistStorageViewController: BaseStoryboardReactorViewController<PlaylistStorageReactor>,
     SongCartViewType {

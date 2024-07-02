@@ -10,6 +10,7 @@ public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
+    var createPlaylistUseCase: any CreatePlaylistUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 
@@ -19,6 +20,7 @@ public final class ContainSongsComponent: Component<ContainSongsDependency>, Con
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             viewModel: .init(
                 songs: songs,
+                createPlaylistUseCase: dependency.createPlaylistUseCase,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
                 logoutUseCase: dependency.logoutUseCase

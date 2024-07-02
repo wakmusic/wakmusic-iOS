@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol FetchPlayListUseCase {
-    func execute() -> Single<[PlayListEntity]>
+    func execute() -> Single<[PlaylistEntity]>
 }

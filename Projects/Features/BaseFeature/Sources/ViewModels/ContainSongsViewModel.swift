@@ -8,8 +8,9 @@ import RxSwift
 import UserDomainInterface
 
 public final class ContainSongsViewModel: ViewModelType {
-    var fetchPlayListUseCase: FetchPlayListUseCase!
-    var addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!
+    private let fetchPlayListUseCase: any FetchPlayListUseCase
+    private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
+    private let createPlaylistUseCase: any CreatePlaylistUseCase
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
@@ -18,24 +19,27 @@ public final class ContainSongsViewModel: ViewModelType {
         let newPlayListTap: PublishSubject<Void> = PublishSubject()
         let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let containSongWithKey: PublishSubject<String> = PublishSubject()
+        let createPlaylist: PublishSubject<String> = PublishSubject()
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[PlayListEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[PlaylistEntity]> = BehaviorRelay(value: [])
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
         let onLogout: PublishRelay<Error>
 
-        init(onLogout: PublishRelay<Error> = PublishRelay()) {
+        init(onLogout: PublishRelay<Error>) {
             self.onLogout = onLogout
         }
     }
 
     init(
         songs: [String],
-        fetchPlayListUseCase: FetchPlayListUseCase!,
-        addSongIntoPlaylistUseCase: AddSongIntoPlaylistUseCase!,
+        createPlaylistUseCase: any CreatePlaylistUseCase,
+        fetchPlayListUseCase: any FetchPlayListUseCase,
+        addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
         logoutUseCase: LogoutUseCase
     ) {
+        self.createPlaylistUseCase = createPlaylistUseCase
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
         self.logoutUseCase = logoutUseCase
@@ -48,7 +52,7 @@ public final class ContainSongsViewModel: ViewModelType {
         let output = Output(onLogout: logoutRelay)
 
         input.playListLoad
-            .flatMap { [weak self] () -> Observable<[PlayListEntity]> in
+            .flatMap { [weak self] () -> Observable<[PlaylistEntity]> in
                 guard let self = self else {
                     return Observable.empty()
                 }
@@ -69,12 +73,17 @@ public final class ContainSongsViewModel: ViewModelType {
                                     Observable.never()
                                 }
                         } else {
-                            return Observable.never()
+                            return Observable.error(wmError)
                         }
                     }
             }
+            .do(onError: { error in
+                let wmError: WMError = error.asWMError
+                output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
+            })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
+        #warning("내 플리 목록만 가져오도록 필터링 dataSource.userId == 현재 로그인한 ID")
 
         input.containSongWithKey
             .flatMap { [weak self] (key: String) -> Observable<AddSongEntity> in
@@ -117,6 +126,31 @@ public final class ContainSongsViewModel: ViewModelType {
                     return BaseEntity(status: 200, description: "\(entity.addedSongCount)곡이 내 리스트에 담겼습니다.")
                 }
             }
+            .bind(to: output.showToastMessage)
+            .disposed(by: disposeBag)
+
+        input.createPlaylist
+            .withUnretained(self) { ($0, $1) }
+            .flatMap { owner, text -> Observable<PlaylistBaseEntity> in
+
+                owner.createPlaylistUseCase.execute(title: text)
+                    .asObservable()
+                    .catch { (error: Error) in
+                        let wmError = error.asWMError
+                        if wmError == .tokenExpired {
+                            logoutRelay.accept(wmError)
+                            return owner.logoutUseCase.execute()
+                                .andThen(Observable.error(wmError))
+                        } else {
+                            return Observable.error(wmError)
+                        }
+                    }
+            }
+            .do(onError: { error in
+                let wmError: WMError = error.asWMError
+                output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
+            })
+            .map { _ in BaseEntity(status: 201, description: "플레이리스트를 성곡적으로 생성했습니다.") }
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)
 
