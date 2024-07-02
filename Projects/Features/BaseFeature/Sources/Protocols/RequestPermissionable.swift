@@ -14,10 +14,6 @@ public protocol RequestPermissionable: AnyObject {
     func showPhotoLibrary()
 }
 
-public extension RequestPermissionable {
-    func showPhotoLibrary() {}
-}
-
 public extension RequestPermissionable where Self: UIViewController {
     func requestPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()

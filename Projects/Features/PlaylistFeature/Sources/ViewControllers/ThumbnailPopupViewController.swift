@@ -109,7 +109,8 @@ extension ThumbnailPopupViewController: UITableViewDelegate {
             return
         }
 
-        delegate?.didTap(indexPath.row, identifier.cost)
-        self.dismiss(animated: true)
+        self.dismiss(animated: true) {
+            self.delegate?.didTap(indexPath.row, identifier.cost)
+        }
     }
 }

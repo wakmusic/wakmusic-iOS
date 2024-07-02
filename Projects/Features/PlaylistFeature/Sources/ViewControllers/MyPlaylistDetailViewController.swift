@@ -325,7 +325,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .compactMap { $0 }
             .distinctUntilChanged()
             .bind(with: self) { owner, data in
-
+                if let navigationController = owner.presentedViewController as? UINavigationController {
+                    navigationController.pushViewController(CheckThumbnailViewController(), animated: true)
+                }
                 owner.headerView.updateThumbnail(data)
             }
             .disposed(by: disposeBag)
@@ -512,19 +514,26 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
     public func showPhotoLibrary() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .any(of: [.images])
-
         configuration.selectionLimit = 1 // 갯수 제한
+
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        picker.modalPresentationStyle = .overFullScreen
-        self.present(picker, animated: true)
+
+        let pickerToWrapNavigationController = picker.wrapNavigationController
+        pickerToWrapNavigationController.modalPresentationStyle = .fullScreen
+        pickerToWrapNavigationController.setNavigationBarHidden(true, animated: false)
+
+        self.present(pickerToWrapNavigationController, animated: true)
     }
 }
 
 /// 갤러리 신버전
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
+        if results.isEmpty {
+            picker.dismiss(animated: true)
+            return
+        }
 
         results.forEach {
             let provider = $0.itemProvider

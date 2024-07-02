@@ -19,8 +19,7 @@ public extension WMBottomSheetViewType where Self: UIViewController {
         if self.bottomSheetView != nil {
             hideWMBottomSheet(postNoti: false)
         }
-        let wmBottomSheetView = WMBottomSheetView()
-        wmBottomSheetView.setupItems(with: items)
+        let wmBottomSheetView = WMBottomSheetView(items: items)
         bottomSheetView = BottomSheetView(
             contentView: wmBottomSheetView,
             contentHeights: [size]
