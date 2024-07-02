@@ -196,7 +196,7 @@ private extension PlaylistViewController {
                 case false:
                     self.showSongCart(
                         in: self.view,
-                        type: .playList,
+                        type: .playlist,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSourceCount,
                         useBottomSpace: true

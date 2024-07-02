@@ -28,6 +28,10 @@ public extension AppComponent {
         PlaylistComponent(parent: self)
     }
 
+    var myPlaylistFactory: any MyPlaylistFactory {
+        MyPlaylistDetailComponent(parent: self)
+    }
+
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
             RemotePlaylistDataSourceImpl(keychain: keychain)

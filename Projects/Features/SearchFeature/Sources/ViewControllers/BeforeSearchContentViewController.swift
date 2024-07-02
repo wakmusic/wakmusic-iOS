@@ -21,6 +21,7 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let playlistDetailFactory: PlaylistDetailFactory
     private let textPopUpFactory: TextPopUpFactory
+    private let myPlaylistFactory: any MyPlaylistFactory
 
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
@@ -39,11 +40,13 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         wakmusicRecommendComponent: WakmusicRecommendComponent,
         textPopUpFactory: TextPopUpFactory,
         playlistDetailFactory: PlaylistDetailFactory,
+        myPlaylistFactory: any MyPlaylistFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
         self.playlistDetailFactory = playlistDetailFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
+        self.myPlaylistFactory = myPlaylistFactory
         super.init(reactor: reactor)
     }
 
@@ -330,7 +333,11 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+                self.navigationController?.pushViewController(
+                    myPlaylistFactory.makeView(key: "-iZB-NSFdy-"),
+                    animated: true
+                )
+//                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
 
             case .popularList:
                 break

@@ -2,7 +2,7 @@ import Foundation
 
 public enum PurposeType {
     case creation
-    case updatePlaylistTile
+    case updatePlaylistTitle
     case nickname
 }
 
@@ -11,7 +11,7 @@ public extension PurposeType {
         switch self {
         case .creation:
             return "리스트 만들기"
-        case .updatePlaylistTile:
+        case .updatePlaylistTitle:
             return "리스트 수정하기"
         case .nickname:
             return "닉네임 수정"
@@ -22,7 +22,7 @@ public extension PurposeType {
         switch self {
         case .creation:
             return "리스트 제목"
-        case .updatePlaylistTile:
+        case .updatePlaylistTitle:
             return "리스트 제목"
         case .nickname:
             return "닉네임"
@@ -33,7 +33,7 @@ public extension PurposeType {
         switch self {
         case .creation:
             return "리스트 생성"
-        case .updatePlaylistTile:
+        case .updatePlaylistTitle:
             return "리스트 수정"
         case .nickname:
             return "완료"

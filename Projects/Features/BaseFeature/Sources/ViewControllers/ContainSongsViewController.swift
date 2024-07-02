@@ -25,7 +25,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
-    public var delegate: ContainSongsViewDelegate?
+    public weak var delegate: ContainSongsViewDelegate?
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 

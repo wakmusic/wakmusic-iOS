@@ -8,6 +8,9 @@ import Then
 import UIKit
 import Utility
 
+#warning("송카트, 공유하기, 이미지 업로드")
+#warning("다양한 바텀시트 겹침 현상")
+
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
     SongCartViewType {
@@ -19,7 +22,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     var bottomSheetView: BottomSheetView!
 
-    //   private let multiPurposePopUpFactory: any MultiPurposePopUpFactory
+    private let multiPurposePopupFactory: any MultiPurposePopupFactory
+
+    private let containSongsFactory: any ContainSongsFactory
+
+    private let textPopUpFactory: any TextPopUpFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -49,6 +56,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.identifier)
         $0.tableHeaderView = headerView
         $0.separatorStyle = .none
+        $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
     private lazy var completeButton: RectangleButton = RectangleButton().then {
@@ -62,12 +70,18 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     lazy var dataSource: MyplaylistDetailDataSource = createDataSource()
 
-    #warning("추후 의존성 추가")
-//    init(reactor: MyPlaylistDetailReactor, multiPurposePopUpFactory: any MultiPurposePopUpFactory) {
-//        self.multiPurposePopUpFactory = multiPurposePopUpFactory
-//        super.init(reactor: reactor)
-//    }
-//
+    init(
+        reactor: MyPlaylistDetailReactor,
+        multiPurposePopupFactory: any MultiPurposePopupFactory,
+        containSongsFactory: any ContainSongsFactory,
+        textPopUpFactory: any TextPopUpFactory
+    ) {
+        self.multiPurposePopupFactory = multiPurposePopupFactory
+        self.containSongsFactory = containSongsFactory
+        self.textPopUpFactory = textPopUpFactory
+
+        super.init(reactor: reactor)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +92,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        hideplaylistEditSheet()
+        hideSongCart()
+        hideplaylistImageEditSheet()
+        reactor?.action.onNext(.deselectAll)
     }
 
     override func addView() {
@@ -138,11 +160,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .withLatestFrom(sharedState.map(\.isEditing))
             .bind(with: self) { owner, isEditing in
 
-                if isEditing {
-                    #warning("경고 팝업 후 되돌릭")
+                let vc = owner.textPopUpFactory.makeView(
+                    text: "변경된 내용을 저장할까요",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: "확인",
+                    cancelButtonText: "취소"
+                ) {
+                    reactor.action.onNext(.forceSave)
+                    owner.navigationController?.popViewController(animated: true)
 
+                } cancelCompletion: {
                     reactor.action.onNext(.restore)
+                    owner.navigationController?.popViewController(animated: true)
+                }
 
+                if isEditing {
+                    owner.showBottomSheet(content: vc)
                 } else {
                     owner.navigationController?.popViewController(animated: true)
                 }
@@ -159,14 +192,23 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         completeButton.rx
             .tap
-            .bind(with: self) { owner, _ in
-                reactor.action.onNext(.completeButtonDidTap)
-            }
+            .map { Reactor.Action.completeButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         headerView.rx.editNickNameButtonDidTap
-            .bind(with: self) { ownerm, _ in
-                #warning("이름 변경 팝업")
+            .bind(with: self) { owner, _ in
+
+                guard let reactor = owner.reactor else {
+                    return
+                }
+
+                let vc = owner.multiPurposePopupFactory.makeView(type: .updatePlaylistTitle, key: reactor.key) { text in
+                    reactor.action.onNext(.changeTitle(text))
+                }
+
+                owner.showBottomSheet(content: vc, size: .fixed(296))
+
                 DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
@@ -174,6 +216,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
                 DEBUG_LOG("카메라 버튼 탭")
+                owner.hideplaylistEditSheet()
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
@@ -210,26 +253,32 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
+        sharedState.map(\.header)
+            .skip(1)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, model in
+                owner.headerView.updateData(model)
+                owner.lockButton.setImage(model.private ? owner.lockImage : owner.unLockImage, for: .normal)
+            }
+            .disposed(by: disposeBag)
+
         sharedState.map(\.dataSource)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
                 var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
 
-                owner.headerView.updateData(model.title, model.songs.count, model.image)
-                owner.lockButton.setImage(model.private ? owner.lockImage : owner.unLockImage, for: .normal)
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
                 )
 
-                if model.songs.isEmpty {
+                if model.isEmpty {
                     owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
                 } else {
                     owner.tableView.restore()
                 }
-
-                #warning("셀 선택 업데이트 관련 질문")
                 snapShot.appendSections([0])
-                snapShot.appendItems(model.songs)
+                snapShot.appendItems(model)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
@@ -249,21 +298,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
-            .withLatestFrom(sharedState.map(\.dataSource.songs.count)) { ($0, $1) }
+            .withLatestFrom(sharedState.map(\.header)) { ($0, $1) }
             .bind(with: self) { owner, info in
 
-                let (count, limit) = (info.0, info.1)
+                let (count, limit) = (info.0, info.1.songCount)
 
                 if count == .zero {
                     owner.hideSongCart()
                 } else {
                     owner.showSongCart(
                         in: owner.view,
-                        type: .myList,
+                        type: .myPlaylist,
                         selectedSongCount: count,
                         totalSongCount: limit,
                         useBottomSpace: false
                     )
+                    owner.songCartView.delegate = owner
                 }
             }
             .disposed(by: disposeBag)
@@ -313,7 +363,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return nil
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
@@ -325,7 +375,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return .zero
         }
 
-        if reactor.currentState.dataSource.songs.isEmpty {
+        if reactor.currentState.dataSource.isEmpty {
             return .zero
         } else {
             return CGFloat(52.0 + 32.0)
@@ -377,8 +427,48 @@ extension MyPlaylistDetailViewController: UIGestureRecognizerDelegate {
 }
 
 extension MyPlaylistDetailViewController: SongCartViewDelegate {
-    func buttonTapped(type: BaseFeature.SongCartSelectType) {
-        #warning("송카트 구횬")
+    func buttonTapped(type: SongCartSelectType) {
+        guard let reactor = reactor else {
+            return
+        }
+
+        let currentState = reactor.currentState
+
+        switch type {
+        case let .allSelect(flag: flag):
+            if flag {
+                reactor.action.onNext(.selectAll)
+            } else {
+                reactor.action.onNext(.deselectAll)
+            }
+        case .addSong:
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
+            vc.modalPresentationStyle = .fullScreen
+
+            self.present(vc, animated: true)
+
+            break
+        case .addPlayList:
+            #warning("재생목록 관련 구현체 구현 시 추가")
+            break
+        case .play:
+            break
+        case .remove:
+
+            let vc: UIViewController = textPopUpFactory.makeView(
+                text: "\(currentState.selectedCount)곡을 삭제하시겠습니까?",
+                cancelButtonIsHidden: false, confirmButtonText: "확인",
+                cancelButtonText: "취소",
+                completion: { [weak self] in
+
+                    guard let self else { return }
+
+                    self.reactor?.action.onNext(.removeSongs)
+                }, cancelCompletion: nil
+            )
+
+            self.showBottomSheet(content: vc)
+        }
     }
 }
 

@@ -178,7 +178,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
                     owner.showSongCart(
                         in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
                             .rootViewController?.view ?? UIView(),
-                        type: .myList,
+                        type: .playlistStorage,
                         selectedSongCount: count,
                         totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
                         useBottomSpace: true
