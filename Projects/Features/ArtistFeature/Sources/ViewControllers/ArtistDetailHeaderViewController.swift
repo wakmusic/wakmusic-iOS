@@ -1,13 +1,6 @@
-//
-//  ArtistDetailHeaderViewController.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/01/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import DesignSystem
+import LogManager
 import RxCocoa
 import RxSwift
 import UIKit
@@ -34,6 +27,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var introDescriptionLabel: UILabel!
 
     var disposeBag: DisposeBag = DisposeBag()
+    private var model: ArtistListEntity?
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -56,13 +50,14 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 
 extension ArtistDetailHeaderViewController {
     func update(model: ArtistListEntity) {
+        self.model = model
         let artistName: String = model.krName
         let artistEngName: String = model.enName.capitalizingFirstLetter
         let artistNameAttributedString = NSMutableAttributedString(
             string: artistName + " " + artistEngName,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -73,7 +68,7 @@ extension ArtistDetailHeaderViewController {
         artistNameAttributedString.addAttributes(
             [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color.withAlphaComponent(0.6),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
                 .kern: -0.5
             ],
             range: artistEngNameRange
@@ -106,7 +101,7 @@ extension ArtistDetailHeaderViewController {
             string: model.title,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .paragraphStyle: artistIntroParagraphStyle,
                 .kern: -0.5
             ]
@@ -123,7 +118,7 @@ extension ArtistDetailHeaderViewController {
             string: model.description,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .paragraphStyle: artistIntroDescriptionParagraphStyle,
                 .kern: -0.5
             ]
@@ -150,6 +145,9 @@ private extension ArtistDetailHeaderViewController {
 
         mergeObservable
             .bind(with: self) { owner, _ in
+                LogManager.analytics(
+                    ArtistAnalyticsLog.clickArtistDescriptionButton(artist: owner.model?.id ?? "")
+                )
                 owner.flipArtistIntro()
             }
             .disposed(by: disposeBag)
@@ -175,26 +173,26 @@ private extension ArtistDetailHeaderViewController {
 
         descriptionView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
         descriptionView.layer.borderWidth = 1
-        descriptionView.layer.borderColor = DesignSystemAsset.GrayColor.gray25.color.cgColor
+        descriptionView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray25.color.cgColor
         descriptionView.layer.cornerRadius = 8
 
         descriptionFrontView.isHidden = false
         descriptionBackView.isHidden = true
 
         artistGroupLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        artistGroupLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        artistGroupLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         artistGroupLabel.setTextWithAttributes(kernValue: -0.5)
 
         artistIntroLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        artistIntroLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        artistIntroLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         artistIntroLabel.textAlignment = .left
 
         introTitleLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 14)
-        introTitleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        introTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         introTitleLabel.setTextWithAttributes(kernValue: -0.5)
 
         introDescriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        introDescriptionLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        introDescriptionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         introDescriptionLabel.textAlignment = .left
         introDescriptionLabel.lineBreakMode = .byWordWrapping
         introDescriptionLabel.setTextWithAttributes(kernValue: -0.5)

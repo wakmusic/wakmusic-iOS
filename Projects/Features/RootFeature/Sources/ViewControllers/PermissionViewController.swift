@@ -56,7 +56,7 @@ extension PermissionViewController {
             string: "앱 접근 권한 안내",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 22),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -66,7 +66,7 @@ extension PermissionViewController {
             string: "선택적 접근 권한",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -77,42 +77,44 @@ extension PermissionViewController {
             string: "카메라",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
         self.cameraLabel.attributedText = cameraAttributedString
 
         let cameraDescriptionAttributedString = NSMutableAttributedString(
-            string: "버그 제보 시 사진 촬영을 위한 권한",
+            string: "버그 제보 시 사진 촬영을 위해 사용",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 .kern: -0.5
             ]
         )
         self.cameraDescriptionLabel.attributedText = cameraDescriptionAttributedString
+        self.cameraDescriptionLabel.numberOfLines = 0
 
         self.albumImageView.image = DesignSystemAsset.Permission.permissionAlbum.image
         let albumAttributedString = NSMutableAttributedString(
             string: "앨범",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
         self.albumLabel.attributedText = albumAttributedString
 
         let albumDescriptionAttributedString = NSMutableAttributedString(
-            string: "버그 제보 시 파일 첨부를 위한 권한",
+            string: "리스트 사진 변경, 가사 꾸미기, 버그 제보 시\n파일 첨부 또는 저장을 위해 사용",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 .kern: -0.5
             ]
         )
         self.albumDescriptionLabel.attributedText = albumDescriptionAttributedString
+        self.albumDescriptionLabel.numberOfLines = 0
 
         self.firstDotLabel.layer.cornerRadius = 2
         self.firstDotLabel.clipsToBounds = true
@@ -124,7 +126,7 @@ extension PermissionViewController {
             string: "선택적 접근 권한은 서비스 사용 중 필요한 시점에 동의를 받고 있습니다. 허용하지 않으셔도 서비스 이용이 가능합니다.",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 .paragraphStyle: paragraphStyle,
                 .kern: -0.5
             ]
@@ -138,7 +140,7 @@ extension PermissionViewController {
             string: "접근 권한 변경 방법 : 설정 > 왁타버스 뮤직",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 .kern: -0.5
             ]
         )
@@ -148,7 +150,7 @@ extension PermissionViewController {
             string: "확인",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         )

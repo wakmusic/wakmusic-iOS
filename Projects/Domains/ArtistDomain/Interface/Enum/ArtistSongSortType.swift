@@ -1,11 +1,3 @@
-//
-//  ArtistSongSortType.swift
-//  ArtistDomainInterface
-//
-//  Created by KTH on 2024/03/07.
-//  Copyright © 2024 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 
 public enum ArtistSongSortType: Int {

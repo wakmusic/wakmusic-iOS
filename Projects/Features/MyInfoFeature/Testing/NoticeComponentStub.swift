@@ -10,7 +10,7 @@ public final class NoticeComponentStub: NoticeFactory {
     public func makeView() -> UIViewController {
         return NoticeViewController.viewController(
             viewModel: .init(
-                fetchNoticeUseCase: FetchNoticeUseCaseStub()
+                fetchNoticeAllUseCase: FetchNoticeAllUseCaseStub()
             ),
             noticeDetailFactory: NoticeDetailComponentStub()
         )

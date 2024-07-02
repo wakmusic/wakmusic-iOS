@@ -24,6 +24,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     private var teamInfoFactory: TeamInfoFactory! // 팀 소개
     private var settingFactory: SettingFactory!
     private var fruitDrawFactory: FruitDrawFactory!
+    private var fruitStorageFactory: FruitStorageFactory!
 
     var editSheetView: EditSheetView!
     var bottomSheetView: BottomSheetView!
@@ -44,6 +45,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        hideEditSheet()
     }
 
     public static func viewController(
@@ -57,7 +59,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         questionFactory: QuestionFactory,
         teamInfoFactory: TeamInfoFactory,
         settingFactory: SettingFactory,
-        fruitDrawFactory: FruitDrawFactory
+        fruitDrawFactory: FruitDrawFactory,
+        fruitStorageFactory: FruitStorageFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopUpComponent = profilePopUpComponent
@@ -70,10 +73,18 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         viewController.teamInfoFactory = teamInfoFactory
         viewController.settingFactory = settingFactory
         viewController.fruitDrawFactory = fruitDrawFactory
+        viewController.fruitStorageFactory = fruitStorageFactory
         return viewController
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.state.map(\.isAllNoticesRead)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isAllNoticesRead in
+                owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
+            }
+            .disposed(by: disposeBag)
+
         reactor.state.map(\.isLoggedIn)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoggedIn in
@@ -124,13 +135,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    let viewController = owner.fruitDrawFactory.makeView().wrapNavigationController
+                    let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
                     viewController.modalPresentationStyle = .fullScreen
                     owner.present(viewController, animated: true)
-                case .like:
+                case .fruit:
                     if reactor.currentState.isLoggedIn {
-                        NotificationCenter.default.post(name: .movedTab, object: 4)
-                        NotificationCenter.default.post(name: .movedStorageFavoriteTab, object: nil)
+                        let viewController = owner.fruitStorageFactory.makeView()
+                        owner.navigationController?.pushViewController(viewController, animated: true)
                     } else {
                         guard let vc = owner.textPopUpFactory.makeView(
                             text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
@@ -186,8 +197,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        myInfoView.rx.likeNavigationButtonDidTap
-            .map { MyInfoReactor.Action.likeNavigationDidTap }
+        myInfoView.rx.fruitNavigationButtonDidTap
+            .map { MyInfoReactor.Action.fruitNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -215,6 +226,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        myInfoView.rx.scrollViewDidTap
+            .bind(with: self) { owner, _ in
+                owner.hideEditSheet()
+            }.disposed(by: disposeBag)
     }
 }
 
@@ -249,5 +265,12 @@ extension MyInfoViewController: EqualHandleTappedType {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         }
+    }
+}
+
+extension MyInfoViewController: FruitDrawViewControllerDelegate {
+    func completedFruitDraw(itemCount: Int) {
+        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
+        LogManager.printDebug("itemCount: \(itemCount)")
     }
 }

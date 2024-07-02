@@ -1,11 +1,3 @@
-//
-//  FetchNoticeEntity.swift
-//  DomainModuleTests
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 
 public struct FetchNoticeEntity {
@@ -33,6 +25,7 @@ public struct FetchNoticeEntity {
     public let thumbnail: FetchNoticeEntity.Image
     public let origins: [FetchNoticeEntity.Image]
     public let createdAt: Double
+    public var isRead: Bool = true
 }
 
 public extension FetchNoticeEntity {

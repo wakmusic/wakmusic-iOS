@@ -1,4 +1,6 @@
+import BaseFeatureInterface
 import DesignSystem
+import FruitDrawFeatureInterface
 import LogManager
 import Lottie
 import RxCocoa
@@ -39,14 +41,15 @@ public final class FruitDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.FruitDraw.fruitDrawMachine.image
     }
 
-    private let drawButton = UIButton(type: .system).then {
-        $0.setTitle("음표 열매 뽑기", for: .normal)
+    private let drawOrConfirmButton = UIButton(type: .system).then {
+        $0.setTitle("...", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
-        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray300.color
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
+        $0.isEnabled = false
     }
 
     private lazy var lottieAnimationView =
@@ -57,6 +60,21 @@ public final class FruitDrawViewController: UIViewController {
             $0.loopMode = .playOnce
             $0.contentMode = .scaleAspectFit
         }
+
+    private let rewardDescriptioniLabel = WMLabel(
+        text: "",
+        textColor: .white,
+        font: .t2(weight: .bold),
+        alignment: .center
+    ).then {
+        $0.numberOfLines = 0
+        $0.alpha = 0
+    }
+
+    private let rewardFruitImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.alpha = 0
+    }
 
     /// Left Component
     private let purpleHeartImageView = UIImageView().then {
@@ -125,7 +143,10 @@ public final class FruitDrawViewController: UIViewController {
         $0.image = DesignSystemAsset.FruitDraw.fruitDrawDeepGreenHeart.image
     }
 
-    private var viewModel: FruitDrawViewModel
+    private let viewModel: FruitDrawViewModel
+    private let textPopUpFactory: TextPopUpFactory
+    private weak var delegate: FruitDrawViewControllerDelegate?
+
     lazy var input = FruitDrawViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
@@ -134,8 +155,14 @@ public final class FruitDrawViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init(viewModel: FruitDrawViewModel) {
+    public init(
+        viewModel: FruitDrawViewModel,
+        textPopUpFactory: TextPopUpFactory,
+        delegate: FruitDrawViewControllerDelegate
+    ) {
         self.viewModel = viewModel
+        self.textPopUpFactory = textPopUpFactory
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -149,7 +176,8 @@ public final class FruitDrawViewController: UIViewController {
         addSubViews()
         setLayout()
         configureUI()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     override public var preferredStatusBarStyle: UIStatusBarStyle {
@@ -158,22 +186,93 @@ public final class FruitDrawViewController: UIViewController {
 }
 
 private extension FruitDrawViewController {
-    func bind() {
-        dismissButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
+    func outputBind() {
+        output.canDraw
+            .skip(1)
+            .bind(with: self) { owner, canDraw in
+                owner.drawOrConfirmButton.isEnabled = canDraw
+                owner.drawOrConfirmButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
+                owner.drawOrConfirmButton.backgroundColor = canDraw ?
+                    DesignSystemAsset.PrimaryColorV2.point.color :
+                    DesignSystemAsset.BlueGrayColor.gray300.color
             }
             .disposed(by: disposeBag)
 
-        drawButton.rx.tap
-            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
-            .bind(with: self) { owner, _ in
-                owner.startLottieAnimation()
-                UIView.animate(
-                    withDuration: 0.3,
-                    delay: 0.5
-                ) {
-                    owner.showHideComponent(isHide: true)
+        output.showRewardNote
+            .bind(with: self) { owner, entity in
+                owner.drawOrConfirmButton.setTitle("확인", for: .normal)
+                owner.drawOrConfirmButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+                owner.rewardDescriptioniLabel.text = "\(entity.name)를 획득했어요!"
+
+                if let data = entity.imageData {
+                    owner.rewardFruitImageView.image = UIImage(data: data)
+                }
+
+                UIView.animate(withDuration: 0.3) {
+                    owner.lottieAnimationView.alpha = 0
+                    owner.drawOrConfirmButton.alpha = 1
+                    owner.rewardDescriptioniLabel.alpha = 1
+                    owner.rewardFruitImageView.alpha = 1
+                }
+            }
+            .disposed(by: disposeBag)
+
+        output.occurredError
+            .bind(with: self) { owner, message in
+                owner.showBottomSheet(
+                    content: owner.textPopUpFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.dismiss(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
+                )
+            }
+            .disposed(by: disposeBag)
+    }
+
+    func inputBind() {
+        input.fetchFruitDrawStatus.onNext(())
+
+        dismissButton.rx.tap
+            .withLatestFrom(output.fruitSource)
+            .bind(with: self) { owner, fruit in
+                let drawCompleted: Bool = fruit.quantity > 0
+                if drawCompleted {
+                    owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    owner.dismiss(animated: true)
+                } else {
+                    owner.dismiss(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+
+        drawOrConfirmButton.rx.tap
+            .withLatestFrom(output.canDraw)
+            .withLatestFrom(output.fruitSource) { ($0, $1) }
+            .filter { $0.0 }
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, source in
+                let (_, fruit) = source
+                let drawCompleted: Bool = fruit.quantity > 0
+
+                if drawCompleted {
+                    owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
+                    owner.dismiss(animated: true)
+                } else {
+                    owner.input.didTapFruitDraw.onNext(())
+                    owner.startLottieAnimation()
+                    UIView.animate(
+                        withDuration: 0.3,
+                        delay: 0.5
+                    ) {
+                        owner.showHideComponent(isHide: true)
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -227,7 +326,9 @@ private extension FruitDrawViewController {
         view.addSubviews(
             navigationBarView,
             descriptioniLabel,
-            drawButton
+            rewardFruitImageView,
+            rewardDescriptioniLabel,
+            drawOrConfirmButton
         )
         navigationBarView.setLeftViews([dismissButton])
     }
@@ -260,10 +361,24 @@ private extension FruitDrawViewController {
             $0.height.equalTo(56)
         }
 
-        drawButton.snp.makeConstraints {
+        drawOrConfirmButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             $0.height.equalTo(56)
+        }
+
+        rewardFruitImageView.snp.makeConstraints {
+            $0.top.equalTo(276.0.correctTop)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(275)
+            $0.height.equalTo(200)
+        }
+
+        rewardDescriptioniLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(32)
+            $0.bottom.equalTo(rewardFruitImageView.snp.top).offset(60.0.correctBottom)
         }
 
         // Left Component
@@ -336,7 +451,7 @@ private extension FruitDrawViewController {
 
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        startComponentAnimation()
+        perform(#selector(startComponentAnimation), with: nil, afterDelay: 0.3)
     }
 }
 
@@ -353,7 +468,7 @@ private extension FruitDrawViewController {
         }
     }
 
-    func startComponentAnimation() {
+    @objc func startComponentAnimation() {
         // Left Component
         purpleHeartImageView.moveAnimate(duration: 5.0, amount: 30, direction: .up)
         leftNoteImageView.moveAnimate(duration: 3.0, amount: 30, direction: .up)
@@ -388,6 +503,6 @@ private extension FruitDrawViewController {
         }
         descriptioniLabel.alpha = isHide ? 0 : 1
         drawMachineImageView.alpha = descriptioniLabel.alpha
-        drawButton.alpha = descriptioniLabel.alpha
+        drawOrConfirmButton.alpha = descriptioniLabel.alpha
     }
 }

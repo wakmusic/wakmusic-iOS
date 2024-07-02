@@ -12,7 +12,8 @@ import StorageFeature
 import StorageFeatureInterface
 
 public protocol MainTabBarDependency: Dependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase { get }
+    var fetchNoticePopupUseCase: any FetchNoticePopupUseCase { get }
+    var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
     var homeComponent: HomeComponent { get }
     var searchFactory: any SearchFactory { get }
     var artistComponent: ArtistComponent { get }
@@ -27,7 +28,8 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
     public func makeView() -> MainTabBarViewController {
         return MainTabBarViewController.viewController(
             viewModel: MainTabBarViewModel.init(
-                fetchNoticeUseCase: self.dependency.fetchNoticeUseCase
+                fetchNoticePopupUseCase: self.dependency.fetchNoticePopupUseCase,
+                fetchNoticeIDListUseCase: self.dependency.fetchNoticeIDListUseCase
             ),
             homeComponent: self.dependency.homeComponent,
             searchFactory: self.dependency.searchFactory,

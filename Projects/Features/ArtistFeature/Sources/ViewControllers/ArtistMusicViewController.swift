@@ -1,13 +1,6 @@
-//
-//  ArtistMusicViewController.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/01/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import DesignSystem
+import LogManager
 import Pageboy
 import Tabman
 import UIKit
@@ -42,7 +35,15 @@ public class ArtistMusicViewController: TabmanViewController, ViewControllerFrom
         didScrollToPageAt index: TabmanViewController.PageIndex,
         direction: PageboyViewController.NavigationDirection,
         animated: Bool
-    ) {}
+    ) {
+        LogManager.analytics(
+            ArtistAnalyticsLog.clickArtistTabbarTab(
+                tab: index == 0 ? "new" :
+                    index == 1 ? "popular" : "old",
+                artist: model?.id ?? ""
+            )
+        )
+    }
 
     public static func viewController(
         model: ArtistListEntity?,
@@ -70,8 +71,8 @@ extension ArtistMusicViewController {
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
-            button.tintColor = DesignSystemAsset.GrayColor.gray400.color
-            button.selectedTintColor = DesignSystemAsset.GrayColor.gray900.color
+            button.tintColor = DesignSystemAsset.BlueGrayColor.gray400.color
+            button.selectedTintColor = DesignSystemAsset.BlueGrayColor.gray900.color
             button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }

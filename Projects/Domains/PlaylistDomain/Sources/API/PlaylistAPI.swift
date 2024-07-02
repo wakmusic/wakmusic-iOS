@@ -139,7 +139,6 @@ extension PlaylistAPI: WMAPI {
             return .none
 
         case let .fetchPlaylistDetail(_, type):
-
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,

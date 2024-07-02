@@ -11,16 +11,12 @@ import Utility
 final class UnknownPlaylistDetailReactor: Reactor {
     let key: String
 
-    var disposeBag = DisposeBag()
-
     enum Action {
         case viewDidLoad
         case selectAll
         case deselectAll
         case itemDidTap(Int)
         case subscriptionButtonDidTap
-        case askToast(String)
-        case changeSubscriptionButtonState(Bool)
     }
 
     enum Mutation {
@@ -94,12 +90,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
-
-        case let .askToast(message):
-            return .just(.showToast(message))
-
-        case let .changeSubscriptionButtonState(flag):
-            return updateSubscribeState(flag)
         }
     }
 
@@ -229,18 +219,17 @@ private extension UnknownPlaylistDetailReactor {
 
         let prev = currentState.isSubscribing
 
-        subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
-            .subscribe(with: self) { owner in
-                owner.action.onNext(.changeSubscriptionButtonState(!prev))
-                owner.action.onNext(.askToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
-            } onError: { owner, error in
+        return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
+            .andThen(
+                .concat([
+                    .just(Mutation.updateSubscribeState(!prev)),
+                    .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
+                ])
+            )
+            .catch { error in
                 let wmError = error.asWMError
-
-                owner.action.onNext(.askToast(wmError.errorDescription!))
+                return .just(.showToast(wmError.errorDescription!))
             }
-            .disposed(by: disposeBag)
-
-        return .empty()
     }
 
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {

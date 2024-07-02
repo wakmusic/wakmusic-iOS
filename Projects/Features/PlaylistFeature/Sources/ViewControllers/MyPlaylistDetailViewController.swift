@@ -210,14 +210,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
 
                 owner.showBottomSheet(content: vc, size: .fixed(296))
-
-                DEBUG_LOG("탭 이름 변경 버튼")
             }
             .disposed(by: disposeBag)
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
-                DEBUG_LOG("카메라 버튼 탭")
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
@@ -464,8 +461,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
-            // vc.modalPresentationStyle = .
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+            vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
 
@@ -491,6 +488,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             self.showBottomSheet(content: vc)
         }
+
+        reactor.action.onNext(.forceEndEditing)
     }
 }
 
@@ -514,7 +513,7 @@ extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
     func didTap(_ type: PlaylistImageEditType) {
         switch type {
         case .gallery:
-            showPhotoLibrary()
+            requestPhotoLibraryPermission()
 
         case .default:
             #warning("기본 팝업")
@@ -533,7 +532,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         configuration.selectionLimit = 1 // 갯수 제한
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-        // picker.modalPresentationStyle =
+        picker.modalPresentationStyle = .overFullScreen
         self.present(picker, animated: true)
     }
 }

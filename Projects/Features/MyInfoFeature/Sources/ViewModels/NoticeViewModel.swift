@@ -7,13 +7,13 @@ import RxSwift
 import Utility
 
 public final class NoticeViewModel {
-    private let fetchNoticeUseCase: FetchNoticeUseCase
+    private let fetchNoticeAllUseCase: FetchNoticeAllUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticeUseCase: any FetchNoticeUseCase
+        fetchNoticeAllUseCase: any FetchNoticeAllUseCase
     ) {
-        self.fetchNoticeUseCase = fetchNoticeUseCase
+        self.fetchNoticeAllUseCase = fetchNoticeAllUseCase
     }
 
     public struct Input {
@@ -30,16 +30,39 @@ public final class NoticeViewModel {
         let output = Output()
 
         input.fetchNotice
-            .flatMap { [fetchNoticeUseCase] _ -> Single<[FetchNoticeEntity]> in
-                return fetchNoticeUseCase.execute(type: .all)
+            .flatMap { [fetchNoticeAllUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticeAllUseCase.execute()
                     .catchAndReturn([])
+            }
+            .map { notices in
+                let readIDs = Set(PreferenceManager.readNoticeIDs ?? [])
+                return notices.map { notice in
+                    var notice = notice
+                    notice.isRead = readIDs.contains(notice.id)
+                    return notice
+                }
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
         input.didTapList
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { $0.1[$0.0.row] }
+            .map { selectedIndexPath, notices in
+                let selecterdID = notices[selectedIndexPath.row].id
+                return notices.map { notice in
+                    var updatedNotice = notice
+                    updatedNotice.isRead = (notice.id == selecterdID) ? true : notice.isRead
+                    return updatedNotice
+                }
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        input.didTapList
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { selectedIndexPath, entities in
+                entities[selectedIndexPath.row]
+            }
             .bind(to: output.goNoticeDetailScene)
             .disposed(by: disposeBag)
 
