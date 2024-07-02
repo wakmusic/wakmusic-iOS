@@ -36,6 +36,10 @@ public extension AppComponent {
         UnknownPlaylistDetailComponent(parent: self)
     }
 
+    var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory {
+        WakmusicPlaylistDetailComponent(parent: self)
+    }
+
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
             RemotePlaylistDataSourceImpl(keychain: keychain)
@@ -99,6 +103,12 @@ public extension AppComponent {
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
+        shared {
+            CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

@@ -6,7 +6,7 @@ import UIKit
 
 public protocol WakmusicRecommendDependency: Dependency {
     var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
-    var playlistDetailFactory: any PlaylistDetailFactory { get }
+    var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
 }
 
 public final class WakmusicRecommendComponent: Component<WakmusicRecommendDependency> {
@@ -16,7 +16,7 @@ public final class WakmusicRecommendComponent: Component<WakmusicRecommendDepend
         )
 
         return WakmusicRecommendViewController(
-            playlistDetailFactory: dependency.playlistDetailFactory,
+            wakmusicPlaylistDetailFactory: dependency.wakmusicPlaylistDetailFactory,
             reactor: reactor
         )
     }

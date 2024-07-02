@@ -13,6 +13,7 @@ public protocol BeforeSearchDependency: Dependency {
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory { get }
+    var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
@@ -22,6 +23,7 @@ public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
             textPopUpFactory: dependency.textPopUpFactory,
             myPlaylistDetailFactory: dependency.myPlaylistDetailFactory,
             unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory,
+            wakmusicPlaylistDetailFactory: dependency.wakmusicPlaylistDetailFactory,
             reactor: BeforeSearchReactor(
                 fetchCurrentVideoUseCase: dependency.fetchCurrentVideoUseCase,
                 fetchRecommendPlaylistUseCase: dependency.fetchRecommendPlaylistUseCase

@@ -8,15 +8,16 @@ import SongsDomainInterface
 import Utility
 
 #warning("구독 이후 Mutation 반영하는거")
-final class UnknownPlaylistDetailReactor: Reactor {
+final class WakmusicPlaylistDetailReactor: Reactor {
     let key: String
+
+    var disposeBag = DisposeBag()
 
     enum Action {
         case viewDidLoad
         case selectAll
         case deselectAll
         case itemDidTap(Int)
-        case subscriptionButtonDidTap
     }
 
     enum Mutation {
@@ -25,7 +26,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
-        case updateSubscribeState(Bool)
         case showToast(String)
     }
 
@@ -34,30 +34,19 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var dataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
-        var isSubscribing: Bool
         @Pulse var toastMessage: String?
     }
 
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
-    private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
-    private let checkSubscriptionUseCase: any CheckSubscriptionUseCase
-
-    private let logoutUseCase: any LogoutUseCase
 
     init(
         key: String,
-        fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
-        subscribePlaylistUseCase: any SubscribePlaylistUseCase,
-        checkSubscriptionUseCase: any CheckSubscriptionUseCase,
-        logoutUseCase: any LogoutUseCase
+        fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
 
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
-        self.subscribePlaylistUseCase = subscribePlaylistUseCase
-        self.checkSubscriptionUseCase = checkSubscriptionUseCase
-        self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
             header: PlaylistDetailHeaderModel(
@@ -69,8 +58,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             ),
             dataSource: [],
             isLoading: false,
-            selectedCount: 0,
-            isSubscribing: false
+            selectedCount: 0
         )
     }
 
@@ -78,9 +66,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return updateDataSource()
-
-        case .subscriptionButtonDidTap:
-            return askUpdateSubscribeUsecase()
 
         case .selectAll:
             return selectAll()
@@ -113,20 +98,17 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
-
-        case let .updateSubscribeState(flag):
-            newState.isSubscribing = flag
         }
 
         return newState
     }
 }
 
-private extension UnknownPlaylistDetailReactor {
+private extension WakmusicPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchPlaylistDetailUseCase.execute(id: key, type: .unknown)
+            fetchPlaylistDetailUseCase.execute(id: key, type: .wmRecommend)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
@@ -149,25 +131,13 @@ private extension UnknownPlaylistDetailReactor {
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
-
-            checkSubscriptionUseCase.execute(key: key)
-                .asObservable()
-                .flatMap { flag -> Observable<Mutation> in
-                    return .just(.updateSubscribeState(flag))
-                }
-                .catch { error in
-                    let wmErorr = error.asWMError
-                    return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
-                    )
-                },
             .just(.updateLoadingState(false))
         ])
     }
 }
 
 /// usecase를 사용하지 않는
-private extension UnknownPlaylistDetailReactor {
+private extension WakmusicPlaylistDetailReactor {
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
@@ -212,27 +182,5 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateDataSource(dataSource)),
             .just(.updateSelectedCount(0))
         ])
-    }
-
-    func askUpdateSubscribeUsecase() -> Observable<Mutation> {
-        let currentState = currentState
-
-        let prev = currentState.isSubscribing
-
-        return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
-            .andThen(
-                .concat([
-                    .just(Mutation.updateSubscribeState(!prev)),
-                    .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
-                ])
-            )
-            .catch { error in
-                let wmError = error.asWMError
-                return .just(.showToast(wmError.errorDescription!))
-            }
-    }
-
-    func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
-        return .just(.updateSubscribeState(flag))
     }
 }
