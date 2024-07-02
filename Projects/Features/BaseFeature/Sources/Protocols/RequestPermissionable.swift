@@ -5,47 +5,20 @@ import UIKit
 import Utility
 
 public enum RequestPermissionType {
-    ///  case camera
     case photoLibrary
 }
 
 public protocol RequestPermissionable: AnyObject {
-    ///  func requestCameraPermission()
     func requestPhotoLibraryPermission()
     func showErrorMessage(type: RequestPermissionType)
-    ///    func showCamera()
     func showPhotoLibrary()
 }
 
 public extension RequestPermissionable {
-    ///  func showCamera() {}
     func showPhotoLibrary() {}
 }
 
 public extension RequestPermissionable where Self: UIViewController {
-//    func requestCameraPermission() {
-//        let cameraMediaType = AVMediaType.video
-//        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-//
-//        switch cameraAuthorizationStatus {
-//        case .denied, .restricted:
-//            self.showErrorMessage(type: .camera)
-//        case .authorized:
-//            self.showCamera()
-//        case .notDetermined:
-//            AVCaptureDevice.requestAccess(for: cameraMediaType) { granted in
-//                if granted {
-//                    DispatchQueue.main.async {
-//                        self.showCamera()
-//                    }
-//                } else {
-//                    self.showErrorMessage(type: .camera)
-//                }
-//            }
-//        default: return
-//        }
-//    }
-
     func requestPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {

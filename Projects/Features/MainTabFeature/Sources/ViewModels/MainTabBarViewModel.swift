@@ -1,11 +1,3 @@
-//
-//  MainTabBarViewModel.swift
-//  MainTabFeature
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import NoticeDomainInterface
 import RxRelay
@@ -13,17 +5,21 @@ import RxSwift
 import Utility
 
 public final class MainTabBarViewModel {
-    private let fetchNoticeUseCase: FetchNoticeUseCase
+    private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
+    private let fetchNoticeIDListUseCase: FetchNoticeIDListUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        fetchNoticeUseCase: any FetchNoticeUseCase
+        fetchNoticePopupUseCase: any FetchNoticePopupUseCase,
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     ) {
-        self.fetchNoticeUseCase = fetchNoticeUseCase
+        self.fetchNoticePopupUseCase = fetchNoticePopupUseCase
+        self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
     }
 
     public struct Input {
         let fetchNoticePopup: PublishSubject<Void> = PublishSubject()
+        let fetchNoticeIDList: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -32,22 +28,37 @@ public final class MainTabBarViewModel {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let igoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredNoticeIDs ?? []
-        DEBUG_LOG("igoredNoticeIds: \(igoredNoticeIds)")
+        let ignoredPopupIDs: [Int] = Utility.PreferenceManager.ignoredPopupIDs ?? []
+        DEBUG_LOG("ignoredPopupIDs: \(ignoredPopupIDs)")
 
         input.fetchNoticePopup
-            .flatMap { [fetchNoticeUseCase] _ -> Single<[FetchNoticeEntity]> in
-                return fetchNoticeUseCase.execute(type: .popup)
+            .flatMap { [fetchNoticePopupUseCase] _ -> Single<[FetchNoticeEntity]> in
+                return fetchNoticePopupUseCase.execute()
                     .catchAndReturn([])
             }
             .map { entities in
-                guard !igoredNoticeIds.isEmpty else { return entities }
+                guard !ignoredPopupIDs.isEmpty else { return entities }
                 return entities.filter { entity in
-                    return !igoredNoticeIds.contains(where: { $0 == entity.id })
+                    return !ignoredPopupIDs.contains(where: { $0 == entity.id })
                 }
             }
-            .debug("igoredNoticeIds")
+            .debug("ignoredPopupIDs")
             .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        input.fetchNoticeIDList
+            .filter {
+                let readNoticeIDs = PreferenceManager.readNoticeIDs ?? []
+                return readNoticeIDs.isEmpty
+            }
+            .flatMap { [fetchNoticeIDListUseCase] _ -> Single<FetchNoticeIDListEntity> in
+                return fetchNoticeIDListUseCase.execute()
+                    .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
+            }
+            .map { $0.data }
+            .bind { allNoticeIDs in
+                PreferenceManager.readNoticeIDs = allNoticeIDs
+            }
             .disposed(by: disposeBag)
 
         return output

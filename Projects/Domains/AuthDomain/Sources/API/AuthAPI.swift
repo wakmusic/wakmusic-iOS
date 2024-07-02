@@ -7,6 +7,7 @@ import Moya
 public enum AuthAPI {
     case fetchToken(providerType: ProviderType, token: String)
     case reGenerateAccessToken
+    case logout
 }
 
 private struct FetchTokenRequestParameters: Encodable {
@@ -29,6 +30,8 @@ extension AuthAPI: WMAPI {
             return "/app"
         case .reGenerateAccessToken:
             return "/token"
+        case .logout:
+            return "/logout"
         }
     }
 
@@ -37,6 +40,8 @@ extension AuthAPI: WMAPI {
         case .fetchToken:
             return .post
         case .reGenerateAccessToken:
+            return .post
+        case .logout:
             return .post
         }
     }
@@ -56,6 +61,9 @@ extension AuthAPI: WMAPI {
             )
         case .reGenerateAccessToken:
             return .requestPlain
+
+        case .logout:
+            return .requestPlain
         }
     }
 
@@ -64,6 +72,9 @@ extension AuthAPI: WMAPI {
         case .fetchToken:
             return .none
         case .reGenerateAccessToken:
+            return .refreshToken
+
+        case .logout:
             return .refreshToken
         }
     }

@@ -19,7 +19,8 @@ public final class PreferenceManager {
         case recentRecords // 최근 검색어
         case startPage // 시작 페이지(탭)
         case appPermissionChecked // 앱 권한팝업 승인
-        case ignoredNoticeIDs // 다시보지 않는 공지 IDs
+        case ignoredPopupIDs // 다시보지 않는 팝업 IDs
+        case readNoticeIDs // 이미 읽은 공지 IDs
     }
 
     @UserDefaultWrapper(key: Constants.recentRecords.rawValue, defaultValue: nil)
@@ -34,8 +35,11 @@ public final class PreferenceManager {
     @UserDefaultWrapper(key: Constants.appPermissionChecked.rawValue, defaultValue: nil)
     public static var appPermissionChecked: Bool?
 
-    @UserDefaultWrapper(key: Constants.ignoredNoticeIDs.rawValue, defaultValue: nil)
-    public static var ignoredNoticeIDs: [Int]?
+    @UserDefaultWrapper(key: Constants.ignoredPopupIDs.rawValue, defaultValue: nil)
+    public static var ignoredPopupIDs: [Int]?
+
+    @UserDefaultWrapper(key: Constants.readNoticeIDs.rawValue, defaultValue: nil)
+    public static var readNoticeIDs: [Int]?
 }
 
 @propertyWrapper

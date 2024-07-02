@@ -46,7 +46,7 @@ public final class ProfilePopViewModel {
 
                 var newModel = model
                 newModel.indices
-                    .forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].type) }
+                    .forEach { newModel[$0].isSelected = (currentProfile == newModel[$0].name) }
                 return newModel
             }
             .bind(to: output.dataSource)
@@ -78,25 +78,35 @@ public final class ProfilePopViewModel {
             .flatMap { [weak self] id -> Observable<BaseEntity> in
                 guard let self = self else { return Observable.empty() }
                 return self.setProfileUseCase.execute(image: id)
-                    .catch { [output, logoutUseCase] error in
-
+                    .asObservable()
+                    .catch { [output, logoutUseCase] error -> Observable<BaseEntity> in
                         let wmError = error.asWMError
 
                         if wmError == .tokenExpired {
                             output.onLogout.accept(error)
                             return logoutUseCase.execute()
                                 .andThen(.never())
+                                .catch { error in
+                                    return Observable<BaseEntity>.create { observable in
+                                        observable.onNext(BaseEntity(
+                                            status: 0,
+                                            description: error.asWMError.errorDescription ?? ""
+                                        ))
+                                        observable.onCompleted()
+                                        return Disposables.create {}
+                                    }
+                                }
                         } else {
-                            return Single<BaseEntity>.create { single in
-                                single(.success(BaseEntity(
+                            return Observable<BaseEntity>.create { observable in
+                                observable.onNext(BaseEntity(
                                     status: 0,
                                     description: error.asWMError.errorDescription ?? ""
-                                )))
+                                ))
+                                observable.onCompleted()
                                 return Disposables.create {}
                             }
                         }
-
-                    }.asObservable()
+                    }
             }
             .withLatestFrom(input.setProfileRequest) { ($0, $1) }
             .do(onNext: { [weak self] model, profile in

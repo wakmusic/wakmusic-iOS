@@ -59,6 +59,13 @@ public extension UIViewController {
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
         attributes.roundCorners = .all(radius: 20)
+        attributes.entranceAnimation = EKAttributes.Animation.init(
+            translate: .init(duration: 0.3),
+            fade: .init(from: 0, to: 1, duration: 0.3)
+        )
+        attributes.exitAnimation = EKAttributes.Animation.init(
+            fade: .init(from: 1, to: 0, duration: 0.3)
+        )
 
         if let verticalOffset = verticalOffset {
             attributes.positionConstraints.verticalOffset = verticalOffset

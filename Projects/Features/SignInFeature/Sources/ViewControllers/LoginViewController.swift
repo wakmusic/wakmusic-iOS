@@ -1,9 +1,12 @@
 import BaseFeature
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SafariServices
+import SnapKit
+import Then
 import UIKit
 import Utility
 
@@ -31,6 +34,25 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var privacyButton: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var copyrightLabel: UILabel!
+
+    private lazy var loadingContentView = UIView().then {
+        $0.backgroundColor = .black.withAlphaComponent(0.4)
+        view.addSubview($0)
+        $0.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        $0.isHidden = true
+    }
+
+    private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.color = .white
+        $0.type = .circleStrokeSpin
+        loadingContentView.addSubview($0)
+        $0.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(30)
+        }
+    }
 
     private var viewModel: LoginViewModel!
     private lazy var input = viewModel.input
@@ -74,6 +96,17 @@ private extension LoginViewController {
                     })
                 } else {
                     owner.dismiss(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+
+        output.showLoading
+            .bind(with: self) { owner, show in
+                owner.loadingContentView.isHidden = !show
+                if show {
+                    owner.activityIndicator.startAnimating()
+                } else {
+                    owner.activityIndicator.stopAnimating()
                 }
             }
             .disposed(by: disposeBag)

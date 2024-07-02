@@ -32,6 +32,7 @@ public final class ArtistViewController:
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
+        LogManager.analytics(ArtistAnalyticsLog.viewPage(pageName: "artist"))
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -57,6 +58,7 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
+                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
                 if entity.id == "jingburger" {
                     let viewController = owner.lyricHighlightingFactory.makeView(
                         model: .init(songID: "fgSXAKsq-Vo", title: "리와인드 (RE:WIND)", artist: "이세계아이돌")

@@ -63,7 +63,15 @@ public final class ContainSongsViewModel: ViewModelType {
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
                             return logoutUseCase.execute()
-                                .andThen(.never())
+                                .asObservable()
+                                .catch { error in
+                                    let description = error.asWMError.errorDescription ?? ""
+                                    output.showToastMessage.onNext(BaseEntity(status: 0, description: description))
+                                    return Observable.never()
+                                }
+                                .flatMap { _ in
+                                    Observable.never()
+                                }
                         } else {
                             return Observable.error(wmError)
                         }

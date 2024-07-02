@@ -1,4 +1,5 @@
 import AuthDomainInterface
+import BaseDomainInterface
 import RxSwift
 
 public struct LogoutUseCaseImpl: LogoutUseCase {

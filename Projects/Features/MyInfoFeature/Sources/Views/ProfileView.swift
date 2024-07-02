@@ -107,7 +107,7 @@ extension ProfileView {
 extension ProfileView: ProfileStateProtocol {
     func updateProfileImage(image: String) {
         imageView.kf.setImage(
-            with: URL(string: WMImageAPI.fetchProfile(name: image, version: 0).toString),
+            with: URL(string: image),
             placeholder: DesignSystemAsset.MyInfo.iconColor.image,
             options: [
                 .transition(.fade(0.5)),

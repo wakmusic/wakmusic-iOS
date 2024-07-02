@@ -21,15 +21,19 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.spacing = 0
     }
 
-    let songLabel = UILabel().then {
-        $0.textColor = DesignSystemAsset.BlueGrayColor.gray25.color
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-    }
+    let songLabel = WMFlowLabel(
+        textColor: DesignSystemAsset.BlueGrayColor.gray25.color,
+        font: .t5(weight: .medium),
+        alignment: .center,
+        kernValue: -0.5
+    )
 
-    let artistLabel = UILabel().then {
-        $0.textColor = DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6)
-        $0.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-    }
+    let artistLabel = WMFlowLabel(
+        textColor: DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6),
+        font: .t6(weight: .medium),
+        alignment: .center,
+        kernValue: -0.5
+    )
 
     private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
         $0.scrollDirection = .vertical

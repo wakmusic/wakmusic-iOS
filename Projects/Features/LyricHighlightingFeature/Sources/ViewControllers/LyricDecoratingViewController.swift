@@ -322,7 +322,7 @@ private extension LyricDecoratingViewController {
         }
 
         indicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.center.equalTo(decorateShareContentView.snp.center)
             $0.size.equalTo(30)
         }
     }

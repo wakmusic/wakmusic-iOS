@@ -2,16 +2,14 @@ import Foundation
 
 public struct ProfileListEntity: Equatable {
     public init(
-        type: String,
-        version: Int,
-        isSelected: Bool
+        name: String,
+        url: String
     ) {
-        self.type = type
-        self.version = version
-        self.isSelected = false
+        self.name = name
+        self.url = url
     }
 
-    public let type: String
-    public var isSelected: Bool
-    public var version: Int
+    public let name: String
+    public let url: String
+    public var isSelected: Bool = false
 }
