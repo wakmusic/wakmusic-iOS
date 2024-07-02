@@ -15,7 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
-                rootViewController: ThumbnailPopupViewController(reactor: ThumbnailPopupReactor())
+                rootViewController: UIViewController()
             )
         )
         window?.rootViewController = viewController

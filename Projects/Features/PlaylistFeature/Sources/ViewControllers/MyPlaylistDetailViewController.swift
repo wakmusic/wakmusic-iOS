@@ -8,17 +8,14 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import PlaylistFeatureInterface
 
 #warning("송카트, 공유하기, 이미지 업로드")
 #warning("다양한 바텀시트 겹침 현상")
 #warning("다운 샘플링")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
-    PlaylistEditSheetViewType, PlaylistImageEditSheetViewType,
-    SongCartViewType {
-    var playlistImageBottomSheetView: BaseFeature.BottomSheetView!
-
-    var playlistImageEditSheetView: PlaylistImageEditSheetView!
+    PlaylistEditSheetViewType, SongCartViewType {
 
     var playlisteditSheetView: PlaylistEditSheetView!
 
@@ -31,6 +28,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
+    
+    private let thumbnailPopupFactory: any ThumbnailPopupFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -78,11 +77,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         reactor: MyPlaylistDetailReactor,
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory
+        textPopUpFactory: any TextPopUpFactory,
+        thumbnailPopupFactory: any ThumbnailPopupFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
+        self.thumbnailPopupFactory = thumbnailPopupFactory
 
         super.init(reactor: reactor)
     }
@@ -215,9 +216,12 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
+                
+                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
+                
+                owner.showBottomSheet(content: vc,size: .fixed(296))
+                
 
-                owner.showplaylistImageEditSheet(in: owner.view)
-                owner.playlistImageEditSheetView.delegate = owner
             }
             .disposed(by: disposeBag)
     }
@@ -363,7 +367,6 @@ extension MyPlaylistDetailViewController {
     func hideAll() {
         hideplaylistEditSheet()
         hideSongCart()
-        hideplaylistImageEditSheet()
         reactor?.action.onNext(.deselectAll)
     }
 }
@@ -508,21 +511,6 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     }
 }
 
-/// 갤러리 / 기본 이미지 바텀시트 델리게이트
-extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
-    func didTap(_ type: PlaylistImageEditType) {
-        switch type {
-        case .gallery:
-            requestPhotoLibraryPermission()
-
-        case .default:
-            #warning("기본 팝업")
-            break
-        }
-
-        self.hideplaylistImageEditSheet()
-    }
-}
 
 extension MyPlaylistDetailViewController: RequestPermissionable {
     public func showPhotoLibrary() {
@@ -588,4 +576,18 @@ extension MyPlaylistDetailViewController: UIImagePickerControllerDelegate, UINav
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+}
+
+extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
+    func didTap(_ index: Int, _ cost: Int) {
+        
+        if index == 0 {
+            
+        } else {
+            requestPhotoLibraryPermission()
+        }
+        
+        
+    }
+    
 }

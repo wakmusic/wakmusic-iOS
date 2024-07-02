@@ -39,6 +39,10 @@ public extension AppComponent {
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory {
         WakmusicPlaylistDetailComponent(parent: self)
     }
+    
+    var thumbnailPopupFactory: any ThumbnailPopupFactory {
+        ThumbnailPopupComponent(parent: self)
+    }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
@@ -111,4 +115,5 @@ public extension AppComponent {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
+    
 }
