@@ -27,7 +27,7 @@ extension ArtistListCell {
             string: model.krName,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray600.color,
                 .kern: -0.5
             ]
         )

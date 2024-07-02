@@ -13,48 +13,52 @@ import Moya
 import NoticeDomainInterface
 
 public enum NoticeAPI {
-    case fetchNotice(type: NoticeType)
     case fetchNoticeCategories
+    case fetchNoticePopup
+    case fetchNoticeAll
+    case fetchNoticeIDList
 }
 
 extension NoticeAPI: WMAPI {
     public var domain: WMDomain {
-        switch self {
-        case .fetchNotice,
-             .fetchNoticeCategories:
-            return .notice
-        }
+        return .notice
     }
 
     public var urlPath: String {
         switch self {
-        case let .fetchNotice(type):
-            return "/\(type.rawValue)"
         case .fetchNoticeCategories:
             return "/categories"
+        case .fetchNoticePopup:
+            return "/popup"
+        case .fetchNoticeAll:
+            return "/all"
+        case .fetchNoticeIDList:
+            return "/ids"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchNotice,
-             .fetchNoticeCategories:
+        case .fetchNoticeCategories:
+            return .get
+        case .fetchNoticePopup:
+            return .get
+        case .fetchNoticeAll:
+            return .get
+        case .fetchNoticeIDList:
             return .get
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchNotice:
-            return .requestParameters(
-                parameters: [
-                    "os": "ios",
-                    "version": Bundle.main
-                        .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-                ],
-                encoding: URLEncoding.queryString
-            )
         case .fetchNoticeCategories:
+            return .requestPlain
+        case .fetchNoticePopup:
+            return .requestPlain
+        case .fetchNoticeAll:
+            return .requestPlain
+        case .fetchNoticeIDList:
             return .requestPlain
         }
     }

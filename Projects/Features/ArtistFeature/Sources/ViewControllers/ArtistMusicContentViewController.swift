@@ -198,9 +198,16 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
         }
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                ArtistAnalyticsLog.clickArtistPlayButton(type: "all", artist: viewModel.model?.id ?? "")
+            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+
         case .shufflePlay:
+            LogManager.analytics(
+                ArtistAnalyticsLog.clickArtistPlayButton(type: "random", artist: viewModel.model?.id ?? "")
+            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs.shuffled())
             input.allSongSelected.onNext(false)
         }

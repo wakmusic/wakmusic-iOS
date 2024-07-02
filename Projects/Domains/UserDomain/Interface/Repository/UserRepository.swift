@@ -13,4 +13,7 @@ public protocol UserRepository {
     func deleteFavoriteList(ids: [String]) -> Single<BaseEntity>
     func fetchUserInfo() -> Single<UserInfoEntity>
     func withdrawUserInfo() -> Single<BaseEntity>
+    func fetchFruitList() -> Single<[FruitEntity]>
+    func fetchFruitDrawStatus() -> Single<FruitDrawStatusEntity>
+    func drawFruit() -> Single<FruitEntity>
 }

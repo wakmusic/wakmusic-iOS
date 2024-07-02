@@ -15,6 +15,9 @@ public enum UserAPI {
     case setProfile(image: String)
     case setUserName(name: String)
     case withdrawUserInfo
+    case fetchFruitList
+    case fetchFruitDrawStatus
+    case drawFruit
 }
 
 extension UserAPI: WMAPI {
@@ -43,7 +46,13 @@ extension UserAPI: WMAPI {
         case .setUserName:
             return "/profile/name"
         case .withdrawUserInfo:
-            return "/user/delete"
+            return "/delete"
+        case .fetchFruitList:
+            return "/fruit/list"
+        case .fetchFruitDrawStatus:
+            return "/fruit/status"
+        case .drawFruit:
+            return "/fruit/draw"
         }
     }
 
@@ -69,6 +78,12 @@ extension UserAPI: WMAPI {
             return .patch
         case .withdrawUserInfo:
             return .delete
+        case .fetchFruitList:
+            return .get
+        case .fetchFruitDrawStatus:
+            return .get
+        case .drawFruit:
+            return .post
         }
     }
 
@@ -103,6 +118,12 @@ extension UserAPI: WMAPI {
         case let .setUserName(name):
             return .requestJSONEncodable(SetUserNameRequestDTO(name: name))
         case .withdrawUserInfo:
+            return .requestPlain
+        case .fetchFruitList:
+            return .requestPlain
+        case .fetchFruitDrawStatus:
+            return .requestPlain
+        case .drawFruit:
             return .requestPlain
         }
     }

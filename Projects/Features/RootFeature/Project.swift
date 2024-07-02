@@ -11,8 +11,8 @@ let project = Project.module(
             spec: .init(
                 resources: ["Resources/**"],
                 dependencies: [
-                    .feature(target: .BaseFeature),
                     .feature(target: .MainTabFeature),
+                    .feature(target: .BaseFeature, type: .interface),
                     .domain(target: .AppDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface)
                 ]

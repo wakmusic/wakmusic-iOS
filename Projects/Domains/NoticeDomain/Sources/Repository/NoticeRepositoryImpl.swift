@@ -1,11 +1,3 @@
-//
-//  NoticeRepositoryImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/04/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import NoticeDomainInterface
 import RxSwift
@@ -19,11 +11,19 @@ public final class NoticeRepositoryImpl: NoticeRepository {
         self.remoteNoticeDataSource = remoteNoticeDataSource
     }
 
-    public func fetchNotice(type: NoticeType) -> Single<[FetchNoticeEntity]> {
-        remoteNoticeDataSource.fetchNotice(type: type)
-    }
-
     public func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity> {
         remoteNoticeDataSource.fetchNoticeCategories()
+    }
+
+    public func fetchNoticePopup() -> Single<[FetchNoticeEntity]> {
+        remoteNoticeDataSource.fetchNoticePopup()
+    }
+
+    public func fetchNoticeAll() -> Single<[FetchNoticeEntity]> {
+        remoteNoticeDataSource.fetchNoticeAll()
+    }
+
+    public func fetchNoticeIDList() -> Single<FetchNoticeIDListEntity> {
+        remoteNoticeDataSource.fetchNoticeIDList()
     }
 }
