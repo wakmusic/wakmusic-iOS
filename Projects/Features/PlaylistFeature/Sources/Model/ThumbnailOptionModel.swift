@@ -1,7 +1,6 @@
 import Foundation
 
 struct ThumbnailOptionModel: Hashable {
-    
     var title: String
     var cost: Int
 
@@ -9,5 +8,4 @@ struct ThumbnailOptionModel: Hashable {
         self.title = title
         self.cost = cost
     }
-
 }
