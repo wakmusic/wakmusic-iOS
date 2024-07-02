@@ -211,13 +211,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 owner.showBottomSheet(content: vc, size: .fixed(296))
 
-                DEBUG_LOG("탭 이름 변경 버튼")
+        
             }
             .disposed(by: disposeBag)
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
-                DEBUG_LOG("카메라 버튼 탭")
+
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
@@ -516,7 +516,7 @@ extension MyPlaylistDetailViewController: PlaylistImageEditSheetDelegate {
     func didTap(_ type: PlaylistImageEditType) {
         switch type {
         case .gallery:
-            showPhotoLibrary()
+            requestPhotoLibraryPermission()
 
         case .default:
             #warning("기본 팝업")
