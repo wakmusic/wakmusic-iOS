@@ -210,14 +210,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
 
                 owner.showBottomSheet(content: vc, size: .fixed(296))
-
-        
             }
             .disposed(by: disposeBag)
 
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
-
 
                 owner.showplaylistImageEditSheet(in: owner.view)
                 owner.playlistImageEditSheetView.delegate = owner
