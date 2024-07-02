@@ -6,6 +6,7 @@ import PlaylistDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
+import Utility
 
 public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlayListUseCase
@@ -81,9 +82,12 @@ public final class ContainSongsViewModel: ViewModelType {
                 let wmError: WMError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
             })
+            .withLatestFrom(PreferenceManager.$userInfo){ ($0, $1) }
+            .map({ playlist, userInfo in
+                return playlist.filter{$0.userId == userInfo?.ID}
+            })
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        #warning("내 플리 목록만 가져오도록 필터링 dataSource.userId == 현재 로그인한 ID")
 
         input.containSongWithKey
             .flatMap { [weak self] (key: String) -> Observable<AddSongEntity> in
