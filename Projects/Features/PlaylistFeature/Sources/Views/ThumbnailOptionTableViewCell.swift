@@ -18,18 +18,35 @@ final class ThumbnailOptionTableViewCell: UITableViewCell {
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t5(weight: .medium)
-    )
+    ).then {
+        $0.numberOfLines = 2
+    }
+
+    private let productView: UIView = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+    }.then {
+        $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
+    }
+
+    private let noteImageView: UIImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.Playlist.miniNote.image
+    }
 
     private let costLabel: WMLabel = WMLabel(
         text: "",
         textColor: .white,
         font: .t6(weight: .medium),
         alignment: .center
-    ).then {
-        $0.layer.cornerRadius = 4
-        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
-        $0.clipsToBounds = true
-    }
+    )
+
+    private let productTypeLabel: WMLabel = WMLabel(
+        text: "",
+        textColor: .white,
+        font: .t7(weight: .bold),
+        alignment: .center
+    )
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,7 +61,8 @@ final class ThumbnailOptionTableViewCell: UITableViewCell {
 
     func addViews() {
         self.contentView.addSubviews(superView)
-        self.superView.addSubviews(titleLabel, costLabel)
+        self.superView.addSubviews(titleLabel, productView)
+        self.productView.addSubviews(noteImageView, costLabel, productTypeLabel)
     }
 
     func setLayout() {
@@ -56,14 +74,34 @@ final class ThumbnailOptionTableViewCell: UITableViewCell {
 
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(30)
+            $0.verticalEdges.equalToSuperview()
+        }
+
+        productView.snp.makeConstraints {
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(15)
+            $0.trailing.equalToSuperview().offset(-30)
             $0.centerY.equalToSuperview()
+            $0.width.greaterThanOrEqualTo(72)
+            $0.height.equalTo(30)
+        }
+
+        noteImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(10)
+            $0.centerY.equalToSuperview()
+            $0.size.equalTo(14)
         }
 
         costLabel.snp.makeConstraints {
-            $0.width.equalTo(72)
-            $0.height.equalTo(30)
-            $0.trailing.equalToSuperview().inset(30)
-            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(noteImageView.snp.trailing).offset(2)
+            $0.width.greaterThanOrEqualTo(9)
+            $0.verticalEdges.equalToSuperview()
+        }
+
+        productTypeLabel.snp.makeConstraints {
+            $0.leading.equalTo(costLabel.snp.trailing).offset(6)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.width.equalTo(21)
+            $0.verticalEdges.equalToSuperview()
         }
     }
 }
@@ -71,31 +109,7 @@ final class ThumbnailOptionTableViewCell: UITableViewCell {
 extension ThumbnailOptionTableViewCell {
     public func update(_ model: ThumbnailOptionModel) {
         titleLabel.text = model.title
-
-        let attributedString = NSMutableAttributedString(string: "")
-
-        let image = DesignSystemAsset.Playlist.miniNote.image
-
-        let padding = NSTextAttachment()
-        padding.bounds = CGRect(x: 0, y: -2, width: 1, height: 0)
-
-        let padding2 = NSTextAttachment()
-        padding2.bounds = CGRect(x: 0, y: -2, width: 5, height: 0)
-        let imageAttachment = NSTextAttachment()
-
-        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 14, height: 14)
-        imageAttachment.image = image
-
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
-        attributedString.append(NSAttributedString(attachment: padding))
-        attributedString.append(NSAttributedString(string: "\(model.cost)"))
-        attributedString.append(NSAttributedString(attachment: padding2))
-        attributedString.append(NSAttributedString(
-            string: model.cost == .zero ? "무료" : "구매",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 12.18)]
-        ))
-        attributedString.append(NSAttributedString(attachment: padding))
-
-        costLabel.attributedText = attributedString
+        costLabel.text = "\(model.cost)"
+        productTypeLabel.text = model.cost == .zero ? "무료" : "구매"
     }
 }
