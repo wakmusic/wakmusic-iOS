@@ -1,5 +1,6 @@
 import AuthDomainInterface
 import BaseDomain
+import BaseDomainInterface
 import Foundation
 import RxSwift
 
@@ -14,5 +15,10 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
         request(.reGenerateAccessToken)
             .map(AuthLoginResponseDTO.self)
             .map { $0.toDomain() }
+    }
+
+    public func logout() -> Completable {
+        request(.logout)
+            .asCompletable()
     }
 }

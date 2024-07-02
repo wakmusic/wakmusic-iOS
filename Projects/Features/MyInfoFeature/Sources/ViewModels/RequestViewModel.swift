@@ -61,6 +61,10 @@ public final class RequestViewModel: ViewModelType {
 
                 return logoutUseCase.execute()
                     .andThen(Single.just(entity))
+                    .catch { error in
+                        let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
+                        return Single<BaseEntity>.just(baseEntity)
+                    }
             }
             .bind(to: output.withDrawResult)
             .disposed(by: disposeBag)
