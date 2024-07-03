@@ -330,9 +330,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .compactMap { $0 }
             .bind(with: self) { owner, data in
                 if let navigationController = owner.presentedViewController as? UINavigationController {
-                    navigationController.pushViewController(CheckThumbnailViewController(), animated: true)
+                    navigationController.pushViewController(
+                        CheckThumbnailViewController(delegate: owner, imageData: data), animated: true)
                 }
-                owner.headerView.updateThumbnail(data)
+                //owner.headerView.updateThumbnail(data)
             }
             .disposed(by: disposeBag)
     }
@@ -370,7 +371,7 @@ extension MyPlaylistDetailViewController {
     func hideAll() {
         hideplaylistEditSheet()
         hideSongCart()
-        reactor?.action.onNext(.deselectAll)
+        reactor?.action.onNext(.restore)
     }
 }
 
@@ -524,7 +525,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         picker.delegate = self
 
         let pickerToWrapNavigationController = picker.wrapNavigationController
-        pickerToWrapNavigationController.modalPresentationStyle = .fullScreen
+        pickerToWrapNavigationController.modalPresentationStyle = .overFullScreen
         pickerToWrapNavigationController.setNavigationBarHidden(true, animated: false)
 
         self.present(pickerToWrapNavigationController, animated: true)
@@ -595,4 +596,11 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
             requestPhotoLibraryPermission()
         }
     }
+}
+
+extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
+    func confirm(_ imageData: Data) {
+        
+    }
+    
 }

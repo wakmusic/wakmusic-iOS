@@ -18,6 +18,7 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
     )
 
     private let tableView: UITableView = UITableView().then {
+        $0.isScrollEnabled = false
         $0.register(ThumbnailOptionTableViewCell.self, forCellReuseIdentifier: ThumbnailOptionTableViewCell.identifier)
         $0.separatorStyle = .none
     }
