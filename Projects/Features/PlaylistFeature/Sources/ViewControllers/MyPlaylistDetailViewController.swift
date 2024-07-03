@@ -9,6 +9,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import LogManager
 
 #warning("송카트, 공유하기, 이미지 업로드")
 #warning("다양한 바텀시트 겹침 현상")
@@ -85,6 +86,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.thumbnailPopupFactory = thumbnailPopupFactory
 
         super.init(reactor: reactor)
+    }
+
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
     override func viewDidLoad() {
@@ -323,7 +328,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         sharedState.map(\.replaceThumnbnailData)
             .compactMap { $0 }
-            .distinctUntilChanged()
             .bind(with: self) { owner, data in
                 if let navigationController = owner.presentedViewController as? UINavigationController {
                     navigationController.pushViewController(CheckThumbnailViewController(), animated: true)
@@ -531,6 +535,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         if results.isEmpty {
+            reactor?.action.onNext(.changeThumnail(nil))
             picker.dismiss(animated: true)
             return
         }
@@ -549,8 +554,8 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             guard let image = image as? UIImage,
                                   let imageToData = image.pngData() else { return }
 
-                            DEBUG_LOG("Image: \(imageToData)")
                             let sizeMB: Double = Double(imageToData.count).megabytes
+                            DEBUG_LOG("Image: \(imageToData) > \(sizeMB)")
                             self.reactor?.action.onNext(.changeThumnail(imageToData))
                         }
                     }

@@ -3,6 +3,7 @@ import DesignSystem
 import SnapKit
 import Then
 import UIKit
+import LogManager
 
 final class CheckThumbnailViewController: UIViewController {
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -11,6 +12,10 @@ final class CheckThumbnailViewController: UIViewController {
         let dismissImage = DesignSystemAsset.Navigation.back.image
             .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
+    }
+
+    deinit {
+        LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
     override func viewDidLoad() {
@@ -35,8 +40,8 @@ private extension CheckThumbnailViewController {
     func addViews() {
         view.addSubview(wmNavigationbarView)
         wmNavigationbarView.setLeftViews([backButton])
-        backButton.addAction {
-            self.navigationController?.popViewController(animated: true)
+        backButton.addAction { [weak self] () in
+            self?.navigationController?.popViewController(animated: true)
         }
     }
 
