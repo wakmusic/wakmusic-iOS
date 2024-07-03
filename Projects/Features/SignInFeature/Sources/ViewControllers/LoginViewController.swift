@@ -35,12 +35,12 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var copyrightLabel: UILabel!
 
-    private lazy var loadingContentView = UIView().then {
+    private let loadingContentView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
         $0.isHidden = true
     }
 
-    private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
+    private let activityIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = .white
         $0.type = .circleStrokeSpin
     }
