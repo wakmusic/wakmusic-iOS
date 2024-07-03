@@ -5,10 +5,8 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import PlaylistFeatureInterface
 
-protocol CheckThumbnailDelegate: AnyObject {
-    func confirm(_ imageData: Data)
-}
 
 final class CheckThumbnailViewController: UIViewController {
     
@@ -166,6 +164,17 @@ private extension CheckThumbnailViewController {
     func bindAction() {
         backButton.addAction { [weak self] () in
             self?.navigationController?.popViewController(animated: true)
+        }
+        
+        confirmButton.addAction { [weak self] () in
+          
+            guard let data = self?.imageData else {
+                return
+            }
+            
+            self?.dismiss(animated: true, completion: {
+                self?.delegate?.receive(data)
+            })
         }
     }
 }

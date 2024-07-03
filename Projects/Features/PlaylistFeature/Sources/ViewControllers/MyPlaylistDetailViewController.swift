@@ -30,6 +30,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let textPopUpFactory: any TextPopUpFactory
 
     private let thumbnailPopupFactory: any ThumbnailPopupFactory
+    
+    private let checkThumbnailFactory: any CheckThumbnailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -78,12 +80,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        thumbnailPopupFactory: any ThumbnailPopupFactory
+        thumbnailPopupFactory: any ThumbnailPopupFactory,
+        checkThumbnailFactory: any CheckThumbnailFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
         self.thumbnailPopupFactory = thumbnailPopupFactory
+        self.checkThumbnailFactory = checkThumbnailFactory
 
         super.init(reactor: reactor)
     }
@@ -331,9 +335,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, data in
                 if let navigationController = owner.presentedViewController as? UINavigationController {
                     navigationController.pushViewController(
-                        CheckThumbnailViewController(delegate: owner, imageData: data), animated: true)
+                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true)
                 }
-                //owner.headerView.updateThumbnail(data)
             }
             .disposed(by: disposeBag)
     }
@@ -599,8 +602,8 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 }
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
-    func confirm(_ imageData: Data) {
-        
+    func receive(_ imageData: Data) {
+        headerView.updateThumbnail(imageData)
     }
     
 }
