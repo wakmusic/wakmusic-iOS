@@ -1,9 +1,9 @@
 import BaseFeature
 import DesignSystem
+import LogManager
 import SnapKit
 import Then
 import UIKit
-import LogManager
 
 final class CheckThumbnailViewController: UIViewController {
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
