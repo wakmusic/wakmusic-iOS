@@ -30,7 +30,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let textPopUpFactory: any TextPopUpFactory
 
     private let thumbnailPopupFactory: any ThumbnailPopupFactory
-    
+
     private let checkThumbnailFactory: any CheckThumbnailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -335,7 +335,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, data in
                 if let navigationController = owner.presentedViewController as? UINavigationController {
                     navigationController.pushViewController(
-                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true)
+                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true
+                    )
                 }
             }
             .disposed(by: disposeBag)
@@ -605,5 +606,4 @@ extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
         headerView.updateThumbnail(imageData)
     }
-    
 }

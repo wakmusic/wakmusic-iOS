@@ -20,7 +20,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
     var checkThumbnailFactory: any CheckThumbnailFactory { get }
-    
+
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 

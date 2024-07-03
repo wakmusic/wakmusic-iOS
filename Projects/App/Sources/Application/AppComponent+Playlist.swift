@@ -43,7 +43,7 @@ public extension AppComponent {
     var thumbnailPopupFactory: any ThumbnailPopupFactory {
         ThumbnailPopupComponent(parent: self)
     }
-    
+
     var checkThumbnailFactory: any CheckThumbnailFactory {
         CheckThumbnailComponent(parent: self)
     }
