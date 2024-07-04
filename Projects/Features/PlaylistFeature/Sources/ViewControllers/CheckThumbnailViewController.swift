@@ -83,7 +83,7 @@ final class CheckThumbnailViewController: UIViewController {
 
             containerView.heightAnchor.constraint(
                 equalToConstant: max(18, gl.heightConstraintAt(
-                    width: APP_WIDTH()-40-16,
+                    width: APP_WIDTH() - 40 - 16,
                     font: .setFont(.t7(weight: .light))
                 ))
             ).isActive = true
