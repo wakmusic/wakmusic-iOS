@@ -8,6 +8,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import LogManager
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
     SongCartViewType {
@@ -73,6 +74,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "unkwown_playlist_detail"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {

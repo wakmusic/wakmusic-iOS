@@ -8,6 +8,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import LogManager
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
     SongCartViewType {
@@ -64,6 +65,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "wakmusic_playlist_detail"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {

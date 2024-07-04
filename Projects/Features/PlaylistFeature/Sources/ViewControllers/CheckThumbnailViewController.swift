@@ -71,8 +71,6 @@ final class CheckThumbnailViewController: UIViewController {
             }
             
             containerView.backgroundColor = .yellow
-
-            
             containerView.addSubviews(imageView, label)
             
             imageView.snp.makeConstraints {
@@ -80,13 +78,10 @@ final class CheckThumbnailViewController: UIViewController {
                 $0.leading.equalToSuperview()
                 $0.centerY.equalTo(label)
             }
-            
             label.snp.makeConstraints {
                 $0.leading.equalTo(imageView.snp.trailing)
                 $0.top.bottom.trailing.equalToSuperview()
             }
-            
-
             $0.addArrangedSubview(containerView)
         }
 
