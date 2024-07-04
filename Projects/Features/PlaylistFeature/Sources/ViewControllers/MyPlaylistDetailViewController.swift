@@ -105,7 +105,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "my_playlist_detail"))
+        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "my_playlist_detail/\(reactor?.key ?? "")"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -156,12 +156,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindAction(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
 
         lockButton.rx
             .tap
             .asDriver()
             .throttle(.seconds(1))
             .drive(onNext: {
+                LogManager.analytics(PlaylistAnalyticsLog.clickLockButton(id: reactor.key ))
                 reactor.action.onNext(.privateButtonDidTap)
 
             })
@@ -226,6 +228,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         headerView.rx.cameraButtonDidTap
             .bind(with: self) { owner, _ in
 
+                LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCameraButton)
                 let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
 
                 owner.showBottomSheet(content: vc, size: .fixed(296))
@@ -477,10 +480,13 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
+            
+            reactor.action.onNext(.forceEndEditing)
 
             break
         case .addPlayList:
             #warning("재생목록 관련 구현체 구현 시 추가")
+            reactor.action.onNext(.forceEndEditing)
             break
         case .play:
             break
@@ -499,9 +505,11 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             )
 
             self.showBottomSheet(content: vc)
+            
+            reactor.action.onNext(.forceEndEditing)
         }
 
-        reactor.action.onNext(.forceEndEditing)
+        
     }
 }
 
@@ -510,8 +518,10 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
         switch type {
         case .edit:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistEditButton)
             reactor?.action.onNext(.editButtonDidTap)
         case .share:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
             #warning("공유 작업")
             break
         }
@@ -597,7 +607,11 @@ extension MyPlaylistDetailViewController: UIImagePickerControllerDelegate, UINav
 extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageOption)
+            #warning("기본이미지 선택 옵션")
+            
         } else {
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCustomImageOption)
             requestPhotoLibraryPermission()
         }
     }

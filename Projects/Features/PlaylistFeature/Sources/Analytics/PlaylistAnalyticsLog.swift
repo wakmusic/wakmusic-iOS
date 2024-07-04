@@ -2,6 +2,12 @@ import LogManager
 
 enum PlaylistAnalyticsLog: AnalyticsLogType {
     case viewPage(pageName: String)
+    case clickLockButton(id: String)
+    case clickPlaylistEditButton
+    case clickPlaylistShareButton
+    case clickPlaylistCameraButton
+    case clickPlaylistDefaultImageOption
+    case clickPlaylistCustomImageOption
 //    case clickArtistItem(artist: String)
 //    case clickArtistDescriptionButton(artist: String)
 //    case clickArtistSubscriptionButton(artist: String)
