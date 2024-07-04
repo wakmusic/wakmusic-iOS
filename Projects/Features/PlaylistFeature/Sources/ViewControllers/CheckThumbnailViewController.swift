@@ -50,8 +50,8 @@ final class CheckThumbnailViewController: UIViewController {
 
     private lazy var guideLineStackView: UIStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 2
-        $0.distribution = .fillEqually
+        $0.spacing = 4
+        $0.distribution = .fill
 
         for gl in guideLines {
             var label: WMLabel = WMLabel(
@@ -66,21 +66,28 @@ final class CheckThumbnailViewController: UIViewController {
             let containerView: UIView = UIView()
 
             let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
-                $0.contentMode = .scaleToFill
+                $0.contentMode = .scaleAspectFit
             }
 
-            containerView.backgroundColor = .yellow
             containerView.addSubviews(imageView, label)
 
             imageView.snp.makeConstraints {
-                $0.width.height.equalTo(20)
-                $0.leading.equalToSuperview()
-                $0.centerY.equalTo(label)
+                $0.size.equalTo(16)
+                $0.leading.top.equalToSuperview()
             }
             label.snp.makeConstraints {
                 $0.leading.equalTo(imageView.snp.trailing)
-                $0.top.bottom.trailing.equalToSuperview()
+                $0.top.trailing.equalToSuperview()
+                $0.height.greaterThanOrEqualTo(18)
             }
+
+            containerView.heightAnchor.constraint(
+                equalToConstant: max(18, gl.heightConstraintAt(
+                    width: APP_WIDTH()-40-16,
+                    font: .setFont(.t7(weight: .light))
+                ))
+            ).isActive = true
+
             $0.addArrangedSubview(containerView)
         }
     }
@@ -162,12 +169,12 @@ private extension CheckThumbnailViewController {
 
         guideLineTitleLabel.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(24)
         }
 
         guideLineStackView.snp.makeConstraints {
             $0.top.equalTo(guideLineTitleLabel.snp.bottom).offset(10)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.leading.equalToSuperview().inset(15)
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
         confirmButton.snp.makeConstraints {
