@@ -585,7 +585,8 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
             #warning("기본이미지 선택 옵션")
 
         } else {
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCustomImageButton
+            LogManager.analytics(
+                PlaylistAnalyticsLog.clickPlaylistCustomImageButton
             )
             requestPhotoLibraryPermission()
         }
