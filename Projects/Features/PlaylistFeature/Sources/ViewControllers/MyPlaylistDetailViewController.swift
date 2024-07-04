@@ -578,37 +578,15 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     }
 }
 
-/// 갤러리 구버전
-extension MyPlaylistDetailViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    public func imagePickerController(
-        _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
-    ) {
-        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
-            return
-        }
-
-        let imageToData: Data = image.pngData() ?? Data()
-        let sizeMB: Double = Double(imageToData.count).megabytes
-
-        self.reactor?.action.onNext(.changeThumnail(imageToData))
-
-        picker.dismiss(animated: true, completion: nil)
-    }
-
-    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-}
-
 extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageOption)
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageButton)
             #warning("기본이미지 선택 옵션")
 
         } else {
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCustomImageOption)
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCustomImageButton
+            )
             requestPhotoLibraryPermission()
         }
     }
