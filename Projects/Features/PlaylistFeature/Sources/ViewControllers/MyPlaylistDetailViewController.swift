@@ -156,14 +156,13 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindAction(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
 
         lockButton.rx
             .tap
             .asDriver()
             .throttle(.seconds(1))
             .drive(onNext: {
-                LogManager.analytics(PlaylistAnalyticsLog.clickLockButton(id: reactor.key ))
+                LogManager.analytics(PlaylistAnalyticsLog.clickLockButton(id: reactor.key))
                 reactor.action.onNext(.privateButtonDidTap)
 
             })
@@ -480,7 +479,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
-            
+
             reactor.action.onNext(.forceEndEditing)
 
             break
@@ -505,11 +504,9 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             )
 
             self.showBottomSheet(content: vc)
-            
+
             reactor.action.onNext(.forceEndEditing)
         }
-
-        
     }
 }
 
@@ -609,7 +606,7 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageOption)
             #warning("기본이미지 선택 옵션")
-            
+
         } else {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCustomImageOption)
             requestPhotoLibraryPermission()

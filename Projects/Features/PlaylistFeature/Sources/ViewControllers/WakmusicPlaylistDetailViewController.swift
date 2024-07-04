@@ -65,7 +65,8 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "wakmusic_playlist_detail/\((reactor?.key ?? ""))"))
+        LogManager
+            .analytics(PlaylistAnalyticsLog.viewPage(pageName: "wakmusic_playlist_detail/\((reactor?.key ?? ""))"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
