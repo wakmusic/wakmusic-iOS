@@ -21,9 +21,8 @@ final class CheckThumbnailViewController: UIViewController {
     }
 
     private var imageData: Data?
-    
-    
-    private  var thumnailContainerView: UIView = UIView()
+
+    private var thumnailContainerView: UIView = UIView()
 
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
         let image = UIImage(data: imageData ?? Data())
@@ -53,7 +52,7 @@ final class CheckThumbnailViewController: UIViewController {
         $0.axis = .vertical
         $0.spacing = 2
         $0.distribution = .fillEqually
-        
+
         for gl in guideLines {
             var label: WMLabel = WMLabel(
                 text: "\(gl)",
@@ -65,14 +64,14 @@ final class CheckThumbnailViewController: UIViewController {
             }
 
             let containerView: UIView = UIView()
-            
+
             let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
                 $0.contentMode = .scaleToFill
             }
-            
+
             containerView.backgroundColor = .yellow
             containerView.addSubviews(imageView, label)
-            
+
             imageView.snp.makeConstraints {
                 $0.width.height.equalTo(20)
                 $0.leading.equalToSuperview()
@@ -84,7 +83,6 @@ final class CheckThumbnailViewController: UIViewController {
             }
             $0.addArrangedSubview(containerView)
         }
-
     }
 
     private let confirmButton: UIButton = UIButton().then {
@@ -137,8 +135,6 @@ private extension CheckThumbnailViewController {
         wmNavigationbarView.setLeftViews([backButton])
         thumnailContainerView.addSubviews(thumbnailImageView)
         guideLineSuperView.addSubviews(guideLineTitleLabel, guideLineStackView, confirmButton)
-        
-        
     }
 
     func setLayout() {
@@ -147,7 +143,7 @@ private extension CheckThumbnailViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
-        
+
         thumnailContainerView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
