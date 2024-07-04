@@ -21,6 +21,9 @@ final class CheckThumbnailViewController: UIViewController {
     }
 
     private var imageData: Data?
+    
+    
+    private  var thumnailContainerView: UIView = UIView()
 
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
         let image = UIImage(data: imageData ?? Data())
@@ -28,7 +31,6 @@ final class CheckThumbnailViewController: UIViewController {
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
         $0.image = image
-        $0.backgroundColor = .yellow
     }
 
     private var guideLineSuperView: UIView = UIView().then {
@@ -43,7 +45,7 @@ final class CheckThumbnailViewController: UIViewController {
 
     private let guideLines: [String] = [
         "이미지를 변경하면 음표 열매 3개를 소모합니다.",
-        "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고asjdajsdjasdjasdjadja",
+        "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고asjdajsdjasdjasdjadjaasdasdasdasdasdadasaadsasdsadsssadadasdsadsadasㅁㄴㄹㅁㄴㅇㅁㄴㅇㅁㅇㅁ",
         "skdaskdkasdkp[asdkp[akdak[k[k"
     ]
 
@@ -51,29 +53,43 @@ final class CheckThumbnailViewController: UIViewController {
         $0.axis = .vertical
         $0.spacing = 2
         $0.distribution = .fillEqually
-
-        let padding = NSTextAttachment()
-
+        
         for gl in guideLines {
             var label: WMLabel = WMLabel(
-                text: "",
+                text: "\(gl)",
                 textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
-                font: .t7(weight: .light)
+                font: .t7(weight: .light),
+                alignment: .left
             ).then {
                 $0.numberOfLines = 0
             }
 
-            let attributedString = NSMutableAttributedString(string: gl)
+            let containerView: UIView = UIView()
+            
+            let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
+                $0.contentMode = .scaleToFill
+            }
+            
+            containerView.backgroundColor = .yellow
 
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = DesignSystemAsset.Playlist.grayDot.image
-            imageAttachment.bounds = CGRect(x: 0, y: -5, width: 20, height: 20)
-            attributedString.insert(NSAttributedString(attachment: imageAttachment), at: 0)
+            
+            containerView.addSubviews(imageView, label)
+            
+            imageView.snp.makeConstraints {
+                $0.width.height.equalTo(20)
+                $0.leading.equalToSuperview()
+                $0.centerY.equalTo(label)
+            }
+            
+            label.snp.makeConstraints {
+                $0.leading.equalTo(imageView.snp.trailing)
+                $0.top.bottom.trailing.equalToSuperview()
+            }
+            
 
-            label.attributedText = attributedString
-
-            $0.addArrangedSubview(label)
+            $0.addArrangedSubview(containerView)
         }
+
     }
 
     private let confirmButton: UIButton = UIButton().then {
@@ -122,10 +138,12 @@ final class CheckThumbnailViewController: UIViewController {
 
 private extension CheckThumbnailViewController {
     func addViews() {
-        view.addSubviews(wmNavigationbarView, thumbnailImageView, guideLineSuperView)
+        view.addSubviews(wmNavigationbarView, thumnailContainerView, guideLineSuperView)
         wmNavigationbarView.setLeftViews([backButton])
-
+        thumnailContainerView.addSubviews(thumbnailImageView)
         guideLineSuperView.addSubviews(guideLineTitleLabel, guideLineStackView, confirmButton)
+        
+        
     }
 
     func setLayout() {
@@ -134,17 +152,20 @@ private extension CheckThumbnailViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
-
-        let max = APP_WIDTH() - 40
+        
+        thumnailContainerView.snp.makeConstraints {
+            $0.top.equalTo(wmNavigationbarView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+        }
 
         thumbnailImageView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.top.equalTo(wmNavigationbarView.snp.bottom).offset(66)
-            $0.height.equalTo(max)
+            $0.height.equalTo(thumbnailImageView.snp.width)
+            $0.center.equalToSuperview()
         }
 
         guideLineSuperView.snp.makeConstraints {
-            $0.top.equalTo(thumbnailImageView.snp.bottom).offset(83)
+            $0.top.equalTo(thumnailContainerView.snp.bottom)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
 
