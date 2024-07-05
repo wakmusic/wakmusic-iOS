@@ -8,11 +8,6 @@ enum PlaylistAnalyticsLog: AnalyticsLogType {
     case clickPlaylistCameraButton
     case clickPlaylistDefaultImageButton
     case clickPlaylistCustomImageButton
-//    case clickArtistItem(artist: String)
-//    case clickArtistDescriptionButton(artist: String)
-//    case clickArtistSubscriptionButton(artist: String)
-//    case clickArtistPlayButton(type: String, artist: String)
-//    case clickArtistTabbarTab(tab: String, artist: String)
-//    case selectMusicItem(id: String, location: String)
-//    case deselectMusicItem(id: String, location: String)
+    case clickPlaylistPlaybutton(type: String, key: String)
+
 }

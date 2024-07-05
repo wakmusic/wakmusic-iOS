@@ -273,12 +273,14 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 /// 전체재생 , 랜덤 재생 델리게이트
 extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
-        DEBUG_LOG("playGroup Touched")
+
         #warning("재생 이벤트 넣기")
         switch event {
         case .allPlay:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlaybutton(type: "all", key: reactor?.key ?? ""))
             break
         case .shufflePlay:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlaybutton(type: "random", key: reactor?.key ?? ""))
             break
         }
     }

@@ -53,7 +53,7 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
         tableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(40)
+            $0.bottom.equalToSuperview()
         }
     }
 
