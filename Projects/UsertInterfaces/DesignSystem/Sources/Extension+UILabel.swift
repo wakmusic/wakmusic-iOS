@@ -78,13 +78,11 @@ public extension UILabel {
         paragraphStyle.lineBreakMode = .byTruncatingTail
         paragraphStyle.alignment = alignment
 
-        let style = NSMutableParagraphStyle()
-
         let baselineOffset: CGFloat
 
         if let lineHeight {
-            style.maximumLineHeight = lineHeight
-            style.minimumLineHeight = lineHeight
+            paragraphStyle.maximumLineHeight = lineHeight
+            paragraphStyle.minimumLineHeight = lineHeight
             baselineOffset = (lineHeight - font.lineHeight) / 2
         } else {
             baselineOffset = 0

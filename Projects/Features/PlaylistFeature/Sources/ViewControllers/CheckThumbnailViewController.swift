@@ -58,7 +58,7 @@ final class CheckThumbnailViewController: UIViewController {
                 textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 font: .t7(weight: .light),
                 alignment: .left,
-                lineHeight: 21.5
+                lineHeight: 18
             ).then {
                 $0.numberOfLines = 0
             }
