@@ -92,7 +92,7 @@ extension UnknownPlaylistHeaderView: UnknownPlaylistHeaderStateProtocol {
 
         let padding = NSTextAttachment()
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = DesignSystemAsset.Playlist.grayDot.image
+        imageAttachment.image = DesignSystemAsset.Playlist.smallGrayDot.image
         imageAttachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
         attributedString.append(NSAttributedString(attachment: imageAttachment))
         attributedString.append(NSAttributedString(string: model.userName))

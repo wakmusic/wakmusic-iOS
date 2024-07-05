@@ -40,6 +40,14 @@ public extension AppComponent {
         WakmusicPlaylistDetailComponent(parent: self)
     }
 
+    var thumbnailPopupFactory: any ThumbnailPopupFactory {
+        ThumbnailPopupComponent(parent: self)
+    }
+
+    var checkThumbnailFactory: any CheckThumbnailFactory {
+        CheckThumbnailComponent(parent: self)
+    }
+
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
             RemotePlaylistDataSourceImpl(keychain: keychain)

@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import PhotosUI
 import ReactorKit
 import SnapKit
@@ -64,6 +65,8 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        LogManager
+            .analytics(PlaylistAnalyticsLog.viewPage(pageName: "wakmusic_playlist_detail"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -270,12 +273,13 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 /// 전체재생 , 랜덤 재생 델리게이트
 extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
-        DEBUG_LOG("playGroup Touched")
         #warning("재생 이벤트 넣기")
         switch event {
         case .allPlay:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
             break
         case .shufflePlay:
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor?.key ?? ""))
             break
         }
     }
@@ -298,7 +302,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.map { $0.id })
+            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)

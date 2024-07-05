@@ -1,6 +1,5 @@
 import AuthDomainInterface
 import Foundation
-import PlaylistDomain
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
