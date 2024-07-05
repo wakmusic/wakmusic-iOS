@@ -6,7 +6,6 @@ import UIKit
 
 #warning("델리게이트 만들기")
 
-
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("이미지 선택")
@@ -54,12 +53,11 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         super.viewDidLoad()
         self.view.backgroundColor = .white
         reactor?.action.onNext(.viewDidload)
-        
+
         #warning("그림자 넣기")
         #warning("리엑터로 액션 보내줘야함")
         // 미리 최초 선택하는 이벤트 여기 맞을지..
         collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
-        
     }
 
     override func addView() {
@@ -96,10 +94,10 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-    
+
     override func bind(reactor: DefaultPlaylistImageReactor) {
         super.bind(reactor: reactor)
-        
+
         collectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -129,8 +127,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
-                                
-                
+
                 var snapShot = NSDiffableDataSourceSnapshot<Int, String>()
 
                 snapShot.appendSections([0])
@@ -138,17 +135,14 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                 snapShot.appendItems(dataSource)
 
                 owner.thumbnailDiffableDataSource.apply(snapShot)
-                
             }
             .disposed(by: disposeBag)
-        
-        
+
         sharedState.map(\.selectedItem)
             .distinctUntilChanged()
             .bind(with: self) { owner, item in
-                                
+
                 print("Item: \(item)")
-                
             }
             .disposed(by: disposeBag)
     }
@@ -191,15 +185,12 @@ extension DefaultPlaylistImageViewController {
     }
 }
 
-
-extension DefaultPlaylistImageViewController : UICollectionViewDelegate {
+extension DefaultPlaylistImageViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-     
         guard let itemIdentifier = thumbnailDiffableDataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        
+
         reactor?.action.onNext(.select(itemIdentifier))
-        
     }
 }

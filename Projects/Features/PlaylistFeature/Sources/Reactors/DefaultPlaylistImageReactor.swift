@@ -11,7 +11,6 @@ final class DefaultPlaylistImageReactor: Reactor {
     enum Mutation {
         case updateDataSource([String])
         case updateSelectedItem(String)
-        
     }
 
     struct State {
@@ -32,7 +31,7 @@ final class DefaultPlaylistImageReactor: Reactor {
         switch action {
         case .viewDidload:
             return updateDataSource()
-        
+
         case let .select(id):
             return .just(.updateSelectedItem(id))
         }
