@@ -6,15 +6,18 @@ import UIKit
 
 final class DefaultThumbnailCell: UICollectionViewCell {
     override var isSelected: Bool {
-        willSet(newValue) {}
+        willSet(newValue) {
+            
+            imageView.layer.borderWidth = newValue ? 2 : 0
+            
+        }
     }
 
     private let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 6
         $0.clipsToBounds = true
-        $0.layer.borderColor = UIColor.red.cgColor
-        $0.layer.borderWidth = 2
+        $0.layer.borderColor =  DesignSystemAsset.PrimaryColorV2.point.color.cgColor
     }
 
     override init(frame: CGRect) {
@@ -41,6 +44,10 @@ extension DefaultThumbnailCell {
     }
 
     public func configure(_ image: String) {
-        imageView.image = UIImage(named: image)
+       
+        let image = DesignSystemAsset.PlayListTheme.theme0.image
+        
+        
+        imageView.image = image
     }
 }
