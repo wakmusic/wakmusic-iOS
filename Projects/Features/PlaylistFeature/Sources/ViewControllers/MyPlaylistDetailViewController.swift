@@ -230,7 +230,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCameraButton)
                 let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
 
-                owner.showBottomSheet(content: vc, size: .fixed(296))
+                owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
             .disposed(by: disposeBag)
     }

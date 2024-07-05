@@ -46,14 +46,15 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
         super.setLayout()
 
         titleLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.top.equalToSuperview().inset(32)
+            $0.height.equalTo(32)
         }
 
         tableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(80 * 2)
         }
     }
 
