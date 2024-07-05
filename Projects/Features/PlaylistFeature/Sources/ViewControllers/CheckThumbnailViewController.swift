@@ -42,6 +42,7 @@ final class CheckThumbnailViewController: UIViewController {
         font: .t5(weight: .medium)
     )
 
+    #warning("코스트 포함해서 가이드라인을 외부에서 주입해야함 ")
     private let guideLines: [String] = [
         "이미지를 변경하면 음표 열매 3개를 소모합니다.",
         "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고 샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님"
