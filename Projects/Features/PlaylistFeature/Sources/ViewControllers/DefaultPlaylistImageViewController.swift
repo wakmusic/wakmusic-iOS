@@ -1,29 +1,26 @@
-import UIKit
-import Then
-import SnapKit
 import BaseFeature
 import DesignSystem
+import SnapKit
+import Then
+import UIKit
 
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
-    
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("이미지 선택")
     }
-    
+
     private let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.MusicDetail.dismiss.image
             .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
-    
+
     private let buttonContainerView: UIView = UIView().then {
         $0.backgroundColor = .white
     }
-    
-    private lazy var collectionView: UICollectionView = createCollectionView()
-    
 
-    
+    private lazy var collectionView: UICollectionView = createCollectionView()
+
     private let thumbnailCellRegistration = UICollectionView.CellRegistration<
         DefaultThumbnailCell, String
     > { cell, _, itemIdentifier in
@@ -40,7 +37,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         )
         return cell
     }
-    
+
     private let confirmButton: UIButton = UIButton().then {
         $0.setTitle("확인", for: .normal)
         $0.setTitleColor(.white, for: .normal)
@@ -49,127 +46,117 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         $0.clipsToBounds = true
         $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         reactor?.action.onNext(.viewDidload)
-        
     }
- 
+
     override func addView() {
         super.addView()
-        
-        self.view.addSubviews(wmNavigationbarView, collectionView ,buttonContainerView)
+
+        self.view.addSubviews(wmNavigationbarView, collectionView, buttonContainerView)
         wmNavigationbarView.setLeftViews([dismissButton])
-        
+
         buttonContainerView.addSubviews(confirmButton)
     }
-    
+
     override func setLayout() {
         super.setLayout()
-        
+
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
-        
+
         collectionView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
         }
-        
-        
-        buttonContainerView.snp.makeConstraints  {
+
+        buttonContainerView.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.bottom)
             $0.bottom.leading.trailing.equalToSuperview()
         }
-        
+
         confirmButton.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(56)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-    
+
     override func bindAction(reactor: DefaultPlaylistImageReactor) {
         super.bindAction(reactor: reactor)
-        
+
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
-        
-        
+
         confirmButton.rx
             .tap
             .bind(with: self) { owner, _ in
                 #warning("추후 델리기에트로 dismiss 후 전달")
             }
             .disposed(by: disposeBag)
-        
     }
-    
+
     override func bindState(reactor: DefaultPlaylistImageReactor) {
-        
         let sharedState = reactor.state.share()
-        
+
         sharedState.map(\.dataSource)
-            .bind(with:self) { owner, dataSource in
-                
+            .bind(with: self) { owner, dataSource in
+
                 var snapShot = NSDiffableDataSourceSnapshot<Int, String>()
-                
+
                 snapShot.appendSections([0])
-                
+
                 snapShot.appendItems(dataSource)
-                
+
                 owner.thumbnailDiffableDataSource.apply(snapShot)
-                
             }
             .disposed(by: disposeBag)
-        
-        
     }
-    
-    
 }
 
 extension DefaultPlaylistImageViewController {
-    
     private func createCollectionView() -> UICollectionView {
         return UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     }
-    
-    private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-            
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalWidth(0.25))
-                                                      
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (
+            sectionIndex: Int,
+            layoutEnvironment: NSCollectionLayoutEnvironment
+        ) -> NSCollectionLayoutSection? in
+
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.25),
+                heightDimension: .fractionalWidth(0.25)
+            )
+
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(76.0))
-            
-            
-            var group =   NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 4)
-            group.interItemSpacing  = .fixed(10)
-           
-            
+
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(76.0)
+            )
+
+            var group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 4)
+            group.interItemSpacing = .fixed(10)
+
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: .zero, trailing: 20)
-            
+
             section.interGroupSpacing = 10.0
-            
-            
+
             return section
         }
         return layout
     }
-    
 }
