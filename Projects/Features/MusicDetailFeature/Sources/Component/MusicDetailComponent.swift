@@ -2,10 +2,10 @@ import MusicDetailFeatureInterface
 import NeedleFoundation
 import UIKit
 
-protocol MusicDetailDependency {}
+public protocol MusicDetailDependency: Dependency {}
 
-final class MusicDetailComponent: Component<MusicDetailDependency>, MusicDetailFactory {
-    func makeViewController() -> UIViewController {
+public final class MusicDetailComponent: Component<MusicDetailDependency>, MusicDetailFactory {
+    public func makeViewController() -> UIViewController {
         fatalError("")
         #warning("구현")
     }
