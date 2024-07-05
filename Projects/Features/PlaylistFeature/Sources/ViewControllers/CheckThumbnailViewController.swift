@@ -57,17 +57,16 @@ final class CheckThumbnailViewController: UIViewController {
                 text: "\(gl)",
                 textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 font: .t7(weight: .light),
-                alignment: .left
+                alignment: .left,
+                lineHeight: 21.5
             ).then {
                 $0.numberOfLines = 0
             }
 
             let containerView: UIView = UIView()
-
             let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
                 $0.contentMode = .scaleAspectFit
             }
-
             containerView.addSubviews(imageView, label)
 
             imageView.snp.makeConstraints {
@@ -76,17 +75,8 @@ final class CheckThumbnailViewController: UIViewController {
             }
             label.snp.makeConstraints {
                 $0.leading.equalTo(imageView.snp.trailing)
-                $0.top.trailing.equalToSuperview()
-                $0.height.greaterThanOrEqualTo(18)
+                $0.top.trailing.bottom.equalToSuperview()
             }
-
-            containerView.heightAnchor.constraint(
-                equalToConstant: max(18, gl.heightConstraintAt(
-                    width: APP_WIDTH() - 40 - 16,
-                    font: .setFont(.t7(weight: .light))
-                ))
-            ).isActive = true
-
             $0.addArrangedSubview(containerView)
         }
     }
@@ -179,7 +169,7 @@ private extension CheckThumbnailViewController {
         confirmButton.snp.makeConstraints {
             $0.top.equalTo(guideLineStackView.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(60)
+            $0.height.equalTo(56)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }

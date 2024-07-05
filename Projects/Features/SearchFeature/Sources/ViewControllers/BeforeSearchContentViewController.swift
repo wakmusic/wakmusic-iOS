@@ -341,7 +341,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
                 break
             case .recommend:
                 self.navigationController?.pushViewController(
-                    myPlaylistDetailFactory.makeView(key: "-iZB-NSFdy-"),
+                    myPlaylistDetailFactory.makeView(key: "_gr76WDOS19"),
                     animated: true
                 )
             // self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
