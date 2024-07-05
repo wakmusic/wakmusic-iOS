@@ -220,7 +220,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     reactor.action.onNext(.changeTitle(text))
                 }
 
-                owner.showBottomSheet(content: vc, size: .fixed(252+SAFEAREA_BOTTOM_HEIGHT()))
+                owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
             .disposed(by: disposeBag)
 
