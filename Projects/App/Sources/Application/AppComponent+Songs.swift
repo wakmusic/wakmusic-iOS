@@ -2,9 +2,9 @@ import BaseFeature
 import HomeFeature
 import LyricHighlightingFeature
 import LyricHighlightingFeatureInterface
+import MusicDetailFeature
 import SongsDomain
 import SongsDomainInterface
-import MusicDetailFeature
 
 public extension AppComponent {
     var homeComponent: HomeComponent {
