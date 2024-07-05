@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "ic_16_dot_4@2x.png",
+      "filename" : "grayDot@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_16_dot_4@3x.png",
+      "filename" : "grayDot@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

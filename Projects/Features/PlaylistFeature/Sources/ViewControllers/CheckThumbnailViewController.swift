@@ -44,8 +44,7 @@ final class CheckThumbnailViewController: UIViewController {
 
     private let guideLines: [String] = [
         "이미지를 변경하면 음표 열매 3개를 소모합니다.",
-        "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고asjdajsdjasdjasdjadjaasdasdasdasdasdadasaadsasdsadsssadadasdsadsadasㅁㄴㄹㅁㄴㅇㅁㄴㅇㅁㅇㅁ",
-        "skdaskdkasdkp[asdkp[akdak[k[k"
+        "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고 샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님"
     ]
 
     private lazy var guideLineStackView: UIStackView = UIStackView().then {
