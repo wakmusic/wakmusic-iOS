@@ -15,7 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
-                rootViewController: UIViewController()
+                rootViewController: DefaultPlaylistImageViewController(reactor: DefaultPlaylistImageReactor())
             )
         )
         window?.rootViewController = viewController
