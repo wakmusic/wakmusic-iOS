@@ -435,10 +435,10 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         #warning("재생 이벤트 넣기")
         switch event {
         case .allPlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlaybutton(type: "all", key: reactor?.key ?? ""))
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
             break
         case .shufflePlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlaybutton(type: "random", key: reactor?.key ?? ""))
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor?.key ?? ""))
             break
         }
     }
