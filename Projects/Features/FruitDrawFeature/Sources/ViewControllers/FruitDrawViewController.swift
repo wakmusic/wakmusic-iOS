@@ -54,7 +54,7 @@ public final class FruitDrawViewController: UIViewController {
 
     private lazy var lottieAnimationView =
         LottieAnimationView(
-            name: "Splash_Logo_Main",
+            name: "Fruit_Draw",
             bundle: DesignSystemResources.bundle
         ).then {
             $0.loopMode = .playOnce
@@ -459,8 +459,8 @@ private extension FruitDrawViewController {
     func startLottieAnimation() {
         view.addSubview(lottieAnimationView)
         lottieAnimationView.snp.makeConstraints {
-            $0.width.equalTo(275)
-            $0.height.equalTo(200)
+            $0.width.equalTo(APP_WIDTH())
+            $0.height.equalTo(200 * APP_WIDTH() / 275)
             $0.center.equalToSuperview()
         }
         lottieAnimationView.play { _ in
