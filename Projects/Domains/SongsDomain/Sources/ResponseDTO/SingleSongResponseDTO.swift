@@ -40,7 +40,7 @@ public extension SingleSongResponseDTO {
             reaction: "",
             views: views,
             last: 0,
-            date: (date / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
+            date: (Double(date) / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             likes: likes,
             karaokeNumber: .init(TJ: karaokeNumber.TJ, KY: karaokeNumber.KY)
         )
