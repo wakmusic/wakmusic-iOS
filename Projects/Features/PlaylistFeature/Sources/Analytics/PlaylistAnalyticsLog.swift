@@ -9,5 +9,4 @@ enum PlaylistAnalyticsLog: AnalyticsLogType {
     case clickPlaylistDefaultImageButton
     case clickPlaylistCustomImageButton
     case clickPlaylistPlaybutton(type: String, key: String)
-
 }
