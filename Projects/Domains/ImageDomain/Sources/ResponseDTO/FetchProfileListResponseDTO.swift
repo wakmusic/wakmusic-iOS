@@ -13,6 +13,5 @@ public extension FetchProfileListResponseDTO {
             name: name,
             url: url
         )
-        
     }
 }

@@ -1,8 +1,8 @@
 import BaseFeature
 import BaseFeatureInterface
+import ImageDomainInterface
 import NeedleFoundation
 import PlaylistFeatureInterface
-import ImageDomainInterface
 import UIKit
 
 public protocol DefaultPlaylistImageDependency: Dependency {

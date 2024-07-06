@@ -1,10 +1,10 @@
 import BaseFeature
 import DesignSystem
+import ImageDomainInterface
 import PlaylistFeatureInterface
 import SnapKit
 import Then
 import UIKit
-import ImageDomainInterface
 
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
     weak var delegate: DefaultPlaylistImageDelegate?
@@ -166,14 +166,17 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
-                
+
                 if flag {
                     owner.indicator.stopAnimating()
                 } else {
                     owner.indicator.stopAnimating()
-                    owner.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
+                    owner.collectionView.selectItem(
+                        at: IndexPath(row: 0, section: 0),
+                        animated: false,
+                        scrollPosition: .top
+                    )
                 }
-                
             }
             .disposed(by: disposeBag)
 

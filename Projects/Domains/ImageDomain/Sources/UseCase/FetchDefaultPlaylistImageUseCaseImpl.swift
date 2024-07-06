@@ -3,7 +3,6 @@ import ImageDomainInterface
 import RxSwift
 
 public struct FetchDefaultPlaylistImageUseCaseImpl: FetchDefaultPlaylistImageUseCase {
-    
     private let imageRepository: any ImageRepository
 
     public init(

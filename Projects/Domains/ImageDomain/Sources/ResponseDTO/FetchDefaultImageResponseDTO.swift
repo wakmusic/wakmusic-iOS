@@ -15,4 +15,3 @@ public extension FetchDefaultImageResponseDTO {
         )
     }
 }
-

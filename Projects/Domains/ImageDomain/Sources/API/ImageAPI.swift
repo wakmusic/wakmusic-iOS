@@ -28,14 +28,14 @@ extension ImageAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchLyricDecoratingBackground, .fetchDefaultPlaylistImage , .fetchProfileList:
+        case .fetchLyricDecoratingBackground, .fetchDefaultPlaylistImage, .fetchProfileList:
             return .get
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchLyricDecoratingBackground, .fetchProfileList , .fetchDefaultPlaylistImage:
+        case .fetchLyricDecoratingBackground, .fetchProfileList, .fetchDefaultPlaylistImage:
             return .requestPlain
         }
     }

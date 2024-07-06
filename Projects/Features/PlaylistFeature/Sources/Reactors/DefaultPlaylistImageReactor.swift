@@ -1,7 +1,7 @@
 import DesignSystem
 import Foundation
-import ReactorKit
 import ImageDomainInterface
+import ReactorKit
 import RxSwift
 
 final class DefaultPlaylistImageReactor: Reactor {
@@ -31,7 +31,7 @@ final class DefaultPlaylistImageReactor: Reactor {
             selectedIndex: 0,
             isLoading: true
         )
-        
+
         self.fetchDefaultPlaylistImageUseCase = fetchDefaultPlaylistImageUseCase
     }
 
@@ -73,7 +73,7 @@ extension DefaultPlaylistImageReactor {
             .just(.updateLoadingState(true)),
             fetchDefaultPlaylistImageUseCase.execute()
                 .asObservable()
-                .flatMap{ data -> Observable<Mutation>  in
+                .flatMap { data -> Observable<Mutation> in
                     return Observable.just(.updateDataSource(data))
                 },
             .just(.updateLoadingState(false))
