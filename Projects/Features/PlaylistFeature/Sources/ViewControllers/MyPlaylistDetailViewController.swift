@@ -32,6 +32,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let thumbnailPopupFactory: any ThumbnailPopupFactory
 
     private let checkThumbnailFactory: any CheckThumbnailFactory
+    
+    private let defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -81,13 +83,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
         thumbnailPopupFactory: any ThumbnailPopupFactory,
-        checkThumbnailFactory: any CheckThumbnailFactory
+        checkThumbnailFactory: any CheckThumbnailFactory,
+        defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
         self.thumbnailPopupFactory = thumbnailPopupFactory
         self.checkThumbnailFactory = checkThumbnailFactory
+        self.defaultPlaylistImageFactory = defaultPlaylistImageFactory
 
         super.init(reactor: reactor)
     }
@@ -583,7 +587,11 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageButton)
-            #warning("기본이미지 선택 옵션")
+            let vc =  defaultPlaylistImageFactory.makeView(self)
+            vc.modalPresentationStyle = .overFullScreen
+            
+            self.present(vc, animated: true)
+            
 
         } else {
             LogManager.analytics(
@@ -596,6 +604,13 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
-        headerView.updateThumbnail(imageData)
+        headerView.updateThumbnailByAlbum(imageData)
     }
+}
+
+extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
+    func receive(_ name: String, _ url: String) {
+        headerView.updateThumbnailByDefault(url)
+    }
+    
 }

@@ -9,7 +9,8 @@ import UIKit
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
     func updateData(_ model: PlaylistDetailHeaderModel)
-    func updateThumbnail(_ data: Data)
+    func updateThumbnailByAlbum(_ data: Data)
+    func updateThumbnailByDefault(_ url: String)
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -143,8 +144,12 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
         cameraContainerView.isHidden = !isEditing
     }
 
-    func updateThumbnail(_ data: Data) {
+    func updateThumbnailByAlbum(_ data: Data) {
         thumbnailImageView.image = UIImage(data: data)
+    }
+    
+    func updateThumbnailByDefault(_ url: String) {
+        thumbnailImageView.kf.setImage(with: URL(string: url))
     }
 }
 

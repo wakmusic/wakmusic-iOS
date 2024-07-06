@@ -20,6 +20,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
     var checkThumbnailFactory: any CheckThumbnailFactory { get }
+    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -40,7 +41,8 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
             thumbnailPopupFactory: dependency.thumbnailPopupFactory,
-            checkThumbnailFactory: dependency.checkThumbnailFactory
+            checkThumbnailFactory: dependency.checkThumbnailFactory,
+            defaultPlaylistImageFactory: dependency.defaultPlaylistImageFactory
         )
     }
 }

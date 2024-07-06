@@ -70,8 +70,6 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         self.view.backgroundColor = .white
         reactor?.action.onNext(.viewDidload)
 
-        #warning("리엑터로 액션 보내줘야함")
-        // 미리 최초 선택하는 이벤트 여기 맞을지..
         collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
     }
 
@@ -128,6 +126,8 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
     override func bindAction(reactor: DefaultPlaylistImageReactor) {
         super.bindAction(reactor: reactor)
 
+        let sharedState = reactor.state.share()
+        
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
@@ -137,8 +137,18 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
         confirmButton.rx
             .tap
-            .bind(with: self) { owner, _ in
-                #warning("추후 델리기에트로 dismiss 후 전달")
+            .withLatestFrom(sharedState.map(\.dataSource))
+            .withLatestFrom(sharedState.map(\.selectedIndex)){($0,$1)}
+            .bind(with: self) { owner, info in
+               
+                let (dataSource, index) = (info.0, info.1)
+                
+                let (name, url) = ("임시 명",  dataSource[index])
+                
+                owner.dismiss(animated: true) {
+                    owner.delegate?.receive(name, url)
+                }
+                
             }
             .disposed(by: disposeBag)
     }
