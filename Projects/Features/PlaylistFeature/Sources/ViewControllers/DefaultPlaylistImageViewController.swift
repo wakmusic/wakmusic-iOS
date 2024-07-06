@@ -151,7 +151,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
-            .filter{!$0.isEmpty}
+            .filter { !$0.isEmpty }
             .bind(with: self) { owner, dataSource in
 
                 var snapShot = NSDiffableDataSourceSnapshot<Int, DefaultImageEntity>()
