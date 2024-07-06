@@ -8,7 +8,7 @@ import SongsDomainInterface
 import Utility
 
 public final class LyricHighlightingViewModel: ViewModelType {
-    private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])
+    private let model: LyricHighlightingRequiredModel
     private let fetchLyricsUseCase: FetchLyricsUseCase
     private let disposeBag = DisposeBag()
 
@@ -34,8 +34,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let goDecoratingScene: PublishSubject<LyricHighlightingRequiredModel> = PublishSubject()
-        let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(songID: "", title: "", artist: ""))
     }
 
     public func transform(from input: Input) -> Output {
@@ -72,20 +71,16 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .map { $0.filter { $0.isHighlighting }.map { $0.text } }
             .map { LyricHighlightingRequiredModel(
                 songID: songID,
-                title: output.updateSongTitle.value,
-                artist: output.updateArtist.value,
+                title: output.updateInfo.value.title,
+                artist: output.updateInfo.value.artist,
                 highlightingItems: $0
             ) }
-            .do(onNext: { model in
-                LogManager.analytics(
-                    LyricHighlightingAnalyticsLog.clickLyricHighlightingCompleteButton(id: model.songID)
-                )
-            })
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 
-        output.updateSongTitle.accept(model.title)
-        output.updateArtist.accept(model.artist)
+        output.updateInfo.accept(.init(
+            songID: model.songID, title: model.title, artist: model.artist)
+        )
 
         output.dataSource
             .map { !$0.filter { $0.isHighlighting }.isEmpty }

@@ -35,7 +35,7 @@ extension LyricDecoratingViewController {
                 LogManager.analytics(
                     LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
                         type: "save",
-                        id: owner.output.updateSongID.value,
+                        id: owner.output.updateInfo.value.songID,
                         bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
                     )
                 )
@@ -48,7 +48,7 @@ extension LyricDecoratingViewController {
                 LogManager.analytics(
                     LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
                         type: "share",
-                        id: owner.output.updateSongID.value,
+                        id: owner.output.updateInfo.value.songID,
                         bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
                     )
                 )
@@ -69,16 +69,11 @@ extension LyricDecoratingViewController {
     }
 
     func outputBind() {
-        output.updateSongTitle
-            .bind(with: self, onNext: { owner, song in
-                owner.songTitleLabel.text = song
+        output.updateInfo
+            .bind(with: self, onNext: { owner, info in
+                owner.songTitleLabel.text = info.title
                 owner.songTitleLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-            })
-            .disposed(by: disposeBag)
-
-        output.updateArtist
-            .bind(with: self, onNext: { owner, artist in
-                owner.artistLabel.text = artist
+                owner.artistLabel.text = info.artist
                 owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             })
             .disposed(by: disposeBag)
