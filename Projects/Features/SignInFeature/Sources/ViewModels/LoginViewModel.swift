@@ -93,7 +93,7 @@ private extension LoginViewModel {
                     platform: entity.platform,
                     profile: entity.profile,
                     name: AES256.encrypt(string: entity.name),
-                    version: entity.version
+                    itemCount: entity.itemCount
                 )
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
                 output.showLoading.accept(false)

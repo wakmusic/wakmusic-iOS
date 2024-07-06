@@ -1,8 +1,7 @@
 import Foundation
+import PlaylistDomainInterface
+import SongsDomainInterface
 
-/**
- 이 구조체는 Playlist Domain이 API 서버의 변경사항을 반영한 후에 제거됩니다
- */
 struct PlaylistModel: Equatable {
     let key: String
     let title: String
@@ -15,11 +14,32 @@ struct PlaylistModel: Equatable {
     struct SongModel: Equatable {
         let videoID: String
         let title: String
-        let artists: [String]
-        let date: Int
-        let start: Int
-        let end: Int
+        let artistString: String
+        let date: String
         let likes: Int
         let isLiked: Bool
+        let karaokeNumber: KaraokeNumber
+
+        struct KaraokeNumber: Equatable {
+            let tj: Int?
+            let ky: Int?
+        }
+    }
+}
+
+extension SongEntity {
+    func toModel(isLiked: Bool) -> PlaylistModel.SongModel {
+        PlaylistModel.SongModel(
+            videoID: self.id,
+            title: self.title,
+            artistString: self.artist,
+            date: self.date,
+            likes: self.likes,
+            isLiked: isLiked,
+            karaokeNumber: PlaylistModel.SongModel.KaraokeNumber(
+                tj: self.karaokeNumber.TJ,
+                ky: self.karaokeNumber.KY
+            )
+        )
     }
 }

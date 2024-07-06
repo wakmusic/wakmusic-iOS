@@ -14,18 +14,18 @@ public struct UserInfoEntity: Equatable {
         platform: String,
         name: String,
         profile: String,
-        version: Int
+        itemCount: Int
 
     ) {
         self.id = id
         self.platform = platform
         self.name = name
         self.profile = profile
-        self.version = version
+        self.itemCount = itemCount
     }
 
     public let id, platform, name, profile: String
-    public let version: Int
+    public let itemCount: Int
 
     public static func == (lhs: UserInfoEntity, rhs: UserInfoEntity) -> Bool {
         lhs.id == rhs.id
