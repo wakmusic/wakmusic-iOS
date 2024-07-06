@@ -180,6 +180,11 @@ public final class FruitDrawViewController: UIViewController {
         inputBind()
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(FruitDrawAnalyticsLog.viewPage(pageName: "fruit_draw"))
+    }
+
     override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -265,6 +270,7 @@ private extension FruitDrawViewController {
                     owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
                     owner.dismiss(animated: true)
                 } else {
+                    LogManager.analytics(FruitDrawAnalyticsLog.clickFruitDrawButton)
                     owner.input.didTapFruitDraw.onNext(())
                     owner.startLottieAnimation()
                     UIView.animate(
