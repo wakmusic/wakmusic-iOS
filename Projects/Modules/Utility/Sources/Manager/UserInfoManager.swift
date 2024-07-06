@@ -40,7 +40,7 @@ public extension UserInfo {
             itemCount: self.itemCount
         )
     }
-    
+
     func update(itemCount: Int) -> UserInfo {
         return UserInfo(
             ID: self.ID,
