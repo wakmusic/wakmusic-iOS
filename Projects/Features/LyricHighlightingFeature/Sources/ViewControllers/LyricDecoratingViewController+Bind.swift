@@ -1,9 +1,9 @@
 import DesignSystem
 import Foundation
+import LogManager
 import RxCocoa
 import RxSwift
 import UIKit
-import LogManager
 
 extension LyricDecoratingViewController {
     func inputBind() {
