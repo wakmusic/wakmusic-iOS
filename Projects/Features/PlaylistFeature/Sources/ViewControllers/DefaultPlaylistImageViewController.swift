@@ -151,6 +151,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
+            .filter{!$0.isEmpty}
             .bind(with: self) { owner, dataSource in
 
                 var snapShot = NSDiffableDataSourceSnapshot<Int, DefaultImageEntity>()
@@ -159,7 +160,13 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
                 snapShot.appendItems(dataSource)
 
-                owner.thumbnailDiffableDataSource.apply(snapShot)
+                owner.thumbnailDiffableDataSource.apply(snapShot) {
+                    owner.collectionView.selectItem(
+                        at: IndexPath(row: 0, section: 0),
+                        animated: false,
+                        scrollPosition: .top
+                    )
+                }
             }
             .disposed(by: disposeBag)
 
@@ -171,11 +178,6 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
-                    owner.collectionView.selectItem(
-                        at: IndexPath(row: 0, section: 0),
-                        animated: false,
-                        scrollPosition: .top
-                    )
                 }
             }
             .disposed(by: disposeBag)
