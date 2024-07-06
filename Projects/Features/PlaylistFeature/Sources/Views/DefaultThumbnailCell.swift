@@ -44,5 +44,5 @@ extension DefaultThumbnailCell {
 
     public func configure(_ model: DefaultImageEntity) {
         imageView.kf.setImage(with: URL(string: model.url), options: [.transition(.fade(0.2))])
-        }
+    }
 }
