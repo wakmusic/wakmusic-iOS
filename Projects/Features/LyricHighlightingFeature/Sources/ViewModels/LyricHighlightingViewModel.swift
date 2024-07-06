@@ -76,6 +76,11 @@ public final class LyricHighlightingViewModel: ViewModelType {
                 artist: output.updateArtist.value,
                 highlightingItems: $0
             ) }
+            .do(onNext: { model in
+                LogManager.analytics(
+                    LyricHighlightingAnalyticsLog.clickLyricHighlightingCompleteButton(id: model.songID)
+                )
+            })
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 

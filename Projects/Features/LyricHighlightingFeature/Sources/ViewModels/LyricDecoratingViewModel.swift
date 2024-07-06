@@ -10,7 +10,7 @@ import UIKit
 import Utility
 
 final class LyricDecoratingViewModel: ViewModelType {
-    private var model: LyricHighlightingRequiredModel = .init(songID: "", title: "", artist: "", highlightingItems: [])
+    private let model: LyricHighlightingRequiredModel
     private let fetchLyricDecoratingBackgroundUseCase: FetchLyricDecoratingBackgroundUseCase
     private let disposeBag = DisposeBag()
 
@@ -33,6 +33,7 @@ final class LyricDecoratingViewModel: ViewModelType {
 
     public struct Output {
         let dataSource: BehaviorRelay<[LyricDecoratingBackgroundEntity]> = BehaviorRelay(value: [])
+        let updateSongID: BehaviorRelay<String> = BehaviorRelay(value: "")
         let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateSongTitle: BehaviorRelay<String> = BehaviorRelay(value: "")
         let updateArtist: BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -69,6 +70,7 @@ final class LyricDecoratingViewModel: ViewModelType {
             .accept(model.highlightingItems.joined(separator: "\n"))
         output.updateSongTitle.accept(model.title)
         output.updateArtist.accept(model.artist)
+        output.updateSongID.accept(model.songID)
 
         input.didTapBackground
             .map { $0.item }

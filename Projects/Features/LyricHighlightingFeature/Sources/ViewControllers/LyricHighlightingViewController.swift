@@ -111,6 +111,7 @@ public final class LyricHighlightingViewController: UIViewController {
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        LogManager.analytics(LyricHighlightingAnalyticsLog.viewPage(pageName: "lyric_highlighting"))
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 

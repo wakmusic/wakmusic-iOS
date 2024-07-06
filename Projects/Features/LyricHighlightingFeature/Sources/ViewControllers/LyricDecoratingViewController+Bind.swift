@@ -3,6 +3,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 import UIKit
+import LogManager
 
 extension LyricDecoratingViewController {
     func inputBind() {
@@ -31,12 +32,26 @@ extension LyricDecoratingViewController {
 
         saveButton.rx.tap
             .bind(with: self) { owner, _ in
+                LogManager.analytics(
+                    LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
+                        type: "save",
+                        id: owner.output.updateSongID.value,
+                        bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
+                    )
+                )
                 owner.requestPhotoLibraryPermission()
             }
             .disposed(by: disposeBag)
 
         shareButton.rx.tap
             .bind(with: self) { owner, _ in
+                LogManager.analytics(
+                    LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
+                        type: "share",
+                        id: owner.output.updateSongID.value,
+                        bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
+                    )
+                )
                 let activityViewController = UIActivityViewController(
                     activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
                     applicationActivities: nil
