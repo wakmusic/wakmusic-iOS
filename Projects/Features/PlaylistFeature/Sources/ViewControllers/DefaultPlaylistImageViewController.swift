@@ -16,9 +16,24 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
+    
+    private let shadowImageVIew: UIImageView = UIImageView().then {
+        $0.contentMode = .scaleToFill
+        $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
+        
+    }
 
     private let buttonContainerView: UIView = UIView().then {
         $0.backgroundColor = .white
+    }
+    
+    private let confirmButton: UIButton = UIButton().then {
+        $0.setTitle("확인", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = .setFont(.t4(weight: .medium))
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
 
     private lazy var collectionView: UICollectionView = createCollectionView()
@@ -40,21 +55,13 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         return cell
     }
 
-    private let confirmButton: UIButton = UIButton().then {
-        $0.setTitle("확인", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = .setFont(.t4(weight: .medium))
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
-    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         reactor?.action.onNext(.viewDidload)
 
-        #warning("그림자 넣기")
         #warning("리엑터로 액션 보내줘야함")
         // 미리 최초 선택하는 이벤트 여기 맞을지..
         collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
@@ -66,7 +73,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         self.view.addSubviews(wmNavigationbarView, collectionView, buttonContainerView)
         wmNavigationbarView.setLeftViews([dismissButton])
 
-        buttonContainerView.addSubviews(confirmButton)
+        buttonContainerView.addSubviews(shadowImageVIew,confirmButton)
     }
 
     override func setLayout() {
@@ -87,8 +94,15 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             $0.top.equalTo(collectionView.snp.bottom)
             $0.bottom.leading.trailing.equalToSuperview()
         }
+        
+        shadowImageVIew.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-14)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.snp.bottom)
+        }
 
         confirmButton.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(20)
             $0.top.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(56)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
@@ -138,11 +152,11 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.selectedItem)
+        sharedState.map(\.selectedIndex)
             .distinctUntilChanged()
-            .bind(with: self) { owner, item in
+            .bind(with: self) { owner, index in
 
-                print("Item: \(item)")
+                print("Item: \(index)")
             }
             .disposed(by: disposeBag)
     }
@@ -187,10 +201,7 @@ extension DefaultPlaylistImageViewController {
 
 extension DefaultPlaylistImageViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let itemIdentifier = thumbnailDiffableDataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
 
-        reactor?.action.onNext(.select(itemIdentifier))
+        reactor?.action.onNext(.selectedIndex(indexPath.row))
     }
 }

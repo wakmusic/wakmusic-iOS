@@ -5,17 +5,17 @@ import ReactorKit
 final class DefaultPlaylistImageReactor: Reactor {
     enum Action {
         case viewDidload
-        case select(String)
+        case selectedIndex(Int)
     }
 
     enum Mutation {
         case updateDataSource([String])
-        case updateSelectedItem(String)
+        case updateSelectedItem(Int)
     }
 
     struct State {
         var dataSource: [String]
-        var selectedItem: String
+        var selectedIndex: Int
     }
 
     var initialState: State
@@ -23,7 +23,7 @@ final class DefaultPlaylistImageReactor: Reactor {
     init() {
         initialState = State(
             dataSource: [],
-            selectedItem: ""
+            selectedIndex: 0
         )
     }
 
@@ -32,8 +32,8 @@ final class DefaultPlaylistImageReactor: Reactor {
         case .viewDidload:
             return updateDataSource()
 
-        case let .select(id):
-            return .just(.updateSelectedItem(id))
+        case let .selectedIndex(index):
+            return .just(.updateSelectedItem(index))
         }
     }
 
@@ -44,7 +44,7 @@ final class DefaultPlaylistImageReactor: Reactor {
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
         case let .updateSelectedItem(id):
-            newState.selectedItem = id
+            newState.selectedIndex = id
         }
 
         return newState
