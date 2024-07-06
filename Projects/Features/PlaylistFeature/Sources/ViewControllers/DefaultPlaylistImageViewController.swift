@@ -151,6 +151,13 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                 owner.thumbnailDiffableDataSource.apply(snapShot)
             }
             .disposed(by: disposeBag)
+        
+        sharedState.map(\.isLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, flag in
+                flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map(\.selectedIndex)
             .distinctUntilChanged()

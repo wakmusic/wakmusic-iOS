@@ -11,11 +11,13 @@ final class DefaultPlaylistImageReactor: Reactor {
     enum Mutation {
         case updateDataSource([String])
         case updateSelectedItem(Int)
+        case updateLoadingState(Bool)
     }
 
     struct State {
         var dataSource: [String]
         var selectedIndex: Int
+        var isLoading: Bool
     }
 
     var initialState: State
@@ -23,7 +25,8 @@ final class DefaultPlaylistImageReactor: Reactor {
     init() {
         initialState = State(
             dataSource: [],
-            selectedIndex: 0
+            selectedIndex: 0,
+            isLoading: false
         )
     }
 
@@ -45,6 +48,8 @@ final class DefaultPlaylistImageReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateSelectedItem(id):
             newState.selectedIndex = id
+        case let .updateLoadingState(flag):
+            newState.isLoading = flag
         }
 
         return newState
@@ -59,6 +64,10 @@ extension DefaultPlaylistImageReactor {
             dataSource.append("theme_\(i)")
         }
 
-        return .just(.updateDataSource(dataSource))
+        return .concat([
+            .just(.updateLoadingState(true)),
+            .just(.updateDataSource(dataSource)),
+            .just(.updateLoadingState(false))
+        ])
     }
 }
