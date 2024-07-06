@@ -9,53 +9,61 @@
 import Combine
 import Foundation
 import SongsDomainInterface
+import Utility
 
-public struct PlayListItem: Equatable {
-    public var item: SongEntity
-    public var isPlaying: Bool
+public struct PlaylistItem: Equatable {
+    public let id: String
+    public let title: String
+    public let artist: String
 
-    public init(item: SongEntity, isPlaying: Bool = false) {
-        self.item = item
-        self.isPlaying = isPlaying
+    public init(
+        id: String,
+        title: String,
+        artist: String
+    ) {
+        self.id = id
+        self.title = title
+        self.artist = artist
     }
 
-    public static func == (lhs: PlayListItem, rhs: PlayListItem) -> Bool {
-        return lhs.item == rhs.item && lhs.item.isSelected == rhs.item.isSelected && lhs.isPlaying == rhs.isPlaying
+    public init(item: SongEntity) {
+        self.id = item.id
+        self.title = item.title
+        self.artist = item.artist
     }
 }
 
-public class PlayList {
-    public var list: [PlayListItem] {
+public class Playlist {
+    public var list: [PlaylistItem] {
         didSet(oldValue) {
             listChanged.send(list)
         }
     }
 
-    public var listChanged = PassthroughSubject<[PlayListItem], Never>()
-    public var listAppended = PassthroughSubject<[PlayListItem], Never>()
-    public var listRemoved = PassthroughSubject<[PlayListItem], Never>()
-    public var listReordered = PassthroughSubject<[PlayListItem], Never>()
-    public var currentPlayIndexChanged = PassthroughSubject<[PlayListItem], Never>()
-    public var currentPlaySongChanged = PassthroughSubject<SongEntity, Never>()
+    public var listChanged = PassthroughSubject<[PlaylistItem], Never>()
+    public var listAppended = PassthroughSubject<[PlaylistItem], Never>()
+    public var listRemoved = PassthroughSubject<[PlaylistItem], Never>()
+    public var listReordered = PassthroughSubject<[PlaylistItem], Never>()
+    public var currentPlayIndexChanged = PassthroughSubject<[PlaylistItem], Never>()
 
-    public init(list: [PlayListItem] = []) {
+    public init(list: [PlaylistItem] = []) {
         self.list = list
     }
 
     public var count: Int { return list.count }
     public var isEmpty: Bool { return list.isEmpty }
 
-    public func append(_ item: PlayListItem) {
+    public func append(_ item: PlaylistItem) {
         list.append(item)
         listAppended.send(list)
     }
 
-    public func append(_ items: [PlayListItem]) {
+    public func append(_ items: [PlaylistItem]) {
         list.append(contentsOf: items)
         listAppended.send(list)
     }
 
-    public func insert(_ newElement: PlayListItem, at: Int) {
+    public func insert(_ newElement: PlaylistItem, at: Int) {
         list.insert(newElement, at: at)
         listAppended.send(list)
     }
@@ -77,7 +85,7 @@ public class PlayList {
         listRemoved.send(list)
     }
 
-    public func contains(_ item: PlayListItem) -> Bool {
+    public func contains(_ item: PlaylistItem) -> Bool {
         return list.contains(item)
     }
 
@@ -88,7 +96,7 @@ public class PlayList {
     }
 
     /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
-    public func uniqueIndex(of item: PlayListItem) -> Int? {
-        return list.firstIndex(where: { $0.item == item.item })
+    public func uniqueIndex(of item: PlaylistItem) -> Int? {
+        return list.firstIndex(of: item)
     }
 }

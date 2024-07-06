@@ -2,12 +2,18 @@ import BaseFeature
 import HomeFeature
 import LyricHighlightingFeature
 import LyricHighlightingFeatureInterface
+import MusicDetailFeature
+import MusicDetailFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 
 public extension AppComponent {
     var homeComponent: HomeComponent {
         HomeComponent(parent: self)
+    }
+
+    var musicDetailFactory: any MusicDetailFactory {
+        MusicDetailComponent(parent: self)
     }
 
     var newSongsComponent: NewSongsComponent {

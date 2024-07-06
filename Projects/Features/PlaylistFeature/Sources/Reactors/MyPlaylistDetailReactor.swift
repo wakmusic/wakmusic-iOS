@@ -7,8 +7,6 @@ import SongsDomainInterface
 import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
-    let key: String
-
     enum Action {
         case viewDidLoad
         case itemDidTap(Int)
@@ -29,11 +27,10 @@ final class MyPlaylistDetailReactor: Reactor {
     enum Mutation {
         case updateEditingState(Bool)
         case updateHeader(PlaylistDetailHeaderModel)
-        case updateDataSource([SongEntity])
-        case updateBackUpDataSource([SongEntity])
+        case updatePlaylist([PlaylistItemModel])
+        case updateBackUpPlaylist([PlaylistItemModel])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateSelectingStateByIndex([SongEntity])
         case updateThumbnail(Data?)
         case showToast(String)
     }
@@ -41,14 +38,15 @@ final class MyPlaylistDetailReactor: Reactor {
     struct State {
         var isEditing: Bool
         var header: PlaylistDetailHeaderModel
-        var dataSource: [SongEntity]
-        var backUpDataSource: [SongEntity]
+        var playlistModels: [PlaylistItemModel]
+        var backupPlaylistModels: [PlaylistItemModel]
         var isLoading: Bool
         var selectedCount: Int
         var replaceThumnbnailData: Data?
         @Pulse var toastMessage: String?
     }
 
+    internal let key: String
     var initialState: State
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let updatePlaylistUseCase: any UpdatePlaylistUseCase
@@ -79,14 +77,15 @@ final class MyPlaylistDetailReactor: Reactor {
         self.initialState = State(
             isEditing: false,
             header: PlaylistDetailHeaderModel(
-                key: key, title: "",
+                key: key,
+                title: "",
                 image: "",
                 userName: "",
                 private: true,
                 songCount: 0
             ),
-            dataSource: [],
-            backUpDataSource: [],
+            playlistModels: [],
+            backupPlaylistModels: [],
             isLoading: false,
             selectedCount: 0,
             replaceThumnbnailData: nil
@@ -96,7 +95,8 @@ final class MyPlaylistDetailReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return updateDataSource()
+            return viewDidLoad()
+
         case .editButtonDidTap:
             return beginEditing()
 
@@ -111,6 +111,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
+
         case .restore:
             return restoreDataSource()
         case let .itemDidMoved(from, to):
@@ -142,19 +143,17 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .updateHeader(header):
             newState.header = header
 
-        case let .updateDataSource(dataSource):
-            newState.dataSource = dataSource
+        case let .updatePlaylist(platylist):
+            newState.playlistModels = platylist
 
-        case let .updateBackUpDataSource(dataSource):
-            newState.backUpDataSource = dataSource
+        case let .updateBackUpPlaylist(dataSource):
+            newState.backupPlaylistModels = dataSource
 
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
+
         case let .updateSelectedCount(count):
             newState.selectedCount = count
-
-        case let .updateSelectingStateByIndex(dataSource):
-            newState.dataSource = dataSource
 
         case let .showToast(message):
             newState.toastMessage = message
@@ -168,7 +167,7 @@ final class MyPlaylistDetailReactor: Reactor {
 }
 
 private extension MyPlaylistDetailReactor {
-    func updateDataSource() -> Observable<Mutation> {
+    func viewDidLoad() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
             fetchPlaylistDetailUseCase.execute(id: key, type: .my)
@@ -185,7 +184,18 @@ private extension MyPlaylistDetailReactor {
                                 songCount: data.songs.count
                             )
                         )),
-                        Observable.just(Mutation.updateDataSource(data.songs))
+                        Observable.just(
+                            Mutation.updatePlaylist(
+                                data.songs.map {
+                                    PlaylistItemModel(
+                                        id: $0.id,
+                                        title: $0.title,
+                                        artist: $0.artist,
+                                        isSelected: false
+                                    )
+                                }
+                            )
+                        )
                     ])
                 }
                 .catch { error in
@@ -200,37 +210,35 @@ private extension MyPlaylistDetailReactor {
 
     func endEditingWithSave() -> Observable<Mutation> {
         let state = currentState
-        var currentDataSoruce = state.dataSource
+        let currentPlaylists = state.playlistModels
 
-        for i in 0 ..< currentDataSoruce.count {
-            currentDataSoruce[i].isSelected = false
+        let updatingPlaylistItemModels = currentPlaylists.map {
+            return $0.updateIsSelected(isSelected: false)
         }
 
         return .concat([
             .just(.updateEditingState(false)),
-            .just(.updateDataSource(currentDataSoruce)),
-            .just(.updateBackUpDataSource(currentDataSoruce)),
+            .just(.updatePlaylist(updatingPlaylistItemModels)),
+            .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
             .just(.updateSelectedCount(0)),
-            updatePlaylistUseCase.execute(key: key, songs: currentDataSoruce.map { $0.id })
+            updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
                 .andThen(.empty())
-
         ])
     }
 
     func endEditing() -> Observable<Mutation> {
         let state = currentState
-        var currentDataSoruce = state.dataSource
+        let currentPlaylists = state.playlistModels
 
-        for i in 0 ..< currentDataSoruce.count {
-            currentDataSoruce[i].isSelected = false
+        let updatingPlaylistItemModels = currentPlaylists.map {
+            return $0.updateIsSelected(isSelected: false)
         }
 
         return .concat([
             .just(.updateEditingState(false)),
-            .just(.updateDataSource(currentDataSoruce)),
-            .just(.updateBackUpDataSource(currentDataSoruce)),
-            .just(.updateSelectedCount(0)),
-
+            .just(.updatePlaylist(updatingPlaylistItemModels)),
+            .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
+            .just(.updateSelectedCount(0))
         ])
     }
 
@@ -268,96 +276,98 @@ private extension MyPlaylistDetailReactor {
 private extension MyPlaylistDetailReactor {
     func beginEditing() -> Observable<Mutation> {
         let state = currentState
-        let currentDataSoruce = state.dataSource
+        let currentPlaylists = state.playlistModels
 
         return .concat([
             .just(.updateEditingState(true)),
-            .just(.updateBackUpDataSource(currentDataSoruce))
+            .just(.updateBackUpPlaylist(currentPlaylists))
         ])
     }
 
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
-        var prev = state.dataSource
+        // 불변성 고려
+        var playlists = state.playlistModels
+        let isSelected = playlists[index].isSelected
 
-        if prev[index].isSelected {
+        if playlists[index].isSelected {
             count -= 1
         } else {
             count += 1
         }
-        prev[index].isSelected = !prev[index].isSelected
+        playlists[index] = playlists[index].updateIsSelected(isSelected: !isSelected)
 
         return .concat([
             .just(Mutation.updateSelectedCount(count)),
-            .just(Mutation.updateSelectingStateByIndex(prev))
+            .just(Mutation.updatePlaylist(playlists))
         ])
     }
 
     func updateItemPosition(from: Int, to: Int) -> Observable<Mutation> {
         let state = currentState
-        var dataSource = state.dataSource
+        var updatingPlaylists = state.playlistModels
 
-        let item = dataSource[from]
+        let item = updatingPlaylists[from]
 
-        dataSource.remove(at: from)
+        updatingPlaylists.remove(at: from)
 
-        dataSource.insert(item, at: to)
+        updatingPlaylists.insert(item, at: to)
 
-        return .just(Mutation.updateDataSource(dataSource))
+        return .just(Mutation.updatePlaylist(updatingPlaylists))
     }
 
     func restoreDataSource() -> Observable<Mutation> {
         let state = currentState
-        let backUpDataSource = state.backUpDataSource
+        let backUpPlaylist = state.backupPlaylistModels
 
         return .concat([
             .just(Mutation.updateEditingState(false)),
-            .just(Mutation.updateDataSource(backUpDataSource)),
+            .just(Mutation.updatePlaylist(backUpPlaylist)),
             .just(.updateSelectedCount(0))
         ])
     }
 
     func selectAll() -> Observable<Mutation> {
         let state = currentState
-        var dataSource = state.dataSource
+        var playlist = state.playlistModels
 
-        for i in 0 ..< dataSource.count {
-            dataSource[i].isSelected = true
+        let updatingPlaylistItemModels = playlist.map {
+            return $0.updateIsSelected(isSelected: true)
         }
 
         return .concat([
-            .just(.updateDataSource(dataSource)),
-            .just(.updateSelectedCount(dataSource.count))
+            .just(.updatePlaylist(updatingPlaylistItemModels)),
+            .just(.updateSelectedCount(updatingPlaylistItemModels.count))
         ])
     }
 
     func deselectAll() -> Observable<Mutation> {
         let state = currentState
-        var dataSource = state.dataSource
+        var playlist = state.playlistModels
 
-        for i in 0 ..< dataSource.count {
-            dataSource[i].isSelected = false
+        let updatingPlaylistItemModels = playlist.map {
+            return $0.updateIsSelected(isSelected: false)
         }
 
         return .concat([
-            .just(.updateDataSource(dataSource)),
+            .just(.updatePlaylist(updatingPlaylistItemModels)),
             .just(.updateSelectedCount(0))
         ])
     }
 
     func removeSongs() -> Observable<Mutation> {
         let state = currentState
-        let dataSource = state.dataSource
+        let playlists = state.playlistModels
 
-        let remainSongs = dataSource.filter { !$0.isSelected }
-        let removeSongs = dataSource.filter { $0.isSelected }.map { $0.id }
+        let remainSongs = playlists.filter { !$0.isSelected }
+        let removeSongs = playlists.filter { $0.isSelected }.map { $0.id }
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
 
         return .concat([
-            .just(.updateDataSource(remainSongs)),
-            .just(.updateBackUpDataSource(remainSongs)),
+            .just(.updatePlaylist(remainSongs)),
+            .just(.updateBackUpPlaylist(remainSongs)),
             .just(.updateEditingState(false)),
             .just(.updateSelectedCount(0)),
             .just(.updateHeader(prevHeader)),
