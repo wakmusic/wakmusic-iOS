@@ -3,6 +3,7 @@ import HomeFeature
 import LyricHighlightingFeature
 import LyricHighlightingFeatureInterface
 import MusicDetailFeature
+import MusicDetailFeatureInterface
 import SongsDomain
 import SongsDomainInterface
 

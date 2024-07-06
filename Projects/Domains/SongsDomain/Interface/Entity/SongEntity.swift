@@ -10,7 +10,7 @@ public struct SongEntity: Hashable {
         views: Int,
         last: Int,
         date: String,
-        likes: Int,
+        likes: Int = 0,
         isSelected: Bool = false,
         karaokeNumber: SongEntity.KaraokeNumber = .init(TJ: nil, KY: nil)
     ) {

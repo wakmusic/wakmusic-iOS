@@ -15,12 +15,12 @@ import Utility
 /// 완전히 도메인 로직으로 전환 고려
 public final class PlayState {
     public static let shared = PlayState()
-    @Published public var playList: PlayList
+    @Published public var playList: Playlist
     private var subscription = Set<AnyCancellable>()
 
     public init() {
         DEBUG_LOG("🚀:: \(Self.self) initialized")
-        self.playList = PlayList()
+        self.playList = Playlist()
         self.playList.list = fetchPlayListFromLocalDB()
         subscribePlayListChanges()
     }
@@ -45,7 +45,7 @@ public final class PlayState {
         .store(in: &subscription)
     }
 
-    public func updatePlaylistChangesToLocalDB(playList: [PlayListItem]) {
+    public func updatePlaylistChangesToLocalDB(playList: [PlaylistItem]) {
         let allPlayedLists = RealmManager.shared.fetchRealmDB(PlaylistLocalEntity.self)
         RealmManager.shared.deleteRealmDB(model: allPlayedLists)
 
@@ -60,11 +60,11 @@ public final class PlayState {
         RealmManager.shared.addRealmDB(model: playedList)
     }
 
-    public func fetchPlayListFromLocalDB() -> [PlayListItem] {
+    public func fetchPlayListFromLocalDB() -> [PlaylistItem] {
         let playedList = RealmManager.shared.fetchRealmDB(PlaylistLocalEntity.self)
             .toArray(type: PlaylistLocalEntity.self)
             .map {
-                PlayListItem(id: $0.id, title: $0.title, artist: $0.artist, date: $0.date)
+                PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist, date: $0.date)
             }
         return playedList
     }
