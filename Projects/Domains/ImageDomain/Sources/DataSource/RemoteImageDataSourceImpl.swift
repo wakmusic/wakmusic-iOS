@@ -15,4 +15,10 @@ public final class RemoteImageDataSourceImpl: BaseRemoteDataSource<ImageAPI>, Re
             .map([FetchProfileListResponseDTO].self)
             .map { $0.map { $0.toDomain() } }
     }
+    
+    public func fetchDefaultPlaylistImage() -> Single<[DefaultImageEntity]> {
+        return request(.fetchDefaultPlaylistImage)
+            .map([FetchDefaultImageResponseDTO].self)
+            .map{ $0.map{$0.toDomain()} }
+    }
 }

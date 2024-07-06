@@ -1,6 +1,8 @@
 import DesignSystem
 import Foundation
 import ReactorKit
+import ImageDomainInterface
+import RxSwift
 
 final class DefaultPlaylistImageReactor: Reactor {
     enum Action {
@@ -9,25 +11,28 @@ final class DefaultPlaylistImageReactor: Reactor {
     }
 
     enum Mutation {
-        case updateDataSource([String])
+        case updateDataSource([DefaultImageEntity])
         case updateSelectedItem(Int)
         case updateLoadingState(Bool)
     }
 
     struct State {
-        var dataSource: [String]
+        var dataSource: [DefaultImageEntity]
         var selectedIndex: Int
         var isLoading: Bool
     }
 
+    private let fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase
     var initialState: State
 
-    init() {
+    init(fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase) {
         initialState = State(
             dataSource: [],
             selectedIndex: 0,
-            isLoading: false
+            isLoading: true
         )
+        
+        self.fetchDefaultPlaylistImageUseCase = fetchDefaultPlaylistImageUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -66,7 +71,11 @@ extension DefaultPlaylistImageReactor {
 
         return .concat([
             .just(.updateLoadingState(true)),
-            .just(.updateDataSource(dataSource)),
+            fetchDefaultPlaylistImageUseCase.execute()
+                .asObservable()
+                .flatMap{ data -> Observable<Mutation>  in
+                    return Observable.just(.updateDataSource(data))
+                },
             .just(.updateLoadingState(false))
         ])
     }

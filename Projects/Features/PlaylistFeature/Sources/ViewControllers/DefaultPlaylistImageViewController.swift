@@ -4,6 +4,7 @@ import PlaylistFeatureInterface
 import SnapKit
 import Then
 import UIKit
+import ImageDomainInterface
 
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
     weak var delegate: DefaultPlaylistImageDelegate?
@@ -39,12 +40,12 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
     private lazy var collectionView: UICollectionView = createCollectionView()
 
     private let thumbnailCellRegistration = UICollectionView.CellRegistration<
-        DefaultThumbnailCell, String
+        DefaultThumbnailCell, DefaultImageEntity
     > { cell, _, itemIdentifier in
         cell.configure(itemIdentifier)
     }
 
-    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<Int, String>(
+    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<Int, DefaultImageEntity>(
         collectionView: collectionView
     ) { [thumbnailCellRegistration] collectionView, indexPath, itemIdentifier in
         let cell = collectionView.dequeueConfiguredReusableCell(
@@ -64,8 +65,6 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         super.viewDidLoad()
         self.view.backgroundColor = .white
         reactor?.action.onNext(.viewDidload)
-
-        collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
     }
 
     override func addView() {
@@ -138,7 +137,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
                 let (dataSource, index) = (info.0, info.1)
 
-                let (name, url) = ("임시 명", dataSource[index])
+                let (name, url) = (dataSource[index].name, dataSource[index].url)
 
                 owner.dismiss(animated: true) {
                     owner.delegate?.receive(name, url)
@@ -154,7 +153,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
 
-                var snapShot = NSDiffableDataSourceSnapshot<Int, String>()
+                var snapShot = NSDiffableDataSourceSnapshot<Int, DefaultImageEntity>()
 
                 snapShot.appendSections([0])
 
@@ -167,7 +166,14 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
-                flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
+                
+                if flag {
+                    owner.indicator.stopAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                    owner.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
+                }
+                
             }
             .disposed(by: disposeBag)
 

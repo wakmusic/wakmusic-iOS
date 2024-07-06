@@ -3,6 +3,8 @@ import Kingfisher
 import SnapKit
 import Then
 import UIKit
+import ImageDomainInterface
+
 
 final class DefaultThumbnailCell: UICollectionViewCell {
     override var isSelected: Bool {
@@ -41,9 +43,8 @@ extension DefaultThumbnailCell {
         }
     }
 
-    public func configure(_ image: String) {
-        let image = DesignSystemAsset.PlayListTheme.theme0.image
-
-        imageView.image = image
+    public func configure(_ model: DefaultImageEntity) {
+    
+        imageView.kf.setImage(with: URL(string: model.url), options: [.transition(.fade(0.2))])
     }
 }

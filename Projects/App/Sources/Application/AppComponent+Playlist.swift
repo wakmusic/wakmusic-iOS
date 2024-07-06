@@ -5,6 +5,8 @@ import PlaylistDomainInterface
 import PlaylistFeature
 import PlaylistFeatureInterface
 import StorageFeature
+import ImageDomainInterface
+import ImageDomain
 
 // MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
@@ -121,6 +123,12 @@ public extension AppComponent {
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
         shared {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+    
+    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+        shared {
+           FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
         }
     }
 }
