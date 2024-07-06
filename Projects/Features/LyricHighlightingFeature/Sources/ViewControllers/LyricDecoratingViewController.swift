@@ -179,9 +179,7 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(
-            LyricHighlightingAnalyticsLog.viewPage(
-                pageName: "lyric_decorating", id: output.updateInfo.value.songID
-            )
+            LyricHighlightingAnalyticsLog.viewPage(pageName: "lyric_decorating")
         )
     }
 }
