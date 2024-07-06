@@ -15,25 +15,21 @@ public struct PlaylistItem: Equatable {
     public let id: String
     public let title: String
     public let artist: String
-    public let date: Date
 
     public init(
         id: String,
         title: String,
-        artist: String,
-        date: Date
+        artist: String
     ) {
         self.id = id
         self.title = title
         self.artist = artist
-        self.date = date
     }
 
     public init(item: SongEntity) {
         self.id = item.id
         self.title = item.title
         self.artist = item.artist
-        self.date = item.date.toDateCustomFormat(format: "yyyy.MM.dd")
     }
 }
 

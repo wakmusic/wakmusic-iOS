@@ -53,8 +53,7 @@ public final class PlayState {
             PlaylistLocalEntity(
                 id: $0.id,
                 title: $0.title,
-                artist: $0.artist,
-                date: $0.date
+                artist: $0.artist
             )
         }
         RealmManager.shared.addRealmDB(model: playedList)
@@ -64,7 +63,7 @@ public final class PlayState {
         let playedList = RealmManager.shared.fetchRealmDB(PlaylistLocalEntity.self)
             .toArray(type: PlaylistLocalEntity.self)
             .map {
-                PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist, date: $0.date)
+                PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist)
             }
         return playedList
     }

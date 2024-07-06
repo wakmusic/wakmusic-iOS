@@ -162,7 +162,6 @@ final class PlaylistViewModel: ViewModelType {
                         id: item.id,
                         title: item.title,
                         artist: item.artist,
-                        date: item.date,
                         isSelected: selectedIds.contains(item.id)
                     )
                 }
@@ -188,7 +187,6 @@ final class PlaylistViewModel: ViewModelType {
                 id: item.id,
                 title: item.title,
                 artist: item.artist,
-                date: item.date,
                 isSelected: output.selectedSongIds.value.contains(item.id)
             )
         }

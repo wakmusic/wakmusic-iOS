@@ -191,7 +191,6 @@ private extension MyPlaylistDetailReactor {
                                         id: $0.id,
                                         title: $0.title,
                                         artist: $0.artist,
-                                        date: $0.date.toDateCustomFormat(format: "yyyy.MM.dd"),
                                         isSelected: false
                                     )
                                 }
