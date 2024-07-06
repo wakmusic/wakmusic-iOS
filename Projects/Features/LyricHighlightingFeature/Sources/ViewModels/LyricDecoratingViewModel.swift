@@ -34,7 +34,11 @@ final class LyricDecoratingViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[LyricDecoratingBackgroundEntity]> = BehaviorRelay(value: [])
         let highlightingItems: BehaviorRelay<String> = BehaviorRelay(value: "")
-        let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(songID: "", title: "", artist: ""))
+        let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(
+            songID: "",
+            title: "",
+            artist: ""
+        ))
         let updateDecoratingImage: BehaviorRelay<String> = BehaviorRelay(value: "")
         let occurredError: PublishSubject<String> = PublishSubject()
     }
@@ -66,8 +70,10 @@ final class LyricDecoratingViewModel: ViewModelType {
 
         output.highlightingItems
             .accept(model.highlightingItems.joined(separator: "\n"))
-        output.updateInfo.accept(.init(
-            songID: model.songID, title: model.title, artist: model.artist)
+        output.updateInfo.accept(
+            .init(
+                songID: model.songID, title: model.title, artist: model.artist
+            )
         )
 
         input.didTapBackground

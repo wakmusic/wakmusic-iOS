@@ -34,7 +34,11 @@ public final class LyricHighlightingViewModel: ViewModelType {
         let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let goDecoratingScene: PublishSubject<LyricHighlightingRequiredModel> = PublishSubject()
-        let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(songID: "", title: "", artist: ""))
+        let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(
+            songID: "",
+            title: "",
+            artist: ""
+        ))
     }
 
     public func transform(from input: Input) -> Output {
@@ -78,8 +82,10 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .bind(to: output.goDecoratingScene)
             .disposed(by: disposeBag)
 
-        output.updateInfo.accept(.init(
-            songID: model.songID, title: model.title, artist: model.artist)
+        output.updateInfo.accept(
+            .init(
+                songID: model.songID, title: model.title, artist: model.artist
+            )
         )
 
         output.dataSource
