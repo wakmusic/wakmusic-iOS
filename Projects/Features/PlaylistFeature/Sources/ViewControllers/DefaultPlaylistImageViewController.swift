@@ -199,20 +199,18 @@ extension DefaultPlaylistImageViewController {
 
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-            
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth(0.25)
             )
 
             var group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 4)
-        
+
             group.interItemSpacing = .fixed(10)
 
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 20, trailing: 20)
 
-            
             return section
         }
         return layout
