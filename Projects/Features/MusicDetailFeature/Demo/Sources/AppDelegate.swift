@@ -22,7 +22,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     videoID: "fgSXAKsq-Vo",
                     title: "리와인드",
                     artistString: "이세계아이돌",
-                    date: 0,
+                    date: "2024.10.10",
                     likes: 1_000_000,
                     isLiked: true,
                     karaokeNumber: .init(tj: 0, ky: 0)
@@ -31,7 +31,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     videoID: "DPEtmqvaKqY",
                     title: "팬서비스",
                     artistString: "고세구",
-                    date: 0,
+                    date: "2024.10.10",
                     likes: 1_000_000,
                     isLiked: true,
                     karaokeNumber: .init(tj: 0, ky: 0)
@@ -40,7 +40,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     videoID: "KQa297hRop0",
                     title: "UP!",
                     artistString: "징버거",
-                    date: 1,
+                    date: "2024.10.10",
                     likes: 1_000_000,
                     isLiked: false,
                     karaokeNumber: .init(tj: 0, ky: 0)
@@ -49,7 +49,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     videoID: "qZi1Xh0_8q4",
                     title: "긍지높은 아이돌",
                     artistString: "고세구",
-                    date: 1,
+                    date: "2024.10.10",
                     likes: 1_000_000,
                     isLiked: true,
                     karaokeNumber: .init(tj: 0, ky: 0)
