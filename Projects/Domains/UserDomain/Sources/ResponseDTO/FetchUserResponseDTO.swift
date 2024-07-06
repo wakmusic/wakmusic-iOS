@@ -25,7 +25,7 @@ public extension FetchUserResponseDTO {
             platform: platform,
             name: name,
             profile: profile,
-            version: 0
+            itemCount: itemCount
         )
     }
 }
