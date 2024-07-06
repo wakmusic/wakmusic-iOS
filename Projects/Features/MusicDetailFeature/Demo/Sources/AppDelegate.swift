@@ -21,42 +21,38 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 .init(
                     videoID: "fgSXAKsq-Vo",
                     title: "리와인드",
-                    artists: ["이세계아이돌"],
+                    artistString: "이세계아이돌",
                     date: 0,
-                    start: 0,
-                    end: 0,
                     likes: 1_000_000,
-                    isLiked: true
+                    isLiked: true,
+                    karaokeNumber: .init(tj: 0, ky: 0)
                 ),
                 .init(
                     videoID: "DPEtmqvaKqY",
                     title: "팬서비스",
-                    artists: ["고세구"],
-                    date: 1,
-                    start: 1,
-                    end: 1,
+                    artistString: "고세구",
+                    date: 0,
                     likes: 1_000_000,
-                    isLiked: true
+                    isLiked: true,
+                    karaokeNumber: .init(tj: 0, ky: 0)
                 ),
                 .init(
                     videoID: "KQa297hRop0",
                     title: "UP!",
-                    artists: ["징버거"],
+                    artistString: "징버거",
                     date: 1,
-                    start: 1,
-                    end: 1,
                     likes: 1_000_000,
-                    isLiked: false
+                    isLiked: false,
+                    karaokeNumber: .init(tj: 0, ky: 0)
                 ),
                 .init(
                     videoID: "qZi1Xh0_8q4",
                     title: "긍지높은 아이돌",
-                    artists: ["고세구"],
+                    artistString: "고세구",
                     date: 1,
-                    start: 1,
-                    end: 1,
                     likes: 1_000_000,
-                    isLiked: true
+                    isLiked: true,
+                    karaokeNumber: .init(tj: 0, ky: 0)
                 )
             ],
             createdAt: 0,
