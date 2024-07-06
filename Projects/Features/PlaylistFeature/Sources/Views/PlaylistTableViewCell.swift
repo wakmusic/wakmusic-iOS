@@ -56,21 +56,13 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.layer.shadowRadius = 5.33
     }
 
-    internal lazy var waveStreamAnimationView =
-        LottieAnimationView(name: "WaveStream", bundle: DesignSystemResources.bundle).then {
-            $0.loopMode = .loop
-            $0.contentMode = .scaleAspectFit
-        }
-
     internal lazy var superButton = UIButton().then {
         $0.addTarget(self, action: #selector(superButtonSelectedAction), for: .touchUpInside)
     }
 
     internal weak var delegate: PlaylistTableViewCellDelegate?
 
-    internal var model: (index: Int, song: SongEntity?) = (0, nil)
-
-    internal var isPlaying: Bool = false
+    internal var model: (index: Int, model: PlaylistItemModel?) = (0, nil)
 
     internal var isAnimating: Bool = false
 
@@ -86,7 +78,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        isPlaying = false
     }
 
     private func configureContents() {
@@ -94,7 +85,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.thumbnailImageView)
         self.contentView.addSubview(self.titleArtistStackView)
         self.contentView.addSubview(self.playImageView)
-        self.contentView.addSubview(self.waveStreamAnimationView)
         self.contentView.addSubview(self.superButton)
 
         let height = 40
@@ -119,12 +109,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.right.equalTo(contentView.snp.right).offset(-20)
         }
 
-        waveStreamAnimationView.snp.makeConstraints {
-            $0.width.height.equalTo(32)
-            $0.centerY.equalTo(contentView.snp.centerY)
-            $0.right.equalTo(contentView.snp.right).offset(-20)
-        }
-
         superButton.snp.makeConstraints {
             $0.left.top.bottom.equalToSuperview()
             $0.right.equalToSuperview()
@@ -133,19 +117,23 @@ internal class PlaylistTableViewCell: UITableViewCell {
 }
 
 extension PlaylistTableViewCell {
-    internal func setContent(song: SongEntity, index: Int, isEditing: Bool) {
+    internal func setContent(
+        model: PlaylistItemModel,
+        index: Int,
+        isEditing: Bool
+    ) {
         self.thumbnailImageView.kf.setImage(
-            with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: song.id).toString),
+            with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
 
-        self.titleLabel.text = song.title
-        self.artistLabel.text = song.artist
-        self.model = (index, song)
-        self.backgroundColor = song.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
+        self.titleLabel.text = model.title
+        self.artistLabel.text = model.artist
+        self.model = (index, model)
+        self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
 
-        self.updateButtonHidden(isEditing: isEditing, isPlaying: isPlaying)
+        self.updateButtonHidden(isEditing: isEditing)
         self.updateConstraintPlayImageView(isEditing: isEditing)
     }
 
@@ -153,13 +141,11 @@ extension PlaylistTableViewCell {
         delegate?.superButtonTapped(index: model.index)
     }
 
-    private func updateButtonHidden(isEditing: Bool, isPlaying: Bool) {
+    private func updateButtonHidden(isEditing: Bool) {
         if isEditing {
             playImageView.isHidden = true
-            waveStreamAnimationView.isHidden = true
         } else {
-            playImageView.isHidden = isPlaying
-            waveStreamAnimationView.isHidden = !isPlaying
+            playImageView.isHidden = false
         }
         superButton.isHidden = !isEditing
     }

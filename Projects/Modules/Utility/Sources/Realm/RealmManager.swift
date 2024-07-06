@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import LogManager
 import Realm
 import RealmSwift
 
 public class RealmManager: NSObject {
     public static let shared = RealmManager()
-    public var realm: Realm!
+    private var realm: Realm!
 
     override init() {
         super.init()
@@ -22,9 +23,12 @@ public class RealmManager: NSObject {
     public func register() {
         // Realm DataBase Migration 하려면 아래의 schemaVersion을 +1 해줘야 합니다.
         let config = Realm.Configuration(
-            schemaVersion: 1,
-            migrationBlock: { _, oldSchemaVersion in
+            schemaVersion: 2,
+            migrationBlock: { database, oldSchemaVersion in
                 if oldSchemaVersion < 1 {}
+                if oldSchemaVersion < 2 {
+                    database.deleteData(forType: PlayedLists.className())
+                }
             }
         )
         Realm.Configuration.defaultConfiguration = config
@@ -33,9 +37,9 @@ public class RealmManager: NSObject {
         do {
             realm = try Realm()
         } catch {
-            DEBUG_LOG(error.localizedDescription)
+            LogManager.printError(error.localizedDescription)
         }
-        DEBUG_LOG(Realm.Configuration.defaultConfiguration.fileURL ?? "")
+        LogManager.printDebug(Realm.Configuration.defaultConfiguration.fileURL ?? "")
     }
 }
 
@@ -48,12 +52,20 @@ public extension RealmManager {
                 } else if let object = model as? [Object] {
                     self.realm.add(object, update: update)
                 } else {
-                    DEBUG_LOG("❌ Object Casting Failed")
+                    LogManager.printError("Object Casting Failed")
                 }
             }
         } catch {
-            DEBUG_LOG(error.localizedDescription)
+            LogManager.printError(error.localizedDescription)
         }
+    }
+
+    func fetchRealmDB<T: Object>() -> Results<T> {
+        self.realm.objects(T.self)
+    }
+
+    func fetchRealmDB<T: Object>(_ type: T.Type) -> Results<T> {
+        self.realm.objects(type)
     }
 
     func deleteRealmDB<T: Object>(model: Results<T>) {
@@ -62,7 +74,7 @@ public extension RealmManager {
                 self.realm.delete(model)
             }
         } catch {
-            DEBUG_LOG(error.localizedDescription)
+            LogManager.printError(error.localizedDescription)
         }
     }
 }
