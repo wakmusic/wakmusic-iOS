@@ -3,10 +3,13 @@ import DesignSystem
 import SnapKit
 import Then
 import UIKit
+import PlaylistFeatureInterface
 
-#warning("델리게이트 만들기")
 
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
+    
+    weak var delegate: (DefaultPlaylistImageDelegate)?
+    
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("이미지 선택")
     }
@@ -53,6 +56,11 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             item: itemIdentifier
         )
         return cell
+    }
+    
+    init(delegate: DefaultPlaylistImageDelegate? = nil, reactor: DefaultPlaylistImageReactor) {
+        self.delegate = delegate
+        super.init(reactor: reactor)
     }
 
 
@@ -155,7 +163,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
-                flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
+                 flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
             }
             .disposed(by: disposeBag)
 
