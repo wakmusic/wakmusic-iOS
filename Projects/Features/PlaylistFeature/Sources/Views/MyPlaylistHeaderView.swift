@@ -147,7 +147,7 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
     func updateThumbnailByAlbum(_ data: Data) {
         thumbnailImageView.image = UIImage(data: data)
     }
-    
+
     func updateThumbnailByDefault(_ url: String) {
         thumbnailImageView.kf.setImage(with: URL(string: url))
     }

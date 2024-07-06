@@ -1,15 +1,13 @@
 import BaseFeature
 import DesignSystem
+import PlaylistFeatureInterface
 import SnapKit
 import Then
 import UIKit
-import PlaylistFeatureInterface
-
 
 final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
-    
-    weak var delegate: (DefaultPlaylistImageDelegate)?
-    
+    weak var delegate: DefaultPlaylistImageDelegate?
+
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("이미지 선택")
     }
@@ -19,17 +17,16 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
         $0.setImage(dismissImage, for: .normal)
     }
-    
+
     private let shadowImageVIew: UIImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.image = DesignSystemAsset.LyricHighlighting.lyricDecoratingBottomShadow.image
-        
     }
 
     private let buttonContainerView: UIView = UIView().then {
         $0.backgroundColor = .white
     }
-    
+
     private let confirmButton: UIButton = UIButton().then {
         $0.setTitle("확인", for: .normal)
         $0.setTitleColor(.white, for: .normal)
@@ -57,13 +54,11 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         )
         return cell
     }
-    
+
     init(delegate: DefaultPlaylistImageDelegate? = nil, reactor: DefaultPlaylistImageReactor) {
         self.delegate = delegate
         super.init(reactor: reactor)
     }
-
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +74,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         self.view.addSubviews(wmNavigationbarView, collectionView, buttonContainerView)
         wmNavigationbarView.setLeftViews([dismissButton])
 
-        buttonContainerView.addSubviews(shadowImageVIew,confirmButton)
+        buttonContainerView.addSubviews(shadowImageVIew, confirmButton)
     }
 
     override func setLayout() {
@@ -100,7 +95,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             $0.top.equalTo(collectionView.snp.bottom)
             $0.bottom.leading.trailing.equalToSuperview()
         }
-        
+
         shadowImageVIew.snp.makeConstraints {
             $0.top.equalToSuperview().offset(-14)
             $0.leading.trailing.equalToSuperview()
@@ -127,7 +122,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         super.bindAction(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
+
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
@@ -138,17 +133,16 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         confirmButton.rx
             .tap
             .withLatestFrom(sharedState.map(\.dataSource))
-            .withLatestFrom(sharedState.map(\.selectedIndex)){($0,$1)}
+            .withLatestFrom(sharedState.map(\.selectedIndex)) { ($0, $1) }
             .bind(with: self) { owner, info in
-               
+
                 let (dataSource, index) = (info.0, info.1)
-                
-                let (name, url) = ("임시 명",  dataSource[index])
-                
+
+                let (name, url) = ("임시 명", dataSource[index])
+
                 owner.dismiss(animated: true) {
                     owner.delegate?.receive(name, url)
                 }
-                
             }
             .disposed(by: disposeBag)
     }
@@ -169,11 +163,11 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                 owner.thumbnailDiffableDataSource.apply(snapShot)
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
-                 flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
+                flag == true ? owner.indicator.stopAnimating() : owner.indicator.stopAnimating()
             }
             .disposed(by: disposeBag)
 
@@ -226,7 +220,6 @@ extension DefaultPlaylistImageViewController {
 
 extension DefaultPlaylistImageViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
         reactor?.action.onNext(.selectedIndex(indexPath.row))
     }
 }

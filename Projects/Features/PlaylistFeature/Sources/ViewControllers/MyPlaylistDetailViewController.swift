@@ -32,7 +32,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let thumbnailPopupFactory: any ThumbnailPopupFactory
 
     private let checkThumbnailFactory: any CheckThumbnailFactory
-    
+
     private let defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -587,11 +587,10 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageButton)
-            let vc =  defaultPlaylistImageFactory.makeView(self)
+            let vc = defaultPlaylistImageFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
-            
+
             self.present(vc, animated: true)
-            
 
         } else {
             LogManager.analytics(
@@ -612,5 +611,4 @@ extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
     func receive(_ name: String, _ url: String) {
         headerView.updateThumbnailByDefault(url)
     }
-    
 }
