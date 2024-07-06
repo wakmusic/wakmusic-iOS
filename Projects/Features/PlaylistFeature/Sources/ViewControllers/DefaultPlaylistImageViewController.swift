@@ -168,7 +168,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .bind(with: self) { owner, flag in
 
                 if flag {
-                    owner.indicator.stopAnimating()
+                    owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
                     owner.collectionView.selectItem(
