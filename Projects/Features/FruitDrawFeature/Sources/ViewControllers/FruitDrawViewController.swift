@@ -504,5 +504,6 @@ private extension FruitDrawViewController {
         descriptioniLabel.alpha = isHide ? 0 : 1
         drawMachineImageView.alpha = descriptioniLabel.alpha
         drawOrConfirmButton.alpha = descriptioniLabel.alpha
+        navigationBarView.alpha = descriptioniLabel.alpha
     }
 }
