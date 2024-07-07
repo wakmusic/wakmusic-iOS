@@ -41,7 +41,7 @@ final class WakmusicRecommendReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateLodingState(isLoading):
             newState.isLoading = isLoading
-            
+
         case let .showToast(message):
             newState.toastMessage = message
         }

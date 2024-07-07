@@ -91,7 +91,7 @@ final class SongSearchResultReactor: Reactor {
 
         case let .updateScrollPage(page):
             newState.scrollPage = page
-            
+
         case let .showToast(message):
             newState.toastMessage = message
         }
