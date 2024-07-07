@@ -30,16 +30,11 @@ extension LyricHighlightingViewController {
     }
 
     func outputBind() {
-        output.updateSongTitle
-            .bind(with: self, onNext: { owner, song in
-                owner.songLabel.text = song
+        output.updateInfo
+            .bind(with: self, onNext: { owner, info in
+                owner.songLabel.text = info.title
                 owner.songLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-            })
-            .disposed(by: disposeBag)
-
-        output.updateArtist
-            .bind(with: self, onNext: { owner, artist in
-                owner.artistLabel.text = artist
+                owner.artistLabel.text = info.artist
                 owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             })
             .disposed(by: disposeBag)

@@ -59,7 +59,7 @@ public final class AfterLoginViewModel: ViewModelType {
                     platform: $0.platform,
                     profile: $0.profile,
                     name: AES256.encrypt(string: $0.name),
-                    version: $0.version
+                    itemCount: $0.itemCount
                 )
             }).disposed(by: disposeBag)
 
