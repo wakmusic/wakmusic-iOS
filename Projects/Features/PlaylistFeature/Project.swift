@@ -6,7 +6,7 @@ let project = Project.module(
     name: ModulePaths.Feature.PlaylistFeature.rawValue,
     targets: [
         .interface(module: .feature(.PlaylistFeature), dependencies: [
-            .feature(target: .BaseFeature, type: .interface),
+            .feature(target: .BaseFeature, type: .interface)
 
         ]),
         .implements(
