@@ -15,7 +15,14 @@ public class PermissionViewController: UIViewController, ViewControllerFromStory
     @IBOutlet weak var borderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainTitleLabel: UILabel!
     @IBOutlet weak var optionalPermissionLabel: UILabel!
+    @IBOutlet weak var requiredPermissionLabel: UILabel!
 
+    @IBOutlet weak var deviceInfoImageView: UIImageView!
+    @IBOutlet weak var deviceInfoLabel: UILabel!
+    @IBOutlet weak var deviceInfoDescriptionLabel: UILabel!
+    @IBOutlet weak var notificationImageView: UIImageView!
+    @IBOutlet weak var notificationLabel: UILabel!
+    @IBOutlet weak var notificationDescriptionLabel: UILabel!
     @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraDescriptionLabel: UILabel!
@@ -62,6 +69,38 @@ extension PermissionViewController {
         )
         self.mainTitleLabel.attributedText = mainTitleAttributedString
 
+        let requiredAttributedString = NSMutableAttributedString(
+            string: "필수적 접근 권한",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        self.requiredPermissionLabel.attributedText = requiredAttributedString
+
+//        self.deviceInfoImageView.image = DesignSystemAsset.Permission.permissionCamera.image
+        let deviceInfoAttributedString = NSMutableAttributedString(
+            string: "기기정보",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        self.deviceInfoLabel.attributedText = deviceInfoAttributedString
+
+        let deviceInfoDescriptionAttributedString = NSMutableAttributedString(
+            string: "사용성 개선 및 오류 확인",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+                .kern: -0.5
+            ]
+        )
+        self.deviceInfoDescriptionLabel.attributedText = deviceInfoDescriptionAttributedString
+        self.deviceInfoDescriptionLabel.numberOfLines = 0
+
         let optionalAttributedString = NSMutableAttributedString(
             string: "선택적 접근 권한",
             attributes: [
@@ -71,6 +110,28 @@ extension PermissionViewController {
             ]
         )
         self.optionalPermissionLabel.attributedText = optionalAttributedString
+
+//        self.notificationImageView.image = DesignSystemAsset.Permission.permissionCamera.image
+        let notificationAttributedString = NSMutableAttributedString(
+            string: "푸시알림",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+                .kern: -0.5
+            ]
+        )
+        self.notificationLabel.attributedText = notificationAttributedString
+
+        let notificationDescriptionAttributedString = NSMutableAttributedString(
+            string: "알림 수신",
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+                .kern: -0.5
+            ]
+        )
+        self.notificationDescriptionLabel.attributedText = notificationDescriptionAttributedString
+        self.notificationDescriptionLabel.numberOfLines = 0
 
         self.cameraImageView.image = DesignSystemAsset.Permission.permissionCamera.image
         let cameraAttributedString = NSMutableAttributedString(
