@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import RxCocoa
@@ -9,7 +10,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 #warning("오버 스크롤 처리")
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
@@ -18,7 +18,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     var bottomSheetView: BottomSheetView!
 
     private let containSongsFactory: any ContainSongsFactory
-    
+
     private let searchSortOptionComponent: SearchSortOptionComponent
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
@@ -32,7 +32,11 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         SongEntity
     > = createDataSource()
 
-    init(_ reactor: SongSearchResultReactor,searchSortOptionComponent: SearchSortOptionComponent, containSongsFactory: any ContainSongsFactory) {
+    init(
+        _ reactor: SongSearchResultReactor,
+        searchSortOptionComponent: SearchSortOptionComponent,
+        containSongsFactory: any ContainSongsFactory
+    ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         super.init(reactor: reactor)
@@ -43,7 +47,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         reactor?.action.onNext(.deselectAll)
@@ -148,12 +152,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                 }
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.selectedCount)
             .distinctUntilChanged()
-            .withLatestFrom(sharedState.map(\.dataSource)){($0,$1)}
+            .withLatestFrom(sharedState.map(\.dataSource)) { ($0, $1) }
             .bind(with: self) { owner, info in
-                
+
                 let (count, limit) = (info.0, info.1.count)
 
                 if count == .zero {
@@ -170,7 +174,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                 }
             }
             .disposed(by: disposeBag)
-        
     }
 
     override func addView() {
@@ -227,7 +230,6 @@ extension SongSearchResultViewController {
                 for: indexPath,
                 item: item
             )
-            
         }
 
         return dataSource
@@ -252,13 +254,12 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 
 extension SongSearchResultViewController: SongCartViewDelegate {
     func buttonTapped(type: SongCartSelectType) {
-        
         guard let reactor = reactor else {
             return
         }
 
         let currentState = reactor.currentState
-         
+
         switch type {
         case let .allSelect(flag: flag):
             break
@@ -266,7 +267,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
-        
+
         case .addPlayList:
             #warning("재생목록 관련 구현체 구현 시 추가")
             break
@@ -276,8 +277,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         case .remove:
             break
         }
-        
+
         reactor.action.onNext(.deselectAll)
     }
-    
 }

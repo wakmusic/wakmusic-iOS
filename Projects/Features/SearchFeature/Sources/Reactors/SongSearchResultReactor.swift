@@ -92,7 +92,6 @@ final class SongSearchResultReactor: Reactor {
             newState.dataSource = dataSource
             newState.canLoad = canLoad
 
-
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
 
@@ -101,10 +100,9 @@ final class SongSearchResultReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
-            
+
         case let .updateSelectedCount(count):
             newState.selectedCount = count
-
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
@@ -162,7 +160,7 @@ extension SongSearchResultReactor {
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
         ])
     }
-    
+
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
