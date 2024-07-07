@@ -15,6 +15,14 @@ public struct UserInfo: Codable, Equatable {
     public let name: String
     public let itemCount: Int
 
+    public var decryptID: String {
+        return AES256.decrypt(encoded: ID)
+    }
+
+    public var decryptName: String {
+        return AES256.decrypt(encoded: name)
+    }
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
     }
@@ -26,7 +34,7 @@ public extension UserInfo {
             ID: self.ID,
             platform: self.platform,
             profile: self.profile,
-            name: name,
+            name: AES256.encrypt(string: name),
             itemCount: self.itemCount
         )
     }

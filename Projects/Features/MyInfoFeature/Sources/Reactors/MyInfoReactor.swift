@@ -175,9 +175,8 @@ private extension MyInfoReactor {
     }
 
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        guard let nickname = userInfo?.name else { return .empty() }
-        let decrypt = AES256.decrypt(encoded: nickname)
-        return .just(.updateNickname(decrypt))
+        guard let userInfo = userInfo else { return .empty() }
+        return .just(.updateNickname(userInfo.decryptName))
     }
 
     func updatePlatform(_ userInfo: UserInfo?) -> Observable<Mutation> {
