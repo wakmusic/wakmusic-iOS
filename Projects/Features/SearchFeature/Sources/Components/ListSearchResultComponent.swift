@@ -10,8 +10,7 @@ import UIKit
 public protocol ListSearchResultDependency: Dependency {
     var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase { get }
     var searchSortOptionComponent: SearchSortOptionComponent { get }
-    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory { get }
-    var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
 }
 
 public final class ListSearchResultComponent: Component<ListSearchResultDependency>, ListSearchResultFactory {
@@ -22,8 +21,7 @@ public final class ListSearchResultComponent: Component<ListSearchResultDependen
                 fetchSearchPlaylistsUseCase: dependency.fetchSearchPlaylistsUseCase
             ),
             searchSortOptionComponent: dependency.searchSortOptionComponent,
-            unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory,
-            myPlaylistDetailFactory: dependency.myPlaylistDetailFactory
+            playlistDetailFactory: dependency.playlistDetailFactory
         )
     }
 }

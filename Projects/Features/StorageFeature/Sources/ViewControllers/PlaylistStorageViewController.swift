@@ -96,13 +96,14 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
             .bind { owner, indexPath, isEditing, dataSource in
 
                 guard isEditing else {
-                    owner.navigationController?.pushViewController(
-                        owner.playlistDetailFactory.makeView(
-                            id: dataSource[indexPath.section].items[indexPath.row].key,
-                            isCustom: true
-                        ),
-                        animated: true
-                    )
+                    #warning("추후 수정 by 케이님 (함프 언급)")
+//                    owner.navigationController?.pushViewController(
+//                        owner.playlistDetailFactory.makeView(
+//                            id: dataSource[indexPath.section].items[indexPath.row].key,
+//                            isCustom: true
+//                        ),
+//                        animated: true
+//                    )
 
                     return
                 }

@@ -12,16 +12,17 @@ import UIKit
 import Utility
 
 final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
-    PlaylistDetailNavigatable {
-    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
+                                            PlaylistDetailNavigatable {
+  
+    
 
-    var myPlaylistDetailFactory: any MyPlaylistDetailFactory
 
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
+    var playlistDetailFactory: any PlaylistDetailFactory
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -37,12 +38,10 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     init(
         _ reactor: ListSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
-        unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
-        myPlaylistDetailFactory: any MyPlaylistDetailFactory
+        playlistDetailFactory: any PlaylistDetailFactory
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
-        self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
-        self.myPlaylistDetailFactory = myPlaylistDetailFactory
+        self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -214,7 +213,9 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
+        
+        navigatePlaylistDetail(key: model.key, isMine: model.ownerId == PreferenceManager.userInfo?.ID)
 
-        navigatePlaylistDetail(playlistKey: model.key, isMine: PreferenceManager.userInfo?.ID ?? "" == model.ownerId)
+        
     }
 }
