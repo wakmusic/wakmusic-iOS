@@ -48,6 +48,10 @@ public extension AppComponent {
         CheckThumbnailComponent(parent: self)
     }
 
+    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
+        DefaultPlaylistImageComponent(parent: self)
+    }
+
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
             RemotePlaylistDataSourceImpl(keychain: keychain)
