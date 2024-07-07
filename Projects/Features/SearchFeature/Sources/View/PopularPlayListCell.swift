@@ -42,10 +42,11 @@ final class PopularPlayListCell: UICollectionViewCell {
 }
 
 extension PopularPlayListCell {
-    public func update(_ model: Model) {
-        self.titleLabel.text = model.title
-        self.nickNameLabel.text = "Hamp"
-    }
+    #warning("추후 업데이트 시 사용")
+//    public func update(_ model: Model) {
+//        self.titleLabel.text = model.title
+//        self.nickNameLabel.text = "Hamp"
+//    }
 
     private func configureUI() {
         imageView.snp.makeConstraints {
