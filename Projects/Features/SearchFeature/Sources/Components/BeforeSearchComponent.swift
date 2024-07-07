@@ -13,7 +13,6 @@ public protocol BeforeSearchDependency: Dependency {
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
-    
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {

@@ -18,7 +18,6 @@ public struct Model: Hashable {
 }
 
 final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
-    
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let textPopUpFactory: TextPopUpFactory
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
@@ -156,8 +155,6 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
 
                 var snapShot = owner.dataSource.snapshot()
                 snapShot.appendSections([.youtube, .recommend, .popularList])
-
-   
 
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
                 snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
@@ -316,7 +313,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             #warning("유튜브 이동")
             LogManager.printDebug("youtube \(model)")
         case let .recommend(model: model):
-         
+
             navigatePlaylistDetail(key: model.key, kind: .wakmu)
 
         case let .popularList(model: model):
@@ -334,7 +331,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-            self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
             case .popularList:
                 break
             }

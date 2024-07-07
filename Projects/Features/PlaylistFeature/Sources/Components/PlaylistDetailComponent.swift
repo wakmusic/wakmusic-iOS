@@ -10,7 +10,6 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
     public func makeView(key: String, kind: PlaylistDetailKind) -> UIViewController {
-        
         switch kind {
         case .my:
             return dependency.myPlaylistDetailFactory.makeView(key: key)
@@ -19,7 +18,5 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
         case .wakmu:
             return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
         }
-        
     }
-    
 }

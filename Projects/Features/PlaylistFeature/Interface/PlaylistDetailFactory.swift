@@ -7,7 +7,6 @@ public enum PlaylistDetailKind {
     case unkwon
 }
 
-
 public protocol PlaylistDetailFactory {
     func makeView(key: String, kind: PlaylistDetailKind) -> UIViewController
 }
