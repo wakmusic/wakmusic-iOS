@@ -12,13 +12,13 @@ import UIKit
 import Utility
 
 final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
-    PlaylistDetailNavigatable {
+    PlaylistDetailNavigator {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
-    var playlistDetailFactory: any PlaylistDetailFactory
+    private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
