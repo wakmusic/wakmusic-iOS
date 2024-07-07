@@ -209,9 +209,8 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-        #warning("복호화 추후 개선 예정")
-
-        let isMine = model.ownerId == AES256.decrypt(encoded: PreferenceManager.userInfo?.ID ?? "")
+        let id = PreferenceManager.userInfo?.decryptedID ?? ""
+        let isMine = model.ownerId == id
 
         navigatePlaylistDetail(
             key: model.key,
