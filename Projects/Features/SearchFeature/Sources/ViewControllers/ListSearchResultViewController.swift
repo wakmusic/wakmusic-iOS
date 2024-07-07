@@ -12,11 +12,7 @@ import UIKit
 import Utility
 
 final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
-                                            PlaylistDetailNavigatable {
-  
-    
-
-
+    PlaylistDetailNavigatable {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -213,9 +209,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        
-        navigatePlaylistDetail(key: model.key, isMine: model.ownerId == PreferenceManager.userInfo?.ID)
 
-        
+        navigatePlaylistDetail(key: model.key, isMine: model.ownerId == PreferenceManager.userInfo?.ID)
     }
 }

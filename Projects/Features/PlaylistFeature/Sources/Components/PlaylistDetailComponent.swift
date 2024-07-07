@@ -1,6 +1,6 @@
 import NeedleFoundation
-import UIKit
 import PlaylistFeatureInterface
+import UIKit
 
 public protocol PlaylistDetailFactoryDependency: Dependency {
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
@@ -8,12 +8,9 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
-    
     public func makeView(key: String, isMine: Bool) -> UIViewController {
-        return isMine ? 
-        dependency.myPlaylistDetailFactory.makeView(key: key) :
-        dependency.unknownPlaylistDetailFactory.makeView(key: key)
+        return isMine ?
+            dependency.myPlaylistDetailFactory.makeView(key: key) :
+            dependency.unknownPlaylistDetailFactory.makeView(key: key)
     }
-
-
 }
