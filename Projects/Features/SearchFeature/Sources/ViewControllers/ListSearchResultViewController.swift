@@ -205,10 +205,11 @@ extension ListSearchResultViewController: SearchSortOptionDelegate {
 
 extension ListSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        #warning("플레이리스트 상세로 이동")
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
+        
+        #warning("복호화 추후 개선 예정")
 
         let isMine = model.ownerId == AES256.decrypt(encoded: PreferenceManager.userInfo?.ID ?? "")
 
