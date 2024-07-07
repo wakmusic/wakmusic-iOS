@@ -387,8 +387,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlaylistEntity) {
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
-        let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
-        self.navigationController?.pushViewController(playListDetailVc, animated: true)
+        #warning("변경된 플레이리슽 디테일 진입 방법으로 리팩")
+//        let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
+//        self.navigationController?.pushViewController(playListDetailVc, animated: true)
     }
 }
 

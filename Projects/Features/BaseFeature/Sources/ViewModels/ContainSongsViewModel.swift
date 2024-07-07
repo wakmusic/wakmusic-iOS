@@ -84,7 +84,8 @@ public final class ContainSongsViewModel: ViewModelType {
             })
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .map { playlist, userInfo in
-                return playlist.filter { $0.userId == userInfo?.ID }
+
+                return playlist.filter { $0.userId == userInfo?.decryptedID }
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)

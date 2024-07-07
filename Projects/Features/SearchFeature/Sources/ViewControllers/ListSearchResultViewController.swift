@@ -1,6 +1,7 @@
 import BaseFeature
 import DesignSystem
 import LogManager
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -10,12 +11,14 @@ import Then
 import UIKit
 import Utility
 
-final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
+final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
+    PlaylistDetailNavigator {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
+    private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -28,8 +31,13 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         SearchPlaylistEntity
     > = createDataSource()
 
-    init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+    init(
+        _ reactor: ListSearchResultReactor,
+        searchSortOptionComponent: SearchSortOptionComponent,
+        playlistDetailFactory: any PlaylistDetailFactory
+    ) {
         self.searchSortOptionComponent = searchSortOptionComponent
+        self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -197,10 +205,16 @@ extension ListSearchResultViewController: SearchSortOptionDelegate {
 
 extension ListSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        #warning("플레이리스트 상세로 이동")
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        LogManager.printDebug(model)
+
+        let id = PreferenceManager.userInfo?.decryptedID ?? ""
+        let isMine = model.ownerId == id
+
+        navigatePlaylistDetail(
+            key: model.key,
+            kind: isMine ? .my : .unknown
+        )
     }
 }

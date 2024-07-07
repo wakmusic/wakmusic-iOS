@@ -6,7 +6,7 @@ public struct SearchPlaylistDTO: Decodable {
     public init(
         key: String,
         title: String,
-        userName: String,
+        user: User,
         imageUrl: String,
         songCount: Int,
         createdAt: Double,
@@ -14,15 +14,20 @@ public struct SearchPlaylistDTO: Decodable {
     ) {
         self.key = key
         self.title = title
-        self.userName = userName
+        self.user = user
         self.imageUrl = imageUrl
         self.songCount = songCount
         self.createdAt = createdAt
         self.private = `private`
     }
 
+    public struct User: Decodable {
+        let handle: String
+        let name: String
+    }
+
     public let key, title, imageUrl: String
-    public let userName: String
+    public let user: User
     public let `private`: Bool
     public let songCount: Int
     public let createdAt: Double
@@ -33,7 +38,8 @@ public extension SearchPlaylistDTO {
         SearchPlaylistEntity(
             key: key,
             title: title,
-            userName: userName,
+            ownerId: user.handle,
+            userName: user.name,
             image: imageUrl,
             date: (createdAt / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             count: songCount,

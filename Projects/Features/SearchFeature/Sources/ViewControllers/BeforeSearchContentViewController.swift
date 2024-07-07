@@ -17,12 +17,10 @@ public struct Model: Hashable {
     let title: String
 }
 
-public final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor> {
+final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let textPopUpFactory: TextPopUpFactory
-    private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
-    private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
-    private let wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory
+    private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
@@ -40,16 +38,12 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
         textPopUpFactory: TextPopUpFactory,
-        myPlaylistDetailFactory: any MyPlaylistDetailFactory,
-        unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
-        wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory,
+        playlistDetailFactory: any PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
         self.textPopUpFactory = textPopUpFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
-        self.myPlaylistDetailFactory = myPlaylistDetailFactory
-        self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
-        self.wakmusicPlaylistDetailFactory = wakmusicPlaylistDetailFactory
+        self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -157,11 +151,10 @@ public final class BeforeSearchContentViewController: BaseReactorViewController<
         sharedState.map(\.dataSource)
             .distinctUntilChanged { $0.currentVideo == $1.currentVideo }
             .bind(with: self) { owner, dataSource in
+                let tmp: [Model] = [Model(title: "임시플리1"), Model(title: "임시플리2"), Model(title: "임시플리3")]
 
                 var snapShot = owner.dataSource.snapshot()
                 snapShot.appendSections([.youtube, .recommend, .popularList])
-
-                let tmp: [Model] = [Model(title: "임시플리1"), Model(title: "임시플리2"), Model(title: "임시플리3")]
 
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
                 snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
@@ -320,11 +313,9 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             #warning("유튜브 이동")
             LogManager.printDebug("youtube \(model)")
         case let .recommend(model: model):
-            LogManager.printDebug("recommend \(model)")
-            self.navigationController?.pushViewController(
-                wakmusicPlaylistDetailFactory.makeView(key: model.key),
-                animated: true
-            )
+
+            navigatePlaylistDetail(key: model.key, kind: .wakmu)
+
         case let .popularList(model: model):
             LogManager.printDebug("popular \(model)")
         }
@@ -340,11 +331,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-                self.navigationController?.pushViewController(
-                    myPlaylistDetailFactory.makeView(key: "-iZB-NSFdy-"),
-                    animated: true
-                )
-            // self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
             case .popularList:
                 break
             }
