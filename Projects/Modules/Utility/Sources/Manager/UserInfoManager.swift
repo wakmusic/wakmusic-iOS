@@ -13,7 +13,15 @@ public struct UserInfo: Codable, Equatable {
     public let platform: String
     public let profile: String
     public let name: String
-    public let version: Int
+    public let itemCount: Int
+
+    public var decryptedID: String {
+        return AES256.decrypt(encoded: ID)
+    }
+
+    public var decryptedName: String {
+        return AES256.decrypt(encoded: name)
+    }
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
@@ -21,17 +29,33 @@ public struct UserInfo: Codable, Equatable {
 }
 
 public extension UserInfo {
-    func update(displayName: String) -> UserInfo {
+    func update(name: String) -> UserInfo {
         return UserInfo(
             ID: self.ID,
             platform: self.platform,
             profile: self.profile,
-            name: displayName,
-            version: self.version
+            name: AES256.encrypt(string: name),
+            itemCount: self.itemCount
         )
     }
 
     func update(profile: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, name: self.name, version: self.version)
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: profile,
+            name: self.name,
+            itemCount: self.itemCount
+        )
+    }
+
+    func update(itemCount: Int) -> UserInfo {
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: self.profile,
+            name: self.name,
+            itemCount: itemCount
+        )
     }
 }

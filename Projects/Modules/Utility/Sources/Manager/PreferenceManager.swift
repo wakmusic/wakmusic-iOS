@@ -58,17 +58,6 @@ public final class UserDefaultWrapper<T: Codable> {
                 let decoder = JSONDecoder()
                 if let lodedObejct = try? decoder.decode(T.self, from: savedData) {
                     return lodedObejct
-
-                    // v2.2.1 > v2.2.2 업데이트 유저 로그아웃 방지 대응
-                } else if let loadedObject = try? JSONSerialization
-                    .jsonObject(with: savedData, options: []) as? [String: Any] {
-                    return UserInfo(
-                        ID: loadedObject["ID"] as? String ?? "",
-                        platform: loadedObject["platform"] as? String ?? "",
-                        profile: loadedObject["profile"] as? String ?? "",
-                        name: loadedObject["displayName"] as? String ?? "",
-                        version: loadedObject["version"] as? Int ?? 0
-                    ) as? T
                 }
 
             } else if UserDefaults.standard.array(forKey: key) != nil {

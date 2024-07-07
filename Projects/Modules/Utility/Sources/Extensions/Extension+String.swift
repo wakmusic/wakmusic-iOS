@@ -54,4 +54,10 @@ public extension String {
         let str = (0 ..< length).map { _ in self.randomElement()! }
         return String(str)
     }
+
+    func toDateCustomFormat(format: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.date(from: self) ?? .init()
+    }
 }

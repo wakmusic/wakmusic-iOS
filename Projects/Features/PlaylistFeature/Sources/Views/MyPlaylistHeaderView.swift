@@ -11,6 +11,8 @@ private protocol MyPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel)
     func updateThumbnailByAlbum(_ data: Data)
     func updateThumbnailByDefault(_ url: String)
+
+    #warning("api 구현 후 함수명을 좀 더 명확하게 변경하기")
 }
 
 private protocol MyPlaylistHeaderActionProtocol {

@@ -281,11 +281,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.dataSource)
+        sharedState.map(\.playlistModels)
             .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
-                var snapShot = NSDiffableDataSourceSnapshot<Int, SongEntity>()
+                var snapShot = NSDiffableDataSourceSnapshot<Int, PlaylistItemModel>()
 
                 let warningView = WMWarningView(
                     text: "리스트에 곡이 없습니다."
@@ -368,7 +368,7 @@ extension MyPlaylistDetailViewController {
                 }
 
                 cell.delegate = self
-                cell.setContent(song: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
+                cell.setContent(model: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
                 cell.selectionStyle = .none
 
                 return cell
@@ -400,7 +400,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return nil
         }
 
-        if reactor.currentState.dataSource.isEmpty {
+        if reactor.currentState.playlistModels.isEmpty {
             return nil
         } else {
             return playbuttonGroupView
@@ -412,7 +412,7 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
             return .zero
         }
 
-        if reactor.currentState.dataSource.isEmpty {
+        if reactor.currentState.playlistModels.isEmpty {
             return .zero
         } else {
             return CGFloat(52.0 + 32.0)
@@ -480,7 +480,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+            let vc = containSongsFactory
+                .makeView(songs: currentState.playlistModels.filter { $0.isSelected }.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)

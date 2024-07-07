@@ -51,14 +51,14 @@ public extension PreferenceManager {
         platform: String,
         profile: String,
         name: String,
-        version: Int
+        itemCount: Int
     ) {
         let userInfo = UserInfo(
-            ID: ID,
+            ID: AES256.encrypt(string: ID),
             platform: platform,
             profile: profile,
-            name: name,
-            version: version
+            name: AES256.encrypt(string: name),
+            itemCount: itemCount
         )
         Utility.PreferenceManager.userInfo = userInfo
     }

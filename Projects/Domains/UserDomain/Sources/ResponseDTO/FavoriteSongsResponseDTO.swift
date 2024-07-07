@@ -41,7 +41,8 @@ public extension FavoriteSongsResponseDTO {
                 reaction: reaction,
                 views: total?.views ?? 0,
                 last: total?.last ?? 0,
-                date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd")
+                date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
+                likes: 0
             ),
             isSelected: false
         )
