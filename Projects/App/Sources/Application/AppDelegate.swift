@@ -21,8 +21,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
         setAnalyticsDefaultParameters()
-        if let userID = PreferenceManager.userInfo?.ID {
-            LogManager.setUserID(userID: AES256.decrypt(encoded: userID))
+        if let userInfo = PreferenceManager.userInfo {
+            LogManager.setUserID(userID: userInfo.decryptedID)
         } else {
             LogManager.setUserID(userID: nil)
         }

@@ -55,10 +55,10 @@ public final class AfterLoginViewModel: ViewModelType {
             }
             .subscribe(onNext: {
                 PreferenceManager.shared.setUserInfo(
-                    ID: AES256.encrypt(string: $0.id),
+                    ID: $0.id,
                     platform: $0.platform,
                     profile: $0.profile,
-                    name: AES256.encrypt(string: $0.name),
+                    name: $0.name,
                     itemCount: $0.itemCount
                 )
             }).disposed(by: disposeBag)
