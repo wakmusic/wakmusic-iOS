@@ -84,10 +84,10 @@ public final class ContainSongsViewModel: ViewModelType {
             })
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .map { playlist, userInfo in
-        #warning("복호화 추후 개선 예정")
+                #warning("복호화 추후 개선 예정")
                 let id = AES256.decrypt(encoded: userInfo?.ID ?? "")
-                
-                return playlist.filter { $0.userId == id}
+
+                return playlist.filter { $0.userId == id }
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)

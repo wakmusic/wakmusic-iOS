@@ -208,7 +208,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        
+
         #warning("복호화 추후 개선 예정")
 
         let isMine = model.ownerId == AES256.decrypt(encoded: PreferenceManager.userInfo?.ID ?? "")
