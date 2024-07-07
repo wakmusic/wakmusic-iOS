@@ -99,5 +99,6 @@ extension SongResultCell {
         titleLabel.text = model.title
         artistLabel.text = model.artist
         dateLabel.text = model.date
+        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : .clear
     }
 }

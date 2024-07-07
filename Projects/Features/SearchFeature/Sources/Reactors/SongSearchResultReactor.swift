@@ -9,15 +9,18 @@ final class SongSearchResultReactor: Reactor {
         case changeSortType(SortType)
         case changeFilterType(FilterType)
         case askLoadMore
+        case deselectAll
+        case itemDidTap(Int)
     }
 
     enum Mutation {
         case updateSortType(SortType)
         case updateFilterType(FilterType)
         case updateDataSource(dataSource: [SongEntity], canLoad: Bool)
-        case updateSelectedCount(Int)
         case updateLoadingState(Bool)
         case updateScrollPage(Int)
+        case updateSelectedCount(Int)
+        case updateSelectingStateByIndex([SongEntity])
         case showToast(String)
     }
 
@@ -68,6 +71,12 @@ final class SongSearchResultReactor: Reactor {
             return updateSortType(type)
         case let .changeFilterType(type):
             return updateFilterType(type)
+
+        case .deselectAll:
+            return deselectAll()
+
+        case let .itemDidTap(index):
+            return updateItemSelected(index)
         }
     }
 
@@ -83,8 +92,6 @@ final class SongSearchResultReactor: Reactor {
             newState.dataSource = dataSource
             newState.canLoad = canLoad
 
-        case let .updateSelectedCount(count):
-            break
 
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
@@ -94,6 +101,13 @@ final class SongSearchResultReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
+            
+        case let .updateSelectedCount(count):
+            newState.selectedCount = count
+
+
+        case let .updateSelectingStateByIndex(dataSource):
+            newState.dataSource = dataSource
         }
 
         return newState
@@ -105,6 +119,7 @@ extension SongSearchResultReactor {
         let state = self.currentState
 
         return .concat([
+            .just(.updateSelectedCount(0)),
             .just(.updateSortType(type)),
             updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1, byOption: true)
         ])
@@ -114,6 +129,7 @@ extension SongSearchResultReactor {
         let state = self.currentState
 
         return .concat([
+            .just(.updateSelectedCount(0)),
             .just(.updateFilterType(type)),
             updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
         ])
@@ -144,6 +160,38 @@ extension SongSearchResultReactor {
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
+        ])
+    }
+    
+    func updateItemSelected(_ index: Int) -> Observable<Mutation> {
+        let state = currentState
+        var count = state.selectedCount
+        var prev = state.dataSource
+
+        if prev[index].isSelected {
+            count -= 1
+        } else {
+            count += 1
+        }
+        prev[index].isSelected = !prev[index].isSelected
+
+        return .concat([
+            .just(Mutation.updateSelectedCount(count)),
+            .just(Mutation.updateSelectingStateByIndex(prev))
+        ])
+    }
+
+    func deselectAll() -> Observable<Mutation> {
+        let state = currentState
+        var dataSource = state.dataSource
+
+        for i in 0 ..< dataSource.count {
+            dataSource[i].isSelected = false
+        }
+
+        return .concat([
+            .just(.updateDataSource(dataSource: dataSource, canLoad: state.canLoad)),
+            .just(.updateSelectedCount(0))
         ])
     }
 }

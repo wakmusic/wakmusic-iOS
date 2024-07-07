@@ -9,6 +9,7 @@ import UIKit
 public protocol SongSearchResultDependency: Dependency {
     var fetchSearchSongsUseCase: any FetchSearchSongsUseCase { get }
     var searchSortOptionComponent: SearchSortOptionComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class SongSearchResultComponent: Component<SongSearchResultDependency>, SongSearchResultFactory {
@@ -18,7 +19,8 @@ public final class SongSearchResultComponent: Component<SongSearchResultDependen
                 text: text,
                 fetchSearchSongsUseCase: dependency.fetchSearchSongsUseCase
             ),
-            dependency.searchSortOptionComponent
+            searchSortOptionComponent: dependency.searchSortOptionComponent,
+            containSongsFactory: dependency.containSongsFactory
         )
     }
 }
