@@ -126,7 +126,11 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
         // 최근 검색어 tableView 셋팅
         Utility.PreferenceManager.$recentRecords
             .compactMap { $0 ?? [] }
-            .bind(to: tableView.rx.items) { ( tableView: UITableView, index: Int, element: String) -> RecentRecordTableViewCell in
+            .bind(to: tableView.rx.items) { (
+                tableView: UITableView,
+                index: Int,
+                element: String
+            ) -> RecentRecordTableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "RecentRecordTableViewCell",
                     for: IndexPath(row: index, section: 0)
@@ -143,14 +147,14 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
 
-                var snapShot = NSDiffableDataSourceSnapshot<BeforeSearchSection,BeforeVcDataSoruce>()
+                var snapShot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
                 snapShot.appendSections([.youtube, .recommend])
 
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
                 snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
-                
+
                 #warning("추후 업데이트 시 사용")
-                //snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
+                // snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
@@ -252,8 +256,15 @@ extension BeforeSearchContentViewController {
                 supplementaryView.update(layoutKind.title, indexPath.section)
             }
 
-        let dataSource = UICollectionViewDiffableDataSource<BeforeSearchSection, BeforeVcDataSoruce>(collectionView: collectionView) {
-            ( collectionView: UICollectionView, indexPath: IndexPath,item: BeforeVcDataSoruce ) -> UICollectionViewCell? in
+        let dataSource = UICollectionViewDiffableDataSource<
+            BeforeSearchSection,
+            BeforeVcDataSoruce
+        >(collectionView: collectionView) {
+            (
+                collectionView: UICollectionView,
+                indexPath: IndexPath,
+                item: BeforeVcDataSoruce
+            ) -> UICollectionViewCell? in
 
             switch item {
             case let .youtube(model: model):
@@ -304,7 +315,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
             navigatePlaylistDetail(key: model.key, kind: .wakmu)
 
-        #warning("추후 업데이트 시 사용")
+            #warning("추후 업데이트 시 사용")
 //        case let .popularList(model: model):
 //            LogManager.printDebug("popular \(model)")
         }
