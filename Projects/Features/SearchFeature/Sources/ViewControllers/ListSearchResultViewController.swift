@@ -210,6 +210,6 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-        navigatePlaylistDetail(key: model.key, isMine: model.ownerId == PreferenceManager.userInfo?.ID)
+        navigatePlaylistDetail(key: model.key, kind: model.ownerId == PreferenceManager.userInfo?.ID ? .my : .unkwon)
     }
 }
