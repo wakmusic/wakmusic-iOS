@@ -20,7 +20,7 @@ public struct SearchPlaylistDTO: Decodable {
         self.createdAt = createdAt
         self.private = `private`
     }
-    
+
     public struct User: Decodable {
         let handle: String
         let name: String

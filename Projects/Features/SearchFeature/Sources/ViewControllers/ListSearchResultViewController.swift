@@ -1,7 +1,7 @@
 import BaseFeature
-import PlaylistFeatureInterface
 import DesignSystem
 import LogManager
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -11,12 +11,12 @@ import Then
 import UIKit
 import Utility
 
-final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>, PlaylistDetailNavigatable  {
+final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
+    PlaylistDetailNavigatable {
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
-    
+
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory
-    
-    
+
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -34,10 +34,11 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         SearchPlaylistEntity
     > = createDataSource()
 
-    init(_ reactor: ListSearchResultReactor,
-         searchSortOptionComponent: SearchSortOptionComponent,
-         unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
-         myPlaylistDetailFactory: any MyPlaylistDetailFactory
+    init(
+        _ reactor: ListSearchResultReactor,
+        searchSortOptionComponent: SearchSortOptionComponent,
+        unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
+        myPlaylistDetailFactory: any MyPlaylistDetailFactory
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory

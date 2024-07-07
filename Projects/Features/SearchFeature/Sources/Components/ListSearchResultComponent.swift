@@ -2,9 +2,9 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
+import PlaylistFeatureInterface
 import SearchDomainInterface
 import SearchFeatureInterface
-import PlaylistFeatureInterface
 import UIKit
 
 public protocol ListSearchResultDependency: Dependency {
