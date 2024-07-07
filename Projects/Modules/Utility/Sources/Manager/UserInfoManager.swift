@@ -15,11 +15,11 @@ public struct UserInfo: Codable, Equatable {
     public let name: String
     public let itemCount: Int
 
-    public var decryptID: String {
+    public var decryptedID: String {
         return AES256.decrypt(encoded: ID)
     }
 
-    public var decryptName: String {
+    public var decryptedName: String {
         return AES256.decrypt(encoded: name)
     }
 

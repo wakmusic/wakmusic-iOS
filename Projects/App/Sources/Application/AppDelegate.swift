@@ -22,7 +22,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         setAnalyticsDefaultParameters()
         if let userInfo = PreferenceManager.userInfo {
-            LogManager.setUserID(userID: userInfo.decryptID)
+            LogManager.setUserID(userID: userInfo.decryptedID)
         } else {
             LogManager.setUserID(userID: nil)
         }
