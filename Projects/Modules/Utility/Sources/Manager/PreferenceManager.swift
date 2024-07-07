@@ -40,6 +40,7 @@ public final class PreferenceManager {
 
     @UserDefaultWrapper(key: Constants.readNoticeIDs.rawValue, defaultValue: nil)
     public static var readNoticeIDs: [Int]?
+    
 }
 
 @propertyWrapper

@@ -209,7 +209,12 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
+        
+        let isMine = model.ownerId == AES256.decrypt(encoded: PreferenceManager.userInfo?.ID ?? "")
 
-        navigatePlaylistDetail(key: model.key, kind: model.ownerId == PreferenceManager.userInfo?.ID ? .my : .unkwon)
+        navigatePlaylistDetail(
+            key: model.key,
+            kind: isMine ? .my : .unkwon
+        )
     }
 }
