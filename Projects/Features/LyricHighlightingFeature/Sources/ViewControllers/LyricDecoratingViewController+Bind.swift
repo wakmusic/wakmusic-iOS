@@ -1,5 +1,6 @@
 import DesignSystem
 import Foundation
+import LogManager
 import RxCocoa
 import RxSwift
 import UIKit
@@ -31,12 +32,26 @@ extension LyricDecoratingViewController {
 
         saveButton.rx.tap
             .bind(with: self) { owner, _ in
+                LogManager.analytics(
+                    LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
+                        type: "save",
+                        id: owner.output.updateInfo.value.songID,
+                        bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
+                    )
+                )
                 owner.requestPhotoLibraryPermission()
             }
             .disposed(by: disposeBag)
 
         shareButton.rx.tap
             .bind(with: self) { owner, _ in
+                LogManager.analytics(
+                    LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
+                        type: "share",
+                        id: owner.output.updateInfo.value.songID,
+                        bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
+                    )
+                )
                 let activityViewController = UIActivityViewController(
                     activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
                     applicationActivities: nil
@@ -54,16 +69,11 @@ extension LyricDecoratingViewController {
     }
 
     func outputBind() {
-        output.updateSongTitle
-            .bind(with: self, onNext: { owner, song in
-                owner.songTitleLabel.text = song
+        output.updateInfo
+            .bind(with: self, onNext: { owner, info in
+                owner.songTitleLabel.text = info.title
                 owner.songTitleLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
-            })
-            .disposed(by: disposeBag)
-
-        output.updateArtist
-            .bind(with: self, onNext: { owner, artist in
-                owner.artistLabel.text = artist
+                owner.artistLabel.text = info.artist
                 owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             })
             .disposed(by: disposeBag)

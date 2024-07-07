@@ -143,7 +143,7 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
     }
 
-    private var viewModel: LyricDecoratingViewModel
+    private let viewModel: LyricDecoratingViewModel
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     let textPopUpFactory: TextPopUpFactory
@@ -174,6 +174,13 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
         configureUI()
         outputBind()
         inputBind()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(
+            LyricHighlightingAnalyticsLog.viewPage(pageName: "lyric_decorating")
+        )
     }
 }
 
