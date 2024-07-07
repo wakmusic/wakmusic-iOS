@@ -1,5 +1,5 @@
-import NotificationDomainInterface
 import Foundation
+import NotificationDomainInterface
 import RxSwift
 
 public struct UpdateNotificationTokenUseCaseImpl: UpdateNotificationTokenUseCase {
