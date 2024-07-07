@@ -1,4 +1,5 @@
 import BaseFeature
+import PlaylistFeatureInterface
 import DesignSystem
 import LogManager
 import RxCocoa
@@ -10,7 +11,12 @@ import Then
 import UIKit
 import Utility
 
-final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
+final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>, PlaylistDetailNavigatable  {
+    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
+    
+    var myPlaylistDetailFactory: any MyPlaylistDetailFactory
+    
+    
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -28,8 +34,14 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         SearchPlaylistEntity
     > = createDataSource()
 
-    init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+    init(_ reactor: ListSearchResultReactor,
+         searchSortOptionComponent: SearchSortOptionComponent,
+         unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
+         myPlaylistDetailFactory: any MyPlaylistDetailFactory
+    ) {
         self.searchSortOptionComponent = searchSortOptionComponent
+        self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
+        self.myPlaylistDetailFactory = myPlaylistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -201,6 +213,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        LogManager.printDebug(model)
+
+        navigatePlaylistDetail(playlistKey: model.key, isMine: PreferenceManager.userInfo?.ID ?? "" == model.ownerId)
     }
 }
