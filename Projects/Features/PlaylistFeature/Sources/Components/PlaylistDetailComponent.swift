@@ -13,7 +13,7 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
         switch kind {
         case .my:
             return dependency.myPlaylistDetailFactory.makeView(key: key)
-        case .unkwon:
+        case .unknown:
             return dependency.unknownPlaylistDetailFactory.makeView(key: key)
         case .wakmu:
             return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)

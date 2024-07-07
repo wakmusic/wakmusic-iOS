@@ -215,7 +215,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
 
         navigatePlaylistDetail(
             key: model.key,
-            kind: isMine ? .my : .unkwon
+            kind: isMine ? .my : .unknown
         )
     }
 }

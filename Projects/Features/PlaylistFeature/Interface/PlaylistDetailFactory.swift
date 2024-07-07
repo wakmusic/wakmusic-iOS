@@ -4,7 +4,7 @@ import UIKit
 public enum PlaylistDetailKind {
     case wakmu
     case my
-    case unkwon
+    case unknown
 }
 
 public protocol PlaylistDetailFactory {
