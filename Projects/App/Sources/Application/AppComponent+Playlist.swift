@@ -1,5 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
+import ImageDomain
+import ImageDomainInterface
 import PlaylistDomain
 import PlaylistDomainInterface
 import PlaylistFeature
@@ -46,6 +48,10 @@ public extension AppComponent {
 
     var checkThumbnailFactory: any CheckThumbnailFactory {
         CheckThumbnailComponent(parent: self)
+    }
+
+    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
+        DefaultPlaylistImageComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
@@ -117,6 +123,12 @@ public extension AppComponent {
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
         shared {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+        shared {
+            FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
         }
     }
 }

@@ -7,6 +7,7 @@ import Moya
 public enum ImageAPI {
     case fetchLyricDecoratingBackground
     case fetchProfileList
+    case fetchDefaultPlaylistImage
 }
 
 extension ImageAPI: WMAPI {
@@ -20,23 +21,21 @@ extension ImageAPI: WMAPI {
             return "/lyrics/backgrounds"
         case .fetchProfileList:
             return "/user/profiles"
+        case .fetchDefaultPlaylistImage:
+            return "/playlists"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchLyricDecoratingBackground:
-            return .get
-        case .fetchProfileList:
+        case .fetchLyricDecoratingBackground, .fetchDefaultPlaylistImage, .fetchProfileList:
             return .get
         }
     }
 
     public var task: Moya.Task {
         switch self {
-        case .fetchLyricDecoratingBackground:
-            return .requestPlain
-        case .fetchProfileList:
+        case .fetchLyricDecoratingBackground, .fetchProfileList, .fetchDefaultPlaylistImage:
             return .requestPlain
         }
     }
