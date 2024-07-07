@@ -89,10 +89,10 @@ private extension LoginViewModel {
             .subscribe(onNext: { [input, output] entity in
                 LogManager.setUserID(userID: entity.id)
                 PreferenceManager.shared.setUserInfo(
-                    ID: AES256.encrypt(string: entity.id),
+                    ID: entity.id,
                     platform: entity.platform,
                     profile: entity.profile,
-                    name: AES256.encrypt(string: entity.name),
+                    name: entity.name,
                     itemCount: entity.itemCount
                 )
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
