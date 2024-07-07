@@ -183,11 +183,7 @@ extension ListSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             ListSearchResultSection,
             SearchPlaylistEntity
-        >(collectionView: collectionView) { (
-            collectionView: UICollectionView,
-            indexPath: IndexPath,
-            item: SearchPlaylistEntity
-        ) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { ( collectionView: UICollectionView, indexPath: IndexPath, item: SearchPlaylistEntity ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,

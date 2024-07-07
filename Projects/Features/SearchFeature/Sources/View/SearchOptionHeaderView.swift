@@ -15,8 +15,7 @@ private protocol SearchOptionHeaderActionProtocol {
     var didTapSortButton: Observable<Void> { get }
 }
 
-final class SearchOptionHeaderView:
-    UIView {
+final class SearchOptionHeaderView: UIView {
     private let searchFilterCellRegistration = UICollectionView.CellRegistration<
         SearchFilterCell, FilterType
     > { cell, indexPath, itemIdentifier in
