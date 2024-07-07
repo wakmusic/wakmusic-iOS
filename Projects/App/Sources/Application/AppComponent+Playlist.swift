@@ -1,5 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
+import ImageDomain
+import ImageDomainInterface
 import PlaylistDomain
 import PlaylistDomainInterface
 import PlaylistFeature
@@ -121,6 +123,12 @@ public extension AppComponent {
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
         shared {
             CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+        shared {
+            FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
         }
     }
 }
