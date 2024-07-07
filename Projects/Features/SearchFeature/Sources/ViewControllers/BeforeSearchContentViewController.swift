@@ -99,6 +99,13 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        
+        reactor.pulse(\.$toastMessage)
+            .compactMap{$0}
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map(\.isLoading)
             .distinctUntilChanged()

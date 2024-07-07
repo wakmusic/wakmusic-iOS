@@ -18,6 +18,7 @@ final class SongSearchResultReactor: Reactor {
         case updateSelectedCount(Int)
         case updateLoadingState(Bool)
         case updateScrollPage(Int)
+        case showToast(String)
     }
 
     struct State {
@@ -28,6 +29,7 @@ final class SongSearchResultReactor: Reactor {
         var scrollPage: Int
         var dataSource: [SongEntity]
         var canLoad: Bool
+        @Pulse var toastMessage: String?
     }
 
     var initialState: State
@@ -89,6 +91,9 @@ final class SongSearchResultReactor: Reactor {
 
         case let .updateScrollPage(page):
             newState.scrollPage = page
+            
+        case let .showToast(message):
+            newState.toastMessage = message
         }
 
         return newState
@@ -130,6 +135,12 @@ extension SongSearchResultReactor {
                 .asObservable()
                 .map { [limit] dataSource -> Mutation in
                     return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+                }
+                .catch { error in
+                    let wmErorr = error.asWMError
+                    return Observable.just(
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
