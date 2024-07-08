@@ -38,7 +38,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
     private var afterVC: AfterSearchViewController?
 
     private var searchGlobalScrollState: SearchGlobalScrollPortocol!
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
     }

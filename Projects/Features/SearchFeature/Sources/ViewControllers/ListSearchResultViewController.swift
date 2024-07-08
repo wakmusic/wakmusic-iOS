@@ -19,7 +19,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private let searchSortOptionComponent: SearchSortOptionComponent
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
-    
+
     private let searchGlobalScrollState: any SearchGlobalScrollPortocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
