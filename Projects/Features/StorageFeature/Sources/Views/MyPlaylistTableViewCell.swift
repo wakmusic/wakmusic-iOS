@@ -131,7 +131,7 @@ extension MyPlaylistTableViewCell {
 
         self.playlistImageView.kf.setImage(
             with: WMImageAPI.fetchPlayList(id: String(model.image), version: model.image_version).toURL,
-            placeholder: DesignSystemAsset.Logo.applogo.image,
+            placeholder: DesignSystemAsset.PlayListTheme.theme3.image,
             options: [.transition(.fade(0.2))]
         )
 

@@ -32,6 +32,7 @@ final class PlaylistStorageView: UIView {
             CreateListTableViewHeaderView.self,
             forHeaderFooterViewReuseIdentifier: CreateListTableViewHeaderView.reuseIdentifier
         )
+        $0.separatorStyle = .none
     }
 
     let emptyWarningView = WarningView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
