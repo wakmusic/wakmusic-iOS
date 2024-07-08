@@ -97,7 +97,6 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, amount in
 
-            
                 let constraint = owner.searchHeaderViewTopConstraint.constant
 
                 // constraint == 0 평상 시
