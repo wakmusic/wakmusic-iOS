@@ -19,6 +19,8 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private let searchSortOptionComponent: SearchSortOptionComponent
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
+    
+    private let searchGlobalScrollState: any SearchGlobalScrollPortocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -34,10 +36,12 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     init(
         _ reactor: ListSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
-        playlistDetailFactory: any PlaylistDetailFactory
+        playlistDetailFactory: any PlaylistDetailFactory,
+        searchGlobalScrollState: any SearchGlobalScrollPortocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.playlistDetailFactory = playlistDetailFactory
+        self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
 

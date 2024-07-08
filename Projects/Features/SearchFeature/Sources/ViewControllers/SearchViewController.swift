@@ -11,8 +11,7 @@ import SnapKit
 import UIKit
 import Utility
 
-#warning("비어있을 때 검색 방지")
-internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
+final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {
     private enum Font {
         static let headerFontSize: CGFloat = 16
@@ -30,14 +29,16 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     @IBOutlet public weak var contentView: UIView!
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
 
-    var beforeSearchComponent: BeforeSearchComponent!
-    var afterSearchComponent: AfterSearchComponent!
-    var textPopUpFactory: TextPopUpFactory!
+    private var beforeSearchComponent: BeforeSearchComponent!
+    private var afterSearchComponent: AfterSearchComponent!
+    private var textPopUpFactory: TextPopUpFactory!
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
     private var afterVC: AfterSearchViewController?
 
+    private var searchGlobalScrollState: SearchGlobalScrollPortocol!
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -50,7 +51,8 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         reactor: SearchReactor,
         beforeSearchComponent: BeforeSearchComponent,
         afterSearchComponent: AfterSearchComponent,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        searchGlobalScrollState: any SearchGlobalScrollPortocol
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
 
@@ -58,6 +60,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         viewController.beforeSearchComponent = beforeSearchComponent
         viewController.afterSearchComponent = afterSearchComponent
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.searchGlobalScrollState = searchGlobalScrollState
         return viewController
     }
 
