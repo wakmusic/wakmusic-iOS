@@ -47,6 +47,7 @@ final class SearchOptionHeaderView: UIView {
         collectionViewLayout: SearchFilterOptionCollectionViewLayout()
     ).then {
         $0.backgroundColor = .clear
+        $0.bounces = false
     }
 
     private let dimView = UIView()

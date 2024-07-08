@@ -191,7 +191,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(16)
+            $0.top.equalTo(headerView.snp.bottom).offset(8)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
