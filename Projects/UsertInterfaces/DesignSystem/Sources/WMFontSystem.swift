@@ -25,7 +25,7 @@ public extension UIFont {
         case t4(weight: WMFontWeight = .medium)
         /// size: 16 height: 24
         case t5(weight: WMFontWeight = .medium)
-        /// size: 14 height: 24
+        /// size: 14 height: 22
         case t6(weight: WMFontWeight = .medium)
         /// size: 14 height: 20
         case t6_1(weight: WMFontWeight = .medium)
@@ -98,7 +98,7 @@ private extension UIFont.WMFontSystem {
         case .t3: return 32
         case .t4: return 28
         case .t5: return 24
-        case .t6: return 20
+        case .t6: return 22
         case .t6_1: return 20
         case .t7, .sc7: return 18
         case .t7_1: return 14

@@ -17,7 +17,7 @@ final class SongResultCell: UICollectionViewCell {
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .t6(weight: .medium),
         alignment: .left,
-        lineHeight: UIFont.WMFontSystem.t6().lineHeight,
+        lineHeight: UIFont.WMFontSystem.t6(weight: .medium).lineHeight,
         kernValue: -0.5
     ).then {
         $0.numberOfLines = 1
