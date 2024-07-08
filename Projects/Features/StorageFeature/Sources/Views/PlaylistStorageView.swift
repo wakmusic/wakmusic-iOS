@@ -28,19 +28,21 @@ final class PlaylistStorageView: UIView {
     let tableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(MyPlaylistTableViewCell.self, forCellReuseIdentifier: MyPlaylistTableViewCell.reuseIdentifer)
-        $0.register(CreateListTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: CreateListTableViewHeaderView.reuseIdentifier)
+        $0.register(
+            CreateListTableViewHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: CreateListTableViewHeaderView.reuseIdentifier
+        )
     }
-    
+
     let emptyWarningView = WarningView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: APP_HEIGHT() / 3))
-    
+
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
         color: DesignSystemAsset.PrimaryColor.point.color
     )
-    
+
     let refreshControl = UIRefreshControl()
-    
 
     init() {
         super.init(frame: .zero)
@@ -81,7 +83,7 @@ final class PlaylistStorageView: UIView {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         tableView.refreshControl = refreshControl
         tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        
+
         emptyWarningView.isHidden = true
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
@@ -92,7 +94,7 @@ extension PlaylistStorageView: PlaylistStorageStateProtocol {
     func updateEmptyWarningViewState(isShow: Bool) {
         self.emptyWarningView.isHidden = !isShow
     }
-    
+
     func updateActivityIndicatorState(isPlaying: Bool) {
         if isPlaying {
             self.activityIndicator.startAnimating()
@@ -100,15 +102,13 @@ extension PlaylistStorageView: PlaylistStorageStateProtocol {
             self.activityIndicator.stopAnimating()
         }
     }
-    
-    
 }
 
 extension Reactive: PlaylistStorageActionProtocol where Base: PlaylistStorageView {
     var refreshControlValueChanged: Observable<Void> {
         base.refreshControl.rx.controlEvent(.valueChanged).map { () }.asObservable()
     }
-    
+
     var createListButtonDidTap: Observable<Void> {
         return .empty()
     }

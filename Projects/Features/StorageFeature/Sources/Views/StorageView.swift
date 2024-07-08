@@ -180,7 +180,7 @@ extension StorageView: StorageStateProtocol {
         self.editButton.isHidden = isHidden
         self.saveButton.isHidden = !isHidden
     }
-    
+
     func updateIsHiddenLoginWarningView(isHidden: Bool) {
         self.loginWarningView.isHidden = isHidden
     }

@@ -1,12 +1,12 @@
 import DesignSystem
 import Kingfisher
-import UIKit
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
+import UIKit
 import UserDomainInterface
 import Utility
-import RxSwift
-import RxCocoa
 
 public protocol MyPlaylistTableViewCellDelegate: AnyObject {
     func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant)
@@ -23,6 +23,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
     private let playlistImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
     }
+
     private let nameLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -31,6 +32,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
     ).then {
         $0.lineBreakMode = .byTruncatingTail
     }
+
     private let countLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray300.color,
@@ -40,6 +42,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
     private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
     }
+
     private let playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.layer.addShadow(
@@ -51,8 +54,9 @@ class MyPlaylistTableViewCell: UITableViewCell {
             spread: 0
         )
     }
+
     private let listSelectButton = UIButton()
-    
+
     weak var delegate: MyPlaylistTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
@@ -63,7 +67,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
 //        self.playListImageView.layer.cornerRadius = 4
 //        self.playButton.setImage(DesignSystemAsset.Home.playSmall.image, for: .normal)
 //    }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addView()
@@ -89,54 +93,53 @@ extension MyPlaylistTableViewCell {
             countLabel
         )
     }
-    
+
     func setLayout() {
         playlistImageView.snp.makeConstraints {
             $0.width.height.equalTo(40)
             $0.centerY.equalToSuperview()
             $0.left.equalToSuperview().inset(20)
         }
-        
+
         verticalStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.left.equalTo(playlistImageView.snp.right).offset(8)
             $0.right.equalTo(playButton.snp.left).offset(-16)
         }
-        
+
         playButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().inset(20)
         }
-        
+
         listSelectButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.left.equalToSuperview()
             $0.right.equalTo(verticalStackView.snp.right)
         }
-        
+
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
-        
+
         countLabel.snp.makeConstraints {
             $0.height.equalTo(18)
         }
     }
-    
+
     func setAction() {
         self.listSelectButton.addAction(for: .touchUpInside) { [weak self] in
             guard let self else { return }
             self.delegate?.buttonTapped(type: .listTapped(indexPath: self.passToModel.0))
         }
-        
+
         self.playButton.addAction(for: .touchUpInside) { [weak self] in
             guard let self else { return }
             self.delegate?.buttonTapped(type: .playTapped(indexPath: self.passToModel.0))
         }
     }
-    
-    
+
     func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath) {
         self.passToModel = (indexPath, model.key)
 
@@ -159,7 +162,7 @@ extension MyPlaylistTableViewCell {
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
         self.listSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
-        //self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
+        // self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
     }
 
     private func getAttributedString(

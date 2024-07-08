@@ -16,7 +16,7 @@ import Utility
 
 final class NewPlaylistStorageViewController: BaseReactorViewController<PlaylistStorageReactor>, SongCartViewType {
     let playlistStorageView = PlaylistStorageView()
-    
+
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
     var textPopUpFactory: TextPopUpFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
@@ -25,11 +25,10 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
-    
     override func loadView() {
         self.view = playlistStorageView
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -53,7 +52,7 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
     override func configureUI() {
         reactor?.action.onNext(.viewDidLoad)
     }
-    
+
     private func setTableView() {
         playlistStorageView.tableView.delegate = self
     }
@@ -68,11 +67,11 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, userInfo in
-                
+
                 owner.playlistStorageView.updateActivityIndicatorState(isPlaying: false)
                 owner.playlistStorageView.refreshControl.endRefreshing()
                 owner.playlistStorageView.updateEmptyWarningViewState(isShow: dataSource.isEmpty)
-                
+
             })
             .map { $0.1 }
             .bind(to: playlistStorageView.tableView.rx.items(dataSource: createDatasources()))
@@ -108,15 +107,15 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
             })
             .disposed(by: disposeBag)
     }
-    
+
     override func bindAction(reactor: PlaylistStorageReactor) {
         let currentState = reactor.state
-        
+
         playlistStorageView.rx.refreshControlValueChanged
             .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         playlistStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
