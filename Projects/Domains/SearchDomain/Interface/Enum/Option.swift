@@ -25,9 +25,8 @@ public enum FilterType: String, Encodable, SearchOptionType {
 public enum SortType: String, Encodable, SearchOptionType {
     case latest
     case oldest
-    case likes
-    case views
     case alphabetical
+    case popular
 
     public var title: String {
         switch self {
@@ -35,12 +34,10 @@ public enum SortType: String, Encodable, SearchOptionType {
             "최신순"
         case .oldest:
             "과거순"
-        case .likes:
-            "좋아요순"
-        case .views:
-            "조회수순"
         case .alphabetical:
             "가나다순"
+        case .popular:
+            "인기순 (서버 개발 검토 중)"
         }
     }
 }

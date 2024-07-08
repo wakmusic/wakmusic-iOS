@@ -16,7 +16,7 @@ final class SearchSortOptionViewController: BaseViewController {
 
     private var disposeBag = DisposeBag()
 
-    private let options: [SortType] = [.latest, .oldest, .alphabetical]
+    private let options: [SortType] = [.latest, .oldest, .alphabetical, .popular]
 
     private var selectedModel: SortType
 
@@ -100,8 +100,12 @@ extension SearchSortOptionViewController {
             .map(\.row)
             .bind(with: self) { owner, index in
 
-                owner.delegate?.updateSortType(owner.options[index])
-                owner.dismiss(animated: true)
+                    owner.dismiss(animated: true) {
+                        #warning("인기 순은 delegate 안 보냄 추후 업데이트 이후 해제 ")
+                        if index == 3 { return }
+                        owner.delegate?.updateSortType(owner.options[index])
+                    }
+                
             }
             .disposed(by: disposeBag)
     }
