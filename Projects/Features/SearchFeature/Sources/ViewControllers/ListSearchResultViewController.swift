@@ -49,10 +49,12 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
     }
-
+    
     override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
-        collectionView.delegate = self
+        collectionView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
     }
 
     override func bindAction(reactor: ListSearchResultReactor) {
@@ -138,6 +140,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     } else {
                         owner.collectionView.restore()
                     }
+                    
                 }
             }
             .disposed(by: disposeBag)
@@ -223,9 +226,10 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         let id = PreferenceManager.userInfo?.decryptedID ?? ""
         let isMine = model.ownerId == id
 
-        navigatePlaylistDetail(
-            key: model.key,
-            kind: isMine ? .my : .unknown
-        )
+        navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
     }
 }

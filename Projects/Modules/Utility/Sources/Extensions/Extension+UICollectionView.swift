@@ -18,4 +18,11 @@ public extension UICollectionView {
     func restore() {
         self.backgroundView = nil
     }
+    
+    var isVerticallyScrollable: Bool {
+        // 콘텐츠 크기가 컬렉션 뷰의 크기보다 큰지 비교
+        print(contentSize.height, bounds.height)
+        return contentSize.height > bounds.height
+    }
+
 }

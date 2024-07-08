@@ -20,13 +20,14 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e54-rK-aGI">
                                 <rect key="frame" x="0.0" y="59" width="393" height="16"/>
+                                <color key="backgroundColor" name="blueGray800"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="nJ5-2M-ZsW"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nx-1t-MMz">
                                 <rect key="frame" x="0.0" y="75" width="393" height="36"/>
-                                <color key="backgroundColor" name="gray100"/>
+                                <color key="backgroundColor" name="blueGray800"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="ykE-p1-BQh"/>
                                 </constraints>
@@ -73,7 +74,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nj5-Rh-R0O">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="115"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yLy-ME-gxl" userLabel="SearchHeaderView" customClass="SearchHeaderView">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yLy-ME-gxl" userLabel="SearchHeaderView">
                                         <rect key="frame" x="0.0" y="59" width="393" height="56"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DMe-Vm-2cg">
@@ -148,7 +149,9 @@
                         <outlet property="cancelButton" destination="pwf-8T-rR0" id="ydM-fP-bdc"/>
                         <outlet property="contentView" destination="jLC-fz-G5h" id="v7E-Mr-1a8"/>
                         <outlet property="contentViewBottomConstraint" destination="znF-Ya-K6h" id="gP4-l4-S2x"/>
+                        <outlet property="searchHeaderContentView" destination="yLy-ME-gxl" id="CqP-Pw-x7T"/>
                         <outlet property="searchHeaderView" destination="nj5-Rh-R0O" id="evQ-ZJ-eOe"/>
+                        <outlet property="searchHeaderViewTopConstraint" destination="2dP-Eo-Ia3" id="SKg-lp-3WO"/>
                         <outlet property="searchImageView" destination="DMe-Vm-2cg" id="oFs-eJ-DKi"/>
                         <outlet property="searchTextFiled" destination="VJU-GJ-8b6" id="qs0-yr-rIP"/>
                     </connections>
@@ -159,6 +162,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="blueGray800">
+            <color red="0.11372549019607843" green="0.16078431372549021" blue="0.22352941176470589" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="gray100">
             <color red="0.94900000095367432" green="0.9570000171661377" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

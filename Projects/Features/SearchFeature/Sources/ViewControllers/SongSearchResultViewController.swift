@@ -11,7 +11,6 @@ import Then
 import UIKit
 import Utility
 
-#warning("오버 스크롤 처리")
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
 
@@ -56,12 +55,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidDisappear(animated)
         reactor?.action.onNext(.deselectAll)
     }
-
+    
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+        
     }
 
     override func bindAction(reactor: SongSearchResultReactor) {
@@ -129,9 +129,9 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
-            .bind(with: self) { owner, info in
+            .bind(with: self) { owner, info  in
 
-                let (isLoading, dataSource) = (info.0, info.1)
+                let ( isLoading, dataSource ) = (info.0, info.1)
 
                 if isLoading {
                     owner.indicator.startAnimating()
@@ -153,6 +153,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     } else {
                         owner.collectionView.restore()
                     }
+                    
                 }
             }
             .disposed(by: disposeBag)
@@ -239,13 +240,20 @@ extension SongSearchResultViewController {
         return dataSource
     }
 
-    public func scrollToTop() {}
+    public func scrollToTop() {
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
 }
 
 extension SongSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
+    }
+    
 }
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {

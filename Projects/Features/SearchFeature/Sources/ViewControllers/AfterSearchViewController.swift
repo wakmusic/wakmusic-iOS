@@ -74,7 +74,7 @@ extension AfterSearchViewController {
     func bindAction(reactor: AfterSearchReactor) {}
 
     private func configureUI() {
-        self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+    //    self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         self.indicator.type = .circleStrokeSpin
         self.indicator.color = DesignSystemAsset.PrimaryColorV2.point.color
         self.dataSource = self // dateSource

@@ -29,6 +29,8 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
     @IBOutlet public weak var contentView: UIView!
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var searchHeaderViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchHeaderContentView: UIView!
     private var beforeSearchComponent: BeforeSearchComponent!
     private var afterSearchComponent: AfterSearchComponent!
     private var textPopUpFactory: TextPopUpFactory!
@@ -90,6 +92,27 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
     override public func bind(reactor: SearchReactor) {
         super.bind(reactor: reactor)
+        
+        searchGlobalScrollState.scrollAmountObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self, onNext: { owner, amount in
+                
+
+                
+                if amount > 0 {
+                    owner.searchHeaderViewTopConstraint.constant = max(-(56), -amount)
+
+                    owner.searchHeaderView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+                    owner.searchHeaderContentView.isHidden = true
+                    
+                } else if amount < 0     {
+                    owner.searchHeaderContentView.isHidden = false
+                    owner.searchHeaderViewTopConstraint.constant = min(0, -amount)
+                    owner.searchHeaderView.backgroundColor = .white
+                }
+            })
+            .disposed(by: disposeBag)
+        
     }
 
     override public func bindState(reactor: SearchReactor) {
