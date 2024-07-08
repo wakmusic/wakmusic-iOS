@@ -105,7 +105,7 @@ final class StorageView: UIView {
             $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
-        
+
         drawFruitButton.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.horizontalEdges.equalToSuperview()
@@ -154,7 +154,7 @@ final class StorageView: UIView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         drawFruitButton.layer.addSublayer(gradientLayer)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = drawFruitButton.bounds

@@ -8,7 +8,7 @@ final class CreateListTableViewHeaderView: UITableViewHeaderFooterView {
     static let reuseIdentifier = "CreateListTableViewHeaderView"
 
     private let innerContentView = UIView()
-    
+
     private let imageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
     }
@@ -44,7 +44,7 @@ final class CreateListTableViewHeaderView: UITableViewHeaderFooterView {
             $0.bottom.equalToSuperview().inset(12)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
-        
+
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalToSuperview()

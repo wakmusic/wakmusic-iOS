@@ -171,7 +171,7 @@ extension ListStorageTableViewCell {
     @objc func listSelectButtonAction() {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
-    
+
     @objc func playButtonAction() {
         delegate?.buttonTapped(type: .playTapped(indexPath: passToModel.0))
     }

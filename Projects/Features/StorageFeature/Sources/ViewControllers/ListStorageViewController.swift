@@ -115,7 +115,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         playlistStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
@@ -244,12 +244,16 @@ extension ListStorageViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-    
+
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CreateListTableViewHeaderView.reuseIdentifier) as? CreateListTableViewHeaderView
+        let headerView = tableView
+            .dequeueReusableHeaderFooterView(
+                withIdentifier: CreateListTableViewHeaderView
+                    .reuseIdentifier
+            ) as? CreateListTableViewHeaderView
         return headerView
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 80
     }
