@@ -106,10 +106,10 @@ extension PlaylistStorageReactor {
                 [MyPlayListSectionModel(
                     model: 0,
                     items: [
-                        .init(key: "123", title: "플리1", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리2", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리3", image: "", songlist: [], image_version: 0),
-                        .init(key: "1234", title: "플리4", image: "", songlist: [], image_version: 0)
+                        .init(key: "123", title: "플레이리스트 제목1", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플레이리스트 제목2", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플레이리스트 제목3", image: "", songlist: [], image_version: 0),
+                        .init(key: "1234", title: "플레이리스트 제목4", image: "", songlist: [], image_version: 0)
                     ]
                 )]
             )

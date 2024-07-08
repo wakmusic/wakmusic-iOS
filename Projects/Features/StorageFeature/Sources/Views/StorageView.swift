@@ -8,6 +8,7 @@ import Utility
 
 private protocol StorageStateProtocol {
     func updateIsHiddenEditButton(isHidden: Bool)
+    func updateIsHiddenLoginWarningView(isHidden: Bool)
 }
 
 private protocol StorageActionProtocol {
@@ -171,6 +172,17 @@ final class StorageView: UIView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         gradientLayer.locations = [0.7, 1.0]
         drawFruitButton.layer.addSublayer(gradientLayer)
+    }
+}
+
+extension StorageView: StorageStateProtocol {
+    func updateIsHiddenEditButton(isHidden: Bool) {
+        self.editButton.isHidden = isHidden
+        self.saveButton.isHidden = !isHidden
+    }
+    
+    func updateIsHiddenLoginWarningView(isHidden: Bool) {
+        self.loginWarningView.isHidden = isHidden
     }
 }
 
