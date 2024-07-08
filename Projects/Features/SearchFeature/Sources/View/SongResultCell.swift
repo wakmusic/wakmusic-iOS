@@ -38,7 +38,7 @@ final class SongResultCell: UICollectionViewCell {
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .sc7(weight: .score3Light),
-        alignment: .left,
+        alignment: .right,
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
         kernValue: -0.5
     ).then {
@@ -83,7 +83,7 @@ extension SongResultCell {
         }
 
         dateLabel.snp.makeConstraints {
-            $0.width.equalTo(70)
+            $0.width.lessThanOrEqualTo(66)
             $0.centerY.equalTo(thumbnailView.snp.centerY)
             $0.trailing.equalToSuperview().inset(20)
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
