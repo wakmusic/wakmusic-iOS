@@ -50,6 +50,14 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         reactor?.action.onNext(.viewDidLoad)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        searchGlobalScrollState.expand()
+        
+
+    }
+    
     override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
@@ -129,7 +137,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     snapshot.appendSections([.list])
 
                     snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: true)
+                    owner.dataSource.apply(snapshot, animatingDifferences: false)
 
                     let warningView = WMWarningView(
                         text: "검색결과가 없습니다."
@@ -230,6 +238,11 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
+        
+        if collectionView.isVerticallyScrollable {
+            searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
+        }
+        
+        
     }
 }

@@ -97,21 +97,42 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, amount in
                 
-
+                DEBUG_LOG(amount)
+                let constraint = owner.searchHeaderViewTopConstraint.constant
                 
-                if amount > 0 {
+                // constraint == 0 평상 시
+                // constraint < 0 위로 올라가는 중
+                // constraint == -56 최종 끝 도달
+                
+                if 0 < amount  && amount <= 56.0   {
                     owner.searchHeaderViewTopConstraint.constant = max(-(56), -amount)
 
                     owner.searchHeaderView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
                     owner.searchHeaderContentView.isHidden = true
                     
-                } else if amount < 0     {
-                    owner.searchHeaderContentView.isHidden = false
+                } else if amount <= 0  {
+                    
                     owner.searchHeaderViewTopConstraint.constant = min(0, -amount)
+                    owner.searchHeaderContentView.isHidden = false
                     owner.searchHeaderView.backgroundColor = .white
                 }
             })
             .disposed(by: disposeBag)
+        
+        searchGlobalScrollState.expandSearchHeaderObservable
+            .asDriver(onErrorJustReturn: ())
+            .drive(with: self, onNext: { owner, _ in
+                
+                UIView.animate(withDuration: 0.1) {
+                    owner.searchHeaderViewTopConstraint.constant = 0
+                    owner.searchHeaderContentView.isHidden = false
+                    owner.searchHeaderView.backgroundColor = .white
+                    owner.searchHeaderView.layoutIfNeeded()
+                }
+                
+            })
+            .disposed(by: disposeBag)
+            
         
     }
 

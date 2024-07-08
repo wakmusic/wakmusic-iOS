@@ -56,6 +56,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         reactor?.action.onNext(.deselectAll)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        searchGlobalScrollState.expand()
+
+    }
+    
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
@@ -251,7 +258,9 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
+        if collectionView.isVerticallyScrollable {
+            searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
+        }
     }
     
 }
