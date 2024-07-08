@@ -25,7 +25,7 @@ private protocol PlaylistStorageActionProtocol {
 }
 
 final class PlaylistStorageView: UIView {
-    let tableView = UITableView().then {
+    let tableView = UITableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .clear
         $0.register(MyPlaylistTableViewCell.self, forCellReuseIdentifier: MyPlaylistTableViewCell.reuseIdentifer)
         $0.register(
@@ -66,7 +66,7 @@ final class PlaylistStorageView: UIView {
 
     func setLayout() {
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).offset(60)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(52)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide).offset(-56)
         }

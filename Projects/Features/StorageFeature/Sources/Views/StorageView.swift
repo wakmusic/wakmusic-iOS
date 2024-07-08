@@ -12,7 +12,6 @@ private protocol StorageStateProtocol {
 }
 
 private protocol StorageActionProtocol {
-    var createListButtonDidTap: Observable<Void> { get }
     var editButtonDidTap: Observable<Void> { get }
     var saveButtonDidTap: Observable<Void> { get }
     var drawFruitButtonDidTap: Observable<Void> { get }
@@ -41,15 +40,6 @@ final class StorageView: UIView {
 
     private let lineView = UIView()
 
-//    private let myPlaylistTableView = UITableView().then {
-//        let nib = UINib(nibName: "MyPlaylistTableViewCell", bundle: nil)
-//        $0.register(nib, forCellReuseIdentifier: "MyPlaylistTableViewCell")
-//    }
-
-    fileprivate let createListButton = UIButton().then {
-        $0.setTitle("리스트 만들기", for: .normal)
-    }
-
     fileprivate let editButton = UIButton().then {
         $0.setTitle("편집", for: .normal)
     }
@@ -58,11 +48,11 @@ final class StorageView: UIView {
         $0.setTitle("저장", for: .normal)
     }
 
-    fileprivate let drawFruitButton = UIButton().then {
+    let drawFruitButton = UIButton().then {
         $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
     }
 
-    private var gradientLayer = CAGradientLayer()
+    var gradientLayer = CAGradientLayer()
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
@@ -82,9 +72,9 @@ final class StorageView: UIView {
         self.addSubviews(
             tabBarView,
             lineView,
-            createListButton,
             editButton,
             saveButton,
+            drawFruitButton,
             loginWarningView
         )
     }
@@ -102,12 +92,6 @@ final class StorageView: UIView {
             $0.horizontalEdges.equalToSuperview()
         }
 
-        createListButton.snp.makeConstraints {
-            $0.top.equalTo(tabBarView.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(20).priority(999)
-            $0.height.equalTo(52)
-        }
-
         editButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
@@ -121,11 +105,17 @@ final class StorageView: UIView {
             $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
+        
+        drawFruitButton.snp.makeConstraints {
+            $0.height.equalTo(56)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
 
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
-            $0.top.equalTo(createListButton.snp.bottom).offset(80)
+            $0.top.equalTo(lineView.snp.bottom).offset(148)
             $0.centerX.equalToSuperview()
         }
     }
@@ -134,12 +124,6 @@ final class StorageView: UIView {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
 
         lineView.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
-
-        createListButton.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, for: .normal)
-        createListButton.layer.cornerRadius = 8
-        createListButton.layer.borderWidth = 1
-        createListButton.backgroundColor = .white
-        createListButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor.copy(alpha: 0.7)
 
         editButton.layer.cornerRadius = 4
         editButton.layer.borderWidth = 1
@@ -165,13 +149,15 @@ final class StorageView: UIView {
             ),
             for: .normal
         )
-        drawFruitButton.backgroundColor = .cyan
-        gradientLayer.frame = drawFruitButton.bounds
-        gradientLayer.colors = [UIColor(hex: "#0098E5"), UIColor(hex: "#968FE8")]
+        gradientLayer.colors = [UIColor(hex: "#0098E5").cgColor, UIColor(hex: "#968FE8").cgColor]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientLayer.locations = [0.7, 1.0]
         drawFruitButton.layer.addSublayer(gradientLayer)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = drawFruitButton.bounds
     }
 }
 
@@ -187,10 +173,6 @@ extension StorageView: StorageStateProtocol {
 }
 
 extension Reactive: StorageActionProtocol where Base: StorageView {
-    var createListButtonDidTap: Observable<Void> {
-        base.createListButton.rx.tap.asObservable()
-    }
-
     var editButtonDidTap: Observable<Void> {
         base.editButton.rx.tap.asObservable()
     }

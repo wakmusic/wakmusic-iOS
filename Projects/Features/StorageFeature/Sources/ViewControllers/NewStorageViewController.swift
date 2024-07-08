@@ -81,10 +81,6 @@ extension NewStorageViewController {
     func bindState(reactor: Reactor) {}
 
     func bindAction(reactor: Reactor) {
-        storageView.rx.createListButtonDidTap.subscribe { _ in
-            print("🚀 리스트 생성 버튼 눌림")
-        }.disposed(by: disposeBag)
-
         storageView.rx.editButtonDidTap.subscribe { _ in
             print("🚀 편집 버튼 눌림")
         }.disposed(by: disposeBag)
