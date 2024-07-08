@@ -8,7 +8,7 @@ import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
 
-public protocol FavoriteDependency: Dependency {
+public protocol LikeStorageDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
@@ -18,10 +18,10 @@ public protocol FavoriteDependency: Dependency {
     var signInFactory: any SignInFactory { get }
 }
 
-public final class FavoriteComponent: Component<FavoriteDependency> {
+public final class LikeStorageComponent: Component<LikeStorageDependency> {
     public func makeView() -> UIViewController {
         return FavoriteViewController.viewController(
-            reactor: FavoriteReactoer(),
+            reactor: LikeStorageReactor(),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory

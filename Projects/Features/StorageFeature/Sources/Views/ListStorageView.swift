@@ -14,20 +14,20 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-private protocol PlaylistStorageStateProtocol {
+private protocol ListStorageStateProtocol {
     func updateActivityIndicatorState(isPlaying: Bool)
     func updateEmptyWarningViewState(isShow: Bool)
 }
 
-private protocol PlaylistStorageActionProtocol {
+private protocol ListStorageActionProtocol {
     var createListButtonDidTap: Observable<Void> { get }
     var refreshControlValueChanged: Observable<Void> { get }
 }
 
-final class PlaylistStorageView: UIView {
+final class ListStorageView: UIView {
     let tableView = UITableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .clear
-        $0.register(MyPlaylistTableViewCell.self, forCellReuseIdentifier: MyPlaylistTableViewCell.reuseIdentifer)
+        $0.register(ListStorageTableViewCell.self, forCellReuseIdentifier: ListStorageTableViewCell.reuseIdentifer)
         $0.register(
             CreateListTableViewHeaderView.self,
             forHeaderFooterViewReuseIdentifier: CreateListTableViewHeaderView.reuseIdentifier
@@ -91,7 +91,7 @@ final class PlaylistStorageView: UIView {
     }
 }
 
-extension PlaylistStorageView: PlaylistStorageStateProtocol {
+extension ListStorageView: ListStorageStateProtocol {
     func updateEmptyWarningViewState(isShow: Bool) {
         self.emptyWarningView.isHidden = !isShow
     }
@@ -105,7 +105,7 @@ extension PlaylistStorageView: PlaylistStorageStateProtocol {
     }
 }
 
-extension Reactive: PlaylistStorageActionProtocol where Base: PlaylistStorageView {
+extension Reactive: ListStorageActionProtocol where Base: ListStorageView {
     var refreshControlValueChanged: Observable<Void> {
         base.refreshControl.rx.controlEvent(.valueChanged).map { () }.asObservable()
     }

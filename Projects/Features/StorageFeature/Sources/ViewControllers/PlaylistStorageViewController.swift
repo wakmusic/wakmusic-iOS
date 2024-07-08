@@ -16,7 +16,7 @@ import Utility
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
 
-final class PlaylistStorageViewController: BaseStoryboardReactorViewController<PlaylistStorageReactor>,
+final class PlaylistStorageViewController: BaseStoryboardReactorViewController<ListStorageReactor>,
     SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
@@ -37,7 +37,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
     }
 
     static func viewController(
-        reactor: PlaylistStorageReactor,
+        reactor: ListStorageReactor,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         textPopUpFactory: TextPopUpFactory,
@@ -71,14 +71,14 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
         reactor?.action.onNext(.viewDidLoad)
     }
 
-    override func bind(reactor: PlaylistStorageReactor) {
+    override func bind(reactor: ListStorageReactor) {
         super.bind(reactor: reactor)
 
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: PlaylistStorageReactor) {
+    override func bindAction(reactor: ListStorageReactor) {
         super.bindAction(reactor: reactor)
 
         let currentState = reactor.state
@@ -115,7 +115,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
             .disposed(by: disposeBag)
     }
 
-    override func bindState(reactor: PlaylistStorageReactor) {
+    override func bindState(reactor: ListStorageReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 3)
@@ -224,7 +224,7 @@ final class PlaylistStorageViewController: BaseStoryboardReactorViewController<P
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "MyPlayListTableViewCell",
                     for: IndexPath(row: indexPath.row, section: 0)
-                ) as? MyPlaylistTableViewCell
+                ) as? ListStorageTableViewCell
                 else { return UITableViewCell() }
 
                 cell.update(
@@ -285,8 +285,8 @@ extension PlaylistStorageViewController: SongCartViewDelegate {
     }
 }
 
-extension PlaylistStorageViewController: MyPlaylistTableViewCellDelegate {
-    public func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant) {
+extension PlaylistStorageViewController: ListStorageTableViewCellDelegate {
+    public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
             self.reactor?.action.onNext(.playlistDidTap(indexPath.row))

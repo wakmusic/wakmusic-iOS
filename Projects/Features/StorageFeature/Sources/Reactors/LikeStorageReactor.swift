@@ -11,7 +11,7 @@ import SongsDomainInterface
 import UserDomainInterface
 import Utility
 
-final class FavoriteReactoer: Reactor {
+final class LikeStorageReactor: Reactor {
     enum Action {
         case viewDidLoad
         case refresh
@@ -105,7 +105,7 @@ final class FavoriteReactoer: Reactor {
     }
 }
 
-extension FavoriteReactoer {
+extension LikeStorageReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .just(
             .updateDataSource(

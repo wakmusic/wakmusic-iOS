@@ -16,10 +16,6 @@ public extension AppComponent {
         SignInComponent(parent: self)
     }
 
-    var storageFactory: any StorageFactory {
-        StorageComponent(parent: self)
-    }
-
     var requestComponent: RequestComponent {
         RequestComponent(parent: self)
     }

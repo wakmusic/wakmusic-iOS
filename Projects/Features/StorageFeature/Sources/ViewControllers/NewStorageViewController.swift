@@ -14,9 +14,9 @@ final class NewStorageViewController: TabmanViewController, View {
     var disposeBag = DisposeBag()
 
     private var bottomSheetView: BottomSheetView!
-    private var playlistStorageComponent: PlaylistStorageComponent!
+    private var playlistStorageComponent: ListStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    private var favoriteComponent: FavoriteComponent!
+    private var favoriteComponent: LikeStorageComponent!
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
 
@@ -44,9 +44,9 @@ final class NewStorageViewController: TabmanViewController, View {
 
     public static func viewController(
         reactor: Reactor,
-        playlistStorageComponent: PlaylistStorageComponent,
+        playlistStorageComponent: ListStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
-        favoriteComponent: FavoriteComponent,
+        favoriteComponent: LikeStorageComponent,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
     ) -> NewStorageViewController {
@@ -167,7 +167,7 @@ extension NewStorageViewController: EqualHandleTappedType {
     func scrollToTop() {
         let current: Int = self.currentIndex ?? 0
         guard self.viewControllers.count > current else { return }
-        if let myPlayList = self.viewControllers[current] as? NewPlaylistStorageViewController {
+        if let myPlayList = self.viewControllers[current] as? ListStorageViewController {
             myPlayList.scrollToTop()
         } else if let favorite = self.viewControllers[current] as? FavoriteViewController {
             favorite.scrollToTop()

@@ -41,9 +41,9 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
     @IBOutlet weak var favoriteFakeView: UIView!
 
     public var bottomSheetView: BottomSheetView!
-    private var playlistStorageComponent: PlaylistStorageComponent!
+    private var playlistStorageComponent: ListStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    private var favoriteComponent: FavoriteComponent!
+    private var favoriteComponent: LikeStorageComponent!
     private var textPopUpFactory: TextPopUpFactory!
 
     private lazy var viewControllers: [UIViewController] = [
@@ -74,9 +74,9 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
 
     public static func viewController(
         reactor: StorageReactor,
-        playlistStorageComponent: PlaylistStorageComponent,
+        playlistStorageComponent: ListStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
-        favoriteComponent: FavoriteComponent,
+        favoriteComponent: LikeStorageComponent,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
 

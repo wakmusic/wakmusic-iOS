@@ -14,8 +14,8 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-final class NewPlaylistStorageViewController: BaseReactorViewController<PlaylistStorageReactor>, SongCartViewType {
-    let playlistStorageView = PlaylistStorageView()
+final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType {
+    let playlistStorageView = ListStorageView()
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
     var textPopUpFactory: TextPopUpFactory!
@@ -35,13 +35,13 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
     }
 
     static func viewController(
-        reactor: PlaylistStorageReactor,
+        reactor: ListStorageReactor,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
-    ) -> NewPlaylistStorageViewController {
-        let viewController = NewPlaylistStorageViewController(reactor: reactor)
+    ) -> ListStorageViewController {
+        let viewController = ListStorageViewController(reactor: reactor)
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.textPopUpFactory = textPopUpFactory
@@ -57,7 +57,7 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
         playlistStorageView.tableView.delegate = self
     }
 
-    override func bindState(reactor: PlaylistStorageReactor) {
+    override func bindState(reactor: ListStorageReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
@@ -108,14 +108,14 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: PlaylistStorageReactor) {
+    override func bindAction(reactor: ListStorageReactor) {
         let currentState = reactor.state
 
         playlistStorageView.rx.refreshControlValueChanged
             .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
+        
         playlistStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
@@ -147,9 +147,9 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell() }
 
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: MyPlaylistTableViewCell.reuseIdentifer,
+                    withIdentifier: ListStorageTableViewCell.reuseIdentifer,
                     for: IndexPath(row: indexPath.row, section: 0)
-                ) as? MyPlaylistTableViewCell
+                ) as? ListStorageTableViewCell
                 else { return UITableViewCell() }
 
                 cell.update(
@@ -173,7 +173,7 @@ final class NewPlaylistStorageViewController: BaseReactorViewController<Playlist
     }
 }
 
-extension NewPlaylistStorageViewController: SongCartViewDelegate {
+extension ListStorageViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
         switch type {
         case let .allSelect(flag):
@@ -210,8 +210,8 @@ extension NewPlaylistStorageViewController: SongCartViewDelegate {
     }
 }
 
-extension NewPlaylistStorageViewController: MyPlaylistTableViewCellDelegate {
-    public func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant) {
+extension ListStorageViewController: ListStorageTableViewCellDelegate {
+    public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
             self.reactor?.action.onNext(.playlistDidTap(indexPath.row))
@@ -231,7 +231,7 @@ extension NewPlaylistStorageViewController: MyPlaylistTableViewCellDelegate {
     }
 }
 
-extension NewPlaylistStorageViewController: UITableViewDelegate {
+extension ListStorageViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
@@ -255,7 +255,7 @@ extension NewPlaylistStorageViewController: UITableViewDelegate {
     }
 }
 
-extension NewPlaylistStorageViewController {
+extension ListStorageViewController {
     func scrollToTop() {
         playlistStorageView.tableView.setContentOffset(.zero, animated: true)
     }

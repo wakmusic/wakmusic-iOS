@@ -11,8 +11,8 @@ public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
-    var playlistStorageComponent: PlaylistStorageComponent { get }
-    var favoriteComponent: FavoriteComponent { get }
+    var listStorageComponent: ListStorageComponent { get }
+    var likeStorageComponent: LikeStorageComponent { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
     var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
     var deletePlayListUseCase: any DeletePlayListUseCase { get }
@@ -34,9 +34,9 @@ public final class StorageComponent: Component<StorageDependency>, StorageFactor
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
                 deletePlayListUseCase: dependency.deletePlayListUseCase
             ),
-            playlistStorageComponent: dependency.playlistStorageComponent,
+            playlistStorageComponent: dependency.listStorageComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            favoriteComponent: dependency.favoriteComponent,
+            favoriteComponent: dependency.likeStorageComponent,
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory
         )

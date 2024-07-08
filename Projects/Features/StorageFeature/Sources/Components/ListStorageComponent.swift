@@ -8,7 +8,7 @@ import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
 
-public protocol PlaylistStorageDependency: Dependency {
+public protocol ListStorageDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchPlayListUseCase: any FetchPlayListUseCase { get }
@@ -19,10 +19,10 @@ public protocol PlaylistStorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
 }
 
-public final class PlaylistStorageComponent: Component<PlaylistStorageDependency> {
+public final class ListStorageComponent: Component<ListStorageDependency> {
     public func makeView() -> UIViewController {
-        return NewPlaylistStorageViewController.viewController(
-            reactor: PlaylistStorageReactor(),
+        return ListStorageViewController.viewController(
+            reactor: ListStorageReactor(),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             playlistDetailFactory: dependency.playlistDetailFactory,
             textPopUpFactory: dependency.textPopUpFactory,

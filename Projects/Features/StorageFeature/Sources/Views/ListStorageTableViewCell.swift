@@ -8,17 +8,17 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-public protocol MyPlaylistTableViewCellDelegate: AnyObject {
-    func buttonTapped(type: MyPlaylistTableViewCellDelegateConstant)
+public protocol ListStorageTableViewCellDelegate: AnyObject {
+    func buttonTapped(type: ListStorageTableViewCellDelegateConstant)
 }
 
-public enum MyPlaylistTableViewCellDelegateConstant {
+public enum ListStorageTableViewCellDelegateConstant {
     case listTapped(indexPath: IndexPath)
     case playTapped(indexPath: IndexPath)
 }
 
-class MyPlaylistTableViewCell: UITableViewCell {
-    static let reuseIdentifer = "MyPlaylistTableViewCell"
+class ListStorageTableViewCell: UITableViewCell {
+    static let reuseIdentifer = "ListStorageTableViewCell"
 
     private let playlistImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
@@ -57,7 +57,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
 
     private let listSelectButton = UIButton()
 
-    weak var delegate: MyPlaylistTableViewCellDelegate?
+    weak var delegate: ListStorageTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -73,7 +73,7 @@ class MyPlaylistTableViewCell: UITableViewCell {
     }
 }
 
-extension MyPlaylistTableViewCell {
+extension ListStorageTableViewCell {
     func addView() {
         self.contentView.addSubviews(
             playlistImageView,
@@ -167,7 +167,7 @@ extension MyPlaylistTableViewCell {
     }
 }
 
-extension MyPlaylistTableViewCell {
+extension ListStorageTableViewCell {
     @objc func listSelectButtonAction() {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }
