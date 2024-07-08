@@ -5,6 +5,14 @@ import SearchFeature
 import SearchFeatureInterface
 
 extension AppComponent {
+    
+    var searchGlobalScrollState: any SearchGlobalScrollPortocol {
+        shared {
+            SearchGlobalScrollState()
+        }
+    }
+
+    
     var searchFactory: any SearchFactory {
         SearchComponent(parent: self)
     }
