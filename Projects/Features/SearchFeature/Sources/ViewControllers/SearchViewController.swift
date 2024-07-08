@@ -93,7 +93,6 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
     override public func bind(reactor: SearchReactor) {
         super.bind(reactor: reactor)
 
-        
         searchGlobalScrollState.scrollAmountObservable
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, amount in
