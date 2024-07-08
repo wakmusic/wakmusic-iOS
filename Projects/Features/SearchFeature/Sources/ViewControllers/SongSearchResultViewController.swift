@@ -55,20 +55,18 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidDisappear(animated)
         reactor?.action.onNext(.deselectAll)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        searchGlobalScrollState.expand()
 
+        searchGlobalScrollState.expand()
     }
-    
+
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
     }
 
     override func bindAction(reactor: SongSearchResultReactor) {
@@ -136,9 +134,9 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map { ($0.isLoading, $0.dataSource) }
-            .bind(with: self) { owner, info  in
+            .bind(with: self) { owner, info in
 
-                let ( isLoading, dataSource ) = (info.0, info.1)
+                let (isLoading, dataSource) = (info.0, info.1)
 
                 if isLoading {
                     owner.indicator.startAnimating()
@@ -160,7 +158,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     } else {
                         owner.collectionView.restore()
                     }
-                    
                 }
             }
             .disposed(by: disposeBag)
@@ -256,13 +253,12 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if collectionView.isVerticallyScrollable {
             searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
         }
     }
-    
 }
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {

@@ -49,15 +49,13 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        searchGlobalScrollState.expand()
-        
 
+        searchGlobalScrollState.expand()
     }
-    
+
     override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
@@ -148,7 +146,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     } else {
                         owner.collectionView.restore()
                     }
-                    
                 }
             }
             .disposed(by: disposeBag)
@@ -236,13 +233,10 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
 
         navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         if collectionView.isVerticallyScrollable {
             searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
         }
-        
-        
     }
 }

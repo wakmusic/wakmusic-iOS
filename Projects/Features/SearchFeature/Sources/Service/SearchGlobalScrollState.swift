@@ -7,14 +7,12 @@ public protocol SearchGlobalScrollPortocol {
 
     func scrollTo(amount: CGFloat)
     func expand()
-
 }
 
 public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
-
     private let scrollAmountSubject = PublishSubject<CGFloat>()
     private let expandSearchHeaderSubject = PublishSubject<Void>()
-    
+
     public init() {}
 
     public var scrollAmountObservable: Observable<CGFloat> {
@@ -24,14 +22,12 @@ public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
     public func scrollTo(amount: CGFloat) {
         scrollAmountSubject.onNext(amount)
     }
-    
+
     public var expandSearchHeaderObservable: Observable<Void> {
         expandSearchHeaderSubject
     }
-    
+
     public func expand() {
         expandSearchHeaderSubject.onNext(())
     }
-    
-
 }
