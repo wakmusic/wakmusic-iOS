@@ -60,18 +60,11 @@ class MyPlaylistTableViewCell: UITableViewCell {
     weak var delegate: MyPlaylistTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//
-//        self.backgroundColor = .clear
-//        self.playListImageView.layer.cornerRadius = 4
-//        self.playButton.setImage(DesignSystemAsset.Home.playSmall.image, for: .normal)
-//    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addView()
         setLayout()
+        setAction()
     }
 
     @available(*, unavailable)
@@ -129,15 +122,8 @@ extension MyPlaylistTableViewCell {
     }
 
     func setAction() {
-        self.listSelectButton.addAction(for: .touchUpInside) { [weak self] in
-            guard let self else { return }
-            self.delegate?.buttonTapped(type: .listTapped(indexPath: self.passToModel.0))
-        }
-
-        self.playButton.addAction(for: .touchUpInside) { [weak self] in
-            guard let self else { return }
-            self.delegate?.buttonTapped(type: .playTapped(indexPath: self.passToModel.0))
-        }
+        self.listSelectButton.addTarget(self, action: #selector(listSelectButtonAction), for: .touchUpInside)
+        self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
     }
 
     func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath) {
@@ -178,5 +164,15 @@ extension MyPlaylistTableViewCell {
             ]
         )
         return attributedString
+    }
+}
+
+extension MyPlaylistTableViewCell {
+    @objc func listSelectButtonAction() {
+        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
+    }
+    
+    @objc func playButtonAction() {
+        delegate?.buttonTapped(type: .playTapped(indexPath: passToModel.0))
     }
 }
