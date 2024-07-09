@@ -94,6 +94,13 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            }
+            .disposed(by: disposeBag)
+
         sharedState.map(\.sortType)
             .distinctUntilChanged()
             .bind(with: self) { owner, type in

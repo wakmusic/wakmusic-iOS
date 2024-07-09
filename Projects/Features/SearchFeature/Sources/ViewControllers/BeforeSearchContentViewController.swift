@@ -13,10 +13,6 @@ import RxSwift
 import UIKit
 import Utility
 
-public struct Model: Hashable {
-    let title: String
-}
-
 final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let textPopUpFactory: TextPopUpFactory
@@ -104,6 +100,13 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
 
         let sharedState = reactor.state.share()
 
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            }
+            .disposed(by: disposeBag)
+
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .withUnretained(self)
@@ -149,16 +152,16 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
             }.disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
-            .distinctUntilChanged { $0.currentVideo == $1.currentVideo }
             .bind(with: self) { owner, dataSource in
-                let tmp: [Model] = [Model(title: "임시플리1"), Model(title: "임시플리2"), Model(title: "임시플리3")]
 
-                var snapShot = owner.dataSource.snapshot()
-                snapShot.appendSections([.youtube, .recommend, .popularList])
+                var snapShot = NSDiffableDataSourceSnapshot<BeforeSearchSection, BeforeVcDataSoruce>()
+                snapShot.appendSections([.youtube, .recommend])
 
                 snapShot.appendItems([.youtube(model: dataSource.currentVideo)], toSection: .youtube)
                 snapShot.appendItems(dataSource.recommendPlayList.map { .recommend(model: $0) }, toSection: .recommend)
-                snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
+
+                #warning("추후 업데이트 시 사용")
+                // snapShot.appendItems(tmp.map { .popularList(model: $0) }, toSection: .popularList)
 
                 owner.dataSource.apply(snapShot, animatingDifferences: false)
             }
@@ -240,11 +243,12 @@ extension BeforeSearchContentViewController {
             cell.update(model: itemIdentifier)
         }
 
-        let popularListCellRegistration = UICollectionView
-            .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
-
-                cell.update(item)
-            }
+        #warning("추후 업데이트 시 사용")
+//        let popularListCellRegistration = UICollectionView
+//            .CellRegistration<PopularPlayListCell, Model> { cell, indexPath, item in
+//
+//                cell.update(item)
+//            }
 
         // MARK: Header
 
@@ -284,12 +288,14 @@ extension BeforeSearchContentViewController {
                         item: model
                     )
 
-            case let .popularList(model: model):
-                return collectionView.dequeueConfiguredReusableCell(
-                    using: popularListCellRegistration,
-                    for: indexPath,
-                    item: model
-                )
+//            case let .popularList(model: model):
+//                break
+                #warning("추후 업데이트 시 사용")
+//                return collectionView.dequeueConfiguredReusableCell(
+//                    using: popularListCellRegistration,
+//                    for: indexPath,
+//                    item: model
+//                )
             }
         }
 
@@ -301,7 +307,7 @@ extension BeforeSearchContentViewController {
     }
 }
 
-// MARK: CollectionView Deleagte
+// MARK: CollectionView Deleagate
 extension BeforeSearchContentViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
@@ -316,8 +322,9 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
             navigatePlaylistDetail(key: model.key, kind: .wakmu)
 
-        case let .popularList(model: model):
-            LogManager.printDebug("popular \(model)")
+            #warning("추후 업데이트 시 사용")
+//        case let .popularList(model: model):
+//            LogManager.printDebug("popular \(model)")
         }
     }
 }
