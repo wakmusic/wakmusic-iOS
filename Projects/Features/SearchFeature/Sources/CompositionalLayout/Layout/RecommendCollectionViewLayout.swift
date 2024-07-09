@@ -31,11 +31,10 @@ extension RecommendCollectionViewLayout {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
 
         group.interItemSpacing = .fixed(8)
-        
+
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 8.0
         section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: .zero, trailing: 20)
-
 
         return section
     }

@@ -27,14 +27,12 @@ extension BeforeSearchCollectionViewLayout {
             alignment: .top
         )
 
-
-
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection
 
         switch layoutKind {
         case .youtube:
-            
+
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
@@ -52,7 +50,7 @@ extension BeforeSearchCollectionViewLayout {
             section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 20, trailing: .zero)
 
         case .recommend:
-            
+
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(0.41),
                 heightDimension: .fractionalHeight(1.0)
@@ -67,21 +65,21 @@ extension BeforeSearchCollectionViewLayout {
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
 
             group.interItemSpacing = .fixed(8)
-            
+
             section = NSCollectionLayoutSection(group: group)
             section.boundarySupplementaryItems = [header]
             section.interGroupSpacing = 8.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
         case .popularList:
-            
+
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
             )
 
             let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-            
+
             #warning("fractional 고민하기")
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(140),
@@ -96,8 +94,6 @@ extension BeforeSearchCollectionViewLayout {
             section.interGroupSpacing = 8
             section.orthogonalScrollingBehavior = .continuous
         }
-
-       
 
         return section
     }
