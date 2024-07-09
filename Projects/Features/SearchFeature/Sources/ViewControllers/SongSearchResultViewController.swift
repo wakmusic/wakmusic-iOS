@@ -61,11 +61,20 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         searchGlobalScrollState.expand()
     }
+    
 
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx
             .setDelegate(self)
+            .disposed(by: disposeBag)
+        
+        searchGlobalScrollState.songResultScrollToTopObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.collectionView.setContentOffset(.zero, animated: true)
+
+            }
             .disposed(by: disposeBag)
     }
 

@@ -45,6 +45,8 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         viewController.reactor = reactor
         return viewController
     }
+    
+
 
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
@@ -59,7 +61,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-        #warning("첫 진입 시 text가 안내려옴 바인딩이 안되서")
+       
         currentState.map(\.text)
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
@@ -144,10 +146,10 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
 
 extension AfterSearchViewController {
     func scrollToTop() {
-        #warning("구현이 끝난 후 연결")
-//        let current: Int = self.currentIndex ?? 0
-//        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
-//        guard searchContent.count > current else { return }
-//        searchContent[current].scrollToTop()
+
+        let current: Int = self.currentIndex ?? 0
+        
+        searchGlobalScrollState.scrollToTop(page: current == 0 ? .song : .list)
+        
     }
 }
