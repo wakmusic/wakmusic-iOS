@@ -56,7 +56,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         reactor?.action.onNext(.deselectAll)
     }
 
-
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx

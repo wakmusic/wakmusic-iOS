@@ -45,14 +45,14 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         viewController.reactor = reactor
         return viewController
     }
-    
+
     override public func pageboyViewController(
-            _ pageboyViewController: PageboyViewController,
-            didScrollToPageAt index: TabmanViewController.PageIndex,
-            direction: PageboyViewController.NavigationDirection,
-            animated: Bool
-        ) {
-            searchGlobalScrollState.expand()
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        searchGlobalScrollState.expand()
     }
 
     deinit {
@@ -130,8 +130,7 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
-        
-         viewControllers[index]
+        viewControllers[index]
     }
 
     public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController
