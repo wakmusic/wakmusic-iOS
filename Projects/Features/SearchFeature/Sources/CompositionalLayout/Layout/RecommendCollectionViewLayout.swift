@@ -18,21 +18,24 @@ final class RecommendCollectionViewLayout: UICollectionViewCompositionalLayout {
 extension RecommendCollectionViewLayout {
     private static func configureLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
+            widthDimension: .fractionalWidth(0.41),
             heightDimension: .fractionalHeight(1.0)
         )
-        var item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(0.25)
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(0.21)
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
 
-        group.interItemSpacing = .fixed(8.0)
-        group.contentInsets = .init(top: 8.0, leading: 20, bottom: 8.0, trailing: 20)
-
+        group.interItemSpacing = .fixed(8)
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: .zero, bottom: .zero, trailing: .zero)
+        section.interGroupSpacing = 8.0
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: .zero, trailing: 20)
+
 
         return section
     }

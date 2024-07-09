@@ -6,7 +6,6 @@ import PlaylistFeatureInterface
 import UIKit
 import Utility
 
-#warning("실제 데이터 및 이벤트 연결")
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
     private let wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory
 
