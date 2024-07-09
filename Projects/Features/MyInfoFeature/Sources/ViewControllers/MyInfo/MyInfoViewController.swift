@@ -135,9 +135,25 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(with: self) { owner, navigate in
                 switch navigate {
                 case .draw:
-                    let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
-                    viewController.modalPresentationStyle = .fullScreen
-                    owner.present(viewController, animated: true)
+                    if reactor.currentState.isLoggedIn {
+                        let viewController = owner.fruitDrawFactory.makeView(delegate: owner)
+                        viewController.modalPresentationStyle = .fullScreen
+                        owner.present(viewController, animated: true)
+                    } else {
+                        let vc = owner.textPopUpFactory.makeView(
+                            text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                            cancelButtonIsHidden: false,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
+                            completion: {
+                                let loginVC = owner.signInFactory.makeView()
+                                loginVC.modalPresentationStyle = .fullScreen
+                                owner.present(loginVC, animated: true)
+                            },
+                            cancelCompletion: {}
+                        )
+                        owner.showBottomSheet(content: vc)
+                    }
                 case .fruit:
                     if reactor.currentState.isLoggedIn {
                         let viewController = owner.fruitStorageFactory.makeView()
