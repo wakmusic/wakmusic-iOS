@@ -60,7 +60,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidAppear(animated)
 
         searchGlobalScrollState.expand()
-        collectionView.setContentOffset(.zero, animated: false) // 이게 들어가야 맞는지 잘 모르겠지만 일단 넣음
     }
 
     override func bind(reactor: SongSearchResultReactor) {
