@@ -19,6 +19,7 @@ final class MyInfoReactor: Reactor {
         case settingNavigationDidTap
         case changedUserInfo(UserInfo?)
         case changedReadNoticeIDs([Int])
+        case requiredLogin
     }
 
     enum Mutation {
@@ -40,6 +41,7 @@ final class MyInfoReactor: Reactor {
         case mail
         case team
         case setting
+        case login
     }
 
     struct State {
@@ -101,6 +103,8 @@ final class MyInfoReactor: Reactor {
             )
         case let .changedReadNoticeIDs(readIDs):
             return updateIsAllNoticesRead(readIDs)
+        case .requiredLogin:
+            return navigateLogin()
         }
     }
 
@@ -218,5 +222,9 @@ private extension MyInfoReactor {
 
     func settingNavigationDidTap() -> Observable<Mutation> {
         return .just(.navigate(.setting))
+    }
+
+    func navigateLogin() -> Observable<Mutation> {
+        return .just(.navigate(.login))
     }
 }
