@@ -56,11 +56,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         reactor?.action.onNext(.deselectAll)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        searchGlobalScrollState.expand()
-    }
 
     override func bind(reactor: SongSearchResultReactor) {
         super.bind(reactor: reactor)

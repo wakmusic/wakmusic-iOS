@@ -50,12 +50,6 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         reactor?.action.onNext(.viewDidLoad)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        searchGlobalScrollState.expand()
-    }
-
     override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
         collectionView.rx

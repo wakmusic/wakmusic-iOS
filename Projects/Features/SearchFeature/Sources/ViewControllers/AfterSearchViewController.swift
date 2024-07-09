@@ -121,7 +121,9 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
-        viewControllers[index]
+        
+        searchGlobalScrollState.expand()
+        return viewControllers[index]
     }
 
     public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController
