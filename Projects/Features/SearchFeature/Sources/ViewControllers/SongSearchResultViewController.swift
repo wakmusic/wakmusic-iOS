@@ -60,6 +60,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidAppear(animated)
 
         searchGlobalScrollState.expand()
+        collectionView.setContentOffset(.zero, animated: false) // 이게 들어가야 맞는지 잘 모르겠지만 일단 넣음
     }
 
     override func bind(reactor: SongSearchResultReactor) {
@@ -255,9 +256,13 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if collectionView.isVerticallyScrollable {
-            searchGlobalScrollState.scrollTo(amount: scrollView.contentOffset.y)
-        }
+        guard collectionView.isVerticallyScrollable else { return }
+        searchGlobalScrollState.scrollTo(
+            source: (
+                scrollView.contentOffset.y,
+                scrollView.contentSize.height - scrollView.frame.size.height
+            )
+        )
     }
 }
 

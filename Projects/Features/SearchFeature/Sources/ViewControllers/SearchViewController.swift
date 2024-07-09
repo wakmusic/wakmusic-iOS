@@ -41,6 +41,9 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
     private var searchGlobalScrollState: SearchGlobalScrollPortocol!
 
+    private let maxHeight: CGFloat = -56
+    private var previousScrollOffset: CGFloat = 0
+
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -95,13 +98,13 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
         searchGlobalScrollState.scrollAmountObservable
             .observe(on: MainScheduler.asyncInstance)
-            .bind(with: self, onNext: { owner, amount in
-
+            .bind(with: self, onNext: { owner, source in
+                /* 이전 코드
                 let constraint = owner.searchHeaderViewTopConstraint.constant
 
-                // constraint == 0 평상 시
-                // constraint < 0 위로 올라가는 중
-                // constraint == -56 최종 끝 도달
+//                 constraint == 0 평상 시
+//                 constraint < 0 위로 올라가는 중
+//                 constraint == -56 최종 끝 도달
 
                 if 0 < amount && amount <= 56.0 {
                     owner.searchHeaderViewTopConstraint.constant = max(-56, -amount)
@@ -114,22 +117,56 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                     owner.searchHeaderContentView.isHidden = false
                     owner.searchHeaderView.backgroundColor = .white
                 }
+                */
+                let offsetY: CGFloat = source.0
+                let scrollDiff = offsetY - owner.previousScrollOffset
+                let absoluteTop: CGFloat = 0
+                let absoluteBottom: CGFloat = source.1
+                let isScrollingDown = scrollDiff > 0 && offsetY > absoluteTop
+                let isScrollingUp = scrollDiff < 0 && offsetY < absoluteBottom
+
+                guard offsetY < absoluteBottom else { return }
+                var newHeight = owner.searchHeaderViewTopConstraint.constant
+
+                if isScrollingDown {
+                    newHeight = max(owner.maxHeight, owner.searchHeaderViewTopConstraint.constant - abs(scrollDiff))
+                } else if isScrollingUp {
+                    if offsetY <= abs(owner.maxHeight) {
+                        newHeight = min(0, owner.searchHeaderViewTopConstraint.constant + abs(scrollDiff))
+                    }
+                }
+
+                if newHeight != owner.searchHeaderViewTopConstraint.constant {
+                    self.searchHeaderViewTopConstraint.constant = newHeight
+                    self.updateHeader()
+                }
+                owner.view.layoutIfNeeded()
+                owner.previousScrollOffset = offsetY
             })
             .disposed(by: disposeBag)
 
         searchGlobalScrollState.expandSearchHeaderObservable
+            .skip(1)
             .asDriver(onErrorJustReturn: ())
             .drive(with: self, onNext: { owner, _ in
+                let openAmount = owner.searchHeaderViewTopConstraint.constant + abs(owner.maxHeight)
+                let percentage = openAmount / abs(owner.maxHeight)
 
-                UIView.animate(withDuration: 0.1) {
-                    owner.searchHeaderViewTopConstraint.constant = 0
-                    owner.searchHeaderContentView.isHidden = false
-                    owner.searchHeaderView.backgroundColor = .white
-                    owner.searchHeaderView.layoutIfNeeded()
-                }
-
+                guard percentage != 1 else { return }
+                owner.searchHeaderContentView.alpha = 1
+                owner.searchHeaderViewTopConstraint.constant = 0
+                owner.searchHeaderView.backgroundColor = .white
             })
             .disposed(by: disposeBag)
+    }
+
+    private func updateHeader() {
+        // percentage == 1 ? 확장 : 축소
+        let openAmount = self.searchHeaderViewTopConstraint.constant + abs(self.maxHeight)
+        let percentage = openAmount / abs(self.maxHeight)
+        self.searchHeaderContentView.alpha = percentage
+        self.searchHeaderView.backgroundColor = percentage == 0 ?
+        DesignSystemAsset.BlueGrayColor.gray100.color : .white
     }
 
     override public func bindState(reactor: SearchReactor) {

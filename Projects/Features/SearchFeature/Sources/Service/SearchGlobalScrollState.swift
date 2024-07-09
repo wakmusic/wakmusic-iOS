@@ -2,25 +2,25 @@ import Foundation
 import RxSwift
 
 public protocol SearchGlobalScrollPortocol {
-    var scrollAmountObservable: Observable<CGFloat> { get }
+    var scrollAmountObservable: Observable<(CGFloat, CGFloat)> { get }
     var expandSearchHeaderObservable: Observable<Void> { get }
 
-    func scrollTo(amount: CGFloat)
+    func scrollTo(source: (CGFloat, CGFloat))
     func expand()
 }
 
 public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
-    private let scrollAmountSubject = PublishSubject<CGFloat>()
+    private let scrollAmountSubject = PublishSubject<(CGFloat, CGFloat)>()
     private let expandSearchHeaderSubject = PublishSubject<Void>()
 
     public init() {}
 
-    public var scrollAmountObservable: Observable<CGFloat> {
+    public var scrollAmountObservable: Observable<(CGFloat, CGFloat)> {
         scrollAmountSubject
     }
 
-    public func scrollTo(amount: CGFloat) {
-        scrollAmountSubject.onNext(amount)
+    public func scrollTo(source: (CGFloat, CGFloat)) {
+        scrollAmountSubject.onNext(source)
     }
 
     public var expandSearchHeaderObservable: Observable<Void> {
