@@ -61,16 +61,14 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         collectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
+
         searchGlobalScrollState.listResultScrollToTopObservable
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
                 owner.collectionView.setContentOffset(.zero, animated: true)
-
             }
             .disposed(by: disposeBag)
     }
-    
 
     override func bindAction(reactor: ListSearchResultReactor) {
         super.bindAction(reactor: reactor)

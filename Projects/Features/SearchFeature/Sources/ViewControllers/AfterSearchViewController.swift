@@ -45,8 +45,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
         viewController.reactor = reactor
         return viewController
     }
-    
-
 
     deinit {
         DEBUG_LOG("❌ \(Self.self)")
@@ -61,7 +59,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-       
+
         currentState.map(\.text)
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
@@ -146,10 +144,8 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
 
 extension AfterSearchViewController {
     func scrollToTop() {
-
         let current: Int = self.currentIndex ?? 0
-        
+
         searchGlobalScrollState.scrollToTop(page: current == 0 ? .song : .list)
-        
     }
 }
