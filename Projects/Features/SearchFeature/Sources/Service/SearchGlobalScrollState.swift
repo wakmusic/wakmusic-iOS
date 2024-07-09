@@ -9,7 +9,7 @@ public enum SearchResultPage {
 public protocol SearchGlobalScrollPortocol {
     var scrollAmountObservable: Observable<(CGFloat, CGFloat)> { get }
     var expandSearchHeaderObservable: Observable<Void> { get }
-    
+
     var songResultScrollToTopObservable: Observable<Void> { get }
     var listResultScrollToTopObservable: Observable<Void> { get }
 
@@ -19,7 +19,6 @@ public protocol SearchGlobalScrollPortocol {
 }
 
 public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
-    
     private let scrollAmountSubject = PublishSubject<(CGFloat, CGFloat)>()
     private let expandSearchHeaderSubject = PublishSubject<Void>()
     private let songResultScrollToTopSubject = PublishSubject<Void>()
@@ -42,23 +41,21 @@ public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
     public func expand() {
         expandSearchHeaderSubject.onNext(())
     }
-    
+
     public var songResultScrollToTopObservable: Observable<Void> {
         songResultScrollToTopSubject
     }
-    
+
     public var listResultScrollToTopObservable: Observable<Void> {
         listResultScrollToTopSubject
     }
-    
+
     public func scrollToTop(page: SearchResultPage) {
-        
         switch page {
         case .song:
             songResultScrollToTopSubject.onNext(())
         case .list:
             listResultScrollToTopSubject.onNext(())
         }
-        
     }
 }

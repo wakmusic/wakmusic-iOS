@@ -52,7 +52,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         searchGlobalScrollState.expand()
     }
 
