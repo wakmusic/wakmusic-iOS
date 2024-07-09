@@ -110,6 +110,8 @@
 		<string>$(WMDOMAIN_IMAGE)</string>
 		<key>WMDOMAIN_NOTICE</key>
 		<string>$(WMDOMAIN_NOTICE)</string>
+		<key>WMDOMAIN_NOTIFICATION</key>
+		<string>$(WMDOMAIN_NOTIFICATION)</string>
 		<key>WMDOMAIN_PLAYLIST</key>
 		<string>$(WMDOMAIN_PLAYLIST)</string>
 		<key>WMDOMAIN_FAQ</key>
