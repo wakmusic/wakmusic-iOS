@@ -67,7 +67,7 @@ extension ListResultCell {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
             $0.top.bottom.equalToSuperview().inset(10)
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().inset(20)
         }
 
         titleLabel.snp.makeConstraints {
@@ -85,7 +85,7 @@ extension ListResultCell {
         dateLabel.snp.makeConstraints {
             $0.width.equalTo(70)
             $0.centerY.equalTo(thumbnailView.snp.centerY)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
         }
     }

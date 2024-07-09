@@ -30,7 +30,7 @@ extension SongSearchResultCollectionViewLayout {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: 20.0, bottom: 20.0, trailing: 20.0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 56.0, trailing: .zero)
 
         return section
     }

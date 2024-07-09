@@ -150,11 +150,11 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalToSuperview().offset(72) // 56 + 16
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+            $0.top.equalTo(headerView.snp.bottom).offset(8)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
