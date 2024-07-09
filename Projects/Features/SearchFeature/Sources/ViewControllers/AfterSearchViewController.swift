@@ -19,6 +19,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     private var songSearchResultFactory: SongSearchResultFactory!
     private var listSearchResultFactory: ListSearchResultFactory!
+    private var searchGlobalScrollState: SearchGlobalScrollPortocol!
     public var disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
@@ -34,11 +35,13 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     public static func viewController(
         songSearchResultFactory: SongSearchResultFactory,
         listSearchResultFactory: ListSearchResultFactory,
+        searchGlobalScrollState: any SearchGlobalScrollPortocol,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.songSearchResultFactory = songSearchResultFactory
         viewController.listSearchResultFactory = listSearchResultFactory
+        viewController.searchGlobalScrollState = searchGlobalScrollState
         viewController.reactor = reactor
         return viewController
     }

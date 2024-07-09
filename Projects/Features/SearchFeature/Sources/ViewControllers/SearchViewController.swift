@@ -99,25 +99,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
         searchGlobalScrollState.scrollAmountObservable
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, source in
-                /* 이전 코드
-                                 let constraint = owner.searchHeaderViewTopConstraint.constant
 
-                 //                 constraint == 0 평상 시
-                 //                 constraint < 0 위로 올라가는 중
-                 //                 constraint == -56 최종 끝 도달
-
-                                 if 0 < amount && amount <= 56.0 {
-                                     owner.searchHeaderViewTopConstraint.constant = max(-56, -amount)
-
-                                     owner.searchHeaderView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-                                     owner.searchHeaderContentView.isHidden = true
-
-                                 } else if amount <= 0 {
-                                     owner.searchHeaderViewTopConstraint.constant = min(0, -amount)
-                                     owner.searchHeaderContentView.isHidden = false
-                                     owner.searchHeaderView.backgroundColor = .white
-                                 }
-                                 */
                 let offsetY: CGFloat = source.0
                 let scrollDiff = offsetY - owner.previousScrollOffset
                 let absoluteTop: CGFloat = 0
@@ -137,8 +119,8 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                 }
 
                 if newHeight != owner.searchHeaderViewTopConstraint.constant {
-                    self.searchHeaderViewTopConstraint.constant = newHeight
-                    self.updateHeader()
+                    owner.searchHeaderViewTopConstraint.constant = newHeight
+                    owner.updateHeader()
                 }
                 owner.view.layoutIfNeeded()
                 owner.previousScrollOffset = offsetY
