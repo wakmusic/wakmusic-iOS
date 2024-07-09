@@ -72,3 +72,7 @@ public func WMDOMAIN_SEARCH() -> String {
 public func WMDOMAIN_IMAGE() -> String {
     return config(key: "WMDOMAIN_IMAGE")
 }
+
+public func WMDOMAIN_NOTIFICATION() -> String {
+    return config(key: "WMDOMAIN_NOTIFICATION")
+}

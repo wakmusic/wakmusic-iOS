@@ -44,7 +44,8 @@ let targets: [Target] = [
             .domain(target: .PlaylistDomain),
             .domain(target: .UserDomain),
             .domain(target: .SearchDomain),
-            .domain(target: .ImageDomain)
+            .domain(target: .ImageDomain),
+            .domain(target: .NotificationDomain)
         ],
         settings: .settings(
             base: env.baseSetting,
@@ -103,7 +104,6 @@ let project: Project =
         name: env.name,
         organizationName: env.organizationName,
         packages: [],
-        // packages: [.Amplify],
         settings: settinges,
         targets: targets,
         schemes: schemes
