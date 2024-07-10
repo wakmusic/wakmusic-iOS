@@ -37,7 +37,7 @@ public enum SortType: String, Encodable, SearchOptionType {
         case .alphabetical:
             "가나다순"
         case .popular:
-            "인기순 (서버 개발 검토 중)"
+            "인기순"
         }
     }
 }
