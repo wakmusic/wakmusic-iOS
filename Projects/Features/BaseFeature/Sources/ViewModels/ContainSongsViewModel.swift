@@ -113,13 +113,13 @@ public final class ContainSongsViewModel: ViewModelType {
                                 status: 409,
                                 description: "이미 내 리스트에 담긴 곡들입니다."
                             ))
-                        
+
                         case .badRequest:
                             output.showToastMessage.onNext(BaseEntity(
                                 status: 400,
                                 description: "노래는 최대 50개까지 선택 가능합니다."
                             ))
-                        
+
                         default:
                             output.showToastMessage.onNext(BaseEntity(status: 400, description: "잘못된 요청입니다."))
                         }
