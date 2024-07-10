@@ -38,7 +38,7 @@ final class SongSearchResultReactor: Reactor {
     var initialState: State
 
     private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
-    let text: String
+    private let text: String
     private let limit: Int = 20
 
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
