@@ -155,7 +155,7 @@ extension SongSearchResultReactor {
                         LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
                             keyword: self.text,
                             category: "song",
-                            totalCount: dataSource.count
+                            count: dataSource.count
                         ))
                     }
 

@@ -105,7 +105,7 @@ extension ListSearchResultReactor {
                         LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
                             keyword: self.text,
                             category: "list",
-                            totalCount: dataSource.count
+                            count: dataSource.count
                         ))
                     }
 

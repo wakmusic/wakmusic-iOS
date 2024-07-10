@@ -29,7 +29,6 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "after_search"))
         configureUI()
     }
 

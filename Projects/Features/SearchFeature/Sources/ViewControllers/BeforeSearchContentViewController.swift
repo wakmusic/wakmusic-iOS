@@ -50,7 +50,11 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "before_search_"))
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "search"))
     }
 
     override public func addView() {
@@ -318,7 +322,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         switch model {
         case let .youtube(model: model):
             #warning("유튜브 이동")
-            LogManager.analytics(SearchAnalyticsLog.clickLastWakmuYoutubeVideo)
+            LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
 
             navigatePlaylistDetail(key: model.key, kind: .wakmu)
