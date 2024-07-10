@@ -20,7 +20,7 @@ final class SearchFilterCell: UICollectionViewCell {
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t6(weight: .light),
-        lineHeight : UIFont.WMFontSystem.t6(weight: .light).lineHeight
+        lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
     )
 
     override init(frame: CGRect) {
