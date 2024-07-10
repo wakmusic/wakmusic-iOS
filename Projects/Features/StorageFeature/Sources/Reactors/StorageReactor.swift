@@ -24,7 +24,7 @@ final class StorageReactor: Reactor {
     let initialState: State
     private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
-    
+
     init(
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared
     ) {
@@ -49,14 +49,14 @@ final class StorageReactor: Reactor {
             return switchEditingState(false)
         }
     }
-    
+
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let editState = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
-        
+
         let movedLikeStorageEvent = storageCommonService.movedLikeStorageEvent
             .map { _ in Mutation.switchTabIndex(1) }
-        
+
         return Observable.merge(mutation, editState, movedLikeStorageEvent)
     }
 
@@ -72,8 +72,6 @@ final class StorageReactor: Reactor {
 
         return newState
     }
-
-    
 }
 
 private extension StorageReactor {

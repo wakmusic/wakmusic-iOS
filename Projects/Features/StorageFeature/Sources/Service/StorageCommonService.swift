@@ -11,7 +11,8 @@ protocol StorageCommonService {
 final class DefaultStorageCommonService: StorageCommonService {
     let isEditingState: BehaviorSubject<Bool> = .init(value: false)
     let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo
-    let movedLikeStorageEvent: Observable<Notification> = NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
-    
+    let movedLikeStorageEvent: Observable<Notification> = NotificationCenter.default.rx
+        .notification(.movedStorageFavoriteTab)
+
     static let shared = DefaultStorageCommonService()
 }

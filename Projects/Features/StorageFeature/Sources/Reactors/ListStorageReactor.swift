@@ -1,10 +1,10 @@
 import Foundation
 import LogManager
+import PlaylistDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
 import UserDomainInterface
-import PlaylistDomainInterface
 import Utility
 
 final class ListStorageReactor: Reactor {
@@ -51,7 +51,7 @@ final class ListStorageReactor: Reactor {
     private let fetchPlayListUseCase: any FetchPlayListUseCase
     private let editPlayListOrderUseCase: any EditPlayListOrderUseCase
     private let deletePlayListUseCase: any DeletePlayListUseCase
-    
+
     init(
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
         createPlaylistUseCase: any CreatePlaylistUseCase,
@@ -64,7 +64,7 @@ final class ListStorageReactor: Reactor {
             isEditing: false,
             dataSource: [],
             backupDataSource: [],
-            selectedItemCount: 0, 
+            selectedItemCount: 0,
             isShowActivityIndicator: false
         )
         self.storageCommonService = storageCommonService
@@ -109,10 +109,10 @@ final class ListStorageReactor: Reactor {
                 // 편집이 종료될 때 처리
                 if editingState == false {
                     let playlistOrder = owner.currentState.dataSource.flatMap { $0.items.map { $0.key } }
-                    
+
                     return Observable.concat([
                         .just(.updateIsShowActivityIndicator(true)),
-                        
+
                         owner.editPlayListOrderUseCase.execute(ids: playlistOrder)
                             .asObservable()
                             .flatMap { _ -> Observable<Mutation> in
@@ -136,20 +136,20 @@ final class ListStorageReactor: Reactor {
                     return .just(.switchEditingState(editingState))
                 }
             }
-        
+
         let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
             .withUnretained(self)
             .flatMap { owner, userInfo -> Observable<Mutation> in
-                    .concat(
-                        owner.updateIsLoggedIn(userInfo),
-                        owner.fetchDataSource()
-                        //userInfo != nil ? owner.fetchDataSource() : owner.clearDataSource()
-                    )
+                .concat(
+                    owner.updateIsLoggedIn(userInfo),
+                    owner.fetchDataSource()
+                    // userInfo != nil ? owner.fetchDataSource() : owner.clearDataSource()
+                )
             }
-        
+
         return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
@@ -196,11 +196,11 @@ extension ListStorageReactor {
             .map { [MyPlayListSectionModel(model: 0, items: $0)] }
             .map { Mutation.updateDataSource($0) }
     }
-    
+
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
-    
+
     func clearDataSource() -> Observable<Mutation> {
         print("🚀 clearDataSource called Reactor")
         return .just(.clearDataSource)

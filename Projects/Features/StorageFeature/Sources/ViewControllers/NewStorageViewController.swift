@@ -92,7 +92,7 @@ extension NewStorageViewController {
             .map { Reactor.Action.editButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         storageView.rx.saveButtonDidTap
             .map { Reactor.Action.saveButtonTap }
             .bind(to: reactor.action)

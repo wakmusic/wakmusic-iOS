@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import FruitDrawFeatureInterface
 import LogManager
 import NVActivityIndicatorView
 import PlaylistFeatureInterface
@@ -13,7 +14,6 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import FruitDrawFeatureInterface
 
 final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType {
     let listStorageView = ListStorageView()
@@ -23,7 +23,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     var playlistDetailFactory: PlaylistDetailFactory!
     var signInFactory: SignInFactory!
     var fruitDrawFactory: FruitDrawFactory!
-    
+
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
@@ -72,21 +72,21 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.listStorageView.updateIsHiddenLoginWarningView(isHidden: isLoggedIn)
             })
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isShowActivityIndicator)
             .distinctUntilChanged()
             .bind(with: self, onNext: { owner, isShow in
                 owner.listStorageView.updateActivityIndicatorState(isPlaying: isShow)
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
                 owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -107,14 +107,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.showBottomSheet(content: vc)
             })
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.dataSource)
-            //.skip(1)
+            // .skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, userInfo in
                 print("🚀 dataSource changed", dataSource.count)
-                //owner.listStorageView.updateActivityIndicatorState(isPlaying: false)
+                // owner.listStorageView.updateActivityIndicatorState(isPlaying: false)
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
             })
             .map { $0.1 }
@@ -160,12 +160,12 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         listStorageView.rx.refreshControlValueChanged
             .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         listStorageView.rx.drawFruitButtonDidTap
             .bind(onNext: { [weak self] _ in
                 guard let self else { return }
@@ -174,12 +174,12 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 self.present(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
+
         listStorageView.rx.createListButtonDidTap
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         listStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }

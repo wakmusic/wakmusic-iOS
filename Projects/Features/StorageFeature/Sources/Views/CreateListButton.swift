@@ -8,7 +8,7 @@ final class CreateListButton: UIButton {
     private let image = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
     }
-    
+
     private let title = WMLabel(
         text: "리스트 만들기",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -54,6 +54,5 @@ final class CreateListButton: UIButton {
         self.setBackgroundColor(.lightGray, for: .selected)
         self.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor.copy(alpha: 0.7)
         self.clipsToBounds = true
-        
     }
 }

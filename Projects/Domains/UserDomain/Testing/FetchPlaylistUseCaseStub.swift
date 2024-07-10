@@ -34,7 +34,7 @@ public struct FetchPlayListUseCaseStub: FetchPlayListUseCase {
             image_version: 0
         )
     ]
-    
+
     public init() {}
 
     public func execute() -> Single<[PlayListEntity]> {

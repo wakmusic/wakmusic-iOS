@@ -30,19 +30,19 @@ private protocol ListStorageActionProtocol {
 
 final class ListStorageView: UIView {
     let createListButton = CreateListButton(frame: .zero)
-    
+
     let tableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(ListStorageTableViewCell.self, forCellReuseIdentifier: ListStorageTableViewCell.reuseIdentifer)
         $0.separatorStyle = .none
     }
-    
+
     fileprivate let drawFruitButton = UIButton().then {
         $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
     }
-    
+
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
-    
+
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
@@ -50,9 +50,9 @@ final class ListStorageView: UIView {
     )
 
     fileprivate let refreshControl = UIRefreshControl()
-    
+
     private var gradientLayer = CAGradientLayer()
-    
+
     init() {
         super.init(frame: .zero)
         addView()
@@ -81,7 +81,7 @@ final class ListStorageView: UIView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(68)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
-        
+
         tableView.snp.makeConstraints {
             $0.top.equalTo(createListButton.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview()
@@ -112,7 +112,7 @@ final class ListStorageView: UIView {
         loginWarningView.isHidden = true
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
-        
+
         drawFruitButton.setAttributedTitle(
             NSAttributedString(
                 string: "음표 열매 뽑으러 가기",
@@ -129,7 +129,7 @@ final class ListStorageView: UIView {
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         drawFruitButton.layer.addSublayer(gradientLayer)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = drawFruitButton.bounds
@@ -140,11 +140,11 @@ extension ListStorageView: ListStorageStateProtocol {
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
         self.tableView.refreshControl = isEnabled ? refreshControl : nil
     }
-    
+
     func updateIsHiddenLoginWarningView(isHidden: Bool) {
         self.loginWarningView.isHidden = isHidden
     }
-    
+
     func updateRefreshControlState(isPlaying: Bool) {
         if isPlaying {
             self.refreshControl.beginRefreshing()
@@ -166,11 +166,11 @@ extension Reactive: ListStorageActionProtocol where Base: ListStorageView {
     var loginButtonDidTap: Observable<Void> {
         base.loginWarningView.loginButtonDidTapSubject.asObservable()
     }
-    
+
     var drawFruitButtonDidTap: Observable<Void> {
         base.drawFruitButton.rx.tap.asObservable()
     }
-    
+
     var refreshControlValueChanged: Observable<Void> {
         base.refreshControl.rx.controlEvent(.valueChanged).map { () }.asObservable()
     }

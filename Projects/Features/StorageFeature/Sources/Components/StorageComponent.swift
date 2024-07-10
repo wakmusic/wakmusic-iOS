@@ -12,7 +12,7 @@ public protocol StorageDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var listStorageComponent: ListStorageComponent { get }
-    var likeStorageComponent: LikeStorageComponent { get }    
+    var likeStorageComponent: LikeStorageComponent { get }
 }
 
 public final class StorageComponent: Component<StorageDependency>, StorageFactory {
