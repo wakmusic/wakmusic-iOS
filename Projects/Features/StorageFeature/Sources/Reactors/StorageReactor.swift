@@ -33,7 +33,6 @@ final class StorageReactor: Reactor {
             tabIndex: 0
         )
         self.storageCommonService = storageCommonService
-        observeMovedFavoriteTab()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -55,7 +54,10 @@ final class StorageReactor: Reactor {
         let editState = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
         
-        return Observable.merge(mutation, editState)
+        let movedLikeStorageEvent = storageCommonService.movedLikeStorageEvent
+            .map { _ in Mutation.switchTabIndex(1) }
+        
+        return Observable.merge(mutation, editState, movedLikeStorageEvent)
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -81,15 +83,5 @@ private extension StorageReactor {
 
     func switchEditingState(_ flag: Bool) -> Observable<Mutation> {
         return .just(.switchEditingState(flag))
-    }
-}
-
-private extension StorageReactor {
-    func observeMovedFavoriteTab() {
-        NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
-            .bind(with: self) { owner, _ in
-                owner.action.onNext(.switchTab(1))
-            }
-            .disposed(by: disposeBag)
     }
 }
